@@ -3,14 +3,17 @@
 1. install Postgres
 2. install pgloader
 3. have a root user on Postgres (`sudo  createuser -s root`)
+4. download the spider dataset 
 ## instructions
-1. download the spider dataset to the root directory.
+run with commanline arg with path to spider dataset ( or add the path to xcode schema)
 
 
 
 # Download All Schemas
-## prereqs 
-1. install graphqurl `npm install -g graphqurl`
 
 ## instructions
 1. run DownloadSchema 
+
+
+# SQLtoGraphQL
+

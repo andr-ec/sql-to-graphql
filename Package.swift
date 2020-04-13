@@ -30,6 +30,12 @@ let package = Package(
             dependencies: [.product(name: "ArgumentParser", package: "swift-argument-parser"),
                            .target(name: "Utilities"),
                            .product(name: "ApolloCodegenLib", package: "Apollo")]
+        ),
+        .target(
+            name: "SQLtoGraphQL",
+            dependencies: [.product(name: "ArgumentParser", package: "swift-argument-parser"),
+            .target(name: "Utilities"),
+            .product(name: "ApolloCodegenLib", package: "Apollo")]
         )
     ]
 )
