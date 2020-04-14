@@ -10,6 +10,15 @@ import ArgumentParser
 import Utilities
 import ApolloCodegenLib
 
+// holds a graphql query.
+struct GraphQLDatasetExample {
+    init(example: DatasetExample, with schema: BaseSchema) {
+        // separate into clauses
+        // find which tables to query
+        // find any aggregates that are needed
+        // create a struct that can return
+    }
+}
 
 let parentFolderOfScriptFile = FileFinder.findParentFolder()
 let sourceRootURL = parentFolderOfScriptFile
@@ -45,30 +54,23 @@ struct ParseSQLtoGraphQL: ParsableCommand {
     
     func process(dataset: SpiderDataset) throws {
         for (name, exampleGroup) in dataset.schemaToExamples {
-            try process(schemaName: name, with: exampleGroup)
+            let graphqlExamples = try process(schemaName: name, with: exampleGroup)
             // we have access to the dataset type here (train, dev)
             // so save here.
         }
     }
     
-    func process(schemaName: String, with examples: [DatasetExample] ) throws {
+    func process(schemaName: String, with examples: [DatasetExample] ) throws -> [GraphQLDatasetExample] {
         // only start hasura if I need it.
 //        let hash = startHasura(name: schemaName, dockerPath: self.dockerPath)
         // process schema here, the path is different from the dataset.
         let schema = try loadSchema(name: schemaName)
         
-        for example in examples {
-            process(example: example, with: schema)
-        }
+        let graphqlExamples = examples.map { GraphQLDatasetExample(example: $0, with: schema)}
         
 //        stopHasura(hash: hash, dockerPath: self.dockerPath)
         // return processed examples.
-    }
-    
-    func process(example: DatasetExample, with schema: BaseSchema) {
-        
-        
-        // return processed example
+        return graphqlExamples
     }
     
     func loadSchema(name: String) throws -> BaseSchema {
