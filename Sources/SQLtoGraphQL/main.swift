@@ -10,15 +10,16 @@ import ArgumentParser
 import Utilities
 import ApolloCodegenLib
 
-// holds a graphql query.
-struct GraphQLDatasetExample {
-    init(example: DatasetExample, with schema: BaseSchema) {
-        // separate into clauses
-        // find which tables to query
-        // find any aggregates that are needed
-        // create a struct that can return
-    }
-}
+//enum ArgumentValue: Codable {
+//    case integer(Int)
+//    case string(String)
+//    case double(Double)
+//    case json(String)
+//    init(from decoder: Decoder) throws {
+//        let container = try decoder.singleValueContainer()
+//        if let x
+//    }
+//}
 
 let parentFolderOfScriptFile = FileFinder.findParentFolder()
 let sourceRootURL = parentFolderOfScriptFile

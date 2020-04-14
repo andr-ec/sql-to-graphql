@@ -55,11 +55,11 @@ struct DatasetExample: Codable {
 class SQL: Codable {
     let except: SQL?
     let from: SQLFrom
-    let groupBy: [[GroupBy]]
+    let groupBy: [[ColumnUnit]]
     let having: [SQLHaving]
     let intersect: SQL?
     let limit: Int?
-    let orderBy: [ExceptOrderBy]
+    let orderBy: [ExceptValueUnit]
     let select: [ExceptSelect]
     let union: SQL?
     let sqlWhere: [SQLWhere]
@@ -68,10 +68,29 @@ class SQL: Codable {
         case except, from, groupBy, having, intersect, limit, orderBy, select, union
         case sqlWhere = "where"
     }
+    
+    enum ConnectionOperator {
+        case intersect(SQL)
+        case union(SQL)
+        case except(SQL)
+        case none
+    }
+    // only one intersect/union/except
+    var connection: ConnectionOperator {
+        if let except = except {
+            return .except(except)
+        } else if let intersect = intersect {
+            return .intersect(intersect)
+        } else if let union = union {
+            return .union(union)
+        } else {
+            return .none
+        }
+    }
 }
 
 enum SQLWhere: Codable {
-    case enumeration(HavingEnum)
+    case enumeration(AndOr)
     case unionArray([CunningWhere])
 
     init(from decoder: Decoder) throws {
@@ -80,7 +99,7 @@ enum SQLWhere: Codable {
             self = .unionArray(x)
             return
         }
-        if let x = try? container.decode(HavingEnum.self) {
+        if let x = try? container.decode(AndOr.self) {
             self = .enumeration(x)
             return
         }
@@ -155,13 +174,13 @@ enum CunningWhere: Codable {
 }
 
 enum ExceptSelect: Codable {
-    case bool(Bool)
-    case unionArrayArray([[SelectSelect]])
+    case isDistict(Bool) // always first!
+    case unionArrayArray([[SelectSelect]]) // always second!
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let x = try? container.decode(Bool.self) {
-            self = .bool(x)
+            self = .isDistict(x)
             return
         }
         if let x = try? container.decode([[SelectSelect]].self) {
@@ -174,7 +193,7 @@ enum ExceptSelect: Codable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
-        case .bool(let x):
+        case .isDistict(let x):
             try container.encode(x)
         case .unionArrayArray(let x):
             try container.encode(x)
@@ -182,18 +201,29 @@ enum ExceptSelect: Codable {
     }
 }
 
+// AGG_OPS = ('none', 'max', 'min', 'count', 'sum', 'avg')
+enum AggregateOpperation: Int, Codable {
+    case none
+    case max
+    case min
+    case count
+    case sum
+    case avg
+}
+
+// (agg_id, val_unit)
 enum SelectSelect: Codable {
-    case integer(Int)
-    case unionArray([OrderBy])
+    case aggregateOpperation(AggregateOpperation) // always first!
+    case valueUnit([ValueUnit]) // always second
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let x = try? container.decode(Int.self) {
-            self = .integer(x)
+        if let x = try? container.decode(AggregateOpperation.self) {
+            self = .aggregateOpperation(x)
             return
         }
-        if let x = try? container.decode([OrderBy].self) {
-            self = .unionArray(x)
+        if let x = try? container.decode([ValueUnit].self) {
+            self = .valueUnit(x)
             return
         }
         throw DecodingError.typeMismatch(SelectSelect.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for SelectSelect"))
@@ -202,42 +232,53 @@ enum SelectSelect: Codable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
-        case .integer(let x):
+        case .aggregateOpperation(let x):
             try container.encode(x)
-        case .unionArray(let x):
+        case .valueUnit(let x):
             try container.encode(x)
         }
     }
 }
 
-enum OrderBy: Codable {
-    case integer(Int)
-    case unionArray([GroupBy])
+// UNIT_OPS = ('none', '-', '+', "*", '/')
+enum UnitOperation: Int, Codable {
+    case none
+    case minus
+    case plus
+    case times
+    case divide
+}
+
+// val_unit: (unit_op, col_unit1, col_unit2)
+// order is important for col_unit1, col_unit2
+enum ValueUnit: Codable {
+    case unitOperation(UnitOperation)
+    case columnUnit([ColumnUnit])
     case null
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let x = try? container.decode(Int.self) {
-            self = .integer(x)
+        if let x = try? container.decode(UnitOperation.self) {
+            self = .unitOperation(x)
             return
         }
-        if let x = try? container.decode([GroupBy].self) {
-            self = .unionArray(x)
+        if let x = try? container.decode([ColumnUnit].self) {
+            self = .columnUnit(x)
             return
         }
         if container.decodeNil() {
             self = .null
             return
         }
-        throw DecodingError.typeMismatch(OrderBy.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for OrderBy"))
+        throw DecodingError.typeMismatch(ValueUnit.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for ValueUnit"))
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
-        case .integer(let x):
+        case .unitOperation(let x):
             try container.encode(x)
-        case .unionArray(let x):
+        case .columnUnit(let x):
             try container.encode(x)
         case .null:
             try container.encodeNil()
@@ -245,26 +286,26 @@ enum OrderBy: Codable {
     }
 }
 
-enum OrderByEnum: String, Codable {
+enum ValueUnitEnum: String, Codable {
     case asc = "asc"
     case desc = "desc"
 }
 
-enum ExceptOrderBy: Codable {
-    case enumeration(OrderByEnum)
-    case unionArrayArray([[OrderBy]])
+enum ExceptValueUnit: Codable {
+    case enumeration(ValueUnitEnum)
+    case unionArrayArray([[ValueUnit]])
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let x = try? container.decode([[OrderBy]].self) {
+        if let x = try? container.decode([[ValueUnit]].self) {
             self = .unionArrayArray(x)
             return
         }
-        if let x = try? container.decode(OrderByEnum.self) {
+        if let x = try? container.decode(ValueUnitEnum.self) {
             self = .enumeration(x)
             return
         }
-        throw DecodingError.typeMismatch(ExceptOrderBy.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for ExceptOrderBy"))
+        throw DecodingError.typeMismatch(ExceptValueUnit.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for ExceptValueUnit"))
     }
 
     func encode(to encoder: Encoder) throws {
@@ -278,18 +319,18 @@ enum ExceptOrderBy: Codable {
     }
 }
 
-
+///condition: [cond_unit1, 'and'/'or', cond_unit2, ...]
 enum SQLHaving: Codable {
-    case enumeration(HavingEnum)
-    case unionArray([PurpleHaving])
+    case enumeration(AndOr)
+    case conditionUnit([PurpleHaving])
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let x = try? container.decode([PurpleHaving].self) {
-            self = .unionArray(x)
+            self = .conditionUnit(x)
             return
         }
-        if let x = try? container.decode(HavingEnum.self) {
+        if let x = try? container.decode(AndOr.self) {
             self = .enumeration(x)
             return
         }
@@ -301,18 +342,18 @@ enum SQLHaving: Codable {
         switch self {
         case .enumeration(let x):
             try container.encode(x)
-        case .unionArray(let x):
+        case .conditionUnit(let x):
             try container.encode(x)
         }
     }
 }
-
+/// cond_unit: (not_op, op_id, val_unit, val1, val2)
 enum PurpleHaving: Codable {
     case bool(Bool)
     case integer(Int)
     case string(String)
     case tableUnitClass(SQL)
-    case unionArray([OrderBy])
+    case unionArray([ValueUnit])
     case null
 
     init(from decoder: Decoder) throws {
@@ -325,7 +366,7 @@ enum PurpleHaving: Codable {
             self = .integer(x)
             return
         }
-        if let x = try? container.decode([OrderBy].self) {
+        if let x = try? container.decode([ValueUnit].self) {
             self = .unionArray(x)
             return
         }
@@ -364,8 +405,8 @@ enum PurpleHaving: Codable {
 }
 
 struct SQLFrom: Codable {
-    let conds: [PurpleCond]
-    let tableUnits: [[FluffyTableUnit]]
+    let conds: [Conditions]
+    let tableUnits: [[TableUnit]]
 
     enum CodingKeys: String, CodingKey {
         case conds
@@ -373,21 +414,21 @@ struct SQLFrom: Codable {
     }
 }
 
-enum PurpleCond: Codable {
-    case enumeration(HavingEnum)
-    case unionArray([CondCond])
+enum Conditions: Codable {
+    case enumeration(AndOr)
+    case conditionUnit([ConditionUnit])
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let x = try? container.decode([CondCond].self) {
-            self = .unionArray(x)
+        if let x = try? container.decode([ConditionUnit].self) {
+            self = .conditionUnit(x)
             return
         }
-        if let x = try? container.decode(HavingEnum.self) {
+        if let x = try? container.decode(AndOr.self) {
             self = .enumeration(x)
             return
         }
-        throw DecodingError.typeMismatch(PurpleCond.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for PurpleCond"))
+        throw DecodingError.typeMismatch(Conditions.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for PurpleCond"))
     }
 
     func encode(to encoder: Encoder) throws {
@@ -395,62 +436,87 @@ enum PurpleCond: Codable {
         switch self {
         case .enumeration(let x):
             try container.encode(x)
-        case .unionArray(let x):
+        case .conditionUnit(let x):
             try container.encode(x)
         }
     }
 }
 
-enum FluffyTableUnit: Codable {
-    case enumeration(TableUnitEnum)
-    case integer(Int)
-    case tableUnitClass(SQL)
+enum TableUnit: Codable {
+    /// will always be first and defines if next index is tableIndex or nested SQL
+    /// So this can be ignored since the type is implicit.
+    case tableUnitType(TableUnitEnum)
+    /// the index of the table
+    case tableIndex(Int)
+    // some nested SQL
+    case nestedSQL(SQL)
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let x = try? container.decode(Int.self) {
-            self = .integer(x)
+            self = .tableIndex(x)
             return
         }
         if let x = try? container.decode(TableUnitEnum.self) {
-            self = .enumeration(x)
+            self = .tableUnitType(x)
             return
         }
         if let x = try? container.decode(SQL.self) {
-            self = .tableUnitClass(x)
+            self = .nestedSQL(x)
             return
         }
-        throw DecodingError.typeMismatch(FluffyTableUnit.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for FluffyTableUnit"))
+        throw DecodingError.typeMismatch(TableUnit.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for TableUnit"))
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
-        case .enumeration(let x):
+        case .tableUnitType(let x):
             try container.encode(x)
-        case .integer(let x):
+        case .tableIndex(let x):
             try container.encode(x)
-        case .tableUnitClass(let x):
+        case .nestedSQL(let x):
             try container.encode(x)
         }
     }
 }
 
-enum HavingEnum: String, Codable {
+enum AndOr: String, Codable {
     case and = "and"
     case or = "or"
 }
 
-enum CondCond: Codable {
-    case bool(Bool)
+///WHERE_OPS = ('not', 'between', '=', '>', '<', '>=', '<=', '!=', 'in', 'like', 'is', 'exists')
+enum WhereOperation: Int, Codable {
+    case not
+    case between
+    case equals
+    case greaterThan
+    case lessThan
+    case greaterThanOrEqualTo
+    case lessThanOrEqualTo
+    case notEqual
+    /// in
+    case inOp
+    case like
+    /// is
+    case isOp
+    case exists
+}
+
+/// cond_unit: (not_op, op_id, val_unit, val1, val2)
+enum ConditionUnit: Codable {
+    case notOperation(Bool)
+    /// is WhereOperation on index 1, is val1 on index 3, is val2 on index4
     case integer(Int)
-    case unionArray([CondElement])
+    /// val_unit: (unit_op, col_unit1, col_unit2)
+    case valueUnit([CondElement])
     case null
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let x = try? container.decode(Bool.self) {
-            self = .bool(x)
+            self = .notOperation(x)
             return
         }
         if let x = try? container.decode(Int.self) {
@@ -458,24 +524,24 @@ enum CondCond: Codable {
             return
         }
         if let x = try? container.decode([CondElement].self) {
-            self = .unionArray(x)
+            self = .valueUnit(x)
             return
         }
         if container.decodeNil() {
             self = .null
             return
         }
-        throw DecodingError.typeMismatch(CondCond.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for CondCond"))
+        throw DecodingError.typeMismatch(ConditionUnit.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for ConditionUnit"))
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
-        case .bool(let x):
+        case .notOperation(let x):
             try container.encode(x)
         case .integer(let x):
             try container.encode(x)
-        case .unionArray(let x):
+        case .valueUnit(let x):
             try container.encode(x)
         case .null:
             try container.encodeNil()
@@ -483,10 +549,12 @@ enum CondCond: Codable {
     }
 }
 
+/// same as valueUnit except for bool
 enum CondElement: Codable {
+    /// not sure why there would be a bool here.
     case bool(Bool)
     case integer(Int)
-    case unionArray([GroupBy])
+    case unionArray([ColumnUnit])
     case null
 
     init(from decoder: Decoder) throws {
@@ -499,7 +567,7 @@ enum CondElement: Codable {
             self = .integer(x)
             return
         }
-        if let x = try? container.decode([GroupBy].self) {
+        if let x = try? container.decode([ColumnUnit].self) {
             self = .unionArray(x)
             return
         }
@@ -525,28 +593,29 @@ enum CondElement: Codable {
     }
 }
 
-
-enum GroupBy: Codable {
-    case bool(Bool)
+/// col_unit: (agg_id, col_id, isDistinct(bool))
+enum ColumnUnit: Codable {
+    case isDistinct(Bool)
+    /// index 0: agg_id, index 1: col_id,
     case integer(Int)
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let x = try? container.decode(Bool.self) {
-            self = .bool(x)
+            self = .isDistinct(x)
             return
         }
         if let x = try? container.decode(Int.self) {
             self = .integer(x)
             return
         }
-        throw DecodingError.typeMismatch(GroupBy.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for GroupBy"))
+        throw DecodingError.typeMismatch(ColumnUnit.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for ColumnUnit"))
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
-        case .bool(let x):
+        case .isDistinct(let x):
             try container.encode(x)
         case .integer(let x):
             try container.encode(x)
