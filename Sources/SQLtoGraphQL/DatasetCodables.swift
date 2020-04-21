@@ -31,6 +31,20 @@
 //# }
 //################################
 
+//CLAUSE_KEYWORDS = ('select', 'from', 'where', 'group', 'order', 'limit', 'intersect', 'union', 'except')
+//JOIN_KEYWORDS = ('join', 'on', 'as')
+//
+//WHERE_OPS = ('not', 'between', '=', '>', '<', '>=', '<=', '!=', 'in', 'like', 'is', 'exists')
+//UNIT_OPS = ('none', '-', '+', "*", '/')
+//AGG_OPS = ('none', 'max', 'min', 'count', 'sum', 'avg')
+//TABLE_TYPE = {
+//    'sql': "sql",
+//    'table_unit': "table_unit",
+//}
+//COND_OPS = ('and', 'or')
+//SQL_OPS = ('intersect', 'union', 'except')
+//ORDER_OPS = ('desc', 'asc')
+
 
 import Foundation
 struct DatasetExample: Codable {
@@ -87,16 +101,32 @@ class SQL: Codable {
             return .none
         }
     }
+    /// returns HavingConditionStruct value only at odd indices that exist
+    func havingCondition(at index: Int) -> HavingConditionStruct? {
+        if case .conditionUnit(let havings) = having[index] {
+            return havings.toStruct()
+        }else {
+            return nil
+        }
+    }
+    /// returns WhereConditionStruct value only at odd indices that exist
+    func whereCondition(at index: Int) -> WhereConditionStruct? {
+        if case .whereCondition(let condition) = sqlWhere[index] {
+            return condition.toStruct()
+        }else {
+            return nil
+        }
+    }
 }
 
 enum SQLWhere: Codable {
     case enumeration(AndOr)
-    case unionArray([CunningWhere])
+    case whereCondition([CunningWhere])
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let x = try? container.decode([CunningWhere].self) {
-            self = .unionArray(x)
+            self = .whereCondition(x)
             return
         }
         if let x = try? container.decode(AndOr.self) {
@@ -111,28 +141,133 @@ enum SQLWhere: Codable {
         switch self {
         case .enumeration(let x):
             try container.encode(x)
-        case .unionArray(let x):
+        case .whereCondition(let x):
             try container.encode(x)
         }
     }
 }
 
+struct OrderByStruct {
+    let direction: ValueUnitEnum
+    let valueUnits: [ValueUnitStruct]
+    init?(orderBys: [ExceptValueUnit]) {
+        assert(orderBys.isEmpty || orderBys.count == 2, "wrong cound for orderBy tuple.")
+        if let first = orderBys.first, case .enumeration(let direction) = first,
+            let last = orderBys.last, case .unionArrayArray(let valueUnits) = last {
+            self.direction = direction
+            self.valueUnits = valueUnits.map { $0.toStruct()}
+        }else {
+            return nil
+        }
+    }
+}
+
+extension Array where Element == ExceptValueUnit {
+    func toStruct() -> OrderByStruct? {
+        return OrderByStruct(orderBys: self)
+    }
+}
+
+struct WhereConditionStruct {
+    let notOperation: Bool
+    private let operationId: Int
+    let operation: WhereOperation
+    /// The value unit before the operation
+    let valueUnit: ValueUnitStruct
+    /// The value unit after operation
+    let val1: ValueType // should this be optional?
+    let val2: ValueType?
+
+    enum ValueType {
+        case double(Double)
+        case integer(Int)
+        case string(String)
+        case sql(SQL)
+        case columnUnit(ColumnUnitStruct)
+    }
+
+    init(units: [CunningWhere]) {
+        assert(units.count == 5, "ConditionUnit (cond_unit) count is not 5.")
+
+        guard case .notOperation(let notOperation) = units[0],
+            case .integer(let operationId) = units[1],
+            case .valueUnit(let valueUnit) = units[2] else {
+            fatalError("ConditionUnit (cond_unit) type orders don't match.")
+        }
+
+        self.notOperation = notOperation
+        self.operationId = operationId
+        self.operation = WhereOperation(rawValue: operationId)!
+        self.valueUnit = valueUnit.toStruct()
+
+        switch units[3] {
+        case .double(let val):
+            self.val1 = .double(val)
+        case .string(let val):
+            self.val1 = .string(val)
+        case .sql(let val):
+            self.val1 = .sql(val)
+        case .integer(let val):
+            self.val1 = .integer(val)
+        case .val(let column):
+            self.val1 = .columnUnit(column.toStuct())
+        default:
+            fatalError("val1: ValueType (val) type orders don't match.")
+        }
+
+        switch units[4] {
+        case .double(let val):
+            self.val2 = .double(val)
+        case .string(let val):
+            self.val2 = .string(val)
+        case .sql(let val):
+            self.val2 = .sql(val)
+        case .integer(let val):
+            self.val2 = .integer(val)
+        case .val(let column):
+            self.val2 = .columnUnit(column.toStuct())
+        case .null:
+            self.val2 = nil // val2 is optional
+        default:
+            fatalError("val2: ValueType (val) type orders don't match.")
+        }
+    }
+}
+
+extension Array where Element == CunningWhere {
+    func toStruct() -> WhereConditionStruct {
+        WhereConditionStruct(units: self)
+    }
+}
+
+
+/// cond_unit: (not_op, op_id, val_unit, val1, val2)
 enum CunningWhere: Codable {
-    case bool(Bool)
+    case notOperation(Bool)
+    case integer(Int)
     case double(Double)
-    case exceptClass(SQL)
+    case sql(SQL)
     case string(String)
-    case unionArray([CondElement])
+    case valueUnit([ValueUnit])
+    case val([ColumnUnit])
     case null
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let x = try? container.decode(Bool.self) {
-            self = .bool(x)
+            self = .notOperation(x)
             return
         }
-        if let x = try? container.decode([CondElement].self) {
-            self = .unionArray(x)
+        if let val = try? container.decode([ColumnUnit].self) {
+            self = .val(val)
+            return
+        }
+        if let x = try? container.decode([ValueUnit].self) {
+            self = .valueUnit(x)
+            return
+        }
+        if let x = try? container.decode(Int.self) {
+            self = .integer(x)
             return
         }
         if let x = try? container.decode(Double.self) {
@@ -144,7 +279,7 @@ enum CunningWhere: Codable {
             return
         }
         if let x = try? container.decode(SQL.self) {
-            self = .exceptClass(x)
+            self = .sql(x)
             return
         }
         if container.decodeNil() {
@@ -153,23 +288,51 @@ enum CunningWhere: Codable {
         }
         throw DecodingError.typeMismatch(CunningWhere.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for CunningWhere"))
     }
-
+    
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
-        case .bool(let x):
+        case .notOperation(let x):
             try container.encode(x)
         case .double(let x):
             try container.encode(x)
-        case .exceptClass(let x):
+        case .integer(let x):
+            try container.encode(x)
+        case .sql(let x):
             try container.encode(x)
         case .string(let x):
             try container.encode(x)
-        case .unionArray(let x):
+        case .valueUnit(let x):
+            try container.encode(x)
+        case .val(let x):
             try container.encode(x)
         case .null:
             try container.encodeNil()
         }
+    }
+}
+
+struct SelectStruct {
+    let isDistinct: Bool
+    let selectStatements: [SelectField]
+    
+    init(selects: [ExceptSelect]) {
+        assert(selects.count == 2, "Select count is not 2")
+        guard case .isDistict(let isDistinct) = selects[0] else {
+            fatalError("isDistinct is not at index 0.")
+        }
+        guard case .unionArrayArray(let selectStatements) = selects[1] else {
+            fatalError("selectStatements is not at index 1.")
+        }
+        self.isDistinct = isDistinct
+        self.selectStatements = selectStatements.toPairs()
+        
+    }
+}
+
+extension Array where Element == ExceptSelect {
+    func toStruct() -> SelectStruct {
+        SelectStruct(selects: self)
     }
 }
 
@@ -209,6 +372,28 @@ enum AggregateOpperation: Int, Codable {
     case count
     case sum
     case avg
+}
+
+struct SelectField {
+    let aggregateOpperation: AggregateOpperation
+    let valueUnit: ValueUnitStruct
+    
+    init(selects:[SelectSelect] ) {
+        guard case .aggregateOpperation(let operation) = selects[0] else {
+            fatalError("select pair type mismatch")
+        }
+        guard case .valueUnit(let unit) = selects[1] else {
+            fatalError("select pair type mismatch")
+        }
+        self.aggregateOpperation = operation
+        self.valueUnit = unit.toStruct()
+    }
+}
+
+extension Array where Element == [SelectSelect] {
+    func toPairs() -> [SelectField] {
+        self.map(SelectField.init(selects:))
+    }
 }
 
 // (agg_id, val_unit)
@@ -347,19 +532,79 @@ enum SQLHaving: Codable {
         }
     }
 }
+
+struct HavingConditionStruct {
+    let notOperation: Bool
+    let operationId: Int
+    let operation: WhereOperation
+    let valueUnit: ValueUnitStruct
+    let val1: ValueType // should this be optional?
+    let val2: ValueType?
+    
+    enum ValueType {
+//        case integer(Int)
+        case string(String)
+        case sql(SQL)
+    }
+
+    init(units: [PurpleHaving]) {
+        assert(units.count == 5, "ConditionUnit (cond_unit) count is not 5.")
+        
+        guard case .notOperation(let notOperation) = units[0],
+            case .integer(let operationId) = units[1],
+            case .valueUnit(let valueUnit) = units[2] else {
+            fatalError("ConditionUnit (cond_unit) type orders don't match.")
+        }
+
+        self.notOperation = notOperation
+        self.operationId = operationId
+        self.operation = WhereOperation(rawValue: operationId)!
+        self.valueUnit = valueUnit.toStruct()
+        
+        switch units[3] {
+//        case .integer(let val):
+//            self.val1 = .integer(val)
+        case .string(let val):
+            self.val1 = .string(val)
+        case .sql(let val):
+            self.val1 = .sql(val)
+        default:
+            fatalError("val1: ValueType (val) type orders don't match.")
+        }
+        
+        switch units[4] {
+//        case .integer(let val):
+//            self.val2 = .integer(val)
+        case .string(let val):
+            self.val2 = .string(val)
+        case .sql(let val):
+            self.val2 = .sql(val)
+        case .null:
+            self.val2 = nil // val2 is optional
+        default:
+            fatalError("val2: ValueType (val) type orders don't match.")
+        }
+    }
+}
+
+extension Array where Element == PurpleHaving {
+    func toStruct() -> HavingConditionStruct {
+        HavingConditionStruct(units: self)
+    }
+}
 /// cond_unit: (not_op, op_id, val_unit, val1, val2)
 enum PurpleHaving: Codable {
-    case bool(Bool)
+    case notOperation(Bool)
     case integer(Int)
+    case valueUnit([ValueUnit])
     case string(String)
-    case tableUnitClass(SQL)
-    case unionArray([ValueUnit])
+    case sql(SQL)
     case null
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let x = try? container.decode(Bool.self) {
-            self = .bool(x)
+            self = .notOperation(x)
             return
         }
         if let x = try? container.decode(Int.self) {
@@ -367,7 +612,7 @@ enum PurpleHaving: Codable {
             return
         }
         if let x = try? container.decode([ValueUnit].self) {
-            self = .unionArray(x)
+            self = .valueUnit(x)
             return
         }
         if let x = try? container.decode(String.self) {
@@ -375,7 +620,7 @@ enum PurpleHaving: Codable {
             return
         }
         if let x = try? container.decode(SQL.self) {
-            self = .tableUnitClass(x)
+            self = .sql(x)
             return
         }
         if container.decodeNil() {
@@ -388,15 +633,15 @@ enum PurpleHaving: Codable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
-        case .bool(let x):
+        case .notOperation(let x):
             try container.encode(x)
         case .integer(let x):
             try container.encode(x)
         case .string(let x):
             try container.encode(x)
-        case .tableUnitClass(let x):
+        case .sql(let x):
             try container.encode(x)
-        case .unionArray(let x):
+        case .valueUnit(let x):
             try container.encode(x)
         case .null:
             try container.encodeNil()
@@ -407,10 +652,25 @@ enum PurpleHaving: Codable {
 struct SQLFrom: Codable {
     let conds: [Conditions]
     let tableUnits: [[TableUnit]]
+    
+    /// either TableUnit.nestedSQL or tableIndex
+    var allTableUnits: [TableUnit] {
+        // index 1 is always the table unit
+        self.tableUnits.compactMap{$0.last}
+        
+    }
 
     enum CodingKeys: String, CodingKey {
         case conds
         case tableUnits = "table_units"
+    }
+    /// returns condition if condition is "[ConditionUnit]" (should be all odd indices)
+    func condition(at index: Int) -> ConditionUnitStruct? {
+        if case .conditionUnit(let units) = self.conds[index] {
+            return units.toStruct()
+        } else {
+            return nil
+        }
     }
 }
 
@@ -504,13 +764,58 @@ enum WhereOperation: Int, Codable {
     case exists
 }
 
+
+struct ConditionUnitStruct {
+    let notOperation: Bool
+    private let operationId: Int
+    let operation: WhereOperation
+    let valueUnit: ValueUnitStruct
+    let val1: ColumnUnitStruct
+    let val2: ColumnUnitStruct?
+
+    init(units: [ConditionUnit]) {
+        assert(units.count == 5, "ConditionUnit (cond_unit) count is not 5.")
+        
+        guard case .notOperation(let notOperation) = units[0],
+            case .integer(let operationId) = units[1],
+            case .valueUnit(let valueUnit) = units[2],
+            case .val(let val1) = units[3] else {
+            fatalError("ConditionUnit (cond_unit) type orders don't match.")
+        }
+
+        self.notOperation = notOperation
+        self.operationId = operationId
+        self.operation = WhereOperation(rawValue: operationId)!
+        self.valueUnit = valueUnit.toStruct()
+        self.val1 = val1.toStuct()
+        switch units[4] {
+        case .val(let val2):
+            self.val2 = val2.toStuct()
+        case .null:
+            self.val2 = nil
+        default:
+            fatalError("val2: ConditionUnit (cond_unit) type orders don't match.")
+        }
+    }
+}
+
+extension Array where Element == ConditionUnit {
+    func toStruct() -> ConditionUnitStruct {
+        ConditionUnitStruct(units: self)
+    }
+}
+
+// possible reason it's weird is because it tries to decode val1 and val2 as ValueUnit
+// in reality those are supposed to be ColumnUnit
 /// cond_unit: (not_op, op_id, val_unit, val1, val2)
 enum ConditionUnit: Codable {
     case notOperation(Bool)
     /// is WhereOperation on index 1, is val1 on index 3, is val2 on index4
     case integer(Int)
     /// val_unit: (unit_op, col_unit1, col_unit2)
-    case valueUnit([CondElement])
+    case valueUnit([ValueUnit])
+//    case valueUnit([ValueUnit])
+    case val([ColumnUnit])
     case null
 
     init(from decoder: Decoder) throws {
@@ -523,7 +828,11 @@ enum ConditionUnit: Codable {
             self = .integer(x)
             return
         }
-        if let x = try? container.decode([CondElement].self) {
+        if let val = try? container.decode([ColumnUnit].self) {
+            self = .val(val)
+            return
+        }
+        if let x = try? container.decode([ValueUnit].self) {
             self = .valueUnit(x)
             return
         }
@@ -543,55 +852,49 @@ enum ConditionUnit: Codable {
             try container.encode(x)
         case .valueUnit(let x):
             try container.encode(x)
+        case .val(let x):
+            try container.encode(x)
         case .null:
             try container.encodeNil()
         }
+    }
+}
+
+// should be a val_unit
+struct ValueUnitStruct {
+    let unitOperation: UnitOperation
+    let columnUnit1: ColumnUnitStruct
+    let columnUnit2: ColumnUnitStruct?
+    init(condElements: [ValueUnit]) {
+        assert(condElements.count == 3, "ValueUnit (val_unit) does not have 3 elements")
+        guard case .unitOperation(let unitOperation) = condElements[0],
+            case .columnUnit(let columnUnit1) = condElements[1] else {
+                fatalError("ValueUnit (val_unit) types don't match order.")
+        }
+        self.unitOperation = unitOperation
+        self.columnUnit1 = columnUnit1.toStuct()
+        // TODO there are some cases where bool is used
+        // wrongly it's enumerating to ValueUnit when it should use ColumnUnit
+        // This might fail, where is the bool???
+        switch condElements[2] {
+        case .columnUnit(let columnUnit2):
+            self.columnUnit2 = columnUnit2.toStuct()
+        case .null:
+            self.columnUnit2 = nil
+        default:
+            fatalError("columnUnit2: ValueUnit (val_unit) types don't match.")
+        }
+    }
+}
+
+extension Array where Element == ValueUnit {
+    func toStruct() -> ValueUnitStruct {
+        ValueUnitStruct(condElements: self)
     }
 }
 
 /// same as valueUnit except for bool
-enum CondElement: Codable {
-    /// not sure why there would be a bool here.
-    case bool(Bool)
-    case integer(Int)
-    case unionArray([ColumnUnit])
-    case null
 
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let x = try? container.decode(Bool.self) {
-            self = .bool(x)
-            return
-        }
-        if let x = try? container.decode(Int.self) {
-            self = .integer(x)
-            return
-        }
-        if let x = try? container.decode([ColumnUnit].self) {
-            self = .unionArray(x)
-            return
-        }
-        if container.decodeNil() {
-            self = .null
-            return
-        }
-        throw DecodingError.typeMismatch(CondElement.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for CondElement"))
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .bool(let x):
-            try container.encode(x)
-        case .integer(let x):
-            try container.encode(x)
-        case .unionArray(let x):
-            try container.encode(x)
-        case .null:
-            try container.encodeNil()
-        }
-    }
-}
 
 /// col_unit: (agg_id, col_id, isDistinct(bool))
 enum ColumnUnit: Codable {
@@ -620,6 +923,31 @@ enum ColumnUnit: Codable {
         case .integer(let x):
             try container.encode(x)
         }
+    }
+}
+
+struct ColumnUnitStruct {
+    let aggregateId: Int
+    let columnId: Int
+    let isDistinct: Bool
+    
+    init(columnUnits: [ColumnUnit]) {
+        assert(columnUnits.count == 3, "Column Unit (col_unit) count is not 3.")
+        guard case .integer(let aggregateId) = columnUnits[0],
+            case .integer(let columnId) = columnUnits[1],
+            case .isDistinct(let isDistinct) = columnUnits[2] else {
+                fatalError("Column Unit (col_unit) types do not match")
+        }
+        
+        self.aggregateId = aggregateId
+        self.columnId = columnId
+        self.isDistinct = isDistinct
+    }
+}
+
+extension Array where Element == ColumnUnit {
+    func toStuct() -> ColumnUnitStruct {
+        return ColumnUnitStruct(columnUnits: self)
     }
 }
 

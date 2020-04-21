@@ -7,6 +7,109 @@
 
 import Foundation
 
+// Raw graphql queries used to create real queries
+class RawGraphQLArgument {
+    
+    enum RawGraphQLArgumentName: RawRepresentable {
+        typealias RawValue = String
+        
+//        case not
+        case whereCase
+        case and
+        case or
+        case name(String)
+        case distinct
+        case column(DatabaseColumn)
+        
+        /// Failable Initalizer
+        public init?(rawValue: RawValue) {
+            switch rawValue {
+            case "where": self = .whereCase
+            case "and":  self = .and
+            case "or":  self = .or
+            case "distinct": self = .distinct
+//            case "not": self = .not
+            default:
+                self = .name(rawValue)
+            }
+        }
+
+        /// Backing raw value
+        public var rawValue: RawValue {
+            switch self {
+//            case .not: return "not"
+            case .whereCase: return "where"
+            case .and: return "and"
+            case .or: return "or"
+            case .distinct: return "distinct"
+            case .name(let name):
+                return name
+            case .column(let column):
+                // TODO check that this is the value I want!
+                return "\(column.tableName)_\(column.columnName)"
+            }
+        }
+    }
+    
+    enum RawGraphQLArgumentValue {
+        case string(String)
+        case integer(Int)
+        case arguments([RawGraphQLArgument])
+        case double(Double)
+        case bool(Bool)
+    }
+    
+    init(name: RawGraphQLArgumentName, value: RawGraphQLArgumentValue, not: Bool = false) {
+        self.name = name
+        self.value = value
+        self.not = not
+    }
+    
+    let name: RawGraphQLArgumentName
+    let value: RawGraphQLArgumentValue
+    let not: Bool
+}
+
+class RawGraphQLQuery {
+    
+    init(table: DatabaseTable,
+         arguments: [RawGraphQLArgument] = [],
+         queries: [RawGraphQLQuery] = [],
+         fields: [RawGraphQLField] = [],
+         hasAggregates: Bool = false) {
+        self.table = table
+        self.arguments = arguments
+        self.queries = queries
+        self.fields = fields
+        self.hasAggregates = hasAggregates
+    }
+    
+    let table: DatabaseTable
+    let arguments: [RawGraphQLArgument]
+    let queries: [RawGraphQLQuery]
+    let fields: [RawGraphQLField]
+    let hasAggregates: Bool
+}
+
+struct RawGraphQLField {
+    init(name: RawGraphQLField.RawGraphQLFieldName, column: DatabaseColumn, arguments: [RawGraphQLArgument] = []) {
+        self.name = name
+        self.column = column
+        self.arguments = arguments
+    }
+    
+    enum RawGraphQLFieldName {
+        case aggregate(AggregateOpperation)
+        case field(String)
+        
+    }
+    let name: RawGraphQLFieldName
+    let column: DatabaseColumn
+    let arguments: [RawGraphQLArgument]
+}
+
+// Real Graphql queries to encode
+
 enum GraphQLArgumentValue {
     case string(String)
     case integer(Int)
@@ -65,22 +168,9 @@ class GraphQLQuery {
     }
 }
 
-// holds a graphql query.
-struct GraphQLDatasetExample {
-    init(example: DatasetExample, with schema: BaseSchema) {
-        // might need to grab tables.json.
-        
-        // find which tables to query from "FROM" and any other
-        // find any aggregates that are needed
-        // create a struct that can return
-        
-        
-        // might need to use vars. can't see everything I need in one shot.
-        switch example.sql.from.tableUnits.first![0] {
-        case .tableIndex(let index):
-            <#code#>
-        default:
-            <#code#>
-        }
-    }
+struct GraphQLDatasetExample: Codable {
+    let schemaId: String
+    let question: String
+    let questionTokens: [String]
+    let query: String
 }
