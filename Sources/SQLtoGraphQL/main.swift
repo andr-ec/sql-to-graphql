@@ -32,7 +32,7 @@ struct ParseSQLtoGraphQL: ParsableCommand {
     func run() throws {
         let spiderURL = URL(fileURLWithPath: spiderPath, isDirectory: true)
         let queryDatasetPaths = try FileManager.default.subpathsOfDirectory(atPath: spiderPath)
-            .filter {($0.contains("train") || $0.contains("dev")) && $0.contains(".json") } // dev/train.json
+            .filter {($0.contains("train") || $0.contains("dev")) && $0.contains(".json") && !$0.contains("others") } // dev/train.json
         
         let datasets = try queryDatasetPaths.map { try SpiderDataset(subPath: $0, parentDirectory: spiderURL) }
         
@@ -41,6 +41,8 @@ struct ParseSQLtoGraphQL: ParsableCommand {
         let databaseById = Dictionary(grouping: databases, by: {$0.dbID})
             .mapValues{ $0.first! }
         
+//        print("Total count = \(datasets.flatMap{ $0.schemaToExamples.map{ $0.value.count}}.reduce(0, +))")
+        // Total examples = 9693
         for dataset in datasets {
             try process(dataset: dataset, databases: databaseById)
         }
@@ -48,6 +50,7 @@ struct ParseSQLtoGraphQL: ParsableCommand {
     }
     
     func process(dataset: SpiderDataset, databases: [String: Database]) throws {
+        // TODO load databases/ datasets only when needed one at a time
         for (name, exampleGroup) in dataset.schemaToExamples {
             let database = databases[name]!
             let schema = try loadSchema(name: name)

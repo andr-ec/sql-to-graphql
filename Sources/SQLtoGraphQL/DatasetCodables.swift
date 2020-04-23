@@ -425,7 +425,7 @@ enum SelectSelect: Codable {
     }
 }
 
-// UNIT_OPS = ('none', '-', '+', "*", '/')
+/// UNIT_OPS = ('none', '-', '+', "*", '/')
 enum UnitOperation: Int, Codable {
     case none
     case minus
@@ -927,7 +927,7 @@ enum ColumnUnit: Codable {
 }
 
 struct ColumnUnitStruct {
-    let aggregateId: Int
+    let aggregateOperation: AggregateOpperation
     let columnId: Int
     let isDistinct: Bool
     
@@ -935,11 +935,12 @@ struct ColumnUnitStruct {
         assert(columnUnits.count == 3, "Column Unit (col_unit) count is not 3.")
         guard case .integer(let aggregateId) = columnUnits[0],
             case .integer(let columnId) = columnUnits[1],
-            case .isDistinct(let isDistinct) = columnUnits[2] else {
+            case .isDistinct(let isDistinct) = columnUnits[2],
+        let aggregateOperation = AggregateOpperation.init(rawValue: aggregateId)  else {
                 fatalError("Column Unit (col_unit) types do not match")
         }
         
-        self.aggregateId = aggregateId
+        self.aggregateOperation = aggregateOperation
         self.columnId = columnId
         self.isDistinct = isDistinct
     }

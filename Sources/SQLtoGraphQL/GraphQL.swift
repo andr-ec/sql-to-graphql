@@ -8,6 +8,16 @@
 import Foundation
 
 // Raw graphql queries used to create real queries
+
+struct RawGraphQLQueryGroup {
+    let queries: [RawGraphQLQuery]
+    let fromTableQueries: [RawGraphQLQuery]
+    let whereArgument: RawGraphQLArgument?
+    let orderByArgument: RawGraphQLArgument?
+    let limitArgument: RawGraphQLArgument?
+    let isDistinct: Bool
+}
+
 class RawGraphQLArgument {
     
     enum RawGraphQLArgumentName: RawRepresentable {
@@ -20,6 +30,8 @@ class RawGraphQLArgument {
         case name(String)
         case distinct
         case column(DatabaseColumn)
+        case orderBy
+        case limit
         
         /// Failable Initalizer
         public init?(rawValue: RawValue) {
@@ -28,6 +40,8 @@ class RawGraphQLArgument {
             case "and":  self = .and
             case "or":  self = .or
             case "distinct": self = .distinct
+            case "order_by": self = .orderBy
+            case "limit": self = .limit
 //            case "not": self = .not
             default:
                 self = .name(rawValue)
@@ -42,6 +56,8 @@ class RawGraphQLArgument {
             case .and: return "and"
             case .or: return "or"
             case .distinct: return "distinct"
+            case .orderBy: return "order_by"
+            case .limit: return "limit"
             case .name(let name):
                 return name
             case .column(let column):
@@ -57,6 +73,7 @@ class RawGraphQLArgument {
         case arguments([RawGraphQLArgument])
         case double(Double)
         case bool(Bool)
+        case namedValue(String) // just returns without quotes for example asc or dec
     }
     
     init(name: RawGraphQLArgumentName, value: RawGraphQLArgumentValue, not: Bool = false) {
@@ -84,11 +101,40 @@ class RawGraphQLQuery {
         self.hasAggregates = hasAggregates
     }
     
-    let table: DatabaseTable
+    var table: DatabaseTable
     let arguments: [RawGraphQLArgument]
-    let queries: [RawGraphQLQuery]
+    var queries: [RawGraphQLQuery]
     let fields: [RawGraphQLField]
+    /// if hasAggregate: `self.query.first` is always the `nodes`,
+    /// `self.query.last` is always the `aggregate`
     let hasAggregates: Bool
+    var name: String? // only has a value once confirmed as nested / parent query
+    
+    
+    /// sets name based off of schema types, handling aggregate when needed.
+    /// `nodes` query is correct name as well.
+    func setNameFrom(schema: BaseSchema) {
+        let types = schema.schema.types
+        let aggregateEnding = self.hasAggregates ? "_aggregate" : ""
+        guard let type = types
+        .first(where: { $0.name.lowercased() == self.table.name.lowercased() + aggregateEnding }) else {
+                fatalError("table not found in schema")
+        }
+        self.name = type.name
+        if self.hasAggregates,
+            let nodesType = types.first(where: { $0.name.lowercased() == self.table.name.lowercased() }),
+            let aggregateFieldsType = types.first(where: {$0.name.lowercased() == self.table.name.lowercased() + aggregateEnding + "_fields"}) {
+            
+            self.queries.first?.table = table
+            self.queries.first?.name = nodesType.name
+            
+            self.queries.last?.table = table
+            self.queries.last?.name = aggregateFieldsType.name
+            // TODO find aggregate type and add.
+        } else if self.hasAggregates {
+            fatalError("table not found in schema")
+        }
+    }
 }
 
 struct RawGraphQLField {
