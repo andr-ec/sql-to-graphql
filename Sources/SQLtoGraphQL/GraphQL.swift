@@ -102,9 +102,9 @@ class RawGraphQLQuery {
     }
     
     var table: DatabaseTable
-    let arguments: [RawGraphQLArgument]
+    var arguments: [RawGraphQLArgument]
     var queries: [RawGraphQLQuery]
-    let fields: [RawGraphQLField]
+    var fields: [RawGraphQLField]
     /// if hasAggregate: `self.query.first` is always the `nodes`,
     /// `self.query.last` is always the `aggregate`
     let hasAggregates: Bool
@@ -134,6 +134,16 @@ class RawGraphQLQuery {
         } else if self.hasAggregates {
             fatalError("table not found in schema")
         }
+    }
+    
+    func combine(with query: RawGraphQLQuery) {
+        self.arguments = self.arguments + query.arguments
+        self.fields = self.fields + query.fields
+        self.queries = self.queries + query.queries
+    }
+    
+    var nestedQueryCount: Int {
+        self.queries.map{$0.nestedQueryCount}.reduce(0, +) + 1
     }
 }
 

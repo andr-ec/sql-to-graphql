@@ -30,6 +30,8 @@ struct ProcessDatabases: ParsableCommand {
     var pgloaderPath: String
     
     func run() {
+        // So we don't run this accidentally while building schemas
+        return
         do {
             let spiderDBsURL = URL(fileURLWithPath: spiderPath, isDirectory: true)
             let sqlLitePaths = try FileManager.default.subpathsOfDirectory(atPath: spiderPath)

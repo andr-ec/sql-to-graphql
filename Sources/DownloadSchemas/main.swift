@@ -32,6 +32,9 @@ struct DownloadGraphQLSchemas: ParsableCommand {
     @Option(name: .shortAndLong, default: true, help: "Should retry failed schema downloads?")
     var shouldRetryFailed: Bool
     
+    @Option(name: .shortAndLong, default: nil, help: "The name of a single schema to download.")
+    var schemaName: String?
+    
     var endpoint: URL {
         URL(string: graphqlEndpoint)!
     }
@@ -39,17 +42,44 @@ struct DownloadGraphQLSchemas: ParsableCommand {
     
     
     func run() {
-        var(successful, failed) = download(schemas: databaseNames.sorted())
-        
-        if shouldRetryFailed {
-            while failed.count > 0 {
-                print("retrying failed \(failed.count)")
-                (successful, failed) = download(schemas: failed)
+        if let name = self.schemaName {
+            self.download(schema: name)
+            return
+        } else {
+            var(successful, failed) = download(schemas: databaseNames.sorted())
+            
+            if shouldRetryFailed {
+                while failed.count > 0 {
+                    print("retrying failed \(failed.count)")
+                    (successful, failed) = download(schemas: failed)
+                }
             }
+            
+            print("successful \(successful.count)")
+            print("failed \(failed.count)")
+        }
+    }
+    
+    func download(schema: String) {
+        let hash = startHasura(name: schema, dockerPath: self.dockerPath)
+        print("⬇️ \(schema)")
+        // This makes it so that hasura has enough time to startup
+        // and the request doesn't fail.
+        sleep(1)
+        let downloaded = self.downloadSchema(name: schema)
+        
+        switch downloaded {
+        case .success(let downloadLogs):
+            print(downloadLogs)
+        //                successful.append(name)
+        case .failure(let error):
+            print("🚨 \(error)")
+            //                failed.append(name)
         }
         
-        print("successful \(successful.count)")
-        print("failed \(failed.count)")
+        let stopped = stopHasura(hash: hash, dockerPath: self.dockerPath)
+        print("✋ \(stopped)")
+        return
     }
     
     func download(schemas: [String]) -> (successful: [String], failed: [String]) {

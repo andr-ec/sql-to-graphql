@@ -374,7 +374,7 @@ enum AggregateOpperation: Int, Codable {
     case avg
 }
 
-struct SelectField {
+struct SelectField: Hashable {
     let aggregateOpperation: AggregateOpperation
     let valueUnit: ValueUnitStruct
     
@@ -861,7 +861,7 @@ enum ConditionUnit: Codable {
 }
 
 // should be a val_unit
-struct ValueUnitStruct {
+struct ValueUnitStruct: Hashable {
     let unitOperation: UnitOperation
     let columnUnit1: ColumnUnitStruct
     let columnUnit2: ColumnUnitStruct?
@@ -926,7 +926,7 @@ enum ColumnUnit: Codable {
     }
 }
 
-struct ColumnUnitStruct {
+struct ColumnUnitStruct: Hashable {
     let aggregateOperation: AggregateOpperation
     let columnId: Int
     let isDistinct: Bool

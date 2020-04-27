@@ -124,4 +124,27 @@ struct Field: Codable {
         case fieldDescription = "description"
         case args, type, isDeprecated//, deprecationReason
     }
+    
+    func nameMatchesFieldType(_ name: String?) -> Bool {
+        guard let name = name, let objectTypeName = self.objectTypeName else {
+            return false
+        }
+        return objectTypeName.lowercased() == name.lowercased()
+    }
+    
+    func fieldMatchesField(_ field:Field) -> Bool {
+        return nameMatchesFieldType(field.objectTypeName)
+    }
+    
+    var objectTypeName: String? {
+        if self.type.kind == .object, let name = self.type.name {
+            return name
+        } else if self.type.ofType?.kind == .some(.object), let name = self.type.ofType?.name {
+            return name
+        } else if type.ofType?.ofType?.ofType?.kind == .some(.object), let name = self.type.ofType?.ofType?.ofType?.name {
+            return name
+        } else {
+            return nil
+        }
+    }
 }

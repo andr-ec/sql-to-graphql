@@ -51,7 +51,7 @@ struct ParseSQLtoGraphQL: ParsableCommand {
     
     func process(dataset: SpiderDataset, databases: [String: Database]) throws {
         // TODO load databases/ datasets only when needed one at a time
-        for (name, exampleGroup) in dataset.schemaToExamples {
+        for (name, exampleGroup) in dataset.schemaToExamples.sorted(by: { $0.key > $1.key}) {
             let database = databases[name]!
             let schema = try loadSchema(name: name)
             

@@ -71,8 +71,8 @@ class DatabaseExamplesParser: Codable {
         
         // reduce selects into a nested query
         // aggregate queries are first
-        let queries = group.queries.reduce([], { $1.hasAggregates ? [$1] + $0 : $0 + [$1] }) // should `*`s go first as well?
-        let firstQuery = queries.first!
+        var queries = group.queries.reduce([], { $1.hasAggregates ? [$1] + $0 : $0 + [$1] }) // should `*`s go first as well?
+        var firstQuery = queries.first!
         if firstQuery.table.name != "*" {
             firstQuery.setNameFrom(schema: self.schema)
         }
@@ -82,23 +82,69 @@ class DatabaseExamplesParser: Codable {
         if hasAnyTable && queries.count == 1 {
             firstQuery.table = group.fromTableQueries.first!.table
             firstQuery.setNameFrom(schema: self.schema)
-        } else if hasAnyTable && group.fromTableQueries.count == 1 {
-            queries.forEach{ query in
-                query.table = group.fromTableQueries.first!.table
-                query.setNameFrom(schema: self.schema)
+        } else if hasAnyTable && queries.count > 1 && group.fromTableQueries.count == 1 {// i should be able to combine the obove
+            firstQuery.table = group.fromTableQueries.first!.table
+            firstQuery.setNameFrom(schema: self.schema)
+            // can create duplicate names here as well.
+            firstQuery = queries.dropFirst().reduce(into: firstQuery) { (result, query) in
+                if query.hasAggregates {
+                    assert(result.hasAggregates) // since aggreagtes are always first
+                    result.queries.first!.combine(with: query.queries.first!) // nodes
+                    result.queries.last!.combine(with: query.queries.last!) // aggregates
+                }
             }
+            queries = [firstQuery]
         } else if hasAnyTable && queriesWithTables.count == 1, let queryWithTable = queriesWithTables.first {
-            queries.forEach{ query in
-                query.table = queryWithTable.table
-                query.setNameFrom(schema: self.schema)
+            // This creates with duplicate names. no bueno
+            // is any table first?
+            // is any table an aggregate?
+            
+            // put everything inside of the first query
+            // give the first query the right name
+            firstQuery.table = queryWithTable.table
+            firstQuery.setNameFrom(schema: self.schema)
+            
+            
+            firstQuery = queries.dropFirst().reduce(into: firstQuery) { (result, query) in
+                if query.hasAggregates {
+                    assert(result.hasAggregates) // since aggreagtes are always first
+                    result.queries.first!.combine(with: query.queries.first!) // nodes
+                    result.queries.last!.combine(with: query.queries.last!) // aggregates
+                }
             }
+            queries = [firstQuery]
         } else if hasAnyTable {
             fatalError("has any table (*) that isn't handled")
         }
         
         let rootQuery = queries
             .dropFirst()
-            .reduce(firstQuery, { self.nestQueries(into: $0, currentQuery: $1) }) // TODO check that every query is used.
+            .reduce(firstQuery) { previousResult, currentQuery in
+                let previousCount = previousResult.nestedQueryCount
+                var newResult = self.nestQueries(into: previousResult, currentQuery: currentQuery)
+
+                if newResult.nestedQueryCount != previousCount + 1,
+                    let unusedQuery = group.fromTableQueries.first(where: { $0.table != previousResult.table && $0.table != currentQuery.table && $0.name != nil}) {
+                    unusedQuery.setNameFrom(schema: self.schema)
+                    let intermediateResult = self.nestQueries(into: unusedQuery, currentQuery: currentQuery)
+                    assert(intermediateResult.nestedQueryCount == 2)
+                    newResult = self.nestQueries(into: previousResult, currentQuery: intermediateResult)
+                    
+                    if newResult.nestedQueryCount != previousCount + 2,
+                        let newNestedResult = nestIntermediateQuery(previousResult: previousResult, currentQuery: intermediateResult) {
+                        newResult = newNestedResult
+                        assert(newResult.nestedQueryCount == 3)
+                    }
+                } else if newResult.nestedQueryCount != previousCount + 1,
+                    let newNestedResult = nestIntermediateQuery(previousResult: previousResult, currentQuery: currentQuery) {
+                    newResult = newNestedResult
+                    assert(newResult.nestedQueryCount >= previousCount + 2) // unsure about this
+                } else {
+                    assert(newResult.nestedQueryCount == previousCount + 1)
+                }
+                assert(newResult.nestedQueryCount > previousCount)
+                return newResult
+        }
         // TODO
         // [] handle cases where rootTable is `*`
         //    can happen on aggregate or on any
@@ -110,9 +156,54 @@ class DatabaseExamplesParser: Codable {
         
         
         
-        // reduce arguments into the root query
+        // reduce arguments into an argument
+        // store other arguments (limit) into array of arguments
+        // store arguments array into root query.
         // add other arguments as well.
         return GraphQLQuery(fieldName: "")
+    }
+    /// Creates searches for a possible intermediate query based on the previousResult and the currentQuery.
+    /// this will also call `nestQueries.
+    /// will prompt if there are more than 1 possible intermediate queries.
+    func nestIntermediateQuery(previousResult: RawGraphQLQuery, currentQuery: RawGraphQLQuery) -> RawGraphQLQuery? {
+        if let previousResultFields = self.schema.schema.types.first(where: {$0.name == previousResult.name })?.fields,
+            let intermediateResultFields = self.schema.schema.types.first(where: {$0.name == previousResult.name})?.fields {
+            let previousCount = previousResult.nestedQueryCount
+            
+            let matchingMissingFields = previousResultFields.filter({field in
+                intermediateResultFields.contains(where: {$0.fieldMatchesField(field)})
+            })
+                .filter({ !$0.name.contains("aggregate")})
+            
+            
+             // otherwise ask for value
+            var currentParent = previousResult
+            while true {
+                var matchingMissingField = matchingMissingFields.first!
+                var queryTypeName: String
+                if matchingMissingFields.count != 1 {
+                    print("Child to \(currentParent.name ?? "") and parent to \(currentQuery.table.name) options:")
+                    print(matchingMissingFields.map{ $0.objectTypeName })
+                    queryTypeName = readLine()!
+                } else {
+                    queryTypeName = matchingMissingField.objectTypeName!
+                }
+                
+                var newMatchingQuery = RawGraphQLQuery(table: self.database.tables.first(where: {$0.name.lowercased() == queryTypeName.lowercased()})!)
+                let newResult = self.nestQueries(into: currentParent, currentQuery: newMatchingQuery)
+                assert(newResult.nestedQueryCount == previousCount + 1)
+                
+                newMatchingQuery = self.nestQueries(into: newMatchingQuery, currentQuery: currentQuery)
+                if newMatchingQuery.nestedQueryCount == 2 {
+                    break
+                } else {
+                    currentParent = newMatchingQuery
+                }
+            }
+            return previousResult
+        } else {
+            return nil
+        }
     }
     
     // i could nest into a GraphQLQuery as well
@@ -122,10 +213,9 @@ class DatabaseExamplesParser: Codable {
         // using recurssion
         // escape condition is that previousResult query has currentQuery as a child
         // returns previousResult with currentQuery added to child Query.
-        let parentName = previousResult.name!
         if previousResult.hasAggregates,
             let nodesQuery = previousResult.queries.first,
-            let childName = self.getChildQueryName(child: currentQuery, of: parentName) {
+            let childName = self.getChildQueryName(child: currentQuery, of: nodesQuery) {
             // TODO name nodesQuery here or in select
             // return new result
             currentQuery.name = childName
@@ -134,27 +224,42 @@ class DatabaseExamplesParser: Codable {
         } else if previousResult.hasAggregates {// if is aggregate but child isn't found
             previousResult.queries.first!.queries = previousResult.queries.first!.queries.map{ self.nestQueries(into: $0, currentQuery: currentQuery)  }
             return previousResult
-        } else if let childName = self.getChildQueryName(child: currentQuery, of: parentName) {
+        } else if let childName = self.getChildQueryName(child: currentQuery, of: previousResult) {
             currentQuery.name = childName
             previousResult.queries = previousResult.queries + [currentQuery]
             return previousResult
-        } else { // if not aggregate and child isn't found.
+        } else if !previousResult.queries.isEmpty { // if not aggregate and child isn't found.
             // go through each of the queries
             // pass into this same function
             previousResult.queries = previousResult.queries.map{ self.nestQueries(into: $0, currentQuery: currentQuery) }
+            return previousResult
+        } else {
             return previousResult
         }
         // TODO could make another else and try make current, the parent.
     }
     
-    func getChildQueryName(child: RawGraphQLQuery, of parentName: String ) -> String? {
-        let parentName = parentName.lowercased()
-        let queryType = schema.schema.types.first(where: {$0.name.lowercased() == parentName})!
-        if let childType = queryType.fields?.first(where: { $0.name.lowercased() == child.table.name.lowercased() }) { // this isn't correct yet.
-            // TODO: 
+    func getChildQueryName(child: RawGraphQLQuery, of parent: RawGraphQLQuery ) -> String? {
+        assert(!child.hasAggregates)
+        assert(!parent.hasAggregates)
+        let queryType = schema.schema.types
+            .first(where: {$0.name.lowercased() == parent.name?.lowercased() ?? ""})
+            ?? schema.schema.types.first(where: {$0.name.lowercased() == parent.table.name.lowercased() + (parent.hasAggregates ? "_aggregate" : "")})!
+        // child queries have table name
+        // I don't have access to the column name here.
+        // comparing the type to the name of the table. should match.
+        let possibleChildren = queryType.fields?
+            .filter{ $0.nameMatchesFieldType(child.table.name) } ?? []
+        if possibleChildren.count == 1, let childQuery = possibleChildren.first {
             // it needs to be a neseted query name for they right type. (there might be multiple)
             // any children to this new node need a reference to this new name ( there is only 30 cases of this, so I could catch them manually ).
-            return childType.name + (child.hasAggregates ? "_aggregate" : "")
+            // there are aggregate children. I think they are being handled correctly.
+            return childQuery.name
+        } else if possibleChildren.count > 1 {
+            print("options:")
+            print(possibleChildren.map{ $0.name })
+            let childName = readLine()!
+            return childName
         } else {
             return nil
         }
@@ -216,8 +321,15 @@ class DatabaseExamplesParser: Codable {
     /// includes a new Query for the table`*` if and only if there is an aggregate field.
     /// and returns a distinct argument
     func parseSelect(_ select: SelectStruct) throws -> (queries: [RawGraphQLQuery], isDistinct: Bool)  {
-        // group fields by table name.
+        let selectToIndex = Dictionary(select.selectStatements.enumerated()
+            // TODO double check on examples that fail with this already being unique Dictionary(uniquekeyswithvalues)
+            .map{ ($1, $0)}, uniquingKeysWith: { $0 < $1 ? $0 : $1})
+        if select.selectStatements.count != selectToIndex.count {
+            print("select fields are not unique.")
+        }
         let anyTable = DatabaseTable(index: -1, name: "*", columns: [])
+        // group fields by table name.
+        // an ordered dictionary, to keep order consistent in processing.
         let tableToSelectField = Dictionary(grouping: select.selectStatements, by: { selectField -> DatabaseTable in
             let columnId = selectField.valueUnit.columnUnit1.columnId
             if columnId == 0 {
@@ -226,16 +338,17 @@ class DatabaseExamplesParser: Codable {
             let column = self.database.columns[columnId]
             return self.database.tables[column.tableIndex]
         })
+            .sorted(by: {selectToIndex[$0.value.first!]! < selectToIndex[$1.value.first!]!})
         
         // 89 cases of distinct with multiple columns on the same table
         // These should be adaptable (remove unique from question or query)
-        guard !select.isDistinct || tableToSelectField.values.filter({ $0.count > 1}).isEmpty else {
+        guard !select.isDistinct || tableToSelectField.filter({ $1.count > 1}).isEmpty else {
             throw ProcessingError.unsupportedDistinctOnMultipleColumns
         }
         
         // 34 cases of distinct with multiple tables
         // These could be adaptable but these queries take a long time
-        guard !select.isDistinct || tableToSelectField.keys.count == 1 else {
+        guard !select.isDistinct || tableToSelectField.count == 1 else {
             throw ProcessingError.unsupportedDistinctOnMultipleTables
         }
         
@@ -258,9 +371,10 @@ class DatabaseExamplesParser: Codable {
     /// matches fields to their tables.
     /// returns each Query holding fields. Query is nested if an aggregate is needed.
     /// includes a new Query for the table`*` if and only if there is an aggregate field.
-    func match(fields: [DatabaseTable: [SelectField]]) throws  -> [RawGraphQLQuery]  {
+    func match(fields: [(key: DatabaseTable, value: [SelectField])]) throws  -> [RawGraphQLQuery]  {
         
         //        assert(!fields.keys.map{tables[$0]}.contains(where: { $0 == nil}), "all fields don't match up to a table.")
+        // TODO sort fields by databaseTable order of apperance in select statements!!
         return try fields.map { (table, matchingFields) in
             // if a query table has no matching fields, just return it as is.
             // groups by .aggregateOpperation throws if operation isn't supported
