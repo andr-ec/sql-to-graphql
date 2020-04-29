@@ -372,6 +372,17 @@ enum AggregateOpperation: Int, Codable {
     case count
     case sum
     case avg
+    
+    var string: String {
+        switch self {
+        case .none: return "none"
+        case .max: return "max"
+        case .min: return "min"
+        case .count: return "count"
+        case .sum: return "sum"
+        case .avg: return "avg"
+        }
+    }
 }
 
 struct SelectField: Hashable {
@@ -748,7 +759,7 @@ enum AndOr: String, Codable {
 
 ///WHERE_OPS = ('not', 'between', '=', '>', '<', '>=', '<=', '!=', 'in', 'like', 'is', 'exists')
 enum WhereOperation: Int, Codable {
-    case not
+    case not // never used
     case between
     case equals
     case greaterThan
@@ -762,6 +773,48 @@ enum WhereOperation: Int, Codable {
     /// is
     case isOp
     case exists
+    
+    public init?(rawString: String) {
+        switch rawString {
+        case "not": self = .not
+        case "between": self =  .between
+        case "equals": self =  .equals
+        case "greaterThan": self =  .greaterThan
+        case "lessThan": self =  .lessThan
+        case "greaterThanOrEqualTo": self =  .greaterThanOrEqualTo
+        case "lessThanOrEqualTo": self =  .lessThanOrEqualTo
+        case "notEqual": self = .notEqual
+        /// in"
+        case "inOp": self = .inOp
+        case "like": self = .like
+        /// is"
+        case "isOp": self = .isOp
+        case "exists": self = .exists
+        default:
+            return nil
+        }
+        
+    }
+    
+    var rawGraphQLString: String {
+        switch self {
+        case .not: return "_neq" // never used
+        case .between: return "between"
+        case .equals: return "_eq"
+        case .greaterThan: return "_gt"
+        case .lessThan: return "_lt"
+        case .greaterThanOrEqualTo: return "_gte"
+        case .lessThanOrEqualTo: return "_lte"
+        case .notEqual: return "_neq"
+        /// in"
+        case .inOp: return "_in" // only for sql
+        case .like: return "_like"
+        /// is"
+        case .isOp: return "isOp" // never used
+            // exists is only for nested sQL
+        case .exists: return "_is_null" // only for sql
+        }
+    }
 }
 
 

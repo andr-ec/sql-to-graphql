@@ -95,6 +95,10 @@ struct TypeElement: Codable {
         case fields, inputFields, enumValues
         
     }
+    /// gets all of the fields that are not relations
+    var allSingleFieldNames: [String] {
+        (fields ?? []).filter{ $0.type.kind == .scalar}.map{ $0.name}
+    }
 }
 
 // MARK: - EnumValue
