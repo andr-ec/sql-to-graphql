@@ -442,7 +442,7 @@ class DatabaseExamplesParser: Codable {
         // ORDER BY clause
         let orderByArgument = try self.parseOrderBy(sql.orderBy.toStruct())
         // LIMIT clause
-        let limitArgument = sql.limit.map{RawGraphQLArgument(name: .and, value: .integer($0)) }
+        let limitArgument = sql.limit.map{RawGraphQLArgument(name: .limit, value: .integer($0)) }
         // except (should only work if the tables being queried are the same)
         if sql.except != nil { // 230 cases
             throw ProcessingError.unsupportedExcept
