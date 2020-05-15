@@ -1,0 +1,1676 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "aircraft"
+"""
+type aircraft {
+  aircraft_id: Int
+  fleet_series: String
+  fuel_propulsion: String
+  manufacturer: String
+  model: String
+  order_year: Int
+
+  """An array relationship"""
+  pilot_records(
+    """distinct select on columns"""
+    distinct_on: [pilot_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pilot_record_order_by!]
+
+    """filter the rows returned"""
+    where: pilot_record_bool_exp
+  ): [pilot_record!]!
+
+  """An aggregated array relationship"""
+  pilot_records_aggregate(
+    """distinct select on columns"""
+    distinct_on: [pilot_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pilot_record_order_by!]
+
+    """filter the rows returned"""
+    where: pilot_record_bool_exp
+  ): pilot_record_aggregate!
+  powertrain: String
+}
+
+"""
+aggregated selection of "aircraft"
+"""
+type aircraft_aggregate {
+  aggregate: aircraft_aggregate_fields
+  nodes: [aircraft!]!
+}
+
+"""
+aggregate fields of "aircraft"
+"""
+type aircraft_aggregate_fields {
+  avg: aircraft_avg_fields
+  count(columns: [aircraft_select_column!], distinct: Boolean): Int
+  max: aircraft_max_fields
+  min: aircraft_min_fields
+  stddev: aircraft_stddev_fields
+  stddev_pop: aircraft_stddev_pop_fields
+  stddev_samp: aircraft_stddev_samp_fields
+  sum: aircraft_sum_fields
+  var_pop: aircraft_var_pop_fields
+  var_samp: aircraft_var_samp_fields
+  variance: aircraft_variance_fields
+}
+
+"""
+order by aggregate values of table "aircraft"
+"""
+input aircraft_aggregate_order_by {
+  avg: aircraft_avg_order_by
+  count: order_by
+  max: aircraft_max_order_by
+  min: aircraft_min_order_by
+  stddev: aircraft_stddev_order_by
+  stddev_pop: aircraft_stddev_pop_order_by
+  stddev_samp: aircraft_stddev_samp_order_by
+  sum: aircraft_sum_order_by
+  var_pop: aircraft_var_pop_order_by
+  var_samp: aircraft_var_samp_order_by
+  variance: aircraft_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "aircraft"
+"""
+input aircraft_arr_rel_insert_input {
+  data: [aircraft_insert_input!]!
+  on_conflict: aircraft_on_conflict
+}
+
+"""aggregate avg on columns"""
+type aircraft_avg_fields {
+  aircraft_id: Float
+  order_year: Float
+}
+
+"""
+order by avg() on columns of table "aircraft"
+"""
+input aircraft_avg_order_by {
+  aircraft_id: order_by
+  order_year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "aircraft". All fields are combined with a logical 'AND'.
+"""
+input aircraft_bool_exp {
+  _and: [aircraft_bool_exp]
+  _not: aircraft_bool_exp
+  _or: [aircraft_bool_exp]
+  aircraft_id: Int_comparison_exp
+  fleet_series: String_comparison_exp
+  fuel_propulsion: String_comparison_exp
+  manufacturer: String_comparison_exp
+  model: String_comparison_exp
+  order_year: Int_comparison_exp
+  pilot_records: pilot_record_bool_exp
+  powertrain: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "aircraft"
+"""
+enum aircraft_constraint {
+  """unique or primary key constraint"""
+  idx_17934_sqlite_autoindex_aircraft_1
+}
+
+"""
+input type for incrementing integer columne in table "aircraft"
+"""
+input aircraft_inc_input {
+  aircraft_id: Int
+  order_year: Int
+}
+
+"""
+input type for inserting data into table "aircraft"
+"""
+input aircraft_insert_input {
+  aircraft_id: Int
+  fleet_series: String
+  fuel_propulsion: String
+  manufacturer: String
+  model: String
+  order_year: Int
+  pilot_records: pilot_record_arr_rel_insert_input
+  powertrain: String
+}
+
+"""aggregate max on columns"""
+type aircraft_max_fields {
+  aircraft_id: Int
+  fleet_series: String
+  fuel_propulsion: String
+  manufacturer: String
+  model: String
+  order_year: Int
+  powertrain: String
+}
+
+"""
+order by max() on columns of table "aircraft"
+"""
+input aircraft_max_order_by {
+  aircraft_id: order_by
+  fleet_series: order_by
+  fuel_propulsion: order_by
+  manufacturer: order_by
+  model: order_by
+  order_year: order_by
+  powertrain: order_by
+}
+
+"""aggregate min on columns"""
+type aircraft_min_fields {
+  aircraft_id: Int
+  fleet_series: String
+  fuel_propulsion: String
+  manufacturer: String
+  model: String
+  order_year: Int
+  powertrain: String
+}
+
+"""
+order by min() on columns of table "aircraft"
+"""
+input aircraft_min_order_by {
+  aircraft_id: order_by
+  fleet_series: order_by
+  fuel_propulsion: order_by
+  manufacturer: order_by
+  model: order_by
+  order_year: order_by
+  powertrain: order_by
+}
+
+"""
+response of any mutation on the table "aircraft"
+"""
+type aircraft_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [aircraft!]!
+}
+
+"""
+input type for inserting object relation for remote table "aircraft"
+"""
+input aircraft_obj_rel_insert_input {
+  data: aircraft_insert_input!
+  on_conflict: aircraft_on_conflict
+}
+
+"""
+on conflict condition type for table "aircraft"
+"""
+input aircraft_on_conflict {
+  constraint: aircraft_constraint!
+  update_columns: [aircraft_update_column!]!
+  where: aircraft_bool_exp
+}
+
+"""
+ordering options when selecting data from "aircraft"
+"""
+input aircraft_order_by {
+  aircraft_id: order_by
+  fleet_series: order_by
+  fuel_propulsion: order_by
+  manufacturer: order_by
+  model: order_by
+  order_year: order_by
+  pilot_records_aggregate: pilot_record_aggregate_order_by
+  powertrain: order_by
+}
+
+"""
+select columns of table "aircraft"
+"""
+enum aircraft_select_column {
+  """column name"""
+  aircraft_id
+
+  """column name"""
+  fleet_series
+
+  """column name"""
+  fuel_propulsion
+
+  """column name"""
+  manufacturer
+
+  """column name"""
+  model
+
+  """column name"""
+  order_year
+
+  """column name"""
+  powertrain
+}
+
+"""
+input type for updating data in table "aircraft"
+"""
+input aircraft_set_input {
+  aircraft_id: Int
+  fleet_series: String
+  fuel_propulsion: String
+  manufacturer: String
+  model: String
+  order_year: Int
+  powertrain: String
+}
+
+"""aggregate stddev on columns"""
+type aircraft_stddev_fields {
+  aircraft_id: Float
+  order_year: Float
+}
+
+"""
+order by stddev() on columns of table "aircraft"
+"""
+input aircraft_stddev_order_by {
+  aircraft_id: order_by
+  order_year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type aircraft_stddev_pop_fields {
+  aircraft_id: Float
+  order_year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "aircraft"
+"""
+input aircraft_stddev_pop_order_by {
+  aircraft_id: order_by
+  order_year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type aircraft_stddev_samp_fields {
+  aircraft_id: Float
+  order_year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "aircraft"
+"""
+input aircraft_stddev_samp_order_by {
+  aircraft_id: order_by
+  order_year: order_by
+}
+
+"""aggregate sum on columns"""
+type aircraft_sum_fields {
+  aircraft_id: Int
+  order_year: Int
+}
+
+"""
+order by sum() on columns of table "aircraft"
+"""
+input aircraft_sum_order_by {
+  aircraft_id: order_by
+  order_year: order_by
+}
+
+"""
+update columns of table "aircraft"
+"""
+enum aircraft_update_column {
+  """column name"""
+  aircraft_id
+
+  """column name"""
+  fleet_series
+
+  """column name"""
+  fuel_propulsion
+
+  """column name"""
+  manufacturer
+
+  """column name"""
+  model
+
+  """column name"""
+  order_year
+
+  """column name"""
+  powertrain
+}
+
+"""aggregate var_pop on columns"""
+type aircraft_var_pop_fields {
+  aircraft_id: Float
+  order_year: Float
+}
+
+"""
+order by var_pop() on columns of table "aircraft"
+"""
+input aircraft_var_pop_order_by {
+  aircraft_id: order_by
+  order_year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type aircraft_var_samp_fields {
+  aircraft_id: Float
+  order_year: Float
+}
+
+"""
+order by var_samp() on columns of table "aircraft"
+"""
+input aircraft_var_samp_order_by {
+  aircraft_id: order_by
+  order_year: order_by
+}
+
+"""aggregate variance on columns"""
+type aircraft_variance_fields {
+  aircraft_id: Float
+  order_year: Float
+}
+
+"""
+order by variance() on columns of table "aircraft"
+"""
+input aircraft_variance_order_by {
+  aircraft_id: order_by
+  order_year: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "aircraft"
+  """
+  delete_aircraft(
+    """filter the rows which have to be deleted"""
+    where: aircraft_bool_exp!
+  ): aircraft_mutation_response
+
+  """
+  delete data from the table: "pilot"
+  """
+  delete_pilot(
+    """filter the rows which have to be deleted"""
+    where: pilot_bool_exp!
+  ): pilot_mutation_response
+
+  """
+  delete data from the table: "pilot_record"
+  """
+  delete_pilot_record(
+    """filter the rows which have to be deleted"""
+    where: pilot_record_bool_exp!
+  ): pilot_record_mutation_response
+
+  """
+  insert data into the table: "aircraft"
+  """
+  insert_aircraft(
+    """the rows to be inserted"""
+    objects: [aircraft_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: aircraft_on_conflict
+  ): aircraft_mutation_response
+
+  """
+  insert data into the table: "pilot"
+  """
+  insert_pilot(
+    """the rows to be inserted"""
+    objects: [pilot_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: pilot_on_conflict
+  ): pilot_mutation_response
+
+  """
+  insert data into the table: "pilot_record"
+  """
+  insert_pilot_record(
+    """the rows to be inserted"""
+    objects: [pilot_record_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: pilot_record_on_conflict
+  ): pilot_record_mutation_response
+
+  """
+  update data of the table: "aircraft"
+  """
+  update_aircraft(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: aircraft_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: aircraft_set_input
+
+    """filter the rows which have to be updated"""
+    where: aircraft_bool_exp!
+  ): aircraft_mutation_response
+
+  """
+  update data of the table: "pilot"
+  """
+  update_pilot(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: pilot_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: pilot_set_input
+
+    """filter the rows which have to be updated"""
+    where: pilot_bool_exp!
+  ): pilot_mutation_response
+
+  """
+  update data of the table: "pilot_record"
+  """
+  update_pilot_record(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: pilot_record_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: pilot_record_set_input
+
+    """filter the rows which have to be updated"""
+    where: pilot_record_bool_exp!
+  ): pilot_record_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "pilot"
+"""
+type pilot {
+  age: Int
+  join_year: Int
+  nationality: String
+  pilot_id: Int
+  pilot_name: String
+
+  """An array relationship"""
+  pilot_records(
+    """distinct select on columns"""
+    distinct_on: [pilot_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pilot_record_order_by!]
+
+    """filter the rows returned"""
+    where: pilot_record_bool_exp
+  ): [pilot_record!]!
+
+  """An aggregated array relationship"""
+  pilot_records_aggregate(
+    """distinct select on columns"""
+    distinct_on: [pilot_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pilot_record_order_by!]
+
+    """filter the rows returned"""
+    where: pilot_record_bool_exp
+  ): pilot_record_aggregate!
+  position: String
+  rank: Int
+  team: String
+}
+
+"""
+aggregated selection of "pilot"
+"""
+type pilot_aggregate {
+  aggregate: pilot_aggregate_fields
+  nodes: [pilot!]!
+}
+
+"""
+aggregate fields of "pilot"
+"""
+type pilot_aggregate_fields {
+  avg: pilot_avg_fields
+  count(columns: [pilot_select_column!], distinct: Boolean): Int
+  max: pilot_max_fields
+  min: pilot_min_fields
+  stddev: pilot_stddev_fields
+  stddev_pop: pilot_stddev_pop_fields
+  stddev_samp: pilot_stddev_samp_fields
+  sum: pilot_sum_fields
+  var_pop: pilot_var_pop_fields
+  var_samp: pilot_var_samp_fields
+  variance: pilot_variance_fields
+}
+
+"""
+order by aggregate values of table "pilot"
+"""
+input pilot_aggregate_order_by {
+  avg: pilot_avg_order_by
+  count: order_by
+  max: pilot_max_order_by
+  min: pilot_min_order_by
+  stddev: pilot_stddev_order_by
+  stddev_pop: pilot_stddev_pop_order_by
+  stddev_samp: pilot_stddev_samp_order_by
+  sum: pilot_sum_order_by
+  var_pop: pilot_var_pop_order_by
+  var_samp: pilot_var_samp_order_by
+  variance: pilot_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "pilot"
+"""
+input pilot_arr_rel_insert_input {
+  data: [pilot_insert_input!]!
+  on_conflict: pilot_on_conflict
+}
+
+"""aggregate avg on columns"""
+type pilot_avg_fields {
+  age: Float
+  join_year: Float
+  pilot_id: Float
+  rank: Float
+}
+
+"""
+order by avg() on columns of table "pilot"
+"""
+input pilot_avg_order_by {
+  age: order_by
+  join_year: order_by
+  pilot_id: order_by
+  rank: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "pilot". All fields are combined with a logical 'AND'.
+"""
+input pilot_bool_exp {
+  _and: [pilot_bool_exp]
+  _not: pilot_bool_exp
+  _or: [pilot_bool_exp]
+  age: Int_comparison_exp
+  join_year: Int_comparison_exp
+  nationality: String_comparison_exp
+  pilot_id: Int_comparison_exp
+  pilot_name: String_comparison_exp
+  pilot_records: pilot_record_bool_exp
+  position: String_comparison_exp
+  rank: Int_comparison_exp
+  team: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "pilot"
+"""
+enum pilot_constraint {
+  """unique or primary key constraint"""
+  idx_17940_sqlite_autoindex_pilot_1
+}
+
+"""
+input type for incrementing integer columne in table "pilot"
+"""
+input pilot_inc_input {
+  age: Int
+  join_year: Int
+  pilot_id: Int
+  rank: Int
+}
+
+"""
+input type for inserting data into table "pilot"
+"""
+input pilot_insert_input {
+  age: Int
+  join_year: Int
+  nationality: String
+  pilot_id: Int
+  pilot_name: String
+  pilot_records: pilot_record_arr_rel_insert_input
+  position: String
+  rank: Int
+  team: String
+}
+
+"""aggregate max on columns"""
+type pilot_max_fields {
+  age: Int
+  join_year: Int
+  nationality: String
+  pilot_id: Int
+  pilot_name: String
+  position: String
+  rank: Int
+  team: String
+}
+
+"""
+order by max() on columns of table "pilot"
+"""
+input pilot_max_order_by {
+  age: order_by
+  join_year: order_by
+  nationality: order_by
+  pilot_id: order_by
+  pilot_name: order_by
+  position: order_by
+  rank: order_by
+  team: order_by
+}
+
+"""aggregate min on columns"""
+type pilot_min_fields {
+  age: Int
+  join_year: Int
+  nationality: String
+  pilot_id: Int
+  pilot_name: String
+  position: String
+  rank: Int
+  team: String
+}
+
+"""
+order by min() on columns of table "pilot"
+"""
+input pilot_min_order_by {
+  age: order_by
+  join_year: order_by
+  nationality: order_by
+  pilot_id: order_by
+  pilot_name: order_by
+  position: order_by
+  rank: order_by
+  team: order_by
+}
+
+"""
+response of any mutation on the table "pilot"
+"""
+type pilot_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [pilot!]!
+}
+
+"""
+input type for inserting object relation for remote table "pilot"
+"""
+input pilot_obj_rel_insert_input {
+  data: pilot_insert_input!
+  on_conflict: pilot_on_conflict
+}
+
+"""
+on conflict condition type for table "pilot"
+"""
+input pilot_on_conflict {
+  constraint: pilot_constraint!
+  update_columns: [pilot_update_column!]!
+  where: pilot_bool_exp
+}
+
+"""
+ordering options when selecting data from "pilot"
+"""
+input pilot_order_by {
+  age: order_by
+  join_year: order_by
+  nationality: order_by
+  pilot_id: order_by
+  pilot_name: order_by
+  pilot_records_aggregate: pilot_record_aggregate_order_by
+  position: order_by
+  rank: order_by
+  team: order_by
+}
+
+"""
+columns and relationships of "pilot_record"
+"""
+type pilot_record {
+  """An object relationship"""
+  aircraft: aircraft
+  aircraft_id: Int
+  date: String
+
+  """An object relationship"""
+  pilot: pilot
+  pilot_id: Int
+  record_id: Int
+}
+
+"""
+aggregated selection of "pilot_record"
+"""
+type pilot_record_aggregate {
+  aggregate: pilot_record_aggregate_fields
+  nodes: [pilot_record!]!
+}
+
+"""
+aggregate fields of "pilot_record"
+"""
+type pilot_record_aggregate_fields {
+  avg: pilot_record_avg_fields
+  count(columns: [pilot_record_select_column!], distinct: Boolean): Int
+  max: pilot_record_max_fields
+  min: pilot_record_min_fields
+  stddev: pilot_record_stddev_fields
+  stddev_pop: pilot_record_stddev_pop_fields
+  stddev_samp: pilot_record_stddev_samp_fields
+  sum: pilot_record_sum_fields
+  var_pop: pilot_record_var_pop_fields
+  var_samp: pilot_record_var_samp_fields
+  variance: pilot_record_variance_fields
+}
+
+"""
+order by aggregate values of table "pilot_record"
+"""
+input pilot_record_aggregate_order_by {
+  avg: pilot_record_avg_order_by
+  count: order_by
+  max: pilot_record_max_order_by
+  min: pilot_record_min_order_by
+  stddev: pilot_record_stddev_order_by
+  stddev_pop: pilot_record_stddev_pop_order_by
+  stddev_samp: pilot_record_stddev_samp_order_by
+  sum: pilot_record_sum_order_by
+  var_pop: pilot_record_var_pop_order_by
+  var_samp: pilot_record_var_samp_order_by
+  variance: pilot_record_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "pilot_record"
+"""
+input pilot_record_arr_rel_insert_input {
+  data: [pilot_record_insert_input!]!
+  on_conflict: pilot_record_on_conflict
+}
+
+"""aggregate avg on columns"""
+type pilot_record_avg_fields {
+  aircraft_id: Float
+  pilot_id: Float
+  record_id: Float
+}
+
+"""
+order by avg() on columns of table "pilot_record"
+"""
+input pilot_record_avg_order_by {
+  aircraft_id: order_by
+  pilot_id: order_by
+  record_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "pilot_record". All fields are combined with a logical 'AND'.
+"""
+input pilot_record_bool_exp {
+  _and: [pilot_record_bool_exp]
+  _not: pilot_record_bool_exp
+  _or: [pilot_record_bool_exp]
+  aircraft: aircraft_bool_exp
+  aircraft_id: Int_comparison_exp
+  date: String_comparison_exp
+  pilot: pilot_bool_exp
+  pilot_id: Int_comparison_exp
+  record_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "pilot_record"
+"""
+enum pilot_record_constraint {
+  """unique or primary key constraint"""
+  idx_17946_sqlite_autoindex_pilot_record_1
+}
+
+"""
+input type for incrementing integer columne in table "pilot_record"
+"""
+input pilot_record_inc_input {
+  aircraft_id: Int
+  pilot_id: Int
+  record_id: Int
+}
+
+"""
+input type for inserting data into table "pilot_record"
+"""
+input pilot_record_insert_input {
+  aircraft: aircraft_obj_rel_insert_input
+  aircraft_id: Int
+  date: String
+  pilot: pilot_obj_rel_insert_input
+  pilot_id: Int
+  record_id: Int
+}
+
+"""aggregate max on columns"""
+type pilot_record_max_fields {
+  aircraft_id: Int
+  date: String
+  pilot_id: Int
+  record_id: Int
+}
+
+"""
+order by max() on columns of table "pilot_record"
+"""
+input pilot_record_max_order_by {
+  aircraft_id: order_by
+  date: order_by
+  pilot_id: order_by
+  record_id: order_by
+}
+
+"""aggregate min on columns"""
+type pilot_record_min_fields {
+  aircraft_id: Int
+  date: String
+  pilot_id: Int
+  record_id: Int
+}
+
+"""
+order by min() on columns of table "pilot_record"
+"""
+input pilot_record_min_order_by {
+  aircraft_id: order_by
+  date: order_by
+  pilot_id: order_by
+  record_id: order_by
+}
+
+"""
+response of any mutation on the table "pilot_record"
+"""
+type pilot_record_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [pilot_record!]!
+}
+
+"""
+input type for inserting object relation for remote table "pilot_record"
+"""
+input pilot_record_obj_rel_insert_input {
+  data: pilot_record_insert_input!
+  on_conflict: pilot_record_on_conflict
+}
+
+"""
+on conflict condition type for table "pilot_record"
+"""
+input pilot_record_on_conflict {
+  constraint: pilot_record_constraint!
+  update_columns: [pilot_record_update_column!]!
+  where: pilot_record_bool_exp
+}
+
+"""
+ordering options when selecting data from "pilot_record"
+"""
+input pilot_record_order_by {
+  aircraft: aircraft_order_by
+  aircraft_id: order_by
+  date: order_by
+  pilot: pilot_order_by
+  pilot_id: order_by
+  record_id: order_by
+}
+
+"""
+select columns of table "pilot_record"
+"""
+enum pilot_record_select_column {
+  """column name"""
+  aircraft_id
+
+  """column name"""
+  date
+
+  """column name"""
+  pilot_id
+
+  """column name"""
+  record_id
+}
+
+"""
+input type for updating data in table "pilot_record"
+"""
+input pilot_record_set_input {
+  aircraft_id: Int
+  date: String
+  pilot_id: Int
+  record_id: Int
+}
+
+"""aggregate stddev on columns"""
+type pilot_record_stddev_fields {
+  aircraft_id: Float
+  pilot_id: Float
+  record_id: Float
+}
+
+"""
+order by stddev() on columns of table "pilot_record"
+"""
+input pilot_record_stddev_order_by {
+  aircraft_id: order_by
+  pilot_id: order_by
+  record_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type pilot_record_stddev_pop_fields {
+  aircraft_id: Float
+  pilot_id: Float
+  record_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "pilot_record"
+"""
+input pilot_record_stddev_pop_order_by {
+  aircraft_id: order_by
+  pilot_id: order_by
+  record_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type pilot_record_stddev_samp_fields {
+  aircraft_id: Float
+  pilot_id: Float
+  record_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "pilot_record"
+"""
+input pilot_record_stddev_samp_order_by {
+  aircraft_id: order_by
+  pilot_id: order_by
+  record_id: order_by
+}
+
+"""aggregate sum on columns"""
+type pilot_record_sum_fields {
+  aircraft_id: Int
+  pilot_id: Int
+  record_id: Int
+}
+
+"""
+order by sum() on columns of table "pilot_record"
+"""
+input pilot_record_sum_order_by {
+  aircraft_id: order_by
+  pilot_id: order_by
+  record_id: order_by
+}
+
+"""
+update columns of table "pilot_record"
+"""
+enum pilot_record_update_column {
+  """column name"""
+  aircraft_id
+
+  """column name"""
+  date
+
+  """column name"""
+  pilot_id
+
+  """column name"""
+  record_id
+}
+
+"""aggregate var_pop on columns"""
+type pilot_record_var_pop_fields {
+  aircraft_id: Float
+  pilot_id: Float
+  record_id: Float
+}
+
+"""
+order by var_pop() on columns of table "pilot_record"
+"""
+input pilot_record_var_pop_order_by {
+  aircraft_id: order_by
+  pilot_id: order_by
+  record_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type pilot_record_var_samp_fields {
+  aircraft_id: Float
+  pilot_id: Float
+  record_id: Float
+}
+
+"""
+order by var_samp() on columns of table "pilot_record"
+"""
+input pilot_record_var_samp_order_by {
+  aircraft_id: order_by
+  pilot_id: order_by
+  record_id: order_by
+}
+
+"""aggregate variance on columns"""
+type pilot_record_variance_fields {
+  aircraft_id: Float
+  pilot_id: Float
+  record_id: Float
+}
+
+"""
+order by variance() on columns of table "pilot_record"
+"""
+input pilot_record_variance_order_by {
+  aircraft_id: order_by
+  pilot_id: order_by
+  record_id: order_by
+}
+
+"""
+select columns of table "pilot"
+"""
+enum pilot_select_column {
+  """column name"""
+  age
+
+  """column name"""
+  join_year
+
+  """column name"""
+  nationality
+
+  """column name"""
+  pilot_id
+
+  """column name"""
+  pilot_name
+
+  """column name"""
+  position
+
+  """column name"""
+  rank
+
+  """column name"""
+  team
+}
+
+"""
+input type for updating data in table "pilot"
+"""
+input pilot_set_input {
+  age: Int
+  join_year: Int
+  nationality: String
+  pilot_id: Int
+  pilot_name: String
+  position: String
+  rank: Int
+  team: String
+}
+
+"""aggregate stddev on columns"""
+type pilot_stddev_fields {
+  age: Float
+  join_year: Float
+  pilot_id: Float
+  rank: Float
+}
+
+"""
+order by stddev() on columns of table "pilot"
+"""
+input pilot_stddev_order_by {
+  age: order_by
+  join_year: order_by
+  pilot_id: order_by
+  rank: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type pilot_stddev_pop_fields {
+  age: Float
+  join_year: Float
+  pilot_id: Float
+  rank: Float
+}
+
+"""
+order by stddev_pop() on columns of table "pilot"
+"""
+input pilot_stddev_pop_order_by {
+  age: order_by
+  join_year: order_by
+  pilot_id: order_by
+  rank: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type pilot_stddev_samp_fields {
+  age: Float
+  join_year: Float
+  pilot_id: Float
+  rank: Float
+}
+
+"""
+order by stddev_samp() on columns of table "pilot"
+"""
+input pilot_stddev_samp_order_by {
+  age: order_by
+  join_year: order_by
+  pilot_id: order_by
+  rank: order_by
+}
+
+"""aggregate sum on columns"""
+type pilot_sum_fields {
+  age: Int
+  join_year: Int
+  pilot_id: Int
+  rank: Int
+}
+
+"""
+order by sum() on columns of table "pilot"
+"""
+input pilot_sum_order_by {
+  age: order_by
+  join_year: order_by
+  pilot_id: order_by
+  rank: order_by
+}
+
+"""
+update columns of table "pilot"
+"""
+enum pilot_update_column {
+  """column name"""
+  age
+
+  """column name"""
+  join_year
+
+  """column name"""
+  nationality
+
+  """column name"""
+  pilot_id
+
+  """column name"""
+  pilot_name
+
+  """column name"""
+  position
+
+  """column name"""
+  rank
+
+  """column name"""
+  team
+}
+
+"""aggregate var_pop on columns"""
+type pilot_var_pop_fields {
+  age: Float
+  join_year: Float
+  pilot_id: Float
+  rank: Float
+}
+
+"""
+order by var_pop() on columns of table "pilot"
+"""
+input pilot_var_pop_order_by {
+  age: order_by
+  join_year: order_by
+  pilot_id: order_by
+  rank: order_by
+}
+
+"""aggregate var_samp on columns"""
+type pilot_var_samp_fields {
+  age: Float
+  join_year: Float
+  pilot_id: Float
+  rank: Float
+}
+
+"""
+order by var_samp() on columns of table "pilot"
+"""
+input pilot_var_samp_order_by {
+  age: order_by
+  join_year: order_by
+  pilot_id: order_by
+  rank: order_by
+}
+
+"""aggregate variance on columns"""
+type pilot_variance_fields {
+  age: Float
+  join_year: Float
+  pilot_id: Float
+  rank: Float
+}
+
+"""
+order by variance() on columns of table "pilot"
+"""
+input pilot_variance_order_by {
+  age: order_by
+  join_year: order_by
+  pilot_id: order_by
+  rank: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "aircraft"
+  """
+  aircraft(
+    """distinct select on columns"""
+    distinct_on: [aircraft_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [aircraft_order_by!]
+
+    """filter the rows returned"""
+    where: aircraft_bool_exp
+  ): [aircraft!]!
+
+  """
+  fetch aggregated fields from the table: "aircraft"
+  """
+  aircraft_aggregate(
+    """distinct select on columns"""
+    distinct_on: [aircraft_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [aircraft_order_by!]
+
+    """filter the rows returned"""
+    where: aircraft_bool_exp
+  ): aircraft_aggregate!
+
+  """
+  fetch data from the table: "pilot"
+  """
+  pilot(
+    """distinct select on columns"""
+    distinct_on: [pilot_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pilot_order_by!]
+
+    """filter the rows returned"""
+    where: pilot_bool_exp
+  ): [pilot!]!
+
+  """
+  fetch aggregated fields from the table: "pilot"
+  """
+  pilot_aggregate(
+    """distinct select on columns"""
+    distinct_on: [pilot_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pilot_order_by!]
+
+    """filter the rows returned"""
+    where: pilot_bool_exp
+  ): pilot_aggregate!
+
+  """
+  fetch data from the table: "pilot_record"
+  """
+  pilot_record(
+    """distinct select on columns"""
+    distinct_on: [pilot_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pilot_record_order_by!]
+
+    """filter the rows returned"""
+    where: pilot_record_bool_exp
+  ): [pilot_record!]!
+
+  """
+  fetch aggregated fields from the table: "pilot_record"
+  """
+  pilot_record_aggregate(
+    """distinct select on columns"""
+    distinct_on: [pilot_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pilot_record_order_by!]
+
+    """filter the rows returned"""
+    where: pilot_record_bool_exp
+  ): pilot_record_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "aircraft"
+  """
+  aircraft(
+    """distinct select on columns"""
+    distinct_on: [aircraft_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [aircraft_order_by!]
+
+    """filter the rows returned"""
+    where: aircraft_bool_exp
+  ): [aircraft!]!
+
+  """
+  fetch aggregated fields from the table: "aircraft"
+  """
+  aircraft_aggregate(
+    """distinct select on columns"""
+    distinct_on: [aircraft_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [aircraft_order_by!]
+
+    """filter the rows returned"""
+    where: aircraft_bool_exp
+  ): aircraft_aggregate!
+
+  """
+  fetch data from the table: "pilot"
+  """
+  pilot(
+    """distinct select on columns"""
+    distinct_on: [pilot_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pilot_order_by!]
+
+    """filter the rows returned"""
+    where: pilot_bool_exp
+  ): [pilot!]!
+
+  """
+  fetch aggregated fields from the table: "pilot"
+  """
+  pilot_aggregate(
+    """distinct select on columns"""
+    distinct_on: [pilot_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pilot_order_by!]
+
+    """filter the rows returned"""
+    where: pilot_bool_exp
+  ): pilot_aggregate!
+
+  """
+  fetch data from the table: "pilot_record"
+  """
+  pilot_record(
+    """distinct select on columns"""
+    distinct_on: [pilot_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pilot_record_order_by!]
+
+    """filter the rows returned"""
+    where: pilot_record_bool_exp
+  ): [pilot_record!]!
+
+  """
+  fetch aggregated fields from the table: "pilot_record"
+  """
+  pilot_record_aggregate(
+    """distinct select on columns"""
+    distinct_on: [pilot_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pilot_record_order_by!]
+
+    """filter the rows returned"""
+    where: pilot_record_bool_exp
+  ): pilot_record_aggregate!
+}

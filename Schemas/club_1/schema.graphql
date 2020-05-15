@@ -1,0 +1,1560 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "club"
+"""
+type club {
+  clubdesc: String
+  clubid: bigint!
+  clublocation: String
+  clubname: String
+
+  """An array relationship"""
+  member_of_clubs(
+    """distinct select on columns"""
+    distinct_on: [member_of_club_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_of_club_order_by!]
+
+    """filter the rows returned"""
+    where: member_of_club_bool_exp
+  ): [member_of_club!]!
+
+  """An aggregated array relationship"""
+  member_of_clubs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [member_of_club_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_of_club_order_by!]
+
+    """filter the rows returned"""
+    where: member_of_club_bool_exp
+  ): member_of_club_aggregate!
+}
+
+"""
+aggregated selection of "club"
+"""
+type club_aggregate {
+  aggregate: club_aggregate_fields
+  nodes: [club!]!
+}
+
+"""
+aggregate fields of "club"
+"""
+type club_aggregate_fields {
+  avg: club_avg_fields
+  count(columns: [club_select_column!], distinct: Boolean): Int
+  max: club_max_fields
+  min: club_min_fields
+  stddev: club_stddev_fields
+  stddev_pop: club_stddev_pop_fields
+  stddev_samp: club_stddev_samp_fields
+  sum: club_sum_fields
+  var_pop: club_var_pop_fields
+  var_samp: club_var_samp_fields
+  variance: club_variance_fields
+}
+
+"""
+order by aggregate values of table "club"
+"""
+input club_aggregate_order_by {
+  avg: club_avg_order_by
+  count: order_by
+  max: club_max_order_by
+  min: club_min_order_by
+  stddev: club_stddev_order_by
+  stddev_pop: club_stddev_pop_order_by
+  stddev_samp: club_stddev_samp_order_by
+  sum: club_sum_order_by
+  var_pop: club_var_pop_order_by
+  var_samp: club_var_samp_order_by
+  variance: club_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "club"
+"""
+input club_arr_rel_insert_input {
+  data: [club_insert_input!]!
+  on_conflict: club_on_conflict
+}
+
+"""aggregate avg on columns"""
+type club_avg_fields {
+  clubid: Float
+}
+
+"""
+order by avg() on columns of table "club"
+"""
+input club_avg_order_by {
+  clubid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "club". All fields are combined with a logical 'AND'.
+"""
+input club_bool_exp {
+  _and: [club_bool_exp]
+  _not: club_bool_exp
+  _or: [club_bool_exp]
+  clubdesc: String_comparison_exp
+  clubid: bigint_comparison_exp
+  clublocation: String_comparison_exp
+  clubname: String_comparison_exp
+  member_of_clubs: member_of_club_bool_exp
+}
+
+"""
+unique or primary key constraints on table "club"
+"""
+enum club_constraint {
+  """unique or primary key constraint"""
+  idx_22276_club_pkey
+}
+
+"""
+input type for incrementing integer columne in table "club"
+"""
+input club_inc_input {
+  clubid: bigint
+}
+
+"""
+input type for inserting data into table "club"
+"""
+input club_insert_input {
+  clubdesc: String
+  clubid: bigint
+  clublocation: String
+  clubname: String
+  member_of_clubs: member_of_club_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type club_max_fields {
+  clubdesc: String
+  clubid: bigint
+  clublocation: String
+  clubname: String
+}
+
+"""
+order by max() on columns of table "club"
+"""
+input club_max_order_by {
+  clubdesc: order_by
+  clubid: order_by
+  clublocation: order_by
+  clubname: order_by
+}
+
+"""aggregate min on columns"""
+type club_min_fields {
+  clubdesc: String
+  clubid: bigint
+  clublocation: String
+  clubname: String
+}
+
+"""
+order by min() on columns of table "club"
+"""
+input club_min_order_by {
+  clubdesc: order_by
+  clubid: order_by
+  clublocation: order_by
+  clubname: order_by
+}
+
+"""
+response of any mutation on the table "club"
+"""
+type club_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [club!]!
+}
+
+"""
+input type for inserting object relation for remote table "club"
+"""
+input club_obj_rel_insert_input {
+  data: club_insert_input!
+  on_conflict: club_on_conflict
+}
+
+"""
+on conflict condition type for table "club"
+"""
+input club_on_conflict {
+  constraint: club_constraint!
+  update_columns: [club_update_column!]!
+  where: club_bool_exp
+}
+
+"""
+ordering options when selecting data from "club"
+"""
+input club_order_by {
+  clubdesc: order_by
+  clubid: order_by
+  clublocation: order_by
+  clubname: order_by
+  member_of_clubs_aggregate: member_of_club_aggregate_order_by
+}
+
+"""
+select columns of table "club"
+"""
+enum club_select_column {
+  """column name"""
+  clubdesc
+
+  """column name"""
+  clubid
+
+  """column name"""
+  clublocation
+
+  """column name"""
+  clubname
+}
+
+"""
+input type for updating data in table "club"
+"""
+input club_set_input {
+  clubdesc: String
+  clubid: bigint
+  clublocation: String
+  clubname: String
+}
+
+"""aggregate stddev on columns"""
+type club_stddev_fields {
+  clubid: Float
+}
+
+"""
+order by stddev() on columns of table "club"
+"""
+input club_stddev_order_by {
+  clubid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type club_stddev_pop_fields {
+  clubid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "club"
+"""
+input club_stddev_pop_order_by {
+  clubid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type club_stddev_samp_fields {
+  clubid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "club"
+"""
+input club_stddev_samp_order_by {
+  clubid: order_by
+}
+
+"""aggregate sum on columns"""
+type club_sum_fields {
+  clubid: bigint
+}
+
+"""
+order by sum() on columns of table "club"
+"""
+input club_sum_order_by {
+  clubid: order_by
+}
+
+"""
+update columns of table "club"
+"""
+enum club_update_column {
+  """column name"""
+  clubdesc
+
+  """column name"""
+  clubid
+
+  """column name"""
+  clublocation
+
+  """column name"""
+  clubname
+}
+
+"""aggregate var_pop on columns"""
+type club_var_pop_fields {
+  clubid: Float
+}
+
+"""
+order by var_pop() on columns of table "club"
+"""
+input club_var_pop_order_by {
+  clubid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type club_var_samp_fields {
+  clubid: Float
+}
+
+"""
+order by var_samp() on columns of table "club"
+"""
+input club_var_samp_order_by {
+  clubid: order_by
+}
+
+"""aggregate variance on columns"""
+type club_variance_fields {
+  clubid: Float
+}
+
+"""
+order by variance() on columns of table "club"
+"""
+input club_variance_order_by {
+  clubid: order_by
+}
+
+"""
+columns and relationships of "member_of_club"
+"""
+type member_of_club {
+  """An object relationship"""
+  club: club
+  clubid: bigint
+  position: String
+
+  """An object relationship"""
+  student: student
+  stuid: bigint
+}
+
+"""
+aggregated selection of "member_of_club"
+"""
+type member_of_club_aggregate {
+  aggregate: member_of_club_aggregate_fields
+  nodes: [member_of_club!]!
+}
+
+"""
+aggregate fields of "member_of_club"
+"""
+type member_of_club_aggregate_fields {
+  avg: member_of_club_avg_fields
+  count(columns: [member_of_club_select_column!], distinct: Boolean): Int
+  max: member_of_club_max_fields
+  min: member_of_club_min_fields
+  stddev: member_of_club_stddev_fields
+  stddev_pop: member_of_club_stddev_pop_fields
+  stddev_samp: member_of_club_stddev_samp_fields
+  sum: member_of_club_sum_fields
+  var_pop: member_of_club_var_pop_fields
+  var_samp: member_of_club_var_samp_fields
+  variance: member_of_club_variance_fields
+}
+
+"""
+order by aggregate values of table "member_of_club"
+"""
+input member_of_club_aggregate_order_by {
+  avg: member_of_club_avg_order_by
+  count: order_by
+  max: member_of_club_max_order_by
+  min: member_of_club_min_order_by
+  stddev: member_of_club_stddev_order_by
+  stddev_pop: member_of_club_stddev_pop_order_by
+  stddev_samp: member_of_club_stddev_samp_order_by
+  sum: member_of_club_sum_order_by
+  var_pop: member_of_club_var_pop_order_by
+  var_samp: member_of_club_var_samp_order_by
+  variance: member_of_club_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "member_of_club"
+"""
+input member_of_club_arr_rel_insert_input {
+  data: [member_of_club_insert_input!]!
+}
+
+"""aggregate avg on columns"""
+type member_of_club_avg_fields {
+  clubid: Float
+  stuid: Float
+}
+
+"""
+order by avg() on columns of table "member_of_club"
+"""
+input member_of_club_avg_order_by {
+  clubid: order_by
+  stuid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "member_of_club". All fields are combined with a logical 'AND'.
+"""
+input member_of_club_bool_exp {
+  _and: [member_of_club_bool_exp]
+  _not: member_of_club_bool_exp
+  _or: [member_of_club_bool_exp]
+  club: club_bool_exp
+  clubid: bigint_comparison_exp
+  position: String_comparison_exp
+  student: student_bool_exp
+  stuid: bigint_comparison_exp
+}
+
+"""
+input type for incrementing integer columne in table "member_of_club"
+"""
+input member_of_club_inc_input {
+  clubid: bigint
+  stuid: bigint
+}
+
+"""
+input type for inserting data into table "member_of_club"
+"""
+input member_of_club_insert_input {
+  club: club_obj_rel_insert_input
+  clubid: bigint
+  position: String
+  student: student_obj_rel_insert_input
+  stuid: bigint
+}
+
+"""aggregate max on columns"""
+type member_of_club_max_fields {
+  clubid: bigint
+  position: String
+  stuid: bigint
+}
+
+"""
+order by max() on columns of table "member_of_club"
+"""
+input member_of_club_max_order_by {
+  clubid: order_by
+  position: order_by
+  stuid: order_by
+}
+
+"""aggregate min on columns"""
+type member_of_club_min_fields {
+  clubid: bigint
+  position: String
+  stuid: bigint
+}
+
+"""
+order by min() on columns of table "member_of_club"
+"""
+input member_of_club_min_order_by {
+  clubid: order_by
+  position: order_by
+  stuid: order_by
+}
+
+"""
+response of any mutation on the table "member_of_club"
+"""
+type member_of_club_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [member_of_club!]!
+}
+
+"""
+input type for inserting object relation for remote table "member_of_club"
+"""
+input member_of_club_obj_rel_insert_input {
+  data: member_of_club_insert_input!
+}
+
+"""
+ordering options when selecting data from "member_of_club"
+"""
+input member_of_club_order_by {
+  club: club_order_by
+  clubid: order_by
+  position: order_by
+  student: student_order_by
+  stuid: order_by
+}
+
+"""
+select columns of table "member_of_club"
+"""
+enum member_of_club_select_column {
+  """column name"""
+  clubid
+
+  """column name"""
+  position
+
+  """column name"""
+  stuid
+}
+
+"""
+input type for updating data in table "member_of_club"
+"""
+input member_of_club_set_input {
+  clubid: bigint
+  position: String
+  stuid: bigint
+}
+
+"""aggregate stddev on columns"""
+type member_of_club_stddev_fields {
+  clubid: Float
+  stuid: Float
+}
+
+"""
+order by stddev() on columns of table "member_of_club"
+"""
+input member_of_club_stddev_order_by {
+  clubid: order_by
+  stuid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type member_of_club_stddev_pop_fields {
+  clubid: Float
+  stuid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "member_of_club"
+"""
+input member_of_club_stddev_pop_order_by {
+  clubid: order_by
+  stuid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type member_of_club_stddev_samp_fields {
+  clubid: Float
+  stuid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "member_of_club"
+"""
+input member_of_club_stddev_samp_order_by {
+  clubid: order_by
+  stuid: order_by
+}
+
+"""aggregate sum on columns"""
+type member_of_club_sum_fields {
+  clubid: bigint
+  stuid: bigint
+}
+
+"""
+order by sum() on columns of table "member_of_club"
+"""
+input member_of_club_sum_order_by {
+  clubid: order_by
+  stuid: order_by
+}
+
+"""aggregate var_pop on columns"""
+type member_of_club_var_pop_fields {
+  clubid: Float
+  stuid: Float
+}
+
+"""
+order by var_pop() on columns of table "member_of_club"
+"""
+input member_of_club_var_pop_order_by {
+  clubid: order_by
+  stuid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type member_of_club_var_samp_fields {
+  clubid: Float
+  stuid: Float
+}
+
+"""
+order by var_samp() on columns of table "member_of_club"
+"""
+input member_of_club_var_samp_order_by {
+  clubid: order_by
+  stuid: order_by
+}
+
+"""aggregate variance on columns"""
+type member_of_club_variance_fields {
+  clubid: Float
+  stuid: Float
+}
+
+"""
+order by variance() on columns of table "member_of_club"
+"""
+input member_of_club_variance_order_by {
+  clubid: order_by
+  stuid: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "club"
+  """
+  delete_club(
+    """filter the rows which have to be deleted"""
+    where: club_bool_exp!
+  ): club_mutation_response
+
+  """
+  delete data from the table: "member_of_club"
+  """
+  delete_member_of_club(
+    """filter the rows which have to be deleted"""
+    where: member_of_club_bool_exp!
+  ): member_of_club_mutation_response
+
+  """
+  delete data from the table: "student"
+  """
+  delete_student(
+    """filter the rows which have to be deleted"""
+    where: student_bool_exp!
+  ): student_mutation_response
+
+  """
+  insert data into the table: "club"
+  """
+  insert_club(
+    """the rows to be inserted"""
+    objects: [club_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: club_on_conflict
+  ): club_mutation_response
+
+  """
+  insert data into the table: "member_of_club"
+  """
+  insert_member_of_club(
+    """the rows to be inserted"""
+    objects: [member_of_club_insert_input!]!
+  ): member_of_club_mutation_response
+
+  """
+  insert data into the table: "student"
+  """
+  insert_student(
+    """the rows to be inserted"""
+    objects: [student_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: student_on_conflict
+  ): student_mutation_response
+
+  """
+  update data of the table: "club"
+  """
+  update_club(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: club_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: club_set_input
+
+    """filter the rows which have to be updated"""
+    where: club_bool_exp!
+  ): club_mutation_response
+
+  """
+  update data of the table: "member_of_club"
+  """
+  update_member_of_club(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: member_of_club_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: member_of_club_set_input
+
+    """filter the rows which have to be updated"""
+    where: member_of_club_bool_exp!
+  ): member_of_club_mutation_response
+
+  """
+  update data of the table: "student"
+  """
+  update_student(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: student_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: student_set_input
+
+    """filter the rows which have to be updated"""
+    where: student_bool_exp!
+  ): student_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "club"
+  """
+  club(
+    """distinct select on columns"""
+    distinct_on: [club_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [club_order_by!]
+
+    """filter the rows returned"""
+    where: club_bool_exp
+  ): [club!]!
+
+  """
+  fetch aggregated fields from the table: "club"
+  """
+  club_aggregate(
+    """distinct select on columns"""
+    distinct_on: [club_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [club_order_by!]
+
+    """filter the rows returned"""
+    where: club_bool_exp
+  ): club_aggregate!
+
+  """fetch data from the table: "club" using primary key columns"""
+  club_by_pk(clubid: bigint!): club
+
+  """
+  fetch data from the table: "member_of_club"
+  """
+  member_of_club(
+    """distinct select on columns"""
+    distinct_on: [member_of_club_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_of_club_order_by!]
+
+    """filter the rows returned"""
+    where: member_of_club_bool_exp
+  ): [member_of_club!]!
+
+  """
+  fetch aggregated fields from the table: "member_of_club"
+  """
+  member_of_club_aggregate(
+    """distinct select on columns"""
+    distinct_on: [member_of_club_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_of_club_order_by!]
+
+    """filter the rows returned"""
+    where: member_of_club_bool_exp
+  ): member_of_club_aggregate!
+
+  """
+  fetch data from the table: "student"
+  """
+  student(
+    """distinct select on columns"""
+    distinct_on: [student_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_order_by!]
+
+    """filter the rows returned"""
+    where: student_bool_exp
+  ): [student!]!
+
+  """
+  fetch aggregated fields from the table: "student"
+  """
+  student_aggregate(
+    """distinct select on columns"""
+    distinct_on: [student_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_order_by!]
+
+    """filter the rows returned"""
+    where: student_bool_exp
+  ): student_aggregate!
+
+  """fetch data from the table: "student" using primary key columns"""
+  student_by_pk(stuid: bigint!): student
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""
+columns and relationships of "student"
+"""
+type student {
+  advisor: bigint
+  age: bigint
+  city_code: String
+  fname: String
+  lname: String
+  major: bigint
+
+  """An array relationship"""
+  member_of_clubs(
+    """distinct select on columns"""
+    distinct_on: [member_of_club_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_of_club_order_by!]
+
+    """filter the rows returned"""
+    where: member_of_club_bool_exp
+  ): [member_of_club!]!
+
+  """An aggregated array relationship"""
+  member_of_clubs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [member_of_club_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_of_club_order_by!]
+
+    """filter the rows returned"""
+    where: member_of_club_bool_exp
+  ): member_of_club_aggregate!
+  sex: String
+  stuid: bigint!
+}
+
+"""
+aggregated selection of "student"
+"""
+type student_aggregate {
+  aggregate: student_aggregate_fields
+  nodes: [student!]!
+}
+
+"""
+aggregate fields of "student"
+"""
+type student_aggregate_fields {
+  avg: student_avg_fields
+  count(columns: [student_select_column!], distinct: Boolean): Int
+  max: student_max_fields
+  min: student_min_fields
+  stddev: student_stddev_fields
+  stddev_pop: student_stddev_pop_fields
+  stddev_samp: student_stddev_samp_fields
+  sum: student_sum_fields
+  var_pop: student_var_pop_fields
+  var_samp: student_var_samp_fields
+  variance: student_variance_fields
+}
+
+"""
+order by aggregate values of table "student"
+"""
+input student_aggregate_order_by {
+  avg: student_avg_order_by
+  count: order_by
+  max: student_max_order_by
+  min: student_min_order_by
+  stddev: student_stddev_order_by
+  stddev_pop: student_stddev_pop_order_by
+  stddev_samp: student_stddev_samp_order_by
+  sum: student_sum_order_by
+  var_pop: student_var_pop_order_by
+  var_samp: student_var_samp_order_by
+  variance: student_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "student"
+"""
+input student_arr_rel_insert_input {
+  data: [student_insert_input!]!
+  on_conflict: student_on_conflict
+}
+
+"""aggregate avg on columns"""
+type student_avg_fields {
+  advisor: Float
+  age: Float
+  major: Float
+  stuid: Float
+}
+
+"""
+order by avg() on columns of table "student"
+"""
+input student_avg_order_by {
+  advisor: order_by
+  age: order_by
+  major: order_by
+  stuid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "student". All fields are combined with a logical 'AND'.
+"""
+input student_bool_exp {
+  _and: [student_bool_exp]
+  _not: student_bool_exp
+  _or: [student_bool_exp]
+  advisor: bigint_comparison_exp
+  age: bigint_comparison_exp
+  city_code: String_comparison_exp
+  fname: String_comparison_exp
+  lname: String_comparison_exp
+  major: bigint_comparison_exp
+  member_of_clubs: member_of_club_bool_exp
+  sex: String_comparison_exp
+  stuid: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "student"
+"""
+enum student_constraint {
+  """unique or primary key constraint"""
+  idx_22270_student_pkey
+}
+
+"""
+input type for incrementing integer columne in table "student"
+"""
+input student_inc_input {
+  advisor: bigint
+  age: bigint
+  major: bigint
+  stuid: bigint
+}
+
+"""
+input type for inserting data into table "student"
+"""
+input student_insert_input {
+  advisor: bigint
+  age: bigint
+  city_code: String
+  fname: String
+  lname: String
+  major: bigint
+  member_of_clubs: member_of_club_arr_rel_insert_input
+  sex: String
+  stuid: bigint
+}
+
+"""aggregate max on columns"""
+type student_max_fields {
+  advisor: bigint
+  age: bigint
+  city_code: String
+  fname: String
+  lname: String
+  major: bigint
+  sex: String
+  stuid: bigint
+}
+
+"""
+order by max() on columns of table "student"
+"""
+input student_max_order_by {
+  advisor: order_by
+  age: order_by
+  city_code: order_by
+  fname: order_by
+  lname: order_by
+  major: order_by
+  sex: order_by
+  stuid: order_by
+}
+
+"""aggregate min on columns"""
+type student_min_fields {
+  advisor: bigint
+  age: bigint
+  city_code: String
+  fname: String
+  lname: String
+  major: bigint
+  sex: String
+  stuid: bigint
+}
+
+"""
+order by min() on columns of table "student"
+"""
+input student_min_order_by {
+  advisor: order_by
+  age: order_by
+  city_code: order_by
+  fname: order_by
+  lname: order_by
+  major: order_by
+  sex: order_by
+  stuid: order_by
+}
+
+"""
+response of any mutation on the table "student"
+"""
+type student_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [student!]!
+}
+
+"""
+input type for inserting object relation for remote table "student"
+"""
+input student_obj_rel_insert_input {
+  data: student_insert_input!
+  on_conflict: student_on_conflict
+}
+
+"""
+on conflict condition type for table "student"
+"""
+input student_on_conflict {
+  constraint: student_constraint!
+  update_columns: [student_update_column!]!
+  where: student_bool_exp
+}
+
+"""
+ordering options when selecting data from "student"
+"""
+input student_order_by {
+  advisor: order_by
+  age: order_by
+  city_code: order_by
+  fname: order_by
+  lname: order_by
+  major: order_by
+  member_of_clubs_aggregate: member_of_club_aggregate_order_by
+  sex: order_by
+  stuid: order_by
+}
+
+"""
+select columns of table "student"
+"""
+enum student_select_column {
+  """column name"""
+  advisor
+
+  """column name"""
+  age
+
+  """column name"""
+  city_code
+
+  """column name"""
+  fname
+
+  """column name"""
+  lname
+
+  """column name"""
+  major
+
+  """column name"""
+  sex
+
+  """column name"""
+  stuid
+}
+
+"""
+input type for updating data in table "student"
+"""
+input student_set_input {
+  advisor: bigint
+  age: bigint
+  city_code: String
+  fname: String
+  lname: String
+  major: bigint
+  sex: String
+  stuid: bigint
+}
+
+"""aggregate stddev on columns"""
+type student_stddev_fields {
+  advisor: Float
+  age: Float
+  major: Float
+  stuid: Float
+}
+
+"""
+order by stddev() on columns of table "student"
+"""
+input student_stddev_order_by {
+  advisor: order_by
+  age: order_by
+  major: order_by
+  stuid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type student_stddev_pop_fields {
+  advisor: Float
+  age: Float
+  major: Float
+  stuid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "student"
+"""
+input student_stddev_pop_order_by {
+  advisor: order_by
+  age: order_by
+  major: order_by
+  stuid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type student_stddev_samp_fields {
+  advisor: Float
+  age: Float
+  major: Float
+  stuid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "student"
+"""
+input student_stddev_samp_order_by {
+  advisor: order_by
+  age: order_by
+  major: order_by
+  stuid: order_by
+}
+
+"""aggregate sum on columns"""
+type student_sum_fields {
+  advisor: bigint
+  age: bigint
+  major: bigint
+  stuid: bigint
+}
+
+"""
+order by sum() on columns of table "student"
+"""
+input student_sum_order_by {
+  advisor: order_by
+  age: order_by
+  major: order_by
+  stuid: order_by
+}
+
+"""
+update columns of table "student"
+"""
+enum student_update_column {
+  """column name"""
+  advisor
+
+  """column name"""
+  age
+
+  """column name"""
+  city_code
+
+  """column name"""
+  fname
+
+  """column name"""
+  lname
+
+  """column name"""
+  major
+
+  """column name"""
+  sex
+
+  """column name"""
+  stuid
+}
+
+"""aggregate var_pop on columns"""
+type student_var_pop_fields {
+  advisor: Float
+  age: Float
+  major: Float
+  stuid: Float
+}
+
+"""
+order by var_pop() on columns of table "student"
+"""
+input student_var_pop_order_by {
+  advisor: order_by
+  age: order_by
+  major: order_by
+  stuid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type student_var_samp_fields {
+  advisor: Float
+  age: Float
+  major: Float
+  stuid: Float
+}
+
+"""
+order by var_samp() on columns of table "student"
+"""
+input student_var_samp_order_by {
+  advisor: order_by
+  age: order_by
+  major: order_by
+  stuid: order_by
+}
+
+"""aggregate variance on columns"""
+type student_variance_fields {
+  advisor: Float
+  age: Float
+  major: Float
+  stuid: Float
+}
+
+"""
+order by variance() on columns of table "student"
+"""
+input student_variance_order_by {
+  advisor: order_by
+  age: order_by
+  major: order_by
+  stuid: order_by
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "club"
+  """
+  club(
+    """distinct select on columns"""
+    distinct_on: [club_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [club_order_by!]
+
+    """filter the rows returned"""
+    where: club_bool_exp
+  ): [club!]!
+
+  """
+  fetch aggregated fields from the table: "club"
+  """
+  club_aggregate(
+    """distinct select on columns"""
+    distinct_on: [club_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [club_order_by!]
+
+    """filter the rows returned"""
+    where: club_bool_exp
+  ): club_aggregate!
+
+  """fetch data from the table: "club" using primary key columns"""
+  club_by_pk(clubid: bigint!): club
+
+  """
+  fetch data from the table: "member_of_club"
+  """
+  member_of_club(
+    """distinct select on columns"""
+    distinct_on: [member_of_club_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_of_club_order_by!]
+
+    """filter the rows returned"""
+    where: member_of_club_bool_exp
+  ): [member_of_club!]!
+
+  """
+  fetch aggregated fields from the table: "member_of_club"
+  """
+  member_of_club_aggregate(
+    """distinct select on columns"""
+    distinct_on: [member_of_club_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_of_club_order_by!]
+
+    """filter the rows returned"""
+    where: member_of_club_bool_exp
+  ): member_of_club_aggregate!
+
+  """
+  fetch data from the table: "student"
+  """
+  student(
+    """distinct select on columns"""
+    distinct_on: [student_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_order_by!]
+
+    """filter the rows returned"""
+    where: student_bool_exp
+  ): [student!]!
+
+  """
+  fetch aggregated fields from the table: "student"
+  """
+  student_aggregate(
+    """distinct select on columns"""
+    distinct_on: [student_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_order_by!]
+
+    """filter the rows returned"""
+    where: student_bool_exp
+  ): student_aggregate!
+
+  """fetch data from the table: "student" using primary key columns"""
+  student_by_pk(stuid: bigint!): student
+}

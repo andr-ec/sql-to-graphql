@@ -1,0 +1,2130 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Boolean. All fields are combined with logical 'AND'.
+"""
+input Boolean_comparison_exp {
+  _eq: Boolean
+  _gt: Boolean
+  _gte: Boolean
+  _in: [Boolean!]
+  _is_null: Boolean
+  _lt: Boolean
+  _lte: Boolean
+  _neq: Boolean
+  _nin: [Boolean!]
+}
+
+"""
+columns and relationships of "conductor"
+"""
+type conductor {
+  age: Int
+  conductor_id: Int
+  name: String
+  nationality: String
+
+  """An array relationship"""
+  orchestras(
+    """distinct select on columns"""
+    distinct_on: [orchestra_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [orchestra_order_by!]
+
+    """filter the rows returned"""
+    where: orchestra_bool_exp
+  ): [orchestra!]!
+
+  """An aggregated array relationship"""
+  orchestras_aggregate(
+    """distinct select on columns"""
+    distinct_on: [orchestra_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [orchestra_order_by!]
+
+    """filter the rows returned"""
+    where: orchestra_bool_exp
+  ): orchestra_aggregate!
+  year_of_work: Int
+}
+
+"""
+aggregated selection of "conductor"
+"""
+type conductor_aggregate {
+  aggregate: conductor_aggregate_fields
+  nodes: [conductor!]!
+}
+
+"""
+aggregate fields of "conductor"
+"""
+type conductor_aggregate_fields {
+  avg: conductor_avg_fields
+  count(columns: [conductor_select_column!], distinct: Boolean): Int
+  max: conductor_max_fields
+  min: conductor_min_fields
+  stddev: conductor_stddev_fields
+  stddev_pop: conductor_stddev_pop_fields
+  stddev_samp: conductor_stddev_samp_fields
+  sum: conductor_sum_fields
+  var_pop: conductor_var_pop_fields
+  var_samp: conductor_var_samp_fields
+  variance: conductor_variance_fields
+}
+
+"""
+order by aggregate values of table "conductor"
+"""
+input conductor_aggregate_order_by {
+  avg: conductor_avg_order_by
+  count: order_by
+  max: conductor_max_order_by
+  min: conductor_min_order_by
+  stddev: conductor_stddev_order_by
+  stddev_pop: conductor_stddev_pop_order_by
+  stddev_samp: conductor_stddev_samp_order_by
+  sum: conductor_sum_order_by
+  var_pop: conductor_var_pop_order_by
+  var_samp: conductor_var_samp_order_by
+  variance: conductor_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "conductor"
+"""
+input conductor_arr_rel_insert_input {
+  data: [conductor_insert_input!]!
+  on_conflict: conductor_on_conflict
+}
+
+"""aggregate avg on columns"""
+type conductor_avg_fields {
+  age: Float
+  conductor_id: Float
+  year_of_work: Float
+}
+
+"""
+order by avg() on columns of table "conductor"
+"""
+input conductor_avg_order_by {
+  age: order_by
+  conductor_id: order_by
+  year_of_work: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "conductor". All fields are combined with a logical 'AND'.
+"""
+input conductor_bool_exp {
+  _and: [conductor_bool_exp]
+  _not: conductor_bool_exp
+  _or: [conductor_bool_exp]
+  age: Int_comparison_exp
+  conductor_id: Int_comparison_exp
+  name: String_comparison_exp
+  nationality: String_comparison_exp
+  orchestras: orchestra_bool_exp
+  year_of_work: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "conductor"
+"""
+enum conductor_constraint {
+  """unique or primary key constraint"""
+  idx_20826_sqlite_autoindex_conductor_1
+}
+
+"""
+input type for incrementing integer columne in table "conductor"
+"""
+input conductor_inc_input {
+  age: Int
+  conductor_id: Int
+  year_of_work: Int
+}
+
+"""
+input type for inserting data into table "conductor"
+"""
+input conductor_insert_input {
+  age: Int
+  conductor_id: Int
+  name: String
+  nationality: String
+  orchestras: orchestra_arr_rel_insert_input
+  year_of_work: Int
+}
+
+"""aggregate max on columns"""
+type conductor_max_fields {
+  age: Int
+  conductor_id: Int
+  name: String
+  nationality: String
+  year_of_work: Int
+}
+
+"""
+order by max() on columns of table "conductor"
+"""
+input conductor_max_order_by {
+  age: order_by
+  conductor_id: order_by
+  name: order_by
+  nationality: order_by
+  year_of_work: order_by
+}
+
+"""aggregate min on columns"""
+type conductor_min_fields {
+  age: Int
+  conductor_id: Int
+  name: String
+  nationality: String
+  year_of_work: Int
+}
+
+"""
+order by min() on columns of table "conductor"
+"""
+input conductor_min_order_by {
+  age: order_by
+  conductor_id: order_by
+  name: order_by
+  nationality: order_by
+  year_of_work: order_by
+}
+
+"""
+response of any mutation on the table "conductor"
+"""
+type conductor_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [conductor!]!
+}
+
+"""
+input type for inserting object relation for remote table "conductor"
+"""
+input conductor_obj_rel_insert_input {
+  data: conductor_insert_input!
+  on_conflict: conductor_on_conflict
+}
+
+"""
+on conflict condition type for table "conductor"
+"""
+input conductor_on_conflict {
+  constraint: conductor_constraint!
+  update_columns: [conductor_update_column!]!
+  where: conductor_bool_exp
+}
+
+"""
+ordering options when selecting data from "conductor"
+"""
+input conductor_order_by {
+  age: order_by
+  conductor_id: order_by
+  name: order_by
+  nationality: order_by
+  orchestras_aggregate: orchestra_aggregate_order_by
+  year_of_work: order_by
+}
+
+"""
+select columns of table "conductor"
+"""
+enum conductor_select_column {
+  """column name"""
+  age
+
+  """column name"""
+  conductor_id
+
+  """column name"""
+  name
+
+  """column name"""
+  nationality
+
+  """column name"""
+  year_of_work
+}
+
+"""
+input type for updating data in table "conductor"
+"""
+input conductor_set_input {
+  age: Int
+  conductor_id: Int
+  name: String
+  nationality: String
+  year_of_work: Int
+}
+
+"""aggregate stddev on columns"""
+type conductor_stddev_fields {
+  age: Float
+  conductor_id: Float
+  year_of_work: Float
+}
+
+"""
+order by stddev() on columns of table "conductor"
+"""
+input conductor_stddev_order_by {
+  age: order_by
+  conductor_id: order_by
+  year_of_work: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type conductor_stddev_pop_fields {
+  age: Float
+  conductor_id: Float
+  year_of_work: Float
+}
+
+"""
+order by stddev_pop() on columns of table "conductor"
+"""
+input conductor_stddev_pop_order_by {
+  age: order_by
+  conductor_id: order_by
+  year_of_work: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type conductor_stddev_samp_fields {
+  age: Float
+  conductor_id: Float
+  year_of_work: Float
+}
+
+"""
+order by stddev_samp() on columns of table "conductor"
+"""
+input conductor_stddev_samp_order_by {
+  age: order_by
+  conductor_id: order_by
+  year_of_work: order_by
+}
+
+"""aggregate sum on columns"""
+type conductor_sum_fields {
+  age: Int
+  conductor_id: Int
+  year_of_work: Int
+}
+
+"""
+order by sum() on columns of table "conductor"
+"""
+input conductor_sum_order_by {
+  age: order_by
+  conductor_id: order_by
+  year_of_work: order_by
+}
+
+"""
+update columns of table "conductor"
+"""
+enum conductor_update_column {
+  """column name"""
+  age
+
+  """column name"""
+  conductor_id
+
+  """column name"""
+  name
+
+  """column name"""
+  nationality
+
+  """column name"""
+  year_of_work
+}
+
+"""aggregate var_pop on columns"""
+type conductor_var_pop_fields {
+  age: Float
+  conductor_id: Float
+  year_of_work: Float
+}
+
+"""
+order by var_pop() on columns of table "conductor"
+"""
+input conductor_var_pop_order_by {
+  age: order_by
+  conductor_id: order_by
+  year_of_work: order_by
+}
+
+"""aggregate var_samp on columns"""
+type conductor_var_samp_fields {
+  age: Float
+  conductor_id: Float
+  year_of_work: Float
+}
+
+"""
+order by var_samp() on columns of table "conductor"
+"""
+input conductor_var_samp_order_by {
+  age: order_by
+  conductor_id: order_by
+  year_of_work: order_by
+}
+
+"""aggregate variance on columns"""
+type conductor_variance_fields {
+  age: Float
+  conductor_id: Float
+  year_of_work: Float
+}
+
+"""
+order by variance() on columns of table "conductor"
+"""
+input conductor_variance_order_by {
+  age: order_by
+  conductor_id: order_by
+  year_of_work: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "conductor"
+  """
+  delete_conductor(
+    """filter the rows which have to be deleted"""
+    where: conductor_bool_exp!
+  ): conductor_mutation_response
+
+  """
+  delete data from the table: "orchestra"
+  """
+  delete_orchestra(
+    """filter the rows which have to be deleted"""
+    where: orchestra_bool_exp!
+  ): orchestra_mutation_response
+
+  """
+  delete data from the table: "performance"
+  """
+  delete_performance(
+    """filter the rows which have to be deleted"""
+    where: performance_bool_exp!
+  ): performance_mutation_response
+
+  """
+  delete data from the table: "show"
+  """
+  delete_show(
+    """filter the rows which have to be deleted"""
+    where: show_bool_exp!
+  ): show_mutation_response
+
+  """
+  insert data into the table: "conductor"
+  """
+  insert_conductor(
+    """the rows to be inserted"""
+    objects: [conductor_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: conductor_on_conflict
+  ): conductor_mutation_response
+
+  """
+  insert data into the table: "orchestra"
+  """
+  insert_orchestra(
+    """the rows to be inserted"""
+    objects: [orchestra_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: orchestra_on_conflict
+  ): orchestra_mutation_response
+
+  """
+  insert data into the table: "performance"
+  """
+  insert_performance(
+    """the rows to be inserted"""
+    objects: [performance_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: performance_on_conflict
+  ): performance_mutation_response
+
+  """
+  insert data into the table: "show"
+  """
+  insert_show(
+    """the rows to be inserted"""
+    objects: [show_insert_input!]!
+  ): show_mutation_response
+
+  """
+  update data of the table: "conductor"
+  """
+  update_conductor(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: conductor_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: conductor_set_input
+
+    """filter the rows which have to be updated"""
+    where: conductor_bool_exp!
+  ): conductor_mutation_response
+
+  """
+  update data of the table: "orchestra"
+  """
+  update_orchestra(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: orchestra_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: orchestra_set_input
+
+    """filter the rows which have to be updated"""
+    where: orchestra_bool_exp!
+  ): orchestra_mutation_response
+
+  """
+  update data of the table: "performance"
+  """
+  update_performance(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: performance_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: performance_set_input
+
+    """filter the rows which have to be updated"""
+    where: performance_bool_exp!
+  ): performance_mutation_response
+
+  """
+  update data of the table: "show"
+  """
+  update_show(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: show_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: show_set_input
+
+    """filter the rows which have to be updated"""
+    where: show_bool_exp!
+  ): show_mutation_response
+}
+
+"""
+columns and relationships of "orchestra"
+"""
+type orchestra {
+  """An object relationship"""
+  conductor: conductor
+  conductor_id: Int
+  major_record_format: String
+  orchestra: String
+  orchestra_id: Int
+
+  """An array relationship"""
+  performances(
+    """distinct select on columns"""
+    distinct_on: [performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [performance_order_by!]
+
+    """filter the rows returned"""
+    where: performance_bool_exp
+  ): [performance!]!
+
+  """An aggregated array relationship"""
+  performances_aggregate(
+    """distinct select on columns"""
+    distinct_on: [performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [performance_order_by!]
+
+    """filter the rows returned"""
+    where: performance_bool_exp
+  ): performance_aggregate!
+  record_company: String
+  year_of_founded: Float
+}
+
+"""
+aggregated selection of "orchestra"
+"""
+type orchestra_aggregate {
+  aggregate: orchestra_aggregate_fields
+  nodes: [orchestra!]!
+}
+
+"""
+aggregate fields of "orchestra"
+"""
+type orchestra_aggregate_fields {
+  avg: orchestra_avg_fields
+  count(columns: [orchestra_select_column!], distinct: Boolean): Int
+  max: orchestra_max_fields
+  min: orchestra_min_fields
+  stddev: orchestra_stddev_fields
+  stddev_pop: orchestra_stddev_pop_fields
+  stddev_samp: orchestra_stddev_samp_fields
+  sum: orchestra_sum_fields
+  var_pop: orchestra_var_pop_fields
+  var_samp: orchestra_var_samp_fields
+  variance: orchestra_variance_fields
+}
+
+"""
+order by aggregate values of table "orchestra"
+"""
+input orchestra_aggregate_order_by {
+  avg: orchestra_avg_order_by
+  count: order_by
+  max: orchestra_max_order_by
+  min: orchestra_min_order_by
+  stddev: orchestra_stddev_order_by
+  stddev_pop: orchestra_stddev_pop_order_by
+  stddev_samp: orchestra_stddev_samp_order_by
+  sum: orchestra_sum_order_by
+  var_pop: orchestra_var_pop_order_by
+  var_samp: orchestra_var_samp_order_by
+  variance: orchestra_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "orchestra"
+"""
+input orchestra_arr_rel_insert_input {
+  data: [orchestra_insert_input!]!
+  on_conflict: orchestra_on_conflict
+}
+
+"""aggregate avg on columns"""
+type orchestra_avg_fields {
+  conductor_id: Float
+  orchestra_id: Float
+  year_of_founded: Float
+}
+
+"""
+order by avg() on columns of table "orchestra"
+"""
+input orchestra_avg_order_by {
+  conductor_id: order_by
+  orchestra_id: order_by
+  year_of_founded: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "orchestra". All fields are combined with a logical 'AND'.
+"""
+input orchestra_bool_exp {
+  _and: [orchestra_bool_exp]
+  _not: orchestra_bool_exp
+  _or: [orchestra_bool_exp]
+  conductor: conductor_bool_exp
+  conductor_id: Int_comparison_exp
+  major_record_format: String_comparison_exp
+  orchestra: String_comparison_exp
+  orchestra_id: Int_comparison_exp
+  performances: performance_bool_exp
+  record_company: String_comparison_exp
+  year_of_founded: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "orchestra"
+"""
+enum orchestra_constraint {
+  """unique or primary key constraint"""
+  idx_20832_sqlite_autoindex_orchestra_1
+}
+
+"""
+input type for incrementing integer columne in table "orchestra"
+"""
+input orchestra_inc_input {
+  conductor_id: Int
+  orchestra_id: Int
+}
+
+"""
+input type for inserting data into table "orchestra"
+"""
+input orchestra_insert_input {
+  conductor: conductor_obj_rel_insert_input
+  conductor_id: Int
+  major_record_format: String
+  orchestra: String
+  orchestra_id: Int
+  performances: performance_arr_rel_insert_input
+  record_company: String
+  year_of_founded: Float
+}
+
+"""aggregate max on columns"""
+type orchestra_max_fields {
+  conductor_id: Int
+  major_record_format: String
+  orchestra: String
+  orchestra_id: Int
+  record_company: String
+  year_of_founded: Float
+}
+
+"""
+order by max() on columns of table "orchestra"
+"""
+input orchestra_max_order_by {
+  conductor_id: order_by
+  major_record_format: order_by
+  orchestra: order_by
+  orchestra_id: order_by
+  record_company: order_by
+  year_of_founded: order_by
+}
+
+"""aggregate min on columns"""
+type orchestra_min_fields {
+  conductor_id: Int
+  major_record_format: String
+  orchestra: String
+  orchestra_id: Int
+  record_company: String
+  year_of_founded: Float
+}
+
+"""
+order by min() on columns of table "orchestra"
+"""
+input orchestra_min_order_by {
+  conductor_id: order_by
+  major_record_format: order_by
+  orchestra: order_by
+  orchestra_id: order_by
+  record_company: order_by
+  year_of_founded: order_by
+}
+
+"""
+response of any mutation on the table "orchestra"
+"""
+type orchestra_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [orchestra!]!
+}
+
+"""
+input type for inserting object relation for remote table "orchestra"
+"""
+input orchestra_obj_rel_insert_input {
+  data: orchestra_insert_input!
+  on_conflict: orchestra_on_conflict
+}
+
+"""
+on conflict condition type for table "orchestra"
+"""
+input orchestra_on_conflict {
+  constraint: orchestra_constraint!
+  update_columns: [orchestra_update_column!]!
+  where: orchestra_bool_exp
+}
+
+"""
+ordering options when selecting data from "orchestra"
+"""
+input orchestra_order_by {
+  conductor: conductor_order_by
+  conductor_id: order_by
+  major_record_format: order_by
+  orchestra: order_by
+  orchestra_id: order_by
+  performances_aggregate: performance_aggregate_order_by
+  record_company: order_by
+  year_of_founded: order_by
+}
+
+"""
+select columns of table "orchestra"
+"""
+enum orchestra_select_column {
+  """column name"""
+  conductor_id
+
+  """column name"""
+  major_record_format
+
+  """column name"""
+  orchestra
+
+  """column name"""
+  orchestra_id
+
+  """column name"""
+  record_company
+
+  """column name"""
+  year_of_founded
+}
+
+"""
+input type for updating data in table "orchestra"
+"""
+input orchestra_set_input {
+  conductor_id: Int
+  major_record_format: String
+  orchestra: String
+  orchestra_id: Int
+  record_company: String
+  year_of_founded: Float
+}
+
+"""aggregate stddev on columns"""
+type orchestra_stddev_fields {
+  conductor_id: Float
+  orchestra_id: Float
+  year_of_founded: Float
+}
+
+"""
+order by stddev() on columns of table "orchestra"
+"""
+input orchestra_stddev_order_by {
+  conductor_id: order_by
+  orchestra_id: order_by
+  year_of_founded: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type orchestra_stddev_pop_fields {
+  conductor_id: Float
+  orchestra_id: Float
+  year_of_founded: Float
+}
+
+"""
+order by stddev_pop() on columns of table "orchestra"
+"""
+input orchestra_stddev_pop_order_by {
+  conductor_id: order_by
+  orchestra_id: order_by
+  year_of_founded: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type orchestra_stddev_samp_fields {
+  conductor_id: Float
+  orchestra_id: Float
+  year_of_founded: Float
+}
+
+"""
+order by stddev_samp() on columns of table "orchestra"
+"""
+input orchestra_stddev_samp_order_by {
+  conductor_id: order_by
+  orchestra_id: order_by
+  year_of_founded: order_by
+}
+
+"""aggregate sum on columns"""
+type orchestra_sum_fields {
+  conductor_id: Int
+  orchestra_id: Int
+  year_of_founded: Float
+}
+
+"""
+order by sum() on columns of table "orchestra"
+"""
+input orchestra_sum_order_by {
+  conductor_id: order_by
+  orchestra_id: order_by
+  year_of_founded: order_by
+}
+
+"""
+update columns of table "orchestra"
+"""
+enum orchestra_update_column {
+  """column name"""
+  conductor_id
+
+  """column name"""
+  major_record_format
+
+  """column name"""
+  orchestra
+
+  """column name"""
+  orchestra_id
+
+  """column name"""
+  record_company
+
+  """column name"""
+  year_of_founded
+}
+
+"""aggregate var_pop on columns"""
+type orchestra_var_pop_fields {
+  conductor_id: Float
+  orchestra_id: Float
+  year_of_founded: Float
+}
+
+"""
+order by var_pop() on columns of table "orchestra"
+"""
+input orchestra_var_pop_order_by {
+  conductor_id: order_by
+  orchestra_id: order_by
+  year_of_founded: order_by
+}
+
+"""aggregate var_samp on columns"""
+type orchestra_var_samp_fields {
+  conductor_id: Float
+  orchestra_id: Float
+  year_of_founded: Float
+}
+
+"""
+order by var_samp() on columns of table "orchestra"
+"""
+input orchestra_var_samp_order_by {
+  conductor_id: order_by
+  orchestra_id: order_by
+  year_of_founded: order_by
+}
+
+"""aggregate variance on columns"""
+type orchestra_variance_fields {
+  conductor_id: Float
+  orchestra_id: Float
+  year_of_founded: Float
+}
+
+"""
+order by variance() on columns of table "orchestra"
+"""
+input orchestra_variance_order_by {
+  conductor_id: order_by
+  orchestra_id: order_by
+  year_of_founded: order_by
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "performance"
+"""
+type performance {
+  date: String
+
+  """An object relationship"""
+  orchestra: orchestra
+  orchestra_id: Int
+  performance_id: Int
+  share: String
+
+  """An array relationship"""
+  shows(
+    """distinct select on columns"""
+    distinct_on: [show_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [show_order_by!]
+
+    """filter the rows returned"""
+    where: show_bool_exp
+  ): [show!]!
+
+  """An aggregated array relationship"""
+  shows_aggregate(
+    """distinct select on columns"""
+    distinct_on: [show_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [show_order_by!]
+
+    """filter the rows returned"""
+    where: show_bool_exp
+  ): show_aggregate!
+  type: String
+  weekly_rank: String
+}
+
+"""
+aggregated selection of "performance"
+"""
+type performance_aggregate {
+  aggregate: performance_aggregate_fields
+  nodes: [performance!]!
+}
+
+"""
+aggregate fields of "performance"
+"""
+type performance_aggregate_fields {
+  avg: performance_avg_fields
+  count(columns: [performance_select_column!], distinct: Boolean): Int
+  max: performance_max_fields
+  min: performance_min_fields
+  stddev: performance_stddev_fields
+  stddev_pop: performance_stddev_pop_fields
+  stddev_samp: performance_stddev_samp_fields
+  sum: performance_sum_fields
+  var_pop: performance_var_pop_fields
+  var_samp: performance_var_samp_fields
+  variance: performance_variance_fields
+}
+
+"""
+order by aggregate values of table "performance"
+"""
+input performance_aggregate_order_by {
+  avg: performance_avg_order_by
+  count: order_by
+  max: performance_max_order_by
+  min: performance_min_order_by
+  stddev: performance_stddev_order_by
+  stddev_pop: performance_stddev_pop_order_by
+  stddev_samp: performance_stddev_samp_order_by
+  sum: performance_sum_order_by
+  var_pop: performance_var_pop_order_by
+  var_samp: performance_var_samp_order_by
+  variance: performance_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "performance"
+"""
+input performance_arr_rel_insert_input {
+  data: [performance_insert_input!]!
+  on_conflict: performance_on_conflict
+}
+
+"""aggregate avg on columns"""
+type performance_avg_fields {
+  orchestra_id: Float
+  performance_id: Float
+}
+
+"""
+order by avg() on columns of table "performance"
+"""
+input performance_avg_order_by {
+  orchestra_id: order_by
+  performance_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "performance". All fields are combined with a logical 'AND'.
+"""
+input performance_bool_exp {
+  _and: [performance_bool_exp]
+  _not: performance_bool_exp
+  _or: [performance_bool_exp]
+  date: String_comparison_exp
+  orchestra: orchestra_bool_exp
+  orchestra_id: Int_comparison_exp
+  performance_id: Int_comparison_exp
+  share: String_comparison_exp
+  shows: show_bool_exp
+  type: String_comparison_exp
+  weekly_rank: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "performance"
+"""
+enum performance_constraint {
+  """unique or primary key constraint"""
+  idx_20838_sqlite_autoindex_performance_1
+}
+
+"""
+input type for incrementing integer columne in table "performance"
+"""
+input performance_inc_input {
+  orchestra_id: Int
+  performance_id: Int
+}
+
+"""
+input type for inserting data into table "performance"
+"""
+input performance_insert_input {
+  date: String
+  orchestra: orchestra_obj_rel_insert_input
+  orchestra_id: Int
+  performance_id: Int
+  share: String
+  shows: show_arr_rel_insert_input
+  type: String
+  weekly_rank: String
+}
+
+"""aggregate max on columns"""
+type performance_max_fields {
+  date: String
+  orchestra_id: Int
+  performance_id: Int
+  share: String
+  type: String
+  weekly_rank: String
+}
+
+"""
+order by max() on columns of table "performance"
+"""
+input performance_max_order_by {
+  date: order_by
+  orchestra_id: order_by
+  performance_id: order_by
+  share: order_by
+  type: order_by
+  weekly_rank: order_by
+}
+
+"""aggregate min on columns"""
+type performance_min_fields {
+  date: String
+  orchestra_id: Int
+  performance_id: Int
+  share: String
+  type: String
+  weekly_rank: String
+}
+
+"""
+order by min() on columns of table "performance"
+"""
+input performance_min_order_by {
+  date: order_by
+  orchestra_id: order_by
+  performance_id: order_by
+  share: order_by
+  type: order_by
+  weekly_rank: order_by
+}
+
+"""
+response of any mutation on the table "performance"
+"""
+type performance_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [performance!]!
+}
+
+"""
+input type for inserting object relation for remote table "performance"
+"""
+input performance_obj_rel_insert_input {
+  data: performance_insert_input!
+  on_conflict: performance_on_conflict
+}
+
+"""
+on conflict condition type for table "performance"
+"""
+input performance_on_conflict {
+  constraint: performance_constraint!
+  update_columns: [performance_update_column!]!
+  where: performance_bool_exp
+}
+
+"""
+ordering options when selecting data from "performance"
+"""
+input performance_order_by {
+  date: order_by
+  orchestra: orchestra_order_by
+  orchestra_id: order_by
+  performance_id: order_by
+  share: order_by
+  shows_aggregate: show_aggregate_order_by
+  type: order_by
+  weekly_rank: order_by
+}
+
+"""
+select columns of table "performance"
+"""
+enum performance_select_column {
+  """column name"""
+  date
+
+  """column name"""
+  orchestra_id
+
+  """column name"""
+  performance_id
+
+  """column name"""
+  share
+
+  """column name"""
+  type
+
+  """column name"""
+  weekly_rank
+}
+
+"""
+input type for updating data in table "performance"
+"""
+input performance_set_input {
+  date: String
+  orchestra_id: Int
+  performance_id: Int
+  share: String
+  type: String
+  weekly_rank: String
+}
+
+"""aggregate stddev on columns"""
+type performance_stddev_fields {
+  orchestra_id: Float
+  performance_id: Float
+}
+
+"""
+order by stddev() on columns of table "performance"
+"""
+input performance_stddev_order_by {
+  orchestra_id: order_by
+  performance_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type performance_stddev_pop_fields {
+  orchestra_id: Float
+  performance_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "performance"
+"""
+input performance_stddev_pop_order_by {
+  orchestra_id: order_by
+  performance_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type performance_stddev_samp_fields {
+  orchestra_id: Float
+  performance_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "performance"
+"""
+input performance_stddev_samp_order_by {
+  orchestra_id: order_by
+  performance_id: order_by
+}
+
+"""aggregate sum on columns"""
+type performance_sum_fields {
+  orchestra_id: Int
+  performance_id: Int
+}
+
+"""
+order by sum() on columns of table "performance"
+"""
+input performance_sum_order_by {
+  orchestra_id: order_by
+  performance_id: order_by
+}
+
+"""
+update columns of table "performance"
+"""
+enum performance_update_column {
+  """column name"""
+  date
+
+  """column name"""
+  orchestra_id
+
+  """column name"""
+  performance_id
+
+  """column name"""
+  share
+
+  """column name"""
+  type
+
+  """column name"""
+  weekly_rank
+}
+
+"""aggregate var_pop on columns"""
+type performance_var_pop_fields {
+  orchestra_id: Float
+  performance_id: Float
+}
+
+"""
+order by var_pop() on columns of table "performance"
+"""
+input performance_var_pop_order_by {
+  orchestra_id: order_by
+  performance_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type performance_var_samp_fields {
+  orchestra_id: Float
+  performance_id: Float
+}
+
+"""
+order by var_samp() on columns of table "performance"
+"""
+input performance_var_samp_order_by {
+  orchestra_id: order_by
+  performance_id: order_by
+}
+
+"""aggregate variance on columns"""
+type performance_variance_fields {
+  orchestra_id: Float
+  performance_id: Float
+}
+
+"""
+order by variance() on columns of table "performance"
+"""
+input performance_variance_order_by {
+  orchestra_id: order_by
+  performance_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "conductor"
+  """
+  conductor(
+    """distinct select on columns"""
+    distinct_on: [conductor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [conductor_order_by!]
+
+    """filter the rows returned"""
+    where: conductor_bool_exp
+  ): [conductor!]!
+
+  """
+  fetch aggregated fields from the table: "conductor"
+  """
+  conductor_aggregate(
+    """distinct select on columns"""
+    distinct_on: [conductor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [conductor_order_by!]
+
+    """filter the rows returned"""
+    where: conductor_bool_exp
+  ): conductor_aggregate!
+
+  """
+  fetch data from the table: "orchestra"
+  """
+  orchestra(
+    """distinct select on columns"""
+    distinct_on: [orchestra_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [orchestra_order_by!]
+
+    """filter the rows returned"""
+    where: orchestra_bool_exp
+  ): [orchestra!]!
+
+  """
+  fetch aggregated fields from the table: "orchestra"
+  """
+  orchestra_aggregate(
+    """distinct select on columns"""
+    distinct_on: [orchestra_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [orchestra_order_by!]
+
+    """filter the rows returned"""
+    where: orchestra_bool_exp
+  ): orchestra_aggregate!
+
+  """
+  fetch data from the table: "performance"
+  """
+  performance(
+    """distinct select on columns"""
+    distinct_on: [performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [performance_order_by!]
+
+    """filter the rows returned"""
+    where: performance_bool_exp
+  ): [performance!]!
+
+  """
+  fetch aggregated fields from the table: "performance"
+  """
+  performance_aggregate(
+    """distinct select on columns"""
+    distinct_on: [performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [performance_order_by!]
+
+    """filter the rows returned"""
+    where: performance_bool_exp
+  ): performance_aggregate!
+
+  """
+  fetch data from the table: "show"
+  """
+  show(
+    """distinct select on columns"""
+    distinct_on: [show_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [show_order_by!]
+
+    """filter the rows returned"""
+    where: show_bool_exp
+  ): [show!]!
+
+  """
+  fetch aggregated fields from the table: "show"
+  """
+  show_aggregate(
+    """distinct select on columns"""
+    distinct_on: [show_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [show_order_by!]
+
+    """filter the rows returned"""
+    where: show_bool_exp
+  ): show_aggregate!
+}
+
+"""
+columns and relationships of "show"
+"""
+type show {
+  attendance: Float
+  if_first_show: String
+
+  """An object relationship"""
+  performance: performance
+  performance_id: Int
+  result: Boolean
+  show_id: Int
+}
+
+"""
+aggregated selection of "show"
+"""
+type show_aggregate {
+  aggregate: show_aggregate_fields
+  nodes: [show!]!
+}
+
+"""
+aggregate fields of "show"
+"""
+type show_aggregate_fields {
+  avg: show_avg_fields
+  count(columns: [show_select_column!], distinct: Boolean): Int
+  max: show_max_fields
+  min: show_min_fields
+  stddev: show_stddev_fields
+  stddev_pop: show_stddev_pop_fields
+  stddev_samp: show_stddev_samp_fields
+  sum: show_sum_fields
+  var_pop: show_var_pop_fields
+  var_samp: show_var_samp_fields
+  variance: show_variance_fields
+}
+
+"""
+order by aggregate values of table "show"
+"""
+input show_aggregate_order_by {
+  avg: show_avg_order_by
+  count: order_by
+  max: show_max_order_by
+  min: show_min_order_by
+  stddev: show_stddev_order_by
+  stddev_pop: show_stddev_pop_order_by
+  stddev_samp: show_stddev_samp_order_by
+  sum: show_sum_order_by
+  var_pop: show_var_pop_order_by
+  var_samp: show_var_samp_order_by
+  variance: show_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "show"
+"""
+input show_arr_rel_insert_input {
+  data: [show_insert_input!]!
+}
+
+"""aggregate avg on columns"""
+type show_avg_fields {
+  attendance: Float
+  performance_id: Float
+  show_id: Float
+}
+
+"""
+order by avg() on columns of table "show"
+"""
+input show_avg_order_by {
+  attendance: order_by
+  performance_id: order_by
+  show_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "show". All fields are combined with a logical 'AND'.
+"""
+input show_bool_exp {
+  _and: [show_bool_exp]
+  _not: show_bool_exp
+  _or: [show_bool_exp]
+  attendance: Float_comparison_exp
+  if_first_show: String_comparison_exp
+  performance: performance_bool_exp
+  performance_id: Int_comparison_exp
+  result: Boolean_comparison_exp
+  show_id: Int_comparison_exp
+}
+
+"""
+input type for incrementing integer columne in table "show"
+"""
+input show_inc_input {
+  performance_id: Int
+  show_id: Int
+}
+
+"""
+input type for inserting data into table "show"
+"""
+input show_insert_input {
+  attendance: Float
+  if_first_show: String
+  performance: performance_obj_rel_insert_input
+  performance_id: Int
+  result: Boolean
+  show_id: Int
+}
+
+"""aggregate max on columns"""
+type show_max_fields {
+  attendance: Float
+  if_first_show: String
+  performance_id: Int
+  show_id: Int
+}
+
+"""
+order by max() on columns of table "show"
+"""
+input show_max_order_by {
+  attendance: order_by
+  if_first_show: order_by
+  performance_id: order_by
+  show_id: order_by
+}
+
+"""aggregate min on columns"""
+type show_min_fields {
+  attendance: Float
+  if_first_show: String
+  performance_id: Int
+  show_id: Int
+}
+
+"""
+order by min() on columns of table "show"
+"""
+input show_min_order_by {
+  attendance: order_by
+  if_first_show: order_by
+  performance_id: order_by
+  show_id: order_by
+}
+
+"""
+response of any mutation on the table "show"
+"""
+type show_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [show!]!
+}
+
+"""
+input type for inserting object relation for remote table "show"
+"""
+input show_obj_rel_insert_input {
+  data: show_insert_input!
+}
+
+"""
+ordering options when selecting data from "show"
+"""
+input show_order_by {
+  attendance: order_by
+  if_first_show: order_by
+  performance: performance_order_by
+  performance_id: order_by
+  result: order_by
+  show_id: order_by
+}
+
+"""
+select columns of table "show"
+"""
+enum show_select_column {
+  """column name"""
+  attendance
+
+  """column name"""
+  if_first_show
+
+  """column name"""
+  performance_id
+
+  """column name"""
+  result
+
+  """column name"""
+  show_id
+}
+
+"""
+input type for updating data in table "show"
+"""
+input show_set_input {
+  attendance: Float
+  if_first_show: String
+  performance_id: Int
+  result: Boolean
+  show_id: Int
+}
+
+"""aggregate stddev on columns"""
+type show_stddev_fields {
+  attendance: Float
+  performance_id: Float
+  show_id: Float
+}
+
+"""
+order by stddev() on columns of table "show"
+"""
+input show_stddev_order_by {
+  attendance: order_by
+  performance_id: order_by
+  show_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type show_stddev_pop_fields {
+  attendance: Float
+  performance_id: Float
+  show_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "show"
+"""
+input show_stddev_pop_order_by {
+  attendance: order_by
+  performance_id: order_by
+  show_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type show_stddev_samp_fields {
+  attendance: Float
+  performance_id: Float
+  show_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "show"
+"""
+input show_stddev_samp_order_by {
+  attendance: order_by
+  performance_id: order_by
+  show_id: order_by
+}
+
+"""aggregate sum on columns"""
+type show_sum_fields {
+  attendance: Float
+  performance_id: Int
+  show_id: Int
+}
+
+"""
+order by sum() on columns of table "show"
+"""
+input show_sum_order_by {
+  attendance: order_by
+  performance_id: order_by
+  show_id: order_by
+}
+
+"""aggregate var_pop on columns"""
+type show_var_pop_fields {
+  attendance: Float
+  performance_id: Float
+  show_id: Float
+}
+
+"""
+order by var_pop() on columns of table "show"
+"""
+input show_var_pop_order_by {
+  attendance: order_by
+  performance_id: order_by
+  show_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type show_var_samp_fields {
+  attendance: Float
+  performance_id: Float
+  show_id: Float
+}
+
+"""
+order by var_samp() on columns of table "show"
+"""
+input show_var_samp_order_by {
+  attendance: order_by
+  performance_id: order_by
+  show_id: order_by
+}
+
+"""aggregate variance on columns"""
+type show_variance_fields {
+  attendance: Float
+  performance_id: Float
+  show_id: Float
+}
+
+"""
+order by variance() on columns of table "show"
+"""
+input show_variance_order_by {
+  attendance: order_by
+  performance_id: order_by
+  show_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "conductor"
+  """
+  conductor(
+    """distinct select on columns"""
+    distinct_on: [conductor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [conductor_order_by!]
+
+    """filter the rows returned"""
+    where: conductor_bool_exp
+  ): [conductor!]!
+
+  """
+  fetch aggregated fields from the table: "conductor"
+  """
+  conductor_aggregate(
+    """distinct select on columns"""
+    distinct_on: [conductor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [conductor_order_by!]
+
+    """filter the rows returned"""
+    where: conductor_bool_exp
+  ): conductor_aggregate!
+
+  """
+  fetch data from the table: "orchestra"
+  """
+  orchestra(
+    """distinct select on columns"""
+    distinct_on: [orchestra_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [orchestra_order_by!]
+
+    """filter the rows returned"""
+    where: orchestra_bool_exp
+  ): [orchestra!]!
+
+  """
+  fetch aggregated fields from the table: "orchestra"
+  """
+  orchestra_aggregate(
+    """distinct select on columns"""
+    distinct_on: [orchestra_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [orchestra_order_by!]
+
+    """filter the rows returned"""
+    where: orchestra_bool_exp
+  ): orchestra_aggregate!
+
+  """
+  fetch data from the table: "performance"
+  """
+  performance(
+    """distinct select on columns"""
+    distinct_on: [performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [performance_order_by!]
+
+    """filter the rows returned"""
+    where: performance_bool_exp
+  ): [performance!]!
+
+  """
+  fetch aggregated fields from the table: "performance"
+  """
+  performance_aggregate(
+    """distinct select on columns"""
+    distinct_on: [performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [performance_order_by!]
+
+    """filter the rows returned"""
+    where: performance_bool_exp
+  ): performance_aggregate!
+
+  """
+  fetch data from the table: "show"
+  """
+  show(
+    """distinct select on columns"""
+    distinct_on: [show_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [show_order_by!]
+
+    """filter the rows returned"""
+    where: show_bool_exp
+  ): [show!]!
+
+  """
+  fetch aggregated fields from the table: "show"
+  """
+  show_aggregate(
+    """distinct select on columns"""
+    distinct_on: [show_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [show_order_by!]
+
+    """filter the rows returned"""
+    where: show_bool_exp
+  ): show_aggregate!
+}

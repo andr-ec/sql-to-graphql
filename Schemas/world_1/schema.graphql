@@ -1,0 +1,1778 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "city"
+"""
+type city {
+  """An object relationship"""
+  country: country
+  countrycode: String
+  district: String
+  id: bigint!
+  name: String
+  population: bigint
+}
+
+"""
+aggregated selection of "city"
+"""
+type city_aggregate {
+  aggregate: city_aggregate_fields
+  nodes: [city!]!
+}
+
+"""
+aggregate fields of "city"
+"""
+type city_aggregate_fields {
+  avg: city_avg_fields
+  count(columns: [city_select_column!], distinct: Boolean): Int
+  max: city_max_fields
+  min: city_min_fields
+  stddev: city_stddev_fields
+  stddev_pop: city_stddev_pop_fields
+  stddev_samp: city_stddev_samp_fields
+  sum: city_sum_fields
+  var_pop: city_var_pop_fields
+  var_samp: city_var_samp_fields
+  variance: city_variance_fields
+}
+
+"""
+order by aggregate values of table "city"
+"""
+input city_aggregate_order_by {
+  avg: city_avg_order_by
+  count: order_by
+  max: city_max_order_by
+  min: city_min_order_by
+  stddev: city_stddev_order_by
+  stddev_pop: city_stddev_pop_order_by
+  stddev_samp: city_stddev_samp_order_by
+  sum: city_sum_order_by
+  var_pop: city_var_pop_order_by
+  var_samp: city_var_samp_order_by
+  variance: city_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "city"
+"""
+input city_arr_rel_insert_input {
+  data: [city_insert_input!]!
+  on_conflict: city_on_conflict
+}
+
+"""aggregate avg on columns"""
+type city_avg_fields {
+  id: Float
+  population: Float
+}
+
+"""
+order by avg() on columns of table "city"
+"""
+input city_avg_order_by {
+  id: order_by
+  population: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "city". All fields are combined with a logical 'AND'.
+"""
+input city_bool_exp {
+  _and: [city_bool_exp]
+  _not: city_bool_exp
+  _or: [city_bool_exp]
+  country: country_bool_exp
+  countrycode: String_comparison_exp
+  district: String_comparison_exp
+  id: bigint_comparison_exp
+  name: String_comparison_exp
+  population: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "city"
+"""
+enum city_constraint {
+  """unique or primary key constraint"""
+  idx_25891_city_pkey
+}
+
+"""
+input type for incrementing integer columne in table "city"
+"""
+input city_inc_input {
+  id: bigint
+  population: bigint
+}
+
+"""
+input type for inserting data into table "city"
+"""
+input city_insert_input {
+  country: country_obj_rel_insert_input
+  countrycode: String
+  district: String
+  id: bigint
+  name: String
+  population: bigint
+}
+
+"""aggregate max on columns"""
+type city_max_fields {
+  countrycode: String
+  district: String
+  id: bigint
+  name: String
+  population: bigint
+}
+
+"""
+order by max() on columns of table "city"
+"""
+input city_max_order_by {
+  countrycode: order_by
+  district: order_by
+  id: order_by
+  name: order_by
+  population: order_by
+}
+
+"""aggregate min on columns"""
+type city_min_fields {
+  countrycode: String
+  district: String
+  id: bigint
+  name: String
+  population: bigint
+}
+
+"""
+order by min() on columns of table "city"
+"""
+input city_min_order_by {
+  countrycode: order_by
+  district: order_by
+  id: order_by
+  name: order_by
+  population: order_by
+}
+
+"""
+response of any mutation on the table "city"
+"""
+type city_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [city!]!
+}
+
+"""
+input type for inserting object relation for remote table "city"
+"""
+input city_obj_rel_insert_input {
+  data: city_insert_input!
+  on_conflict: city_on_conflict
+}
+
+"""
+on conflict condition type for table "city"
+"""
+input city_on_conflict {
+  constraint: city_constraint!
+  update_columns: [city_update_column!]!
+  where: city_bool_exp
+}
+
+"""
+ordering options when selecting data from "city"
+"""
+input city_order_by {
+  country: country_order_by
+  countrycode: order_by
+  district: order_by
+  id: order_by
+  name: order_by
+  population: order_by
+}
+
+"""
+select columns of table "city"
+"""
+enum city_select_column {
+  """column name"""
+  countrycode
+
+  """column name"""
+  district
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  population
+}
+
+"""
+input type for updating data in table "city"
+"""
+input city_set_input {
+  countrycode: String
+  district: String
+  id: bigint
+  name: String
+  population: bigint
+}
+
+"""aggregate stddev on columns"""
+type city_stddev_fields {
+  id: Float
+  population: Float
+}
+
+"""
+order by stddev() on columns of table "city"
+"""
+input city_stddev_order_by {
+  id: order_by
+  population: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type city_stddev_pop_fields {
+  id: Float
+  population: Float
+}
+
+"""
+order by stddev_pop() on columns of table "city"
+"""
+input city_stddev_pop_order_by {
+  id: order_by
+  population: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type city_stddev_samp_fields {
+  id: Float
+  population: Float
+}
+
+"""
+order by stddev_samp() on columns of table "city"
+"""
+input city_stddev_samp_order_by {
+  id: order_by
+  population: order_by
+}
+
+"""aggregate sum on columns"""
+type city_sum_fields {
+  id: bigint
+  population: bigint
+}
+
+"""
+order by sum() on columns of table "city"
+"""
+input city_sum_order_by {
+  id: order_by
+  population: order_by
+}
+
+"""
+update columns of table "city"
+"""
+enum city_update_column {
+  """column name"""
+  countrycode
+
+  """column name"""
+  district
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  population
+}
+
+"""aggregate var_pop on columns"""
+type city_var_pop_fields {
+  id: Float
+  population: Float
+}
+
+"""
+order by var_pop() on columns of table "city"
+"""
+input city_var_pop_order_by {
+  id: order_by
+  population: order_by
+}
+
+"""aggregate var_samp on columns"""
+type city_var_samp_fields {
+  id: Float
+  population: Float
+}
+
+"""
+order by var_samp() on columns of table "city"
+"""
+input city_var_samp_order_by {
+  id: order_by
+  population: order_by
+}
+
+"""aggregate variance on columns"""
+type city_variance_fields {
+  id: Float
+  population: Float
+}
+
+"""
+order by variance() on columns of table "city"
+"""
+input city_variance_order_by {
+  id: order_by
+  population: order_by
+}
+
+"""
+columns and relationships of "country"
+"""
+type country {
+  capital: bigint
+
+  """An array relationship"""
+  cities(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): [city!]!
+
+  """An aggregated array relationship"""
+  cities_aggregate(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): city_aggregate!
+  code: String
+  code2: String
+  continent: String
+
+  """An array relationship"""
+  countrylanguages(
+    """distinct select on columns"""
+    distinct_on: [countrylanguage_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [countrylanguage_order_by!]
+
+    """filter the rows returned"""
+    where: countrylanguage_bool_exp
+  ): [countrylanguage!]!
+
+  """An aggregated array relationship"""
+  countrylanguages_aggregate(
+    """distinct select on columns"""
+    distinct_on: [countrylanguage_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [countrylanguage_order_by!]
+
+    """filter the rows returned"""
+    where: countrylanguage_bool_exp
+  ): countrylanguage_aggregate!
+  gnp: float8
+  gnpold: float8
+  governmentform: String
+  headofstate: String
+  indepyear: bigint
+  lifeexpectancy: float8
+  localname: String
+  name: String
+  population: bigint
+  region: String
+  surfacearea: float8
+}
+
+"""
+aggregated selection of "country"
+"""
+type country_aggregate {
+  aggregate: country_aggregate_fields
+  nodes: [country!]!
+}
+
+"""
+aggregate fields of "country"
+"""
+type country_aggregate_fields {
+  avg: country_avg_fields
+  count(columns: [country_select_column!], distinct: Boolean): Int
+  max: country_max_fields
+  min: country_min_fields
+  stddev: country_stddev_fields
+  stddev_pop: country_stddev_pop_fields
+  stddev_samp: country_stddev_samp_fields
+  sum: country_sum_fields
+  var_pop: country_var_pop_fields
+  var_samp: country_var_samp_fields
+  variance: country_variance_fields
+}
+
+"""
+order by aggregate values of table "country"
+"""
+input country_aggregate_order_by {
+  avg: country_avg_order_by
+  count: order_by
+  max: country_max_order_by
+  min: country_min_order_by
+  stddev: country_stddev_order_by
+  stddev_pop: country_stddev_pop_order_by
+  stddev_samp: country_stddev_samp_order_by
+  sum: country_sum_order_by
+  var_pop: country_var_pop_order_by
+  var_samp: country_var_samp_order_by
+  variance: country_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "country"
+"""
+input country_arr_rel_insert_input {
+  data: [country_insert_input!]!
+  on_conflict: country_on_conflict
+}
+
+"""aggregate avg on columns"""
+type country_avg_fields {
+  capital: Float
+  gnp: Float
+  gnpold: Float
+  indepyear: Float
+  lifeexpectancy: Float
+  population: Float
+  surfacearea: Float
+}
+
+"""
+order by avg() on columns of table "country"
+"""
+input country_avg_order_by {
+  capital: order_by
+  gnp: order_by
+  gnpold: order_by
+  indepyear: order_by
+  lifeexpectancy: order_by
+  population: order_by
+  surfacearea: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "country". All fields are combined with a logical 'AND'.
+"""
+input country_bool_exp {
+  _and: [country_bool_exp]
+  _not: country_bool_exp
+  _or: [country_bool_exp]
+  capital: bigint_comparison_exp
+  cities: city_bool_exp
+  code: String_comparison_exp
+  code2: String_comparison_exp
+  continent: String_comparison_exp
+  countrylanguages: countrylanguage_bool_exp
+  gnp: float8_comparison_exp
+  gnpold: float8_comparison_exp
+  governmentform: String_comparison_exp
+  headofstate: String_comparison_exp
+  indepyear: bigint_comparison_exp
+  lifeexpectancy: float8_comparison_exp
+  localname: String_comparison_exp
+  name: String_comparison_exp
+  population: bigint_comparison_exp
+  region: String_comparison_exp
+  surfacearea: float8_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "country"
+"""
+enum country_constraint {
+  """unique or primary key constraint"""
+  idx_25902_sqlite_autoindex_country_1
+}
+
+"""
+input type for incrementing integer columne in table "country"
+"""
+input country_inc_input {
+  capital: bigint
+  indepyear: bigint
+  population: bigint
+}
+
+"""
+input type for inserting data into table "country"
+"""
+input country_insert_input {
+  capital: bigint
+  cities: city_arr_rel_insert_input
+  code: String
+  code2: String
+  continent: String
+  countrylanguages: countrylanguage_arr_rel_insert_input
+  gnp: float8
+  gnpold: float8
+  governmentform: String
+  headofstate: String
+  indepyear: bigint
+  lifeexpectancy: float8
+  localname: String
+  name: String
+  population: bigint
+  region: String
+  surfacearea: float8
+}
+
+"""aggregate max on columns"""
+type country_max_fields {
+  capital: bigint
+  code: String
+  code2: String
+  continent: String
+  gnp: float8
+  gnpold: float8
+  governmentform: String
+  headofstate: String
+  indepyear: bigint
+  lifeexpectancy: float8
+  localname: String
+  name: String
+  population: bigint
+  region: String
+  surfacearea: float8
+}
+
+"""
+order by max() on columns of table "country"
+"""
+input country_max_order_by {
+  capital: order_by
+  code: order_by
+  code2: order_by
+  continent: order_by
+  gnp: order_by
+  gnpold: order_by
+  governmentform: order_by
+  headofstate: order_by
+  indepyear: order_by
+  lifeexpectancy: order_by
+  localname: order_by
+  name: order_by
+  population: order_by
+  region: order_by
+  surfacearea: order_by
+}
+
+"""aggregate min on columns"""
+type country_min_fields {
+  capital: bigint
+  code: String
+  code2: String
+  continent: String
+  gnp: float8
+  gnpold: float8
+  governmentform: String
+  headofstate: String
+  indepyear: bigint
+  lifeexpectancy: float8
+  localname: String
+  name: String
+  population: bigint
+  region: String
+  surfacearea: float8
+}
+
+"""
+order by min() on columns of table "country"
+"""
+input country_min_order_by {
+  capital: order_by
+  code: order_by
+  code2: order_by
+  continent: order_by
+  gnp: order_by
+  gnpold: order_by
+  governmentform: order_by
+  headofstate: order_by
+  indepyear: order_by
+  lifeexpectancy: order_by
+  localname: order_by
+  name: order_by
+  population: order_by
+  region: order_by
+  surfacearea: order_by
+}
+
+"""
+response of any mutation on the table "country"
+"""
+type country_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [country!]!
+}
+
+"""
+input type for inserting object relation for remote table "country"
+"""
+input country_obj_rel_insert_input {
+  data: country_insert_input!
+  on_conflict: country_on_conflict
+}
+
+"""
+on conflict condition type for table "country"
+"""
+input country_on_conflict {
+  constraint: country_constraint!
+  update_columns: [country_update_column!]!
+  where: country_bool_exp
+}
+
+"""
+ordering options when selecting data from "country"
+"""
+input country_order_by {
+  capital: order_by
+  cities_aggregate: city_aggregate_order_by
+  code: order_by
+  code2: order_by
+  continent: order_by
+  countrylanguages_aggregate: countrylanguage_aggregate_order_by
+  gnp: order_by
+  gnpold: order_by
+  governmentform: order_by
+  headofstate: order_by
+  indepyear: order_by
+  lifeexpectancy: order_by
+  localname: order_by
+  name: order_by
+  population: order_by
+  region: order_by
+  surfacearea: order_by
+}
+
+"""
+select columns of table "country"
+"""
+enum country_select_column {
+  """column name"""
+  capital
+
+  """column name"""
+  code
+
+  """column name"""
+  code2
+
+  """column name"""
+  continent
+
+  """column name"""
+  gnp
+
+  """column name"""
+  gnpold
+
+  """column name"""
+  governmentform
+
+  """column name"""
+  headofstate
+
+  """column name"""
+  indepyear
+
+  """column name"""
+  lifeexpectancy
+
+  """column name"""
+  localname
+
+  """column name"""
+  name
+
+  """column name"""
+  population
+
+  """column name"""
+  region
+
+  """column name"""
+  surfacearea
+}
+
+"""
+input type for updating data in table "country"
+"""
+input country_set_input {
+  capital: bigint
+  code: String
+  code2: String
+  continent: String
+  gnp: float8
+  gnpold: float8
+  governmentform: String
+  headofstate: String
+  indepyear: bigint
+  lifeexpectancy: float8
+  localname: String
+  name: String
+  population: bigint
+  region: String
+  surfacearea: float8
+}
+
+"""aggregate stddev on columns"""
+type country_stddev_fields {
+  capital: Float
+  gnp: Float
+  gnpold: Float
+  indepyear: Float
+  lifeexpectancy: Float
+  population: Float
+  surfacearea: Float
+}
+
+"""
+order by stddev() on columns of table "country"
+"""
+input country_stddev_order_by {
+  capital: order_by
+  gnp: order_by
+  gnpold: order_by
+  indepyear: order_by
+  lifeexpectancy: order_by
+  population: order_by
+  surfacearea: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type country_stddev_pop_fields {
+  capital: Float
+  gnp: Float
+  gnpold: Float
+  indepyear: Float
+  lifeexpectancy: Float
+  population: Float
+  surfacearea: Float
+}
+
+"""
+order by stddev_pop() on columns of table "country"
+"""
+input country_stddev_pop_order_by {
+  capital: order_by
+  gnp: order_by
+  gnpold: order_by
+  indepyear: order_by
+  lifeexpectancy: order_by
+  population: order_by
+  surfacearea: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type country_stddev_samp_fields {
+  capital: Float
+  gnp: Float
+  gnpold: Float
+  indepyear: Float
+  lifeexpectancy: Float
+  population: Float
+  surfacearea: Float
+}
+
+"""
+order by stddev_samp() on columns of table "country"
+"""
+input country_stddev_samp_order_by {
+  capital: order_by
+  gnp: order_by
+  gnpold: order_by
+  indepyear: order_by
+  lifeexpectancy: order_by
+  population: order_by
+  surfacearea: order_by
+}
+
+"""aggregate sum on columns"""
+type country_sum_fields {
+  capital: bigint
+  gnp: float8
+  gnpold: float8
+  indepyear: bigint
+  lifeexpectancy: float8
+  population: bigint
+  surfacearea: float8
+}
+
+"""
+order by sum() on columns of table "country"
+"""
+input country_sum_order_by {
+  capital: order_by
+  gnp: order_by
+  gnpold: order_by
+  indepyear: order_by
+  lifeexpectancy: order_by
+  population: order_by
+  surfacearea: order_by
+}
+
+"""
+update columns of table "country"
+"""
+enum country_update_column {
+  """column name"""
+  capital
+
+  """column name"""
+  code
+
+  """column name"""
+  code2
+
+  """column name"""
+  continent
+
+  """column name"""
+  gnp
+
+  """column name"""
+  gnpold
+
+  """column name"""
+  governmentform
+
+  """column name"""
+  headofstate
+
+  """column name"""
+  indepyear
+
+  """column name"""
+  lifeexpectancy
+
+  """column name"""
+  localname
+
+  """column name"""
+  name
+
+  """column name"""
+  population
+
+  """column name"""
+  region
+
+  """column name"""
+  surfacearea
+}
+
+"""aggregate var_pop on columns"""
+type country_var_pop_fields {
+  capital: Float
+  gnp: Float
+  gnpold: Float
+  indepyear: Float
+  lifeexpectancy: Float
+  population: Float
+  surfacearea: Float
+}
+
+"""
+order by var_pop() on columns of table "country"
+"""
+input country_var_pop_order_by {
+  capital: order_by
+  gnp: order_by
+  gnpold: order_by
+  indepyear: order_by
+  lifeexpectancy: order_by
+  population: order_by
+  surfacearea: order_by
+}
+
+"""aggregate var_samp on columns"""
+type country_var_samp_fields {
+  capital: Float
+  gnp: Float
+  gnpold: Float
+  indepyear: Float
+  lifeexpectancy: Float
+  population: Float
+  surfacearea: Float
+}
+
+"""
+order by var_samp() on columns of table "country"
+"""
+input country_var_samp_order_by {
+  capital: order_by
+  gnp: order_by
+  gnpold: order_by
+  indepyear: order_by
+  lifeexpectancy: order_by
+  population: order_by
+  surfacearea: order_by
+}
+
+"""aggregate variance on columns"""
+type country_variance_fields {
+  capital: Float
+  gnp: Float
+  gnpold: Float
+  indepyear: Float
+  lifeexpectancy: Float
+  population: Float
+  surfacearea: Float
+}
+
+"""
+order by variance() on columns of table "country"
+"""
+input country_variance_order_by {
+  capital: order_by
+  gnp: order_by
+  gnpold: order_by
+  indepyear: order_by
+  lifeexpectancy: order_by
+  population: order_by
+  surfacearea: order_by
+}
+
+"""
+columns and relationships of "countrylanguage"
+"""
+type countrylanguage {
+  """An object relationship"""
+  country: country
+  countrycode: String
+  isofficial: String
+  language: String
+  percentage: float8
+}
+
+"""
+aggregated selection of "countrylanguage"
+"""
+type countrylanguage_aggregate {
+  aggregate: countrylanguage_aggregate_fields
+  nodes: [countrylanguage!]!
+}
+
+"""
+aggregate fields of "countrylanguage"
+"""
+type countrylanguage_aggregate_fields {
+  avg: countrylanguage_avg_fields
+  count(columns: [countrylanguage_select_column!], distinct: Boolean): Int
+  max: countrylanguage_max_fields
+  min: countrylanguage_min_fields
+  stddev: countrylanguage_stddev_fields
+  stddev_pop: countrylanguage_stddev_pop_fields
+  stddev_samp: countrylanguage_stddev_samp_fields
+  sum: countrylanguage_sum_fields
+  var_pop: countrylanguage_var_pop_fields
+  var_samp: countrylanguage_var_samp_fields
+  variance: countrylanguage_variance_fields
+}
+
+"""
+order by aggregate values of table "countrylanguage"
+"""
+input countrylanguage_aggregate_order_by {
+  avg: countrylanguage_avg_order_by
+  count: order_by
+  max: countrylanguage_max_order_by
+  min: countrylanguage_min_order_by
+  stddev: countrylanguage_stddev_order_by
+  stddev_pop: countrylanguage_stddev_pop_order_by
+  stddev_samp: countrylanguage_stddev_samp_order_by
+  sum: countrylanguage_sum_order_by
+  var_pop: countrylanguage_var_pop_order_by
+  var_samp: countrylanguage_var_samp_order_by
+  variance: countrylanguage_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "countrylanguage"
+"""
+input countrylanguage_arr_rel_insert_input {
+  data: [countrylanguage_insert_input!]!
+  on_conflict: countrylanguage_on_conflict
+}
+
+"""aggregate avg on columns"""
+type countrylanguage_avg_fields {
+  percentage: Float
+}
+
+"""
+order by avg() on columns of table "countrylanguage"
+"""
+input countrylanguage_avg_order_by {
+  percentage: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "countrylanguage". All fields are combined with a logical 'AND'.
+"""
+input countrylanguage_bool_exp {
+  _and: [countrylanguage_bool_exp]
+  _not: countrylanguage_bool_exp
+  _or: [countrylanguage_bool_exp]
+  country: country_bool_exp
+  countrycode: String_comparison_exp
+  isofficial: String_comparison_exp
+  language: String_comparison_exp
+  percentage: float8_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "countrylanguage"
+"""
+enum countrylanguage_constraint {
+  """unique or primary key constraint"""
+  idx_25917_sqlite_autoindex_countrylanguage_1
+}
+
+"""
+input type for inserting data into table "countrylanguage"
+"""
+input countrylanguage_insert_input {
+  country: country_obj_rel_insert_input
+  countrycode: String
+  isofficial: String
+  language: String
+  percentage: float8
+}
+
+"""aggregate max on columns"""
+type countrylanguage_max_fields {
+  countrycode: String
+  isofficial: String
+  language: String
+  percentage: float8
+}
+
+"""
+order by max() on columns of table "countrylanguage"
+"""
+input countrylanguage_max_order_by {
+  countrycode: order_by
+  isofficial: order_by
+  language: order_by
+  percentage: order_by
+}
+
+"""aggregate min on columns"""
+type countrylanguage_min_fields {
+  countrycode: String
+  isofficial: String
+  language: String
+  percentage: float8
+}
+
+"""
+order by min() on columns of table "countrylanguage"
+"""
+input countrylanguage_min_order_by {
+  countrycode: order_by
+  isofficial: order_by
+  language: order_by
+  percentage: order_by
+}
+
+"""
+response of any mutation on the table "countrylanguage"
+"""
+type countrylanguage_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [countrylanguage!]!
+}
+
+"""
+input type for inserting object relation for remote table "countrylanguage"
+"""
+input countrylanguage_obj_rel_insert_input {
+  data: countrylanguage_insert_input!
+  on_conflict: countrylanguage_on_conflict
+}
+
+"""
+on conflict condition type for table "countrylanguage"
+"""
+input countrylanguage_on_conflict {
+  constraint: countrylanguage_constraint!
+  update_columns: [countrylanguage_update_column!]!
+  where: countrylanguage_bool_exp
+}
+
+"""
+ordering options when selecting data from "countrylanguage"
+"""
+input countrylanguage_order_by {
+  country: country_order_by
+  countrycode: order_by
+  isofficial: order_by
+  language: order_by
+  percentage: order_by
+}
+
+"""
+select columns of table "countrylanguage"
+"""
+enum countrylanguage_select_column {
+  """column name"""
+  countrycode
+
+  """column name"""
+  isofficial
+
+  """column name"""
+  language
+
+  """column name"""
+  percentage
+}
+
+"""
+input type for updating data in table "countrylanguage"
+"""
+input countrylanguage_set_input {
+  countrycode: String
+  isofficial: String
+  language: String
+  percentage: float8
+}
+
+"""aggregate stddev on columns"""
+type countrylanguage_stddev_fields {
+  percentage: Float
+}
+
+"""
+order by stddev() on columns of table "countrylanguage"
+"""
+input countrylanguage_stddev_order_by {
+  percentage: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type countrylanguage_stddev_pop_fields {
+  percentage: Float
+}
+
+"""
+order by stddev_pop() on columns of table "countrylanguage"
+"""
+input countrylanguage_stddev_pop_order_by {
+  percentage: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type countrylanguage_stddev_samp_fields {
+  percentage: Float
+}
+
+"""
+order by stddev_samp() on columns of table "countrylanguage"
+"""
+input countrylanguage_stddev_samp_order_by {
+  percentage: order_by
+}
+
+"""aggregate sum on columns"""
+type countrylanguage_sum_fields {
+  percentage: float8
+}
+
+"""
+order by sum() on columns of table "countrylanguage"
+"""
+input countrylanguage_sum_order_by {
+  percentage: order_by
+}
+
+"""
+update columns of table "countrylanguage"
+"""
+enum countrylanguage_update_column {
+  """column name"""
+  countrycode
+
+  """column name"""
+  isofficial
+
+  """column name"""
+  language
+
+  """column name"""
+  percentage
+}
+
+"""aggregate var_pop on columns"""
+type countrylanguage_var_pop_fields {
+  percentage: Float
+}
+
+"""
+order by var_pop() on columns of table "countrylanguage"
+"""
+input countrylanguage_var_pop_order_by {
+  percentage: order_by
+}
+
+"""aggregate var_samp on columns"""
+type countrylanguage_var_samp_fields {
+  percentage: Float
+}
+
+"""
+order by var_samp() on columns of table "countrylanguage"
+"""
+input countrylanguage_var_samp_order_by {
+  percentage: order_by
+}
+
+"""aggregate variance on columns"""
+type countrylanguage_variance_fields {
+  percentage: Float
+}
+
+"""
+order by variance() on columns of table "countrylanguage"
+"""
+input countrylanguage_variance_order_by {
+  percentage: order_by
+}
+
+scalar float8
+
+"""
+expression to compare columns of type float8. All fields are combined with logical 'AND'.
+"""
+input float8_comparison_exp {
+  _eq: float8
+  _gt: float8
+  _gte: float8
+  _in: [float8!]
+  _is_null: Boolean
+  _lt: float8
+  _lte: float8
+  _neq: float8
+  _nin: [float8!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "city"
+  """
+  delete_city(
+    """filter the rows which have to be deleted"""
+    where: city_bool_exp!
+  ): city_mutation_response
+
+  """
+  delete data from the table: "country"
+  """
+  delete_country(
+    """filter the rows which have to be deleted"""
+    where: country_bool_exp!
+  ): country_mutation_response
+
+  """
+  delete data from the table: "countrylanguage"
+  """
+  delete_countrylanguage(
+    """filter the rows which have to be deleted"""
+    where: countrylanguage_bool_exp!
+  ): countrylanguage_mutation_response
+
+  """
+  insert data into the table: "city"
+  """
+  insert_city(
+    """the rows to be inserted"""
+    objects: [city_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: city_on_conflict
+  ): city_mutation_response
+
+  """
+  insert data into the table: "country"
+  """
+  insert_country(
+    """the rows to be inserted"""
+    objects: [country_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: country_on_conflict
+  ): country_mutation_response
+
+  """
+  insert data into the table: "countrylanguage"
+  """
+  insert_countrylanguage(
+    """the rows to be inserted"""
+    objects: [countrylanguage_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: countrylanguage_on_conflict
+  ): countrylanguage_mutation_response
+
+  """
+  update data of the table: "city"
+  """
+  update_city(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: city_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: city_set_input
+
+    """filter the rows which have to be updated"""
+    where: city_bool_exp!
+  ): city_mutation_response
+
+  """
+  update data of the table: "country"
+  """
+  update_country(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: country_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: country_set_input
+
+    """filter the rows which have to be updated"""
+    where: country_bool_exp!
+  ): country_mutation_response
+
+  """
+  update data of the table: "countrylanguage"
+  """
+  update_countrylanguage(
+    """sets the columns of the filtered rows to the given values"""
+    _set: countrylanguage_set_input
+
+    """filter the rows which have to be updated"""
+    where: countrylanguage_bool_exp!
+  ): countrylanguage_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "city"
+  """
+  city(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): [city!]!
+
+  """
+  fetch aggregated fields from the table: "city"
+  """
+  city_aggregate(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): city_aggregate!
+
+  """fetch data from the table: "city" using primary key columns"""
+  city_by_pk(id: bigint!): city
+
+  """
+  fetch data from the table: "country"
+  """
+  country(
+    """distinct select on columns"""
+    distinct_on: [country_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [country_order_by!]
+
+    """filter the rows returned"""
+    where: country_bool_exp
+  ): [country!]!
+
+  """
+  fetch aggregated fields from the table: "country"
+  """
+  country_aggregate(
+    """distinct select on columns"""
+    distinct_on: [country_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [country_order_by!]
+
+    """filter the rows returned"""
+    where: country_bool_exp
+  ): country_aggregate!
+
+  """
+  fetch data from the table: "countrylanguage"
+  """
+  countrylanguage(
+    """distinct select on columns"""
+    distinct_on: [countrylanguage_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [countrylanguage_order_by!]
+
+    """filter the rows returned"""
+    where: countrylanguage_bool_exp
+  ): [countrylanguage!]!
+
+  """
+  fetch aggregated fields from the table: "countrylanguage"
+  """
+  countrylanguage_aggregate(
+    """distinct select on columns"""
+    distinct_on: [countrylanguage_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [countrylanguage_order_by!]
+
+    """filter the rows returned"""
+    where: countrylanguage_bool_exp
+  ): countrylanguage_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "city"
+  """
+  city(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): [city!]!
+
+  """
+  fetch aggregated fields from the table: "city"
+  """
+  city_aggregate(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): city_aggregate!
+
+  """fetch data from the table: "city" using primary key columns"""
+  city_by_pk(id: bigint!): city
+
+  """
+  fetch data from the table: "country"
+  """
+  country(
+    """distinct select on columns"""
+    distinct_on: [country_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [country_order_by!]
+
+    """filter the rows returned"""
+    where: country_bool_exp
+  ): [country!]!
+
+  """
+  fetch aggregated fields from the table: "country"
+  """
+  country_aggregate(
+    """distinct select on columns"""
+    distinct_on: [country_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [country_order_by!]
+
+    """filter the rows returned"""
+    where: country_bool_exp
+  ): country_aggregate!
+
+  """
+  fetch data from the table: "countrylanguage"
+  """
+  countrylanguage(
+    """distinct select on columns"""
+    distinct_on: [countrylanguage_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [countrylanguage_order_by!]
+
+    """filter the rows returned"""
+    where: countrylanguage_bool_exp
+  ): [countrylanguage!]!
+
+  """
+  fetch aggregated fields from the table: "countrylanguage"
+  """
+  countrylanguage_aggregate(
+    """distinct select on columns"""
+    distinct_on: [countrylanguage_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [countrylanguage_order_by!]
+
+    """filter the rows returned"""
+    where: countrylanguage_bool_exp
+  ): countrylanguage_aggregate!
+}

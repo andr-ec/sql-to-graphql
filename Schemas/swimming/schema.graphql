@@ -1,0 +1,2190 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "event"
+"""
+type event {
+  id: Int
+  name: String
+
+  """An array relationship"""
+  records(
+    """distinct select on columns"""
+    distinct_on: [record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [record_order_by!]
+
+    """filter the rows returned"""
+    where: record_bool_exp
+  ): [record!]!
+
+  """An aggregated array relationship"""
+  records_aggregate(
+    """distinct select on columns"""
+    distinct_on: [record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [record_order_by!]
+
+    """filter the rows returned"""
+    where: record_bool_exp
+  ): record_aggregate!
+
+  """An object relationship"""
+  stadium: stadium
+  stadium_id: Int
+  year: String
+}
+
+"""
+aggregated selection of "event"
+"""
+type event_aggregate {
+  aggregate: event_aggregate_fields
+  nodes: [event!]!
+}
+
+"""
+aggregate fields of "event"
+"""
+type event_aggregate_fields {
+  avg: event_avg_fields
+  count(columns: [event_select_column!], distinct: Boolean): Int
+  max: event_max_fields
+  min: event_min_fields
+  stddev: event_stddev_fields
+  stddev_pop: event_stddev_pop_fields
+  stddev_samp: event_stddev_samp_fields
+  sum: event_sum_fields
+  var_pop: event_var_pop_fields
+  var_samp: event_var_samp_fields
+  variance: event_variance_fields
+}
+
+"""
+order by aggregate values of table "event"
+"""
+input event_aggregate_order_by {
+  avg: event_avg_order_by
+  count: order_by
+  max: event_max_order_by
+  min: event_min_order_by
+  stddev: event_stddev_order_by
+  stddev_pop: event_stddev_pop_order_by
+  stddev_samp: event_stddev_samp_order_by
+  sum: event_sum_order_by
+  var_pop: event_var_pop_order_by
+  var_samp: event_var_samp_order_by
+  variance: event_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "event"
+"""
+input event_arr_rel_insert_input {
+  data: [event_insert_input!]!
+  on_conflict: event_on_conflict
+}
+
+"""aggregate avg on columns"""
+type event_avg_fields {
+  id: Float
+  stadium_id: Float
+}
+
+"""
+order by avg() on columns of table "event"
+"""
+input event_avg_order_by {
+  id: order_by
+  stadium_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "event". All fields are combined with a logical 'AND'.
+"""
+input event_bool_exp {
+  _and: [event_bool_exp]
+  _not: event_bool_exp
+  _or: [event_bool_exp]
+  id: Int_comparison_exp
+  name: String_comparison_exp
+  records: record_bool_exp
+  stadium: stadium_bool_exp
+  stadium_id: Int_comparison_exp
+  year: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "event"
+"""
+enum event_constraint {
+  """unique or primary key constraint"""
+  idx_23688_sqlite_autoindex_event_1
+}
+
+"""
+input type for incrementing integer columne in table "event"
+"""
+input event_inc_input {
+  id: Int
+  stadium_id: Int
+}
+
+"""
+input type for inserting data into table "event"
+"""
+input event_insert_input {
+  id: Int
+  name: String
+  records: record_arr_rel_insert_input
+  stadium: stadium_obj_rel_insert_input
+  stadium_id: Int
+  year: String
+}
+
+"""aggregate max on columns"""
+type event_max_fields {
+  id: Int
+  name: String
+  stadium_id: Int
+  year: String
+}
+
+"""
+order by max() on columns of table "event"
+"""
+input event_max_order_by {
+  id: order_by
+  name: order_by
+  stadium_id: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type event_min_fields {
+  id: Int
+  name: String
+  stadium_id: Int
+  year: String
+}
+
+"""
+order by min() on columns of table "event"
+"""
+input event_min_order_by {
+  id: order_by
+  name: order_by
+  stadium_id: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "event"
+"""
+type event_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [event!]!
+}
+
+"""
+input type for inserting object relation for remote table "event"
+"""
+input event_obj_rel_insert_input {
+  data: event_insert_input!
+  on_conflict: event_on_conflict
+}
+
+"""
+on conflict condition type for table "event"
+"""
+input event_on_conflict {
+  constraint: event_constraint!
+  update_columns: [event_update_column!]!
+  where: event_bool_exp
+}
+
+"""
+ordering options when selecting data from "event"
+"""
+input event_order_by {
+  id: order_by
+  name: order_by
+  records_aggregate: record_aggregate_order_by
+  stadium: stadium_order_by
+  stadium_id: order_by
+  year: order_by
+}
+
+"""
+select columns of table "event"
+"""
+enum event_select_column {
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  stadium_id
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "event"
+"""
+input event_set_input {
+  id: Int
+  name: String
+  stadium_id: Int
+  year: String
+}
+
+"""aggregate stddev on columns"""
+type event_stddev_fields {
+  id: Float
+  stadium_id: Float
+}
+
+"""
+order by stddev() on columns of table "event"
+"""
+input event_stddev_order_by {
+  id: order_by
+  stadium_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type event_stddev_pop_fields {
+  id: Float
+  stadium_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "event"
+"""
+input event_stddev_pop_order_by {
+  id: order_by
+  stadium_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type event_stddev_samp_fields {
+  id: Float
+  stadium_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "event"
+"""
+input event_stddev_samp_order_by {
+  id: order_by
+  stadium_id: order_by
+}
+
+"""aggregate sum on columns"""
+type event_sum_fields {
+  id: Int
+  stadium_id: Int
+}
+
+"""
+order by sum() on columns of table "event"
+"""
+input event_sum_order_by {
+  id: order_by
+  stadium_id: order_by
+}
+
+"""
+update columns of table "event"
+"""
+enum event_update_column {
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  stadium_id
+
+  """column name"""
+  year
+}
+
+"""aggregate var_pop on columns"""
+type event_var_pop_fields {
+  id: Float
+  stadium_id: Float
+}
+
+"""
+order by var_pop() on columns of table "event"
+"""
+input event_var_pop_order_by {
+  id: order_by
+  stadium_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type event_var_samp_fields {
+  id: Float
+  stadium_id: Float
+}
+
+"""
+order by var_samp() on columns of table "event"
+"""
+input event_var_samp_order_by {
+  id: order_by
+  stadium_id: order_by
+}
+
+"""aggregate variance on columns"""
+type event_variance_fields {
+  id: Float
+  stadium_id: Float
+}
+
+"""
+order by variance() on columns of table "event"
+"""
+input event_variance_order_by {
+  id: order_by
+  stadium_id: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "event"
+  """
+  delete_event(
+    """filter the rows which have to be deleted"""
+    where: event_bool_exp!
+  ): event_mutation_response
+
+  """
+  delete data from the table: "record"
+  """
+  delete_record(
+    """filter the rows which have to be deleted"""
+    where: record_bool_exp!
+  ): record_mutation_response
+
+  """
+  delete data from the table: "stadium"
+  """
+  delete_stadium(
+    """filter the rows which have to be deleted"""
+    where: stadium_bool_exp!
+  ): stadium_mutation_response
+
+  """
+  delete data from the table: "swimmer"
+  """
+  delete_swimmer(
+    """filter the rows which have to be deleted"""
+    where: swimmer_bool_exp!
+  ): swimmer_mutation_response
+
+  """
+  insert data into the table: "event"
+  """
+  insert_event(
+    """the rows to be inserted"""
+    objects: [event_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: event_on_conflict
+  ): event_mutation_response
+
+  """
+  insert data into the table: "record"
+  """
+  insert_record(
+    """the rows to be inserted"""
+    objects: [record_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: record_on_conflict
+  ): record_mutation_response
+
+  """
+  insert data into the table: "stadium"
+  """
+  insert_stadium(
+    """the rows to be inserted"""
+    objects: [stadium_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: stadium_on_conflict
+  ): stadium_mutation_response
+
+  """
+  insert data into the table: "swimmer"
+  """
+  insert_swimmer(
+    """the rows to be inserted"""
+    objects: [swimmer_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: swimmer_on_conflict
+  ): swimmer_mutation_response
+
+  """
+  update data of the table: "event"
+  """
+  update_event(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: event_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: event_set_input
+
+    """filter the rows which have to be updated"""
+    where: event_bool_exp!
+  ): event_mutation_response
+
+  """
+  update data of the table: "record"
+  """
+  update_record(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: record_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: record_set_input
+
+    """filter the rows which have to be updated"""
+    where: record_bool_exp!
+  ): record_mutation_response
+
+  """
+  update data of the table: "stadium"
+  """
+  update_stadium(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: stadium_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: stadium_set_input
+
+    """filter the rows which have to be updated"""
+    where: stadium_bool_exp!
+  ): stadium_mutation_response
+
+  """
+  update data of the table: "swimmer"
+  """
+  update_swimmer(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: swimmer_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: swimmer_set_input
+
+    """filter the rows which have to be updated"""
+    where: swimmer_bool_exp!
+  ): swimmer_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "event"
+  """
+  event(
+    """distinct select on columns"""
+    distinct_on: [event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [event_order_by!]
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): [event!]!
+
+  """
+  fetch aggregated fields from the table: "event"
+  """
+  event_aggregate(
+    """distinct select on columns"""
+    distinct_on: [event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [event_order_by!]
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): event_aggregate!
+
+  """
+  fetch data from the table: "record"
+  """
+  record(
+    """distinct select on columns"""
+    distinct_on: [record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [record_order_by!]
+
+    """filter the rows returned"""
+    where: record_bool_exp
+  ): [record!]!
+
+  """
+  fetch aggregated fields from the table: "record"
+  """
+  record_aggregate(
+    """distinct select on columns"""
+    distinct_on: [record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [record_order_by!]
+
+    """filter the rows returned"""
+    where: record_bool_exp
+  ): record_aggregate!
+
+  """
+  fetch data from the table: "stadium"
+  """
+  stadium(
+    """distinct select on columns"""
+    distinct_on: [stadium_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stadium_order_by!]
+
+    """filter the rows returned"""
+    where: stadium_bool_exp
+  ): [stadium!]!
+
+  """
+  fetch aggregated fields from the table: "stadium"
+  """
+  stadium_aggregate(
+    """distinct select on columns"""
+    distinct_on: [stadium_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stadium_order_by!]
+
+    """filter the rows returned"""
+    where: stadium_bool_exp
+  ): stadium_aggregate!
+
+  """
+  fetch data from the table: "swimmer"
+  """
+  swimmer(
+    """distinct select on columns"""
+    distinct_on: [swimmer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [swimmer_order_by!]
+
+    """filter the rows returned"""
+    where: swimmer_bool_exp
+  ): [swimmer!]!
+
+  """
+  fetch aggregated fields from the table: "swimmer"
+  """
+  swimmer_aggregate(
+    """distinct select on columns"""
+    distinct_on: [swimmer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [swimmer_order_by!]
+
+    """filter the rows returned"""
+    where: swimmer_bool_exp
+  ): swimmer_aggregate!
+}
+
+"""
+columns and relationships of "record"
+"""
+type record {
+  """An object relationship"""
+  event: event
+  event_id: Int
+  id: Int
+  result: String
+
+  """An object relationship"""
+  swimmer: swimmer
+  swimmer_id: Int
+}
+
+"""
+aggregated selection of "record"
+"""
+type record_aggregate {
+  aggregate: record_aggregate_fields
+  nodes: [record!]!
+}
+
+"""
+aggregate fields of "record"
+"""
+type record_aggregate_fields {
+  avg: record_avg_fields
+  count(columns: [record_select_column!], distinct: Boolean): Int
+  max: record_max_fields
+  min: record_min_fields
+  stddev: record_stddev_fields
+  stddev_pop: record_stddev_pop_fields
+  stddev_samp: record_stddev_samp_fields
+  sum: record_sum_fields
+  var_pop: record_var_pop_fields
+  var_samp: record_var_samp_fields
+  variance: record_variance_fields
+}
+
+"""
+order by aggregate values of table "record"
+"""
+input record_aggregate_order_by {
+  avg: record_avg_order_by
+  count: order_by
+  max: record_max_order_by
+  min: record_min_order_by
+  stddev: record_stddev_order_by
+  stddev_pop: record_stddev_pop_order_by
+  stddev_samp: record_stddev_samp_order_by
+  sum: record_sum_order_by
+  var_pop: record_var_pop_order_by
+  var_samp: record_var_samp_order_by
+  variance: record_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "record"
+"""
+input record_arr_rel_insert_input {
+  data: [record_insert_input!]!
+  on_conflict: record_on_conflict
+}
+
+"""aggregate avg on columns"""
+type record_avg_fields {
+  event_id: Float
+  id: Float
+  swimmer_id: Float
+}
+
+"""
+order by avg() on columns of table "record"
+"""
+input record_avg_order_by {
+  event_id: order_by
+  id: order_by
+  swimmer_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "record". All fields are combined with a logical 'AND'.
+"""
+input record_bool_exp {
+  _and: [record_bool_exp]
+  _not: record_bool_exp
+  _or: [record_bool_exp]
+  event: event_bool_exp
+  event_id: Int_comparison_exp
+  id: Int_comparison_exp
+  result: String_comparison_exp
+  swimmer: swimmer_bool_exp
+  swimmer_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "record"
+"""
+enum record_constraint {
+  """unique or primary key constraint"""
+  idx_23694_sqlite_autoindex_record_1
+}
+
+"""
+input type for incrementing integer columne in table "record"
+"""
+input record_inc_input {
+  event_id: Int
+  id: Int
+  swimmer_id: Int
+}
+
+"""
+input type for inserting data into table "record"
+"""
+input record_insert_input {
+  event: event_obj_rel_insert_input
+  event_id: Int
+  id: Int
+  result: String
+  swimmer: swimmer_obj_rel_insert_input
+  swimmer_id: Int
+}
+
+"""aggregate max on columns"""
+type record_max_fields {
+  event_id: Int
+  id: Int
+  result: String
+  swimmer_id: Int
+}
+
+"""
+order by max() on columns of table "record"
+"""
+input record_max_order_by {
+  event_id: order_by
+  id: order_by
+  result: order_by
+  swimmer_id: order_by
+}
+
+"""aggregate min on columns"""
+type record_min_fields {
+  event_id: Int
+  id: Int
+  result: String
+  swimmer_id: Int
+}
+
+"""
+order by min() on columns of table "record"
+"""
+input record_min_order_by {
+  event_id: order_by
+  id: order_by
+  result: order_by
+  swimmer_id: order_by
+}
+
+"""
+response of any mutation on the table "record"
+"""
+type record_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [record!]!
+}
+
+"""
+input type for inserting object relation for remote table "record"
+"""
+input record_obj_rel_insert_input {
+  data: record_insert_input!
+  on_conflict: record_on_conflict
+}
+
+"""
+on conflict condition type for table "record"
+"""
+input record_on_conflict {
+  constraint: record_constraint!
+  update_columns: [record_update_column!]!
+  where: record_bool_exp
+}
+
+"""
+ordering options when selecting data from "record"
+"""
+input record_order_by {
+  event: event_order_by
+  event_id: order_by
+  id: order_by
+  result: order_by
+  swimmer: swimmer_order_by
+  swimmer_id: order_by
+}
+
+"""
+select columns of table "record"
+"""
+enum record_select_column {
+  """column name"""
+  event_id
+
+  """column name"""
+  id
+
+  """column name"""
+  result
+
+  """column name"""
+  swimmer_id
+}
+
+"""
+input type for updating data in table "record"
+"""
+input record_set_input {
+  event_id: Int
+  id: Int
+  result: String
+  swimmer_id: Int
+}
+
+"""aggregate stddev on columns"""
+type record_stddev_fields {
+  event_id: Float
+  id: Float
+  swimmer_id: Float
+}
+
+"""
+order by stddev() on columns of table "record"
+"""
+input record_stddev_order_by {
+  event_id: order_by
+  id: order_by
+  swimmer_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type record_stddev_pop_fields {
+  event_id: Float
+  id: Float
+  swimmer_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "record"
+"""
+input record_stddev_pop_order_by {
+  event_id: order_by
+  id: order_by
+  swimmer_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type record_stddev_samp_fields {
+  event_id: Float
+  id: Float
+  swimmer_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "record"
+"""
+input record_stddev_samp_order_by {
+  event_id: order_by
+  id: order_by
+  swimmer_id: order_by
+}
+
+"""aggregate sum on columns"""
+type record_sum_fields {
+  event_id: Int
+  id: Int
+  swimmer_id: Int
+}
+
+"""
+order by sum() on columns of table "record"
+"""
+input record_sum_order_by {
+  event_id: order_by
+  id: order_by
+  swimmer_id: order_by
+}
+
+"""
+update columns of table "record"
+"""
+enum record_update_column {
+  """column name"""
+  event_id
+
+  """column name"""
+  id
+
+  """column name"""
+  result
+
+  """column name"""
+  swimmer_id
+}
+
+"""aggregate var_pop on columns"""
+type record_var_pop_fields {
+  event_id: Float
+  id: Float
+  swimmer_id: Float
+}
+
+"""
+order by var_pop() on columns of table "record"
+"""
+input record_var_pop_order_by {
+  event_id: order_by
+  id: order_by
+  swimmer_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type record_var_samp_fields {
+  event_id: Float
+  id: Float
+  swimmer_id: Float
+}
+
+"""
+order by var_samp() on columns of table "record"
+"""
+input record_var_samp_order_by {
+  event_id: order_by
+  id: order_by
+  swimmer_id: order_by
+}
+
+"""aggregate variance on columns"""
+type record_variance_fields {
+  event_id: Float
+  id: Float
+  swimmer_id: Float
+}
+
+"""
+order by variance() on columns of table "record"
+"""
+input record_variance_order_by {
+  event_id: order_by
+  id: order_by
+  swimmer_id: order_by
+}
+
+"""
+columns and relationships of "stadium"
+"""
+type stadium {
+  capacity: Int
+  city: String
+  country: String
+
+  """An array relationship"""
+  events(
+    """distinct select on columns"""
+    distinct_on: [event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [event_order_by!]
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): [event!]!
+
+  """An aggregated array relationship"""
+  events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [event_order_by!]
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): event_aggregate!
+  id: Int
+  name: String
+  opening_year: Int
+}
+
+"""
+aggregated selection of "stadium"
+"""
+type stadium_aggregate {
+  aggregate: stadium_aggregate_fields
+  nodes: [stadium!]!
+}
+
+"""
+aggregate fields of "stadium"
+"""
+type stadium_aggregate_fields {
+  avg: stadium_avg_fields
+  count(columns: [stadium_select_column!], distinct: Boolean): Int
+  max: stadium_max_fields
+  min: stadium_min_fields
+  stddev: stadium_stddev_fields
+  stddev_pop: stadium_stddev_pop_fields
+  stddev_samp: stadium_stddev_samp_fields
+  sum: stadium_sum_fields
+  var_pop: stadium_var_pop_fields
+  var_samp: stadium_var_samp_fields
+  variance: stadium_variance_fields
+}
+
+"""
+order by aggregate values of table "stadium"
+"""
+input stadium_aggregate_order_by {
+  avg: stadium_avg_order_by
+  count: order_by
+  max: stadium_max_order_by
+  min: stadium_min_order_by
+  stddev: stadium_stddev_order_by
+  stddev_pop: stadium_stddev_pop_order_by
+  stddev_samp: stadium_stddev_samp_order_by
+  sum: stadium_sum_order_by
+  var_pop: stadium_var_pop_order_by
+  var_samp: stadium_var_samp_order_by
+  variance: stadium_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "stadium"
+"""
+input stadium_arr_rel_insert_input {
+  data: [stadium_insert_input!]!
+  on_conflict: stadium_on_conflict
+}
+
+"""aggregate avg on columns"""
+type stadium_avg_fields {
+  capacity: Float
+  id: Float
+  opening_year: Float
+}
+
+"""
+order by avg() on columns of table "stadium"
+"""
+input stadium_avg_order_by {
+  capacity: order_by
+  id: order_by
+  opening_year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "stadium". All fields are combined with a logical 'AND'.
+"""
+input stadium_bool_exp {
+  _and: [stadium_bool_exp]
+  _not: stadium_bool_exp
+  _or: [stadium_bool_exp]
+  capacity: Int_comparison_exp
+  city: String_comparison_exp
+  country: String_comparison_exp
+  events: event_bool_exp
+  id: Int_comparison_exp
+  name: String_comparison_exp
+  opening_year: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "stadium"
+"""
+enum stadium_constraint {
+  """unique or primary key constraint"""
+  idx_23682_sqlite_autoindex_stadium_1
+}
+
+"""
+input type for incrementing integer columne in table "stadium"
+"""
+input stadium_inc_input {
+  capacity: Int
+  id: Int
+  opening_year: Int
+}
+
+"""
+input type for inserting data into table "stadium"
+"""
+input stadium_insert_input {
+  capacity: Int
+  city: String
+  country: String
+  events: event_arr_rel_insert_input
+  id: Int
+  name: String
+  opening_year: Int
+}
+
+"""aggregate max on columns"""
+type stadium_max_fields {
+  capacity: Int
+  city: String
+  country: String
+  id: Int
+  name: String
+  opening_year: Int
+}
+
+"""
+order by max() on columns of table "stadium"
+"""
+input stadium_max_order_by {
+  capacity: order_by
+  city: order_by
+  country: order_by
+  id: order_by
+  name: order_by
+  opening_year: order_by
+}
+
+"""aggregate min on columns"""
+type stadium_min_fields {
+  capacity: Int
+  city: String
+  country: String
+  id: Int
+  name: String
+  opening_year: Int
+}
+
+"""
+order by min() on columns of table "stadium"
+"""
+input stadium_min_order_by {
+  capacity: order_by
+  city: order_by
+  country: order_by
+  id: order_by
+  name: order_by
+  opening_year: order_by
+}
+
+"""
+response of any mutation on the table "stadium"
+"""
+type stadium_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [stadium!]!
+}
+
+"""
+input type for inserting object relation for remote table "stadium"
+"""
+input stadium_obj_rel_insert_input {
+  data: stadium_insert_input!
+  on_conflict: stadium_on_conflict
+}
+
+"""
+on conflict condition type for table "stadium"
+"""
+input stadium_on_conflict {
+  constraint: stadium_constraint!
+  update_columns: [stadium_update_column!]!
+  where: stadium_bool_exp
+}
+
+"""
+ordering options when selecting data from "stadium"
+"""
+input stadium_order_by {
+  capacity: order_by
+  city: order_by
+  country: order_by
+  events_aggregate: event_aggregate_order_by
+  id: order_by
+  name: order_by
+  opening_year: order_by
+}
+
+"""
+select columns of table "stadium"
+"""
+enum stadium_select_column {
+  """column name"""
+  capacity
+
+  """column name"""
+  city
+
+  """column name"""
+  country
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  opening_year
+}
+
+"""
+input type for updating data in table "stadium"
+"""
+input stadium_set_input {
+  capacity: Int
+  city: String
+  country: String
+  id: Int
+  name: String
+  opening_year: Int
+}
+
+"""aggregate stddev on columns"""
+type stadium_stddev_fields {
+  capacity: Float
+  id: Float
+  opening_year: Float
+}
+
+"""
+order by stddev() on columns of table "stadium"
+"""
+input stadium_stddev_order_by {
+  capacity: order_by
+  id: order_by
+  opening_year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type stadium_stddev_pop_fields {
+  capacity: Float
+  id: Float
+  opening_year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "stadium"
+"""
+input stadium_stddev_pop_order_by {
+  capacity: order_by
+  id: order_by
+  opening_year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type stadium_stddev_samp_fields {
+  capacity: Float
+  id: Float
+  opening_year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "stadium"
+"""
+input stadium_stddev_samp_order_by {
+  capacity: order_by
+  id: order_by
+  opening_year: order_by
+}
+
+"""aggregate sum on columns"""
+type stadium_sum_fields {
+  capacity: Int
+  id: Int
+  opening_year: Int
+}
+
+"""
+order by sum() on columns of table "stadium"
+"""
+input stadium_sum_order_by {
+  capacity: order_by
+  id: order_by
+  opening_year: order_by
+}
+
+"""
+update columns of table "stadium"
+"""
+enum stadium_update_column {
+  """column name"""
+  capacity
+
+  """column name"""
+  city
+
+  """column name"""
+  country
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  opening_year
+}
+
+"""aggregate var_pop on columns"""
+type stadium_var_pop_fields {
+  capacity: Float
+  id: Float
+  opening_year: Float
+}
+
+"""
+order by var_pop() on columns of table "stadium"
+"""
+input stadium_var_pop_order_by {
+  capacity: order_by
+  id: order_by
+  opening_year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type stadium_var_samp_fields {
+  capacity: Float
+  id: Float
+  opening_year: Float
+}
+
+"""
+order by var_samp() on columns of table "stadium"
+"""
+input stadium_var_samp_order_by {
+  capacity: order_by
+  id: order_by
+  opening_year: order_by
+}
+
+"""aggregate variance on columns"""
+type stadium_variance_fields {
+  capacity: Float
+  id: Float
+  opening_year: Float
+}
+
+"""
+order by variance() on columns of table "stadium"
+"""
+input stadium_variance_order_by {
+  capacity: order_by
+  id: order_by
+  opening_year: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "event"
+  """
+  event(
+    """distinct select on columns"""
+    distinct_on: [event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [event_order_by!]
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): [event!]!
+
+  """
+  fetch aggregated fields from the table: "event"
+  """
+  event_aggregate(
+    """distinct select on columns"""
+    distinct_on: [event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [event_order_by!]
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): event_aggregate!
+
+  """
+  fetch data from the table: "record"
+  """
+  record(
+    """distinct select on columns"""
+    distinct_on: [record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [record_order_by!]
+
+    """filter the rows returned"""
+    where: record_bool_exp
+  ): [record!]!
+
+  """
+  fetch aggregated fields from the table: "record"
+  """
+  record_aggregate(
+    """distinct select on columns"""
+    distinct_on: [record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [record_order_by!]
+
+    """filter the rows returned"""
+    where: record_bool_exp
+  ): record_aggregate!
+
+  """
+  fetch data from the table: "stadium"
+  """
+  stadium(
+    """distinct select on columns"""
+    distinct_on: [stadium_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stadium_order_by!]
+
+    """filter the rows returned"""
+    where: stadium_bool_exp
+  ): [stadium!]!
+
+  """
+  fetch aggregated fields from the table: "stadium"
+  """
+  stadium_aggregate(
+    """distinct select on columns"""
+    distinct_on: [stadium_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stadium_order_by!]
+
+    """filter the rows returned"""
+    where: stadium_bool_exp
+  ): stadium_aggregate!
+
+  """
+  fetch data from the table: "swimmer"
+  """
+  swimmer(
+    """distinct select on columns"""
+    distinct_on: [swimmer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [swimmer_order_by!]
+
+    """filter the rows returned"""
+    where: swimmer_bool_exp
+  ): [swimmer!]!
+
+  """
+  fetch aggregated fields from the table: "swimmer"
+  """
+  swimmer_aggregate(
+    """distinct select on columns"""
+    distinct_on: [swimmer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [swimmer_order_by!]
+
+    """filter the rows returned"""
+    where: swimmer_bool_exp
+  ): swimmer_aggregate!
+}
+
+"""
+columns and relationships of "swimmer"
+"""
+type swimmer {
+  id: Int
+  meter_100: Float
+  meter_200: String
+  meter_300: String
+  meter_400: String
+  meter_500: String
+  meter_600: String
+  meter_700: String
+  name: String
+  nationality: String
+
+  """An array relationship"""
+  records(
+    """distinct select on columns"""
+    distinct_on: [record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [record_order_by!]
+
+    """filter the rows returned"""
+    where: record_bool_exp
+  ): [record!]!
+
+  """An aggregated array relationship"""
+  records_aggregate(
+    """distinct select on columns"""
+    distinct_on: [record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [record_order_by!]
+
+    """filter the rows returned"""
+    where: record_bool_exp
+  ): record_aggregate!
+  time: String
+}
+
+"""
+aggregated selection of "swimmer"
+"""
+type swimmer_aggregate {
+  aggregate: swimmer_aggregate_fields
+  nodes: [swimmer!]!
+}
+
+"""
+aggregate fields of "swimmer"
+"""
+type swimmer_aggregate_fields {
+  avg: swimmer_avg_fields
+  count(columns: [swimmer_select_column!], distinct: Boolean): Int
+  max: swimmer_max_fields
+  min: swimmer_min_fields
+  stddev: swimmer_stddev_fields
+  stddev_pop: swimmer_stddev_pop_fields
+  stddev_samp: swimmer_stddev_samp_fields
+  sum: swimmer_sum_fields
+  var_pop: swimmer_var_pop_fields
+  var_samp: swimmer_var_samp_fields
+  variance: swimmer_variance_fields
+}
+
+"""
+order by aggregate values of table "swimmer"
+"""
+input swimmer_aggregate_order_by {
+  avg: swimmer_avg_order_by
+  count: order_by
+  max: swimmer_max_order_by
+  min: swimmer_min_order_by
+  stddev: swimmer_stddev_order_by
+  stddev_pop: swimmer_stddev_pop_order_by
+  stddev_samp: swimmer_stddev_samp_order_by
+  sum: swimmer_sum_order_by
+  var_pop: swimmer_var_pop_order_by
+  var_samp: swimmer_var_samp_order_by
+  variance: swimmer_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "swimmer"
+"""
+input swimmer_arr_rel_insert_input {
+  data: [swimmer_insert_input!]!
+  on_conflict: swimmer_on_conflict
+}
+
+"""aggregate avg on columns"""
+type swimmer_avg_fields {
+  id: Float
+  meter_100: Float
+}
+
+"""
+order by avg() on columns of table "swimmer"
+"""
+input swimmer_avg_order_by {
+  id: order_by
+  meter_100: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "swimmer". All fields are combined with a logical 'AND'.
+"""
+input swimmer_bool_exp {
+  _and: [swimmer_bool_exp]
+  _not: swimmer_bool_exp
+  _or: [swimmer_bool_exp]
+  id: Int_comparison_exp
+  meter_100: Float_comparison_exp
+  meter_200: String_comparison_exp
+  meter_300: String_comparison_exp
+  meter_400: String_comparison_exp
+  meter_500: String_comparison_exp
+  meter_600: String_comparison_exp
+  meter_700: String_comparison_exp
+  name: String_comparison_exp
+  nationality: String_comparison_exp
+  records: record_bool_exp
+  time: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "swimmer"
+"""
+enum swimmer_constraint {
+  """unique or primary key constraint"""
+  idx_23676_sqlite_autoindex_swimmer_1
+}
+
+"""
+input type for incrementing integer columne in table "swimmer"
+"""
+input swimmer_inc_input {
+  id: Int
+}
+
+"""
+input type for inserting data into table "swimmer"
+"""
+input swimmer_insert_input {
+  id: Int
+  meter_100: Float
+  meter_200: String
+  meter_300: String
+  meter_400: String
+  meter_500: String
+  meter_600: String
+  meter_700: String
+  name: String
+  nationality: String
+  records: record_arr_rel_insert_input
+  time: String
+}
+
+"""aggregate max on columns"""
+type swimmer_max_fields {
+  id: Int
+  meter_100: Float
+  meter_200: String
+  meter_300: String
+  meter_400: String
+  meter_500: String
+  meter_600: String
+  meter_700: String
+  name: String
+  nationality: String
+  time: String
+}
+
+"""
+order by max() on columns of table "swimmer"
+"""
+input swimmer_max_order_by {
+  id: order_by
+  meter_100: order_by
+  meter_200: order_by
+  meter_300: order_by
+  meter_400: order_by
+  meter_500: order_by
+  meter_600: order_by
+  meter_700: order_by
+  name: order_by
+  nationality: order_by
+  time: order_by
+}
+
+"""aggregate min on columns"""
+type swimmer_min_fields {
+  id: Int
+  meter_100: Float
+  meter_200: String
+  meter_300: String
+  meter_400: String
+  meter_500: String
+  meter_600: String
+  meter_700: String
+  name: String
+  nationality: String
+  time: String
+}
+
+"""
+order by min() on columns of table "swimmer"
+"""
+input swimmer_min_order_by {
+  id: order_by
+  meter_100: order_by
+  meter_200: order_by
+  meter_300: order_by
+  meter_400: order_by
+  meter_500: order_by
+  meter_600: order_by
+  meter_700: order_by
+  name: order_by
+  nationality: order_by
+  time: order_by
+}
+
+"""
+response of any mutation on the table "swimmer"
+"""
+type swimmer_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [swimmer!]!
+}
+
+"""
+input type for inserting object relation for remote table "swimmer"
+"""
+input swimmer_obj_rel_insert_input {
+  data: swimmer_insert_input!
+  on_conflict: swimmer_on_conflict
+}
+
+"""
+on conflict condition type for table "swimmer"
+"""
+input swimmer_on_conflict {
+  constraint: swimmer_constraint!
+  update_columns: [swimmer_update_column!]!
+  where: swimmer_bool_exp
+}
+
+"""
+ordering options when selecting data from "swimmer"
+"""
+input swimmer_order_by {
+  id: order_by
+  meter_100: order_by
+  meter_200: order_by
+  meter_300: order_by
+  meter_400: order_by
+  meter_500: order_by
+  meter_600: order_by
+  meter_700: order_by
+  name: order_by
+  nationality: order_by
+  records_aggregate: record_aggregate_order_by
+  time: order_by
+}
+
+"""
+select columns of table "swimmer"
+"""
+enum swimmer_select_column {
+  """column name"""
+  id
+
+  """column name"""
+  meter_100
+
+  """column name"""
+  meter_200
+
+  """column name"""
+  meter_300
+
+  """column name"""
+  meter_400
+
+  """column name"""
+  meter_500
+
+  """column name"""
+  meter_600
+
+  """column name"""
+  meter_700
+
+  """column name"""
+  name
+
+  """column name"""
+  nationality
+
+  """column name"""
+  time
+}
+
+"""
+input type for updating data in table "swimmer"
+"""
+input swimmer_set_input {
+  id: Int
+  meter_100: Float
+  meter_200: String
+  meter_300: String
+  meter_400: String
+  meter_500: String
+  meter_600: String
+  meter_700: String
+  name: String
+  nationality: String
+  time: String
+}
+
+"""aggregate stddev on columns"""
+type swimmer_stddev_fields {
+  id: Float
+  meter_100: Float
+}
+
+"""
+order by stddev() on columns of table "swimmer"
+"""
+input swimmer_stddev_order_by {
+  id: order_by
+  meter_100: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type swimmer_stddev_pop_fields {
+  id: Float
+  meter_100: Float
+}
+
+"""
+order by stddev_pop() on columns of table "swimmer"
+"""
+input swimmer_stddev_pop_order_by {
+  id: order_by
+  meter_100: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type swimmer_stddev_samp_fields {
+  id: Float
+  meter_100: Float
+}
+
+"""
+order by stddev_samp() on columns of table "swimmer"
+"""
+input swimmer_stddev_samp_order_by {
+  id: order_by
+  meter_100: order_by
+}
+
+"""aggregate sum on columns"""
+type swimmer_sum_fields {
+  id: Int
+  meter_100: Float
+}
+
+"""
+order by sum() on columns of table "swimmer"
+"""
+input swimmer_sum_order_by {
+  id: order_by
+  meter_100: order_by
+}
+
+"""
+update columns of table "swimmer"
+"""
+enum swimmer_update_column {
+  """column name"""
+  id
+
+  """column name"""
+  meter_100
+
+  """column name"""
+  meter_200
+
+  """column name"""
+  meter_300
+
+  """column name"""
+  meter_400
+
+  """column name"""
+  meter_500
+
+  """column name"""
+  meter_600
+
+  """column name"""
+  meter_700
+
+  """column name"""
+  name
+
+  """column name"""
+  nationality
+
+  """column name"""
+  time
+}
+
+"""aggregate var_pop on columns"""
+type swimmer_var_pop_fields {
+  id: Float
+  meter_100: Float
+}
+
+"""
+order by var_pop() on columns of table "swimmer"
+"""
+input swimmer_var_pop_order_by {
+  id: order_by
+  meter_100: order_by
+}
+
+"""aggregate var_samp on columns"""
+type swimmer_var_samp_fields {
+  id: Float
+  meter_100: Float
+}
+
+"""
+order by var_samp() on columns of table "swimmer"
+"""
+input swimmer_var_samp_order_by {
+  id: order_by
+  meter_100: order_by
+}
+
+"""aggregate variance on columns"""
+type swimmer_variance_fields {
+  id: Float
+  meter_100: Float
+}
+
+"""
+order by variance() on columns of table "swimmer"
+"""
+input swimmer_variance_order_by {
+  id: order_by
+  meter_100: order_by
+}

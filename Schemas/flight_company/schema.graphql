@@ -1,0 +1,1703 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "airport"
+"""
+type airport {
+  city: String
+  country: String
+
+  """An array relationship"""
+  flights(
+    """distinct select on columns"""
+    distinct_on: [flight_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [flight_order_by!]
+
+    """filter the rows returned"""
+    where: flight_bool_exp
+  ): [flight!]!
+
+  """An aggregated array relationship"""
+  flights_aggregate(
+    """distinct select on columns"""
+    distinct_on: [flight_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [flight_order_by!]
+
+    """filter the rows returned"""
+    where: flight_bool_exp
+  ): flight_aggregate!
+  iata: String
+  icao: String
+  id: Int!
+  name: String
+}
+
+"""
+aggregated selection of "airport"
+"""
+type airport_aggregate {
+  aggregate: airport_aggregate_fields
+  nodes: [airport!]!
+}
+
+"""
+aggregate fields of "airport"
+"""
+type airport_aggregate_fields {
+  avg: airport_avg_fields
+  count(columns: [airport_select_column!], distinct: Boolean): Int
+  max: airport_max_fields
+  min: airport_min_fields
+  stddev: airport_stddev_fields
+  stddev_pop: airport_stddev_pop_fields
+  stddev_samp: airport_stddev_samp_fields
+  sum: airport_sum_fields
+  var_pop: airport_var_pop_fields
+  var_samp: airport_var_samp_fields
+  variance: airport_variance_fields
+}
+
+"""
+order by aggregate values of table "airport"
+"""
+input airport_aggregate_order_by {
+  avg: airport_avg_order_by
+  count: order_by
+  max: airport_max_order_by
+  min: airport_min_order_by
+  stddev: airport_stddev_order_by
+  stddev_pop: airport_stddev_pop_order_by
+  stddev_samp: airport_stddev_samp_order_by
+  sum: airport_sum_order_by
+  var_pop: airport_var_pop_order_by
+  var_samp: airport_var_samp_order_by
+  variance: airport_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "airport"
+"""
+input airport_arr_rel_insert_input {
+  data: [airport_insert_input!]!
+  on_conflict: airport_on_conflict
+}
+
+"""aggregate avg on columns"""
+type airport_avg_fields {
+  id: Float
+}
+
+"""
+order by avg() on columns of table "airport"
+"""
+input airport_avg_order_by {
+  id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "airport". All fields are combined with a logical 'AND'.
+"""
+input airport_bool_exp {
+  _and: [airport_bool_exp]
+  _not: airport_bool_exp
+  _or: [airport_bool_exp]
+  city: String_comparison_exp
+  country: String_comparison_exp
+  flights: flight_bool_exp
+  iata: String_comparison_exp
+  icao: String_comparison_exp
+  id: Int_comparison_exp
+  name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "airport"
+"""
+enum airport_constraint {
+  """unique or primary key constraint"""
+  idx_20690_sqlite_autoindex_airport_1
+}
+
+"""
+input type for incrementing integer columne in table "airport"
+"""
+input airport_inc_input {
+  id: Int
+}
+
+"""
+input type for inserting data into table "airport"
+"""
+input airport_insert_input {
+  city: String
+  country: String
+  flights: flight_arr_rel_insert_input
+  iata: String
+  icao: String
+  id: Int
+  name: String
+}
+
+"""aggregate max on columns"""
+type airport_max_fields {
+  city: String
+  country: String
+  iata: String
+  icao: String
+  id: Int
+  name: String
+}
+
+"""
+order by max() on columns of table "airport"
+"""
+input airport_max_order_by {
+  city: order_by
+  country: order_by
+  iata: order_by
+  icao: order_by
+  id: order_by
+  name: order_by
+}
+
+"""aggregate min on columns"""
+type airport_min_fields {
+  city: String
+  country: String
+  iata: String
+  icao: String
+  id: Int
+  name: String
+}
+
+"""
+order by min() on columns of table "airport"
+"""
+input airport_min_order_by {
+  city: order_by
+  country: order_by
+  iata: order_by
+  icao: order_by
+  id: order_by
+  name: order_by
+}
+
+"""
+response of any mutation on the table "airport"
+"""
+type airport_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [airport!]!
+}
+
+"""
+input type for inserting object relation for remote table "airport"
+"""
+input airport_obj_rel_insert_input {
+  data: airport_insert_input!
+  on_conflict: airport_on_conflict
+}
+
+"""
+on conflict condition type for table "airport"
+"""
+input airport_on_conflict {
+  constraint: airport_constraint!
+  update_columns: [airport_update_column!]!
+  where: airport_bool_exp
+}
+
+"""
+ordering options when selecting data from "airport"
+"""
+input airport_order_by {
+  city: order_by
+  country: order_by
+  flights_aggregate: flight_aggregate_order_by
+  iata: order_by
+  icao: order_by
+  id: order_by
+  name: order_by
+}
+
+"""
+select columns of table "airport"
+"""
+enum airport_select_column {
+  """column name"""
+  city
+
+  """column name"""
+  country
+
+  """column name"""
+  iata
+
+  """column name"""
+  icao
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "airport"
+"""
+input airport_set_input {
+  city: String
+  country: String
+  iata: String
+  icao: String
+  id: Int
+  name: String
+}
+
+"""aggregate stddev on columns"""
+type airport_stddev_fields {
+  id: Float
+}
+
+"""
+order by stddev() on columns of table "airport"
+"""
+input airport_stddev_order_by {
+  id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type airport_stddev_pop_fields {
+  id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "airport"
+"""
+input airport_stddev_pop_order_by {
+  id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type airport_stddev_samp_fields {
+  id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "airport"
+"""
+input airport_stddev_samp_order_by {
+  id: order_by
+}
+
+"""aggregate sum on columns"""
+type airport_sum_fields {
+  id: Int
+}
+
+"""
+order by sum() on columns of table "airport"
+"""
+input airport_sum_order_by {
+  id: order_by
+}
+
+"""
+update columns of table "airport"
+"""
+enum airport_update_column {
+  """column name"""
+  city
+
+  """column name"""
+  country
+
+  """column name"""
+  iata
+
+  """column name"""
+  icao
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+}
+
+"""aggregate var_pop on columns"""
+type airport_var_pop_fields {
+  id: Float
+}
+
+"""
+order by var_pop() on columns of table "airport"
+"""
+input airport_var_pop_order_by {
+  id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type airport_var_samp_fields {
+  id: Float
+}
+
+"""
+order by var_samp() on columns of table "airport"
+"""
+input airport_var_samp_order_by {
+  id: order_by
+}
+
+"""aggregate variance on columns"""
+type airport_variance_fields {
+  id: Float
+}
+
+"""
+order by variance() on columns of table "airport"
+"""
+input airport_variance_order_by {
+  id: order_by
+}
+
+"""
+columns and relationships of "flight"
+"""
+type flight {
+  """An object relationship"""
+  airport: airport
+  airport_id: Int
+  altitude: Float
+  company_id: Int
+  date: String
+  id: Int!
+
+  """An object relationship"""
+  operate_company: operate_company
+  pilot: String
+  vehicle_flight_number: String
+  velocity: Float
+}
+
+"""
+aggregated selection of "flight"
+"""
+type flight_aggregate {
+  aggregate: flight_aggregate_fields
+  nodes: [flight!]!
+}
+
+"""
+aggregate fields of "flight"
+"""
+type flight_aggregate_fields {
+  avg: flight_avg_fields
+  count(columns: [flight_select_column!], distinct: Boolean): Int
+  max: flight_max_fields
+  min: flight_min_fields
+  stddev: flight_stddev_fields
+  stddev_pop: flight_stddev_pop_fields
+  stddev_samp: flight_stddev_samp_fields
+  sum: flight_sum_fields
+  var_pop: flight_var_pop_fields
+  var_samp: flight_var_samp_fields
+  variance: flight_variance_fields
+}
+
+"""
+order by aggregate values of table "flight"
+"""
+input flight_aggregate_order_by {
+  avg: flight_avg_order_by
+  count: order_by
+  max: flight_max_order_by
+  min: flight_min_order_by
+  stddev: flight_stddev_order_by
+  stddev_pop: flight_stddev_pop_order_by
+  stddev_samp: flight_stddev_samp_order_by
+  sum: flight_sum_order_by
+  var_pop: flight_var_pop_order_by
+  var_samp: flight_var_samp_order_by
+  variance: flight_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "flight"
+"""
+input flight_arr_rel_insert_input {
+  data: [flight_insert_input!]!
+  on_conflict: flight_on_conflict
+}
+
+"""aggregate avg on columns"""
+type flight_avg_fields {
+  airport_id: Float
+  altitude: Float
+  company_id: Float
+  id: Float
+  velocity: Float
+}
+
+"""
+order by avg() on columns of table "flight"
+"""
+input flight_avg_order_by {
+  airport_id: order_by
+  altitude: order_by
+  company_id: order_by
+  id: order_by
+  velocity: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "flight". All fields are combined with a logical 'AND'.
+"""
+input flight_bool_exp {
+  _and: [flight_bool_exp]
+  _not: flight_bool_exp
+  _or: [flight_bool_exp]
+  airport: airport_bool_exp
+  airport_id: Int_comparison_exp
+  altitude: Float_comparison_exp
+  company_id: Int_comparison_exp
+  date: String_comparison_exp
+  id: Int_comparison_exp
+  operate_company: operate_company_bool_exp
+  pilot: String_comparison_exp
+  vehicle_flight_number: String_comparison_exp
+  velocity: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "flight"
+"""
+enum flight_constraint {
+  """unique or primary key constraint"""
+  idx_20702_sqlite_autoindex_flight_1
+}
+
+"""
+input type for incrementing integer columne in table "flight"
+"""
+input flight_inc_input {
+  airport_id: Int
+  company_id: Int
+  id: Int
+}
+
+"""
+input type for inserting data into table "flight"
+"""
+input flight_insert_input {
+  airport: airport_obj_rel_insert_input
+  airport_id: Int
+  altitude: Float
+  company_id: Int
+  date: String
+  id: Int
+  operate_company: operate_company_obj_rel_insert_input
+  pilot: String
+  vehicle_flight_number: String
+  velocity: Float
+}
+
+"""aggregate max on columns"""
+type flight_max_fields {
+  airport_id: Int
+  altitude: Float
+  company_id: Int
+  date: String
+  id: Int
+  pilot: String
+  vehicle_flight_number: String
+  velocity: Float
+}
+
+"""
+order by max() on columns of table "flight"
+"""
+input flight_max_order_by {
+  airport_id: order_by
+  altitude: order_by
+  company_id: order_by
+  date: order_by
+  id: order_by
+  pilot: order_by
+  vehicle_flight_number: order_by
+  velocity: order_by
+}
+
+"""aggregate min on columns"""
+type flight_min_fields {
+  airport_id: Int
+  altitude: Float
+  company_id: Int
+  date: String
+  id: Int
+  pilot: String
+  vehicle_flight_number: String
+  velocity: Float
+}
+
+"""
+order by min() on columns of table "flight"
+"""
+input flight_min_order_by {
+  airport_id: order_by
+  altitude: order_by
+  company_id: order_by
+  date: order_by
+  id: order_by
+  pilot: order_by
+  vehicle_flight_number: order_by
+  velocity: order_by
+}
+
+"""
+response of any mutation on the table "flight"
+"""
+type flight_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [flight!]!
+}
+
+"""
+input type for inserting object relation for remote table "flight"
+"""
+input flight_obj_rel_insert_input {
+  data: flight_insert_input!
+  on_conflict: flight_on_conflict
+}
+
+"""
+on conflict condition type for table "flight"
+"""
+input flight_on_conflict {
+  constraint: flight_constraint!
+  update_columns: [flight_update_column!]!
+  where: flight_bool_exp
+}
+
+"""
+ordering options when selecting data from "flight"
+"""
+input flight_order_by {
+  airport: airport_order_by
+  airport_id: order_by
+  altitude: order_by
+  company_id: order_by
+  date: order_by
+  id: order_by
+  operate_company: operate_company_order_by
+  pilot: order_by
+  vehicle_flight_number: order_by
+  velocity: order_by
+}
+
+"""
+select columns of table "flight"
+"""
+enum flight_select_column {
+  """column name"""
+  airport_id
+
+  """column name"""
+  altitude
+
+  """column name"""
+  company_id
+
+  """column name"""
+  date
+
+  """column name"""
+  id
+
+  """column name"""
+  pilot
+
+  """column name"""
+  vehicle_flight_number
+
+  """column name"""
+  velocity
+}
+
+"""
+input type for updating data in table "flight"
+"""
+input flight_set_input {
+  airport_id: Int
+  altitude: Float
+  company_id: Int
+  date: String
+  id: Int
+  pilot: String
+  vehicle_flight_number: String
+  velocity: Float
+}
+
+"""aggregate stddev on columns"""
+type flight_stddev_fields {
+  airport_id: Float
+  altitude: Float
+  company_id: Float
+  id: Float
+  velocity: Float
+}
+
+"""
+order by stddev() on columns of table "flight"
+"""
+input flight_stddev_order_by {
+  airport_id: order_by
+  altitude: order_by
+  company_id: order_by
+  id: order_by
+  velocity: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type flight_stddev_pop_fields {
+  airport_id: Float
+  altitude: Float
+  company_id: Float
+  id: Float
+  velocity: Float
+}
+
+"""
+order by stddev_pop() on columns of table "flight"
+"""
+input flight_stddev_pop_order_by {
+  airport_id: order_by
+  altitude: order_by
+  company_id: order_by
+  id: order_by
+  velocity: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type flight_stddev_samp_fields {
+  airport_id: Float
+  altitude: Float
+  company_id: Float
+  id: Float
+  velocity: Float
+}
+
+"""
+order by stddev_samp() on columns of table "flight"
+"""
+input flight_stddev_samp_order_by {
+  airport_id: order_by
+  altitude: order_by
+  company_id: order_by
+  id: order_by
+  velocity: order_by
+}
+
+"""aggregate sum on columns"""
+type flight_sum_fields {
+  airport_id: Int
+  altitude: Float
+  company_id: Int
+  id: Int
+  velocity: Float
+}
+
+"""
+order by sum() on columns of table "flight"
+"""
+input flight_sum_order_by {
+  airport_id: order_by
+  altitude: order_by
+  company_id: order_by
+  id: order_by
+  velocity: order_by
+}
+
+"""
+update columns of table "flight"
+"""
+enum flight_update_column {
+  """column name"""
+  airport_id
+
+  """column name"""
+  altitude
+
+  """column name"""
+  company_id
+
+  """column name"""
+  date
+
+  """column name"""
+  id
+
+  """column name"""
+  pilot
+
+  """column name"""
+  vehicle_flight_number
+
+  """column name"""
+  velocity
+}
+
+"""aggregate var_pop on columns"""
+type flight_var_pop_fields {
+  airport_id: Float
+  altitude: Float
+  company_id: Float
+  id: Float
+  velocity: Float
+}
+
+"""
+order by var_pop() on columns of table "flight"
+"""
+input flight_var_pop_order_by {
+  airport_id: order_by
+  altitude: order_by
+  company_id: order_by
+  id: order_by
+  velocity: order_by
+}
+
+"""aggregate var_samp on columns"""
+type flight_var_samp_fields {
+  airport_id: Float
+  altitude: Float
+  company_id: Float
+  id: Float
+  velocity: Float
+}
+
+"""
+order by var_samp() on columns of table "flight"
+"""
+input flight_var_samp_order_by {
+  airport_id: order_by
+  altitude: order_by
+  company_id: order_by
+  id: order_by
+  velocity: order_by
+}
+
+"""aggregate variance on columns"""
+type flight_variance_fields {
+  airport_id: Float
+  altitude: Float
+  company_id: Float
+  id: Float
+  velocity: Float
+}
+
+"""
+order by variance() on columns of table "flight"
+"""
+input flight_variance_order_by {
+  airport_id: order_by
+  altitude: order_by
+  company_id: order_by
+  id: order_by
+  velocity: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "airport"
+  """
+  delete_airport(
+    """filter the rows which have to be deleted"""
+    where: airport_bool_exp!
+  ): airport_mutation_response
+
+  """
+  delete data from the table: "flight"
+  """
+  delete_flight(
+    """filter the rows which have to be deleted"""
+    where: flight_bool_exp!
+  ): flight_mutation_response
+
+  """
+  delete data from the table: "operate_company"
+  """
+  delete_operate_company(
+    """filter the rows which have to be deleted"""
+    where: operate_company_bool_exp!
+  ): operate_company_mutation_response
+
+  """
+  insert data into the table: "airport"
+  """
+  insert_airport(
+    """the rows to be inserted"""
+    objects: [airport_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: airport_on_conflict
+  ): airport_mutation_response
+
+  """
+  insert data into the table: "flight"
+  """
+  insert_flight(
+    """the rows to be inserted"""
+    objects: [flight_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: flight_on_conflict
+  ): flight_mutation_response
+
+  """
+  insert data into the table: "operate_company"
+  """
+  insert_operate_company(
+    """the rows to be inserted"""
+    objects: [operate_company_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: operate_company_on_conflict
+  ): operate_company_mutation_response
+
+  """
+  update data of the table: "airport"
+  """
+  update_airport(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: airport_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: airport_set_input
+
+    """filter the rows which have to be updated"""
+    where: airport_bool_exp!
+  ): airport_mutation_response
+
+  """
+  update data of the table: "flight"
+  """
+  update_flight(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: flight_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: flight_set_input
+
+    """filter the rows which have to be updated"""
+    where: flight_bool_exp!
+  ): flight_mutation_response
+
+  """
+  update data of the table: "operate_company"
+  """
+  update_operate_company(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: operate_company_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: operate_company_set_input
+
+    """filter the rows which have to be updated"""
+    where: operate_company_bool_exp!
+  ): operate_company_mutation_response
+}
+
+"""
+columns and relationships of "operate_company"
+"""
+type operate_company {
+  """An array relationship"""
+  flights(
+    """distinct select on columns"""
+    distinct_on: [flight_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [flight_order_by!]
+
+    """filter the rows returned"""
+    where: flight_bool_exp
+  ): [flight!]!
+
+  """An aggregated array relationship"""
+  flights_aggregate(
+    """distinct select on columns"""
+    distinct_on: [flight_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [flight_order_by!]
+
+    """filter the rows returned"""
+    where: flight_bool_exp
+  ): flight_aggregate!
+  group_equity_shareholding: Float
+  id: Int!
+  incorporated_in: String
+  name: String
+  principal_activities: String
+  type: String
+}
+
+"""
+aggregated selection of "operate_company"
+"""
+type operate_company_aggregate {
+  aggregate: operate_company_aggregate_fields
+  nodes: [operate_company!]!
+}
+
+"""
+aggregate fields of "operate_company"
+"""
+type operate_company_aggregate_fields {
+  avg: operate_company_avg_fields
+  count(columns: [operate_company_select_column!], distinct: Boolean): Int
+  max: operate_company_max_fields
+  min: operate_company_min_fields
+  stddev: operate_company_stddev_fields
+  stddev_pop: operate_company_stddev_pop_fields
+  stddev_samp: operate_company_stddev_samp_fields
+  sum: operate_company_sum_fields
+  var_pop: operate_company_var_pop_fields
+  var_samp: operate_company_var_samp_fields
+  variance: operate_company_variance_fields
+}
+
+"""
+order by aggregate values of table "operate_company"
+"""
+input operate_company_aggregate_order_by {
+  avg: operate_company_avg_order_by
+  count: order_by
+  max: operate_company_max_order_by
+  min: operate_company_min_order_by
+  stddev: operate_company_stddev_order_by
+  stddev_pop: operate_company_stddev_pop_order_by
+  stddev_samp: operate_company_stddev_samp_order_by
+  sum: operate_company_sum_order_by
+  var_pop: operate_company_var_pop_order_by
+  var_samp: operate_company_var_samp_order_by
+  variance: operate_company_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "operate_company"
+"""
+input operate_company_arr_rel_insert_input {
+  data: [operate_company_insert_input!]!
+  on_conflict: operate_company_on_conflict
+}
+
+"""aggregate avg on columns"""
+type operate_company_avg_fields {
+  group_equity_shareholding: Float
+  id: Float
+}
+
+"""
+order by avg() on columns of table "operate_company"
+"""
+input operate_company_avg_order_by {
+  group_equity_shareholding: order_by
+  id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "operate_company". All fields are combined with a logical 'AND'.
+"""
+input operate_company_bool_exp {
+  _and: [operate_company_bool_exp]
+  _not: operate_company_bool_exp
+  _or: [operate_company_bool_exp]
+  flights: flight_bool_exp
+  group_equity_shareholding: Float_comparison_exp
+  id: Int_comparison_exp
+  incorporated_in: String_comparison_exp
+  name: String_comparison_exp
+  principal_activities: String_comparison_exp
+  type: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "operate_company"
+"""
+enum operate_company_constraint {
+  """unique or primary key constraint"""
+  idx_20696_sqlite_autoindex_operate_company_1
+}
+
+"""
+input type for incrementing integer columne in table "operate_company"
+"""
+input operate_company_inc_input {
+  id: Int
+}
+
+"""
+input type for inserting data into table "operate_company"
+"""
+input operate_company_insert_input {
+  flights: flight_arr_rel_insert_input
+  group_equity_shareholding: Float
+  id: Int
+  incorporated_in: String
+  name: String
+  principal_activities: String
+  type: String
+}
+
+"""aggregate max on columns"""
+type operate_company_max_fields {
+  group_equity_shareholding: Float
+  id: Int
+  incorporated_in: String
+  name: String
+  principal_activities: String
+  type: String
+}
+
+"""
+order by max() on columns of table "operate_company"
+"""
+input operate_company_max_order_by {
+  group_equity_shareholding: order_by
+  id: order_by
+  incorporated_in: order_by
+  name: order_by
+  principal_activities: order_by
+  type: order_by
+}
+
+"""aggregate min on columns"""
+type operate_company_min_fields {
+  group_equity_shareholding: Float
+  id: Int
+  incorporated_in: String
+  name: String
+  principal_activities: String
+  type: String
+}
+
+"""
+order by min() on columns of table "operate_company"
+"""
+input operate_company_min_order_by {
+  group_equity_shareholding: order_by
+  id: order_by
+  incorporated_in: order_by
+  name: order_by
+  principal_activities: order_by
+  type: order_by
+}
+
+"""
+response of any mutation on the table "operate_company"
+"""
+type operate_company_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [operate_company!]!
+}
+
+"""
+input type for inserting object relation for remote table "operate_company"
+"""
+input operate_company_obj_rel_insert_input {
+  data: operate_company_insert_input!
+  on_conflict: operate_company_on_conflict
+}
+
+"""
+on conflict condition type for table "operate_company"
+"""
+input operate_company_on_conflict {
+  constraint: operate_company_constraint!
+  update_columns: [operate_company_update_column!]!
+  where: operate_company_bool_exp
+}
+
+"""
+ordering options when selecting data from "operate_company"
+"""
+input operate_company_order_by {
+  flights_aggregate: flight_aggregate_order_by
+  group_equity_shareholding: order_by
+  id: order_by
+  incorporated_in: order_by
+  name: order_by
+  principal_activities: order_by
+  type: order_by
+}
+
+"""
+select columns of table "operate_company"
+"""
+enum operate_company_select_column {
+  """column name"""
+  group_equity_shareholding
+
+  """column name"""
+  id
+
+  """column name"""
+  incorporated_in
+
+  """column name"""
+  name
+
+  """column name"""
+  principal_activities
+
+  """column name"""
+  type
+}
+
+"""
+input type for updating data in table "operate_company"
+"""
+input operate_company_set_input {
+  group_equity_shareholding: Float
+  id: Int
+  incorporated_in: String
+  name: String
+  principal_activities: String
+  type: String
+}
+
+"""aggregate stddev on columns"""
+type operate_company_stddev_fields {
+  group_equity_shareholding: Float
+  id: Float
+}
+
+"""
+order by stddev() on columns of table "operate_company"
+"""
+input operate_company_stddev_order_by {
+  group_equity_shareholding: order_by
+  id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type operate_company_stddev_pop_fields {
+  group_equity_shareholding: Float
+  id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "operate_company"
+"""
+input operate_company_stddev_pop_order_by {
+  group_equity_shareholding: order_by
+  id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type operate_company_stddev_samp_fields {
+  group_equity_shareholding: Float
+  id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "operate_company"
+"""
+input operate_company_stddev_samp_order_by {
+  group_equity_shareholding: order_by
+  id: order_by
+}
+
+"""aggregate sum on columns"""
+type operate_company_sum_fields {
+  group_equity_shareholding: Float
+  id: Int
+}
+
+"""
+order by sum() on columns of table "operate_company"
+"""
+input operate_company_sum_order_by {
+  group_equity_shareholding: order_by
+  id: order_by
+}
+
+"""
+update columns of table "operate_company"
+"""
+enum operate_company_update_column {
+  """column name"""
+  group_equity_shareholding
+
+  """column name"""
+  id
+
+  """column name"""
+  incorporated_in
+
+  """column name"""
+  name
+
+  """column name"""
+  principal_activities
+
+  """column name"""
+  type
+}
+
+"""aggregate var_pop on columns"""
+type operate_company_var_pop_fields {
+  group_equity_shareholding: Float
+  id: Float
+}
+
+"""
+order by var_pop() on columns of table "operate_company"
+"""
+input operate_company_var_pop_order_by {
+  group_equity_shareholding: order_by
+  id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type operate_company_var_samp_fields {
+  group_equity_shareholding: Float
+  id: Float
+}
+
+"""
+order by var_samp() on columns of table "operate_company"
+"""
+input operate_company_var_samp_order_by {
+  group_equity_shareholding: order_by
+  id: order_by
+}
+
+"""aggregate variance on columns"""
+type operate_company_variance_fields {
+  group_equity_shareholding: Float
+  id: Float
+}
+
+"""
+order by variance() on columns of table "operate_company"
+"""
+input operate_company_variance_order_by {
+  group_equity_shareholding: order_by
+  id: order_by
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "airport"
+  """
+  airport(
+    """distinct select on columns"""
+    distinct_on: [airport_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [airport_order_by!]
+
+    """filter the rows returned"""
+    where: airport_bool_exp
+  ): [airport!]!
+
+  """
+  fetch aggregated fields from the table: "airport"
+  """
+  airport_aggregate(
+    """distinct select on columns"""
+    distinct_on: [airport_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [airport_order_by!]
+
+    """filter the rows returned"""
+    where: airport_bool_exp
+  ): airport_aggregate!
+
+  """fetch data from the table: "airport" using primary key columns"""
+  airport_by_pk(id: Int!): airport
+
+  """
+  fetch data from the table: "flight"
+  """
+  flight(
+    """distinct select on columns"""
+    distinct_on: [flight_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [flight_order_by!]
+
+    """filter the rows returned"""
+    where: flight_bool_exp
+  ): [flight!]!
+
+  """
+  fetch aggregated fields from the table: "flight"
+  """
+  flight_aggregate(
+    """distinct select on columns"""
+    distinct_on: [flight_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [flight_order_by!]
+
+    """filter the rows returned"""
+    where: flight_bool_exp
+  ): flight_aggregate!
+
+  """fetch data from the table: "flight" using primary key columns"""
+  flight_by_pk(id: Int!): flight
+
+  """
+  fetch data from the table: "operate_company"
+  """
+  operate_company(
+    """distinct select on columns"""
+    distinct_on: [operate_company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [operate_company_order_by!]
+
+    """filter the rows returned"""
+    where: operate_company_bool_exp
+  ): [operate_company!]!
+
+  """
+  fetch aggregated fields from the table: "operate_company"
+  """
+  operate_company_aggregate(
+    """distinct select on columns"""
+    distinct_on: [operate_company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [operate_company_order_by!]
+
+    """filter the rows returned"""
+    where: operate_company_bool_exp
+  ): operate_company_aggregate!
+
+  """fetch data from the table: "operate_company" using primary key columns"""
+  operate_company_by_pk(id: Int!): operate_company
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "airport"
+  """
+  airport(
+    """distinct select on columns"""
+    distinct_on: [airport_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [airport_order_by!]
+
+    """filter the rows returned"""
+    where: airport_bool_exp
+  ): [airport!]!
+
+  """
+  fetch aggregated fields from the table: "airport"
+  """
+  airport_aggregate(
+    """distinct select on columns"""
+    distinct_on: [airport_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [airport_order_by!]
+
+    """filter the rows returned"""
+    where: airport_bool_exp
+  ): airport_aggregate!
+
+  """fetch data from the table: "airport" using primary key columns"""
+  airport_by_pk(id: Int!): airport
+
+  """
+  fetch data from the table: "flight"
+  """
+  flight(
+    """distinct select on columns"""
+    distinct_on: [flight_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [flight_order_by!]
+
+    """filter the rows returned"""
+    where: flight_bool_exp
+  ): [flight!]!
+
+  """
+  fetch aggregated fields from the table: "flight"
+  """
+  flight_aggregate(
+    """distinct select on columns"""
+    distinct_on: [flight_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [flight_order_by!]
+
+    """filter the rows returned"""
+    where: flight_bool_exp
+  ): flight_aggregate!
+
+  """fetch data from the table: "flight" using primary key columns"""
+  flight_by_pk(id: Int!): flight
+
+  """
+  fetch data from the table: "operate_company"
+  """
+  operate_company(
+    """distinct select on columns"""
+    distinct_on: [operate_company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [operate_company_order_by!]
+
+    """filter the rows returned"""
+    where: operate_company_bool_exp
+  ): [operate_company!]!
+
+  """
+  fetch aggregated fields from the table: "operate_company"
+  """
+  operate_company_aggregate(
+    """distinct select on columns"""
+    distinct_on: [operate_company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [operate_company_order_by!]
+
+    """filter the rows returned"""
+    where: operate_company_bool_exp
+  ): operate_company_aggregate!
+
+  """fetch data from the table: "operate_company" using primary key columns"""
+  operate_company_by_pk(id: Int!): operate_company
+}

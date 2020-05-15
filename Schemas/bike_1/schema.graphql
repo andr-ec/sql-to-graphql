@@ -1,0 +1,2883 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "station"
+  """
+  delete_station(
+    """filter the rows which have to be deleted"""
+    where: station_bool_exp!
+  ): station_mutation_response
+
+  """
+  delete data from the table: "status"
+  """
+  delete_status(
+    """filter the rows which have to be deleted"""
+    where: status_bool_exp!
+  ): status_mutation_response
+
+  """
+  delete data from the table: "trip"
+  """
+  delete_trip(
+    """filter the rows which have to be deleted"""
+    where: trip_bool_exp!
+  ): trip_mutation_response
+
+  """
+  delete data from the table: "weather"
+  """
+  delete_weather(
+    """filter the rows which have to be deleted"""
+    where: weather_bool_exp!
+  ): weather_mutation_response
+
+  """
+  insert data into the table: "station"
+  """
+  insert_station(
+    """the rows to be inserted"""
+    objects: [station_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: station_on_conflict
+  ): station_mutation_response
+
+  """
+  insert data into the table: "status"
+  """
+  insert_status(
+    """the rows to be inserted"""
+    objects: [status_insert_input!]!
+  ): status_mutation_response
+
+  """
+  insert data into the table: "trip"
+  """
+  insert_trip(
+    """the rows to be inserted"""
+    objects: [trip_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: trip_on_conflict
+  ): trip_mutation_response
+
+  """
+  insert data into the table: "weather"
+  """
+  insert_weather(
+    """the rows to be inserted"""
+    objects: [weather_insert_input!]!
+  ): weather_mutation_response
+
+  """
+  update data of the table: "station"
+  """
+  update_station(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: station_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: station_set_input
+
+    """filter the rows which have to be updated"""
+    where: station_bool_exp!
+  ): station_mutation_response
+
+  """
+  update data of the table: "status"
+  """
+  update_status(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: status_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: status_set_input
+
+    """filter the rows which have to be updated"""
+    where: status_bool_exp!
+  ): status_mutation_response
+
+  """
+  update data of the table: "trip"
+  """
+  update_trip(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: trip_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: trip_set_input
+
+    """filter the rows which have to be updated"""
+    where: trip_bool_exp!
+  ): trip_mutation_response
+
+  """
+  update data of the table: "weather"
+  """
+  update_weather(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: weather_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: weather_set_input
+
+    """filter the rows which have to be updated"""
+    where: weather_bool_exp!
+  ): weather_mutation_response
+}
+
+scalar numeric
+
+"""
+expression to compare columns of type numeric. All fields are combined with logical 'AND'.
+"""
+input numeric_comparison_exp {
+  _eq: numeric
+  _gt: numeric
+  _gte: numeric
+  _in: [numeric!]
+  _is_null: Boolean
+  _lt: numeric
+  _lte: numeric
+  _neq: numeric
+  _nin: [numeric!]
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "station"
+  """
+  station(
+    """distinct select on columns"""
+    distinct_on: [station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_order_by!]
+
+    """filter the rows returned"""
+    where: station_bool_exp
+  ): [station!]!
+
+  """
+  fetch aggregated fields from the table: "station"
+  """
+  station_aggregate(
+    """distinct select on columns"""
+    distinct_on: [station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_order_by!]
+
+    """filter the rows returned"""
+    where: station_bool_exp
+  ): station_aggregate!
+
+  """fetch data from the table: "station" using primary key columns"""
+  station_by_pk(id: bigint!): station
+
+  """
+  fetch data from the table: "status"
+  """
+  status(
+    """distinct select on columns"""
+    distinct_on: [status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [status_order_by!]
+
+    """filter the rows returned"""
+    where: status_bool_exp
+  ): [status!]!
+
+  """
+  fetch aggregated fields from the table: "status"
+  """
+  status_aggregate(
+    """distinct select on columns"""
+    distinct_on: [status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [status_order_by!]
+
+    """filter the rows returned"""
+    where: status_bool_exp
+  ): status_aggregate!
+
+  """
+  fetch data from the table: "trip"
+  """
+  trip(
+    """distinct select on columns"""
+    distinct_on: [trip_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [trip_order_by!]
+
+    """filter the rows returned"""
+    where: trip_bool_exp
+  ): [trip!]!
+
+  """
+  fetch aggregated fields from the table: "trip"
+  """
+  trip_aggregate(
+    """distinct select on columns"""
+    distinct_on: [trip_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [trip_order_by!]
+
+    """filter the rows returned"""
+    where: trip_bool_exp
+  ): trip_aggregate!
+
+  """fetch data from the table: "trip" using primary key columns"""
+  trip_by_pk(id: bigint!): trip
+
+  """
+  fetch data from the table: "weather"
+  """
+  weather(
+    """distinct select on columns"""
+    distinct_on: [weather_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [weather_order_by!]
+
+    """filter the rows returned"""
+    where: weather_bool_exp
+  ): [weather!]!
+
+  """
+  fetch aggregated fields from the table: "weather"
+  """
+  weather_aggregate(
+    """distinct select on columns"""
+    distinct_on: [weather_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [weather_order_by!]
+
+    """filter the rows returned"""
+    where: weather_bool_exp
+  ): weather_aggregate!
+}
+
+"""
+columns and relationships of "station"
+"""
+type station {
+  city: String
+  dock_count: bigint
+  id: bigint!
+  installation_date: String
+  lat: numeric
+  long: numeric
+  name: String
+
+  """An array relationship"""
+  statuses(
+    """distinct select on columns"""
+    distinct_on: [status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [status_order_by!]
+
+    """filter the rows returned"""
+    where: status_bool_exp
+  ): [status!]!
+
+  """An aggregated array relationship"""
+  statuses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [status_order_by!]
+
+    """filter the rows returned"""
+    where: status_bool_exp
+  ): status_aggregate!
+
+  """An array relationship"""
+  tripsByEndStationId(
+    """distinct select on columns"""
+    distinct_on: [trip_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [trip_order_by!]
+
+    """filter the rows returned"""
+    where: trip_bool_exp
+  ): [trip!]!
+
+  """An aggregated array relationship"""
+  tripsByEndStationId_aggregate(
+    """distinct select on columns"""
+    distinct_on: [trip_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [trip_order_by!]
+
+    """filter the rows returned"""
+    where: trip_bool_exp
+  ): trip_aggregate!
+
+  """An array relationship"""
+  tripsByStartStationId(
+    """distinct select on columns"""
+    distinct_on: [trip_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [trip_order_by!]
+
+    """filter the rows returned"""
+    where: trip_bool_exp
+  ): [trip!]!
+
+  """An aggregated array relationship"""
+  tripsByStartStationId_aggregate(
+    """distinct select on columns"""
+    distinct_on: [trip_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [trip_order_by!]
+
+    """filter the rows returned"""
+    where: trip_bool_exp
+  ): trip_aggregate!
+}
+
+"""
+aggregated selection of "station"
+"""
+type station_aggregate {
+  aggregate: station_aggregate_fields
+  nodes: [station!]!
+}
+
+"""
+aggregate fields of "station"
+"""
+type station_aggregate_fields {
+  avg: station_avg_fields
+  count(columns: [station_select_column!], distinct: Boolean): Int
+  max: station_max_fields
+  min: station_min_fields
+  stddev: station_stddev_fields
+  stddev_pop: station_stddev_pop_fields
+  stddev_samp: station_stddev_samp_fields
+  sum: station_sum_fields
+  var_pop: station_var_pop_fields
+  var_samp: station_var_samp_fields
+  variance: station_variance_fields
+}
+
+"""
+order by aggregate values of table "station"
+"""
+input station_aggregate_order_by {
+  avg: station_avg_order_by
+  count: order_by
+  max: station_max_order_by
+  min: station_min_order_by
+  stddev: station_stddev_order_by
+  stddev_pop: station_stddev_pop_order_by
+  stddev_samp: station_stddev_samp_order_by
+  sum: station_sum_order_by
+  var_pop: station_var_pop_order_by
+  var_samp: station_var_samp_order_by
+  variance: station_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "station"
+"""
+input station_arr_rel_insert_input {
+  data: [station_insert_input!]!
+  on_conflict: station_on_conflict
+}
+
+"""aggregate avg on columns"""
+type station_avg_fields {
+  dock_count: Float
+  id: Float
+  lat: Float
+  long: Float
+}
+
+"""
+order by avg() on columns of table "station"
+"""
+input station_avg_order_by {
+  dock_count: order_by
+  id: order_by
+  lat: order_by
+  long: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "station". All fields are combined with a logical 'AND'.
+"""
+input station_bool_exp {
+  _and: [station_bool_exp]
+  _not: station_bool_exp
+  _or: [station_bool_exp]
+  city: String_comparison_exp
+  dock_count: bigint_comparison_exp
+  id: bigint_comparison_exp
+  installation_date: String_comparison_exp
+  lat: numeric_comparison_exp
+  long: numeric_comparison_exp
+  name: String_comparison_exp
+  statuses: status_bool_exp
+  tripsByEndStationId: trip_bool_exp
+  tripsByStartStationId: trip_bool_exp
+}
+
+"""
+unique or primary key constraints on table "station"
+"""
+enum station_constraint {
+  """unique or primary key constraint"""
+  idx_17896_station_pkey
+}
+
+"""
+input type for incrementing integer columne in table "station"
+"""
+input station_inc_input {
+  dock_count: bigint
+  id: bigint
+}
+
+"""
+input type for inserting data into table "station"
+"""
+input station_insert_input {
+  city: String
+  dock_count: bigint
+  id: bigint
+  installation_date: String
+  lat: numeric
+  long: numeric
+  name: String
+  statuses: status_arr_rel_insert_input
+  tripsByEndStationId: trip_arr_rel_insert_input
+  tripsByStartStationId: trip_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type station_max_fields {
+  city: String
+  dock_count: bigint
+  id: bigint
+  installation_date: String
+  lat: numeric
+  long: numeric
+  name: String
+}
+
+"""
+order by max() on columns of table "station"
+"""
+input station_max_order_by {
+  city: order_by
+  dock_count: order_by
+  id: order_by
+  installation_date: order_by
+  lat: order_by
+  long: order_by
+  name: order_by
+}
+
+"""aggregate min on columns"""
+type station_min_fields {
+  city: String
+  dock_count: bigint
+  id: bigint
+  installation_date: String
+  lat: numeric
+  long: numeric
+  name: String
+}
+
+"""
+order by min() on columns of table "station"
+"""
+input station_min_order_by {
+  city: order_by
+  dock_count: order_by
+  id: order_by
+  installation_date: order_by
+  lat: order_by
+  long: order_by
+  name: order_by
+}
+
+"""
+response of any mutation on the table "station"
+"""
+type station_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [station!]!
+}
+
+"""
+input type for inserting object relation for remote table "station"
+"""
+input station_obj_rel_insert_input {
+  data: station_insert_input!
+  on_conflict: station_on_conflict
+}
+
+"""
+on conflict condition type for table "station"
+"""
+input station_on_conflict {
+  constraint: station_constraint!
+  update_columns: [station_update_column!]!
+  where: station_bool_exp
+}
+
+"""
+ordering options when selecting data from "station"
+"""
+input station_order_by {
+  city: order_by
+  dock_count: order_by
+  id: order_by
+  installation_date: order_by
+  lat: order_by
+  long: order_by
+  name: order_by
+  statuses_aggregate: status_aggregate_order_by
+  tripsByEndStationId_aggregate: trip_aggregate_order_by
+  tripsByStartStationId_aggregate: trip_aggregate_order_by
+}
+
+"""
+select columns of table "station"
+"""
+enum station_select_column {
+  """column name"""
+  city
+
+  """column name"""
+  dock_count
+
+  """column name"""
+  id
+
+  """column name"""
+  installation_date
+
+  """column name"""
+  lat
+
+  """column name"""
+  long
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "station"
+"""
+input station_set_input {
+  city: String
+  dock_count: bigint
+  id: bigint
+  installation_date: String
+  lat: numeric
+  long: numeric
+  name: String
+}
+
+"""aggregate stddev on columns"""
+type station_stddev_fields {
+  dock_count: Float
+  id: Float
+  lat: Float
+  long: Float
+}
+
+"""
+order by stddev() on columns of table "station"
+"""
+input station_stddev_order_by {
+  dock_count: order_by
+  id: order_by
+  lat: order_by
+  long: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type station_stddev_pop_fields {
+  dock_count: Float
+  id: Float
+  lat: Float
+  long: Float
+}
+
+"""
+order by stddev_pop() on columns of table "station"
+"""
+input station_stddev_pop_order_by {
+  dock_count: order_by
+  id: order_by
+  lat: order_by
+  long: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type station_stddev_samp_fields {
+  dock_count: Float
+  id: Float
+  lat: Float
+  long: Float
+}
+
+"""
+order by stddev_samp() on columns of table "station"
+"""
+input station_stddev_samp_order_by {
+  dock_count: order_by
+  id: order_by
+  lat: order_by
+  long: order_by
+}
+
+"""aggregate sum on columns"""
+type station_sum_fields {
+  dock_count: bigint
+  id: bigint
+  lat: numeric
+  long: numeric
+}
+
+"""
+order by sum() on columns of table "station"
+"""
+input station_sum_order_by {
+  dock_count: order_by
+  id: order_by
+  lat: order_by
+  long: order_by
+}
+
+"""
+update columns of table "station"
+"""
+enum station_update_column {
+  """column name"""
+  city
+
+  """column name"""
+  dock_count
+
+  """column name"""
+  id
+
+  """column name"""
+  installation_date
+
+  """column name"""
+  lat
+
+  """column name"""
+  long
+
+  """column name"""
+  name
+}
+
+"""aggregate var_pop on columns"""
+type station_var_pop_fields {
+  dock_count: Float
+  id: Float
+  lat: Float
+  long: Float
+}
+
+"""
+order by var_pop() on columns of table "station"
+"""
+input station_var_pop_order_by {
+  dock_count: order_by
+  id: order_by
+  lat: order_by
+  long: order_by
+}
+
+"""aggregate var_samp on columns"""
+type station_var_samp_fields {
+  dock_count: Float
+  id: Float
+  lat: Float
+  long: Float
+}
+
+"""
+order by var_samp() on columns of table "station"
+"""
+input station_var_samp_order_by {
+  dock_count: order_by
+  id: order_by
+  lat: order_by
+  long: order_by
+}
+
+"""aggregate variance on columns"""
+type station_variance_fields {
+  dock_count: Float
+  id: Float
+  lat: Float
+  long: Float
+}
+
+"""
+order by variance() on columns of table "station"
+"""
+input station_variance_order_by {
+  dock_count: order_by
+  id: order_by
+  lat: order_by
+  long: order_by
+}
+
+"""
+columns and relationships of "status"
+"""
+type status {
+  bikes_available: bigint
+  docks_available: bigint
+
+  """An object relationship"""
+  station: station
+  station_id: bigint
+  time: String
+}
+
+"""
+aggregated selection of "status"
+"""
+type status_aggregate {
+  aggregate: status_aggregate_fields
+  nodes: [status!]!
+}
+
+"""
+aggregate fields of "status"
+"""
+type status_aggregate_fields {
+  avg: status_avg_fields
+  count(columns: [status_select_column!], distinct: Boolean): Int
+  max: status_max_fields
+  min: status_min_fields
+  stddev: status_stddev_fields
+  stddev_pop: status_stddev_pop_fields
+  stddev_samp: status_stddev_samp_fields
+  sum: status_sum_fields
+  var_pop: status_var_pop_fields
+  var_samp: status_var_samp_fields
+  variance: status_variance_fields
+}
+
+"""
+order by aggregate values of table "status"
+"""
+input status_aggregate_order_by {
+  avg: status_avg_order_by
+  count: order_by
+  max: status_max_order_by
+  min: status_min_order_by
+  stddev: status_stddev_order_by
+  stddev_pop: status_stddev_pop_order_by
+  stddev_samp: status_stddev_samp_order_by
+  sum: status_sum_order_by
+  var_pop: status_var_pop_order_by
+  var_samp: status_var_samp_order_by
+  variance: status_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "status"
+"""
+input status_arr_rel_insert_input {
+  data: [status_insert_input!]!
+}
+
+"""aggregate avg on columns"""
+type status_avg_fields {
+  bikes_available: Float
+  docks_available: Float
+  station_id: Float
+}
+
+"""
+order by avg() on columns of table "status"
+"""
+input status_avg_order_by {
+  bikes_available: order_by
+  docks_available: order_by
+  station_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "status". All fields are combined with a logical 'AND'.
+"""
+input status_bool_exp {
+  _and: [status_bool_exp]
+  _not: status_bool_exp
+  _or: [status_bool_exp]
+  bikes_available: bigint_comparison_exp
+  docks_available: bigint_comparison_exp
+  station: station_bool_exp
+  station_id: bigint_comparison_exp
+  time: String_comparison_exp
+}
+
+"""
+input type for incrementing integer columne in table "status"
+"""
+input status_inc_input {
+  bikes_available: bigint
+  docks_available: bigint
+  station_id: bigint
+}
+
+"""
+input type for inserting data into table "status"
+"""
+input status_insert_input {
+  bikes_available: bigint
+  docks_available: bigint
+  station: station_obj_rel_insert_input
+  station_id: bigint
+  time: String
+}
+
+"""aggregate max on columns"""
+type status_max_fields {
+  bikes_available: bigint
+  docks_available: bigint
+  station_id: bigint
+  time: String
+}
+
+"""
+order by max() on columns of table "status"
+"""
+input status_max_order_by {
+  bikes_available: order_by
+  docks_available: order_by
+  station_id: order_by
+  time: order_by
+}
+
+"""aggregate min on columns"""
+type status_min_fields {
+  bikes_available: bigint
+  docks_available: bigint
+  station_id: bigint
+  time: String
+}
+
+"""
+order by min() on columns of table "status"
+"""
+input status_min_order_by {
+  bikes_available: order_by
+  docks_available: order_by
+  station_id: order_by
+  time: order_by
+}
+
+"""
+response of any mutation on the table "status"
+"""
+type status_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [status!]!
+}
+
+"""
+input type for inserting object relation for remote table "status"
+"""
+input status_obj_rel_insert_input {
+  data: status_insert_input!
+}
+
+"""
+ordering options when selecting data from "status"
+"""
+input status_order_by {
+  bikes_available: order_by
+  docks_available: order_by
+  station: station_order_by
+  station_id: order_by
+  time: order_by
+}
+
+"""
+select columns of table "status"
+"""
+enum status_select_column {
+  """column name"""
+  bikes_available
+
+  """column name"""
+  docks_available
+
+  """column name"""
+  station_id
+
+  """column name"""
+  time
+}
+
+"""
+input type for updating data in table "status"
+"""
+input status_set_input {
+  bikes_available: bigint
+  docks_available: bigint
+  station_id: bigint
+  time: String
+}
+
+"""aggregate stddev on columns"""
+type status_stddev_fields {
+  bikes_available: Float
+  docks_available: Float
+  station_id: Float
+}
+
+"""
+order by stddev() on columns of table "status"
+"""
+input status_stddev_order_by {
+  bikes_available: order_by
+  docks_available: order_by
+  station_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type status_stddev_pop_fields {
+  bikes_available: Float
+  docks_available: Float
+  station_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "status"
+"""
+input status_stddev_pop_order_by {
+  bikes_available: order_by
+  docks_available: order_by
+  station_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type status_stddev_samp_fields {
+  bikes_available: Float
+  docks_available: Float
+  station_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "status"
+"""
+input status_stddev_samp_order_by {
+  bikes_available: order_by
+  docks_available: order_by
+  station_id: order_by
+}
+
+"""aggregate sum on columns"""
+type status_sum_fields {
+  bikes_available: bigint
+  docks_available: bigint
+  station_id: bigint
+}
+
+"""
+order by sum() on columns of table "status"
+"""
+input status_sum_order_by {
+  bikes_available: order_by
+  docks_available: order_by
+  station_id: order_by
+}
+
+"""aggregate var_pop on columns"""
+type status_var_pop_fields {
+  bikes_available: Float
+  docks_available: Float
+  station_id: Float
+}
+
+"""
+order by var_pop() on columns of table "status"
+"""
+input status_var_pop_order_by {
+  bikes_available: order_by
+  docks_available: order_by
+  station_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type status_var_samp_fields {
+  bikes_available: Float
+  docks_available: Float
+  station_id: Float
+}
+
+"""
+order by var_samp() on columns of table "status"
+"""
+input status_var_samp_order_by {
+  bikes_available: order_by
+  docks_available: order_by
+  station_id: order_by
+}
+
+"""aggregate variance on columns"""
+type status_variance_fields {
+  bikes_available: Float
+  docks_available: Float
+  station_id: Float
+}
+
+"""
+order by variance() on columns of table "status"
+"""
+input status_variance_order_by {
+  bikes_available: order_by
+  docks_available: order_by
+  station_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "station"
+  """
+  station(
+    """distinct select on columns"""
+    distinct_on: [station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_order_by!]
+
+    """filter the rows returned"""
+    where: station_bool_exp
+  ): [station!]!
+
+  """
+  fetch aggregated fields from the table: "station"
+  """
+  station_aggregate(
+    """distinct select on columns"""
+    distinct_on: [station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_order_by!]
+
+    """filter the rows returned"""
+    where: station_bool_exp
+  ): station_aggregate!
+
+  """fetch data from the table: "station" using primary key columns"""
+  station_by_pk(id: bigint!): station
+
+  """
+  fetch data from the table: "status"
+  """
+  status(
+    """distinct select on columns"""
+    distinct_on: [status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [status_order_by!]
+
+    """filter the rows returned"""
+    where: status_bool_exp
+  ): [status!]!
+
+  """
+  fetch aggregated fields from the table: "status"
+  """
+  status_aggregate(
+    """distinct select on columns"""
+    distinct_on: [status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [status_order_by!]
+
+    """filter the rows returned"""
+    where: status_bool_exp
+  ): status_aggregate!
+
+  """
+  fetch data from the table: "trip"
+  """
+  trip(
+    """distinct select on columns"""
+    distinct_on: [trip_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [trip_order_by!]
+
+    """filter the rows returned"""
+    where: trip_bool_exp
+  ): [trip!]!
+
+  """
+  fetch aggregated fields from the table: "trip"
+  """
+  trip_aggregate(
+    """distinct select on columns"""
+    distinct_on: [trip_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [trip_order_by!]
+
+    """filter the rows returned"""
+    where: trip_bool_exp
+  ): trip_aggregate!
+
+  """fetch data from the table: "trip" using primary key columns"""
+  trip_by_pk(id: bigint!): trip
+
+  """
+  fetch data from the table: "weather"
+  """
+  weather(
+    """distinct select on columns"""
+    distinct_on: [weather_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [weather_order_by!]
+
+    """filter the rows returned"""
+    where: weather_bool_exp
+  ): [weather!]!
+
+  """
+  fetch aggregated fields from the table: "weather"
+  """
+  weather_aggregate(
+    """distinct select on columns"""
+    distinct_on: [weather_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [weather_order_by!]
+
+    """filter the rows returned"""
+    where: weather_bool_exp
+  ): weather_aggregate!
+}
+
+"""
+columns and relationships of "trip"
+"""
+type trip {
+  bike_id: bigint
+  duration: bigint
+  end_date: String
+  end_station_id: bigint
+  end_station_name: String
+  id: bigint!
+  start_date: String
+  start_station_id: bigint
+  start_station_name: String
+
+  """An object relationship"""
+  stationByEndStationId: station
+
+  """An object relationship"""
+  stationByStartStationId: station
+  subscription_type: String
+
+  """An array relationship"""
+  weathers(
+    """distinct select on columns"""
+    distinct_on: [weather_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [weather_order_by!]
+
+    """filter the rows returned"""
+    where: weather_bool_exp
+  ): [weather!]!
+
+  """An aggregated array relationship"""
+  weathers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [weather_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [weather_order_by!]
+
+    """filter the rows returned"""
+    where: weather_bool_exp
+  ): weather_aggregate!
+  zip_code: bigint
+}
+
+"""
+aggregated selection of "trip"
+"""
+type trip_aggregate {
+  aggregate: trip_aggregate_fields
+  nodes: [trip!]!
+}
+
+"""
+aggregate fields of "trip"
+"""
+type trip_aggregate_fields {
+  avg: trip_avg_fields
+  count(columns: [trip_select_column!], distinct: Boolean): Int
+  max: trip_max_fields
+  min: trip_min_fields
+  stddev: trip_stddev_fields
+  stddev_pop: trip_stddev_pop_fields
+  stddev_samp: trip_stddev_samp_fields
+  sum: trip_sum_fields
+  var_pop: trip_var_pop_fields
+  var_samp: trip_var_samp_fields
+  variance: trip_variance_fields
+}
+
+"""
+order by aggregate values of table "trip"
+"""
+input trip_aggregate_order_by {
+  avg: trip_avg_order_by
+  count: order_by
+  max: trip_max_order_by
+  min: trip_min_order_by
+  stddev: trip_stddev_order_by
+  stddev_pop: trip_stddev_pop_order_by
+  stddev_samp: trip_stddev_samp_order_by
+  sum: trip_sum_order_by
+  var_pop: trip_var_pop_order_by
+  var_samp: trip_var_samp_order_by
+  variance: trip_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "trip"
+"""
+input trip_arr_rel_insert_input {
+  data: [trip_insert_input!]!
+  on_conflict: trip_on_conflict
+}
+
+"""aggregate avg on columns"""
+type trip_avg_fields {
+  bike_id: Float
+  duration: Float
+  end_station_id: Float
+  id: Float
+  start_station_id: Float
+  zip_code: Float
+}
+
+"""
+order by avg() on columns of table "trip"
+"""
+input trip_avg_order_by {
+  bike_id: order_by
+  duration: order_by
+  end_station_id: order_by
+  id: order_by
+  start_station_id: order_by
+  zip_code: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "trip". All fields are combined with a logical 'AND'.
+"""
+input trip_bool_exp {
+  _and: [trip_bool_exp]
+  _not: trip_bool_exp
+  _or: [trip_bool_exp]
+  bike_id: bigint_comparison_exp
+  duration: bigint_comparison_exp
+  end_date: String_comparison_exp
+  end_station_id: bigint_comparison_exp
+  end_station_name: String_comparison_exp
+  id: bigint_comparison_exp
+  start_date: String_comparison_exp
+  start_station_id: bigint_comparison_exp
+  start_station_name: String_comparison_exp
+  stationByEndStationId: station_bool_exp
+  stationByStartStationId: station_bool_exp
+  subscription_type: String_comparison_exp
+  weathers: weather_bool_exp
+  zip_code: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "trip"
+"""
+enum trip_constraint {
+  """unique or primary key constraint"""
+  idx_17908_trip_pkey
+}
+
+"""
+input type for incrementing integer columne in table "trip"
+"""
+input trip_inc_input {
+  bike_id: bigint
+  duration: bigint
+  end_station_id: bigint
+  id: bigint
+  start_station_id: bigint
+  zip_code: bigint
+}
+
+"""
+input type for inserting data into table "trip"
+"""
+input trip_insert_input {
+  bike_id: bigint
+  duration: bigint
+  end_date: String
+  end_station_id: bigint
+  end_station_name: String
+  id: bigint
+  start_date: String
+  start_station_id: bigint
+  start_station_name: String
+  stationByEndStationId: station_obj_rel_insert_input
+  stationByStartStationId: station_obj_rel_insert_input
+  subscription_type: String
+  weathers: weather_arr_rel_insert_input
+  zip_code: bigint
+}
+
+"""aggregate max on columns"""
+type trip_max_fields {
+  bike_id: bigint
+  duration: bigint
+  end_date: String
+  end_station_id: bigint
+  end_station_name: String
+  id: bigint
+  start_date: String
+  start_station_id: bigint
+  start_station_name: String
+  subscription_type: String
+  zip_code: bigint
+}
+
+"""
+order by max() on columns of table "trip"
+"""
+input trip_max_order_by {
+  bike_id: order_by
+  duration: order_by
+  end_date: order_by
+  end_station_id: order_by
+  end_station_name: order_by
+  id: order_by
+  start_date: order_by
+  start_station_id: order_by
+  start_station_name: order_by
+  subscription_type: order_by
+  zip_code: order_by
+}
+
+"""aggregate min on columns"""
+type trip_min_fields {
+  bike_id: bigint
+  duration: bigint
+  end_date: String
+  end_station_id: bigint
+  end_station_name: String
+  id: bigint
+  start_date: String
+  start_station_id: bigint
+  start_station_name: String
+  subscription_type: String
+  zip_code: bigint
+}
+
+"""
+order by min() on columns of table "trip"
+"""
+input trip_min_order_by {
+  bike_id: order_by
+  duration: order_by
+  end_date: order_by
+  end_station_id: order_by
+  end_station_name: order_by
+  id: order_by
+  start_date: order_by
+  start_station_id: order_by
+  start_station_name: order_by
+  subscription_type: order_by
+  zip_code: order_by
+}
+
+"""
+response of any mutation on the table "trip"
+"""
+type trip_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [trip!]!
+}
+
+"""
+input type for inserting object relation for remote table "trip"
+"""
+input trip_obj_rel_insert_input {
+  data: trip_insert_input!
+  on_conflict: trip_on_conflict
+}
+
+"""
+on conflict condition type for table "trip"
+"""
+input trip_on_conflict {
+  constraint: trip_constraint!
+  update_columns: [trip_update_column!]!
+  where: trip_bool_exp
+}
+
+"""
+ordering options when selecting data from "trip"
+"""
+input trip_order_by {
+  bike_id: order_by
+  duration: order_by
+  end_date: order_by
+  end_station_id: order_by
+  end_station_name: order_by
+  id: order_by
+  start_date: order_by
+  start_station_id: order_by
+  start_station_name: order_by
+  stationByEndStationId: station_order_by
+  stationByStartStationId: station_order_by
+  subscription_type: order_by
+  weathers_aggregate: weather_aggregate_order_by
+  zip_code: order_by
+}
+
+"""
+select columns of table "trip"
+"""
+enum trip_select_column {
+  """column name"""
+  bike_id
+
+  """column name"""
+  duration
+
+  """column name"""
+  end_date
+
+  """column name"""
+  end_station_id
+
+  """column name"""
+  end_station_name
+
+  """column name"""
+  id
+
+  """column name"""
+  start_date
+
+  """column name"""
+  start_station_id
+
+  """column name"""
+  start_station_name
+
+  """column name"""
+  subscription_type
+
+  """column name"""
+  zip_code
+}
+
+"""
+input type for updating data in table "trip"
+"""
+input trip_set_input {
+  bike_id: bigint
+  duration: bigint
+  end_date: String
+  end_station_id: bigint
+  end_station_name: String
+  id: bigint
+  start_date: String
+  start_station_id: bigint
+  start_station_name: String
+  subscription_type: String
+  zip_code: bigint
+}
+
+"""aggregate stddev on columns"""
+type trip_stddev_fields {
+  bike_id: Float
+  duration: Float
+  end_station_id: Float
+  id: Float
+  start_station_id: Float
+  zip_code: Float
+}
+
+"""
+order by stddev() on columns of table "trip"
+"""
+input trip_stddev_order_by {
+  bike_id: order_by
+  duration: order_by
+  end_station_id: order_by
+  id: order_by
+  start_station_id: order_by
+  zip_code: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type trip_stddev_pop_fields {
+  bike_id: Float
+  duration: Float
+  end_station_id: Float
+  id: Float
+  start_station_id: Float
+  zip_code: Float
+}
+
+"""
+order by stddev_pop() on columns of table "trip"
+"""
+input trip_stddev_pop_order_by {
+  bike_id: order_by
+  duration: order_by
+  end_station_id: order_by
+  id: order_by
+  start_station_id: order_by
+  zip_code: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type trip_stddev_samp_fields {
+  bike_id: Float
+  duration: Float
+  end_station_id: Float
+  id: Float
+  start_station_id: Float
+  zip_code: Float
+}
+
+"""
+order by stddev_samp() on columns of table "trip"
+"""
+input trip_stddev_samp_order_by {
+  bike_id: order_by
+  duration: order_by
+  end_station_id: order_by
+  id: order_by
+  start_station_id: order_by
+  zip_code: order_by
+}
+
+"""aggregate sum on columns"""
+type trip_sum_fields {
+  bike_id: bigint
+  duration: bigint
+  end_station_id: bigint
+  id: bigint
+  start_station_id: bigint
+  zip_code: bigint
+}
+
+"""
+order by sum() on columns of table "trip"
+"""
+input trip_sum_order_by {
+  bike_id: order_by
+  duration: order_by
+  end_station_id: order_by
+  id: order_by
+  start_station_id: order_by
+  zip_code: order_by
+}
+
+"""
+update columns of table "trip"
+"""
+enum trip_update_column {
+  """column name"""
+  bike_id
+
+  """column name"""
+  duration
+
+  """column name"""
+  end_date
+
+  """column name"""
+  end_station_id
+
+  """column name"""
+  end_station_name
+
+  """column name"""
+  id
+
+  """column name"""
+  start_date
+
+  """column name"""
+  start_station_id
+
+  """column name"""
+  start_station_name
+
+  """column name"""
+  subscription_type
+
+  """column name"""
+  zip_code
+}
+
+"""aggregate var_pop on columns"""
+type trip_var_pop_fields {
+  bike_id: Float
+  duration: Float
+  end_station_id: Float
+  id: Float
+  start_station_id: Float
+  zip_code: Float
+}
+
+"""
+order by var_pop() on columns of table "trip"
+"""
+input trip_var_pop_order_by {
+  bike_id: order_by
+  duration: order_by
+  end_station_id: order_by
+  id: order_by
+  start_station_id: order_by
+  zip_code: order_by
+}
+
+"""aggregate var_samp on columns"""
+type trip_var_samp_fields {
+  bike_id: Float
+  duration: Float
+  end_station_id: Float
+  id: Float
+  start_station_id: Float
+  zip_code: Float
+}
+
+"""
+order by var_samp() on columns of table "trip"
+"""
+input trip_var_samp_order_by {
+  bike_id: order_by
+  duration: order_by
+  end_station_id: order_by
+  id: order_by
+  start_station_id: order_by
+  zip_code: order_by
+}
+
+"""aggregate variance on columns"""
+type trip_variance_fields {
+  bike_id: Float
+  duration: Float
+  end_station_id: Float
+  id: Float
+  start_station_id: Float
+  zip_code: Float
+}
+
+"""
+order by variance() on columns of table "trip"
+"""
+input trip_variance_order_by {
+  bike_id: order_by
+  duration: order_by
+  end_station_id: order_by
+  id: order_by
+  start_station_id: order_by
+  zip_code: order_by
+}
+
+"""
+columns and relationships of "weather"
+"""
+type weather {
+  cloud_cover: bigint
+  date: String
+  events: String
+  max_dew_point_f: bigint
+  max_gust_speed_mph: bigint
+  max_humidity: bigint
+  max_sea_level_pressure_inches: numeric
+  max_temperature_f: bigint
+  max_visibility_miles: bigint
+  max_wind_speed_mph: bigint
+  mean_dew_point_f: bigint
+  mean_humidity: bigint
+  mean_sea_level_pressure_inches: numeric
+  mean_temperature_f: bigint
+  mean_visibility_miles: bigint
+  mean_wind_speed_mph: bigint
+  min_dew_point_f: bigint
+  min_humidity: bigint
+  min_sea_level_pressure_inches: numeric
+  min_temperature_f: bigint
+  min_visibility_miles: bigint
+  precipitation_inches: bigint
+
+  """An array relationship"""
+  trips(
+    """distinct select on columns"""
+    distinct_on: [weather_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [weather_order_by!]
+
+    """filter the rows returned"""
+    where: weather_bool_exp
+  ): [weather!]!
+
+  """An aggregated array relationship"""
+  trips_aggregate(
+    """distinct select on columns"""
+    distinct_on: [weather_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [weather_order_by!]
+
+    """filter the rows returned"""
+    where: weather_bool_exp
+  ): weather_aggregate!
+  wind_dir_degrees: bigint
+  zip_code: bigint
+}
+
+"""
+aggregated selection of "weather"
+"""
+type weather_aggregate {
+  aggregate: weather_aggregate_fields
+  nodes: [weather!]!
+}
+
+"""
+aggregate fields of "weather"
+"""
+type weather_aggregate_fields {
+  avg: weather_avg_fields
+  count(columns: [weather_select_column!], distinct: Boolean): Int
+  max: weather_max_fields
+  min: weather_min_fields
+  stddev: weather_stddev_fields
+  stddev_pop: weather_stddev_pop_fields
+  stddev_samp: weather_stddev_samp_fields
+  sum: weather_sum_fields
+  var_pop: weather_var_pop_fields
+  var_samp: weather_var_samp_fields
+  variance: weather_variance_fields
+}
+
+"""
+order by aggregate values of table "weather"
+"""
+input weather_aggregate_order_by {
+  avg: weather_avg_order_by
+  count: order_by
+  max: weather_max_order_by
+  min: weather_min_order_by
+  stddev: weather_stddev_order_by
+  stddev_pop: weather_stddev_pop_order_by
+  stddev_samp: weather_stddev_samp_order_by
+  sum: weather_sum_order_by
+  var_pop: weather_var_pop_order_by
+  var_samp: weather_var_samp_order_by
+  variance: weather_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "weather"
+"""
+input weather_arr_rel_insert_input {
+  data: [weather_insert_input!]!
+}
+
+"""aggregate avg on columns"""
+type weather_avg_fields {
+  cloud_cover: Float
+  max_dew_point_f: Float
+  max_gust_speed_mph: Float
+  max_humidity: Float
+  max_sea_level_pressure_inches: Float
+  max_temperature_f: Float
+  max_visibility_miles: Float
+  max_wind_speed_mph: Float
+  mean_dew_point_f: Float
+  mean_humidity: Float
+  mean_sea_level_pressure_inches: Float
+  mean_temperature_f: Float
+  mean_visibility_miles: Float
+  mean_wind_speed_mph: Float
+  min_dew_point_f: Float
+  min_humidity: Float
+  min_sea_level_pressure_inches: Float
+  min_temperature_f: Float
+  min_visibility_miles: Float
+  precipitation_inches: Float
+  wind_dir_degrees: Float
+  zip_code: Float
+}
+
+"""
+order by avg() on columns of table "weather"
+"""
+input weather_avg_order_by {
+  cloud_cover: order_by
+  max_dew_point_f: order_by
+  max_gust_speed_mph: order_by
+  max_humidity: order_by
+  max_sea_level_pressure_inches: order_by
+  max_temperature_f: order_by
+  max_visibility_miles: order_by
+  max_wind_speed_mph: order_by
+  mean_dew_point_f: order_by
+  mean_humidity: order_by
+  mean_sea_level_pressure_inches: order_by
+  mean_temperature_f: order_by
+  mean_visibility_miles: order_by
+  mean_wind_speed_mph: order_by
+  min_dew_point_f: order_by
+  min_humidity: order_by
+  min_sea_level_pressure_inches: order_by
+  min_temperature_f: order_by
+  min_visibility_miles: order_by
+  precipitation_inches: order_by
+  wind_dir_degrees: order_by
+  zip_code: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "weather". All fields are combined with a logical 'AND'.
+"""
+input weather_bool_exp {
+  _and: [weather_bool_exp]
+  _not: weather_bool_exp
+  _or: [weather_bool_exp]
+  cloud_cover: bigint_comparison_exp
+  date: String_comparison_exp
+  events: String_comparison_exp
+  max_dew_point_f: bigint_comparison_exp
+  max_gust_speed_mph: bigint_comparison_exp
+  max_humidity: bigint_comparison_exp
+  max_sea_level_pressure_inches: numeric_comparison_exp
+  max_temperature_f: bigint_comparison_exp
+  max_visibility_miles: bigint_comparison_exp
+  max_wind_speed_mph: bigint_comparison_exp
+  mean_dew_point_f: bigint_comparison_exp
+  mean_humidity: bigint_comparison_exp
+  mean_sea_level_pressure_inches: numeric_comparison_exp
+  mean_temperature_f: bigint_comparison_exp
+  mean_visibility_miles: bigint_comparison_exp
+  mean_wind_speed_mph: bigint_comparison_exp
+  min_dew_point_f: bigint_comparison_exp
+  min_humidity: bigint_comparison_exp
+  min_sea_level_pressure_inches: numeric_comparison_exp
+  min_temperature_f: bigint_comparison_exp
+  min_visibility_miles: bigint_comparison_exp
+  precipitation_inches: bigint_comparison_exp
+  trips: weather_bool_exp
+  wind_dir_degrees: bigint_comparison_exp
+  zip_code: bigint_comparison_exp
+}
+
+"""
+input type for incrementing integer columne in table "weather"
+"""
+input weather_inc_input {
+  cloud_cover: bigint
+  max_dew_point_f: bigint
+  max_gust_speed_mph: bigint
+  max_humidity: bigint
+  max_temperature_f: bigint
+  max_visibility_miles: bigint
+  max_wind_speed_mph: bigint
+  mean_dew_point_f: bigint
+  mean_humidity: bigint
+  mean_temperature_f: bigint
+  mean_visibility_miles: bigint
+  mean_wind_speed_mph: bigint
+  min_dew_point_f: bigint
+  min_humidity: bigint
+  min_temperature_f: bigint
+  min_visibility_miles: bigint
+  precipitation_inches: bigint
+  wind_dir_degrees: bigint
+  zip_code: bigint
+}
+
+"""
+input type for inserting data into table "weather"
+"""
+input weather_insert_input {
+  cloud_cover: bigint
+  date: String
+  events: String
+  max_dew_point_f: bigint
+  max_gust_speed_mph: bigint
+  max_humidity: bigint
+  max_sea_level_pressure_inches: numeric
+  max_temperature_f: bigint
+  max_visibility_miles: bigint
+  max_wind_speed_mph: bigint
+  mean_dew_point_f: bigint
+  mean_humidity: bigint
+  mean_sea_level_pressure_inches: numeric
+  mean_temperature_f: bigint
+  mean_visibility_miles: bigint
+  mean_wind_speed_mph: bigint
+  min_dew_point_f: bigint
+  min_humidity: bigint
+  min_sea_level_pressure_inches: numeric
+  min_temperature_f: bigint
+  min_visibility_miles: bigint
+  precipitation_inches: bigint
+  trips: weather_arr_rel_insert_input
+  wind_dir_degrees: bigint
+  zip_code: bigint
+}
+
+"""aggregate max on columns"""
+type weather_max_fields {
+  cloud_cover: bigint
+  date: String
+  events: String
+  max_dew_point_f: bigint
+  max_gust_speed_mph: bigint
+  max_humidity: bigint
+  max_sea_level_pressure_inches: numeric
+  max_temperature_f: bigint
+  max_visibility_miles: bigint
+  max_wind_speed_mph: bigint
+  mean_dew_point_f: bigint
+  mean_humidity: bigint
+  mean_sea_level_pressure_inches: numeric
+  mean_temperature_f: bigint
+  mean_visibility_miles: bigint
+  mean_wind_speed_mph: bigint
+  min_dew_point_f: bigint
+  min_humidity: bigint
+  min_sea_level_pressure_inches: numeric
+  min_temperature_f: bigint
+  min_visibility_miles: bigint
+  precipitation_inches: bigint
+  wind_dir_degrees: bigint
+  zip_code: bigint
+}
+
+"""
+order by max() on columns of table "weather"
+"""
+input weather_max_order_by {
+  cloud_cover: order_by
+  date: order_by
+  events: order_by
+  max_dew_point_f: order_by
+  max_gust_speed_mph: order_by
+  max_humidity: order_by
+  max_sea_level_pressure_inches: order_by
+  max_temperature_f: order_by
+  max_visibility_miles: order_by
+  max_wind_speed_mph: order_by
+  mean_dew_point_f: order_by
+  mean_humidity: order_by
+  mean_sea_level_pressure_inches: order_by
+  mean_temperature_f: order_by
+  mean_visibility_miles: order_by
+  mean_wind_speed_mph: order_by
+  min_dew_point_f: order_by
+  min_humidity: order_by
+  min_sea_level_pressure_inches: order_by
+  min_temperature_f: order_by
+  min_visibility_miles: order_by
+  precipitation_inches: order_by
+  wind_dir_degrees: order_by
+  zip_code: order_by
+}
+
+"""aggregate min on columns"""
+type weather_min_fields {
+  cloud_cover: bigint
+  date: String
+  events: String
+  max_dew_point_f: bigint
+  max_gust_speed_mph: bigint
+  max_humidity: bigint
+  max_sea_level_pressure_inches: numeric
+  max_temperature_f: bigint
+  max_visibility_miles: bigint
+  max_wind_speed_mph: bigint
+  mean_dew_point_f: bigint
+  mean_humidity: bigint
+  mean_sea_level_pressure_inches: numeric
+  mean_temperature_f: bigint
+  mean_visibility_miles: bigint
+  mean_wind_speed_mph: bigint
+  min_dew_point_f: bigint
+  min_humidity: bigint
+  min_sea_level_pressure_inches: numeric
+  min_temperature_f: bigint
+  min_visibility_miles: bigint
+  precipitation_inches: bigint
+  wind_dir_degrees: bigint
+  zip_code: bigint
+}
+
+"""
+order by min() on columns of table "weather"
+"""
+input weather_min_order_by {
+  cloud_cover: order_by
+  date: order_by
+  events: order_by
+  max_dew_point_f: order_by
+  max_gust_speed_mph: order_by
+  max_humidity: order_by
+  max_sea_level_pressure_inches: order_by
+  max_temperature_f: order_by
+  max_visibility_miles: order_by
+  max_wind_speed_mph: order_by
+  mean_dew_point_f: order_by
+  mean_humidity: order_by
+  mean_sea_level_pressure_inches: order_by
+  mean_temperature_f: order_by
+  mean_visibility_miles: order_by
+  mean_wind_speed_mph: order_by
+  min_dew_point_f: order_by
+  min_humidity: order_by
+  min_sea_level_pressure_inches: order_by
+  min_temperature_f: order_by
+  min_visibility_miles: order_by
+  precipitation_inches: order_by
+  wind_dir_degrees: order_by
+  zip_code: order_by
+}
+
+"""
+response of any mutation on the table "weather"
+"""
+type weather_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [weather!]!
+}
+
+"""
+input type for inserting object relation for remote table "weather"
+"""
+input weather_obj_rel_insert_input {
+  data: weather_insert_input!
+}
+
+"""
+ordering options when selecting data from "weather"
+"""
+input weather_order_by {
+  cloud_cover: order_by
+  date: order_by
+  events: order_by
+  max_dew_point_f: order_by
+  max_gust_speed_mph: order_by
+  max_humidity: order_by
+  max_sea_level_pressure_inches: order_by
+  max_temperature_f: order_by
+  max_visibility_miles: order_by
+  max_wind_speed_mph: order_by
+  mean_dew_point_f: order_by
+  mean_humidity: order_by
+  mean_sea_level_pressure_inches: order_by
+  mean_temperature_f: order_by
+  mean_visibility_miles: order_by
+  mean_wind_speed_mph: order_by
+  min_dew_point_f: order_by
+  min_humidity: order_by
+  min_sea_level_pressure_inches: order_by
+  min_temperature_f: order_by
+  min_visibility_miles: order_by
+  precipitation_inches: order_by
+  trips_aggregate: weather_aggregate_order_by
+  wind_dir_degrees: order_by
+  zip_code: order_by
+}
+
+"""
+select columns of table "weather"
+"""
+enum weather_select_column {
+  """column name"""
+  cloud_cover
+
+  """column name"""
+  date
+
+  """column name"""
+  events
+
+  """column name"""
+  max_dew_point_f
+
+  """column name"""
+  max_gust_speed_mph
+
+  """column name"""
+  max_humidity
+
+  """column name"""
+  max_sea_level_pressure_inches
+
+  """column name"""
+  max_temperature_f
+
+  """column name"""
+  max_visibility_miles
+
+  """column name"""
+  max_wind_speed_mph
+
+  """column name"""
+  mean_dew_point_f
+
+  """column name"""
+  mean_humidity
+
+  """column name"""
+  mean_sea_level_pressure_inches
+
+  """column name"""
+  mean_temperature_f
+
+  """column name"""
+  mean_visibility_miles
+
+  """column name"""
+  mean_wind_speed_mph
+
+  """column name"""
+  min_dew_point_f
+
+  """column name"""
+  min_humidity
+
+  """column name"""
+  min_sea_level_pressure_inches
+
+  """column name"""
+  min_temperature_f
+
+  """column name"""
+  min_visibility_miles
+
+  """column name"""
+  precipitation_inches
+
+  """column name"""
+  wind_dir_degrees
+
+  """column name"""
+  zip_code
+}
+
+"""
+input type for updating data in table "weather"
+"""
+input weather_set_input {
+  cloud_cover: bigint
+  date: String
+  events: String
+  max_dew_point_f: bigint
+  max_gust_speed_mph: bigint
+  max_humidity: bigint
+  max_sea_level_pressure_inches: numeric
+  max_temperature_f: bigint
+  max_visibility_miles: bigint
+  max_wind_speed_mph: bigint
+  mean_dew_point_f: bigint
+  mean_humidity: bigint
+  mean_sea_level_pressure_inches: numeric
+  mean_temperature_f: bigint
+  mean_visibility_miles: bigint
+  mean_wind_speed_mph: bigint
+  min_dew_point_f: bigint
+  min_humidity: bigint
+  min_sea_level_pressure_inches: numeric
+  min_temperature_f: bigint
+  min_visibility_miles: bigint
+  precipitation_inches: bigint
+  wind_dir_degrees: bigint
+  zip_code: bigint
+}
+
+"""aggregate stddev on columns"""
+type weather_stddev_fields {
+  cloud_cover: Float
+  max_dew_point_f: Float
+  max_gust_speed_mph: Float
+  max_humidity: Float
+  max_sea_level_pressure_inches: Float
+  max_temperature_f: Float
+  max_visibility_miles: Float
+  max_wind_speed_mph: Float
+  mean_dew_point_f: Float
+  mean_humidity: Float
+  mean_sea_level_pressure_inches: Float
+  mean_temperature_f: Float
+  mean_visibility_miles: Float
+  mean_wind_speed_mph: Float
+  min_dew_point_f: Float
+  min_humidity: Float
+  min_sea_level_pressure_inches: Float
+  min_temperature_f: Float
+  min_visibility_miles: Float
+  precipitation_inches: Float
+  wind_dir_degrees: Float
+  zip_code: Float
+}
+
+"""
+order by stddev() on columns of table "weather"
+"""
+input weather_stddev_order_by {
+  cloud_cover: order_by
+  max_dew_point_f: order_by
+  max_gust_speed_mph: order_by
+  max_humidity: order_by
+  max_sea_level_pressure_inches: order_by
+  max_temperature_f: order_by
+  max_visibility_miles: order_by
+  max_wind_speed_mph: order_by
+  mean_dew_point_f: order_by
+  mean_humidity: order_by
+  mean_sea_level_pressure_inches: order_by
+  mean_temperature_f: order_by
+  mean_visibility_miles: order_by
+  mean_wind_speed_mph: order_by
+  min_dew_point_f: order_by
+  min_humidity: order_by
+  min_sea_level_pressure_inches: order_by
+  min_temperature_f: order_by
+  min_visibility_miles: order_by
+  precipitation_inches: order_by
+  wind_dir_degrees: order_by
+  zip_code: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type weather_stddev_pop_fields {
+  cloud_cover: Float
+  max_dew_point_f: Float
+  max_gust_speed_mph: Float
+  max_humidity: Float
+  max_sea_level_pressure_inches: Float
+  max_temperature_f: Float
+  max_visibility_miles: Float
+  max_wind_speed_mph: Float
+  mean_dew_point_f: Float
+  mean_humidity: Float
+  mean_sea_level_pressure_inches: Float
+  mean_temperature_f: Float
+  mean_visibility_miles: Float
+  mean_wind_speed_mph: Float
+  min_dew_point_f: Float
+  min_humidity: Float
+  min_sea_level_pressure_inches: Float
+  min_temperature_f: Float
+  min_visibility_miles: Float
+  precipitation_inches: Float
+  wind_dir_degrees: Float
+  zip_code: Float
+}
+
+"""
+order by stddev_pop() on columns of table "weather"
+"""
+input weather_stddev_pop_order_by {
+  cloud_cover: order_by
+  max_dew_point_f: order_by
+  max_gust_speed_mph: order_by
+  max_humidity: order_by
+  max_sea_level_pressure_inches: order_by
+  max_temperature_f: order_by
+  max_visibility_miles: order_by
+  max_wind_speed_mph: order_by
+  mean_dew_point_f: order_by
+  mean_humidity: order_by
+  mean_sea_level_pressure_inches: order_by
+  mean_temperature_f: order_by
+  mean_visibility_miles: order_by
+  mean_wind_speed_mph: order_by
+  min_dew_point_f: order_by
+  min_humidity: order_by
+  min_sea_level_pressure_inches: order_by
+  min_temperature_f: order_by
+  min_visibility_miles: order_by
+  precipitation_inches: order_by
+  wind_dir_degrees: order_by
+  zip_code: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type weather_stddev_samp_fields {
+  cloud_cover: Float
+  max_dew_point_f: Float
+  max_gust_speed_mph: Float
+  max_humidity: Float
+  max_sea_level_pressure_inches: Float
+  max_temperature_f: Float
+  max_visibility_miles: Float
+  max_wind_speed_mph: Float
+  mean_dew_point_f: Float
+  mean_humidity: Float
+  mean_sea_level_pressure_inches: Float
+  mean_temperature_f: Float
+  mean_visibility_miles: Float
+  mean_wind_speed_mph: Float
+  min_dew_point_f: Float
+  min_humidity: Float
+  min_sea_level_pressure_inches: Float
+  min_temperature_f: Float
+  min_visibility_miles: Float
+  precipitation_inches: Float
+  wind_dir_degrees: Float
+  zip_code: Float
+}
+
+"""
+order by stddev_samp() on columns of table "weather"
+"""
+input weather_stddev_samp_order_by {
+  cloud_cover: order_by
+  max_dew_point_f: order_by
+  max_gust_speed_mph: order_by
+  max_humidity: order_by
+  max_sea_level_pressure_inches: order_by
+  max_temperature_f: order_by
+  max_visibility_miles: order_by
+  max_wind_speed_mph: order_by
+  mean_dew_point_f: order_by
+  mean_humidity: order_by
+  mean_sea_level_pressure_inches: order_by
+  mean_temperature_f: order_by
+  mean_visibility_miles: order_by
+  mean_wind_speed_mph: order_by
+  min_dew_point_f: order_by
+  min_humidity: order_by
+  min_sea_level_pressure_inches: order_by
+  min_temperature_f: order_by
+  min_visibility_miles: order_by
+  precipitation_inches: order_by
+  wind_dir_degrees: order_by
+  zip_code: order_by
+}
+
+"""aggregate sum on columns"""
+type weather_sum_fields {
+  cloud_cover: bigint
+  max_dew_point_f: bigint
+  max_gust_speed_mph: bigint
+  max_humidity: bigint
+  max_sea_level_pressure_inches: numeric
+  max_temperature_f: bigint
+  max_visibility_miles: bigint
+  max_wind_speed_mph: bigint
+  mean_dew_point_f: bigint
+  mean_humidity: bigint
+  mean_sea_level_pressure_inches: numeric
+  mean_temperature_f: bigint
+  mean_visibility_miles: bigint
+  mean_wind_speed_mph: bigint
+  min_dew_point_f: bigint
+  min_humidity: bigint
+  min_sea_level_pressure_inches: numeric
+  min_temperature_f: bigint
+  min_visibility_miles: bigint
+  precipitation_inches: bigint
+  wind_dir_degrees: bigint
+  zip_code: bigint
+}
+
+"""
+order by sum() on columns of table "weather"
+"""
+input weather_sum_order_by {
+  cloud_cover: order_by
+  max_dew_point_f: order_by
+  max_gust_speed_mph: order_by
+  max_humidity: order_by
+  max_sea_level_pressure_inches: order_by
+  max_temperature_f: order_by
+  max_visibility_miles: order_by
+  max_wind_speed_mph: order_by
+  mean_dew_point_f: order_by
+  mean_humidity: order_by
+  mean_sea_level_pressure_inches: order_by
+  mean_temperature_f: order_by
+  mean_visibility_miles: order_by
+  mean_wind_speed_mph: order_by
+  min_dew_point_f: order_by
+  min_humidity: order_by
+  min_sea_level_pressure_inches: order_by
+  min_temperature_f: order_by
+  min_visibility_miles: order_by
+  precipitation_inches: order_by
+  wind_dir_degrees: order_by
+  zip_code: order_by
+}
+
+"""aggregate var_pop on columns"""
+type weather_var_pop_fields {
+  cloud_cover: Float
+  max_dew_point_f: Float
+  max_gust_speed_mph: Float
+  max_humidity: Float
+  max_sea_level_pressure_inches: Float
+  max_temperature_f: Float
+  max_visibility_miles: Float
+  max_wind_speed_mph: Float
+  mean_dew_point_f: Float
+  mean_humidity: Float
+  mean_sea_level_pressure_inches: Float
+  mean_temperature_f: Float
+  mean_visibility_miles: Float
+  mean_wind_speed_mph: Float
+  min_dew_point_f: Float
+  min_humidity: Float
+  min_sea_level_pressure_inches: Float
+  min_temperature_f: Float
+  min_visibility_miles: Float
+  precipitation_inches: Float
+  wind_dir_degrees: Float
+  zip_code: Float
+}
+
+"""
+order by var_pop() on columns of table "weather"
+"""
+input weather_var_pop_order_by {
+  cloud_cover: order_by
+  max_dew_point_f: order_by
+  max_gust_speed_mph: order_by
+  max_humidity: order_by
+  max_sea_level_pressure_inches: order_by
+  max_temperature_f: order_by
+  max_visibility_miles: order_by
+  max_wind_speed_mph: order_by
+  mean_dew_point_f: order_by
+  mean_humidity: order_by
+  mean_sea_level_pressure_inches: order_by
+  mean_temperature_f: order_by
+  mean_visibility_miles: order_by
+  mean_wind_speed_mph: order_by
+  min_dew_point_f: order_by
+  min_humidity: order_by
+  min_sea_level_pressure_inches: order_by
+  min_temperature_f: order_by
+  min_visibility_miles: order_by
+  precipitation_inches: order_by
+  wind_dir_degrees: order_by
+  zip_code: order_by
+}
+
+"""aggregate var_samp on columns"""
+type weather_var_samp_fields {
+  cloud_cover: Float
+  max_dew_point_f: Float
+  max_gust_speed_mph: Float
+  max_humidity: Float
+  max_sea_level_pressure_inches: Float
+  max_temperature_f: Float
+  max_visibility_miles: Float
+  max_wind_speed_mph: Float
+  mean_dew_point_f: Float
+  mean_humidity: Float
+  mean_sea_level_pressure_inches: Float
+  mean_temperature_f: Float
+  mean_visibility_miles: Float
+  mean_wind_speed_mph: Float
+  min_dew_point_f: Float
+  min_humidity: Float
+  min_sea_level_pressure_inches: Float
+  min_temperature_f: Float
+  min_visibility_miles: Float
+  precipitation_inches: Float
+  wind_dir_degrees: Float
+  zip_code: Float
+}
+
+"""
+order by var_samp() on columns of table "weather"
+"""
+input weather_var_samp_order_by {
+  cloud_cover: order_by
+  max_dew_point_f: order_by
+  max_gust_speed_mph: order_by
+  max_humidity: order_by
+  max_sea_level_pressure_inches: order_by
+  max_temperature_f: order_by
+  max_visibility_miles: order_by
+  max_wind_speed_mph: order_by
+  mean_dew_point_f: order_by
+  mean_humidity: order_by
+  mean_sea_level_pressure_inches: order_by
+  mean_temperature_f: order_by
+  mean_visibility_miles: order_by
+  mean_wind_speed_mph: order_by
+  min_dew_point_f: order_by
+  min_humidity: order_by
+  min_sea_level_pressure_inches: order_by
+  min_temperature_f: order_by
+  min_visibility_miles: order_by
+  precipitation_inches: order_by
+  wind_dir_degrees: order_by
+  zip_code: order_by
+}
+
+"""aggregate variance on columns"""
+type weather_variance_fields {
+  cloud_cover: Float
+  max_dew_point_f: Float
+  max_gust_speed_mph: Float
+  max_humidity: Float
+  max_sea_level_pressure_inches: Float
+  max_temperature_f: Float
+  max_visibility_miles: Float
+  max_wind_speed_mph: Float
+  mean_dew_point_f: Float
+  mean_humidity: Float
+  mean_sea_level_pressure_inches: Float
+  mean_temperature_f: Float
+  mean_visibility_miles: Float
+  mean_wind_speed_mph: Float
+  min_dew_point_f: Float
+  min_humidity: Float
+  min_sea_level_pressure_inches: Float
+  min_temperature_f: Float
+  min_visibility_miles: Float
+  precipitation_inches: Float
+  wind_dir_degrees: Float
+  zip_code: Float
+}
+
+"""
+order by variance() on columns of table "weather"
+"""
+input weather_variance_order_by {
+  cloud_cover: order_by
+  max_dew_point_f: order_by
+  max_gust_speed_mph: order_by
+  max_humidity: order_by
+  max_sea_level_pressure_inches: order_by
+  max_temperature_f: order_by
+  max_visibility_miles: order_by
+  max_wind_speed_mph: order_by
+  mean_dew_point_f: order_by
+  mean_humidity: order_by
+  mean_sea_level_pressure_inches: order_by
+  mean_temperature_f: order_by
+  mean_visibility_miles: order_by
+  mean_wind_speed_mph: order_by
+  min_dew_point_f: order_by
+  min_humidity: order_by
+  min_sea_level_pressure_inches: order_by
+  min_temperature_f: order_by
+  min_visibility_miles: order_by
+  precipitation_inches: order_by
+  wind_dir_degrees: order_by
+  zip_code: order_by
+}

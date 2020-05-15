@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import Utilities
 /// Parses all the examples belonging to a single database and schema.
 /// Strategy: Create different GraphqlQueries and combine them once we know everything we need.
 class DatabaseExamplesParser: Codable {
@@ -25,6 +25,9 @@ class DatabaseExamplesParser: Codable {
         let (successfulExamples, failedExamples) =  self.examples.reduce(([],[])) { (previousResult, currentExample) -> ([GraphQLDatasetExample], [FailedExample]) in
             let (successful, failed) = previousResult
             do {
+//                if currentExample.question == "How many car makers are there in france?" {
+//                    print("debug")
+//                }
                 let processedQuery = try self.processQuery(sql: currentExample.sql).encode()
                 let processedExample = GraphQLDatasetExample(
                     schemaId: currentExample.dbID,
@@ -91,15 +94,15 @@ class DatabaseExamplesParser: Codable {
     
     func getDistinctArgument(for query: RawGraphQLQuery) -> RawGraphQLArgument {
         let distinctColumn = query.fields.first!.column
-        let distinctField = getFieldName(from: distinctColumn)
+        let distinctField = getFieldName(from: distinctColumn).name
         let distinctArgument = RawGraphQLArgument(name: .distinct, value: .namedValue(distinctField))
         return distinctArgument
     }
     
-    func getFieldName(from column: DatabaseColumn) -> String {
+    func getFieldName(from column: DatabaseColumn) -> Field {
         self.schema.schema.types
         .first(where: {column.tableName.lowercased() == $0.name.lowercased()})!
-        .fields!.first(where: {$0.name.lowercased() == column.columnName.lowercased()})!.name
+            .fields!.first(where: {$0.name.lowercased() == column.columnName.lowercased()})!
     }
     
     /// returns an argument where  existing  arguments are recursivly nested  to the correct level given a processed query
@@ -124,15 +127,20 @@ class DatabaseExamplesParser: Codable {
     }
     /// names argument based off of column and schema, then uses `nestColumnArgument`
     func nameAndNestColumnArgument(column: DatabaseColumn, argument: RawGraphQLArgument, query: RawGraphQLQuery, fromTableQueries: [RawGraphQLQuery]) throws -> RawGraphQLArgument? {
-        if case .column(_) = argument.name { } else {
+        guard case .column(_) = argument.name else {
             fatalError("not a column")
         }
         // handle nots
         // handle name
-        let name = self.getFieldName(from: column)
+        let field = self.getFieldName(from: column)
+        let name = field.name
+        argument.matchArgumentWithType(field: field)
+        
         argument.name = .name(name)
+//        RawGraphQLArgumentValue(
         let baseArgument = argument.not ? RawGraphQLArgument(name: .not, value: .arguments([argument])) : argument
-        return try self.nestColumnArgument(column: column, argument: baseArgument, query: query, fromTableQueries: fromTableQueries)
+        let baseQuery = query.hasAggregates ? query.queries.first! : query
+        return try self.nestColumnArgument(column: column, argument: baseArgument, query: baseQuery, fromTableQueries: fromTableQueries)
     }
     
     /// recursively searches in query for the correct depth which handles that column
@@ -140,6 +148,7 @@ class DatabaseExamplesParser: Codable {
     private func nestColumnArgument(column: DatabaseColumn, argument: RawGraphQLArgument, query: RawGraphQLQuery, fromTableQueries: [RawGraphQLQuery]) throws -> RawGraphQLArgument? {
 
         if query.table.columns.contains(column) {
+            // need to make sure argument is of the right type.
             return argument
         } else if !query.queries.isEmpty {
             // go through each nested query and pass a new argument representing it.
@@ -181,16 +190,25 @@ class DatabaseExamplesParser: Codable {
         }
     }
     
-    /// checks for any instances where a field is `*`
+    /// checks for any instances where a field is `*` or an Aggreaget that's missing a name
     /// if that's the case, adds all scalar fields
     private func handleAllFields(for query: RawGraphQLQuery) {
         query.fields = query.fields.flatMap{ queryField -> [RawGraphQLField] in
             if case .allFields = queryField.name {
+                assert(queryField.arguments.count == 0)
                 return self.schema.schema.types
                     .first(where: {$0.name.lowercased() == query.table.name.lowercased()})!
                 .allSingleFieldNames
                     .map { RawGraphQLField(name: .field($0), column: queryField.column)}
-            } else {
+            } else if case .aggregate(let aggregate) = queryField.name, aggregate != .count {
+                let name = self.schema.schema.types
+                .first(where: {$0.name.lowercased() == query.table.name.lowercased()})!
+                    .fields!.first(where: {$0.name.lowercased() == queryField.column.columnName.lowercased()})!.name
+                var field = RawGraphQLField(name: queryField.name, column: queryField.column, arguments: queryField.arguments)
+                field.aggregateFieldName = name
+                return [field]
+            }
+            else {
                 return [queryField]
             }
         }
@@ -269,6 +287,9 @@ class DatabaseExamplesParser: Codable {
         }
         
         handleAllFields(for: firstQuery) // needed to handle `*` fields
+        if firstQuery.hasAggregates {
+            handleAllFields(for: firstQuery.queries.last!)
+        }
         let rootQuery = try queries
             .dropFirst()
             .reduce(firstQuery) { previousResult, currentQuery in
@@ -565,7 +586,7 @@ class DatabaseExamplesParser: Codable {
                 guard column.columnName != "*"  else {
                     return RawGraphQLField(name: .allFields, column: column )
                 }
-                let fieldName = self.getFieldName(from: column)
+                let fieldName = self.getFieldName(from: column).name
                 return RawGraphQLField(name: .field(fieldName), column: column )
             }
             

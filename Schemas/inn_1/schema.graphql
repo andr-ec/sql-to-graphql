@@ -1,0 +1,1227 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "reservations"
+  """
+  delete_reservations(
+    """filter the rows which have to be deleted"""
+    where: reservations_bool_exp!
+  ): reservations_mutation_response
+
+  """
+  delete data from the table: "rooms"
+  """
+  delete_rooms(
+    """filter the rows which have to be deleted"""
+    where: rooms_bool_exp!
+  ): rooms_mutation_response
+
+  """
+  insert data into the table: "reservations"
+  """
+  insert_reservations(
+    """the rows to be inserted"""
+    objects: [reservations_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: reservations_on_conflict
+  ): reservations_mutation_response
+
+  """
+  insert data into the table: "rooms"
+  """
+  insert_rooms(
+    """the rows to be inserted"""
+    objects: [rooms_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: rooms_on_conflict
+  ): rooms_mutation_response
+
+  """
+  update data of the table: "reservations"
+  """
+  update_reservations(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: reservations_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: reservations_set_input
+
+    """filter the rows which have to be updated"""
+    where: reservations_bool_exp!
+  ): reservations_mutation_response
+
+  """
+  update data of the table: "rooms"
+  """
+  update_rooms(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: rooms_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: rooms_set_input
+
+    """filter the rows which have to be updated"""
+    where: rooms_bool_exp!
+  ): rooms_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "reservations"
+  """
+  reservations(
+    """distinct select on columns"""
+    distinct_on: [reservations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [reservations_order_by!]
+
+    """filter the rows returned"""
+    where: reservations_bool_exp
+  ): [reservations!]!
+
+  """
+  fetch aggregated fields from the table: "reservations"
+  """
+  reservations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [reservations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [reservations_order_by!]
+
+    """filter the rows returned"""
+    where: reservations_bool_exp
+  ): reservations_aggregate!
+
+  """fetch data from the table: "reservations" using primary key columns"""
+  reservations_by_pk(code: bigint!): reservations
+
+  """
+  fetch data from the table: "rooms"
+  """
+  rooms(
+    """distinct select on columns"""
+    distinct_on: [rooms_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rooms_order_by!]
+
+    """filter the rows returned"""
+    where: rooms_bool_exp
+  ): [rooms!]!
+
+  """
+  fetch aggregated fields from the table: "rooms"
+  """
+  rooms_aggregate(
+    """distinct select on columns"""
+    distinct_on: [rooms_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rooms_order_by!]
+
+    """filter the rows returned"""
+    where: rooms_bool_exp
+  ): rooms_aggregate!
+}
+
+"""
+columns and relationships of "reservations"
+"""
+type reservations {
+  adults: bigint
+  checkin: String
+  checkout: String
+  code: bigint!
+  firstname: String
+  kids: bigint
+  lastname: String
+  rate: Float
+  room: String
+
+  """An object relationship"""
+  roomByRoom: rooms
+}
+
+"""
+aggregated selection of "reservations"
+"""
+type reservations_aggregate {
+  aggregate: reservations_aggregate_fields
+  nodes: [reservations!]!
+}
+
+"""
+aggregate fields of "reservations"
+"""
+type reservations_aggregate_fields {
+  avg: reservations_avg_fields
+  count(columns: [reservations_select_column!], distinct: Boolean): Int
+  max: reservations_max_fields
+  min: reservations_min_fields
+  stddev: reservations_stddev_fields
+  stddev_pop: reservations_stddev_pop_fields
+  stddev_samp: reservations_stddev_samp_fields
+  sum: reservations_sum_fields
+  var_pop: reservations_var_pop_fields
+  var_samp: reservations_var_samp_fields
+  variance: reservations_variance_fields
+}
+
+"""
+order by aggregate values of table "reservations"
+"""
+input reservations_aggregate_order_by {
+  avg: reservations_avg_order_by
+  count: order_by
+  max: reservations_max_order_by
+  min: reservations_min_order_by
+  stddev: reservations_stddev_order_by
+  stddev_pop: reservations_stddev_pop_order_by
+  stddev_samp: reservations_stddev_samp_order_by
+  sum: reservations_sum_order_by
+  var_pop: reservations_var_pop_order_by
+  var_samp: reservations_var_samp_order_by
+  variance: reservations_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "reservations"
+"""
+input reservations_arr_rel_insert_input {
+  data: [reservations_insert_input!]!
+  on_conflict: reservations_on_conflict
+}
+
+"""aggregate avg on columns"""
+type reservations_avg_fields {
+  adults: Float
+  code: Float
+  kids: Float
+  rate: Float
+}
+
+"""
+order by avg() on columns of table "reservations"
+"""
+input reservations_avg_order_by {
+  adults: order_by
+  code: order_by
+  kids: order_by
+  rate: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "reservations". All fields are combined with a logical 'AND'.
+"""
+input reservations_bool_exp {
+  _and: [reservations_bool_exp]
+  _not: reservations_bool_exp
+  _or: [reservations_bool_exp]
+  adults: bigint_comparison_exp
+  checkin: String_comparison_exp
+  checkout: String_comparison_exp
+  code: bigint_comparison_exp
+  firstname: String_comparison_exp
+  kids: bigint_comparison_exp
+  lastname: String_comparison_exp
+  rate: Float_comparison_exp
+  room: String_comparison_exp
+  roomByRoom: rooms_bool_exp
+}
+
+"""
+unique or primary key constraints on table "reservations"
+"""
+enum reservations_constraint {
+  """unique or primary key constraint"""
+  idx_26738_reservations_pkey
+}
+
+"""
+input type for incrementing integer columne in table "reservations"
+"""
+input reservations_inc_input {
+  adults: bigint
+  code: bigint
+  kids: bigint
+}
+
+"""
+input type for inserting data into table "reservations"
+"""
+input reservations_insert_input {
+  adults: bigint
+  checkin: String
+  checkout: String
+  code: bigint
+  firstname: String
+  kids: bigint
+  lastname: String
+  rate: Float
+  room: String
+  roomByRoom: rooms_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type reservations_max_fields {
+  adults: bigint
+  checkin: String
+  checkout: String
+  code: bigint
+  firstname: String
+  kids: bigint
+  lastname: String
+  rate: Float
+  room: String
+}
+
+"""
+order by max() on columns of table "reservations"
+"""
+input reservations_max_order_by {
+  adults: order_by
+  checkin: order_by
+  checkout: order_by
+  code: order_by
+  firstname: order_by
+  kids: order_by
+  lastname: order_by
+  rate: order_by
+  room: order_by
+}
+
+"""aggregate min on columns"""
+type reservations_min_fields {
+  adults: bigint
+  checkin: String
+  checkout: String
+  code: bigint
+  firstname: String
+  kids: bigint
+  lastname: String
+  rate: Float
+  room: String
+}
+
+"""
+order by min() on columns of table "reservations"
+"""
+input reservations_min_order_by {
+  adults: order_by
+  checkin: order_by
+  checkout: order_by
+  code: order_by
+  firstname: order_by
+  kids: order_by
+  lastname: order_by
+  rate: order_by
+  room: order_by
+}
+
+"""
+response of any mutation on the table "reservations"
+"""
+type reservations_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [reservations!]!
+}
+
+"""
+input type for inserting object relation for remote table "reservations"
+"""
+input reservations_obj_rel_insert_input {
+  data: reservations_insert_input!
+  on_conflict: reservations_on_conflict
+}
+
+"""
+on conflict condition type for table "reservations"
+"""
+input reservations_on_conflict {
+  constraint: reservations_constraint!
+  update_columns: [reservations_update_column!]!
+  where: reservations_bool_exp
+}
+
+"""
+ordering options when selecting data from "reservations"
+"""
+input reservations_order_by {
+  adults: order_by
+  checkin: order_by
+  checkout: order_by
+  code: order_by
+  firstname: order_by
+  kids: order_by
+  lastname: order_by
+  rate: order_by
+  room: order_by
+  roomByRoom: rooms_order_by
+}
+
+"""
+select columns of table "reservations"
+"""
+enum reservations_select_column {
+  """column name"""
+  adults
+
+  """column name"""
+  checkin
+
+  """column name"""
+  checkout
+
+  """column name"""
+  code
+
+  """column name"""
+  firstname
+
+  """column name"""
+  kids
+
+  """column name"""
+  lastname
+
+  """column name"""
+  rate
+
+  """column name"""
+  room
+}
+
+"""
+input type for updating data in table "reservations"
+"""
+input reservations_set_input {
+  adults: bigint
+  checkin: String
+  checkout: String
+  code: bigint
+  firstname: String
+  kids: bigint
+  lastname: String
+  rate: Float
+  room: String
+}
+
+"""aggregate stddev on columns"""
+type reservations_stddev_fields {
+  adults: Float
+  code: Float
+  kids: Float
+  rate: Float
+}
+
+"""
+order by stddev() on columns of table "reservations"
+"""
+input reservations_stddev_order_by {
+  adults: order_by
+  code: order_by
+  kids: order_by
+  rate: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type reservations_stddev_pop_fields {
+  adults: Float
+  code: Float
+  kids: Float
+  rate: Float
+}
+
+"""
+order by stddev_pop() on columns of table "reservations"
+"""
+input reservations_stddev_pop_order_by {
+  adults: order_by
+  code: order_by
+  kids: order_by
+  rate: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type reservations_stddev_samp_fields {
+  adults: Float
+  code: Float
+  kids: Float
+  rate: Float
+}
+
+"""
+order by stddev_samp() on columns of table "reservations"
+"""
+input reservations_stddev_samp_order_by {
+  adults: order_by
+  code: order_by
+  kids: order_by
+  rate: order_by
+}
+
+"""aggregate sum on columns"""
+type reservations_sum_fields {
+  adults: bigint
+  code: bigint
+  kids: bigint
+  rate: Float
+}
+
+"""
+order by sum() on columns of table "reservations"
+"""
+input reservations_sum_order_by {
+  adults: order_by
+  code: order_by
+  kids: order_by
+  rate: order_by
+}
+
+"""
+update columns of table "reservations"
+"""
+enum reservations_update_column {
+  """column name"""
+  adults
+
+  """column name"""
+  checkin
+
+  """column name"""
+  checkout
+
+  """column name"""
+  code
+
+  """column name"""
+  firstname
+
+  """column name"""
+  kids
+
+  """column name"""
+  lastname
+
+  """column name"""
+  rate
+
+  """column name"""
+  room
+}
+
+"""aggregate var_pop on columns"""
+type reservations_var_pop_fields {
+  adults: Float
+  code: Float
+  kids: Float
+  rate: Float
+}
+
+"""
+order by var_pop() on columns of table "reservations"
+"""
+input reservations_var_pop_order_by {
+  adults: order_by
+  code: order_by
+  kids: order_by
+  rate: order_by
+}
+
+"""aggregate var_samp on columns"""
+type reservations_var_samp_fields {
+  adults: Float
+  code: Float
+  kids: Float
+  rate: Float
+}
+
+"""
+order by var_samp() on columns of table "reservations"
+"""
+input reservations_var_samp_order_by {
+  adults: order_by
+  code: order_by
+  kids: order_by
+  rate: order_by
+}
+
+"""aggregate variance on columns"""
+type reservations_variance_fields {
+  adults: Float
+  code: Float
+  kids: Float
+  rate: Float
+}
+
+"""
+order by variance() on columns of table "reservations"
+"""
+input reservations_variance_order_by {
+  adults: order_by
+  code: order_by
+  kids: order_by
+  rate: order_by
+}
+
+"""
+columns and relationships of "rooms"
+"""
+type rooms {
+  baseprice: bigint
+  beds: bigint
+  bedtype: String
+  decor: String
+  maxoccupancy: bigint
+
+  """An array relationship"""
+  reservations(
+    """distinct select on columns"""
+    distinct_on: [reservations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [reservations_order_by!]
+
+    """filter the rows returned"""
+    where: reservations_bool_exp
+  ): [reservations!]!
+
+  """An aggregated array relationship"""
+  reservations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [reservations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [reservations_order_by!]
+
+    """filter the rows returned"""
+    where: reservations_bool_exp
+  ): reservations_aggregate!
+  roomid: String
+  roomname: String
+}
+
+"""
+aggregated selection of "rooms"
+"""
+type rooms_aggregate {
+  aggregate: rooms_aggregate_fields
+  nodes: [rooms!]!
+}
+
+"""
+aggregate fields of "rooms"
+"""
+type rooms_aggregate_fields {
+  avg: rooms_avg_fields
+  count(columns: [rooms_select_column!], distinct: Boolean): Int
+  max: rooms_max_fields
+  min: rooms_min_fields
+  stddev: rooms_stddev_fields
+  stddev_pop: rooms_stddev_pop_fields
+  stddev_samp: rooms_stddev_samp_fields
+  sum: rooms_sum_fields
+  var_pop: rooms_var_pop_fields
+  var_samp: rooms_var_samp_fields
+  variance: rooms_variance_fields
+}
+
+"""
+order by aggregate values of table "rooms"
+"""
+input rooms_aggregate_order_by {
+  avg: rooms_avg_order_by
+  count: order_by
+  max: rooms_max_order_by
+  min: rooms_min_order_by
+  stddev: rooms_stddev_order_by
+  stddev_pop: rooms_stddev_pop_order_by
+  stddev_samp: rooms_stddev_samp_order_by
+  sum: rooms_sum_order_by
+  var_pop: rooms_var_pop_order_by
+  var_samp: rooms_var_samp_order_by
+  variance: rooms_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "rooms"
+"""
+input rooms_arr_rel_insert_input {
+  data: [rooms_insert_input!]!
+  on_conflict: rooms_on_conflict
+}
+
+"""aggregate avg on columns"""
+type rooms_avg_fields {
+  baseprice: Float
+  beds: Float
+  maxoccupancy: Float
+}
+
+"""
+order by avg() on columns of table "rooms"
+"""
+input rooms_avg_order_by {
+  baseprice: order_by
+  beds: order_by
+  maxoccupancy: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "rooms". All fields are combined with a logical 'AND'.
+"""
+input rooms_bool_exp {
+  _and: [rooms_bool_exp]
+  _not: rooms_bool_exp
+  _or: [rooms_bool_exp]
+  baseprice: bigint_comparison_exp
+  beds: bigint_comparison_exp
+  bedtype: String_comparison_exp
+  decor: String_comparison_exp
+  maxoccupancy: bigint_comparison_exp
+  reservations: reservations_bool_exp
+  roomid: String_comparison_exp
+  roomname: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "rooms"
+"""
+enum rooms_constraint {
+  """unique or primary key constraint"""
+  idx_26732_sqlite_autoindex_rooms_1
+}
+
+"""
+input type for incrementing integer columne in table "rooms"
+"""
+input rooms_inc_input {
+  baseprice: bigint
+  beds: bigint
+  maxoccupancy: bigint
+}
+
+"""
+input type for inserting data into table "rooms"
+"""
+input rooms_insert_input {
+  baseprice: bigint
+  beds: bigint
+  bedtype: String
+  decor: String
+  maxoccupancy: bigint
+  reservations: reservations_arr_rel_insert_input
+  roomid: String
+  roomname: String
+}
+
+"""aggregate max on columns"""
+type rooms_max_fields {
+  baseprice: bigint
+  beds: bigint
+  bedtype: String
+  decor: String
+  maxoccupancy: bigint
+  roomid: String
+  roomname: String
+}
+
+"""
+order by max() on columns of table "rooms"
+"""
+input rooms_max_order_by {
+  baseprice: order_by
+  beds: order_by
+  bedtype: order_by
+  decor: order_by
+  maxoccupancy: order_by
+  roomid: order_by
+  roomname: order_by
+}
+
+"""aggregate min on columns"""
+type rooms_min_fields {
+  baseprice: bigint
+  beds: bigint
+  bedtype: String
+  decor: String
+  maxoccupancy: bigint
+  roomid: String
+  roomname: String
+}
+
+"""
+order by min() on columns of table "rooms"
+"""
+input rooms_min_order_by {
+  baseprice: order_by
+  beds: order_by
+  bedtype: order_by
+  decor: order_by
+  maxoccupancy: order_by
+  roomid: order_by
+  roomname: order_by
+}
+
+"""
+response of any mutation on the table "rooms"
+"""
+type rooms_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [rooms!]!
+}
+
+"""
+input type for inserting object relation for remote table "rooms"
+"""
+input rooms_obj_rel_insert_input {
+  data: rooms_insert_input!
+  on_conflict: rooms_on_conflict
+}
+
+"""
+on conflict condition type for table "rooms"
+"""
+input rooms_on_conflict {
+  constraint: rooms_constraint!
+  update_columns: [rooms_update_column!]!
+  where: rooms_bool_exp
+}
+
+"""
+ordering options when selecting data from "rooms"
+"""
+input rooms_order_by {
+  baseprice: order_by
+  beds: order_by
+  bedtype: order_by
+  decor: order_by
+  maxoccupancy: order_by
+  reservations_aggregate: reservations_aggregate_order_by
+  roomid: order_by
+  roomname: order_by
+}
+
+"""
+select columns of table "rooms"
+"""
+enum rooms_select_column {
+  """column name"""
+  baseprice
+
+  """column name"""
+  beds
+
+  """column name"""
+  bedtype
+
+  """column name"""
+  decor
+
+  """column name"""
+  maxoccupancy
+
+  """column name"""
+  roomid
+
+  """column name"""
+  roomname
+}
+
+"""
+input type for updating data in table "rooms"
+"""
+input rooms_set_input {
+  baseprice: bigint
+  beds: bigint
+  bedtype: String
+  decor: String
+  maxoccupancy: bigint
+  roomid: String
+  roomname: String
+}
+
+"""aggregate stddev on columns"""
+type rooms_stddev_fields {
+  baseprice: Float
+  beds: Float
+  maxoccupancy: Float
+}
+
+"""
+order by stddev() on columns of table "rooms"
+"""
+input rooms_stddev_order_by {
+  baseprice: order_by
+  beds: order_by
+  maxoccupancy: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type rooms_stddev_pop_fields {
+  baseprice: Float
+  beds: Float
+  maxoccupancy: Float
+}
+
+"""
+order by stddev_pop() on columns of table "rooms"
+"""
+input rooms_stddev_pop_order_by {
+  baseprice: order_by
+  beds: order_by
+  maxoccupancy: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type rooms_stddev_samp_fields {
+  baseprice: Float
+  beds: Float
+  maxoccupancy: Float
+}
+
+"""
+order by stddev_samp() on columns of table "rooms"
+"""
+input rooms_stddev_samp_order_by {
+  baseprice: order_by
+  beds: order_by
+  maxoccupancy: order_by
+}
+
+"""aggregate sum on columns"""
+type rooms_sum_fields {
+  baseprice: bigint
+  beds: bigint
+  maxoccupancy: bigint
+}
+
+"""
+order by sum() on columns of table "rooms"
+"""
+input rooms_sum_order_by {
+  baseprice: order_by
+  beds: order_by
+  maxoccupancy: order_by
+}
+
+"""
+update columns of table "rooms"
+"""
+enum rooms_update_column {
+  """column name"""
+  baseprice
+
+  """column name"""
+  beds
+
+  """column name"""
+  bedtype
+
+  """column name"""
+  decor
+
+  """column name"""
+  maxoccupancy
+
+  """column name"""
+  roomid
+
+  """column name"""
+  roomname
+}
+
+"""aggregate var_pop on columns"""
+type rooms_var_pop_fields {
+  baseprice: Float
+  beds: Float
+  maxoccupancy: Float
+}
+
+"""
+order by var_pop() on columns of table "rooms"
+"""
+input rooms_var_pop_order_by {
+  baseprice: order_by
+  beds: order_by
+  maxoccupancy: order_by
+}
+
+"""aggregate var_samp on columns"""
+type rooms_var_samp_fields {
+  baseprice: Float
+  beds: Float
+  maxoccupancy: Float
+}
+
+"""
+order by var_samp() on columns of table "rooms"
+"""
+input rooms_var_samp_order_by {
+  baseprice: order_by
+  beds: order_by
+  maxoccupancy: order_by
+}
+
+"""aggregate variance on columns"""
+type rooms_variance_fields {
+  baseprice: Float
+  beds: Float
+  maxoccupancy: Float
+}
+
+"""
+order by variance() on columns of table "rooms"
+"""
+input rooms_variance_order_by {
+  baseprice: order_by
+  beds: order_by
+  maxoccupancy: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "reservations"
+  """
+  reservations(
+    """distinct select on columns"""
+    distinct_on: [reservations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [reservations_order_by!]
+
+    """filter the rows returned"""
+    where: reservations_bool_exp
+  ): [reservations!]!
+
+  """
+  fetch aggregated fields from the table: "reservations"
+  """
+  reservations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [reservations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [reservations_order_by!]
+
+    """filter the rows returned"""
+    where: reservations_bool_exp
+  ): reservations_aggregate!
+
+  """fetch data from the table: "reservations" using primary key columns"""
+  reservations_by_pk(code: bigint!): reservations
+
+  """
+  fetch data from the table: "rooms"
+  """
+  rooms(
+    """distinct select on columns"""
+    distinct_on: [rooms_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rooms_order_by!]
+
+    """filter the rows returned"""
+    where: rooms_bool_exp
+  ): [rooms!]!
+
+  """
+  fetch aggregated fields from the table: "rooms"
+  """
+  rooms_aggregate(
+    """distinct select on columns"""
+    distinct_on: [rooms_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rooms_order_by!]
+
+    """filter the rows returned"""
+    where: rooms_bool_exp
+  ): rooms_aggregate!
+}

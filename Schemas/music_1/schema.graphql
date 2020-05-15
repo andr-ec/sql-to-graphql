@@ -1,0 +1,2014 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "artist"
+"""
+type artist {
+  artist_name: String
+  country: String
+
+  """An array relationship"""
+  files(
+    """distinct select on columns"""
+    distinct_on: [files_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [files_order_by!]
+
+    """filter the rows returned"""
+    where: files_bool_exp
+  ): [files!]!
+
+  """An aggregated array relationship"""
+  files_aggregate(
+    """distinct select on columns"""
+    distinct_on: [files_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [files_order_by!]
+
+    """filter the rows returned"""
+    where: files_bool_exp
+  ): files_aggregate!
+  gender: String
+
+  """An object relationship"""
+  genre: genre
+  preferred_genre: String
+
+  """An array relationship"""
+  songs(
+    """distinct select on columns"""
+    distinct_on: [song_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [song_order_by!]
+
+    """filter the rows returned"""
+    where: song_bool_exp
+  ): [song!]!
+
+  """An aggregated array relationship"""
+  songs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [song_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [song_order_by!]
+
+    """filter the rows returned"""
+    where: song_bool_exp
+  ): song_aggregate!
+}
+
+"""
+aggregated selection of "artist"
+"""
+type artist_aggregate {
+  aggregate: artist_aggregate_fields
+  nodes: [artist!]!
+}
+
+"""
+aggregate fields of "artist"
+"""
+type artist_aggregate_fields {
+  count(columns: [artist_select_column!], distinct: Boolean): Int
+  max: artist_max_fields
+  min: artist_min_fields
+}
+
+"""
+order by aggregate values of table "artist"
+"""
+input artist_aggregate_order_by {
+  count: order_by
+  max: artist_max_order_by
+  min: artist_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "artist"
+"""
+input artist_arr_rel_insert_input {
+  data: [artist_insert_input!]!
+  on_conflict: artist_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "artist". All fields are combined with a logical 'AND'.
+"""
+input artist_bool_exp {
+  _and: [artist_bool_exp]
+  _not: artist_bool_exp
+  _or: [artist_bool_exp]
+  artist_name: String_comparison_exp
+  country: String_comparison_exp
+  files: files_bool_exp
+  gender: String_comparison_exp
+  genre: genre_bool_exp
+  preferred_genre: String_comparison_exp
+  songs: song_bool_exp
+}
+
+"""
+unique or primary key constraints on table "artist"
+"""
+enum artist_constraint {
+  """unique or primary key constraint"""
+  artist_artist_name_key
+}
+
+"""
+input type for inserting data into table "artist"
+"""
+input artist_insert_input {
+  artist_name: String
+  country: String
+  files: files_arr_rel_insert_input
+  gender: String
+  genre: genre_obj_rel_insert_input
+  preferred_genre: String
+  songs: song_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type artist_max_fields {
+  artist_name: String
+  country: String
+  gender: String
+  preferred_genre: String
+}
+
+"""
+order by max() on columns of table "artist"
+"""
+input artist_max_order_by {
+  artist_name: order_by
+  country: order_by
+  gender: order_by
+  preferred_genre: order_by
+}
+
+"""aggregate min on columns"""
+type artist_min_fields {
+  artist_name: String
+  country: String
+  gender: String
+  preferred_genre: String
+}
+
+"""
+order by min() on columns of table "artist"
+"""
+input artist_min_order_by {
+  artist_name: order_by
+  country: order_by
+  gender: order_by
+  preferred_genre: order_by
+}
+
+"""
+response of any mutation on the table "artist"
+"""
+type artist_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [artist!]!
+}
+
+"""
+input type for inserting object relation for remote table "artist"
+"""
+input artist_obj_rel_insert_input {
+  data: artist_insert_input!
+  on_conflict: artist_on_conflict
+}
+
+"""
+on conflict condition type for table "artist"
+"""
+input artist_on_conflict {
+  constraint: artist_constraint!
+  update_columns: [artist_update_column!]!
+  where: artist_bool_exp
+}
+
+"""
+ordering options when selecting data from "artist"
+"""
+input artist_order_by {
+  artist_name: order_by
+  country: order_by
+  files_aggregate: files_aggregate_order_by
+  gender: order_by
+  genre: genre_order_by
+  preferred_genre: order_by
+  songs_aggregate: song_aggregate_order_by
+}
+
+"""
+select columns of table "artist"
+"""
+enum artist_select_column {
+  """column name"""
+  artist_name
+
+  """column name"""
+  country
+
+  """column name"""
+  gender
+
+  """column name"""
+  preferred_genre
+}
+
+"""
+input type for updating data in table "artist"
+"""
+input artist_set_input {
+  artist_name: String
+  country: String
+  gender: String
+  preferred_genre: String
+}
+
+"""
+update columns of table "artist"
+"""
+enum artist_update_column {
+  """column name"""
+  artist_name
+
+  """column name"""
+  country
+
+  """column name"""
+  gender
+
+  """column name"""
+  preferred_genre
+}
+
+"""
+columns and relationships of "files"
+"""
+type files {
+  """An object relationship"""
+  artist: artist
+  artist_name: String
+  duration: String
+  f_id: Int
+  file_size: String
+  formats: String
+
+  """An array relationship"""
+  songs(
+    """distinct select on columns"""
+    distinct_on: [song_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [song_order_by!]
+
+    """filter the rows returned"""
+    where: song_bool_exp
+  ): [song!]!
+
+  """An aggregated array relationship"""
+  songs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [song_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [song_order_by!]
+
+    """filter the rows returned"""
+    where: song_bool_exp
+  ): song_aggregate!
+}
+
+"""
+aggregated selection of "files"
+"""
+type files_aggregate {
+  aggregate: files_aggregate_fields
+  nodes: [files!]!
+}
+
+"""
+aggregate fields of "files"
+"""
+type files_aggregate_fields {
+  avg: files_avg_fields
+  count(columns: [files_select_column!], distinct: Boolean): Int
+  max: files_max_fields
+  min: files_min_fields
+  stddev: files_stddev_fields
+  stddev_pop: files_stddev_pop_fields
+  stddev_samp: files_stddev_samp_fields
+  sum: files_sum_fields
+  var_pop: files_var_pop_fields
+  var_samp: files_var_samp_fields
+  variance: files_variance_fields
+}
+
+"""
+order by aggregate values of table "files"
+"""
+input files_aggregate_order_by {
+  avg: files_avg_order_by
+  count: order_by
+  max: files_max_order_by
+  min: files_min_order_by
+  stddev: files_stddev_order_by
+  stddev_pop: files_stddev_pop_order_by
+  stddev_samp: files_stddev_samp_order_by
+  sum: files_sum_order_by
+  var_pop: files_var_pop_order_by
+  var_samp: files_var_samp_order_by
+  variance: files_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "files"
+"""
+input files_arr_rel_insert_input {
+  data: [files_insert_input!]!
+  on_conflict: files_on_conflict
+}
+
+"""aggregate avg on columns"""
+type files_avg_fields {
+  f_id: Float
+}
+
+"""
+order by avg() on columns of table "files"
+"""
+input files_avg_order_by {
+  f_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "files". All fields are combined with a logical 'AND'.
+"""
+input files_bool_exp {
+  _and: [files_bool_exp]
+  _not: files_bool_exp
+  _or: [files_bool_exp]
+  artist: artist_bool_exp
+  artist_name: String_comparison_exp
+  duration: String_comparison_exp
+  f_id: Int_comparison_exp
+  file_size: String_comparison_exp
+  formats: String_comparison_exp
+  songs: song_bool_exp
+}
+
+"""
+unique or primary key constraints on table "files"
+"""
+enum files_constraint {
+  """unique or primary key constraint"""
+  files_f_id_key
+}
+
+"""
+input type for incrementing integer columne in table "files"
+"""
+input files_inc_input {
+  f_id: Int
+}
+
+"""
+input type for inserting data into table "files"
+"""
+input files_insert_input {
+  artist: artist_obj_rel_insert_input
+  artist_name: String
+  duration: String
+  f_id: Int
+  file_size: String
+  formats: String
+  songs: song_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type files_max_fields {
+  artist_name: String
+  duration: String
+  f_id: Int
+  file_size: String
+  formats: String
+}
+
+"""
+order by max() on columns of table "files"
+"""
+input files_max_order_by {
+  artist_name: order_by
+  duration: order_by
+  f_id: order_by
+  file_size: order_by
+  formats: order_by
+}
+
+"""aggregate min on columns"""
+type files_min_fields {
+  artist_name: String
+  duration: String
+  f_id: Int
+  file_size: String
+  formats: String
+}
+
+"""
+order by min() on columns of table "files"
+"""
+input files_min_order_by {
+  artist_name: order_by
+  duration: order_by
+  f_id: order_by
+  file_size: order_by
+  formats: order_by
+}
+
+"""
+response of any mutation on the table "files"
+"""
+type files_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [files!]!
+}
+
+"""
+input type for inserting object relation for remote table "files"
+"""
+input files_obj_rel_insert_input {
+  data: files_insert_input!
+  on_conflict: files_on_conflict
+}
+
+"""
+on conflict condition type for table "files"
+"""
+input files_on_conflict {
+  constraint: files_constraint!
+  update_columns: [files_update_column!]!
+  where: files_bool_exp
+}
+
+"""
+ordering options when selecting data from "files"
+"""
+input files_order_by {
+  artist: artist_order_by
+  artist_name: order_by
+  duration: order_by
+  f_id: order_by
+  file_size: order_by
+  formats: order_by
+  songs_aggregate: song_aggregate_order_by
+}
+
+"""
+select columns of table "files"
+"""
+enum files_select_column {
+  """column name"""
+  artist_name
+
+  """column name"""
+  duration
+
+  """column name"""
+  f_id
+
+  """column name"""
+  file_size
+
+  """column name"""
+  formats
+}
+
+"""
+input type for updating data in table "files"
+"""
+input files_set_input {
+  artist_name: String
+  duration: String
+  f_id: Int
+  file_size: String
+  formats: String
+}
+
+"""aggregate stddev on columns"""
+type files_stddev_fields {
+  f_id: Float
+}
+
+"""
+order by stddev() on columns of table "files"
+"""
+input files_stddev_order_by {
+  f_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type files_stddev_pop_fields {
+  f_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "files"
+"""
+input files_stddev_pop_order_by {
+  f_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type files_stddev_samp_fields {
+  f_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "files"
+"""
+input files_stddev_samp_order_by {
+  f_id: order_by
+}
+
+"""aggregate sum on columns"""
+type files_sum_fields {
+  f_id: Int
+}
+
+"""
+order by sum() on columns of table "files"
+"""
+input files_sum_order_by {
+  f_id: order_by
+}
+
+"""
+update columns of table "files"
+"""
+enum files_update_column {
+  """column name"""
+  artist_name
+
+  """column name"""
+  duration
+
+  """column name"""
+  f_id
+
+  """column name"""
+  file_size
+
+  """column name"""
+  formats
+}
+
+"""aggregate var_pop on columns"""
+type files_var_pop_fields {
+  f_id: Float
+}
+
+"""
+order by var_pop() on columns of table "files"
+"""
+input files_var_pop_order_by {
+  f_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type files_var_samp_fields {
+  f_id: Float
+}
+
+"""
+order by var_samp() on columns of table "files"
+"""
+input files_var_samp_order_by {
+  f_id: order_by
+}
+
+"""aggregate variance on columns"""
+type files_variance_fields {
+  f_id: Float
+}
+
+"""
+order by variance() on columns of table "files"
+"""
+input files_variance_order_by {
+  f_id: order_by
+}
+
+"""
+columns and relationships of "genre"
+"""
+type genre {
+  """An array relationship"""
+  artists(
+    """distinct select on columns"""
+    distinct_on: [artist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [artist_order_by!]
+
+    """filter the rows returned"""
+    where: artist_bool_exp
+  ): [artist!]!
+
+  """An aggregated array relationship"""
+  artists_aggregate(
+    """distinct select on columns"""
+    distinct_on: [artist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [artist_order_by!]
+
+    """filter the rows returned"""
+    where: artist_bool_exp
+  ): artist_aggregate!
+  g_name: String
+  most_popular_in: String
+  rating: Int
+
+  """An array relationship"""
+  songs(
+    """distinct select on columns"""
+    distinct_on: [song_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [song_order_by!]
+
+    """filter the rows returned"""
+    where: song_bool_exp
+  ): [song!]!
+
+  """An aggregated array relationship"""
+  songs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [song_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [song_order_by!]
+
+    """filter the rows returned"""
+    where: song_bool_exp
+  ): song_aggregate!
+}
+
+"""
+aggregated selection of "genre"
+"""
+type genre_aggregate {
+  aggregate: genre_aggregate_fields
+  nodes: [genre!]!
+}
+
+"""
+aggregate fields of "genre"
+"""
+type genre_aggregate_fields {
+  avg: genre_avg_fields
+  count(columns: [genre_select_column!], distinct: Boolean): Int
+  max: genre_max_fields
+  min: genre_min_fields
+  stddev: genre_stddev_fields
+  stddev_pop: genre_stddev_pop_fields
+  stddev_samp: genre_stddev_samp_fields
+  sum: genre_sum_fields
+  var_pop: genre_var_pop_fields
+  var_samp: genre_var_samp_fields
+  variance: genre_variance_fields
+}
+
+"""
+order by aggregate values of table "genre"
+"""
+input genre_aggregate_order_by {
+  avg: genre_avg_order_by
+  count: order_by
+  max: genre_max_order_by
+  min: genre_min_order_by
+  stddev: genre_stddev_order_by
+  stddev_pop: genre_stddev_pop_order_by
+  stddev_samp: genre_stddev_samp_order_by
+  sum: genre_sum_order_by
+  var_pop: genre_var_pop_order_by
+  var_samp: genre_var_samp_order_by
+  variance: genre_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "genre"
+"""
+input genre_arr_rel_insert_input {
+  data: [genre_insert_input!]!
+  on_conflict: genre_on_conflict
+}
+
+"""aggregate avg on columns"""
+type genre_avg_fields {
+  rating: Float
+}
+
+"""
+order by avg() on columns of table "genre"
+"""
+input genre_avg_order_by {
+  rating: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "genre". All fields are combined with a logical 'AND'.
+"""
+input genre_bool_exp {
+  _and: [genre_bool_exp]
+  _not: genre_bool_exp
+  _or: [genre_bool_exp]
+  artists: artist_bool_exp
+  g_name: String_comparison_exp
+  most_popular_in: String_comparison_exp
+  rating: Int_comparison_exp
+  songs: song_bool_exp
+}
+
+"""
+unique or primary key constraints on table "genre"
+"""
+enum genre_constraint {
+  """unique or primary key constraint"""
+  genre_g_name_key
+}
+
+"""
+input type for incrementing integer columne in table "genre"
+"""
+input genre_inc_input {
+  rating: Int
+}
+
+"""
+input type for inserting data into table "genre"
+"""
+input genre_insert_input {
+  artists: artist_arr_rel_insert_input
+  g_name: String
+  most_popular_in: String
+  rating: Int
+  songs: song_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type genre_max_fields {
+  g_name: String
+  most_popular_in: String
+  rating: Int
+}
+
+"""
+order by max() on columns of table "genre"
+"""
+input genre_max_order_by {
+  g_name: order_by
+  most_popular_in: order_by
+  rating: order_by
+}
+
+"""aggregate min on columns"""
+type genre_min_fields {
+  g_name: String
+  most_popular_in: String
+  rating: Int
+}
+
+"""
+order by min() on columns of table "genre"
+"""
+input genre_min_order_by {
+  g_name: order_by
+  most_popular_in: order_by
+  rating: order_by
+}
+
+"""
+response of any mutation on the table "genre"
+"""
+type genre_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [genre!]!
+}
+
+"""
+input type for inserting object relation for remote table "genre"
+"""
+input genre_obj_rel_insert_input {
+  data: genre_insert_input!
+  on_conflict: genre_on_conflict
+}
+
+"""
+on conflict condition type for table "genre"
+"""
+input genre_on_conflict {
+  constraint: genre_constraint!
+  update_columns: [genre_update_column!]!
+  where: genre_bool_exp
+}
+
+"""
+ordering options when selecting data from "genre"
+"""
+input genre_order_by {
+  artists_aggregate: artist_aggregate_order_by
+  g_name: order_by
+  most_popular_in: order_by
+  rating: order_by
+  songs_aggregate: song_aggregate_order_by
+}
+
+"""
+select columns of table "genre"
+"""
+enum genre_select_column {
+  """column name"""
+  g_name
+
+  """column name"""
+  most_popular_in
+
+  """column name"""
+  rating
+}
+
+"""
+input type for updating data in table "genre"
+"""
+input genre_set_input {
+  g_name: String
+  most_popular_in: String
+  rating: Int
+}
+
+"""aggregate stddev on columns"""
+type genre_stddev_fields {
+  rating: Float
+}
+
+"""
+order by stddev() on columns of table "genre"
+"""
+input genre_stddev_order_by {
+  rating: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type genre_stddev_pop_fields {
+  rating: Float
+}
+
+"""
+order by stddev_pop() on columns of table "genre"
+"""
+input genre_stddev_pop_order_by {
+  rating: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type genre_stddev_samp_fields {
+  rating: Float
+}
+
+"""
+order by stddev_samp() on columns of table "genre"
+"""
+input genre_stddev_samp_order_by {
+  rating: order_by
+}
+
+"""aggregate sum on columns"""
+type genre_sum_fields {
+  rating: Int
+}
+
+"""
+order by sum() on columns of table "genre"
+"""
+input genre_sum_order_by {
+  rating: order_by
+}
+
+"""
+update columns of table "genre"
+"""
+enum genre_update_column {
+  """column name"""
+  g_name
+
+  """column name"""
+  most_popular_in
+
+  """column name"""
+  rating
+}
+
+"""aggregate var_pop on columns"""
+type genre_var_pop_fields {
+  rating: Float
+}
+
+"""
+order by var_pop() on columns of table "genre"
+"""
+input genre_var_pop_order_by {
+  rating: order_by
+}
+
+"""aggregate var_samp on columns"""
+type genre_var_samp_fields {
+  rating: Float
+}
+
+"""
+order by var_samp() on columns of table "genre"
+"""
+input genre_var_samp_order_by {
+  rating: order_by
+}
+
+"""aggregate variance on columns"""
+type genre_variance_fields {
+  rating: Float
+}
+
+"""
+order by variance() on columns of table "genre"
+"""
+input genre_variance_order_by {
+  rating: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "artist"
+  """
+  delete_artist(
+    """filter the rows which have to be deleted"""
+    where: artist_bool_exp!
+  ): artist_mutation_response
+
+  """
+  delete data from the table: "files"
+  """
+  delete_files(
+    """filter the rows which have to be deleted"""
+    where: files_bool_exp!
+  ): files_mutation_response
+
+  """
+  delete data from the table: "genre"
+  """
+  delete_genre(
+    """filter the rows which have to be deleted"""
+    where: genre_bool_exp!
+  ): genre_mutation_response
+
+  """
+  delete data from the table: "song"
+  """
+  delete_song(
+    """filter the rows which have to be deleted"""
+    where: song_bool_exp!
+  ): song_mutation_response
+
+  """
+  insert data into the table: "artist"
+  """
+  insert_artist(
+    """the rows to be inserted"""
+    objects: [artist_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: artist_on_conflict
+  ): artist_mutation_response
+
+  """
+  insert data into the table: "files"
+  """
+  insert_files(
+    """the rows to be inserted"""
+    objects: [files_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: files_on_conflict
+  ): files_mutation_response
+
+  """
+  insert data into the table: "genre"
+  """
+  insert_genre(
+    """the rows to be inserted"""
+    objects: [genre_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: genre_on_conflict
+  ): genre_mutation_response
+
+  """
+  insert data into the table: "song"
+  """
+  insert_song(
+    """the rows to be inserted"""
+    objects: [song_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: song_on_conflict
+  ): song_mutation_response
+
+  """
+  update data of the table: "artist"
+  """
+  update_artist(
+    """sets the columns of the filtered rows to the given values"""
+    _set: artist_set_input
+
+    """filter the rows which have to be updated"""
+    where: artist_bool_exp!
+  ): artist_mutation_response
+
+  """
+  update data of the table: "files"
+  """
+  update_files(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: files_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: files_set_input
+
+    """filter the rows which have to be updated"""
+    where: files_bool_exp!
+  ): files_mutation_response
+
+  """
+  update data of the table: "genre"
+  """
+  update_genre(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: genre_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: genre_set_input
+
+    """filter the rows which have to be updated"""
+    where: genre_bool_exp!
+  ): genre_mutation_response
+
+  """
+  update data of the table: "song"
+  """
+  update_song(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: song_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: song_set_input
+
+    """filter the rows which have to be updated"""
+    where: song_bool_exp!
+  ): song_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "artist"
+  """
+  artist(
+    """distinct select on columns"""
+    distinct_on: [artist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [artist_order_by!]
+
+    """filter the rows returned"""
+    where: artist_bool_exp
+  ): [artist!]!
+
+  """
+  fetch aggregated fields from the table: "artist"
+  """
+  artist_aggregate(
+    """distinct select on columns"""
+    distinct_on: [artist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [artist_order_by!]
+
+    """filter the rows returned"""
+    where: artist_bool_exp
+  ): artist_aggregate!
+
+  """
+  fetch data from the table: "files"
+  """
+  files(
+    """distinct select on columns"""
+    distinct_on: [files_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [files_order_by!]
+
+    """filter the rows returned"""
+    where: files_bool_exp
+  ): [files!]!
+
+  """
+  fetch aggregated fields from the table: "files"
+  """
+  files_aggregate(
+    """distinct select on columns"""
+    distinct_on: [files_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [files_order_by!]
+
+    """filter the rows returned"""
+    where: files_bool_exp
+  ): files_aggregate!
+
+  """
+  fetch data from the table: "genre"
+  """
+  genre(
+    """distinct select on columns"""
+    distinct_on: [genre_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [genre_order_by!]
+
+    """filter the rows returned"""
+    where: genre_bool_exp
+  ): [genre!]!
+
+  """
+  fetch aggregated fields from the table: "genre"
+  """
+  genre_aggregate(
+    """distinct select on columns"""
+    distinct_on: [genre_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [genre_order_by!]
+
+    """filter the rows returned"""
+    where: genre_bool_exp
+  ): genre_aggregate!
+
+  """
+  fetch data from the table: "song"
+  """
+  song(
+    """distinct select on columns"""
+    distinct_on: [song_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [song_order_by!]
+
+    """filter the rows returned"""
+    where: song_bool_exp
+  ): [song!]!
+
+  """
+  fetch aggregated fields from the table: "song"
+  """
+  song_aggregate(
+    """distinct select on columns"""
+    distinct_on: [song_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [song_order_by!]
+
+    """filter the rows returned"""
+    where: song_bool_exp
+  ): song_aggregate!
+}
+
+"""
+columns and relationships of "song"
+"""
+type song {
+  """An object relationship"""
+  artist: artist
+  artist_name: String
+  country: String
+  f_id: Int
+
+  """An object relationship"""
+  file: files
+
+  """An object relationship"""
+  genre: genre
+  genre_is: String
+  languages: String
+  rating: Int
+  releasedate: String
+  resolution: Int
+  song_name: String
+}
+
+"""
+aggregated selection of "song"
+"""
+type song_aggregate {
+  aggregate: song_aggregate_fields
+  nodes: [song!]!
+}
+
+"""
+aggregate fields of "song"
+"""
+type song_aggregate_fields {
+  avg: song_avg_fields
+  count(columns: [song_select_column!], distinct: Boolean): Int
+  max: song_max_fields
+  min: song_min_fields
+  stddev: song_stddev_fields
+  stddev_pop: song_stddev_pop_fields
+  stddev_samp: song_stddev_samp_fields
+  sum: song_sum_fields
+  var_pop: song_var_pop_fields
+  var_samp: song_var_samp_fields
+  variance: song_variance_fields
+}
+
+"""
+order by aggregate values of table "song"
+"""
+input song_aggregate_order_by {
+  avg: song_avg_order_by
+  count: order_by
+  max: song_max_order_by
+  min: song_min_order_by
+  stddev: song_stddev_order_by
+  stddev_pop: song_stddev_pop_order_by
+  stddev_samp: song_stddev_samp_order_by
+  sum: song_sum_order_by
+  var_pop: song_var_pop_order_by
+  var_samp: song_var_samp_order_by
+  variance: song_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "song"
+"""
+input song_arr_rel_insert_input {
+  data: [song_insert_input!]!
+  on_conflict: song_on_conflict
+}
+
+"""aggregate avg on columns"""
+type song_avg_fields {
+  f_id: Float
+  rating: Float
+  resolution: Float
+}
+
+"""
+order by avg() on columns of table "song"
+"""
+input song_avg_order_by {
+  f_id: order_by
+  rating: order_by
+  resolution: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "song". All fields are combined with a logical 'AND'.
+"""
+input song_bool_exp {
+  _and: [song_bool_exp]
+  _not: song_bool_exp
+  _or: [song_bool_exp]
+  artist: artist_bool_exp
+  artist_name: String_comparison_exp
+  country: String_comparison_exp
+  f_id: Int_comparison_exp
+  file: files_bool_exp
+  genre: genre_bool_exp
+  genre_is: String_comparison_exp
+  languages: String_comparison_exp
+  rating: Int_comparison_exp
+  releasedate: String_comparison_exp
+  resolution: Int_comparison_exp
+  song_name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "song"
+"""
+enum song_constraint {
+  """unique or primary key constraint"""
+  song_song_name_key
+}
+
+"""
+input type for incrementing integer columne in table "song"
+"""
+input song_inc_input {
+  f_id: Int
+  rating: Int
+  resolution: Int
+}
+
+"""
+input type for inserting data into table "song"
+"""
+input song_insert_input {
+  artist: artist_obj_rel_insert_input
+  artist_name: String
+  country: String
+  f_id: Int
+  file: files_obj_rel_insert_input
+  genre: genre_obj_rel_insert_input
+  genre_is: String
+  languages: String
+  rating: Int
+  releasedate: String
+  resolution: Int
+  song_name: String
+}
+
+"""aggregate max on columns"""
+type song_max_fields {
+  artist_name: String
+  country: String
+  f_id: Int
+  genre_is: String
+  languages: String
+  rating: Int
+  releasedate: String
+  resolution: Int
+  song_name: String
+}
+
+"""
+order by max() on columns of table "song"
+"""
+input song_max_order_by {
+  artist_name: order_by
+  country: order_by
+  f_id: order_by
+  genre_is: order_by
+  languages: order_by
+  rating: order_by
+  releasedate: order_by
+  resolution: order_by
+  song_name: order_by
+}
+
+"""aggregate min on columns"""
+type song_min_fields {
+  artist_name: String
+  country: String
+  f_id: Int
+  genre_is: String
+  languages: String
+  rating: Int
+  releasedate: String
+  resolution: Int
+  song_name: String
+}
+
+"""
+order by min() on columns of table "song"
+"""
+input song_min_order_by {
+  artist_name: order_by
+  country: order_by
+  f_id: order_by
+  genre_is: order_by
+  languages: order_by
+  rating: order_by
+  releasedate: order_by
+  resolution: order_by
+  song_name: order_by
+}
+
+"""
+response of any mutation on the table "song"
+"""
+type song_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [song!]!
+}
+
+"""
+input type for inserting object relation for remote table "song"
+"""
+input song_obj_rel_insert_input {
+  data: song_insert_input!
+  on_conflict: song_on_conflict
+}
+
+"""
+on conflict condition type for table "song"
+"""
+input song_on_conflict {
+  constraint: song_constraint!
+  update_columns: [song_update_column!]!
+  where: song_bool_exp
+}
+
+"""
+ordering options when selecting data from "song"
+"""
+input song_order_by {
+  artist: artist_order_by
+  artist_name: order_by
+  country: order_by
+  f_id: order_by
+  file: files_order_by
+  genre: genre_order_by
+  genre_is: order_by
+  languages: order_by
+  rating: order_by
+  releasedate: order_by
+  resolution: order_by
+  song_name: order_by
+}
+
+"""
+select columns of table "song"
+"""
+enum song_select_column {
+  """column name"""
+  artist_name
+
+  """column name"""
+  country
+
+  """column name"""
+  f_id
+
+  """column name"""
+  genre_is
+
+  """column name"""
+  languages
+
+  """column name"""
+  rating
+
+  """column name"""
+  releasedate
+
+  """column name"""
+  resolution
+
+  """column name"""
+  song_name
+}
+
+"""
+input type for updating data in table "song"
+"""
+input song_set_input {
+  artist_name: String
+  country: String
+  f_id: Int
+  genre_is: String
+  languages: String
+  rating: Int
+  releasedate: String
+  resolution: Int
+  song_name: String
+}
+
+"""aggregate stddev on columns"""
+type song_stddev_fields {
+  f_id: Float
+  rating: Float
+  resolution: Float
+}
+
+"""
+order by stddev() on columns of table "song"
+"""
+input song_stddev_order_by {
+  f_id: order_by
+  rating: order_by
+  resolution: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type song_stddev_pop_fields {
+  f_id: Float
+  rating: Float
+  resolution: Float
+}
+
+"""
+order by stddev_pop() on columns of table "song"
+"""
+input song_stddev_pop_order_by {
+  f_id: order_by
+  rating: order_by
+  resolution: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type song_stddev_samp_fields {
+  f_id: Float
+  rating: Float
+  resolution: Float
+}
+
+"""
+order by stddev_samp() on columns of table "song"
+"""
+input song_stddev_samp_order_by {
+  f_id: order_by
+  rating: order_by
+  resolution: order_by
+}
+
+"""aggregate sum on columns"""
+type song_sum_fields {
+  f_id: Int
+  rating: Int
+  resolution: Int
+}
+
+"""
+order by sum() on columns of table "song"
+"""
+input song_sum_order_by {
+  f_id: order_by
+  rating: order_by
+  resolution: order_by
+}
+
+"""
+update columns of table "song"
+"""
+enum song_update_column {
+  """column name"""
+  artist_name
+
+  """column name"""
+  country
+
+  """column name"""
+  f_id
+
+  """column name"""
+  genre_is
+
+  """column name"""
+  languages
+
+  """column name"""
+  rating
+
+  """column name"""
+  releasedate
+
+  """column name"""
+  resolution
+
+  """column name"""
+  song_name
+}
+
+"""aggregate var_pop on columns"""
+type song_var_pop_fields {
+  f_id: Float
+  rating: Float
+  resolution: Float
+}
+
+"""
+order by var_pop() on columns of table "song"
+"""
+input song_var_pop_order_by {
+  f_id: order_by
+  rating: order_by
+  resolution: order_by
+}
+
+"""aggregate var_samp on columns"""
+type song_var_samp_fields {
+  f_id: Float
+  rating: Float
+  resolution: Float
+}
+
+"""
+order by var_samp() on columns of table "song"
+"""
+input song_var_samp_order_by {
+  f_id: order_by
+  rating: order_by
+  resolution: order_by
+}
+
+"""aggregate variance on columns"""
+type song_variance_fields {
+  f_id: Float
+  rating: Float
+  resolution: Float
+}
+
+"""
+order by variance() on columns of table "song"
+"""
+input song_variance_order_by {
+  f_id: order_by
+  rating: order_by
+  resolution: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "artist"
+  """
+  artist(
+    """distinct select on columns"""
+    distinct_on: [artist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [artist_order_by!]
+
+    """filter the rows returned"""
+    where: artist_bool_exp
+  ): [artist!]!
+
+  """
+  fetch aggregated fields from the table: "artist"
+  """
+  artist_aggregate(
+    """distinct select on columns"""
+    distinct_on: [artist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [artist_order_by!]
+
+    """filter the rows returned"""
+    where: artist_bool_exp
+  ): artist_aggregate!
+
+  """
+  fetch data from the table: "files"
+  """
+  files(
+    """distinct select on columns"""
+    distinct_on: [files_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [files_order_by!]
+
+    """filter the rows returned"""
+    where: files_bool_exp
+  ): [files!]!
+
+  """
+  fetch aggregated fields from the table: "files"
+  """
+  files_aggregate(
+    """distinct select on columns"""
+    distinct_on: [files_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [files_order_by!]
+
+    """filter the rows returned"""
+    where: files_bool_exp
+  ): files_aggregate!
+
+  """
+  fetch data from the table: "genre"
+  """
+  genre(
+    """distinct select on columns"""
+    distinct_on: [genre_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [genre_order_by!]
+
+    """filter the rows returned"""
+    where: genre_bool_exp
+  ): [genre!]!
+
+  """
+  fetch aggregated fields from the table: "genre"
+  """
+  genre_aggregate(
+    """distinct select on columns"""
+    distinct_on: [genre_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [genre_order_by!]
+
+    """filter the rows returned"""
+    where: genre_bool_exp
+  ): genre_aggregate!
+
+  """
+  fetch data from the table: "song"
+  """
+  song(
+    """distinct select on columns"""
+    distinct_on: [song_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [song_order_by!]
+
+    """filter the rows returned"""
+    where: song_bool_exp
+  ): [song!]!
+
+  """
+  fetch aggregated fields from the table: "song"
+  """
+  song_aggregate(
+    """distinct select on columns"""
+    distinct_on: [song_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [song_order_by!]
+
+    """filter the rows returned"""
+    where: song_bool_exp
+  ): song_aggregate!
+}

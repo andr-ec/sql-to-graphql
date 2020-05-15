@@ -1,0 +1,3222 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "investors"
+"""
+type investors {
+  investor_details: String
+  investor_id: bigint!
+
+  """An array relationship"""
+  lots(
+    """distinct select on columns"""
+    distinct_on: [lots_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [lots_order_by!]
+
+    """filter the rows returned"""
+    where: lots_bool_exp
+  ): [lots!]!
+
+  """An aggregated array relationship"""
+  lots_aggregate(
+    """distinct select on columns"""
+    distinct_on: [lots_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [lots_order_by!]
+
+    """filter the rows returned"""
+    where: lots_bool_exp
+  ): lots_aggregate!
+
+  """An array relationship"""
+  transactions(
+    """distinct select on columns"""
+    distinct_on: [transactions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [transactions_order_by!]
+
+    """filter the rows returned"""
+    where: transactions_bool_exp
+  ): [transactions!]!
+
+  """An aggregated array relationship"""
+  transactions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [transactions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [transactions_order_by!]
+
+    """filter the rows returned"""
+    where: transactions_bool_exp
+  ): transactions_aggregate!
+}
+
+"""
+aggregated selection of "investors"
+"""
+type investors_aggregate {
+  aggregate: investors_aggregate_fields
+  nodes: [investors!]!
+}
+
+"""
+aggregate fields of "investors"
+"""
+type investors_aggregate_fields {
+  avg: investors_avg_fields
+  count(columns: [investors_select_column!], distinct: Boolean): Int
+  max: investors_max_fields
+  min: investors_min_fields
+  stddev: investors_stddev_fields
+  stddev_pop: investors_stddev_pop_fields
+  stddev_samp: investors_stddev_samp_fields
+  sum: investors_sum_fields
+  var_pop: investors_var_pop_fields
+  var_samp: investors_var_samp_fields
+  variance: investors_variance_fields
+}
+
+"""
+order by aggregate values of table "investors"
+"""
+input investors_aggregate_order_by {
+  avg: investors_avg_order_by
+  count: order_by
+  max: investors_max_order_by
+  min: investors_min_order_by
+  stddev: investors_stddev_order_by
+  stddev_pop: investors_stddev_pop_order_by
+  stddev_samp: investors_stddev_samp_order_by
+  sum: investors_sum_order_by
+  var_pop: investors_var_pop_order_by
+  var_samp: investors_var_samp_order_by
+  variance: investors_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "investors"
+"""
+input investors_arr_rel_insert_input {
+  data: [investors_insert_input!]!
+  on_conflict: investors_on_conflict
+}
+
+"""aggregate avg on columns"""
+type investors_avg_fields {
+  investor_id: Float
+}
+
+"""
+order by avg() on columns of table "investors"
+"""
+input investors_avg_order_by {
+  investor_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "investors". All fields are combined with a logical 'AND'.
+"""
+input investors_bool_exp {
+  _and: [investors_bool_exp]
+  _not: investors_bool_exp
+  _or: [investors_bool_exp]
+  investor_details: String_comparison_exp
+  investor_id: bigint_comparison_exp
+  lots: lots_bool_exp
+  transactions: transactions_bool_exp
+}
+
+"""
+unique or primary key constraints on table "investors"
+"""
+enum investors_constraint {
+  """unique or primary key constraint"""
+  idx_23809_investors_pkey
+}
+
+"""
+input type for incrementing integer columne in table "investors"
+"""
+input investors_inc_input {
+  investor_id: bigint
+}
+
+"""
+input type for inserting data into table "investors"
+"""
+input investors_insert_input {
+  investor_details: String
+  investor_id: bigint
+  lots: lots_arr_rel_insert_input
+  transactions: transactions_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type investors_max_fields {
+  investor_details: String
+  investor_id: bigint
+}
+
+"""
+order by max() on columns of table "investors"
+"""
+input investors_max_order_by {
+  investor_details: order_by
+  investor_id: order_by
+}
+
+"""aggregate min on columns"""
+type investors_min_fields {
+  investor_details: String
+  investor_id: bigint
+}
+
+"""
+order by min() on columns of table "investors"
+"""
+input investors_min_order_by {
+  investor_details: order_by
+  investor_id: order_by
+}
+
+"""
+response of any mutation on the table "investors"
+"""
+type investors_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [investors!]!
+}
+
+"""
+input type for inserting object relation for remote table "investors"
+"""
+input investors_obj_rel_insert_input {
+  data: investors_insert_input!
+  on_conflict: investors_on_conflict
+}
+
+"""
+on conflict condition type for table "investors"
+"""
+input investors_on_conflict {
+  constraint: investors_constraint!
+  update_columns: [investors_update_column!]!
+  where: investors_bool_exp
+}
+
+"""
+ordering options when selecting data from "investors"
+"""
+input investors_order_by {
+  investor_details: order_by
+  investor_id: order_by
+  lots_aggregate: lots_aggregate_order_by
+  transactions_aggregate: transactions_aggregate_order_by
+}
+
+"""
+select columns of table "investors"
+"""
+enum investors_select_column {
+  """column name"""
+  investor_details
+
+  """column name"""
+  investor_id
+}
+
+"""
+input type for updating data in table "investors"
+"""
+input investors_set_input {
+  investor_details: String
+  investor_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type investors_stddev_fields {
+  investor_id: Float
+}
+
+"""
+order by stddev() on columns of table "investors"
+"""
+input investors_stddev_order_by {
+  investor_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type investors_stddev_pop_fields {
+  investor_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "investors"
+"""
+input investors_stddev_pop_order_by {
+  investor_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type investors_stddev_samp_fields {
+  investor_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "investors"
+"""
+input investors_stddev_samp_order_by {
+  investor_id: order_by
+}
+
+"""aggregate sum on columns"""
+type investors_sum_fields {
+  investor_id: bigint
+}
+
+"""
+order by sum() on columns of table "investors"
+"""
+input investors_sum_order_by {
+  investor_id: order_by
+}
+
+"""
+update columns of table "investors"
+"""
+enum investors_update_column {
+  """column name"""
+  investor_details
+
+  """column name"""
+  investor_id
+}
+
+"""aggregate var_pop on columns"""
+type investors_var_pop_fields {
+  investor_id: Float
+}
+
+"""
+order by var_pop() on columns of table "investors"
+"""
+input investors_var_pop_order_by {
+  investor_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type investors_var_samp_fields {
+  investor_id: Float
+}
+
+"""
+order by var_samp() on columns of table "investors"
+"""
+input investors_var_samp_order_by {
+  investor_id: order_by
+}
+
+"""aggregate variance on columns"""
+type investors_variance_fields {
+  investor_id: Float
+}
+
+"""
+order by variance() on columns of table "investors"
+"""
+input investors_variance_order_by {
+  investor_id: order_by
+}
+
+"""
+columns and relationships of "lots"
+"""
+type lots {
+  """An object relationship"""
+  investor: investors
+  investor_id: bigint
+  lot_details: String
+  lot_id: bigint!
+
+  """An array relationship"""
+  transactions_lots(
+    """distinct select on columns"""
+    distinct_on: [transactions_lots_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [transactions_lots_order_by!]
+
+    """filter the rows returned"""
+    where: transactions_lots_bool_exp
+  ): [transactions_lots!]!
+
+  """An aggregated array relationship"""
+  transactions_lots_aggregate(
+    """distinct select on columns"""
+    distinct_on: [transactions_lots_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [transactions_lots_order_by!]
+
+    """filter the rows returned"""
+    where: transactions_lots_bool_exp
+  ): transactions_lots_aggregate!
+}
+
+"""
+aggregated selection of "lots"
+"""
+type lots_aggregate {
+  aggregate: lots_aggregate_fields
+  nodes: [lots!]!
+}
+
+"""
+aggregate fields of "lots"
+"""
+type lots_aggregate_fields {
+  avg: lots_avg_fields
+  count(columns: [lots_select_column!], distinct: Boolean): Int
+  max: lots_max_fields
+  min: lots_min_fields
+  stddev: lots_stddev_fields
+  stddev_pop: lots_stddev_pop_fields
+  stddev_samp: lots_stddev_samp_fields
+  sum: lots_sum_fields
+  var_pop: lots_var_pop_fields
+  var_samp: lots_var_samp_fields
+  variance: lots_variance_fields
+}
+
+"""
+order by aggregate values of table "lots"
+"""
+input lots_aggregate_order_by {
+  avg: lots_avg_order_by
+  count: order_by
+  max: lots_max_order_by
+  min: lots_min_order_by
+  stddev: lots_stddev_order_by
+  stddev_pop: lots_stddev_pop_order_by
+  stddev_samp: lots_stddev_samp_order_by
+  sum: lots_sum_order_by
+  var_pop: lots_var_pop_order_by
+  var_samp: lots_var_samp_order_by
+  variance: lots_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "lots"
+"""
+input lots_arr_rel_insert_input {
+  data: [lots_insert_input!]!
+  on_conflict: lots_on_conflict
+}
+
+"""aggregate avg on columns"""
+type lots_avg_fields {
+  investor_id: Float
+  lot_id: Float
+}
+
+"""
+order by avg() on columns of table "lots"
+"""
+input lots_avg_order_by {
+  investor_id: order_by
+  lot_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "lots". All fields are combined with a logical 'AND'.
+"""
+input lots_bool_exp {
+  _and: [lots_bool_exp]
+  _not: lots_bool_exp
+  _or: [lots_bool_exp]
+  investor: investors_bool_exp
+  investor_id: bigint_comparison_exp
+  lot_details: String_comparison_exp
+  lot_id: bigint_comparison_exp
+  transactions_lots: transactions_lots_bool_exp
+}
+
+"""
+unique or primary key constraints on table "lots"
+"""
+enum lots_constraint {
+  """unique or primary key constraint"""
+  idx_23815_lots_pkey
+}
+
+"""
+input type for incrementing integer columne in table "lots"
+"""
+input lots_inc_input {
+  investor_id: bigint
+  lot_id: bigint
+}
+
+"""
+input type for inserting data into table "lots"
+"""
+input lots_insert_input {
+  investor: investors_obj_rel_insert_input
+  investor_id: bigint
+  lot_details: String
+  lot_id: bigint
+  transactions_lots: transactions_lots_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type lots_max_fields {
+  investor_id: bigint
+  lot_details: String
+  lot_id: bigint
+}
+
+"""
+order by max() on columns of table "lots"
+"""
+input lots_max_order_by {
+  investor_id: order_by
+  lot_details: order_by
+  lot_id: order_by
+}
+
+"""aggregate min on columns"""
+type lots_min_fields {
+  investor_id: bigint
+  lot_details: String
+  lot_id: bigint
+}
+
+"""
+order by min() on columns of table "lots"
+"""
+input lots_min_order_by {
+  investor_id: order_by
+  lot_details: order_by
+  lot_id: order_by
+}
+
+"""
+response of any mutation on the table "lots"
+"""
+type lots_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [lots!]!
+}
+
+"""
+input type for inserting object relation for remote table "lots"
+"""
+input lots_obj_rel_insert_input {
+  data: lots_insert_input!
+  on_conflict: lots_on_conflict
+}
+
+"""
+on conflict condition type for table "lots"
+"""
+input lots_on_conflict {
+  constraint: lots_constraint!
+  update_columns: [lots_update_column!]!
+  where: lots_bool_exp
+}
+
+"""
+ordering options when selecting data from "lots"
+"""
+input lots_order_by {
+  investor: investors_order_by
+  investor_id: order_by
+  lot_details: order_by
+  lot_id: order_by
+  transactions_lots_aggregate: transactions_lots_aggregate_order_by
+}
+
+"""
+select columns of table "lots"
+"""
+enum lots_select_column {
+  """column name"""
+  investor_id
+
+  """column name"""
+  lot_details
+
+  """column name"""
+  lot_id
+}
+
+"""
+input type for updating data in table "lots"
+"""
+input lots_set_input {
+  investor_id: bigint
+  lot_details: String
+  lot_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type lots_stddev_fields {
+  investor_id: Float
+  lot_id: Float
+}
+
+"""
+order by stddev() on columns of table "lots"
+"""
+input lots_stddev_order_by {
+  investor_id: order_by
+  lot_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type lots_stddev_pop_fields {
+  investor_id: Float
+  lot_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "lots"
+"""
+input lots_stddev_pop_order_by {
+  investor_id: order_by
+  lot_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type lots_stddev_samp_fields {
+  investor_id: Float
+  lot_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "lots"
+"""
+input lots_stddev_samp_order_by {
+  investor_id: order_by
+  lot_id: order_by
+}
+
+"""aggregate sum on columns"""
+type lots_sum_fields {
+  investor_id: bigint
+  lot_id: bigint
+}
+
+"""
+order by sum() on columns of table "lots"
+"""
+input lots_sum_order_by {
+  investor_id: order_by
+  lot_id: order_by
+}
+
+"""
+update columns of table "lots"
+"""
+enum lots_update_column {
+  """column name"""
+  investor_id
+
+  """column name"""
+  lot_details
+
+  """column name"""
+  lot_id
+}
+
+"""aggregate var_pop on columns"""
+type lots_var_pop_fields {
+  investor_id: Float
+  lot_id: Float
+}
+
+"""
+order by var_pop() on columns of table "lots"
+"""
+input lots_var_pop_order_by {
+  investor_id: order_by
+  lot_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type lots_var_samp_fields {
+  investor_id: Float
+  lot_id: Float
+}
+
+"""
+order by var_samp() on columns of table "lots"
+"""
+input lots_var_samp_order_by {
+  investor_id: order_by
+  lot_id: order_by
+}
+
+"""aggregate variance on columns"""
+type lots_variance_fields {
+  investor_id: Float
+  lot_id: Float
+}
+
+"""
+order by variance() on columns of table "lots"
+"""
+input lots_variance_order_by {
+  investor_id: order_by
+  lot_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "investors"
+  """
+  delete_investors(
+    """filter the rows which have to be deleted"""
+    where: investors_bool_exp!
+  ): investors_mutation_response
+
+  """
+  delete data from the table: "lots"
+  """
+  delete_lots(
+    """filter the rows which have to be deleted"""
+    where: lots_bool_exp!
+  ): lots_mutation_response
+
+  """
+  delete data from the table: "purchases"
+  """
+  delete_purchases(
+    """filter the rows which have to be deleted"""
+    where: purchases_bool_exp!
+  ): purchases_mutation_response
+
+  """
+  delete data from the table: "ref_transaction_types"
+  """
+  delete_ref_transaction_types(
+    """filter the rows which have to be deleted"""
+    where: ref_transaction_types_bool_exp!
+  ): ref_transaction_types_mutation_response
+
+  """
+  delete data from the table: "sales"
+  """
+  delete_sales(
+    """filter the rows which have to be deleted"""
+    where: sales_bool_exp!
+  ): sales_mutation_response
+
+  """
+  delete data from the table: "transactions"
+  """
+  delete_transactions(
+    """filter the rows which have to be deleted"""
+    where: transactions_bool_exp!
+  ): transactions_mutation_response
+
+  """
+  delete data from the table: "transactions_lots"
+  """
+  delete_transactions_lots(
+    """filter the rows which have to be deleted"""
+    where: transactions_lots_bool_exp!
+  ): transactions_lots_mutation_response
+
+  """
+  insert data into the table: "investors"
+  """
+  insert_investors(
+    """the rows to be inserted"""
+    objects: [investors_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: investors_on_conflict
+  ): investors_mutation_response
+
+  """
+  insert data into the table: "lots"
+  """
+  insert_lots(
+    """the rows to be inserted"""
+    objects: [lots_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: lots_on_conflict
+  ): lots_mutation_response
+
+  """
+  insert data into the table: "purchases"
+  """
+  insert_purchases(
+    """the rows to be inserted"""
+    objects: [purchases_insert_input!]!
+  ): purchases_mutation_response
+
+  """
+  insert data into the table: "ref_transaction_types"
+  """
+  insert_ref_transaction_types(
+    """the rows to be inserted"""
+    objects: [ref_transaction_types_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: ref_transaction_types_on_conflict
+  ): ref_transaction_types_mutation_response
+
+  """
+  insert data into the table: "sales"
+  """
+  insert_sales(
+    """the rows to be inserted"""
+    objects: [sales_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: sales_on_conflict
+  ): sales_mutation_response
+
+  """
+  insert data into the table: "transactions"
+  """
+  insert_transactions(
+    """the rows to be inserted"""
+    objects: [transactions_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: transactions_on_conflict
+  ): transactions_mutation_response
+
+  """
+  insert data into the table: "transactions_lots"
+  """
+  insert_transactions_lots(
+    """the rows to be inserted"""
+    objects: [transactions_lots_insert_input!]!
+  ): transactions_lots_mutation_response
+
+  """
+  update data of the table: "investors"
+  """
+  update_investors(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: investors_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: investors_set_input
+
+    """filter the rows which have to be updated"""
+    where: investors_bool_exp!
+  ): investors_mutation_response
+
+  """
+  update data of the table: "lots"
+  """
+  update_lots(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: lots_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: lots_set_input
+
+    """filter the rows which have to be updated"""
+    where: lots_bool_exp!
+  ): lots_mutation_response
+
+  """
+  update data of the table: "purchases"
+  """
+  update_purchases(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: purchases_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: purchases_set_input
+
+    """filter the rows which have to be updated"""
+    where: purchases_bool_exp!
+  ): purchases_mutation_response
+
+  """
+  update data of the table: "ref_transaction_types"
+  """
+  update_ref_transaction_types(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ref_transaction_types_set_input
+
+    """filter the rows which have to be updated"""
+    where: ref_transaction_types_bool_exp!
+  ): ref_transaction_types_mutation_response
+
+  """
+  update data of the table: "sales"
+  """
+  update_sales(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: sales_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: sales_set_input
+
+    """filter the rows which have to be updated"""
+    where: sales_bool_exp!
+  ): sales_mutation_response
+
+  """
+  update data of the table: "transactions"
+  """
+  update_transactions(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: transactions_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: transactions_set_input
+
+    """filter the rows which have to be updated"""
+    where: transactions_bool_exp!
+  ): transactions_mutation_response
+
+  """
+  update data of the table: "transactions_lots"
+  """
+  update_transactions_lots(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: transactions_lots_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: transactions_lots_set_input
+
+    """filter the rows which have to be updated"""
+    where: transactions_lots_bool_exp!
+  ): transactions_lots_mutation_response
+}
+
+scalar numeric
+
+"""
+expression to compare columns of type numeric. All fields are combined with logical 'AND'.
+"""
+input numeric_comparison_exp {
+  _eq: numeric
+  _gt: numeric
+  _gte: numeric
+  _in: [numeric!]
+  _is_null: Boolean
+  _lt: numeric
+  _lte: numeric
+  _neq: numeric
+  _nin: [numeric!]
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "purchases"
+"""
+type purchases {
+  purchase_details: String
+  purchase_transaction_id: bigint
+
+  """An object relationship"""
+  transaction: transactions
+}
+
+"""
+aggregated selection of "purchases"
+"""
+type purchases_aggregate {
+  aggregate: purchases_aggregate_fields
+  nodes: [purchases!]!
+}
+
+"""
+aggregate fields of "purchases"
+"""
+type purchases_aggregate_fields {
+  avg: purchases_avg_fields
+  count(columns: [purchases_select_column!], distinct: Boolean): Int
+  max: purchases_max_fields
+  min: purchases_min_fields
+  stddev: purchases_stddev_fields
+  stddev_pop: purchases_stddev_pop_fields
+  stddev_samp: purchases_stddev_samp_fields
+  sum: purchases_sum_fields
+  var_pop: purchases_var_pop_fields
+  var_samp: purchases_var_samp_fields
+  variance: purchases_variance_fields
+}
+
+"""
+order by aggregate values of table "purchases"
+"""
+input purchases_aggregate_order_by {
+  avg: purchases_avg_order_by
+  count: order_by
+  max: purchases_max_order_by
+  min: purchases_min_order_by
+  stddev: purchases_stddev_order_by
+  stddev_pop: purchases_stddev_pop_order_by
+  stddev_samp: purchases_stddev_samp_order_by
+  sum: purchases_sum_order_by
+  var_pop: purchases_var_pop_order_by
+  var_samp: purchases_var_samp_order_by
+  variance: purchases_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "purchases"
+"""
+input purchases_arr_rel_insert_input {
+  data: [purchases_insert_input!]!
+}
+
+"""aggregate avg on columns"""
+type purchases_avg_fields {
+  purchase_transaction_id: Float
+}
+
+"""
+order by avg() on columns of table "purchases"
+"""
+input purchases_avg_order_by {
+  purchase_transaction_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "purchases". All fields are combined with a logical 'AND'.
+"""
+input purchases_bool_exp {
+  _and: [purchases_bool_exp]
+  _not: purchases_bool_exp
+  _or: [purchases_bool_exp]
+  purchase_details: String_comparison_exp
+  purchase_transaction_id: bigint_comparison_exp
+  transaction: transactions_bool_exp
+}
+
+"""
+input type for incrementing integer columne in table "purchases"
+"""
+input purchases_inc_input {
+  purchase_transaction_id: bigint
+}
+
+"""
+input type for inserting data into table "purchases"
+"""
+input purchases_insert_input {
+  purchase_details: String
+  purchase_transaction_id: bigint
+  transaction: transactions_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type purchases_max_fields {
+  purchase_details: String
+  purchase_transaction_id: bigint
+}
+
+"""
+order by max() on columns of table "purchases"
+"""
+input purchases_max_order_by {
+  purchase_details: order_by
+  purchase_transaction_id: order_by
+}
+
+"""aggregate min on columns"""
+type purchases_min_fields {
+  purchase_details: String
+  purchase_transaction_id: bigint
+}
+
+"""
+order by min() on columns of table "purchases"
+"""
+input purchases_min_order_by {
+  purchase_details: order_by
+  purchase_transaction_id: order_by
+}
+
+"""
+response of any mutation on the table "purchases"
+"""
+type purchases_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [purchases!]!
+}
+
+"""
+input type for inserting object relation for remote table "purchases"
+"""
+input purchases_obj_rel_insert_input {
+  data: purchases_insert_input!
+}
+
+"""
+ordering options when selecting data from "purchases"
+"""
+input purchases_order_by {
+  purchase_details: order_by
+  purchase_transaction_id: order_by
+  transaction: transactions_order_by
+}
+
+"""
+select columns of table "purchases"
+"""
+enum purchases_select_column {
+  """column name"""
+  purchase_details
+
+  """column name"""
+  purchase_transaction_id
+}
+
+"""
+input type for updating data in table "purchases"
+"""
+input purchases_set_input {
+  purchase_details: String
+  purchase_transaction_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type purchases_stddev_fields {
+  purchase_transaction_id: Float
+}
+
+"""
+order by stddev() on columns of table "purchases"
+"""
+input purchases_stddev_order_by {
+  purchase_transaction_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type purchases_stddev_pop_fields {
+  purchase_transaction_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "purchases"
+"""
+input purchases_stddev_pop_order_by {
+  purchase_transaction_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type purchases_stddev_samp_fields {
+  purchase_transaction_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "purchases"
+"""
+input purchases_stddev_samp_order_by {
+  purchase_transaction_id: order_by
+}
+
+"""aggregate sum on columns"""
+type purchases_sum_fields {
+  purchase_transaction_id: bigint
+}
+
+"""
+order by sum() on columns of table "purchases"
+"""
+input purchases_sum_order_by {
+  purchase_transaction_id: order_by
+}
+
+"""aggregate var_pop on columns"""
+type purchases_var_pop_fields {
+  purchase_transaction_id: Float
+}
+
+"""
+order by var_pop() on columns of table "purchases"
+"""
+input purchases_var_pop_order_by {
+  purchase_transaction_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type purchases_var_samp_fields {
+  purchase_transaction_id: Float
+}
+
+"""
+order by var_samp() on columns of table "purchases"
+"""
+input purchases_var_samp_order_by {
+  purchase_transaction_id: order_by
+}
+
+"""aggregate variance on columns"""
+type purchases_variance_fields {
+  purchase_transaction_id: Float
+}
+
+"""
+order by variance() on columns of table "purchases"
+"""
+input purchases_variance_order_by {
+  purchase_transaction_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "investors"
+  """
+  investors(
+    """distinct select on columns"""
+    distinct_on: [investors_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [investors_order_by!]
+
+    """filter the rows returned"""
+    where: investors_bool_exp
+  ): [investors!]!
+
+  """
+  fetch aggregated fields from the table: "investors"
+  """
+  investors_aggregate(
+    """distinct select on columns"""
+    distinct_on: [investors_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [investors_order_by!]
+
+    """filter the rows returned"""
+    where: investors_bool_exp
+  ): investors_aggregate!
+
+  """fetch data from the table: "investors" using primary key columns"""
+  investors_by_pk(investor_id: bigint!): investors
+
+  """
+  fetch data from the table: "lots"
+  """
+  lots(
+    """distinct select on columns"""
+    distinct_on: [lots_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [lots_order_by!]
+
+    """filter the rows returned"""
+    where: lots_bool_exp
+  ): [lots!]!
+
+  """
+  fetch aggregated fields from the table: "lots"
+  """
+  lots_aggregate(
+    """distinct select on columns"""
+    distinct_on: [lots_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [lots_order_by!]
+
+    """filter the rows returned"""
+    where: lots_bool_exp
+  ): lots_aggregate!
+
+  """fetch data from the table: "lots" using primary key columns"""
+  lots_by_pk(lot_id: bigint!): lots
+
+  """
+  fetch data from the table: "purchases"
+  """
+  purchases(
+    """distinct select on columns"""
+    distinct_on: [purchases_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [purchases_order_by!]
+
+    """filter the rows returned"""
+    where: purchases_bool_exp
+  ): [purchases!]!
+
+  """
+  fetch aggregated fields from the table: "purchases"
+  """
+  purchases_aggregate(
+    """distinct select on columns"""
+    distinct_on: [purchases_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [purchases_order_by!]
+
+    """filter the rows returned"""
+    where: purchases_bool_exp
+  ): purchases_aggregate!
+
+  """
+  fetch data from the table: "ref_transaction_types"
+  """
+  ref_transaction_types(
+    """distinct select on columns"""
+    distinct_on: [ref_transaction_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_transaction_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_transaction_types_bool_exp
+  ): [ref_transaction_types!]!
+
+  """
+  fetch aggregated fields from the table: "ref_transaction_types"
+  """
+  ref_transaction_types_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_transaction_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_transaction_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_transaction_types_bool_exp
+  ): ref_transaction_types_aggregate!
+
+  """
+  fetch data from the table: "ref_transaction_types" using primary key columns
+  """
+  ref_transaction_types_by_pk(transaction_type_code: String!): ref_transaction_types
+
+  """
+  fetch data from the table: "sales"
+  """
+  sales(
+    """distinct select on columns"""
+    distinct_on: [sales_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [sales_order_by!]
+
+    """filter the rows returned"""
+    where: sales_bool_exp
+  ): [sales!]!
+
+  """
+  fetch aggregated fields from the table: "sales"
+  """
+  sales_aggregate(
+    """distinct select on columns"""
+    distinct_on: [sales_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [sales_order_by!]
+
+    """filter the rows returned"""
+    where: sales_bool_exp
+  ): sales_aggregate!
+
+  """fetch data from the table: "sales" using primary key columns"""
+  sales_by_pk(sales_transaction_id: bigint!): sales
+
+  """
+  fetch data from the table: "transactions"
+  """
+  transactions(
+    """distinct select on columns"""
+    distinct_on: [transactions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [transactions_order_by!]
+
+    """filter the rows returned"""
+    where: transactions_bool_exp
+  ): [transactions!]!
+
+  """
+  fetch aggregated fields from the table: "transactions"
+  """
+  transactions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [transactions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [transactions_order_by!]
+
+    """filter the rows returned"""
+    where: transactions_bool_exp
+  ): transactions_aggregate!
+
+  """fetch data from the table: "transactions" using primary key columns"""
+  transactions_by_pk(transaction_id: bigint!): transactions
+
+  """
+  fetch data from the table: "transactions_lots"
+  """
+  transactions_lots(
+    """distinct select on columns"""
+    distinct_on: [transactions_lots_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [transactions_lots_order_by!]
+
+    """filter the rows returned"""
+    where: transactions_lots_bool_exp
+  ): [transactions_lots!]!
+
+  """
+  fetch aggregated fields from the table: "transactions_lots"
+  """
+  transactions_lots_aggregate(
+    """distinct select on columns"""
+    distinct_on: [transactions_lots_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [transactions_lots_order_by!]
+
+    """filter the rows returned"""
+    where: transactions_lots_bool_exp
+  ): transactions_lots_aggregate!
+}
+
+"""
+columns and relationships of "ref_transaction_types"
+"""
+type ref_transaction_types {
+  transaction_type_code: String!
+  transaction_type_description: String
+
+  """An array relationship"""
+  transactions(
+    """distinct select on columns"""
+    distinct_on: [transactions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [transactions_order_by!]
+
+    """filter the rows returned"""
+    where: transactions_bool_exp
+  ): [transactions!]!
+
+  """An aggregated array relationship"""
+  transactions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [transactions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [transactions_order_by!]
+
+    """filter the rows returned"""
+    where: transactions_bool_exp
+  ): transactions_aggregate!
+}
+
+"""
+aggregated selection of "ref_transaction_types"
+"""
+type ref_transaction_types_aggregate {
+  aggregate: ref_transaction_types_aggregate_fields
+  nodes: [ref_transaction_types!]!
+}
+
+"""
+aggregate fields of "ref_transaction_types"
+"""
+type ref_transaction_types_aggregate_fields {
+  count(columns: [ref_transaction_types_select_column!], distinct: Boolean): Int
+  max: ref_transaction_types_max_fields
+  min: ref_transaction_types_min_fields
+}
+
+"""
+order by aggregate values of table "ref_transaction_types"
+"""
+input ref_transaction_types_aggregate_order_by {
+  count: order_by
+  max: ref_transaction_types_max_order_by
+  min: ref_transaction_types_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "ref_transaction_types"
+"""
+input ref_transaction_types_arr_rel_insert_input {
+  data: [ref_transaction_types_insert_input!]!
+  on_conflict: ref_transaction_types_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "ref_transaction_types". All fields are combined with a logical 'AND'.
+"""
+input ref_transaction_types_bool_exp {
+  _and: [ref_transaction_types_bool_exp]
+  _not: ref_transaction_types_bool_exp
+  _or: [ref_transaction_types_bool_exp]
+  transaction_type_code: String_comparison_exp
+  transaction_type_description: String_comparison_exp
+  transactions: transactions_bool_exp
+}
+
+"""
+unique or primary key constraints on table "ref_transaction_types"
+"""
+enum ref_transaction_types_constraint {
+  """unique or primary key constraint"""
+  idx_23821_sqlite_autoindex_ref_transaction_types_1
+}
+
+"""
+input type for inserting data into table "ref_transaction_types"
+"""
+input ref_transaction_types_insert_input {
+  transaction_type_code: String
+  transaction_type_description: String
+  transactions: transactions_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type ref_transaction_types_max_fields {
+  transaction_type_code: String
+  transaction_type_description: String
+}
+
+"""
+order by max() on columns of table "ref_transaction_types"
+"""
+input ref_transaction_types_max_order_by {
+  transaction_type_code: order_by
+  transaction_type_description: order_by
+}
+
+"""aggregate min on columns"""
+type ref_transaction_types_min_fields {
+  transaction_type_code: String
+  transaction_type_description: String
+}
+
+"""
+order by min() on columns of table "ref_transaction_types"
+"""
+input ref_transaction_types_min_order_by {
+  transaction_type_code: order_by
+  transaction_type_description: order_by
+}
+
+"""
+response of any mutation on the table "ref_transaction_types"
+"""
+type ref_transaction_types_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [ref_transaction_types!]!
+}
+
+"""
+input type for inserting object relation for remote table "ref_transaction_types"
+"""
+input ref_transaction_types_obj_rel_insert_input {
+  data: ref_transaction_types_insert_input!
+  on_conflict: ref_transaction_types_on_conflict
+}
+
+"""
+on conflict condition type for table "ref_transaction_types"
+"""
+input ref_transaction_types_on_conflict {
+  constraint: ref_transaction_types_constraint!
+  update_columns: [ref_transaction_types_update_column!]!
+  where: ref_transaction_types_bool_exp
+}
+
+"""
+ordering options when selecting data from "ref_transaction_types"
+"""
+input ref_transaction_types_order_by {
+  transaction_type_code: order_by
+  transaction_type_description: order_by
+  transactions_aggregate: transactions_aggregate_order_by
+}
+
+"""
+select columns of table "ref_transaction_types"
+"""
+enum ref_transaction_types_select_column {
+  """column name"""
+  transaction_type_code
+
+  """column name"""
+  transaction_type_description
+}
+
+"""
+input type for updating data in table "ref_transaction_types"
+"""
+input ref_transaction_types_set_input {
+  transaction_type_code: String
+  transaction_type_description: String
+}
+
+"""
+update columns of table "ref_transaction_types"
+"""
+enum ref_transaction_types_update_column {
+  """column name"""
+  transaction_type_code
+
+  """column name"""
+  transaction_type_description
+}
+
+"""
+columns and relationships of "sales"
+"""
+type sales {
+  sales_details: String
+  sales_transaction_id: bigint!
+
+  """An object relationship"""
+  transaction: transactions!
+}
+
+"""
+aggregated selection of "sales"
+"""
+type sales_aggregate {
+  aggregate: sales_aggregate_fields
+  nodes: [sales!]!
+}
+
+"""
+aggregate fields of "sales"
+"""
+type sales_aggregate_fields {
+  avg: sales_avg_fields
+  count(columns: [sales_select_column!], distinct: Boolean): Int
+  max: sales_max_fields
+  min: sales_min_fields
+  stddev: sales_stddev_fields
+  stddev_pop: sales_stddev_pop_fields
+  stddev_samp: sales_stddev_samp_fields
+  sum: sales_sum_fields
+  var_pop: sales_var_pop_fields
+  var_samp: sales_var_samp_fields
+  variance: sales_variance_fields
+}
+
+"""
+order by aggregate values of table "sales"
+"""
+input sales_aggregate_order_by {
+  avg: sales_avg_order_by
+  count: order_by
+  max: sales_max_order_by
+  min: sales_min_order_by
+  stddev: sales_stddev_order_by
+  stddev_pop: sales_stddev_pop_order_by
+  stddev_samp: sales_stddev_samp_order_by
+  sum: sales_sum_order_by
+  var_pop: sales_var_pop_order_by
+  var_samp: sales_var_samp_order_by
+  variance: sales_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "sales"
+"""
+input sales_arr_rel_insert_input {
+  data: [sales_insert_input!]!
+  on_conflict: sales_on_conflict
+}
+
+"""aggregate avg on columns"""
+type sales_avg_fields {
+  sales_transaction_id: Float
+}
+
+"""
+order by avg() on columns of table "sales"
+"""
+input sales_avg_order_by {
+  sales_transaction_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "sales". All fields are combined with a logical 'AND'.
+"""
+input sales_bool_exp {
+  _and: [sales_bool_exp]
+  _not: sales_bool_exp
+  _or: [sales_bool_exp]
+  sales_details: String_comparison_exp
+  sales_transaction_id: bigint_comparison_exp
+  transaction: transactions_bool_exp
+}
+
+"""
+unique or primary key constraints on table "sales"
+"""
+enum sales_constraint {
+  """unique or primary key constraint"""
+  idx_23833_sales_pkey
+}
+
+"""
+input type for incrementing integer columne in table "sales"
+"""
+input sales_inc_input {
+  sales_transaction_id: bigint
+}
+
+"""
+input type for inserting data into table "sales"
+"""
+input sales_insert_input {
+  sales_details: String
+  sales_transaction_id: bigint
+  transaction: transactions_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type sales_max_fields {
+  sales_details: String
+  sales_transaction_id: bigint
+}
+
+"""
+order by max() on columns of table "sales"
+"""
+input sales_max_order_by {
+  sales_details: order_by
+  sales_transaction_id: order_by
+}
+
+"""aggregate min on columns"""
+type sales_min_fields {
+  sales_details: String
+  sales_transaction_id: bigint
+}
+
+"""
+order by min() on columns of table "sales"
+"""
+input sales_min_order_by {
+  sales_details: order_by
+  sales_transaction_id: order_by
+}
+
+"""
+response of any mutation on the table "sales"
+"""
+type sales_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [sales!]!
+}
+
+"""
+input type for inserting object relation for remote table "sales"
+"""
+input sales_obj_rel_insert_input {
+  data: sales_insert_input!
+  on_conflict: sales_on_conflict
+}
+
+"""
+on conflict condition type for table "sales"
+"""
+input sales_on_conflict {
+  constraint: sales_constraint!
+  update_columns: [sales_update_column!]!
+  where: sales_bool_exp
+}
+
+"""
+ordering options when selecting data from "sales"
+"""
+input sales_order_by {
+  sales_details: order_by
+  sales_transaction_id: order_by
+  transaction: transactions_order_by
+}
+
+"""
+select columns of table "sales"
+"""
+enum sales_select_column {
+  """column name"""
+  sales_details
+
+  """column name"""
+  sales_transaction_id
+}
+
+"""
+input type for updating data in table "sales"
+"""
+input sales_set_input {
+  sales_details: String
+  sales_transaction_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type sales_stddev_fields {
+  sales_transaction_id: Float
+}
+
+"""
+order by stddev() on columns of table "sales"
+"""
+input sales_stddev_order_by {
+  sales_transaction_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type sales_stddev_pop_fields {
+  sales_transaction_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "sales"
+"""
+input sales_stddev_pop_order_by {
+  sales_transaction_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type sales_stddev_samp_fields {
+  sales_transaction_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "sales"
+"""
+input sales_stddev_samp_order_by {
+  sales_transaction_id: order_by
+}
+
+"""aggregate sum on columns"""
+type sales_sum_fields {
+  sales_transaction_id: bigint
+}
+
+"""
+order by sum() on columns of table "sales"
+"""
+input sales_sum_order_by {
+  sales_transaction_id: order_by
+}
+
+"""
+update columns of table "sales"
+"""
+enum sales_update_column {
+  """column name"""
+  sales_details
+
+  """column name"""
+  sales_transaction_id
+}
+
+"""aggregate var_pop on columns"""
+type sales_var_pop_fields {
+  sales_transaction_id: Float
+}
+
+"""
+order by var_pop() on columns of table "sales"
+"""
+input sales_var_pop_order_by {
+  sales_transaction_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type sales_var_samp_fields {
+  sales_transaction_id: Float
+}
+
+"""
+order by var_samp() on columns of table "sales"
+"""
+input sales_var_samp_order_by {
+  sales_transaction_id: order_by
+}
+
+"""aggregate variance on columns"""
+type sales_variance_fields {
+  sales_transaction_id: Float
+}
+
+"""
+order by variance() on columns of table "sales"
+"""
+input sales_variance_order_by {
+  sales_transaction_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "investors"
+  """
+  investors(
+    """distinct select on columns"""
+    distinct_on: [investors_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [investors_order_by!]
+
+    """filter the rows returned"""
+    where: investors_bool_exp
+  ): [investors!]!
+
+  """
+  fetch aggregated fields from the table: "investors"
+  """
+  investors_aggregate(
+    """distinct select on columns"""
+    distinct_on: [investors_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [investors_order_by!]
+
+    """filter the rows returned"""
+    where: investors_bool_exp
+  ): investors_aggregate!
+
+  """fetch data from the table: "investors" using primary key columns"""
+  investors_by_pk(investor_id: bigint!): investors
+
+  """
+  fetch data from the table: "lots"
+  """
+  lots(
+    """distinct select on columns"""
+    distinct_on: [lots_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [lots_order_by!]
+
+    """filter the rows returned"""
+    where: lots_bool_exp
+  ): [lots!]!
+
+  """
+  fetch aggregated fields from the table: "lots"
+  """
+  lots_aggregate(
+    """distinct select on columns"""
+    distinct_on: [lots_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [lots_order_by!]
+
+    """filter the rows returned"""
+    where: lots_bool_exp
+  ): lots_aggregate!
+
+  """fetch data from the table: "lots" using primary key columns"""
+  lots_by_pk(lot_id: bigint!): lots
+
+  """
+  fetch data from the table: "purchases"
+  """
+  purchases(
+    """distinct select on columns"""
+    distinct_on: [purchases_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [purchases_order_by!]
+
+    """filter the rows returned"""
+    where: purchases_bool_exp
+  ): [purchases!]!
+
+  """
+  fetch aggregated fields from the table: "purchases"
+  """
+  purchases_aggregate(
+    """distinct select on columns"""
+    distinct_on: [purchases_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [purchases_order_by!]
+
+    """filter the rows returned"""
+    where: purchases_bool_exp
+  ): purchases_aggregate!
+
+  """
+  fetch data from the table: "ref_transaction_types"
+  """
+  ref_transaction_types(
+    """distinct select on columns"""
+    distinct_on: [ref_transaction_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_transaction_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_transaction_types_bool_exp
+  ): [ref_transaction_types!]!
+
+  """
+  fetch aggregated fields from the table: "ref_transaction_types"
+  """
+  ref_transaction_types_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_transaction_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_transaction_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_transaction_types_bool_exp
+  ): ref_transaction_types_aggregate!
+
+  """
+  fetch data from the table: "ref_transaction_types" using primary key columns
+  """
+  ref_transaction_types_by_pk(transaction_type_code: String!): ref_transaction_types
+
+  """
+  fetch data from the table: "sales"
+  """
+  sales(
+    """distinct select on columns"""
+    distinct_on: [sales_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [sales_order_by!]
+
+    """filter the rows returned"""
+    where: sales_bool_exp
+  ): [sales!]!
+
+  """
+  fetch aggregated fields from the table: "sales"
+  """
+  sales_aggregate(
+    """distinct select on columns"""
+    distinct_on: [sales_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [sales_order_by!]
+
+    """filter the rows returned"""
+    where: sales_bool_exp
+  ): sales_aggregate!
+
+  """fetch data from the table: "sales" using primary key columns"""
+  sales_by_pk(sales_transaction_id: bigint!): sales
+
+  """
+  fetch data from the table: "transactions"
+  """
+  transactions(
+    """distinct select on columns"""
+    distinct_on: [transactions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [transactions_order_by!]
+
+    """filter the rows returned"""
+    where: transactions_bool_exp
+  ): [transactions!]!
+
+  """
+  fetch aggregated fields from the table: "transactions"
+  """
+  transactions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [transactions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [transactions_order_by!]
+
+    """filter the rows returned"""
+    where: transactions_bool_exp
+  ): transactions_aggregate!
+
+  """fetch data from the table: "transactions" using primary key columns"""
+  transactions_by_pk(transaction_id: bigint!): transactions
+
+  """
+  fetch data from the table: "transactions_lots"
+  """
+  transactions_lots(
+    """distinct select on columns"""
+    distinct_on: [transactions_lots_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [transactions_lots_order_by!]
+
+    """filter the rows returned"""
+    where: transactions_lots_bool_exp
+  ): [transactions_lots!]!
+
+  """
+  fetch aggregated fields from the table: "transactions_lots"
+  """
+  transactions_lots_aggregate(
+    """distinct select on columns"""
+    distinct_on: [transactions_lots_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [transactions_lots_order_by!]
+
+    """filter the rows returned"""
+    where: transactions_lots_bool_exp
+  ): transactions_lots_aggregate!
+}
+
+scalar timestamptz
+
+"""
+expression to compare columns of type timestamptz. All fields are combined with logical 'AND'.
+"""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}
+
+"""
+columns and relationships of "transactions"
+"""
+type transactions {
+  amount_of_transaction: numeric
+  date_of_transaction: timestamptz
+
+  """An object relationship"""
+  investor: investors
+  investor_id: bigint
+  other_details: String
+
+  """An array relationship"""
+  purchases(
+    """distinct select on columns"""
+    distinct_on: [purchases_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [purchases_order_by!]
+
+    """filter the rows returned"""
+    where: purchases_bool_exp
+  ): [purchases!]!
+
+  """An aggregated array relationship"""
+  purchases_aggregate(
+    """distinct select on columns"""
+    distinct_on: [purchases_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [purchases_order_by!]
+
+    """filter the rows returned"""
+    where: purchases_bool_exp
+  ): purchases_aggregate!
+
+  """An object relationship"""
+  ref_transaction_type: ref_transaction_types
+
+  """An array relationship"""
+  sales(
+    """distinct select on columns"""
+    distinct_on: [sales_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [sales_order_by!]
+
+    """filter the rows returned"""
+    where: sales_bool_exp
+  ): [sales!]!
+
+  """An aggregated array relationship"""
+  sales_aggregate(
+    """distinct select on columns"""
+    distinct_on: [sales_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [sales_order_by!]
+
+    """filter the rows returned"""
+    where: sales_bool_exp
+  ): sales_aggregate!
+  share_count: String
+  transaction_id: bigint!
+  transaction_type_code: String
+
+  """An array relationship"""
+  transactions_lots(
+    """distinct select on columns"""
+    distinct_on: [transactions_lots_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [transactions_lots_order_by!]
+
+    """filter the rows returned"""
+    where: transactions_lots_bool_exp
+  ): [transactions_lots!]!
+
+  """An aggregated array relationship"""
+  transactions_lots_aggregate(
+    """distinct select on columns"""
+    distinct_on: [transactions_lots_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [transactions_lots_order_by!]
+
+    """filter the rows returned"""
+    where: transactions_lots_bool_exp
+  ): transactions_lots_aggregate!
+}
+
+"""
+aggregated selection of "transactions"
+"""
+type transactions_aggregate {
+  aggregate: transactions_aggregate_fields
+  nodes: [transactions!]!
+}
+
+"""
+aggregate fields of "transactions"
+"""
+type transactions_aggregate_fields {
+  avg: transactions_avg_fields
+  count(columns: [transactions_select_column!], distinct: Boolean): Int
+  max: transactions_max_fields
+  min: transactions_min_fields
+  stddev: transactions_stddev_fields
+  stddev_pop: transactions_stddev_pop_fields
+  stddev_samp: transactions_stddev_samp_fields
+  sum: transactions_sum_fields
+  var_pop: transactions_var_pop_fields
+  var_samp: transactions_var_samp_fields
+  variance: transactions_variance_fields
+}
+
+"""
+order by aggregate values of table "transactions"
+"""
+input transactions_aggregate_order_by {
+  avg: transactions_avg_order_by
+  count: order_by
+  max: transactions_max_order_by
+  min: transactions_min_order_by
+  stddev: transactions_stddev_order_by
+  stddev_pop: transactions_stddev_pop_order_by
+  stddev_samp: transactions_stddev_samp_order_by
+  sum: transactions_sum_order_by
+  var_pop: transactions_var_pop_order_by
+  var_samp: transactions_var_samp_order_by
+  variance: transactions_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "transactions"
+"""
+input transactions_arr_rel_insert_input {
+  data: [transactions_insert_input!]!
+  on_conflict: transactions_on_conflict
+}
+
+"""aggregate avg on columns"""
+type transactions_avg_fields {
+  amount_of_transaction: Float
+  investor_id: Float
+  transaction_id: Float
+}
+
+"""
+order by avg() on columns of table "transactions"
+"""
+input transactions_avg_order_by {
+  amount_of_transaction: order_by
+  investor_id: order_by
+  transaction_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "transactions". All fields are combined with a logical 'AND'.
+"""
+input transactions_bool_exp {
+  _and: [transactions_bool_exp]
+  _not: transactions_bool_exp
+  _or: [transactions_bool_exp]
+  amount_of_transaction: numeric_comparison_exp
+  date_of_transaction: timestamptz_comparison_exp
+  investor: investors_bool_exp
+  investor_id: bigint_comparison_exp
+  other_details: String_comparison_exp
+  purchases: purchases_bool_exp
+  ref_transaction_type: ref_transaction_types_bool_exp
+  sales: sales_bool_exp
+  share_count: String_comparison_exp
+  transaction_id: bigint_comparison_exp
+  transaction_type_code: String_comparison_exp
+  transactions_lots: transactions_lots_bool_exp
+}
+
+"""
+unique or primary key constraints on table "transactions"
+"""
+enum transactions_constraint {
+  """unique or primary key constraint"""
+  idx_23827_transactions_pkey
+}
+
+"""
+input type for incrementing integer columne in table "transactions"
+"""
+input transactions_inc_input {
+  investor_id: bigint
+  transaction_id: bigint
+}
+
+"""
+input type for inserting data into table "transactions"
+"""
+input transactions_insert_input {
+  amount_of_transaction: numeric
+  date_of_transaction: timestamptz
+  investor: investors_obj_rel_insert_input
+  investor_id: bigint
+  other_details: String
+  purchases: purchases_arr_rel_insert_input
+  ref_transaction_type: ref_transaction_types_obj_rel_insert_input
+  sales: sales_arr_rel_insert_input
+  share_count: String
+  transaction_id: bigint
+  transaction_type_code: String
+  transactions_lots: transactions_lots_arr_rel_insert_input
+}
+
+"""
+columns and relationships of "transactions_lots"
+"""
+type transactions_lots {
+  """An object relationship"""
+  lot: lots
+  lot_id: bigint
+
+  """An object relationship"""
+  transaction: transactions
+  transaction_id: bigint
+}
+
+"""
+aggregated selection of "transactions_lots"
+"""
+type transactions_lots_aggregate {
+  aggregate: transactions_lots_aggregate_fields
+  nodes: [transactions_lots!]!
+}
+
+"""
+aggregate fields of "transactions_lots"
+"""
+type transactions_lots_aggregate_fields {
+  avg: transactions_lots_avg_fields
+  count(columns: [transactions_lots_select_column!], distinct: Boolean): Int
+  max: transactions_lots_max_fields
+  min: transactions_lots_min_fields
+  stddev: transactions_lots_stddev_fields
+  stddev_pop: transactions_lots_stddev_pop_fields
+  stddev_samp: transactions_lots_stddev_samp_fields
+  sum: transactions_lots_sum_fields
+  var_pop: transactions_lots_var_pop_fields
+  var_samp: transactions_lots_var_samp_fields
+  variance: transactions_lots_variance_fields
+}
+
+"""
+order by aggregate values of table "transactions_lots"
+"""
+input transactions_lots_aggregate_order_by {
+  avg: transactions_lots_avg_order_by
+  count: order_by
+  max: transactions_lots_max_order_by
+  min: transactions_lots_min_order_by
+  stddev: transactions_lots_stddev_order_by
+  stddev_pop: transactions_lots_stddev_pop_order_by
+  stddev_samp: transactions_lots_stddev_samp_order_by
+  sum: transactions_lots_sum_order_by
+  var_pop: transactions_lots_var_pop_order_by
+  var_samp: transactions_lots_var_samp_order_by
+  variance: transactions_lots_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "transactions_lots"
+"""
+input transactions_lots_arr_rel_insert_input {
+  data: [transactions_lots_insert_input!]!
+}
+
+"""aggregate avg on columns"""
+type transactions_lots_avg_fields {
+  lot_id: Float
+  transaction_id: Float
+}
+
+"""
+order by avg() on columns of table "transactions_lots"
+"""
+input transactions_lots_avg_order_by {
+  lot_id: order_by
+  transaction_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "transactions_lots". All fields are combined with a logical 'AND'.
+"""
+input transactions_lots_bool_exp {
+  _and: [transactions_lots_bool_exp]
+  _not: transactions_lots_bool_exp
+  _or: [transactions_lots_bool_exp]
+  lot: lots_bool_exp
+  lot_id: bigint_comparison_exp
+  transaction: transactions_bool_exp
+  transaction_id: bigint_comparison_exp
+}
+
+"""
+input type for incrementing integer columne in table "transactions_lots"
+"""
+input transactions_lots_inc_input {
+  lot_id: bigint
+  transaction_id: bigint
+}
+
+"""
+input type for inserting data into table "transactions_lots"
+"""
+input transactions_lots_insert_input {
+  lot: lots_obj_rel_insert_input
+  lot_id: bigint
+  transaction: transactions_obj_rel_insert_input
+  transaction_id: bigint
+}
+
+"""aggregate max on columns"""
+type transactions_lots_max_fields {
+  lot_id: bigint
+  transaction_id: bigint
+}
+
+"""
+order by max() on columns of table "transactions_lots"
+"""
+input transactions_lots_max_order_by {
+  lot_id: order_by
+  transaction_id: order_by
+}
+
+"""aggregate min on columns"""
+type transactions_lots_min_fields {
+  lot_id: bigint
+  transaction_id: bigint
+}
+
+"""
+order by min() on columns of table "transactions_lots"
+"""
+input transactions_lots_min_order_by {
+  lot_id: order_by
+  transaction_id: order_by
+}
+
+"""
+response of any mutation on the table "transactions_lots"
+"""
+type transactions_lots_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [transactions_lots!]!
+}
+
+"""
+input type for inserting object relation for remote table "transactions_lots"
+"""
+input transactions_lots_obj_rel_insert_input {
+  data: transactions_lots_insert_input!
+}
+
+"""
+ordering options when selecting data from "transactions_lots"
+"""
+input transactions_lots_order_by {
+  lot: lots_order_by
+  lot_id: order_by
+  transaction: transactions_order_by
+  transaction_id: order_by
+}
+
+"""
+select columns of table "transactions_lots"
+"""
+enum transactions_lots_select_column {
+  """column name"""
+  lot_id
+
+  """column name"""
+  transaction_id
+}
+
+"""
+input type for updating data in table "transactions_lots"
+"""
+input transactions_lots_set_input {
+  lot_id: bigint
+  transaction_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type transactions_lots_stddev_fields {
+  lot_id: Float
+  transaction_id: Float
+}
+
+"""
+order by stddev() on columns of table "transactions_lots"
+"""
+input transactions_lots_stddev_order_by {
+  lot_id: order_by
+  transaction_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type transactions_lots_stddev_pop_fields {
+  lot_id: Float
+  transaction_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "transactions_lots"
+"""
+input transactions_lots_stddev_pop_order_by {
+  lot_id: order_by
+  transaction_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type transactions_lots_stddev_samp_fields {
+  lot_id: Float
+  transaction_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "transactions_lots"
+"""
+input transactions_lots_stddev_samp_order_by {
+  lot_id: order_by
+  transaction_id: order_by
+}
+
+"""aggregate sum on columns"""
+type transactions_lots_sum_fields {
+  lot_id: bigint
+  transaction_id: bigint
+}
+
+"""
+order by sum() on columns of table "transactions_lots"
+"""
+input transactions_lots_sum_order_by {
+  lot_id: order_by
+  transaction_id: order_by
+}
+
+"""aggregate var_pop on columns"""
+type transactions_lots_var_pop_fields {
+  lot_id: Float
+  transaction_id: Float
+}
+
+"""
+order by var_pop() on columns of table "transactions_lots"
+"""
+input transactions_lots_var_pop_order_by {
+  lot_id: order_by
+  transaction_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type transactions_lots_var_samp_fields {
+  lot_id: Float
+  transaction_id: Float
+}
+
+"""
+order by var_samp() on columns of table "transactions_lots"
+"""
+input transactions_lots_var_samp_order_by {
+  lot_id: order_by
+  transaction_id: order_by
+}
+
+"""aggregate variance on columns"""
+type transactions_lots_variance_fields {
+  lot_id: Float
+  transaction_id: Float
+}
+
+"""
+order by variance() on columns of table "transactions_lots"
+"""
+input transactions_lots_variance_order_by {
+  lot_id: order_by
+  transaction_id: order_by
+}
+
+"""aggregate max on columns"""
+type transactions_max_fields {
+  amount_of_transaction: numeric
+  date_of_transaction: timestamptz
+  investor_id: bigint
+  other_details: String
+  share_count: String
+  transaction_id: bigint
+  transaction_type_code: String
+}
+
+"""
+order by max() on columns of table "transactions"
+"""
+input transactions_max_order_by {
+  amount_of_transaction: order_by
+  date_of_transaction: order_by
+  investor_id: order_by
+  other_details: order_by
+  share_count: order_by
+  transaction_id: order_by
+  transaction_type_code: order_by
+}
+
+"""aggregate min on columns"""
+type transactions_min_fields {
+  amount_of_transaction: numeric
+  date_of_transaction: timestamptz
+  investor_id: bigint
+  other_details: String
+  share_count: String
+  transaction_id: bigint
+  transaction_type_code: String
+}
+
+"""
+order by min() on columns of table "transactions"
+"""
+input transactions_min_order_by {
+  amount_of_transaction: order_by
+  date_of_transaction: order_by
+  investor_id: order_by
+  other_details: order_by
+  share_count: order_by
+  transaction_id: order_by
+  transaction_type_code: order_by
+}
+
+"""
+response of any mutation on the table "transactions"
+"""
+type transactions_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [transactions!]!
+}
+
+"""
+input type for inserting object relation for remote table "transactions"
+"""
+input transactions_obj_rel_insert_input {
+  data: transactions_insert_input!
+  on_conflict: transactions_on_conflict
+}
+
+"""
+on conflict condition type for table "transactions"
+"""
+input transactions_on_conflict {
+  constraint: transactions_constraint!
+  update_columns: [transactions_update_column!]!
+  where: transactions_bool_exp
+}
+
+"""
+ordering options when selecting data from "transactions"
+"""
+input transactions_order_by {
+  amount_of_transaction: order_by
+  date_of_transaction: order_by
+  investor: investors_order_by
+  investor_id: order_by
+  other_details: order_by
+  purchases_aggregate: purchases_aggregate_order_by
+  ref_transaction_type: ref_transaction_types_order_by
+  sales_aggregate: sales_aggregate_order_by
+  share_count: order_by
+  transaction_id: order_by
+  transaction_type_code: order_by
+  transactions_lots_aggregate: transactions_lots_aggregate_order_by
+}
+
+"""
+select columns of table "transactions"
+"""
+enum transactions_select_column {
+  """column name"""
+  amount_of_transaction
+
+  """column name"""
+  date_of_transaction
+
+  """column name"""
+  investor_id
+
+  """column name"""
+  other_details
+
+  """column name"""
+  share_count
+
+  """column name"""
+  transaction_id
+
+  """column name"""
+  transaction_type_code
+}
+
+"""
+input type for updating data in table "transactions"
+"""
+input transactions_set_input {
+  amount_of_transaction: numeric
+  date_of_transaction: timestamptz
+  investor_id: bigint
+  other_details: String
+  share_count: String
+  transaction_id: bigint
+  transaction_type_code: String
+}
+
+"""aggregate stddev on columns"""
+type transactions_stddev_fields {
+  amount_of_transaction: Float
+  investor_id: Float
+  transaction_id: Float
+}
+
+"""
+order by stddev() on columns of table "transactions"
+"""
+input transactions_stddev_order_by {
+  amount_of_transaction: order_by
+  investor_id: order_by
+  transaction_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type transactions_stddev_pop_fields {
+  amount_of_transaction: Float
+  investor_id: Float
+  transaction_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "transactions"
+"""
+input transactions_stddev_pop_order_by {
+  amount_of_transaction: order_by
+  investor_id: order_by
+  transaction_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type transactions_stddev_samp_fields {
+  amount_of_transaction: Float
+  investor_id: Float
+  transaction_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "transactions"
+"""
+input transactions_stddev_samp_order_by {
+  amount_of_transaction: order_by
+  investor_id: order_by
+  transaction_id: order_by
+}
+
+"""aggregate sum on columns"""
+type transactions_sum_fields {
+  amount_of_transaction: numeric
+  investor_id: bigint
+  transaction_id: bigint
+}
+
+"""
+order by sum() on columns of table "transactions"
+"""
+input transactions_sum_order_by {
+  amount_of_transaction: order_by
+  investor_id: order_by
+  transaction_id: order_by
+}
+
+"""
+update columns of table "transactions"
+"""
+enum transactions_update_column {
+  """column name"""
+  amount_of_transaction
+
+  """column name"""
+  date_of_transaction
+
+  """column name"""
+  investor_id
+
+  """column name"""
+  other_details
+
+  """column name"""
+  share_count
+
+  """column name"""
+  transaction_id
+
+  """column name"""
+  transaction_type_code
+}
+
+"""aggregate var_pop on columns"""
+type transactions_var_pop_fields {
+  amount_of_transaction: Float
+  investor_id: Float
+  transaction_id: Float
+}
+
+"""
+order by var_pop() on columns of table "transactions"
+"""
+input transactions_var_pop_order_by {
+  amount_of_transaction: order_by
+  investor_id: order_by
+  transaction_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type transactions_var_samp_fields {
+  amount_of_transaction: Float
+  investor_id: Float
+  transaction_id: Float
+}
+
+"""
+order by var_samp() on columns of table "transactions"
+"""
+input transactions_var_samp_order_by {
+  amount_of_transaction: order_by
+  investor_id: order_by
+  transaction_id: order_by
+}
+
+"""aggregate variance on columns"""
+type transactions_variance_fields {
+  amount_of_transaction: Float
+  investor_id: Float
+  transaction_id: Float
+}
+
+"""
+order by variance() on columns of table "transactions"
+"""
+input transactions_variance_order_by {
+  amount_of_transaction: order_by
+  investor_id: order_by
+  transaction_id: order_by
+}

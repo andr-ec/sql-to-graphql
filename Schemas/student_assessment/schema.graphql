@@ -1,0 +1,4562 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "addresses"
+"""
+type addresses {
+  address_id: bigint!
+  city: String
+  country: String
+  line_1: String
+  line_2: String
+
+  """An array relationship"""
+  people_addresses(
+    """distinct select on columns"""
+    distinct_on: [people_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: people_addresses_bool_exp
+  ): [people_addresses!]!
+
+  """An aggregated array relationship"""
+  people_addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [people_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: people_addresses_bool_exp
+  ): people_addresses_aggregate!
+  state_province_county: String
+  zip_postcode: String
+}
+
+"""
+aggregated selection of "addresses"
+"""
+type addresses_aggregate {
+  aggregate: addresses_aggregate_fields
+  nodes: [addresses!]!
+}
+
+"""
+aggregate fields of "addresses"
+"""
+type addresses_aggregate_fields {
+  avg: addresses_avg_fields
+  count(columns: [addresses_select_column!], distinct: Boolean): Int
+  max: addresses_max_fields
+  min: addresses_min_fields
+  stddev: addresses_stddev_fields
+  stddev_pop: addresses_stddev_pop_fields
+  stddev_samp: addresses_stddev_samp_fields
+  sum: addresses_sum_fields
+  var_pop: addresses_var_pop_fields
+  var_samp: addresses_var_samp_fields
+  variance: addresses_variance_fields
+}
+
+"""
+order by aggregate values of table "addresses"
+"""
+input addresses_aggregate_order_by {
+  avg: addresses_avg_order_by
+  count: order_by
+  max: addresses_max_order_by
+  min: addresses_min_order_by
+  stddev: addresses_stddev_order_by
+  stddev_pop: addresses_stddev_pop_order_by
+  stddev_samp: addresses_stddev_samp_order_by
+  sum: addresses_sum_order_by
+  var_pop: addresses_var_pop_order_by
+  var_samp: addresses_var_samp_order_by
+  variance: addresses_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "addresses"
+"""
+input addresses_arr_rel_insert_input {
+  data: [addresses_insert_input!]!
+  on_conflict: addresses_on_conflict
+}
+
+"""aggregate avg on columns"""
+type addresses_avg_fields {
+  address_id: Float
+}
+
+"""
+order by avg() on columns of table "addresses"
+"""
+input addresses_avg_order_by {
+  address_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "addresses". All fields are combined with a logical 'AND'.
+"""
+input addresses_bool_exp {
+  _and: [addresses_bool_exp]
+  _not: addresses_bool_exp
+  _or: [addresses_bool_exp]
+  address_id: bigint_comparison_exp
+  city: String_comparison_exp
+  country: String_comparison_exp
+  line_1: String_comparison_exp
+  line_2: String_comparison_exp
+  people_addresses: people_addresses_bool_exp
+  state_province_county: String_comparison_exp
+  zip_postcode: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "addresses"
+"""
+enum addresses_constraint {
+  """unique or primary key constraint"""
+  idx_26923_addresses_pkey
+}
+
+"""
+input type for incrementing integer columne in table "addresses"
+"""
+input addresses_inc_input {
+  address_id: bigint
+}
+
+"""
+input type for inserting data into table "addresses"
+"""
+input addresses_insert_input {
+  address_id: bigint
+  city: String
+  country: String
+  line_1: String
+  line_2: String
+  people_addresses: people_addresses_arr_rel_insert_input
+  state_province_county: String
+  zip_postcode: String
+}
+
+"""aggregate max on columns"""
+type addresses_max_fields {
+  address_id: bigint
+  city: String
+  country: String
+  line_1: String
+  line_2: String
+  state_province_county: String
+  zip_postcode: String
+}
+
+"""
+order by max() on columns of table "addresses"
+"""
+input addresses_max_order_by {
+  address_id: order_by
+  city: order_by
+  country: order_by
+  line_1: order_by
+  line_2: order_by
+  state_province_county: order_by
+  zip_postcode: order_by
+}
+
+"""aggregate min on columns"""
+type addresses_min_fields {
+  address_id: bigint
+  city: String
+  country: String
+  line_1: String
+  line_2: String
+  state_province_county: String
+  zip_postcode: String
+}
+
+"""
+order by min() on columns of table "addresses"
+"""
+input addresses_min_order_by {
+  address_id: order_by
+  city: order_by
+  country: order_by
+  line_1: order_by
+  line_2: order_by
+  state_province_county: order_by
+  zip_postcode: order_by
+}
+
+"""
+response of any mutation on the table "addresses"
+"""
+type addresses_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [addresses!]!
+}
+
+"""
+input type for inserting object relation for remote table "addresses"
+"""
+input addresses_obj_rel_insert_input {
+  data: addresses_insert_input!
+  on_conflict: addresses_on_conflict
+}
+
+"""
+on conflict condition type for table "addresses"
+"""
+input addresses_on_conflict {
+  constraint: addresses_constraint!
+  update_columns: [addresses_update_column!]!
+  where: addresses_bool_exp
+}
+
+"""
+ordering options when selecting data from "addresses"
+"""
+input addresses_order_by {
+  address_id: order_by
+  city: order_by
+  country: order_by
+  line_1: order_by
+  line_2: order_by
+  people_addresses_aggregate: people_addresses_aggregate_order_by
+  state_province_county: order_by
+  zip_postcode: order_by
+}
+
+"""
+select columns of table "addresses"
+"""
+enum addresses_select_column {
+  """column name"""
+  address_id
+
+  """column name"""
+  city
+
+  """column name"""
+  country
+
+  """column name"""
+  line_1
+
+  """column name"""
+  line_2
+
+  """column name"""
+  state_province_county
+
+  """column name"""
+  zip_postcode
+}
+
+"""
+input type for updating data in table "addresses"
+"""
+input addresses_set_input {
+  address_id: bigint
+  city: String
+  country: String
+  line_1: String
+  line_2: String
+  state_province_county: String
+  zip_postcode: String
+}
+
+"""aggregate stddev on columns"""
+type addresses_stddev_fields {
+  address_id: Float
+}
+
+"""
+order by stddev() on columns of table "addresses"
+"""
+input addresses_stddev_order_by {
+  address_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type addresses_stddev_pop_fields {
+  address_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "addresses"
+"""
+input addresses_stddev_pop_order_by {
+  address_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type addresses_stddev_samp_fields {
+  address_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "addresses"
+"""
+input addresses_stddev_samp_order_by {
+  address_id: order_by
+}
+
+"""aggregate sum on columns"""
+type addresses_sum_fields {
+  address_id: bigint
+}
+
+"""
+order by sum() on columns of table "addresses"
+"""
+input addresses_sum_order_by {
+  address_id: order_by
+}
+
+"""
+update columns of table "addresses"
+"""
+enum addresses_update_column {
+  """column name"""
+  address_id
+
+  """column name"""
+  city
+
+  """column name"""
+  country
+
+  """column name"""
+  line_1
+
+  """column name"""
+  line_2
+
+  """column name"""
+  state_province_county
+
+  """column name"""
+  zip_postcode
+}
+
+"""aggregate var_pop on columns"""
+type addresses_var_pop_fields {
+  address_id: Float
+}
+
+"""
+order by var_pop() on columns of table "addresses"
+"""
+input addresses_var_pop_order_by {
+  address_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type addresses_var_samp_fields {
+  address_id: Float
+}
+
+"""
+order by var_samp() on columns of table "addresses"
+"""
+input addresses_var_samp_order_by {
+  address_id: order_by
+}
+
+"""aggregate variance on columns"""
+type addresses_variance_fields {
+  address_id: Float
+}
+
+"""
+order by variance() on columns of table "addresses"
+"""
+input addresses_variance_order_by {
+  address_id: order_by
+}
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "candidate_assessments"
+"""
+type candidate_assessments {
+  asessment_outcome_code: String
+  assessment_date: timestamptz
+
+  """An object relationship"""
+  candidate: candidates!
+  candidate_id: bigint!
+  qualification: String!
+}
+
+"""
+aggregated selection of "candidate_assessments"
+"""
+type candidate_assessments_aggregate {
+  aggregate: candidate_assessments_aggregate_fields
+  nodes: [candidate_assessments!]!
+}
+
+"""
+aggregate fields of "candidate_assessments"
+"""
+type candidate_assessments_aggregate_fields {
+  avg: candidate_assessments_avg_fields
+  count(columns: [candidate_assessments_select_column!], distinct: Boolean): Int
+  max: candidate_assessments_max_fields
+  min: candidate_assessments_min_fields
+  stddev: candidate_assessments_stddev_fields
+  stddev_pop: candidate_assessments_stddev_pop_fields
+  stddev_samp: candidate_assessments_stddev_samp_fields
+  sum: candidate_assessments_sum_fields
+  var_pop: candidate_assessments_var_pop_fields
+  var_samp: candidate_assessments_var_samp_fields
+  variance: candidate_assessments_variance_fields
+}
+
+"""
+order by aggregate values of table "candidate_assessments"
+"""
+input candidate_assessments_aggregate_order_by {
+  avg: candidate_assessments_avg_order_by
+  count: order_by
+  max: candidate_assessments_max_order_by
+  min: candidate_assessments_min_order_by
+  stddev: candidate_assessments_stddev_order_by
+  stddev_pop: candidate_assessments_stddev_pop_order_by
+  stddev_samp: candidate_assessments_stddev_samp_order_by
+  sum: candidate_assessments_sum_order_by
+  var_pop: candidate_assessments_var_pop_order_by
+  var_samp: candidate_assessments_var_samp_order_by
+  variance: candidate_assessments_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "candidate_assessments"
+"""
+input candidate_assessments_arr_rel_insert_input {
+  data: [candidate_assessments_insert_input!]!
+  on_conflict: candidate_assessments_on_conflict
+}
+
+"""aggregate avg on columns"""
+type candidate_assessments_avg_fields {
+  candidate_id: Float
+}
+
+"""
+order by avg() on columns of table "candidate_assessments"
+"""
+input candidate_assessments_avg_order_by {
+  candidate_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "candidate_assessments". All fields are combined with a logical 'AND'.
+"""
+input candidate_assessments_bool_exp {
+  _and: [candidate_assessments_bool_exp]
+  _not: candidate_assessments_bool_exp
+  _or: [candidate_assessments_bool_exp]
+  asessment_outcome_code: String_comparison_exp
+  assessment_date: timestamptz_comparison_exp
+  candidate: candidates_bool_exp
+  candidate_id: bigint_comparison_exp
+  qualification: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "candidate_assessments"
+"""
+enum candidate_assessments_constraint {
+  """unique or primary key constraint"""
+  idx_26962_sqlite_autoindex_candidate_assessments_1
+}
+
+"""
+input type for incrementing integer columne in table "candidate_assessments"
+"""
+input candidate_assessments_inc_input {
+  candidate_id: bigint
+}
+
+"""
+input type for inserting data into table "candidate_assessments"
+"""
+input candidate_assessments_insert_input {
+  asessment_outcome_code: String
+  assessment_date: timestamptz
+  candidate: candidates_obj_rel_insert_input
+  candidate_id: bigint
+  qualification: String
+}
+
+"""aggregate max on columns"""
+type candidate_assessments_max_fields {
+  asessment_outcome_code: String
+  assessment_date: timestamptz
+  candidate_id: bigint
+  qualification: String
+}
+
+"""
+order by max() on columns of table "candidate_assessments"
+"""
+input candidate_assessments_max_order_by {
+  asessment_outcome_code: order_by
+  assessment_date: order_by
+  candidate_id: order_by
+  qualification: order_by
+}
+
+"""aggregate min on columns"""
+type candidate_assessments_min_fields {
+  asessment_outcome_code: String
+  assessment_date: timestamptz
+  candidate_id: bigint
+  qualification: String
+}
+
+"""
+order by min() on columns of table "candidate_assessments"
+"""
+input candidate_assessments_min_order_by {
+  asessment_outcome_code: order_by
+  assessment_date: order_by
+  candidate_id: order_by
+  qualification: order_by
+}
+
+"""
+response of any mutation on the table "candidate_assessments"
+"""
+type candidate_assessments_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [candidate_assessments!]!
+}
+
+"""
+input type for inserting object relation for remote table "candidate_assessments"
+"""
+input candidate_assessments_obj_rel_insert_input {
+  data: candidate_assessments_insert_input!
+  on_conflict: candidate_assessments_on_conflict
+}
+
+"""
+on conflict condition type for table "candidate_assessments"
+"""
+input candidate_assessments_on_conflict {
+  constraint: candidate_assessments_constraint!
+  update_columns: [candidate_assessments_update_column!]!
+  where: candidate_assessments_bool_exp
+}
+
+"""
+ordering options when selecting data from "candidate_assessments"
+"""
+input candidate_assessments_order_by {
+  asessment_outcome_code: order_by
+  assessment_date: order_by
+  candidate: candidates_order_by
+  candidate_id: order_by
+  qualification: order_by
+}
+
+"""
+select columns of table "candidate_assessments"
+"""
+enum candidate_assessments_select_column {
+  """column name"""
+  asessment_outcome_code
+
+  """column name"""
+  assessment_date
+
+  """column name"""
+  candidate_id
+
+  """column name"""
+  qualification
+}
+
+"""
+input type for updating data in table "candidate_assessments"
+"""
+input candidate_assessments_set_input {
+  asessment_outcome_code: String
+  assessment_date: timestamptz
+  candidate_id: bigint
+  qualification: String
+}
+
+"""aggregate stddev on columns"""
+type candidate_assessments_stddev_fields {
+  candidate_id: Float
+}
+
+"""
+order by stddev() on columns of table "candidate_assessments"
+"""
+input candidate_assessments_stddev_order_by {
+  candidate_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type candidate_assessments_stddev_pop_fields {
+  candidate_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "candidate_assessments"
+"""
+input candidate_assessments_stddev_pop_order_by {
+  candidate_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type candidate_assessments_stddev_samp_fields {
+  candidate_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "candidate_assessments"
+"""
+input candidate_assessments_stddev_samp_order_by {
+  candidate_id: order_by
+}
+
+"""aggregate sum on columns"""
+type candidate_assessments_sum_fields {
+  candidate_id: bigint
+}
+
+"""
+order by sum() on columns of table "candidate_assessments"
+"""
+input candidate_assessments_sum_order_by {
+  candidate_id: order_by
+}
+
+"""
+update columns of table "candidate_assessments"
+"""
+enum candidate_assessments_update_column {
+  """column name"""
+  asessment_outcome_code
+
+  """column name"""
+  assessment_date
+
+  """column name"""
+  candidate_id
+
+  """column name"""
+  qualification
+}
+
+"""aggregate var_pop on columns"""
+type candidate_assessments_var_pop_fields {
+  candidate_id: Float
+}
+
+"""
+order by var_pop() on columns of table "candidate_assessments"
+"""
+input candidate_assessments_var_pop_order_by {
+  candidate_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type candidate_assessments_var_samp_fields {
+  candidate_id: Float
+}
+
+"""
+order by var_samp() on columns of table "candidate_assessments"
+"""
+input candidate_assessments_var_samp_order_by {
+  candidate_id: order_by
+}
+
+"""aggregate variance on columns"""
+type candidate_assessments_variance_fields {
+  candidate_id: Float
+}
+
+"""
+order by variance() on columns of table "candidate_assessments"
+"""
+input candidate_assessments_variance_order_by {
+  candidate_id: order_by
+}
+
+"""
+columns and relationships of "candidates"
+"""
+type candidates {
+  """An array relationship"""
+  candidate_assessments(
+    """distinct select on columns"""
+    distinct_on: [candidate_assessments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [candidate_assessments_order_by!]
+
+    """filter the rows returned"""
+    where: candidate_assessments_bool_exp
+  ): [candidate_assessments!]!
+
+  """An aggregated array relationship"""
+  candidate_assessments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [candidate_assessments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [candidate_assessments_order_by!]
+
+    """filter the rows returned"""
+    where: candidate_assessments_bool_exp
+  ): candidate_assessments_aggregate!
+  candidate_details: String
+  candidate_id: bigint!
+
+  """An object relationship"""
+  person: people!
+}
+
+"""
+aggregated selection of "candidates"
+"""
+type candidates_aggregate {
+  aggregate: candidates_aggregate_fields
+  nodes: [candidates!]!
+}
+
+"""
+aggregate fields of "candidates"
+"""
+type candidates_aggregate_fields {
+  avg: candidates_avg_fields
+  count(columns: [candidates_select_column!], distinct: Boolean): Int
+  max: candidates_max_fields
+  min: candidates_min_fields
+  stddev: candidates_stddev_fields
+  stddev_pop: candidates_stddev_pop_fields
+  stddev_samp: candidates_stddev_samp_fields
+  sum: candidates_sum_fields
+  var_pop: candidates_var_pop_fields
+  var_samp: candidates_var_samp_fields
+  variance: candidates_variance_fields
+}
+
+"""
+order by aggregate values of table "candidates"
+"""
+input candidates_aggregate_order_by {
+  avg: candidates_avg_order_by
+  count: order_by
+  max: candidates_max_order_by
+  min: candidates_min_order_by
+  stddev: candidates_stddev_order_by
+  stddev_pop: candidates_stddev_pop_order_by
+  stddev_samp: candidates_stddev_samp_order_by
+  sum: candidates_sum_order_by
+  var_pop: candidates_var_pop_order_by
+  var_samp: candidates_var_samp_order_by
+  variance: candidates_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "candidates"
+"""
+input candidates_arr_rel_insert_input {
+  data: [candidates_insert_input!]!
+  on_conflict: candidates_on_conflict
+}
+
+"""aggregate avg on columns"""
+type candidates_avg_fields {
+  candidate_id: Float
+}
+
+"""
+order by avg() on columns of table "candidates"
+"""
+input candidates_avg_order_by {
+  candidate_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "candidates". All fields are combined with a logical 'AND'.
+"""
+input candidates_bool_exp {
+  _and: [candidates_bool_exp]
+  _not: candidates_bool_exp
+  _or: [candidates_bool_exp]
+  candidate_assessments: candidate_assessments_bool_exp
+  candidate_details: String_comparison_exp
+  candidate_id: bigint_comparison_exp
+  person: people_bool_exp
+}
+
+"""
+unique or primary key constraints on table "candidates"
+"""
+enum candidates_constraint {
+  """unique or primary key constraint"""
+  idx_26956_candidates_pkey
+}
+
+"""
+input type for incrementing integer columne in table "candidates"
+"""
+input candidates_inc_input {
+  candidate_id: bigint
+}
+
+"""
+input type for inserting data into table "candidates"
+"""
+input candidates_insert_input {
+  candidate_assessments: candidate_assessments_arr_rel_insert_input
+  candidate_details: String
+  candidate_id: bigint
+  person: people_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type candidates_max_fields {
+  candidate_details: String
+  candidate_id: bigint
+}
+
+"""
+order by max() on columns of table "candidates"
+"""
+input candidates_max_order_by {
+  candidate_details: order_by
+  candidate_id: order_by
+}
+
+"""aggregate min on columns"""
+type candidates_min_fields {
+  candidate_details: String
+  candidate_id: bigint
+}
+
+"""
+order by min() on columns of table "candidates"
+"""
+input candidates_min_order_by {
+  candidate_details: order_by
+  candidate_id: order_by
+}
+
+"""
+response of any mutation on the table "candidates"
+"""
+type candidates_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [candidates!]!
+}
+
+"""
+input type for inserting object relation for remote table "candidates"
+"""
+input candidates_obj_rel_insert_input {
+  data: candidates_insert_input!
+  on_conflict: candidates_on_conflict
+}
+
+"""
+on conflict condition type for table "candidates"
+"""
+input candidates_on_conflict {
+  constraint: candidates_constraint!
+  update_columns: [candidates_update_column!]!
+  where: candidates_bool_exp
+}
+
+"""
+ordering options when selecting data from "candidates"
+"""
+input candidates_order_by {
+  candidate_assessments_aggregate: candidate_assessments_aggregate_order_by
+  candidate_details: order_by
+  candidate_id: order_by
+  person: people_order_by
+}
+
+"""
+select columns of table "candidates"
+"""
+enum candidates_select_column {
+  """column name"""
+  candidate_details
+
+  """column name"""
+  candidate_id
+}
+
+"""
+input type for updating data in table "candidates"
+"""
+input candidates_set_input {
+  candidate_details: String
+  candidate_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type candidates_stddev_fields {
+  candidate_id: Float
+}
+
+"""
+order by stddev() on columns of table "candidates"
+"""
+input candidates_stddev_order_by {
+  candidate_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type candidates_stddev_pop_fields {
+  candidate_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "candidates"
+"""
+input candidates_stddev_pop_order_by {
+  candidate_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type candidates_stddev_samp_fields {
+  candidate_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "candidates"
+"""
+input candidates_stddev_samp_order_by {
+  candidate_id: order_by
+}
+
+"""aggregate sum on columns"""
+type candidates_sum_fields {
+  candidate_id: bigint
+}
+
+"""
+order by sum() on columns of table "candidates"
+"""
+input candidates_sum_order_by {
+  candidate_id: order_by
+}
+
+"""
+update columns of table "candidates"
+"""
+enum candidates_update_column {
+  """column name"""
+  candidate_details
+
+  """column name"""
+  candidate_id
+}
+
+"""aggregate var_pop on columns"""
+type candidates_var_pop_fields {
+  candidate_id: Float
+}
+
+"""
+order by var_pop() on columns of table "candidates"
+"""
+input candidates_var_pop_order_by {
+  candidate_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type candidates_var_samp_fields {
+  candidate_id: Float
+}
+
+"""
+order by var_samp() on columns of table "candidates"
+"""
+input candidates_var_samp_order_by {
+  candidate_id: order_by
+}
+
+"""aggregate variance on columns"""
+type candidates_variance_fields {
+  candidate_id: Float
+}
+
+"""
+order by variance() on columns of table "candidates"
+"""
+input candidates_variance_order_by {
+  candidate_id: order_by
+}
+
+"""
+columns and relationships of "courses"
+"""
+type courses {
+  course_description: String
+  course_id: bigint!
+  course_name: String
+  other_details: String
+
+  """An array relationship"""
+  student_course_attendances(
+    """distinct select on columns"""
+    distinct_on: [student_course_attendance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_course_attendance_order_by!]
+
+    """filter the rows returned"""
+    where: student_course_attendance_bool_exp
+  ): [student_course_attendance!]!
+
+  """An aggregated array relationship"""
+  student_course_attendances_aggregate(
+    """distinct select on columns"""
+    distinct_on: [student_course_attendance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_course_attendance_order_by!]
+
+    """filter the rows returned"""
+    where: student_course_attendance_bool_exp
+  ): student_course_attendance_aggregate!
+
+  """An array relationship"""
+  student_course_registrations(
+    """distinct select on columns"""
+    distinct_on: [student_course_registrations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_course_registrations_order_by!]
+
+    """filter the rows returned"""
+    where: student_course_registrations_bool_exp
+  ): [student_course_registrations!]!
+
+  """An aggregated array relationship"""
+  student_course_registrations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [student_course_registrations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_course_registrations_order_by!]
+
+    """filter the rows returned"""
+    where: student_course_registrations_bool_exp
+  ): student_course_registrations_aggregate!
+}
+
+"""
+aggregated selection of "courses"
+"""
+type courses_aggregate {
+  aggregate: courses_aggregate_fields
+  nodes: [courses!]!
+}
+
+"""
+aggregate fields of "courses"
+"""
+type courses_aggregate_fields {
+  avg: courses_avg_fields
+  count(columns: [courses_select_column!], distinct: Boolean): Int
+  max: courses_max_fields
+  min: courses_min_fields
+  stddev: courses_stddev_fields
+  stddev_pop: courses_stddev_pop_fields
+  stddev_samp: courses_stddev_samp_fields
+  sum: courses_sum_fields
+  var_pop: courses_var_pop_fields
+  var_samp: courses_var_samp_fields
+  variance: courses_variance_fields
+}
+
+"""
+order by aggregate values of table "courses"
+"""
+input courses_aggregate_order_by {
+  avg: courses_avg_order_by
+  count: order_by
+  max: courses_max_order_by
+  min: courses_min_order_by
+  stddev: courses_stddev_order_by
+  stddev_pop: courses_stddev_pop_order_by
+  stddev_samp: courses_stddev_samp_order_by
+  sum: courses_sum_order_by
+  var_pop: courses_var_pop_order_by
+  var_samp: courses_var_samp_order_by
+  variance: courses_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "courses"
+"""
+input courses_arr_rel_insert_input {
+  data: [courses_insert_input!]!
+  on_conflict: courses_on_conflict
+}
+
+"""aggregate avg on columns"""
+type courses_avg_fields {
+  course_id: Float
+}
+
+"""
+order by avg() on columns of table "courses"
+"""
+input courses_avg_order_by {
+  course_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "courses". All fields are combined with a logical 'AND'.
+"""
+input courses_bool_exp {
+  _and: [courses_bool_exp]
+  _not: courses_bool_exp
+  _or: [courses_bool_exp]
+  course_description: String_comparison_exp
+  course_id: bigint_comparison_exp
+  course_name: String_comparison_exp
+  other_details: String_comparison_exp
+  student_course_attendances: student_course_attendance_bool_exp
+  student_course_registrations: student_course_registrations_bool_exp
+}
+
+"""
+unique or primary key constraints on table "courses"
+"""
+enum courses_constraint {
+  """unique or primary key constraint"""
+  idx_26941_sqlite_autoindex_courses_1
+}
+
+"""
+input type for incrementing integer columne in table "courses"
+"""
+input courses_inc_input {
+  course_id: bigint
+}
+
+"""
+input type for inserting data into table "courses"
+"""
+input courses_insert_input {
+  course_description: String
+  course_id: bigint
+  course_name: String
+  other_details: String
+  student_course_attendances: student_course_attendance_arr_rel_insert_input
+  student_course_registrations: student_course_registrations_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type courses_max_fields {
+  course_description: String
+  course_id: bigint
+  course_name: String
+  other_details: String
+}
+
+"""
+order by max() on columns of table "courses"
+"""
+input courses_max_order_by {
+  course_description: order_by
+  course_id: order_by
+  course_name: order_by
+  other_details: order_by
+}
+
+"""aggregate min on columns"""
+type courses_min_fields {
+  course_description: String
+  course_id: bigint
+  course_name: String
+  other_details: String
+}
+
+"""
+order by min() on columns of table "courses"
+"""
+input courses_min_order_by {
+  course_description: order_by
+  course_id: order_by
+  course_name: order_by
+  other_details: order_by
+}
+
+"""
+response of any mutation on the table "courses"
+"""
+type courses_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [courses!]!
+}
+
+"""
+input type for inserting object relation for remote table "courses"
+"""
+input courses_obj_rel_insert_input {
+  data: courses_insert_input!
+  on_conflict: courses_on_conflict
+}
+
+"""
+on conflict condition type for table "courses"
+"""
+input courses_on_conflict {
+  constraint: courses_constraint!
+  update_columns: [courses_update_column!]!
+  where: courses_bool_exp
+}
+
+"""
+ordering options when selecting data from "courses"
+"""
+input courses_order_by {
+  course_description: order_by
+  course_id: order_by
+  course_name: order_by
+  other_details: order_by
+  student_course_attendances_aggregate: student_course_attendance_aggregate_order_by
+  student_course_registrations_aggregate: student_course_registrations_aggregate_order_by
+}
+
+"""
+select columns of table "courses"
+"""
+enum courses_select_column {
+  """column name"""
+  course_description
+
+  """column name"""
+  course_id
+
+  """column name"""
+  course_name
+
+  """column name"""
+  other_details
+}
+
+"""
+input type for updating data in table "courses"
+"""
+input courses_set_input {
+  course_description: String
+  course_id: bigint
+  course_name: String
+  other_details: String
+}
+
+"""aggregate stddev on columns"""
+type courses_stddev_fields {
+  course_id: Float
+}
+
+"""
+order by stddev() on columns of table "courses"
+"""
+input courses_stddev_order_by {
+  course_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type courses_stddev_pop_fields {
+  course_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "courses"
+"""
+input courses_stddev_pop_order_by {
+  course_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type courses_stddev_samp_fields {
+  course_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "courses"
+"""
+input courses_stddev_samp_order_by {
+  course_id: order_by
+}
+
+"""aggregate sum on columns"""
+type courses_sum_fields {
+  course_id: bigint
+}
+
+"""
+order by sum() on columns of table "courses"
+"""
+input courses_sum_order_by {
+  course_id: order_by
+}
+
+"""
+update columns of table "courses"
+"""
+enum courses_update_column {
+  """column name"""
+  course_description
+
+  """column name"""
+  course_id
+
+  """column name"""
+  course_name
+
+  """column name"""
+  other_details
+}
+
+"""aggregate var_pop on columns"""
+type courses_var_pop_fields {
+  course_id: Float
+}
+
+"""
+order by var_pop() on columns of table "courses"
+"""
+input courses_var_pop_order_by {
+  course_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type courses_var_samp_fields {
+  course_id: Float
+}
+
+"""
+order by var_samp() on columns of table "courses"
+"""
+input courses_var_samp_order_by {
+  course_id: order_by
+}
+
+"""aggregate variance on columns"""
+type courses_variance_fields {
+  course_id: Float
+}
+
+"""
+order by variance() on columns of table "courses"
+"""
+input courses_variance_order_by {
+  course_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "addresses"
+  """
+  delete_addresses(
+    """filter the rows which have to be deleted"""
+    where: addresses_bool_exp!
+  ): addresses_mutation_response
+
+  """
+  delete data from the table: "candidate_assessments"
+  """
+  delete_candidate_assessments(
+    """filter the rows which have to be deleted"""
+    where: candidate_assessments_bool_exp!
+  ): candidate_assessments_mutation_response
+
+  """
+  delete data from the table: "candidates"
+  """
+  delete_candidates(
+    """filter the rows which have to be deleted"""
+    where: candidates_bool_exp!
+  ): candidates_mutation_response
+
+  """
+  delete data from the table: "courses"
+  """
+  delete_courses(
+    """filter the rows which have to be deleted"""
+    where: courses_bool_exp!
+  ): courses_mutation_response
+
+  """
+  delete data from the table: "people"
+  """
+  delete_people(
+    """filter the rows which have to be deleted"""
+    where: people_bool_exp!
+  ): people_mutation_response
+
+  """
+  delete data from the table: "people_addresses"
+  """
+  delete_people_addresses(
+    """filter the rows which have to be deleted"""
+    where: people_addresses_bool_exp!
+  ): people_addresses_mutation_response
+
+  """
+  delete data from the table: "student_course_attendance"
+  """
+  delete_student_course_attendance(
+    """filter the rows which have to be deleted"""
+    where: student_course_attendance_bool_exp!
+  ): student_course_attendance_mutation_response
+
+  """
+  delete data from the table: "student_course_registrations"
+  """
+  delete_student_course_registrations(
+    """filter the rows which have to be deleted"""
+    where: student_course_registrations_bool_exp!
+  ): student_course_registrations_mutation_response
+
+  """
+  delete data from the table: "students"
+  """
+  delete_students(
+    """filter the rows which have to be deleted"""
+    where: students_bool_exp!
+  ): students_mutation_response
+
+  """
+  insert data into the table: "addresses"
+  """
+  insert_addresses(
+    """the rows to be inserted"""
+    objects: [addresses_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: addresses_on_conflict
+  ): addresses_mutation_response
+
+  """
+  insert data into the table: "candidate_assessments"
+  """
+  insert_candidate_assessments(
+    """the rows to be inserted"""
+    objects: [candidate_assessments_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: candidate_assessments_on_conflict
+  ): candidate_assessments_mutation_response
+
+  """
+  insert data into the table: "candidates"
+  """
+  insert_candidates(
+    """the rows to be inserted"""
+    objects: [candidates_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: candidates_on_conflict
+  ): candidates_mutation_response
+
+  """
+  insert data into the table: "courses"
+  """
+  insert_courses(
+    """the rows to be inserted"""
+    objects: [courses_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: courses_on_conflict
+  ): courses_mutation_response
+
+  """
+  insert data into the table: "people"
+  """
+  insert_people(
+    """the rows to be inserted"""
+    objects: [people_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: people_on_conflict
+  ): people_mutation_response
+
+  """
+  insert data into the table: "people_addresses"
+  """
+  insert_people_addresses(
+    """the rows to be inserted"""
+    objects: [people_addresses_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: people_addresses_on_conflict
+  ): people_addresses_mutation_response
+
+  """
+  insert data into the table: "student_course_attendance"
+  """
+  insert_student_course_attendance(
+    """the rows to be inserted"""
+    objects: [student_course_attendance_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: student_course_attendance_on_conflict
+  ): student_course_attendance_mutation_response
+
+  """
+  insert data into the table: "student_course_registrations"
+  """
+  insert_student_course_registrations(
+    """the rows to be inserted"""
+    objects: [student_course_registrations_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: student_course_registrations_on_conflict
+  ): student_course_registrations_mutation_response
+
+  """
+  insert data into the table: "students"
+  """
+  insert_students(
+    """the rows to be inserted"""
+    objects: [students_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: students_on_conflict
+  ): students_mutation_response
+
+  """
+  update data of the table: "addresses"
+  """
+  update_addresses(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: addresses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: addresses_set_input
+
+    """filter the rows which have to be updated"""
+    where: addresses_bool_exp!
+  ): addresses_mutation_response
+
+  """
+  update data of the table: "candidate_assessments"
+  """
+  update_candidate_assessments(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: candidate_assessments_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: candidate_assessments_set_input
+
+    """filter the rows which have to be updated"""
+    where: candidate_assessments_bool_exp!
+  ): candidate_assessments_mutation_response
+
+  """
+  update data of the table: "candidates"
+  """
+  update_candidates(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: candidates_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: candidates_set_input
+
+    """filter the rows which have to be updated"""
+    where: candidates_bool_exp!
+  ): candidates_mutation_response
+
+  """
+  update data of the table: "courses"
+  """
+  update_courses(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: courses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: courses_set_input
+
+    """filter the rows which have to be updated"""
+    where: courses_bool_exp!
+  ): courses_mutation_response
+
+  """
+  update data of the table: "people"
+  """
+  update_people(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: people_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: people_set_input
+
+    """filter the rows which have to be updated"""
+    where: people_bool_exp!
+  ): people_mutation_response
+
+  """
+  update data of the table: "people_addresses"
+  """
+  update_people_addresses(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: people_addresses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: people_addresses_set_input
+
+    """filter the rows which have to be updated"""
+    where: people_addresses_bool_exp!
+  ): people_addresses_mutation_response
+
+  """
+  update data of the table: "student_course_attendance"
+  """
+  update_student_course_attendance(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: student_course_attendance_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: student_course_attendance_set_input
+
+    """filter the rows which have to be updated"""
+    where: student_course_attendance_bool_exp!
+  ): student_course_attendance_mutation_response
+
+  """
+  update data of the table: "student_course_registrations"
+  """
+  update_student_course_registrations(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: student_course_registrations_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: student_course_registrations_set_input
+
+    """filter the rows which have to be updated"""
+    where: student_course_registrations_bool_exp!
+  ): student_course_registrations_mutation_response
+
+  """
+  update data of the table: "students"
+  """
+  update_students(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: students_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: students_set_input
+
+    """filter the rows which have to be updated"""
+    where: students_bool_exp!
+  ): students_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "people"
+"""
+type people {
+  """An array relationship"""
+  candidates(
+    """distinct select on columns"""
+    distinct_on: [candidates_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [candidates_order_by!]
+
+    """filter the rows returned"""
+    where: candidates_bool_exp
+  ): [candidates!]!
+
+  """An aggregated array relationship"""
+  candidates_aggregate(
+    """distinct select on columns"""
+    distinct_on: [candidates_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [candidates_order_by!]
+
+    """filter the rows returned"""
+    where: candidates_bool_exp
+  ): candidates_aggregate!
+  cell_mobile_number: String
+  email_address: String
+  first_name: String
+  last_name: String
+  login_name: String
+  middle_name: String
+  password: String
+
+  """An array relationship"""
+  people_addresses(
+    """distinct select on columns"""
+    distinct_on: [people_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: people_addresses_bool_exp
+  ): [people_addresses!]!
+
+  """An aggregated array relationship"""
+  people_addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [people_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: people_addresses_bool_exp
+  ): people_addresses_aggregate!
+  person_id: bigint!
+
+  """An array relationship"""
+  students(
+    """distinct select on columns"""
+    distinct_on: [students_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [students_order_by!]
+
+    """filter the rows returned"""
+    where: students_bool_exp
+  ): [students!]!
+
+  """An aggregated array relationship"""
+  students_aggregate(
+    """distinct select on columns"""
+    distinct_on: [students_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [students_order_by!]
+
+    """filter the rows returned"""
+    where: students_bool_exp
+  ): students_aggregate!
+}
+
+"""
+columns and relationships of "people_addresses"
+"""
+type people_addresses {
+  """An object relationship"""
+  address: addresses
+  address_id: bigint
+  date_from: timestamptz
+  date_to: timestamptz
+
+  """An object relationship"""
+  person: people
+  person_address_id: bigint!
+  person_id: bigint
+}
+
+"""
+aggregated selection of "people_addresses"
+"""
+type people_addresses_aggregate {
+  aggregate: people_addresses_aggregate_fields
+  nodes: [people_addresses!]!
+}
+
+"""
+aggregate fields of "people_addresses"
+"""
+type people_addresses_aggregate_fields {
+  avg: people_addresses_avg_fields
+  count(columns: [people_addresses_select_column!], distinct: Boolean): Int
+  max: people_addresses_max_fields
+  min: people_addresses_min_fields
+  stddev: people_addresses_stddev_fields
+  stddev_pop: people_addresses_stddev_pop_fields
+  stddev_samp: people_addresses_stddev_samp_fields
+  sum: people_addresses_sum_fields
+  var_pop: people_addresses_var_pop_fields
+  var_samp: people_addresses_var_samp_fields
+  variance: people_addresses_variance_fields
+}
+
+"""
+order by aggregate values of table "people_addresses"
+"""
+input people_addresses_aggregate_order_by {
+  avg: people_addresses_avg_order_by
+  count: order_by
+  max: people_addresses_max_order_by
+  min: people_addresses_min_order_by
+  stddev: people_addresses_stddev_order_by
+  stddev_pop: people_addresses_stddev_pop_order_by
+  stddev_samp: people_addresses_stddev_samp_order_by
+  sum: people_addresses_sum_order_by
+  var_pop: people_addresses_var_pop_order_by
+  var_samp: people_addresses_var_samp_order_by
+  variance: people_addresses_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "people_addresses"
+"""
+input people_addresses_arr_rel_insert_input {
+  data: [people_addresses_insert_input!]!
+  on_conflict: people_addresses_on_conflict
+}
+
+"""aggregate avg on columns"""
+type people_addresses_avg_fields {
+  address_id: Float
+  person_address_id: Float
+  person_id: Float
+}
+
+"""
+order by avg() on columns of table "people_addresses"
+"""
+input people_addresses_avg_order_by {
+  address_id: order_by
+  person_address_id: order_by
+  person_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "people_addresses". All fields are combined with a logical 'AND'.
+"""
+input people_addresses_bool_exp {
+  _and: [people_addresses_bool_exp]
+  _not: people_addresses_bool_exp
+  _or: [people_addresses_bool_exp]
+  address: addresses_bool_exp
+  address_id: bigint_comparison_exp
+  date_from: timestamptz_comparison_exp
+  date_to: timestamptz_comparison_exp
+  person: people_bool_exp
+  person_address_id: bigint_comparison_exp
+  person_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "people_addresses"
+"""
+enum people_addresses_constraint {
+  """unique or primary key constraint"""
+  idx_26947_people_addresses_pkey
+}
+
+"""
+input type for incrementing integer columne in table "people_addresses"
+"""
+input people_addresses_inc_input {
+  address_id: bigint
+  person_address_id: bigint
+  person_id: bigint
+}
+
+"""
+input type for inserting data into table "people_addresses"
+"""
+input people_addresses_insert_input {
+  address: addresses_obj_rel_insert_input
+  address_id: bigint
+  date_from: timestamptz
+  date_to: timestamptz
+  person: people_obj_rel_insert_input
+  person_address_id: bigint
+  person_id: bigint
+}
+
+"""aggregate max on columns"""
+type people_addresses_max_fields {
+  address_id: bigint
+  date_from: timestamptz
+  date_to: timestamptz
+  person_address_id: bigint
+  person_id: bigint
+}
+
+"""
+order by max() on columns of table "people_addresses"
+"""
+input people_addresses_max_order_by {
+  address_id: order_by
+  date_from: order_by
+  date_to: order_by
+  person_address_id: order_by
+  person_id: order_by
+}
+
+"""aggregate min on columns"""
+type people_addresses_min_fields {
+  address_id: bigint
+  date_from: timestamptz
+  date_to: timestamptz
+  person_address_id: bigint
+  person_id: bigint
+}
+
+"""
+order by min() on columns of table "people_addresses"
+"""
+input people_addresses_min_order_by {
+  address_id: order_by
+  date_from: order_by
+  date_to: order_by
+  person_address_id: order_by
+  person_id: order_by
+}
+
+"""
+response of any mutation on the table "people_addresses"
+"""
+type people_addresses_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [people_addresses!]!
+}
+
+"""
+input type for inserting object relation for remote table "people_addresses"
+"""
+input people_addresses_obj_rel_insert_input {
+  data: people_addresses_insert_input!
+  on_conflict: people_addresses_on_conflict
+}
+
+"""
+on conflict condition type for table "people_addresses"
+"""
+input people_addresses_on_conflict {
+  constraint: people_addresses_constraint!
+  update_columns: [people_addresses_update_column!]!
+  where: people_addresses_bool_exp
+}
+
+"""
+ordering options when selecting data from "people_addresses"
+"""
+input people_addresses_order_by {
+  address: addresses_order_by
+  address_id: order_by
+  date_from: order_by
+  date_to: order_by
+  person: people_order_by
+  person_address_id: order_by
+  person_id: order_by
+}
+
+"""
+select columns of table "people_addresses"
+"""
+enum people_addresses_select_column {
+  """column name"""
+  address_id
+
+  """column name"""
+  date_from
+
+  """column name"""
+  date_to
+
+  """column name"""
+  person_address_id
+
+  """column name"""
+  person_id
+}
+
+"""
+input type for updating data in table "people_addresses"
+"""
+input people_addresses_set_input {
+  address_id: bigint
+  date_from: timestamptz
+  date_to: timestamptz
+  person_address_id: bigint
+  person_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type people_addresses_stddev_fields {
+  address_id: Float
+  person_address_id: Float
+  person_id: Float
+}
+
+"""
+order by stddev() on columns of table "people_addresses"
+"""
+input people_addresses_stddev_order_by {
+  address_id: order_by
+  person_address_id: order_by
+  person_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type people_addresses_stddev_pop_fields {
+  address_id: Float
+  person_address_id: Float
+  person_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "people_addresses"
+"""
+input people_addresses_stddev_pop_order_by {
+  address_id: order_by
+  person_address_id: order_by
+  person_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type people_addresses_stddev_samp_fields {
+  address_id: Float
+  person_address_id: Float
+  person_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "people_addresses"
+"""
+input people_addresses_stddev_samp_order_by {
+  address_id: order_by
+  person_address_id: order_by
+  person_id: order_by
+}
+
+"""aggregate sum on columns"""
+type people_addresses_sum_fields {
+  address_id: bigint
+  person_address_id: bigint
+  person_id: bigint
+}
+
+"""
+order by sum() on columns of table "people_addresses"
+"""
+input people_addresses_sum_order_by {
+  address_id: order_by
+  person_address_id: order_by
+  person_id: order_by
+}
+
+"""
+update columns of table "people_addresses"
+"""
+enum people_addresses_update_column {
+  """column name"""
+  address_id
+
+  """column name"""
+  date_from
+
+  """column name"""
+  date_to
+
+  """column name"""
+  person_address_id
+
+  """column name"""
+  person_id
+}
+
+"""aggregate var_pop on columns"""
+type people_addresses_var_pop_fields {
+  address_id: Float
+  person_address_id: Float
+  person_id: Float
+}
+
+"""
+order by var_pop() on columns of table "people_addresses"
+"""
+input people_addresses_var_pop_order_by {
+  address_id: order_by
+  person_address_id: order_by
+  person_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type people_addresses_var_samp_fields {
+  address_id: Float
+  person_address_id: Float
+  person_id: Float
+}
+
+"""
+order by var_samp() on columns of table "people_addresses"
+"""
+input people_addresses_var_samp_order_by {
+  address_id: order_by
+  person_address_id: order_by
+  person_id: order_by
+}
+
+"""aggregate variance on columns"""
+type people_addresses_variance_fields {
+  address_id: Float
+  person_address_id: Float
+  person_id: Float
+}
+
+"""
+order by variance() on columns of table "people_addresses"
+"""
+input people_addresses_variance_order_by {
+  address_id: order_by
+  person_address_id: order_by
+  person_id: order_by
+}
+
+"""
+aggregated selection of "people"
+"""
+type people_aggregate {
+  aggregate: people_aggregate_fields
+  nodes: [people!]!
+}
+
+"""
+aggregate fields of "people"
+"""
+type people_aggregate_fields {
+  avg: people_avg_fields
+  count(columns: [people_select_column!], distinct: Boolean): Int
+  max: people_max_fields
+  min: people_min_fields
+  stddev: people_stddev_fields
+  stddev_pop: people_stddev_pop_fields
+  stddev_samp: people_stddev_samp_fields
+  sum: people_sum_fields
+  var_pop: people_var_pop_fields
+  var_samp: people_var_samp_fields
+  variance: people_variance_fields
+}
+
+"""
+order by aggregate values of table "people"
+"""
+input people_aggregate_order_by {
+  avg: people_avg_order_by
+  count: order_by
+  max: people_max_order_by
+  min: people_min_order_by
+  stddev: people_stddev_order_by
+  stddev_pop: people_stddev_pop_order_by
+  stddev_samp: people_stddev_samp_order_by
+  sum: people_sum_order_by
+  var_pop: people_var_pop_order_by
+  var_samp: people_var_samp_order_by
+  variance: people_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "people"
+"""
+input people_arr_rel_insert_input {
+  data: [people_insert_input!]!
+  on_conflict: people_on_conflict
+}
+
+"""aggregate avg on columns"""
+type people_avg_fields {
+  person_id: Float
+}
+
+"""
+order by avg() on columns of table "people"
+"""
+input people_avg_order_by {
+  person_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "people". All fields are combined with a logical 'AND'.
+"""
+input people_bool_exp {
+  _and: [people_bool_exp]
+  _not: people_bool_exp
+  _or: [people_bool_exp]
+  candidates: candidates_bool_exp
+  cell_mobile_number: String_comparison_exp
+  email_address: String_comparison_exp
+  first_name: String_comparison_exp
+  last_name: String_comparison_exp
+  login_name: String_comparison_exp
+  middle_name: String_comparison_exp
+  password: String_comparison_exp
+  people_addresses: people_addresses_bool_exp
+  person_id: bigint_comparison_exp
+  students: students_bool_exp
+}
+
+"""
+unique or primary key constraints on table "people"
+"""
+enum people_constraint {
+  """unique or primary key constraint"""
+  idx_26929_people_pkey
+}
+
+"""
+input type for incrementing integer columne in table "people"
+"""
+input people_inc_input {
+  person_id: bigint
+}
+
+"""
+input type for inserting data into table "people"
+"""
+input people_insert_input {
+  candidates: candidates_arr_rel_insert_input
+  cell_mobile_number: String
+  email_address: String
+  first_name: String
+  last_name: String
+  login_name: String
+  middle_name: String
+  password: String
+  people_addresses: people_addresses_arr_rel_insert_input
+  person_id: bigint
+  students: students_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type people_max_fields {
+  cell_mobile_number: String
+  email_address: String
+  first_name: String
+  last_name: String
+  login_name: String
+  middle_name: String
+  password: String
+  person_id: bigint
+}
+
+"""
+order by max() on columns of table "people"
+"""
+input people_max_order_by {
+  cell_mobile_number: order_by
+  email_address: order_by
+  first_name: order_by
+  last_name: order_by
+  login_name: order_by
+  middle_name: order_by
+  password: order_by
+  person_id: order_by
+}
+
+"""aggregate min on columns"""
+type people_min_fields {
+  cell_mobile_number: String
+  email_address: String
+  first_name: String
+  last_name: String
+  login_name: String
+  middle_name: String
+  password: String
+  person_id: bigint
+}
+
+"""
+order by min() on columns of table "people"
+"""
+input people_min_order_by {
+  cell_mobile_number: order_by
+  email_address: order_by
+  first_name: order_by
+  last_name: order_by
+  login_name: order_by
+  middle_name: order_by
+  password: order_by
+  person_id: order_by
+}
+
+"""
+response of any mutation on the table "people"
+"""
+type people_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [people!]!
+}
+
+"""
+input type for inserting object relation for remote table "people"
+"""
+input people_obj_rel_insert_input {
+  data: people_insert_input!
+  on_conflict: people_on_conflict
+}
+
+"""
+on conflict condition type for table "people"
+"""
+input people_on_conflict {
+  constraint: people_constraint!
+  update_columns: [people_update_column!]!
+  where: people_bool_exp
+}
+
+"""
+ordering options when selecting data from "people"
+"""
+input people_order_by {
+  candidates_aggregate: candidates_aggregate_order_by
+  cell_mobile_number: order_by
+  email_address: order_by
+  first_name: order_by
+  last_name: order_by
+  login_name: order_by
+  middle_name: order_by
+  password: order_by
+  people_addresses_aggregate: people_addresses_aggregate_order_by
+  person_id: order_by
+  students_aggregate: students_aggregate_order_by
+}
+
+"""
+select columns of table "people"
+"""
+enum people_select_column {
+  """column name"""
+  cell_mobile_number
+
+  """column name"""
+  email_address
+
+  """column name"""
+  first_name
+
+  """column name"""
+  last_name
+
+  """column name"""
+  login_name
+
+  """column name"""
+  middle_name
+
+  """column name"""
+  password
+
+  """column name"""
+  person_id
+}
+
+"""
+input type for updating data in table "people"
+"""
+input people_set_input {
+  cell_mobile_number: String
+  email_address: String
+  first_name: String
+  last_name: String
+  login_name: String
+  middle_name: String
+  password: String
+  person_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type people_stddev_fields {
+  person_id: Float
+}
+
+"""
+order by stddev() on columns of table "people"
+"""
+input people_stddev_order_by {
+  person_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type people_stddev_pop_fields {
+  person_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "people"
+"""
+input people_stddev_pop_order_by {
+  person_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type people_stddev_samp_fields {
+  person_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "people"
+"""
+input people_stddev_samp_order_by {
+  person_id: order_by
+}
+
+"""aggregate sum on columns"""
+type people_sum_fields {
+  person_id: bigint
+}
+
+"""
+order by sum() on columns of table "people"
+"""
+input people_sum_order_by {
+  person_id: order_by
+}
+
+"""
+update columns of table "people"
+"""
+enum people_update_column {
+  """column name"""
+  cell_mobile_number
+
+  """column name"""
+  email_address
+
+  """column name"""
+  first_name
+
+  """column name"""
+  last_name
+
+  """column name"""
+  login_name
+
+  """column name"""
+  middle_name
+
+  """column name"""
+  password
+
+  """column name"""
+  person_id
+}
+
+"""aggregate var_pop on columns"""
+type people_var_pop_fields {
+  person_id: Float
+}
+
+"""
+order by var_pop() on columns of table "people"
+"""
+input people_var_pop_order_by {
+  person_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type people_var_samp_fields {
+  person_id: Float
+}
+
+"""
+order by var_samp() on columns of table "people"
+"""
+input people_var_samp_order_by {
+  person_id: order_by
+}
+
+"""aggregate variance on columns"""
+type people_variance_fields {
+  person_id: Float
+}
+
+"""
+order by variance() on columns of table "people"
+"""
+input people_variance_order_by {
+  person_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "addresses"
+  """
+  addresses(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): [addresses!]!
+
+  """
+  fetch aggregated fields from the table: "addresses"
+  """
+  addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): addresses_aggregate!
+
+  """fetch data from the table: "addresses" using primary key columns"""
+  addresses_by_pk(address_id: bigint!): addresses
+
+  """
+  fetch data from the table: "candidate_assessments"
+  """
+  candidate_assessments(
+    """distinct select on columns"""
+    distinct_on: [candidate_assessments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [candidate_assessments_order_by!]
+
+    """filter the rows returned"""
+    where: candidate_assessments_bool_exp
+  ): [candidate_assessments!]!
+
+  """
+  fetch aggregated fields from the table: "candidate_assessments"
+  """
+  candidate_assessments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [candidate_assessments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [candidate_assessments_order_by!]
+
+    """filter the rows returned"""
+    where: candidate_assessments_bool_exp
+  ): candidate_assessments_aggregate!
+
+  """
+  fetch data from the table: "candidate_assessments" using primary key columns
+  """
+  candidate_assessments_by_pk(candidate_id: bigint!, qualification: String!): candidate_assessments
+
+  """
+  fetch data from the table: "candidates"
+  """
+  candidates(
+    """distinct select on columns"""
+    distinct_on: [candidates_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [candidates_order_by!]
+
+    """filter the rows returned"""
+    where: candidates_bool_exp
+  ): [candidates!]!
+
+  """
+  fetch aggregated fields from the table: "candidates"
+  """
+  candidates_aggregate(
+    """distinct select on columns"""
+    distinct_on: [candidates_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [candidates_order_by!]
+
+    """filter the rows returned"""
+    where: candidates_bool_exp
+  ): candidates_aggregate!
+
+  """fetch data from the table: "candidates" using primary key columns"""
+  candidates_by_pk(candidate_id: bigint!): candidates
+
+  """
+  fetch data from the table: "courses"
+  """
+  courses(
+    """distinct select on columns"""
+    distinct_on: [courses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [courses_order_by!]
+
+    """filter the rows returned"""
+    where: courses_bool_exp
+  ): [courses!]!
+
+  """
+  fetch aggregated fields from the table: "courses"
+  """
+  courses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [courses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [courses_order_by!]
+
+    """filter the rows returned"""
+    where: courses_bool_exp
+  ): courses_aggregate!
+
+  """fetch data from the table: "courses" using primary key columns"""
+  courses_by_pk(course_id: bigint!): courses
+
+  """
+  fetch data from the table: "people"
+  """
+  people(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): [people!]!
+
+  """
+  fetch data from the table: "people_addresses"
+  """
+  people_addresses(
+    """distinct select on columns"""
+    distinct_on: [people_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: people_addresses_bool_exp
+  ): [people_addresses!]!
+
+  """
+  fetch aggregated fields from the table: "people_addresses"
+  """
+  people_addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [people_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: people_addresses_bool_exp
+  ): people_addresses_aggregate!
+
+  """
+  fetch data from the table: "people_addresses" using primary key columns
+  """
+  people_addresses_by_pk(person_address_id: bigint!): people_addresses
+
+  """
+  fetch aggregated fields from the table: "people"
+  """
+  people_aggregate(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): people_aggregate!
+
+  """fetch data from the table: "people" using primary key columns"""
+  people_by_pk(person_id: bigint!): people
+
+  """
+  fetch data from the table: "student_course_attendance"
+  """
+  student_course_attendance(
+    """distinct select on columns"""
+    distinct_on: [student_course_attendance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_course_attendance_order_by!]
+
+    """filter the rows returned"""
+    where: student_course_attendance_bool_exp
+  ): [student_course_attendance!]!
+
+  """
+  fetch aggregated fields from the table: "student_course_attendance"
+  """
+  student_course_attendance_aggregate(
+    """distinct select on columns"""
+    distinct_on: [student_course_attendance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_course_attendance_order_by!]
+
+    """filter the rows returned"""
+    where: student_course_attendance_bool_exp
+  ): student_course_attendance_aggregate!
+
+  """
+  fetch data from the table: "student_course_attendance" using primary key columns
+  """
+  student_course_attendance_by_pk(course_id: bigint!, student_id: bigint!): student_course_attendance
+
+  """
+  fetch data from the table: "student_course_registrations"
+  """
+  student_course_registrations(
+    """distinct select on columns"""
+    distinct_on: [student_course_registrations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_course_registrations_order_by!]
+
+    """filter the rows returned"""
+    where: student_course_registrations_bool_exp
+  ): [student_course_registrations!]!
+
+  """
+  fetch aggregated fields from the table: "student_course_registrations"
+  """
+  student_course_registrations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [student_course_registrations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_course_registrations_order_by!]
+
+    """filter the rows returned"""
+    where: student_course_registrations_bool_exp
+  ): student_course_registrations_aggregate!
+
+  """
+  fetch data from the table: "student_course_registrations" using primary key columns
+  """
+  student_course_registrations_by_pk(course_id: bigint!, student_id: bigint!): student_course_registrations
+
+  """
+  fetch data from the table: "students"
+  """
+  students(
+    """distinct select on columns"""
+    distinct_on: [students_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [students_order_by!]
+
+    """filter the rows returned"""
+    where: students_bool_exp
+  ): [students!]!
+
+  """
+  fetch aggregated fields from the table: "students"
+  """
+  students_aggregate(
+    """distinct select on columns"""
+    distinct_on: [students_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [students_order_by!]
+
+    """filter the rows returned"""
+    where: students_bool_exp
+  ): students_aggregate!
+
+  """fetch data from the table: "students" using primary key columns"""
+  students_by_pk(student_id: bigint!): students
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""
+columns and relationships of "student_course_attendance"
+"""
+type student_course_attendance {
+  """An object relationship"""
+  course: courses!
+  course_id: bigint!
+  date_of_attendance: timestamptz
+
+  """An object relationship"""
+  student: students!
+
+  """An object relationship"""
+  student_course_registration: student_course_registrations
+  student_id: bigint!
+}
+
+"""
+aggregated selection of "student_course_attendance"
+"""
+type student_course_attendance_aggregate {
+  aggregate: student_course_attendance_aggregate_fields
+  nodes: [student_course_attendance!]!
+}
+
+"""
+aggregate fields of "student_course_attendance"
+"""
+type student_course_attendance_aggregate_fields {
+  avg: student_course_attendance_avg_fields
+  count(columns: [student_course_attendance_select_column!], distinct: Boolean): Int
+  max: student_course_attendance_max_fields
+  min: student_course_attendance_min_fields
+  stddev: student_course_attendance_stddev_fields
+  stddev_pop: student_course_attendance_stddev_pop_fields
+  stddev_samp: student_course_attendance_stddev_samp_fields
+  sum: student_course_attendance_sum_fields
+  var_pop: student_course_attendance_var_pop_fields
+  var_samp: student_course_attendance_var_samp_fields
+  variance: student_course_attendance_variance_fields
+}
+
+"""
+order by aggregate values of table "student_course_attendance"
+"""
+input student_course_attendance_aggregate_order_by {
+  avg: student_course_attendance_avg_order_by
+  count: order_by
+  max: student_course_attendance_max_order_by
+  min: student_course_attendance_min_order_by
+  stddev: student_course_attendance_stddev_order_by
+  stddev_pop: student_course_attendance_stddev_pop_order_by
+  stddev_samp: student_course_attendance_stddev_samp_order_by
+  sum: student_course_attendance_sum_order_by
+  var_pop: student_course_attendance_var_pop_order_by
+  var_samp: student_course_attendance_var_samp_order_by
+  variance: student_course_attendance_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "student_course_attendance"
+"""
+input student_course_attendance_arr_rel_insert_input {
+  data: [student_course_attendance_insert_input!]!
+  on_conflict: student_course_attendance_on_conflict
+}
+
+"""aggregate avg on columns"""
+type student_course_attendance_avg_fields {
+  course_id: Float
+  student_id: Float
+}
+
+"""
+order by avg() on columns of table "student_course_attendance"
+"""
+input student_course_attendance_avg_order_by {
+  course_id: order_by
+  student_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "student_course_attendance". All fields are combined with a logical 'AND'.
+"""
+input student_course_attendance_bool_exp {
+  _and: [student_course_attendance_bool_exp]
+  _not: student_course_attendance_bool_exp
+  _or: [student_course_attendance_bool_exp]
+  course: courses_bool_exp
+  course_id: bigint_comparison_exp
+  date_of_attendance: timestamptz_comparison_exp
+  student: students_bool_exp
+  student_course_registration: student_course_registrations_bool_exp
+  student_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "student_course_attendance"
+"""
+enum student_course_attendance_constraint {
+  """unique or primary key constraint"""
+  idx_26953_sqlite_autoindex_student_course_attendance_1
+}
+
+"""
+input type for incrementing integer columne in table "student_course_attendance"
+"""
+input student_course_attendance_inc_input {
+  course_id: bigint
+  student_id: bigint
+}
+
+"""
+input type for inserting data into table "student_course_attendance"
+"""
+input student_course_attendance_insert_input {
+  course: courses_obj_rel_insert_input
+  course_id: bigint
+  date_of_attendance: timestamptz
+  student: students_obj_rel_insert_input
+  student_course_registration: student_course_registrations_obj_rel_insert_input
+  student_id: bigint
+}
+
+"""aggregate max on columns"""
+type student_course_attendance_max_fields {
+  course_id: bigint
+  date_of_attendance: timestamptz
+  student_id: bigint
+}
+
+"""
+order by max() on columns of table "student_course_attendance"
+"""
+input student_course_attendance_max_order_by {
+  course_id: order_by
+  date_of_attendance: order_by
+  student_id: order_by
+}
+
+"""aggregate min on columns"""
+type student_course_attendance_min_fields {
+  course_id: bigint
+  date_of_attendance: timestamptz
+  student_id: bigint
+}
+
+"""
+order by min() on columns of table "student_course_attendance"
+"""
+input student_course_attendance_min_order_by {
+  course_id: order_by
+  date_of_attendance: order_by
+  student_id: order_by
+}
+
+"""
+response of any mutation on the table "student_course_attendance"
+"""
+type student_course_attendance_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [student_course_attendance!]!
+}
+
+"""
+input type for inserting object relation for remote table "student_course_attendance"
+"""
+input student_course_attendance_obj_rel_insert_input {
+  data: student_course_attendance_insert_input!
+  on_conflict: student_course_attendance_on_conflict
+}
+
+"""
+on conflict condition type for table "student_course_attendance"
+"""
+input student_course_attendance_on_conflict {
+  constraint: student_course_attendance_constraint!
+  update_columns: [student_course_attendance_update_column!]!
+  where: student_course_attendance_bool_exp
+}
+
+"""
+ordering options when selecting data from "student_course_attendance"
+"""
+input student_course_attendance_order_by {
+  course: courses_order_by
+  course_id: order_by
+  date_of_attendance: order_by
+  student: students_order_by
+  student_course_registration: student_course_registrations_order_by
+  student_id: order_by
+}
+
+"""
+select columns of table "student_course_attendance"
+"""
+enum student_course_attendance_select_column {
+  """column name"""
+  course_id
+
+  """column name"""
+  date_of_attendance
+
+  """column name"""
+  student_id
+}
+
+"""
+input type for updating data in table "student_course_attendance"
+"""
+input student_course_attendance_set_input {
+  course_id: bigint
+  date_of_attendance: timestamptz
+  student_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type student_course_attendance_stddev_fields {
+  course_id: Float
+  student_id: Float
+}
+
+"""
+order by stddev() on columns of table "student_course_attendance"
+"""
+input student_course_attendance_stddev_order_by {
+  course_id: order_by
+  student_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type student_course_attendance_stddev_pop_fields {
+  course_id: Float
+  student_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "student_course_attendance"
+"""
+input student_course_attendance_stddev_pop_order_by {
+  course_id: order_by
+  student_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type student_course_attendance_stddev_samp_fields {
+  course_id: Float
+  student_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "student_course_attendance"
+"""
+input student_course_attendance_stddev_samp_order_by {
+  course_id: order_by
+  student_id: order_by
+}
+
+"""aggregate sum on columns"""
+type student_course_attendance_sum_fields {
+  course_id: bigint
+  student_id: bigint
+}
+
+"""
+order by sum() on columns of table "student_course_attendance"
+"""
+input student_course_attendance_sum_order_by {
+  course_id: order_by
+  student_id: order_by
+}
+
+"""
+update columns of table "student_course_attendance"
+"""
+enum student_course_attendance_update_column {
+  """column name"""
+  course_id
+
+  """column name"""
+  date_of_attendance
+
+  """column name"""
+  student_id
+}
+
+"""aggregate var_pop on columns"""
+type student_course_attendance_var_pop_fields {
+  course_id: Float
+  student_id: Float
+}
+
+"""
+order by var_pop() on columns of table "student_course_attendance"
+"""
+input student_course_attendance_var_pop_order_by {
+  course_id: order_by
+  student_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type student_course_attendance_var_samp_fields {
+  course_id: Float
+  student_id: Float
+}
+
+"""
+order by var_samp() on columns of table "student_course_attendance"
+"""
+input student_course_attendance_var_samp_order_by {
+  course_id: order_by
+  student_id: order_by
+}
+
+"""aggregate variance on columns"""
+type student_course_attendance_variance_fields {
+  course_id: Float
+  student_id: Float
+}
+
+"""
+order by variance() on columns of table "student_course_attendance"
+"""
+input student_course_attendance_variance_order_by {
+  course_id: order_by
+  student_id: order_by
+}
+
+"""
+columns and relationships of "student_course_registrations"
+"""
+type student_course_registrations {
+  """An object relationship"""
+  course: courses!
+  course_id: bigint!
+  registration_date: timestamptz
+
+  """An object relationship"""
+  student: students!
+
+  """An array relationship"""
+  student_course_attendances(
+    """distinct select on columns"""
+    distinct_on: [student_course_attendance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_course_attendance_order_by!]
+
+    """filter the rows returned"""
+    where: student_course_attendance_bool_exp
+  ): [student_course_attendance!]!
+
+  """An aggregated array relationship"""
+  student_course_attendances_aggregate(
+    """distinct select on columns"""
+    distinct_on: [student_course_attendance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_course_attendance_order_by!]
+
+    """filter the rows returned"""
+    where: student_course_attendance_bool_exp
+  ): student_course_attendance_aggregate!
+  student_id: bigint!
+}
+
+"""
+aggregated selection of "student_course_registrations"
+"""
+type student_course_registrations_aggregate {
+  aggregate: student_course_registrations_aggregate_fields
+  nodes: [student_course_registrations!]!
+}
+
+"""
+aggregate fields of "student_course_registrations"
+"""
+type student_course_registrations_aggregate_fields {
+  avg: student_course_registrations_avg_fields
+  count(columns: [student_course_registrations_select_column!], distinct: Boolean): Int
+  max: student_course_registrations_max_fields
+  min: student_course_registrations_min_fields
+  stddev: student_course_registrations_stddev_fields
+  stddev_pop: student_course_registrations_stddev_pop_fields
+  stddev_samp: student_course_registrations_stddev_samp_fields
+  sum: student_course_registrations_sum_fields
+  var_pop: student_course_registrations_var_pop_fields
+  var_samp: student_course_registrations_var_samp_fields
+  variance: student_course_registrations_variance_fields
+}
+
+"""
+order by aggregate values of table "student_course_registrations"
+"""
+input student_course_registrations_aggregate_order_by {
+  avg: student_course_registrations_avg_order_by
+  count: order_by
+  max: student_course_registrations_max_order_by
+  min: student_course_registrations_min_order_by
+  stddev: student_course_registrations_stddev_order_by
+  stddev_pop: student_course_registrations_stddev_pop_order_by
+  stddev_samp: student_course_registrations_stddev_samp_order_by
+  sum: student_course_registrations_sum_order_by
+  var_pop: student_course_registrations_var_pop_order_by
+  var_samp: student_course_registrations_var_samp_order_by
+  variance: student_course_registrations_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "student_course_registrations"
+"""
+input student_course_registrations_arr_rel_insert_input {
+  data: [student_course_registrations_insert_input!]!
+  on_conflict: student_course_registrations_on_conflict
+}
+
+"""aggregate avg on columns"""
+type student_course_registrations_avg_fields {
+  course_id: Float
+  student_id: Float
+}
+
+"""
+order by avg() on columns of table "student_course_registrations"
+"""
+input student_course_registrations_avg_order_by {
+  course_id: order_by
+  student_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "student_course_registrations".
+All fields are combined with a logical 'AND'.
+"""
+input student_course_registrations_bool_exp {
+  _and: [student_course_registrations_bool_exp]
+  _not: student_course_registrations_bool_exp
+  _or: [student_course_registrations_bool_exp]
+  course: courses_bool_exp
+  course_id: bigint_comparison_exp
+  registration_date: timestamptz_comparison_exp
+  student: students_bool_exp
+  student_course_attendances: student_course_attendance_bool_exp
+  student_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "student_course_registrations"
+"""
+enum student_course_registrations_constraint {
+  """unique or primary key constraint"""
+  idx_26950_sqlite_autoindex_student_course_registrations_1
+}
+
+"""
+input type for incrementing integer columne in table "student_course_registrations"
+"""
+input student_course_registrations_inc_input {
+  course_id: bigint
+  student_id: bigint
+}
+
+"""
+input type for inserting data into table "student_course_registrations"
+"""
+input student_course_registrations_insert_input {
+  course: courses_obj_rel_insert_input
+  course_id: bigint
+  registration_date: timestamptz
+  student: students_obj_rel_insert_input
+  student_course_attendances: student_course_attendance_arr_rel_insert_input
+  student_id: bigint
+}
+
+"""aggregate max on columns"""
+type student_course_registrations_max_fields {
+  course_id: bigint
+  registration_date: timestamptz
+  student_id: bigint
+}
+
+"""
+order by max() on columns of table "student_course_registrations"
+"""
+input student_course_registrations_max_order_by {
+  course_id: order_by
+  registration_date: order_by
+  student_id: order_by
+}
+
+"""aggregate min on columns"""
+type student_course_registrations_min_fields {
+  course_id: bigint
+  registration_date: timestamptz
+  student_id: bigint
+}
+
+"""
+order by min() on columns of table "student_course_registrations"
+"""
+input student_course_registrations_min_order_by {
+  course_id: order_by
+  registration_date: order_by
+  student_id: order_by
+}
+
+"""
+response of any mutation on the table "student_course_registrations"
+"""
+type student_course_registrations_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [student_course_registrations!]!
+}
+
+"""
+input type for inserting object relation for remote table "student_course_registrations"
+"""
+input student_course_registrations_obj_rel_insert_input {
+  data: student_course_registrations_insert_input!
+  on_conflict: student_course_registrations_on_conflict
+}
+
+"""
+on conflict condition type for table "student_course_registrations"
+"""
+input student_course_registrations_on_conflict {
+  constraint: student_course_registrations_constraint!
+  update_columns: [student_course_registrations_update_column!]!
+  where: student_course_registrations_bool_exp
+}
+
+"""
+ordering options when selecting data from "student_course_registrations"
+"""
+input student_course_registrations_order_by {
+  course: courses_order_by
+  course_id: order_by
+  registration_date: order_by
+  student: students_order_by
+  student_course_attendances_aggregate: student_course_attendance_aggregate_order_by
+  student_id: order_by
+}
+
+"""
+select columns of table "student_course_registrations"
+"""
+enum student_course_registrations_select_column {
+  """column name"""
+  course_id
+
+  """column name"""
+  registration_date
+
+  """column name"""
+  student_id
+}
+
+"""
+input type for updating data in table "student_course_registrations"
+"""
+input student_course_registrations_set_input {
+  course_id: bigint
+  registration_date: timestamptz
+  student_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type student_course_registrations_stddev_fields {
+  course_id: Float
+  student_id: Float
+}
+
+"""
+order by stddev() on columns of table "student_course_registrations"
+"""
+input student_course_registrations_stddev_order_by {
+  course_id: order_by
+  student_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type student_course_registrations_stddev_pop_fields {
+  course_id: Float
+  student_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "student_course_registrations"
+"""
+input student_course_registrations_stddev_pop_order_by {
+  course_id: order_by
+  student_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type student_course_registrations_stddev_samp_fields {
+  course_id: Float
+  student_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "student_course_registrations"
+"""
+input student_course_registrations_stddev_samp_order_by {
+  course_id: order_by
+  student_id: order_by
+}
+
+"""aggregate sum on columns"""
+type student_course_registrations_sum_fields {
+  course_id: bigint
+  student_id: bigint
+}
+
+"""
+order by sum() on columns of table "student_course_registrations"
+"""
+input student_course_registrations_sum_order_by {
+  course_id: order_by
+  student_id: order_by
+}
+
+"""
+update columns of table "student_course_registrations"
+"""
+enum student_course_registrations_update_column {
+  """column name"""
+  course_id
+
+  """column name"""
+  registration_date
+
+  """column name"""
+  student_id
+}
+
+"""aggregate var_pop on columns"""
+type student_course_registrations_var_pop_fields {
+  course_id: Float
+  student_id: Float
+}
+
+"""
+order by var_pop() on columns of table "student_course_registrations"
+"""
+input student_course_registrations_var_pop_order_by {
+  course_id: order_by
+  student_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type student_course_registrations_var_samp_fields {
+  course_id: Float
+  student_id: Float
+}
+
+"""
+order by var_samp() on columns of table "student_course_registrations"
+"""
+input student_course_registrations_var_samp_order_by {
+  course_id: order_by
+  student_id: order_by
+}
+
+"""aggregate variance on columns"""
+type student_course_registrations_variance_fields {
+  course_id: Float
+  student_id: Float
+}
+
+"""
+order by variance() on columns of table "student_course_registrations"
+"""
+input student_course_registrations_variance_order_by {
+  course_id: order_by
+  student_id: order_by
+}
+
+"""
+columns and relationships of "students"
+"""
+type students {
+  """An object relationship"""
+  person: people!
+
+  """An array relationship"""
+  student_course_attendances(
+    """distinct select on columns"""
+    distinct_on: [student_course_attendance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_course_attendance_order_by!]
+
+    """filter the rows returned"""
+    where: student_course_attendance_bool_exp
+  ): [student_course_attendance!]!
+
+  """An aggregated array relationship"""
+  student_course_attendances_aggregate(
+    """distinct select on columns"""
+    distinct_on: [student_course_attendance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_course_attendance_order_by!]
+
+    """filter the rows returned"""
+    where: student_course_attendance_bool_exp
+  ): student_course_attendance_aggregate!
+
+  """An array relationship"""
+  student_course_registrations(
+    """distinct select on columns"""
+    distinct_on: [student_course_registrations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_course_registrations_order_by!]
+
+    """filter the rows returned"""
+    where: student_course_registrations_bool_exp
+  ): [student_course_registrations!]!
+
+  """An aggregated array relationship"""
+  student_course_registrations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [student_course_registrations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_course_registrations_order_by!]
+
+    """filter the rows returned"""
+    where: student_course_registrations_bool_exp
+  ): student_course_registrations_aggregate!
+  student_details: String
+  student_id: bigint!
+}
+
+"""
+aggregated selection of "students"
+"""
+type students_aggregate {
+  aggregate: students_aggregate_fields
+  nodes: [students!]!
+}
+
+"""
+aggregate fields of "students"
+"""
+type students_aggregate_fields {
+  avg: students_avg_fields
+  count(columns: [students_select_column!], distinct: Boolean): Int
+  max: students_max_fields
+  min: students_min_fields
+  stddev: students_stddev_fields
+  stddev_pop: students_stddev_pop_fields
+  stddev_samp: students_stddev_samp_fields
+  sum: students_sum_fields
+  var_pop: students_var_pop_fields
+  var_samp: students_var_samp_fields
+  variance: students_variance_fields
+}
+
+"""
+order by aggregate values of table "students"
+"""
+input students_aggregate_order_by {
+  avg: students_avg_order_by
+  count: order_by
+  max: students_max_order_by
+  min: students_min_order_by
+  stddev: students_stddev_order_by
+  stddev_pop: students_stddev_pop_order_by
+  stddev_samp: students_stddev_samp_order_by
+  sum: students_sum_order_by
+  var_pop: students_var_pop_order_by
+  var_samp: students_var_samp_order_by
+  variance: students_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "students"
+"""
+input students_arr_rel_insert_input {
+  data: [students_insert_input!]!
+  on_conflict: students_on_conflict
+}
+
+"""aggregate avg on columns"""
+type students_avg_fields {
+  student_id: Float
+}
+
+"""
+order by avg() on columns of table "students"
+"""
+input students_avg_order_by {
+  student_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "students". All fields are combined with a logical 'AND'.
+"""
+input students_bool_exp {
+  _and: [students_bool_exp]
+  _not: students_bool_exp
+  _or: [students_bool_exp]
+  person: people_bool_exp
+  student_course_attendances: student_course_attendance_bool_exp
+  student_course_registrations: student_course_registrations_bool_exp
+  student_details: String_comparison_exp
+  student_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "students"
+"""
+enum students_constraint {
+  """unique or primary key constraint"""
+  idx_26935_students_pkey
+}
+
+"""
+input type for incrementing integer columne in table "students"
+"""
+input students_inc_input {
+  student_id: bigint
+}
+
+"""
+input type for inserting data into table "students"
+"""
+input students_insert_input {
+  person: people_obj_rel_insert_input
+  student_course_attendances: student_course_attendance_arr_rel_insert_input
+  student_course_registrations: student_course_registrations_arr_rel_insert_input
+  student_details: String
+  student_id: bigint
+}
+
+"""aggregate max on columns"""
+type students_max_fields {
+  student_details: String
+  student_id: bigint
+}
+
+"""
+order by max() on columns of table "students"
+"""
+input students_max_order_by {
+  student_details: order_by
+  student_id: order_by
+}
+
+"""aggregate min on columns"""
+type students_min_fields {
+  student_details: String
+  student_id: bigint
+}
+
+"""
+order by min() on columns of table "students"
+"""
+input students_min_order_by {
+  student_details: order_by
+  student_id: order_by
+}
+
+"""
+response of any mutation on the table "students"
+"""
+type students_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [students!]!
+}
+
+"""
+input type for inserting object relation for remote table "students"
+"""
+input students_obj_rel_insert_input {
+  data: students_insert_input!
+  on_conflict: students_on_conflict
+}
+
+"""
+on conflict condition type for table "students"
+"""
+input students_on_conflict {
+  constraint: students_constraint!
+  update_columns: [students_update_column!]!
+  where: students_bool_exp
+}
+
+"""
+ordering options when selecting data from "students"
+"""
+input students_order_by {
+  person: people_order_by
+  student_course_attendances_aggregate: student_course_attendance_aggregate_order_by
+  student_course_registrations_aggregate: student_course_registrations_aggregate_order_by
+  student_details: order_by
+  student_id: order_by
+}
+
+"""
+select columns of table "students"
+"""
+enum students_select_column {
+  """column name"""
+  student_details
+
+  """column name"""
+  student_id
+}
+
+"""
+input type for updating data in table "students"
+"""
+input students_set_input {
+  student_details: String
+  student_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type students_stddev_fields {
+  student_id: Float
+}
+
+"""
+order by stddev() on columns of table "students"
+"""
+input students_stddev_order_by {
+  student_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type students_stddev_pop_fields {
+  student_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "students"
+"""
+input students_stddev_pop_order_by {
+  student_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type students_stddev_samp_fields {
+  student_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "students"
+"""
+input students_stddev_samp_order_by {
+  student_id: order_by
+}
+
+"""aggregate sum on columns"""
+type students_sum_fields {
+  student_id: bigint
+}
+
+"""
+order by sum() on columns of table "students"
+"""
+input students_sum_order_by {
+  student_id: order_by
+}
+
+"""
+update columns of table "students"
+"""
+enum students_update_column {
+  """column name"""
+  student_details
+
+  """column name"""
+  student_id
+}
+
+"""aggregate var_pop on columns"""
+type students_var_pop_fields {
+  student_id: Float
+}
+
+"""
+order by var_pop() on columns of table "students"
+"""
+input students_var_pop_order_by {
+  student_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type students_var_samp_fields {
+  student_id: Float
+}
+
+"""
+order by var_samp() on columns of table "students"
+"""
+input students_var_samp_order_by {
+  student_id: order_by
+}
+
+"""aggregate variance on columns"""
+type students_variance_fields {
+  student_id: Float
+}
+
+"""
+order by variance() on columns of table "students"
+"""
+input students_variance_order_by {
+  student_id: order_by
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "addresses"
+  """
+  addresses(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): [addresses!]!
+
+  """
+  fetch aggregated fields from the table: "addresses"
+  """
+  addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): addresses_aggregate!
+
+  """fetch data from the table: "addresses" using primary key columns"""
+  addresses_by_pk(address_id: bigint!): addresses
+
+  """
+  fetch data from the table: "candidate_assessments"
+  """
+  candidate_assessments(
+    """distinct select on columns"""
+    distinct_on: [candidate_assessments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [candidate_assessments_order_by!]
+
+    """filter the rows returned"""
+    where: candidate_assessments_bool_exp
+  ): [candidate_assessments!]!
+
+  """
+  fetch aggregated fields from the table: "candidate_assessments"
+  """
+  candidate_assessments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [candidate_assessments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [candidate_assessments_order_by!]
+
+    """filter the rows returned"""
+    where: candidate_assessments_bool_exp
+  ): candidate_assessments_aggregate!
+
+  """
+  fetch data from the table: "candidate_assessments" using primary key columns
+  """
+  candidate_assessments_by_pk(candidate_id: bigint!, qualification: String!): candidate_assessments
+
+  """
+  fetch data from the table: "candidates"
+  """
+  candidates(
+    """distinct select on columns"""
+    distinct_on: [candidates_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [candidates_order_by!]
+
+    """filter the rows returned"""
+    where: candidates_bool_exp
+  ): [candidates!]!
+
+  """
+  fetch aggregated fields from the table: "candidates"
+  """
+  candidates_aggregate(
+    """distinct select on columns"""
+    distinct_on: [candidates_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [candidates_order_by!]
+
+    """filter the rows returned"""
+    where: candidates_bool_exp
+  ): candidates_aggregate!
+
+  """fetch data from the table: "candidates" using primary key columns"""
+  candidates_by_pk(candidate_id: bigint!): candidates
+
+  """
+  fetch data from the table: "courses"
+  """
+  courses(
+    """distinct select on columns"""
+    distinct_on: [courses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [courses_order_by!]
+
+    """filter the rows returned"""
+    where: courses_bool_exp
+  ): [courses!]!
+
+  """
+  fetch aggregated fields from the table: "courses"
+  """
+  courses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [courses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [courses_order_by!]
+
+    """filter the rows returned"""
+    where: courses_bool_exp
+  ): courses_aggregate!
+
+  """fetch data from the table: "courses" using primary key columns"""
+  courses_by_pk(course_id: bigint!): courses
+
+  """
+  fetch data from the table: "people"
+  """
+  people(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): [people!]!
+
+  """
+  fetch data from the table: "people_addresses"
+  """
+  people_addresses(
+    """distinct select on columns"""
+    distinct_on: [people_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: people_addresses_bool_exp
+  ): [people_addresses!]!
+
+  """
+  fetch aggregated fields from the table: "people_addresses"
+  """
+  people_addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [people_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: people_addresses_bool_exp
+  ): people_addresses_aggregate!
+
+  """
+  fetch data from the table: "people_addresses" using primary key columns
+  """
+  people_addresses_by_pk(person_address_id: bigint!): people_addresses
+
+  """
+  fetch aggregated fields from the table: "people"
+  """
+  people_aggregate(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): people_aggregate!
+
+  """fetch data from the table: "people" using primary key columns"""
+  people_by_pk(person_id: bigint!): people
+
+  """
+  fetch data from the table: "student_course_attendance"
+  """
+  student_course_attendance(
+    """distinct select on columns"""
+    distinct_on: [student_course_attendance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_course_attendance_order_by!]
+
+    """filter the rows returned"""
+    where: student_course_attendance_bool_exp
+  ): [student_course_attendance!]!
+
+  """
+  fetch aggregated fields from the table: "student_course_attendance"
+  """
+  student_course_attendance_aggregate(
+    """distinct select on columns"""
+    distinct_on: [student_course_attendance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_course_attendance_order_by!]
+
+    """filter the rows returned"""
+    where: student_course_attendance_bool_exp
+  ): student_course_attendance_aggregate!
+
+  """
+  fetch data from the table: "student_course_attendance" using primary key columns
+  """
+  student_course_attendance_by_pk(course_id: bigint!, student_id: bigint!): student_course_attendance
+
+  """
+  fetch data from the table: "student_course_registrations"
+  """
+  student_course_registrations(
+    """distinct select on columns"""
+    distinct_on: [student_course_registrations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_course_registrations_order_by!]
+
+    """filter the rows returned"""
+    where: student_course_registrations_bool_exp
+  ): [student_course_registrations!]!
+
+  """
+  fetch aggregated fields from the table: "student_course_registrations"
+  """
+  student_course_registrations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [student_course_registrations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [student_course_registrations_order_by!]
+
+    """filter the rows returned"""
+    where: student_course_registrations_bool_exp
+  ): student_course_registrations_aggregate!
+
+  """
+  fetch data from the table: "student_course_registrations" using primary key columns
+  """
+  student_course_registrations_by_pk(course_id: bigint!, student_id: bigint!): student_course_registrations
+
+  """
+  fetch data from the table: "students"
+  """
+  students(
+    """distinct select on columns"""
+    distinct_on: [students_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [students_order_by!]
+
+    """filter the rows returned"""
+    where: students_bool_exp
+  ): [students!]!
+
+  """
+  fetch aggregated fields from the table: "students"
+  """
+  students_aggregate(
+    """distinct select on columns"""
+    distinct_on: [students_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [students_order_by!]
+
+    """filter the rows returned"""
+    where: students_bool_exp
+  ): students_aggregate!
+
+  """fetch data from the table: "students" using primary key columns"""
+  students_by_pk(student_id: bigint!): students
+}
+
+scalar timestamptz
+
+"""
+expression to compare columns of type timestamptz. All fields are combined with logical 'AND'.
+"""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}

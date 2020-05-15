@@ -1,0 +1,1157 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "people"
+  """
+  delete_people(
+    """filter the rows which have to be deleted"""
+    where: people_bool_exp!
+  ): people_mutation_response
+
+  """
+  delete data from the table: "poker_player"
+  """
+  delete_poker_player(
+    """filter the rows which have to be deleted"""
+    where: poker_player_bool_exp!
+  ): poker_player_mutation_response
+
+  """
+  insert data into the table: "people"
+  """
+  insert_people(
+    """the rows to be inserted"""
+    objects: [people_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: people_on_conflict
+  ): people_mutation_response
+
+  """
+  insert data into the table: "poker_player"
+  """
+  insert_poker_player(
+    """the rows to be inserted"""
+    objects: [poker_player_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: poker_player_on_conflict
+  ): poker_player_mutation_response
+
+  """
+  update data of the table: "people"
+  """
+  update_people(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: people_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: people_set_input
+
+    """filter the rows which have to be updated"""
+    where: people_bool_exp!
+  ): people_mutation_response
+
+  """
+  update data of the table: "poker_player"
+  """
+  update_poker_player(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: poker_player_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: poker_player_set_input
+
+    """filter the rows which have to be updated"""
+    where: poker_player_bool_exp!
+  ): poker_player_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "people"
+"""
+type people {
+  birth_date: String
+  height: Float
+  name: String
+  nationality: String
+  people_id: Int
+
+  """An array relationship"""
+  poker_players(
+    """distinct select on columns"""
+    distinct_on: [poker_player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [poker_player_order_by!]
+
+    """filter the rows returned"""
+    where: poker_player_bool_exp
+  ): [poker_player!]!
+
+  """An aggregated array relationship"""
+  poker_players_aggregate(
+    """distinct select on columns"""
+    distinct_on: [poker_player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [poker_player_order_by!]
+
+    """filter the rows returned"""
+    where: poker_player_bool_exp
+  ): poker_player_aggregate!
+}
+
+"""
+aggregated selection of "people"
+"""
+type people_aggregate {
+  aggregate: people_aggregate_fields
+  nodes: [people!]!
+}
+
+"""
+aggregate fields of "people"
+"""
+type people_aggregate_fields {
+  avg: people_avg_fields
+  count(columns: [people_select_column!], distinct: Boolean): Int
+  max: people_max_fields
+  min: people_min_fields
+  stddev: people_stddev_fields
+  stddev_pop: people_stddev_pop_fields
+  stddev_samp: people_stddev_samp_fields
+  sum: people_sum_fields
+  var_pop: people_var_pop_fields
+  var_samp: people_var_samp_fields
+  variance: people_variance_fields
+}
+
+"""
+order by aggregate values of table "people"
+"""
+input people_aggregate_order_by {
+  avg: people_avg_order_by
+  count: order_by
+  max: people_max_order_by
+  min: people_min_order_by
+  stddev: people_stddev_order_by
+  stddev_pop: people_stddev_pop_order_by
+  stddev_samp: people_stddev_samp_order_by
+  sum: people_sum_order_by
+  var_pop: people_var_pop_order_by
+  var_samp: people_var_samp_order_by
+  variance: people_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "people"
+"""
+input people_arr_rel_insert_input {
+  data: [people_insert_input!]!
+  on_conflict: people_on_conflict
+}
+
+"""aggregate avg on columns"""
+type people_avg_fields {
+  height: Float
+  people_id: Float
+}
+
+"""
+order by avg() on columns of table "people"
+"""
+input people_avg_order_by {
+  height: order_by
+  people_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "people". All fields are combined with a logical 'AND'.
+"""
+input people_bool_exp {
+  _and: [people_bool_exp]
+  _not: people_bool_exp
+  _or: [people_bool_exp]
+  birth_date: String_comparison_exp
+  height: Float_comparison_exp
+  name: String_comparison_exp
+  nationality: String_comparison_exp
+  people_id: Int_comparison_exp
+  poker_players: poker_player_bool_exp
+}
+
+"""
+unique or primary key constraints on table "people"
+"""
+enum people_constraint {
+  """unique or primary key constraint"""
+  idx_22794_sqlite_autoindex_people_1
+}
+
+"""
+input type for incrementing integer columne in table "people"
+"""
+input people_inc_input {
+  people_id: Int
+}
+
+"""
+input type for inserting data into table "people"
+"""
+input people_insert_input {
+  birth_date: String
+  height: Float
+  name: String
+  nationality: String
+  people_id: Int
+  poker_players: poker_player_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type people_max_fields {
+  birth_date: String
+  height: Float
+  name: String
+  nationality: String
+  people_id: Int
+}
+
+"""
+order by max() on columns of table "people"
+"""
+input people_max_order_by {
+  birth_date: order_by
+  height: order_by
+  name: order_by
+  nationality: order_by
+  people_id: order_by
+}
+
+"""aggregate min on columns"""
+type people_min_fields {
+  birth_date: String
+  height: Float
+  name: String
+  nationality: String
+  people_id: Int
+}
+
+"""
+order by min() on columns of table "people"
+"""
+input people_min_order_by {
+  birth_date: order_by
+  height: order_by
+  name: order_by
+  nationality: order_by
+  people_id: order_by
+}
+
+"""
+response of any mutation on the table "people"
+"""
+type people_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [people!]!
+}
+
+"""
+input type for inserting object relation for remote table "people"
+"""
+input people_obj_rel_insert_input {
+  data: people_insert_input!
+  on_conflict: people_on_conflict
+}
+
+"""
+on conflict condition type for table "people"
+"""
+input people_on_conflict {
+  constraint: people_constraint!
+  update_columns: [people_update_column!]!
+  where: people_bool_exp
+}
+
+"""
+ordering options when selecting data from "people"
+"""
+input people_order_by {
+  birth_date: order_by
+  height: order_by
+  name: order_by
+  nationality: order_by
+  people_id: order_by
+  poker_players_aggregate: poker_player_aggregate_order_by
+}
+
+"""
+select columns of table "people"
+"""
+enum people_select_column {
+  """column name"""
+  birth_date
+
+  """column name"""
+  height
+
+  """column name"""
+  name
+
+  """column name"""
+  nationality
+
+  """column name"""
+  people_id
+}
+
+"""
+input type for updating data in table "people"
+"""
+input people_set_input {
+  birth_date: String
+  height: Float
+  name: String
+  nationality: String
+  people_id: Int
+}
+
+"""aggregate stddev on columns"""
+type people_stddev_fields {
+  height: Float
+  people_id: Float
+}
+
+"""
+order by stddev() on columns of table "people"
+"""
+input people_stddev_order_by {
+  height: order_by
+  people_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type people_stddev_pop_fields {
+  height: Float
+  people_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "people"
+"""
+input people_stddev_pop_order_by {
+  height: order_by
+  people_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type people_stddev_samp_fields {
+  height: Float
+  people_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "people"
+"""
+input people_stddev_samp_order_by {
+  height: order_by
+  people_id: order_by
+}
+
+"""aggregate sum on columns"""
+type people_sum_fields {
+  height: Float
+  people_id: Int
+}
+
+"""
+order by sum() on columns of table "people"
+"""
+input people_sum_order_by {
+  height: order_by
+  people_id: order_by
+}
+
+"""
+update columns of table "people"
+"""
+enum people_update_column {
+  """column name"""
+  birth_date
+
+  """column name"""
+  height
+
+  """column name"""
+  name
+
+  """column name"""
+  nationality
+
+  """column name"""
+  people_id
+}
+
+"""aggregate var_pop on columns"""
+type people_var_pop_fields {
+  height: Float
+  people_id: Float
+}
+
+"""
+order by var_pop() on columns of table "people"
+"""
+input people_var_pop_order_by {
+  height: order_by
+  people_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type people_var_samp_fields {
+  height: Float
+  people_id: Float
+}
+
+"""
+order by var_samp() on columns of table "people"
+"""
+input people_var_samp_order_by {
+  height: order_by
+  people_id: order_by
+}
+
+"""aggregate variance on columns"""
+type people_variance_fields {
+  height: Float
+  people_id: Float
+}
+
+"""
+order by variance() on columns of table "people"
+"""
+input people_variance_order_by {
+  height: order_by
+  people_id: order_by
+}
+
+"""
+columns and relationships of "poker_player"
+"""
+type poker_player {
+  best_finish: Float
+  earnings: Float
+  final_table_made: Float
+  money_rank: Float
+  people_id: Int
+
+  """An object relationship"""
+  person: people
+  poker_player_id: Int
+}
+
+"""
+aggregated selection of "poker_player"
+"""
+type poker_player_aggregate {
+  aggregate: poker_player_aggregate_fields
+  nodes: [poker_player!]!
+}
+
+"""
+aggregate fields of "poker_player"
+"""
+type poker_player_aggregate_fields {
+  avg: poker_player_avg_fields
+  count(columns: [poker_player_select_column!], distinct: Boolean): Int
+  max: poker_player_max_fields
+  min: poker_player_min_fields
+  stddev: poker_player_stddev_fields
+  stddev_pop: poker_player_stddev_pop_fields
+  stddev_samp: poker_player_stddev_samp_fields
+  sum: poker_player_sum_fields
+  var_pop: poker_player_var_pop_fields
+  var_samp: poker_player_var_samp_fields
+  variance: poker_player_variance_fields
+}
+
+"""
+order by aggregate values of table "poker_player"
+"""
+input poker_player_aggregate_order_by {
+  avg: poker_player_avg_order_by
+  count: order_by
+  max: poker_player_max_order_by
+  min: poker_player_min_order_by
+  stddev: poker_player_stddev_order_by
+  stddev_pop: poker_player_stddev_pop_order_by
+  stddev_samp: poker_player_stddev_samp_order_by
+  sum: poker_player_sum_order_by
+  var_pop: poker_player_var_pop_order_by
+  var_samp: poker_player_var_samp_order_by
+  variance: poker_player_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "poker_player"
+"""
+input poker_player_arr_rel_insert_input {
+  data: [poker_player_insert_input!]!
+  on_conflict: poker_player_on_conflict
+}
+
+"""aggregate avg on columns"""
+type poker_player_avg_fields {
+  best_finish: Float
+  earnings: Float
+  final_table_made: Float
+  money_rank: Float
+  people_id: Float
+  poker_player_id: Float
+}
+
+"""
+order by avg() on columns of table "poker_player"
+"""
+input poker_player_avg_order_by {
+  best_finish: order_by
+  earnings: order_by
+  final_table_made: order_by
+  money_rank: order_by
+  people_id: order_by
+  poker_player_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "poker_player". All fields are combined with a logical 'AND'.
+"""
+input poker_player_bool_exp {
+  _and: [poker_player_bool_exp]
+  _not: poker_player_bool_exp
+  _or: [poker_player_bool_exp]
+  best_finish: Float_comparison_exp
+  earnings: Float_comparison_exp
+  final_table_made: Float_comparison_exp
+  money_rank: Float_comparison_exp
+  people_id: Int_comparison_exp
+  person: people_bool_exp
+  poker_player_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "poker_player"
+"""
+enum poker_player_constraint {
+  """unique or primary key constraint"""
+  idx_22791_sqlite_autoindex_poker_player_1
+}
+
+"""
+input type for incrementing integer columne in table "poker_player"
+"""
+input poker_player_inc_input {
+  people_id: Int
+  poker_player_id: Int
+}
+
+"""
+input type for inserting data into table "poker_player"
+"""
+input poker_player_insert_input {
+  best_finish: Float
+  earnings: Float
+  final_table_made: Float
+  money_rank: Float
+  people_id: Int
+  person: people_obj_rel_insert_input
+  poker_player_id: Int
+}
+
+"""aggregate max on columns"""
+type poker_player_max_fields {
+  best_finish: Float
+  earnings: Float
+  final_table_made: Float
+  money_rank: Float
+  people_id: Int
+  poker_player_id: Int
+}
+
+"""
+order by max() on columns of table "poker_player"
+"""
+input poker_player_max_order_by {
+  best_finish: order_by
+  earnings: order_by
+  final_table_made: order_by
+  money_rank: order_by
+  people_id: order_by
+  poker_player_id: order_by
+}
+
+"""aggregate min on columns"""
+type poker_player_min_fields {
+  best_finish: Float
+  earnings: Float
+  final_table_made: Float
+  money_rank: Float
+  people_id: Int
+  poker_player_id: Int
+}
+
+"""
+order by min() on columns of table "poker_player"
+"""
+input poker_player_min_order_by {
+  best_finish: order_by
+  earnings: order_by
+  final_table_made: order_by
+  money_rank: order_by
+  people_id: order_by
+  poker_player_id: order_by
+}
+
+"""
+response of any mutation on the table "poker_player"
+"""
+type poker_player_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [poker_player!]!
+}
+
+"""
+input type for inserting object relation for remote table "poker_player"
+"""
+input poker_player_obj_rel_insert_input {
+  data: poker_player_insert_input!
+  on_conflict: poker_player_on_conflict
+}
+
+"""
+on conflict condition type for table "poker_player"
+"""
+input poker_player_on_conflict {
+  constraint: poker_player_constraint!
+  update_columns: [poker_player_update_column!]!
+  where: poker_player_bool_exp
+}
+
+"""
+ordering options when selecting data from "poker_player"
+"""
+input poker_player_order_by {
+  best_finish: order_by
+  earnings: order_by
+  final_table_made: order_by
+  money_rank: order_by
+  people_id: order_by
+  person: people_order_by
+  poker_player_id: order_by
+}
+
+"""
+select columns of table "poker_player"
+"""
+enum poker_player_select_column {
+  """column name"""
+  best_finish
+
+  """column name"""
+  earnings
+
+  """column name"""
+  final_table_made
+
+  """column name"""
+  money_rank
+
+  """column name"""
+  people_id
+
+  """column name"""
+  poker_player_id
+}
+
+"""
+input type for updating data in table "poker_player"
+"""
+input poker_player_set_input {
+  best_finish: Float
+  earnings: Float
+  final_table_made: Float
+  money_rank: Float
+  people_id: Int
+  poker_player_id: Int
+}
+
+"""aggregate stddev on columns"""
+type poker_player_stddev_fields {
+  best_finish: Float
+  earnings: Float
+  final_table_made: Float
+  money_rank: Float
+  people_id: Float
+  poker_player_id: Float
+}
+
+"""
+order by stddev() on columns of table "poker_player"
+"""
+input poker_player_stddev_order_by {
+  best_finish: order_by
+  earnings: order_by
+  final_table_made: order_by
+  money_rank: order_by
+  people_id: order_by
+  poker_player_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type poker_player_stddev_pop_fields {
+  best_finish: Float
+  earnings: Float
+  final_table_made: Float
+  money_rank: Float
+  people_id: Float
+  poker_player_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "poker_player"
+"""
+input poker_player_stddev_pop_order_by {
+  best_finish: order_by
+  earnings: order_by
+  final_table_made: order_by
+  money_rank: order_by
+  people_id: order_by
+  poker_player_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type poker_player_stddev_samp_fields {
+  best_finish: Float
+  earnings: Float
+  final_table_made: Float
+  money_rank: Float
+  people_id: Float
+  poker_player_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "poker_player"
+"""
+input poker_player_stddev_samp_order_by {
+  best_finish: order_by
+  earnings: order_by
+  final_table_made: order_by
+  money_rank: order_by
+  people_id: order_by
+  poker_player_id: order_by
+}
+
+"""aggregate sum on columns"""
+type poker_player_sum_fields {
+  best_finish: Float
+  earnings: Float
+  final_table_made: Float
+  money_rank: Float
+  people_id: Int
+  poker_player_id: Int
+}
+
+"""
+order by sum() on columns of table "poker_player"
+"""
+input poker_player_sum_order_by {
+  best_finish: order_by
+  earnings: order_by
+  final_table_made: order_by
+  money_rank: order_by
+  people_id: order_by
+  poker_player_id: order_by
+}
+
+"""
+update columns of table "poker_player"
+"""
+enum poker_player_update_column {
+  """column name"""
+  best_finish
+
+  """column name"""
+  earnings
+
+  """column name"""
+  final_table_made
+
+  """column name"""
+  money_rank
+
+  """column name"""
+  people_id
+
+  """column name"""
+  poker_player_id
+}
+
+"""aggregate var_pop on columns"""
+type poker_player_var_pop_fields {
+  best_finish: Float
+  earnings: Float
+  final_table_made: Float
+  money_rank: Float
+  people_id: Float
+  poker_player_id: Float
+}
+
+"""
+order by var_pop() on columns of table "poker_player"
+"""
+input poker_player_var_pop_order_by {
+  best_finish: order_by
+  earnings: order_by
+  final_table_made: order_by
+  money_rank: order_by
+  people_id: order_by
+  poker_player_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type poker_player_var_samp_fields {
+  best_finish: Float
+  earnings: Float
+  final_table_made: Float
+  money_rank: Float
+  people_id: Float
+  poker_player_id: Float
+}
+
+"""
+order by var_samp() on columns of table "poker_player"
+"""
+input poker_player_var_samp_order_by {
+  best_finish: order_by
+  earnings: order_by
+  final_table_made: order_by
+  money_rank: order_by
+  people_id: order_by
+  poker_player_id: order_by
+}
+
+"""aggregate variance on columns"""
+type poker_player_variance_fields {
+  best_finish: Float
+  earnings: Float
+  final_table_made: Float
+  money_rank: Float
+  people_id: Float
+  poker_player_id: Float
+}
+
+"""
+order by variance() on columns of table "poker_player"
+"""
+input poker_player_variance_order_by {
+  best_finish: order_by
+  earnings: order_by
+  final_table_made: order_by
+  money_rank: order_by
+  people_id: order_by
+  poker_player_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "people"
+  """
+  people(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): [people!]!
+
+  """
+  fetch aggregated fields from the table: "people"
+  """
+  people_aggregate(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): people_aggregate!
+
+  """
+  fetch data from the table: "poker_player"
+  """
+  poker_player(
+    """distinct select on columns"""
+    distinct_on: [poker_player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [poker_player_order_by!]
+
+    """filter the rows returned"""
+    where: poker_player_bool_exp
+  ): [poker_player!]!
+
+  """
+  fetch aggregated fields from the table: "poker_player"
+  """
+  poker_player_aggregate(
+    """distinct select on columns"""
+    distinct_on: [poker_player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [poker_player_order_by!]
+
+    """filter the rows returned"""
+    where: poker_player_bool_exp
+  ): poker_player_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "people"
+  """
+  people(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): [people!]!
+
+  """
+  fetch aggregated fields from the table: "people"
+  """
+  people_aggregate(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): people_aggregate!
+
+  """
+  fetch data from the table: "poker_player"
+  """
+  poker_player(
+    """distinct select on columns"""
+    distinct_on: [poker_player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [poker_player_order_by!]
+
+    """filter the rows returned"""
+    where: poker_player_bool_exp
+  ): [poker_player!]!
+
+  """
+  fetch aggregated fields from the table: "poker_player"
+  """
+  poker_player_aggregate(
+    """distinct select on columns"""
+    distinct_on: [poker_player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [poker_player_order_by!]
+
+    """filter the rows returned"""
+    where: poker_player_bool_exp
+  ): poker_player_aggregate!
+}

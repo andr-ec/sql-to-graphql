@@ -1,0 +1,3646 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "countries"
+"""
+type countries {
+  country_id: String
+  country_name: String
+
+  """An array relationship"""
+  locations(
+    """distinct select on columns"""
+    distinct_on: [locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [locations_order_by!]
+
+    """filter the rows returned"""
+    where: locations_bool_exp
+  ): [locations!]!
+
+  """An aggregated array relationship"""
+  locations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [locations_order_by!]
+
+    """filter the rows returned"""
+    where: locations_bool_exp
+  ): locations_aggregate!
+
+  """An object relationship"""
+  region: regions
+  region_id: numeric
+}
+
+"""
+aggregated selection of "countries"
+"""
+type countries_aggregate {
+  aggregate: countries_aggregate_fields
+  nodes: [countries!]!
+}
+
+"""
+aggregate fields of "countries"
+"""
+type countries_aggregate_fields {
+  avg: countries_avg_fields
+  count(columns: [countries_select_column!], distinct: Boolean): Int
+  max: countries_max_fields
+  min: countries_min_fields
+  stddev: countries_stddev_fields
+  stddev_pop: countries_stddev_pop_fields
+  stddev_samp: countries_stddev_samp_fields
+  sum: countries_sum_fields
+  var_pop: countries_var_pop_fields
+  var_samp: countries_var_samp_fields
+  variance: countries_variance_fields
+}
+
+"""
+order by aggregate values of table "countries"
+"""
+input countries_aggregate_order_by {
+  avg: countries_avg_order_by
+  count: order_by
+  max: countries_max_order_by
+  min: countries_min_order_by
+  stddev: countries_stddev_order_by
+  stddev_pop: countries_stddev_pop_order_by
+  stddev_samp: countries_stddev_samp_order_by
+  sum: countries_sum_order_by
+  var_pop: countries_var_pop_order_by
+  var_samp: countries_var_samp_order_by
+  variance: countries_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "countries"
+"""
+input countries_arr_rel_insert_input {
+  data: [countries_insert_input!]!
+  on_conflict: countries_on_conflict
+}
+
+"""aggregate avg on columns"""
+type countries_avg_fields {
+  region_id: Float
+}
+
+"""
+order by avg() on columns of table "countries"
+"""
+input countries_avg_order_by {
+  region_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "countries". All fields are combined with a logical 'AND'.
+"""
+input countries_bool_exp {
+  _and: [countries_bool_exp]
+  _not: countries_bool_exp
+  _or: [countries_bool_exp]
+  country_id: String_comparison_exp
+  country_name: String_comparison_exp
+  locations: locations_bool_exp
+  region: regions_bool_exp
+  region_id: numeric_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "countries"
+"""
+enum countries_constraint {
+  """unique or primary key constraint"""
+  idx_19508_sqlite_autoindex_countries_1
+}
+
+"""
+input type for inserting data into table "countries"
+"""
+input countries_insert_input {
+  country_id: String
+  country_name: String
+  locations: locations_arr_rel_insert_input
+  region: regions_obj_rel_insert_input
+  region_id: numeric
+}
+
+"""aggregate max on columns"""
+type countries_max_fields {
+  country_id: String
+  country_name: String
+  region_id: numeric
+}
+
+"""
+order by max() on columns of table "countries"
+"""
+input countries_max_order_by {
+  country_id: order_by
+  country_name: order_by
+  region_id: order_by
+}
+
+"""aggregate min on columns"""
+type countries_min_fields {
+  country_id: String
+  country_name: String
+  region_id: numeric
+}
+
+"""
+order by min() on columns of table "countries"
+"""
+input countries_min_order_by {
+  country_id: order_by
+  country_name: order_by
+  region_id: order_by
+}
+
+"""
+response of any mutation on the table "countries"
+"""
+type countries_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [countries!]!
+}
+
+"""
+input type for inserting object relation for remote table "countries"
+"""
+input countries_obj_rel_insert_input {
+  data: countries_insert_input!
+  on_conflict: countries_on_conflict
+}
+
+"""
+on conflict condition type for table "countries"
+"""
+input countries_on_conflict {
+  constraint: countries_constraint!
+  update_columns: [countries_update_column!]!
+  where: countries_bool_exp
+}
+
+"""
+ordering options when selecting data from "countries"
+"""
+input countries_order_by {
+  country_id: order_by
+  country_name: order_by
+  locations_aggregate: locations_aggregate_order_by
+  region: regions_order_by
+  region_id: order_by
+}
+
+"""
+select columns of table "countries"
+"""
+enum countries_select_column {
+  """column name"""
+  country_id
+
+  """column name"""
+  country_name
+
+  """column name"""
+  region_id
+}
+
+"""
+input type for updating data in table "countries"
+"""
+input countries_set_input {
+  country_id: String
+  country_name: String
+  region_id: numeric
+}
+
+"""aggregate stddev on columns"""
+type countries_stddev_fields {
+  region_id: Float
+}
+
+"""
+order by stddev() on columns of table "countries"
+"""
+input countries_stddev_order_by {
+  region_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type countries_stddev_pop_fields {
+  region_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "countries"
+"""
+input countries_stddev_pop_order_by {
+  region_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type countries_stddev_samp_fields {
+  region_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "countries"
+"""
+input countries_stddev_samp_order_by {
+  region_id: order_by
+}
+
+"""aggregate sum on columns"""
+type countries_sum_fields {
+  region_id: numeric
+}
+
+"""
+order by sum() on columns of table "countries"
+"""
+input countries_sum_order_by {
+  region_id: order_by
+}
+
+"""
+update columns of table "countries"
+"""
+enum countries_update_column {
+  """column name"""
+  country_id
+
+  """column name"""
+  country_name
+
+  """column name"""
+  region_id
+}
+
+"""aggregate var_pop on columns"""
+type countries_var_pop_fields {
+  region_id: Float
+}
+
+"""
+order by var_pop() on columns of table "countries"
+"""
+input countries_var_pop_order_by {
+  region_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type countries_var_samp_fields {
+  region_id: Float
+}
+
+"""
+order by var_samp() on columns of table "countries"
+"""
+input countries_var_samp_order_by {
+  region_id: order_by
+}
+
+"""aggregate variance on columns"""
+type countries_variance_fields {
+  region_id: Float
+}
+
+"""
+order by variance() on columns of table "countries"
+"""
+input countries_variance_order_by {
+  region_id: order_by
+}
+
+scalar date
+
+"""
+expression to compare columns of type date. All fields are combined with logical 'AND'.
+"""
+input date_comparison_exp {
+  _eq: date
+  _gt: date
+  _gte: date
+  _in: [date!]
+  _is_null: Boolean
+  _lt: date
+  _lte: date
+  _neq: date
+  _nin: [date!]
+}
+
+"""
+columns and relationships of "departments"
+"""
+type departments {
+  department_id: numeric!
+  department_name: String
+
+  """An array relationship"""
+  employees(
+    """distinct select on columns"""
+    distinct_on: [employees_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employees_order_by!]
+
+    """filter the rows returned"""
+    where: employees_bool_exp
+  ): [employees!]!
+
+  """An aggregated array relationship"""
+  employees_aggregate(
+    """distinct select on columns"""
+    distinct_on: [employees_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employees_order_by!]
+
+    """filter the rows returned"""
+    where: employees_bool_exp
+  ): employees_aggregate!
+
+  """An array relationship"""
+  job_histories(
+    """distinct select on columns"""
+    distinct_on: [job_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [job_history_order_by!]
+
+    """filter the rows returned"""
+    where: job_history_bool_exp
+  ): [job_history!]!
+
+  """An aggregated array relationship"""
+  job_histories_aggregate(
+    """distinct select on columns"""
+    distinct_on: [job_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [job_history_order_by!]
+
+    """filter the rows returned"""
+    where: job_history_bool_exp
+  ): job_history_aggregate!
+
+  """An object relationship"""
+  location: locations
+  location_id: numeric
+  manager_id: numeric
+}
+
+"""
+aggregated selection of "departments"
+"""
+type departments_aggregate {
+  aggregate: departments_aggregate_fields
+  nodes: [departments!]!
+}
+
+"""
+aggregate fields of "departments"
+"""
+type departments_aggregate_fields {
+  avg: departments_avg_fields
+  count(columns: [departments_select_column!], distinct: Boolean): Int
+  max: departments_max_fields
+  min: departments_min_fields
+  stddev: departments_stddev_fields
+  stddev_pop: departments_stddev_pop_fields
+  stddev_samp: departments_stddev_samp_fields
+  sum: departments_sum_fields
+  var_pop: departments_var_pop_fields
+  var_samp: departments_var_samp_fields
+  variance: departments_variance_fields
+}
+
+"""
+order by aggregate values of table "departments"
+"""
+input departments_aggregate_order_by {
+  avg: departments_avg_order_by
+  count: order_by
+  max: departments_max_order_by
+  min: departments_min_order_by
+  stddev: departments_stddev_order_by
+  stddev_pop: departments_stddev_pop_order_by
+  stddev_samp: departments_stddev_samp_order_by
+  sum: departments_sum_order_by
+  var_pop: departments_var_pop_order_by
+  var_samp: departments_var_samp_order_by
+  variance: departments_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "departments"
+"""
+input departments_arr_rel_insert_input {
+  data: [departments_insert_input!]!
+  on_conflict: departments_on_conflict
+}
+
+"""aggregate avg on columns"""
+type departments_avg_fields {
+  department_id: Float
+  location_id: Float
+  manager_id: Float
+}
+
+"""
+order by avg() on columns of table "departments"
+"""
+input departments_avg_order_by {
+  department_id: order_by
+  location_id: order_by
+  manager_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "departments". All fields are combined with a logical 'AND'.
+"""
+input departments_bool_exp {
+  _and: [departments_bool_exp]
+  _not: departments_bool_exp
+  _or: [departments_bool_exp]
+  department_id: numeric_comparison_exp
+  department_name: String_comparison_exp
+  employees: employees_bool_exp
+  job_histories: job_history_bool_exp
+  location: locations_bool_exp
+  location_id: numeric_comparison_exp
+  manager_id: numeric_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "departments"
+"""
+enum departments_constraint {
+  """unique or primary key constraint"""
+  departments_department_id_key
+
+  """unique or primary key constraint"""
+  departments_pkey
+
+  """unique or primary key constraint"""
+  idx_19515_sqlite_autoindex_departments_1
+}
+
+"""
+input type for inserting data into table "departments"
+"""
+input departments_insert_input {
+  department_id: numeric
+  department_name: String
+  employees: employees_arr_rel_insert_input
+  job_histories: job_history_arr_rel_insert_input
+  location: locations_obj_rel_insert_input
+  location_id: numeric
+  manager_id: numeric
+}
+
+"""aggregate max on columns"""
+type departments_max_fields {
+  department_id: numeric
+  department_name: String
+  location_id: numeric
+  manager_id: numeric
+}
+
+"""
+order by max() on columns of table "departments"
+"""
+input departments_max_order_by {
+  department_id: order_by
+  department_name: order_by
+  location_id: order_by
+  manager_id: order_by
+}
+
+"""aggregate min on columns"""
+type departments_min_fields {
+  department_id: numeric
+  department_name: String
+  location_id: numeric
+  manager_id: numeric
+}
+
+"""
+order by min() on columns of table "departments"
+"""
+input departments_min_order_by {
+  department_id: order_by
+  department_name: order_by
+  location_id: order_by
+  manager_id: order_by
+}
+
+"""
+response of any mutation on the table "departments"
+"""
+type departments_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [departments!]!
+}
+
+"""
+input type for inserting object relation for remote table "departments"
+"""
+input departments_obj_rel_insert_input {
+  data: departments_insert_input!
+  on_conflict: departments_on_conflict
+}
+
+"""
+on conflict condition type for table "departments"
+"""
+input departments_on_conflict {
+  constraint: departments_constraint!
+  update_columns: [departments_update_column!]!
+  where: departments_bool_exp
+}
+
+"""
+ordering options when selecting data from "departments"
+"""
+input departments_order_by {
+  department_id: order_by
+  department_name: order_by
+  employees_aggregate: employees_aggregate_order_by
+  job_histories_aggregate: job_history_aggregate_order_by
+  location: locations_order_by
+  location_id: order_by
+  manager_id: order_by
+}
+
+"""
+select columns of table "departments"
+"""
+enum departments_select_column {
+  """column name"""
+  department_id
+
+  """column name"""
+  department_name
+
+  """column name"""
+  location_id
+
+  """column name"""
+  manager_id
+}
+
+"""
+input type for updating data in table "departments"
+"""
+input departments_set_input {
+  department_id: numeric
+  department_name: String
+  location_id: numeric
+  manager_id: numeric
+}
+
+"""aggregate stddev on columns"""
+type departments_stddev_fields {
+  department_id: Float
+  location_id: Float
+  manager_id: Float
+}
+
+"""
+order by stddev() on columns of table "departments"
+"""
+input departments_stddev_order_by {
+  department_id: order_by
+  location_id: order_by
+  manager_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type departments_stddev_pop_fields {
+  department_id: Float
+  location_id: Float
+  manager_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "departments"
+"""
+input departments_stddev_pop_order_by {
+  department_id: order_by
+  location_id: order_by
+  manager_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type departments_stddev_samp_fields {
+  department_id: Float
+  location_id: Float
+  manager_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "departments"
+"""
+input departments_stddev_samp_order_by {
+  department_id: order_by
+  location_id: order_by
+  manager_id: order_by
+}
+
+"""aggregate sum on columns"""
+type departments_sum_fields {
+  department_id: numeric
+  location_id: numeric
+  manager_id: numeric
+}
+
+"""
+order by sum() on columns of table "departments"
+"""
+input departments_sum_order_by {
+  department_id: order_by
+  location_id: order_by
+  manager_id: order_by
+}
+
+"""
+update columns of table "departments"
+"""
+enum departments_update_column {
+  """column name"""
+  department_id
+
+  """column name"""
+  department_name
+
+  """column name"""
+  location_id
+
+  """column name"""
+  manager_id
+}
+
+"""aggregate var_pop on columns"""
+type departments_var_pop_fields {
+  department_id: Float
+  location_id: Float
+  manager_id: Float
+}
+
+"""
+order by var_pop() on columns of table "departments"
+"""
+input departments_var_pop_order_by {
+  department_id: order_by
+  location_id: order_by
+  manager_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type departments_var_samp_fields {
+  department_id: Float
+  location_id: Float
+  manager_id: Float
+}
+
+"""
+order by var_samp() on columns of table "departments"
+"""
+input departments_var_samp_order_by {
+  department_id: order_by
+  location_id: order_by
+  manager_id: order_by
+}
+
+"""aggregate variance on columns"""
+type departments_variance_fields {
+  department_id: Float
+  location_id: Float
+  manager_id: Float
+}
+
+"""
+order by variance() on columns of table "departments"
+"""
+input departments_variance_order_by {
+  department_id: order_by
+  location_id: order_by
+  manager_id: order_by
+}
+
+"""
+columns and relationships of "employees"
+"""
+type employees {
+  commission_pct: numeric
+
+  """An object relationship"""
+  department: departments
+  department_id: numeric
+  email: String
+  employee_id: numeric
+  first_name: String
+  hire_date: date
+
+  """An object relationship"""
+  job: jobs
+
+  """An array relationship"""
+  job_histories(
+    """distinct select on columns"""
+    distinct_on: [job_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [job_history_order_by!]
+
+    """filter the rows returned"""
+    where: job_history_bool_exp
+  ): [job_history!]!
+
+  """An aggregated array relationship"""
+  job_histories_aggregate(
+    """distinct select on columns"""
+    distinct_on: [job_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [job_history_order_by!]
+
+    """filter the rows returned"""
+    where: job_history_bool_exp
+  ): job_history_aggregate!
+  job_id: String
+  last_name: String
+
+  """An object relationship"""
+  manager: employees
+  manager_id: numeric
+  phone_number: String
+  salary: numeric
+}
+
+"""
+aggregated selection of "employees"
+"""
+type employees_aggregate {
+  aggregate: employees_aggregate_fields
+  nodes: [employees!]!
+}
+
+"""
+aggregate fields of "employees"
+"""
+type employees_aggregate_fields {
+  avg: employees_avg_fields
+  count(columns: [employees_select_column!], distinct: Boolean): Int
+  max: employees_max_fields
+  min: employees_min_fields
+  stddev: employees_stddev_fields
+  stddev_pop: employees_stddev_pop_fields
+  stddev_samp: employees_stddev_samp_fields
+  sum: employees_sum_fields
+  var_pop: employees_var_pop_fields
+  var_samp: employees_var_samp_fields
+  variance: employees_variance_fields
+}
+
+"""
+order by aggregate values of table "employees"
+"""
+input employees_aggregate_order_by {
+  avg: employees_avg_order_by
+  count: order_by
+  max: employees_max_order_by
+  min: employees_min_order_by
+  stddev: employees_stddev_order_by
+  stddev_pop: employees_stddev_pop_order_by
+  stddev_samp: employees_stddev_samp_order_by
+  sum: employees_sum_order_by
+  var_pop: employees_var_pop_order_by
+  var_samp: employees_var_samp_order_by
+  variance: employees_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "employees"
+"""
+input employees_arr_rel_insert_input {
+  data: [employees_insert_input!]!
+  on_conflict: employees_on_conflict
+}
+
+"""aggregate avg on columns"""
+type employees_avg_fields {
+  commission_pct: Float
+  department_id: Float
+  employee_id: Float
+  manager_id: Float
+  salary: Float
+}
+
+"""
+order by avg() on columns of table "employees"
+"""
+input employees_avg_order_by {
+  commission_pct: order_by
+  department_id: order_by
+  employee_id: order_by
+  manager_id: order_by
+  salary: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "employees". All fields are combined with a logical 'AND'.
+"""
+input employees_bool_exp {
+  _and: [employees_bool_exp]
+  _not: employees_bool_exp
+  _or: [employees_bool_exp]
+  commission_pct: numeric_comparison_exp
+  department: departments_bool_exp
+  department_id: numeric_comparison_exp
+  email: String_comparison_exp
+  employee_id: numeric_comparison_exp
+  first_name: String_comparison_exp
+  hire_date: date_comparison_exp
+  job: jobs_bool_exp
+  job_histories: job_history_bool_exp
+  job_id: String_comparison_exp
+  last_name: String_comparison_exp
+  manager: employees_bool_exp
+  manager_id: numeric_comparison_exp
+  phone_number: String_comparison_exp
+  salary: numeric_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "employees"
+"""
+enum employees_constraint {
+  """unique or primary key constraint"""
+  idx_19533_sqlite_autoindex_employees_1
+}
+
+"""
+input type for inserting data into table "employees"
+"""
+input employees_insert_input {
+  commission_pct: numeric
+  department: departments_obj_rel_insert_input
+  department_id: numeric
+  email: String
+  employee_id: numeric
+  first_name: String
+  hire_date: date
+  job: jobs_obj_rel_insert_input
+  job_histories: job_history_arr_rel_insert_input
+  job_id: String
+  last_name: String
+  manager: employees_obj_rel_insert_input
+  manager_id: numeric
+  phone_number: String
+  salary: numeric
+}
+
+"""aggregate max on columns"""
+type employees_max_fields {
+  commission_pct: numeric
+  department_id: numeric
+  email: String
+  employee_id: numeric
+  first_name: String
+  hire_date: date
+  job_id: String
+  last_name: String
+  manager_id: numeric
+  phone_number: String
+  salary: numeric
+}
+
+"""
+order by max() on columns of table "employees"
+"""
+input employees_max_order_by {
+  commission_pct: order_by
+  department_id: order_by
+  email: order_by
+  employee_id: order_by
+  first_name: order_by
+  hire_date: order_by
+  job_id: order_by
+  last_name: order_by
+  manager_id: order_by
+  phone_number: order_by
+  salary: order_by
+}
+
+"""aggregate min on columns"""
+type employees_min_fields {
+  commission_pct: numeric
+  department_id: numeric
+  email: String
+  employee_id: numeric
+  first_name: String
+  hire_date: date
+  job_id: String
+  last_name: String
+  manager_id: numeric
+  phone_number: String
+  salary: numeric
+}
+
+"""
+order by min() on columns of table "employees"
+"""
+input employees_min_order_by {
+  commission_pct: order_by
+  department_id: order_by
+  email: order_by
+  employee_id: order_by
+  first_name: order_by
+  hire_date: order_by
+  job_id: order_by
+  last_name: order_by
+  manager_id: order_by
+  phone_number: order_by
+  salary: order_by
+}
+
+"""
+response of any mutation on the table "employees"
+"""
+type employees_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [employees!]!
+}
+
+"""
+input type for inserting object relation for remote table "employees"
+"""
+input employees_obj_rel_insert_input {
+  data: employees_insert_input!
+  on_conflict: employees_on_conflict
+}
+
+"""
+on conflict condition type for table "employees"
+"""
+input employees_on_conflict {
+  constraint: employees_constraint!
+  update_columns: [employees_update_column!]!
+  where: employees_bool_exp
+}
+
+"""
+ordering options when selecting data from "employees"
+"""
+input employees_order_by {
+  commission_pct: order_by
+  department: departments_order_by
+  department_id: order_by
+  email: order_by
+  employee_id: order_by
+  first_name: order_by
+  hire_date: order_by
+  job: jobs_order_by
+  job_histories_aggregate: job_history_aggregate_order_by
+  job_id: order_by
+  last_name: order_by
+  manager: employees_order_by
+  manager_id: order_by
+  phone_number: order_by
+  salary: order_by
+}
+
+"""
+select columns of table "employees"
+"""
+enum employees_select_column {
+  """column name"""
+  commission_pct
+
+  """column name"""
+  department_id
+
+  """column name"""
+  email
+
+  """column name"""
+  employee_id
+
+  """column name"""
+  first_name
+
+  """column name"""
+  hire_date
+
+  """column name"""
+  job_id
+
+  """column name"""
+  last_name
+
+  """column name"""
+  manager_id
+
+  """column name"""
+  phone_number
+
+  """column name"""
+  salary
+}
+
+"""
+input type for updating data in table "employees"
+"""
+input employees_set_input {
+  commission_pct: numeric
+  department_id: numeric
+  email: String
+  employee_id: numeric
+  first_name: String
+  hire_date: date
+  job_id: String
+  last_name: String
+  manager_id: numeric
+  phone_number: String
+  salary: numeric
+}
+
+"""aggregate stddev on columns"""
+type employees_stddev_fields {
+  commission_pct: Float
+  department_id: Float
+  employee_id: Float
+  manager_id: Float
+  salary: Float
+}
+
+"""
+order by stddev() on columns of table "employees"
+"""
+input employees_stddev_order_by {
+  commission_pct: order_by
+  department_id: order_by
+  employee_id: order_by
+  manager_id: order_by
+  salary: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type employees_stddev_pop_fields {
+  commission_pct: Float
+  department_id: Float
+  employee_id: Float
+  manager_id: Float
+  salary: Float
+}
+
+"""
+order by stddev_pop() on columns of table "employees"
+"""
+input employees_stddev_pop_order_by {
+  commission_pct: order_by
+  department_id: order_by
+  employee_id: order_by
+  manager_id: order_by
+  salary: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type employees_stddev_samp_fields {
+  commission_pct: Float
+  department_id: Float
+  employee_id: Float
+  manager_id: Float
+  salary: Float
+}
+
+"""
+order by stddev_samp() on columns of table "employees"
+"""
+input employees_stddev_samp_order_by {
+  commission_pct: order_by
+  department_id: order_by
+  employee_id: order_by
+  manager_id: order_by
+  salary: order_by
+}
+
+"""aggregate sum on columns"""
+type employees_sum_fields {
+  commission_pct: numeric
+  department_id: numeric
+  employee_id: numeric
+  manager_id: numeric
+  salary: numeric
+}
+
+"""
+order by sum() on columns of table "employees"
+"""
+input employees_sum_order_by {
+  commission_pct: order_by
+  department_id: order_by
+  employee_id: order_by
+  manager_id: order_by
+  salary: order_by
+}
+
+"""
+update columns of table "employees"
+"""
+enum employees_update_column {
+  """column name"""
+  commission_pct
+
+  """column name"""
+  department_id
+
+  """column name"""
+  email
+
+  """column name"""
+  employee_id
+
+  """column name"""
+  first_name
+
+  """column name"""
+  hire_date
+
+  """column name"""
+  job_id
+
+  """column name"""
+  last_name
+
+  """column name"""
+  manager_id
+
+  """column name"""
+  phone_number
+
+  """column name"""
+  salary
+}
+
+"""aggregate var_pop on columns"""
+type employees_var_pop_fields {
+  commission_pct: Float
+  department_id: Float
+  employee_id: Float
+  manager_id: Float
+  salary: Float
+}
+
+"""
+order by var_pop() on columns of table "employees"
+"""
+input employees_var_pop_order_by {
+  commission_pct: order_by
+  department_id: order_by
+  employee_id: order_by
+  manager_id: order_by
+  salary: order_by
+}
+
+"""aggregate var_samp on columns"""
+type employees_var_samp_fields {
+  commission_pct: Float
+  department_id: Float
+  employee_id: Float
+  manager_id: Float
+  salary: Float
+}
+
+"""
+order by var_samp() on columns of table "employees"
+"""
+input employees_var_samp_order_by {
+  commission_pct: order_by
+  department_id: order_by
+  employee_id: order_by
+  manager_id: order_by
+  salary: order_by
+}
+
+"""aggregate variance on columns"""
+type employees_variance_fields {
+  commission_pct: Float
+  department_id: Float
+  employee_id: Float
+  manager_id: Float
+  salary: Float
+}
+
+"""
+order by variance() on columns of table "employees"
+"""
+input employees_variance_order_by {
+  commission_pct: order_by
+  department_id: order_by
+  employee_id: order_by
+  manager_id: order_by
+  salary: order_by
+}
+
+"""
+columns and relationships of "job_history"
+"""
+type job_history {
+  """An object relationship"""
+  department: departments
+  department_id: numeric
+
+  """An object relationship"""
+  employee: employees
+  employee_id: numeric
+  end_date: date
+
+  """An object relationship"""
+  job: jobs
+  job_id: String
+  start_date: date
+}
+
+"""
+aggregated selection of "job_history"
+"""
+type job_history_aggregate {
+  aggregate: job_history_aggregate_fields
+  nodes: [job_history!]!
+}
+
+"""
+aggregate fields of "job_history"
+"""
+type job_history_aggregate_fields {
+  avg: job_history_avg_fields
+  count(columns: [job_history_select_column!], distinct: Boolean): Int
+  max: job_history_max_fields
+  min: job_history_min_fields
+  stddev: job_history_stddev_fields
+  stddev_pop: job_history_stddev_pop_fields
+  stddev_samp: job_history_stddev_samp_fields
+  sum: job_history_sum_fields
+  var_pop: job_history_var_pop_fields
+  var_samp: job_history_var_samp_fields
+  variance: job_history_variance_fields
+}
+
+"""
+order by aggregate values of table "job_history"
+"""
+input job_history_aggregate_order_by {
+  avg: job_history_avg_order_by
+  count: order_by
+  max: job_history_max_order_by
+  min: job_history_min_order_by
+  stddev: job_history_stddev_order_by
+  stddev_pop: job_history_stddev_pop_order_by
+  stddev_samp: job_history_stddev_samp_order_by
+  sum: job_history_sum_order_by
+  var_pop: job_history_var_pop_order_by
+  var_samp: job_history_var_samp_order_by
+  variance: job_history_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "job_history"
+"""
+input job_history_arr_rel_insert_input {
+  data: [job_history_insert_input!]!
+  on_conflict: job_history_on_conflict
+}
+
+"""aggregate avg on columns"""
+type job_history_avg_fields {
+  department_id: Float
+  employee_id: Float
+}
+
+"""
+order by avg() on columns of table "job_history"
+"""
+input job_history_avg_order_by {
+  department_id: order_by
+  employee_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "job_history". All fields are combined with a logical 'AND'.
+"""
+input job_history_bool_exp {
+  _and: [job_history_bool_exp]
+  _not: job_history_bool_exp
+  _or: [job_history_bool_exp]
+  department: departments_bool_exp
+  department_id: numeric_comparison_exp
+  employee: employees_bool_exp
+  employee_id: numeric_comparison_exp
+  end_date: date_comparison_exp
+  job: jobs_bool_exp
+  job_id: String_comparison_exp
+  start_date: date_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "job_history"
+"""
+enum job_history_constraint {
+  """unique or primary key constraint"""
+  idx_19544_sqlite_autoindex_job_history_1
+}
+
+"""
+input type for inserting data into table "job_history"
+"""
+input job_history_insert_input {
+  department: departments_obj_rel_insert_input
+  department_id: numeric
+  employee: employees_obj_rel_insert_input
+  employee_id: numeric
+  end_date: date
+  job: jobs_obj_rel_insert_input
+  job_id: String
+  start_date: date
+}
+
+"""aggregate max on columns"""
+type job_history_max_fields {
+  department_id: numeric
+  employee_id: numeric
+  end_date: date
+  job_id: String
+  start_date: date
+}
+
+"""
+order by max() on columns of table "job_history"
+"""
+input job_history_max_order_by {
+  department_id: order_by
+  employee_id: order_by
+  end_date: order_by
+  job_id: order_by
+  start_date: order_by
+}
+
+"""aggregate min on columns"""
+type job_history_min_fields {
+  department_id: numeric
+  employee_id: numeric
+  end_date: date
+  job_id: String
+  start_date: date
+}
+
+"""
+order by min() on columns of table "job_history"
+"""
+input job_history_min_order_by {
+  department_id: order_by
+  employee_id: order_by
+  end_date: order_by
+  job_id: order_by
+  start_date: order_by
+}
+
+"""
+response of any mutation on the table "job_history"
+"""
+type job_history_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [job_history!]!
+}
+
+"""
+input type for inserting object relation for remote table "job_history"
+"""
+input job_history_obj_rel_insert_input {
+  data: job_history_insert_input!
+  on_conflict: job_history_on_conflict
+}
+
+"""
+on conflict condition type for table "job_history"
+"""
+input job_history_on_conflict {
+  constraint: job_history_constraint!
+  update_columns: [job_history_update_column!]!
+  where: job_history_bool_exp
+}
+
+"""
+ordering options when selecting data from "job_history"
+"""
+input job_history_order_by {
+  department: departments_order_by
+  department_id: order_by
+  employee: employees_order_by
+  employee_id: order_by
+  end_date: order_by
+  job: jobs_order_by
+  job_id: order_by
+  start_date: order_by
+}
+
+"""
+select columns of table "job_history"
+"""
+enum job_history_select_column {
+  """column name"""
+  department_id
+
+  """column name"""
+  employee_id
+
+  """column name"""
+  end_date
+
+  """column name"""
+  job_id
+
+  """column name"""
+  start_date
+}
+
+"""
+input type for updating data in table "job_history"
+"""
+input job_history_set_input {
+  department_id: numeric
+  employee_id: numeric
+  end_date: date
+  job_id: String
+  start_date: date
+}
+
+"""aggregate stddev on columns"""
+type job_history_stddev_fields {
+  department_id: Float
+  employee_id: Float
+}
+
+"""
+order by stddev() on columns of table "job_history"
+"""
+input job_history_stddev_order_by {
+  department_id: order_by
+  employee_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type job_history_stddev_pop_fields {
+  department_id: Float
+  employee_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "job_history"
+"""
+input job_history_stddev_pop_order_by {
+  department_id: order_by
+  employee_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type job_history_stddev_samp_fields {
+  department_id: Float
+  employee_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "job_history"
+"""
+input job_history_stddev_samp_order_by {
+  department_id: order_by
+  employee_id: order_by
+}
+
+"""aggregate sum on columns"""
+type job_history_sum_fields {
+  department_id: numeric
+  employee_id: numeric
+}
+
+"""
+order by sum() on columns of table "job_history"
+"""
+input job_history_sum_order_by {
+  department_id: order_by
+  employee_id: order_by
+}
+
+"""
+update columns of table "job_history"
+"""
+enum job_history_update_column {
+  """column name"""
+  department_id
+
+  """column name"""
+  employee_id
+
+  """column name"""
+  end_date
+
+  """column name"""
+  job_id
+
+  """column name"""
+  start_date
+}
+
+"""aggregate var_pop on columns"""
+type job_history_var_pop_fields {
+  department_id: Float
+  employee_id: Float
+}
+
+"""
+order by var_pop() on columns of table "job_history"
+"""
+input job_history_var_pop_order_by {
+  department_id: order_by
+  employee_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type job_history_var_samp_fields {
+  department_id: Float
+  employee_id: Float
+}
+
+"""
+order by var_samp() on columns of table "job_history"
+"""
+input job_history_var_samp_order_by {
+  department_id: order_by
+  employee_id: order_by
+}
+
+"""aggregate variance on columns"""
+type job_history_variance_fields {
+  department_id: Float
+  employee_id: Float
+}
+
+"""
+order by variance() on columns of table "job_history"
+"""
+input job_history_variance_order_by {
+  department_id: order_by
+  employee_id: order_by
+}
+
+"""
+columns and relationships of "jobs"
+"""
+type jobs {
+  """An array relationship"""
+  employees(
+    """distinct select on columns"""
+    distinct_on: [employees_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employees_order_by!]
+
+    """filter the rows returned"""
+    where: employees_bool_exp
+  ): [employees!]!
+
+  """An aggregated array relationship"""
+  employees_aggregate(
+    """distinct select on columns"""
+    distinct_on: [employees_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employees_order_by!]
+
+    """filter the rows returned"""
+    where: employees_bool_exp
+  ): employees_aggregate!
+
+  """An array relationship"""
+  job_histories(
+    """distinct select on columns"""
+    distinct_on: [job_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [job_history_order_by!]
+
+    """filter the rows returned"""
+    where: job_history_bool_exp
+  ): [job_history!]!
+
+  """An aggregated array relationship"""
+  job_histories_aggregate(
+    """distinct select on columns"""
+    distinct_on: [job_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [job_history_order_by!]
+
+    """filter the rows returned"""
+    where: job_history_bool_exp
+  ): job_history_aggregate!
+  job_id: String
+  job_title: String
+  max_salary: numeric
+  min_salary: numeric
+}
+
+"""
+aggregated selection of "jobs"
+"""
+type jobs_aggregate {
+  aggregate: jobs_aggregate_fields
+  nodes: [jobs!]!
+}
+
+"""
+aggregate fields of "jobs"
+"""
+type jobs_aggregate_fields {
+  avg: jobs_avg_fields
+  count(columns: [jobs_select_column!], distinct: Boolean): Int
+  max: jobs_max_fields
+  min: jobs_min_fields
+  stddev: jobs_stddev_fields
+  stddev_pop: jobs_stddev_pop_fields
+  stddev_samp: jobs_stddev_samp_fields
+  sum: jobs_sum_fields
+  var_pop: jobs_var_pop_fields
+  var_samp: jobs_var_samp_fields
+  variance: jobs_variance_fields
+}
+
+"""
+order by aggregate values of table "jobs"
+"""
+input jobs_aggregate_order_by {
+  avg: jobs_avg_order_by
+  count: order_by
+  max: jobs_max_order_by
+  min: jobs_min_order_by
+  stddev: jobs_stddev_order_by
+  stddev_pop: jobs_stddev_pop_order_by
+  stddev_samp: jobs_stddev_samp_order_by
+  sum: jobs_sum_order_by
+  var_pop: jobs_var_pop_order_by
+  var_samp: jobs_var_samp_order_by
+  variance: jobs_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "jobs"
+"""
+input jobs_arr_rel_insert_input {
+  data: [jobs_insert_input!]!
+  on_conflict: jobs_on_conflict
+}
+
+"""aggregate avg on columns"""
+type jobs_avg_fields {
+  max_salary: Float
+  min_salary: Float
+}
+
+"""
+order by avg() on columns of table "jobs"
+"""
+input jobs_avg_order_by {
+  max_salary: order_by
+  min_salary: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "jobs". All fields are combined with a logical 'AND'.
+"""
+input jobs_bool_exp {
+  _and: [jobs_bool_exp]
+  _not: jobs_bool_exp
+  _or: [jobs_bool_exp]
+  employees: employees_bool_exp
+  job_histories: job_history_bool_exp
+  job_id: String_comparison_exp
+  job_title: String_comparison_exp
+  max_salary: numeric_comparison_exp
+  min_salary: numeric_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "jobs"
+"""
+enum jobs_constraint {
+  """unique or primary key constraint"""
+  idx_19524_sqlite_autoindex_jobs_1
+}
+
+"""
+input type for inserting data into table "jobs"
+"""
+input jobs_insert_input {
+  employees: employees_arr_rel_insert_input
+  job_histories: job_history_arr_rel_insert_input
+  job_id: String
+  job_title: String
+  max_salary: numeric
+  min_salary: numeric
+}
+
+"""aggregate max on columns"""
+type jobs_max_fields {
+  job_id: String
+  job_title: String
+  max_salary: numeric
+  min_salary: numeric
+}
+
+"""
+order by max() on columns of table "jobs"
+"""
+input jobs_max_order_by {
+  job_id: order_by
+  job_title: order_by
+  max_salary: order_by
+  min_salary: order_by
+}
+
+"""aggregate min on columns"""
+type jobs_min_fields {
+  job_id: String
+  job_title: String
+  max_salary: numeric
+  min_salary: numeric
+}
+
+"""
+order by min() on columns of table "jobs"
+"""
+input jobs_min_order_by {
+  job_id: order_by
+  job_title: order_by
+  max_salary: order_by
+  min_salary: order_by
+}
+
+"""
+response of any mutation on the table "jobs"
+"""
+type jobs_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [jobs!]!
+}
+
+"""
+input type for inserting object relation for remote table "jobs"
+"""
+input jobs_obj_rel_insert_input {
+  data: jobs_insert_input!
+  on_conflict: jobs_on_conflict
+}
+
+"""
+on conflict condition type for table "jobs"
+"""
+input jobs_on_conflict {
+  constraint: jobs_constraint!
+  update_columns: [jobs_update_column!]!
+  where: jobs_bool_exp
+}
+
+"""
+ordering options when selecting data from "jobs"
+"""
+input jobs_order_by {
+  employees_aggregate: employees_aggregate_order_by
+  job_histories_aggregate: job_history_aggregate_order_by
+  job_id: order_by
+  job_title: order_by
+  max_salary: order_by
+  min_salary: order_by
+}
+
+"""
+select columns of table "jobs"
+"""
+enum jobs_select_column {
+  """column name"""
+  job_id
+
+  """column name"""
+  job_title
+
+  """column name"""
+  max_salary
+
+  """column name"""
+  min_salary
+}
+
+"""
+input type for updating data in table "jobs"
+"""
+input jobs_set_input {
+  job_id: String
+  job_title: String
+  max_salary: numeric
+  min_salary: numeric
+}
+
+"""aggregate stddev on columns"""
+type jobs_stddev_fields {
+  max_salary: Float
+  min_salary: Float
+}
+
+"""
+order by stddev() on columns of table "jobs"
+"""
+input jobs_stddev_order_by {
+  max_salary: order_by
+  min_salary: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type jobs_stddev_pop_fields {
+  max_salary: Float
+  min_salary: Float
+}
+
+"""
+order by stddev_pop() on columns of table "jobs"
+"""
+input jobs_stddev_pop_order_by {
+  max_salary: order_by
+  min_salary: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type jobs_stddev_samp_fields {
+  max_salary: Float
+  min_salary: Float
+}
+
+"""
+order by stddev_samp() on columns of table "jobs"
+"""
+input jobs_stddev_samp_order_by {
+  max_salary: order_by
+  min_salary: order_by
+}
+
+"""aggregate sum on columns"""
+type jobs_sum_fields {
+  max_salary: numeric
+  min_salary: numeric
+}
+
+"""
+order by sum() on columns of table "jobs"
+"""
+input jobs_sum_order_by {
+  max_salary: order_by
+  min_salary: order_by
+}
+
+"""
+update columns of table "jobs"
+"""
+enum jobs_update_column {
+  """column name"""
+  job_id
+
+  """column name"""
+  job_title
+
+  """column name"""
+  max_salary
+
+  """column name"""
+  min_salary
+}
+
+"""aggregate var_pop on columns"""
+type jobs_var_pop_fields {
+  max_salary: Float
+  min_salary: Float
+}
+
+"""
+order by var_pop() on columns of table "jobs"
+"""
+input jobs_var_pop_order_by {
+  max_salary: order_by
+  min_salary: order_by
+}
+
+"""aggregate var_samp on columns"""
+type jobs_var_samp_fields {
+  max_salary: Float
+  min_salary: Float
+}
+
+"""
+order by var_samp() on columns of table "jobs"
+"""
+input jobs_var_samp_order_by {
+  max_salary: order_by
+  min_salary: order_by
+}
+
+"""aggregate variance on columns"""
+type jobs_variance_fields {
+  max_salary: Float
+  min_salary: Float
+}
+
+"""
+order by variance() on columns of table "jobs"
+"""
+input jobs_variance_order_by {
+  max_salary: order_by
+  min_salary: order_by
+}
+
+"""
+columns and relationships of "locations"
+"""
+type locations {
+  city: String
+
+  """An object relationship"""
+  country: countries
+  country_id: String
+
+  """An array relationship"""
+  departments(
+    """distinct select on columns"""
+    distinct_on: [departments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [departments_order_by!]
+
+    """filter the rows returned"""
+    where: departments_bool_exp
+  ): [departments!]!
+
+  """An aggregated array relationship"""
+  departments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [departments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [departments_order_by!]
+
+    """filter the rows returned"""
+    where: departments_bool_exp
+  ): departments_aggregate!
+  location_id: numeric!
+  postal_code: String
+  state_province: String
+  street_address: String
+}
+
+"""
+aggregated selection of "locations"
+"""
+type locations_aggregate {
+  aggregate: locations_aggregate_fields
+  nodes: [locations!]!
+}
+
+"""
+aggregate fields of "locations"
+"""
+type locations_aggregate_fields {
+  avg: locations_avg_fields
+  count(columns: [locations_select_column!], distinct: Boolean): Int
+  max: locations_max_fields
+  min: locations_min_fields
+  stddev: locations_stddev_fields
+  stddev_pop: locations_stddev_pop_fields
+  stddev_samp: locations_stddev_samp_fields
+  sum: locations_sum_fields
+  var_pop: locations_var_pop_fields
+  var_samp: locations_var_samp_fields
+  variance: locations_variance_fields
+}
+
+"""
+order by aggregate values of table "locations"
+"""
+input locations_aggregate_order_by {
+  avg: locations_avg_order_by
+  count: order_by
+  max: locations_max_order_by
+  min: locations_min_order_by
+  stddev: locations_stddev_order_by
+  stddev_pop: locations_stddev_pop_order_by
+  stddev_samp: locations_stddev_samp_order_by
+  sum: locations_sum_order_by
+  var_pop: locations_var_pop_order_by
+  var_samp: locations_var_samp_order_by
+  variance: locations_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "locations"
+"""
+input locations_arr_rel_insert_input {
+  data: [locations_insert_input!]!
+  on_conflict: locations_on_conflict
+}
+
+"""aggregate avg on columns"""
+type locations_avg_fields {
+  location_id: Float
+}
+
+"""
+order by avg() on columns of table "locations"
+"""
+input locations_avg_order_by {
+  location_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "locations". All fields are combined with a logical 'AND'.
+"""
+input locations_bool_exp {
+  _and: [locations_bool_exp]
+  _not: locations_bool_exp
+  _or: [locations_bool_exp]
+  city: String_comparison_exp
+  country: countries_bool_exp
+  country_id: String_comparison_exp
+  departments: departments_bool_exp
+  location_id: numeric_comparison_exp
+  postal_code: String_comparison_exp
+  state_province: String_comparison_exp
+  street_address: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "locations"
+"""
+enum locations_constraint {
+  """unique or primary key constraint"""
+  idx_19551_sqlite_autoindex_locations_1
+
+  """unique or primary key constraint"""
+  locations_pkey
+}
+
+"""
+input type for inserting data into table "locations"
+"""
+input locations_insert_input {
+  city: String
+  country: countries_obj_rel_insert_input
+  country_id: String
+  departments: departments_arr_rel_insert_input
+  location_id: numeric
+  postal_code: String
+  state_province: String
+  street_address: String
+}
+
+"""aggregate max on columns"""
+type locations_max_fields {
+  city: String
+  country_id: String
+  location_id: numeric
+  postal_code: String
+  state_province: String
+  street_address: String
+}
+
+"""
+order by max() on columns of table "locations"
+"""
+input locations_max_order_by {
+  city: order_by
+  country_id: order_by
+  location_id: order_by
+  postal_code: order_by
+  state_province: order_by
+  street_address: order_by
+}
+
+"""aggregate min on columns"""
+type locations_min_fields {
+  city: String
+  country_id: String
+  location_id: numeric
+  postal_code: String
+  state_province: String
+  street_address: String
+}
+
+"""
+order by min() on columns of table "locations"
+"""
+input locations_min_order_by {
+  city: order_by
+  country_id: order_by
+  location_id: order_by
+  postal_code: order_by
+  state_province: order_by
+  street_address: order_by
+}
+
+"""
+response of any mutation on the table "locations"
+"""
+type locations_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [locations!]!
+}
+
+"""
+input type for inserting object relation for remote table "locations"
+"""
+input locations_obj_rel_insert_input {
+  data: locations_insert_input!
+  on_conflict: locations_on_conflict
+}
+
+"""
+on conflict condition type for table "locations"
+"""
+input locations_on_conflict {
+  constraint: locations_constraint!
+  update_columns: [locations_update_column!]!
+  where: locations_bool_exp
+}
+
+"""
+ordering options when selecting data from "locations"
+"""
+input locations_order_by {
+  city: order_by
+  country: countries_order_by
+  country_id: order_by
+  departments_aggregate: departments_aggregate_order_by
+  location_id: order_by
+  postal_code: order_by
+  state_province: order_by
+  street_address: order_by
+}
+
+"""
+select columns of table "locations"
+"""
+enum locations_select_column {
+  """column name"""
+  city
+
+  """column name"""
+  country_id
+
+  """column name"""
+  location_id
+
+  """column name"""
+  postal_code
+
+  """column name"""
+  state_province
+
+  """column name"""
+  street_address
+}
+
+"""
+input type for updating data in table "locations"
+"""
+input locations_set_input {
+  city: String
+  country_id: String
+  location_id: numeric
+  postal_code: String
+  state_province: String
+  street_address: String
+}
+
+"""aggregate stddev on columns"""
+type locations_stddev_fields {
+  location_id: Float
+}
+
+"""
+order by stddev() on columns of table "locations"
+"""
+input locations_stddev_order_by {
+  location_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type locations_stddev_pop_fields {
+  location_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "locations"
+"""
+input locations_stddev_pop_order_by {
+  location_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type locations_stddev_samp_fields {
+  location_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "locations"
+"""
+input locations_stddev_samp_order_by {
+  location_id: order_by
+}
+
+"""aggregate sum on columns"""
+type locations_sum_fields {
+  location_id: numeric
+}
+
+"""
+order by sum() on columns of table "locations"
+"""
+input locations_sum_order_by {
+  location_id: order_by
+}
+
+"""
+update columns of table "locations"
+"""
+enum locations_update_column {
+  """column name"""
+  city
+
+  """column name"""
+  country_id
+
+  """column name"""
+  location_id
+
+  """column name"""
+  postal_code
+
+  """column name"""
+  state_province
+
+  """column name"""
+  street_address
+}
+
+"""aggregate var_pop on columns"""
+type locations_var_pop_fields {
+  location_id: Float
+}
+
+"""
+order by var_pop() on columns of table "locations"
+"""
+input locations_var_pop_order_by {
+  location_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type locations_var_samp_fields {
+  location_id: Float
+}
+
+"""
+order by var_samp() on columns of table "locations"
+"""
+input locations_var_samp_order_by {
+  location_id: order_by
+}
+
+"""aggregate variance on columns"""
+type locations_variance_fields {
+  location_id: Float
+}
+
+"""
+order by variance() on columns of table "locations"
+"""
+input locations_variance_order_by {
+  location_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "countries"
+  """
+  delete_countries(
+    """filter the rows which have to be deleted"""
+    where: countries_bool_exp!
+  ): countries_mutation_response
+
+  """
+  delete data from the table: "departments"
+  """
+  delete_departments(
+    """filter the rows which have to be deleted"""
+    where: departments_bool_exp!
+  ): departments_mutation_response
+
+  """
+  delete data from the table: "employees"
+  """
+  delete_employees(
+    """filter the rows which have to be deleted"""
+    where: employees_bool_exp!
+  ): employees_mutation_response
+
+  """
+  delete data from the table: "job_history"
+  """
+  delete_job_history(
+    """filter the rows which have to be deleted"""
+    where: job_history_bool_exp!
+  ): job_history_mutation_response
+
+  """
+  delete data from the table: "jobs"
+  """
+  delete_jobs(
+    """filter the rows which have to be deleted"""
+    where: jobs_bool_exp!
+  ): jobs_mutation_response
+
+  """
+  delete data from the table: "locations"
+  """
+  delete_locations(
+    """filter the rows which have to be deleted"""
+    where: locations_bool_exp!
+  ): locations_mutation_response
+
+  """
+  delete data from the table: "regions"
+  """
+  delete_regions(
+    """filter the rows which have to be deleted"""
+    where: regions_bool_exp!
+  ): regions_mutation_response
+
+  """
+  insert data into the table: "countries"
+  """
+  insert_countries(
+    """the rows to be inserted"""
+    objects: [countries_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: countries_on_conflict
+  ): countries_mutation_response
+
+  """
+  insert data into the table: "departments"
+  """
+  insert_departments(
+    """the rows to be inserted"""
+    objects: [departments_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: departments_on_conflict
+  ): departments_mutation_response
+
+  """
+  insert data into the table: "employees"
+  """
+  insert_employees(
+    """the rows to be inserted"""
+    objects: [employees_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: employees_on_conflict
+  ): employees_mutation_response
+
+  """
+  insert data into the table: "job_history"
+  """
+  insert_job_history(
+    """the rows to be inserted"""
+    objects: [job_history_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: job_history_on_conflict
+  ): job_history_mutation_response
+
+  """
+  insert data into the table: "jobs"
+  """
+  insert_jobs(
+    """the rows to be inserted"""
+    objects: [jobs_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: jobs_on_conflict
+  ): jobs_mutation_response
+
+  """
+  insert data into the table: "locations"
+  """
+  insert_locations(
+    """the rows to be inserted"""
+    objects: [locations_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: locations_on_conflict
+  ): locations_mutation_response
+
+  """
+  insert data into the table: "regions"
+  """
+  insert_regions(
+    """the rows to be inserted"""
+    objects: [regions_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: regions_on_conflict
+  ): regions_mutation_response
+
+  """
+  update data of the table: "countries"
+  """
+  update_countries(
+    """sets the columns of the filtered rows to the given values"""
+    _set: countries_set_input
+
+    """filter the rows which have to be updated"""
+    where: countries_bool_exp!
+  ): countries_mutation_response
+
+  """
+  update data of the table: "departments"
+  """
+  update_departments(
+    """sets the columns of the filtered rows to the given values"""
+    _set: departments_set_input
+
+    """filter the rows which have to be updated"""
+    where: departments_bool_exp!
+  ): departments_mutation_response
+
+  """
+  update data of the table: "employees"
+  """
+  update_employees(
+    """sets the columns of the filtered rows to the given values"""
+    _set: employees_set_input
+
+    """filter the rows which have to be updated"""
+    where: employees_bool_exp!
+  ): employees_mutation_response
+
+  """
+  update data of the table: "job_history"
+  """
+  update_job_history(
+    """sets the columns of the filtered rows to the given values"""
+    _set: job_history_set_input
+
+    """filter the rows which have to be updated"""
+    where: job_history_bool_exp!
+  ): job_history_mutation_response
+
+  """
+  update data of the table: "jobs"
+  """
+  update_jobs(
+    """sets the columns of the filtered rows to the given values"""
+    _set: jobs_set_input
+
+    """filter the rows which have to be updated"""
+    where: jobs_bool_exp!
+  ): jobs_mutation_response
+
+  """
+  update data of the table: "locations"
+  """
+  update_locations(
+    """sets the columns of the filtered rows to the given values"""
+    _set: locations_set_input
+
+    """filter the rows which have to be updated"""
+    where: locations_bool_exp!
+  ): locations_mutation_response
+
+  """
+  update data of the table: "regions"
+  """
+  update_regions(
+    """sets the columns of the filtered rows to the given values"""
+    _set: regions_set_input
+
+    """filter the rows which have to be updated"""
+    where: regions_bool_exp!
+  ): regions_mutation_response
+}
+
+scalar numeric
+
+"""
+expression to compare columns of type numeric. All fields are combined with logical 'AND'.
+"""
+input numeric_comparison_exp {
+  _eq: numeric
+  _gt: numeric
+  _gte: numeric
+  _in: [numeric!]
+  _is_null: Boolean
+  _lt: numeric
+  _lte: numeric
+  _neq: numeric
+  _nin: [numeric!]
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "countries"
+  """
+  countries(
+    """distinct select on columns"""
+    distinct_on: [countries_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [countries_order_by!]
+
+    """filter the rows returned"""
+    where: countries_bool_exp
+  ): [countries!]!
+
+  """
+  fetch aggregated fields from the table: "countries"
+  """
+  countries_aggregate(
+    """distinct select on columns"""
+    distinct_on: [countries_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [countries_order_by!]
+
+    """filter the rows returned"""
+    where: countries_bool_exp
+  ): countries_aggregate!
+
+  """
+  fetch data from the table: "departments"
+  """
+  departments(
+    """distinct select on columns"""
+    distinct_on: [departments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [departments_order_by!]
+
+    """filter the rows returned"""
+    where: departments_bool_exp
+  ): [departments!]!
+
+  """
+  fetch aggregated fields from the table: "departments"
+  """
+  departments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [departments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [departments_order_by!]
+
+    """filter the rows returned"""
+    where: departments_bool_exp
+  ): departments_aggregate!
+
+  """fetch data from the table: "departments" using primary key columns"""
+  departments_by_pk(department_id: numeric!): departments
+
+  """
+  fetch data from the table: "employees"
+  """
+  employees(
+    """distinct select on columns"""
+    distinct_on: [employees_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employees_order_by!]
+
+    """filter the rows returned"""
+    where: employees_bool_exp
+  ): [employees!]!
+
+  """
+  fetch aggregated fields from the table: "employees"
+  """
+  employees_aggregate(
+    """distinct select on columns"""
+    distinct_on: [employees_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employees_order_by!]
+
+    """filter the rows returned"""
+    where: employees_bool_exp
+  ): employees_aggregate!
+
+  """
+  fetch data from the table: "job_history"
+  """
+  job_history(
+    """distinct select on columns"""
+    distinct_on: [job_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [job_history_order_by!]
+
+    """filter the rows returned"""
+    where: job_history_bool_exp
+  ): [job_history!]!
+
+  """
+  fetch aggregated fields from the table: "job_history"
+  """
+  job_history_aggregate(
+    """distinct select on columns"""
+    distinct_on: [job_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [job_history_order_by!]
+
+    """filter the rows returned"""
+    where: job_history_bool_exp
+  ): job_history_aggregate!
+
+  """
+  fetch data from the table: "jobs"
+  """
+  jobs(
+    """distinct select on columns"""
+    distinct_on: [jobs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [jobs_order_by!]
+
+    """filter the rows returned"""
+    where: jobs_bool_exp
+  ): [jobs!]!
+
+  """
+  fetch aggregated fields from the table: "jobs"
+  """
+  jobs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [jobs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [jobs_order_by!]
+
+    """filter the rows returned"""
+    where: jobs_bool_exp
+  ): jobs_aggregate!
+
+  """
+  fetch data from the table: "locations"
+  """
+  locations(
+    """distinct select on columns"""
+    distinct_on: [locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [locations_order_by!]
+
+    """filter the rows returned"""
+    where: locations_bool_exp
+  ): [locations!]!
+
+  """
+  fetch aggregated fields from the table: "locations"
+  """
+  locations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [locations_order_by!]
+
+    """filter the rows returned"""
+    where: locations_bool_exp
+  ): locations_aggregate!
+
+  """fetch data from the table: "locations" using primary key columns"""
+  locations_by_pk(location_id: numeric!): locations
+
+  """
+  fetch data from the table: "regions"
+  """
+  regions(
+    """distinct select on columns"""
+    distinct_on: [regions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [regions_order_by!]
+
+    """filter the rows returned"""
+    where: regions_bool_exp
+  ): [regions!]!
+
+  """
+  fetch aggregated fields from the table: "regions"
+  """
+  regions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [regions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [regions_order_by!]
+
+    """filter the rows returned"""
+    where: regions_bool_exp
+  ): regions_aggregate!
+}
+
+"""
+columns and relationships of "regions"
+"""
+type regions {
+  """An array relationship"""
+  countries(
+    """distinct select on columns"""
+    distinct_on: [countries_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [countries_order_by!]
+
+    """filter the rows returned"""
+    where: countries_bool_exp
+  ): [countries!]!
+
+  """An aggregated array relationship"""
+  countries_aggregate(
+    """distinct select on columns"""
+    distinct_on: [countries_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [countries_order_by!]
+
+    """filter the rows returned"""
+    where: countries_bool_exp
+  ): countries_aggregate!
+  region_id: numeric
+  region_name: String
+}
+
+"""
+aggregated selection of "regions"
+"""
+type regions_aggregate {
+  aggregate: regions_aggregate_fields
+  nodes: [regions!]!
+}
+
+"""
+aggregate fields of "regions"
+"""
+type regions_aggregate_fields {
+  avg: regions_avg_fields
+  count(columns: [regions_select_column!], distinct: Boolean): Int
+  max: regions_max_fields
+  min: regions_min_fields
+  stddev: regions_stddev_fields
+  stddev_pop: regions_stddev_pop_fields
+  stddev_samp: regions_stddev_samp_fields
+  sum: regions_sum_fields
+  var_pop: regions_var_pop_fields
+  var_samp: regions_var_samp_fields
+  variance: regions_variance_fields
+}
+
+"""
+order by aggregate values of table "regions"
+"""
+input regions_aggregate_order_by {
+  avg: regions_avg_order_by
+  count: order_by
+  max: regions_max_order_by
+  min: regions_min_order_by
+  stddev: regions_stddev_order_by
+  stddev_pop: regions_stddev_pop_order_by
+  stddev_samp: regions_stddev_samp_order_by
+  sum: regions_sum_order_by
+  var_pop: regions_var_pop_order_by
+  var_samp: regions_var_samp_order_by
+  variance: regions_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "regions"
+"""
+input regions_arr_rel_insert_input {
+  data: [regions_insert_input!]!
+  on_conflict: regions_on_conflict
+}
+
+"""aggregate avg on columns"""
+type regions_avg_fields {
+  region_id: Float
+}
+
+"""
+order by avg() on columns of table "regions"
+"""
+input regions_avg_order_by {
+  region_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "regions". All fields are combined with a logical 'AND'.
+"""
+input regions_bool_exp {
+  _and: [regions_bool_exp]
+  _not: regions_bool_exp
+  _or: [regions_bool_exp]
+  countries: countries_bool_exp
+  region_id: numeric_comparison_exp
+  region_name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "regions"
+"""
+enum regions_constraint {
+  """unique or primary key constraint"""
+  idx_19502_sqlite_autoindex_regions_1
+}
+
+"""
+input type for inserting data into table "regions"
+"""
+input regions_insert_input {
+  countries: countries_arr_rel_insert_input
+  region_id: numeric
+  region_name: String
+}
+
+"""aggregate max on columns"""
+type regions_max_fields {
+  region_id: numeric
+  region_name: String
+}
+
+"""
+order by max() on columns of table "regions"
+"""
+input regions_max_order_by {
+  region_id: order_by
+  region_name: order_by
+}
+
+"""aggregate min on columns"""
+type regions_min_fields {
+  region_id: numeric
+  region_name: String
+}
+
+"""
+order by min() on columns of table "regions"
+"""
+input regions_min_order_by {
+  region_id: order_by
+  region_name: order_by
+}
+
+"""
+response of any mutation on the table "regions"
+"""
+type regions_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [regions!]!
+}
+
+"""
+input type for inserting object relation for remote table "regions"
+"""
+input regions_obj_rel_insert_input {
+  data: regions_insert_input!
+  on_conflict: regions_on_conflict
+}
+
+"""
+on conflict condition type for table "regions"
+"""
+input regions_on_conflict {
+  constraint: regions_constraint!
+  update_columns: [regions_update_column!]!
+  where: regions_bool_exp
+}
+
+"""
+ordering options when selecting data from "regions"
+"""
+input regions_order_by {
+  countries_aggregate: countries_aggregate_order_by
+  region_id: order_by
+  region_name: order_by
+}
+
+"""
+select columns of table "regions"
+"""
+enum regions_select_column {
+  """column name"""
+  region_id
+
+  """column name"""
+  region_name
+}
+
+"""
+input type for updating data in table "regions"
+"""
+input regions_set_input {
+  region_id: numeric
+  region_name: String
+}
+
+"""aggregate stddev on columns"""
+type regions_stddev_fields {
+  region_id: Float
+}
+
+"""
+order by stddev() on columns of table "regions"
+"""
+input regions_stddev_order_by {
+  region_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type regions_stddev_pop_fields {
+  region_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "regions"
+"""
+input regions_stddev_pop_order_by {
+  region_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type regions_stddev_samp_fields {
+  region_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "regions"
+"""
+input regions_stddev_samp_order_by {
+  region_id: order_by
+}
+
+"""aggregate sum on columns"""
+type regions_sum_fields {
+  region_id: numeric
+}
+
+"""
+order by sum() on columns of table "regions"
+"""
+input regions_sum_order_by {
+  region_id: order_by
+}
+
+"""
+update columns of table "regions"
+"""
+enum regions_update_column {
+  """column name"""
+  region_id
+
+  """column name"""
+  region_name
+}
+
+"""aggregate var_pop on columns"""
+type regions_var_pop_fields {
+  region_id: Float
+}
+
+"""
+order by var_pop() on columns of table "regions"
+"""
+input regions_var_pop_order_by {
+  region_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type regions_var_samp_fields {
+  region_id: Float
+}
+
+"""
+order by var_samp() on columns of table "regions"
+"""
+input regions_var_samp_order_by {
+  region_id: order_by
+}
+
+"""aggregate variance on columns"""
+type regions_variance_fields {
+  region_id: Float
+}
+
+"""
+order by variance() on columns of table "regions"
+"""
+input regions_variance_order_by {
+  region_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "countries"
+  """
+  countries(
+    """distinct select on columns"""
+    distinct_on: [countries_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [countries_order_by!]
+
+    """filter the rows returned"""
+    where: countries_bool_exp
+  ): [countries!]!
+
+  """
+  fetch aggregated fields from the table: "countries"
+  """
+  countries_aggregate(
+    """distinct select on columns"""
+    distinct_on: [countries_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [countries_order_by!]
+
+    """filter the rows returned"""
+    where: countries_bool_exp
+  ): countries_aggregate!
+
+  """
+  fetch data from the table: "departments"
+  """
+  departments(
+    """distinct select on columns"""
+    distinct_on: [departments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [departments_order_by!]
+
+    """filter the rows returned"""
+    where: departments_bool_exp
+  ): [departments!]!
+
+  """
+  fetch aggregated fields from the table: "departments"
+  """
+  departments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [departments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [departments_order_by!]
+
+    """filter the rows returned"""
+    where: departments_bool_exp
+  ): departments_aggregate!
+
+  """fetch data from the table: "departments" using primary key columns"""
+  departments_by_pk(department_id: numeric!): departments
+
+  """
+  fetch data from the table: "employees"
+  """
+  employees(
+    """distinct select on columns"""
+    distinct_on: [employees_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employees_order_by!]
+
+    """filter the rows returned"""
+    where: employees_bool_exp
+  ): [employees!]!
+
+  """
+  fetch aggregated fields from the table: "employees"
+  """
+  employees_aggregate(
+    """distinct select on columns"""
+    distinct_on: [employees_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employees_order_by!]
+
+    """filter the rows returned"""
+    where: employees_bool_exp
+  ): employees_aggregate!
+
+  """
+  fetch data from the table: "job_history"
+  """
+  job_history(
+    """distinct select on columns"""
+    distinct_on: [job_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [job_history_order_by!]
+
+    """filter the rows returned"""
+    where: job_history_bool_exp
+  ): [job_history!]!
+
+  """
+  fetch aggregated fields from the table: "job_history"
+  """
+  job_history_aggregate(
+    """distinct select on columns"""
+    distinct_on: [job_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [job_history_order_by!]
+
+    """filter the rows returned"""
+    where: job_history_bool_exp
+  ): job_history_aggregate!
+
+  """
+  fetch data from the table: "jobs"
+  """
+  jobs(
+    """distinct select on columns"""
+    distinct_on: [jobs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [jobs_order_by!]
+
+    """filter the rows returned"""
+    where: jobs_bool_exp
+  ): [jobs!]!
+
+  """
+  fetch aggregated fields from the table: "jobs"
+  """
+  jobs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [jobs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [jobs_order_by!]
+
+    """filter the rows returned"""
+    where: jobs_bool_exp
+  ): jobs_aggregate!
+
+  """
+  fetch data from the table: "locations"
+  """
+  locations(
+    """distinct select on columns"""
+    distinct_on: [locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [locations_order_by!]
+
+    """filter the rows returned"""
+    where: locations_bool_exp
+  ): [locations!]!
+
+  """
+  fetch aggregated fields from the table: "locations"
+  """
+  locations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [locations_order_by!]
+
+    """filter the rows returned"""
+    where: locations_bool_exp
+  ): locations_aggregate!
+
+  """fetch data from the table: "locations" using primary key columns"""
+  locations_by_pk(location_id: numeric!): locations
+
+  """
+  fetch data from the table: "regions"
+  """
+  regions(
+    """distinct select on columns"""
+    distinct_on: [regions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [regions_order_by!]
+
+    """filter the rows returned"""
+    where: regions_bool_exp
+  ): [regions!]!
+
+  """
+  fetch aggregated fields from the table: "regions"
+  """
+  regions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [regions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [regions_order_by!]
+
+    """filter the rows returned"""
+    where: regions_bool_exp
+  ): regions_aggregate!
+}

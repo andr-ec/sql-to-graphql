@@ -1,0 +1,1094 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "race"
+  """
+  delete_race(
+    """filter the rows which have to be deleted"""
+    where: race_bool_exp!
+  ): race_mutation_response
+
+  """
+  delete data from the table: "track"
+  """
+  delete_track(
+    """filter the rows which have to be deleted"""
+    where: track_bool_exp!
+  ): track_mutation_response
+
+  """
+  insert data into the table: "race"
+  """
+  insert_race(
+    """the rows to be inserted"""
+    objects: [race_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: race_on_conflict
+  ): race_mutation_response
+
+  """
+  insert data into the table: "track"
+  """
+  insert_track(
+    """the rows to be inserted"""
+    objects: [track_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: track_on_conflict
+  ): track_mutation_response
+
+  """
+  update data of the table: "race"
+  """
+  update_race(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: race_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: race_set_input
+
+    """filter the rows which have to be updated"""
+    where: race_bool_exp!
+  ): race_mutation_response
+
+  """
+  update data of the table: "track"
+  """
+  update_track(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: track_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: track_set_input
+
+    """filter the rows which have to be updated"""
+    where: track_bool_exp!
+  ): track_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "race"
+  """
+  race(
+    """distinct select on columns"""
+    distinct_on: [race_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [race_order_by!]
+
+    """filter the rows returned"""
+    where: race_bool_exp
+  ): [race!]!
+
+  """
+  fetch aggregated fields from the table: "race"
+  """
+  race_aggregate(
+    """distinct select on columns"""
+    distinct_on: [race_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [race_order_by!]
+
+    """filter the rows returned"""
+    where: race_bool_exp
+  ): race_aggregate!
+
+  """
+  fetch data from the table: "track"
+  """
+  track(
+    """distinct select on columns"""
+    distinct_on: [track_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [track_order_by!]
+
+    """filter the rows returned"""
+    where: track_bool_exp
+  ): [track!]!
+
+  """
+  fetch aggregated fields from the table: "track"
+  """
+  track_aggregate(
+    """distinct select on columns"""
+    distinct_on: [track_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [track_order_by!]
+
+    """filter the rows returned"""
+    where: track_bool_exp
+  ): track_aggregate!
+}
+
+"""
+columns and relationships of "race"
+"""
+type race {
+  class: String
+  date: String
+  name: String
+  race_id: Int
+
+  """An object relationship"""
+  track: track
+  track_id: Int
+}
+
+"""
+aggregated selection of "race"
+"""
+type race_aggregate {
+  aggregate: race_aggregate_fields
+  nodes: [race!]!
+}
+
+"""
+aggregate fields of "race"
+"""
+type race_aggregate_fields {
+  avg: race_avg_fields
+  count(columns: [race_select_column!], distinct: Boolean): Int
+  max: race_max_fields
+  min: race_min_fields
+  stddev: race_stddev_fields
+  stddev_pop: race_stddev_pop_fields
+  stddev_samp: race_stddev_samp_fields
+  sum: race_sum_fields
+  var_pop: race_var_pop_fields
+  var_samp: race_var_samp_fields
+  variance: race_variance_fields
+}
+
+"""
+order by aggregate values of table "race"
+"""
+input race_aggregate_order_by {
+  avg: race_avg_order_by
+  count: order_by
+  max: race_max_order_by
+  min: race_min_order_by
+  stddev: race_stddev_order_by
+  stddev_pop: race_stddev_pop_order_by
+  stddev_samp: race_stddev_samp_order_by
+  sum: race_sum_order_by
+  var_pop: race_var_pop_order_by
+  var_samp: race_var_samp_order_by
+  variance: race_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "race"
+"""
+input race_arr_rel_insert_input {
+  data: [race_insert_input!]!
+  on_conflict: race_on_conflict
+}
+
+"""aggregate avg on columns"""
+type race_avg_fields {
+  race_id: Float
+  track_id: Float
+}
+
+"""
+order by avg() on columns of table "race"
+"""
+input race_avg_order_by {
+  race_id: order_by
+  track_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "race". All fields are combined with a logical 'AND'.
+"""
+input race_bool_exp {
+  _and: [race_bool_exp]
+  _not: race_bool_exp
+  _or: [race_bool_exp]
+  class: String_comparison_exp
+  date: String_comparison_exp
+  name: String_comparison_exp
+  race_id: Int_comparison_exp
+  track: track_bool_exp
+  track_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "race"
+"""
+enum race_constraint {
+  """unique or primary key constraint"""
+  idx_17841_sqlite_autoindex_race_1
+}
+
+"""
+input type for incrementing integer columne in table "race"
+"""
+input race_inc_input {
+  race_id: Int
+  track_id: Int
+}
+
+"""
+input type for inserting data into table "race"
+"""
+input race_insert_input {
+  class: String
+  date: String
+  name: String
+  race_id: Int
+  track: track_obj_rel_insert_input
+  track_id: Int
+}
+
+"""aggregate max on columns"""
+type race_max_fields {
+  class: String
+  date: String
+  name: String
+  race_id: Int
+  track_id: Int
+}
+
+"""
+order by max() on columns of table "race"
+"""
+input race_max_order_by {
+  class: order_by
+  date: order_by
+  name: order_by
+  race_id: order_by
+  track_id: order_by
+}
+
+"""aggregate min on columns"""
+type race_min_fields {
+  class: String
+  date: String
+  name: String
+  race_id: Int
+  track_id: Int
+}
+
+"""
+order by min() on columns of table "race"
+"""
+input race_min_order_by {
+  class: order_by
+  date: order_by
+  name: order_by
+  race_id: order_by
+  track_id: order_by
+}
+
+"""
+response of any mutation on the table "race"
+"""
+type race_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [race!]!
+}
+
+"""
+input type for inserting object relation for remote table "race"
+"""
+input race_obj_rel_insert_input {
+  data: race_insert_input!
+  on_conflict: race_on_conflict
+}
+
+"""
+on conflict condition type for table "race"
+"""
+input race_on_conflict {
+  constraint: race_constraint!
+  update_columns: [race_update_column!]!
+  where: race_bool_exp
+}
+
+"""
+ordering options when selecting data from "race"
+"""
+input race_order_by {
+  class: order_by
+  date: order_by
+  name: order_by
+  race_id: order_by
+  track: track_order_by
+  track_id: order_by
+}
+
+"""
+select columns of table "race"
+"""
+enum race_select_column {
+  """column name"""
+  class
+
+  """column name"""
+  date
+
+  """column name"""
+  name
+
+  """column name"""
+  race_id
+
+  """column name"""
+  track_id
+}
+
+"""
+input type for updating data in table "race"
+"""
+input race_set_input {
+  class: String
+  date: String
+  name: String
+  race_id: Int
+  track_id: Int
+}
+
+"""aggregate stddev on columns"""
+type race_stddev_fields {
+  race_id: Float
+  track_id: Float
+}
+
+"""
+order by stddev() on columns of table "race"
+"""
+input race_stddev_order_by {
+  race_id: order_by
+  track_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type race_stddev_pop_fields {
+  race_id: Float
+  track_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "race"
+"""
+input race_stddev_pop_order_by {
+  race_id: order_by
+  track_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type race_stddev_samp_fields {
+  race_id: Float
+  track_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "race"
+"""
+input race_stddev_samp_order_by {
+  race_id: order_by
+  track_id: order_by
+}
+
+"""aggregate sum on columns"""
+type race_sum_fields {
+  race_id: Int
+  track_id: Int
+}
+
+"""
+order by sum() on columns of table "race"
+"""
+input race_sum_order_by {
+  race_id: order_by
+  track_id: order_by
+}
+
+"""
+update columns of table "race"
+"""
+enum race_update_column {
+  """column name"""
+  class
+
+  """column name"""
+  date
+
+  """column name"""
+  name
+
+  """column name"""
+  race_id
+
+  """column name"""
+  track_id
+}
+
+"""aggregate var_pop on columns"""
+type race_var_pop_fields {
+  race_id: Float
+  track_id: Float
+}
+
+"""
+order by var_pop() on columns of table "race"
+"""
+input race_var_pop_order_by {
+  race_id: order_by
+  track_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type race_var_samp_fields {
+  race_id: Float
+  track_id: Float
+}
+
+"""
+order by var_samp() on columns of table "race"
+"""
+input race_var_samp_order_by {
+  race_id: order_by
+  track_id: order_by
+}
+
+"""aggregate variance on columns"""
+type race_variance_fields {
+  race_id: Float
+  track_id: Float
+}
+
+"""
+order by variance() on columns of table "race"
+"""
+input race_variance_order_by {
+  race_id: order_by
+  track_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "race"
+  """
+  race(
+    """distinct select on columns"""
+    distinct_on: [race_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [race_order_by!]
+
+    """filter the rows returned"""
+    where: race_bool_exp
+  ): [race!]!
+
+  """
+  fetch aggregated fields from the table: "race"
+  """
+  race_aggregate(
+    """distinct select on columns"""
+    distinct_on: [race_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [race_order_by!]
+
+    """filter the rows returned"""
+    where: race_bool_exp
+  ): race_aggregate!
+
+  """
+  fetch data from the table: "track"
+  """
+  track(
+    """distinct select on columns"""
+    distinct_on: [track_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [track_order_by!]
+
+    """filter the rows returned"""
+    where: track_bool_exp
+  ): [track!]!
+
+  """
+  fetch aggregated fields from the table: "track"
+  """
+  track_aggregate(
+    """distinct select on columns"""
+    distinct_on: [track_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [track_order_by!]
+
+    """filter the rows returned"""
+    where: track_bool_exp
+  ): track_aggregate!
+}
+
+"""
+columns and relationships of "track"
+"""
+type track {
+  location: String
+  name: String
+
+  """An array relationship"""
+  races(
+    """distinct select on columns"""
+    distinct_on: [race_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [race_order_by!]
+
+    """filter the rows returned"""
+    where: race_bool_exp
+  ): [race!]!
+
+  """An aggregated array relationship"""
+  races_aggregate(
+    """distinct select on columns"""
+    distinct_on: [race_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [race_order_by!]
+
+    """filter the rows returned"""
+    where: race_bool_exp
+  ): race_aggregate!
+  seating: Float
+  track_id: Int
+  year_opened: Float
+}
+
+"""
+aggregated selection of "track"
+"""
+type track_aggregate {
+  aggregate: track_aggregate_fields
+  nodes: [track!]!
+}
+
+"""
+aggregate fields of "track"
+"""
+type track_aggregate_fields {
+  avg: track_avg_fields
+  count(columns: [track_select_column!], distinct: Boolean): Int
+  max: track_max_fields
+  min: track_min_fields
+  stddev: track_stddev_fields
+  stddev_pop: track_stddev_pop_fields
+  stddev_samp: track_stddev_samp_fields
+  sum: track_sum_fields
+  var_pop: track_var_pop_fields
+  var_samp: track_var_samp_fields
+  variance: track_variance_fields
+}
+
+"""
+order by aggregate values of table "track"
+"""
+input track_aggregate_order_by {
+  avg: track_avg_order_by
+  count: order_by
+  max: track_max_order_by
+  min: track_min_order_by
+  stddev: track_stddev_order_by
+  stddev_pop: track_stddev_pop_order_by
+  stddev_samp: track_stddev_samp_order_by
+  sum: track_sum_order_by
+  var_pop: track_var_pop_order_by
+  var_samp: track_var_samp_order_by
+  variance: track_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "track"
+"""
+input track_arr_rel_insert_input {
+  data: [track_insert_input!]!
+  on_conflict: track_on_conflict
+}
+
+"""aggregate avg on columns"""
+type track_avg_fields {
+  seating: Float
+  track_id: Float
+  year_opened: Float
+}
+
+"""
+order by avg() on columns of table "track"
+"""
+input track_avg_order_by {
+  seating: order_by
+  track_id: order_by
+  year_opened: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "track". All fields are combined with a logical 'AND'.
+"""
+input track_bool_exp {
+  _and: [track_bool_exp]
+  _not: track_bool_exp
+  _or: [track_bool_exp]
+  location: String_comparison_exp
+  name: String_comparison_exp
+  races: race_bool_exp
+  seating: Float_comparison_exp
+  track_id: Int_comparison_exp
+  year_opened: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "track"
+"""
+enum track_constraint {
+  """unique or primary key constraint"""
+  idx_17847_sqlite_autoindex_track_1
+}
+
+"""
+input type for incrementing integer columne in table "track"
+"""
+input track_inc_input {
+  track_id: Int
+}
+
+"""
+input type for inserting data into table "track"
+"""
+input track_insert_input {
+  location: String
+  name: String
+  races: race_arr_rel_insert_input
+  seating: Float
+  track_id: Int
+  year_opened: Float
+}
+
+"""aggregate max on columns"""
+type track_max_fields {
+  location: String
+  name: String
+  seating: Float
+  track_id: Int
+  year_opened: Float
+}
+
+"""
+order by max() on columns of table "track"
+"""
+input track_max_order_by {
+  location: order_by
+  name: order_by
+  seating: order_by
+  track_id: order_by
+  year_opened: order_by
+}
+
+"""aggregate min on columns"""
+type track_min_fields {
+  location: String
+  name: String
+  seating: Float
+  track_id: Int
+  year_opened: Float
+}
+
+"""
+order by min() on columns of table "track"
+"""
+input track_min_order_by {
+  location: order_by
+  name: order_by
+  seating: order_by
+  track_id: order_by
+  year_opened: order_by
+}
+
+"""
+response of any mutation on the table "track"
+"""
+type track_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [track!]!
+}
+
+"""
+input type for inserting object relation for remote table "track"
+"""
+input track_obj_rel_insert_input {
+  data: track_insert_input!
+  on_conflict: track_on_conflict
+}
+
+"""
+on conflict condition type for table "track"
+"""
+input track_on_conflict {
+  constraint: track_constraint!
+  update_columns: [track_update_column!]!
+  where: track_bool_exp
+}
+
+"""
+ordering options when selecting data from "track"
+"""
+input track_order_by {
+  location: order_by
+  name: order_by
+  races_aggregate: race_aggregate_order_by
+  seating: order_by
+  track_id: order_by
+  year_opened: order_by
+}
+
+"""
+select columns of table "track"
+"""
+enum track_select_column {
+  """column name"""
+  location
+
+  """column name"""
+  name
+
+  """column name"""
+  seating
+
+  """column name"""
+  track_id
+
+  """column name"""
+  year_opened
+}
+
+"""
+input type for updating data in table "track"
+"""
+input track_set_input {
+  location: String
+  name: String
+  seating: Float
+  track_id: Int
+  year_opened: Float
+}
+
+"""aggregate stddev on columns"""
+type track_stddev_fields {
+  seating: Float
+  track_id: Float
+  year_opened: Float
+}
+
+"""
+order by stddev() on columns of table "track"
+"""
+input track_stddev_order_by {
+  seating: order_by
+  track_id: order_by
+  year_opened: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type track_stddev_pop_fields {
+  seating: Float
+  track_id: Float
+  year_opened: Float
+}
+
+"""
+order by stddev_pop() on columns of table "track"
+"""
+input track_stddev_pop_order_by {
+  seating: order_by
+  track_id: order_by
+  year_opened: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type track_stddev_samp_fields {
+  seating: Float
+  track_id: Float
+  year_opened: Float
+}
+
+"""
+order by stddev_samp() on columns of table "track"
+"""
+input track_stddev_samp_order_by {
+  seating: order_by
+  track_id: order_by
+  year_opened: order_by
+}
+
+"""aggregate sum on columns"""
+type track_sum_fields {
+  seating: Float
+  track_id: Int
+  year_opened: Float
+}
+
+"""
+order by sum() on columns of table "track"
+"""
+input track_sum_order_by {
+  seating: order_by
+  track_id: order_by
+  year_opened: order_by
+}
+
+"""
+update columns of table "track"
+"""
+enum track_update_column {
+  """column name"""
+  location
+
+  """column name"""
+  name
+
+  """column name"""
+  seating
+
+  """column name"""
+  track_id
+
+  """column name"""
+  year_opened
+}
+
+"""aggregate var_pop on columns"""
+type track_var_pop_fields {
+  seating: Float
+  track_id: Float
+  year_opened: Float
+}
+
+"""
+order by var_pop() on columns of table "track"
+"""
+input track_var_pop_order_by {
+  seating: order_by
+  track_id: order_by
+  year_opened: order_by
+}
+
+"""aggregate var_samp on columns"""
+type track_var_samp_fields {
+  seating: Float
+  track_id: Float
+  year_opened: Float
+}
+
+"""
+order by var_samp() on columns of table "track"
+"""
+input track_var_samp_order_by {
+  seating: order_by
+  track_id: order_by
+  year_opened: order_by
+}
+
+"""aggregate variance on columns"""
+type track_variance_fields {
+  seating: Float
+  track_id: Float
+  year_opened: Float
+}
+
+"""
+order by variance() on columns of table "track"
+"""
+input track_variance_order_by {
+  seating: order_by
+  track_id: order_by
+  year_opened: order_by
+}

@@ -1,0 +1,2011 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "item"
+"""
+type item {
+  i_id: bigint!
+
+  """An array relationship"""
+  reviews(
+    """distinct select on columns"""
+    distinct_on: [review_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [review_order_by!]
+
+    """filter the rows returned"""
+    where: review_bool_exp
+  ): [review!]!
+
+  """An aggregated array relationship"""
+  reviews_aggregate(
+    """distinct select on columns"""
+    distinct_on: [review_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [review_order_by!]
+
+    """filter the rows returned"""
+    where: review_bool_exp
+  ): review_aggregate!
+  title: String
+}
+
+"""
+aggregated selection of "item"
+"""
+type item_aggregate {
+  aggregate: item_aggregate_fields
+  nodes: [item!]!
+}
+
+"""
+aggregate fields of "item"
+"""
+type item_aggregate_fields {
+  avg: item_avg_fields
+  count(columns: [item_select_column!], distinct: Boolean): Int
+  max: item_max_fields
+  min: item_min_fields
+  stddev: item_stddev_fields
+  stddev_pop: item_stddev_pop_fields
+  stddev_samp: item_stddev_samp_fields
+  sum: item_sum_fields
+  var_pop: item_var_pop_fields
+  var_samp: item_var_samp_fields
+  variance: item_variance_fields
+}
+
+"""
+order by aggregate values of table "item"
+"""
+input item_aggregate_order_by {
+  avg: item_avg_order_by
+  count: order_by
+  max: item_max_order_by
+  min: item_min_order_by
+  stddev: item_stddev_order_by
+  stddev_pop: item_stddev_pop_order_by
+  stddev_samp: item_stddev_samp_order_by
+  sum: item_sum_order_by
+  var_pop: item_var_pop_order_by
+  var_samp: item_var_samp_order_by
+  variance: item_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "item"
+"""
+input item_arr_rel_insert_input {
+  data: [item_insert_input!]!
+  on_conflict: item_on_conflict
+}
+
+"""aggregate avg on columns"""
+type item_avg_fields {
+  i_id: Float
+}
+
+"""
+order by avg() on columns of table "item"
+"""
+input item_avg_order_by {
+  i_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "item". All fields are combined with a logical 'AND'.
+"""
+input item_bool_exp {
+  _and: [item_bool_exp]
+  _not: item_bool_exp
+  _or: [item_bool_exp]
+  i_id: bigint_comparison_exp
+  reviews: review_bool_exp
+  title: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "item"
+"""
+enum item_constraint {
+  """unique or primary key constraint"""
+  idx_22307_item_pkey
+}
+
+"""
+input type for incrementing integer columne in table "item"
+"""
+input item_inc_input {
+  i_id: bigint
+}
+
+"""
+input type for inserting data into table "item"
+"""
+input item_insert_input {
+  i_id: bigint
+  reviews: review_arr_rel_insert_input
+  title: String
+}
+
+"""aggregate max on columns"""
+type item_max_fields {
+  i_id: bigint
+  title: String
+}
+
+"""
+order by max() on columns of table "item"
+"""
+input item_max_order_by {
+  i_id: order_by
+  title: order_by
+}
+
+"""aggregate min on columns"""
+type item_min_fields {
+  i_id: bigint
+  title: String
+}
+
+"""
+order by min() on columns of table "item"
+"""
+input item_min_order_by {
+  i_id: order_by
+  title: order_by
+}
+
+"""
+response of any mutation on the table "item"
+"""
+type item_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [item!]!
+}
+
+"""
+input type for inserting object relation for remote table "item"
+"""
+input item_obj_rel_insert_input {
+  data: item_insert_input!
+  on_conflict: item_on_conflict
+}
+
+"""
+on conflict condition type for table "item"
+"""
+input item_on_conflict {
+  constraint: item_constraint!
+  update_columns: [item_update_column!]!
+  where: item_bool_exp
+}
+
+"""
+ordering options when selecting data from "item"
+"""
+input item_order_by {
+  i_id: order_by
+  reviews_aggregate: review_aggregate_order_by
+  title: order_by
+}
+
+"""
+select columns of table "item"
+"""
+enum item_select_column {
+  """column name"""
+  i_id
+
+  """column name"""
+  title
+}
+
+"""
+input type for updating data in table "item"
+"""
+input item_set_input {
+  i_id: bigint
+  title: String
+}
+
+"""aggregate stddev on columns"""
+type item_stddev_fields {
+  i_id: Float
+}
+
+"""
+order by stddev() on columns of table "item"
+"""
+input item_stddev_order_by {
+  i_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type item_stddev_pop_fields {
+  i_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "item"
+"""
+input item_stddev_pop_order_by {
+  i_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type item_stddev_samp_fields {
+  i_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "item"
+"""
+input item_stddev_samp_order_by {
+  i_id: order_by
+}
+
+"""aggregate sum on columns"""
+type item_sum_fields {
+  i_id: bigint
+}
+
+"""
+order by sum() on columns of table "item"
+"""
+input item_sum_order_by {
+  i_id: order_by
+}
+
+"""
+update columns of table "item"
+"""
+enum item_update_column {
+  """column name"""
+  i_id
+
+  """column name"""
+  title
+}
+
+"""aggregate var_pop on columns"""
+type item_var_pop_fields {
+  i_id: Float
+}
+
+"""
+order by var_pop() on columns of table "item"
+"""
+input item_var_pop_order_by {
+  i_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type item_var_samp_fields {
+  i_id: Float
+}
+
+"""
+order by var_samp() on columns of table "item"
+"""
+input item_var_samp_order_by {
+  i_id: order_by
+}
+
+"""aggregate variance on columns"""
+type item_variance_fields {
+  i_id: Float
+}
+
+"""
+order by variance() on columns of table "item"
+"""
+input item_variance_order_by {
+  i_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "item"
+  """
+  delete_item(
+    """filter the rows which have to be deleted"""
+    where: item_bool_exp!
+  ): item_mutation_response
+
+  """
+  delete data from the table: "review"
+  """
+  delete_review(
+    """filter the rows which have to be deleted"""
+    where: review_bool_exp!
+  ): review_mutation_response
+
+  """
+  delete data from the table: "trust"
+  """
+  delete_trust(
+    """filter the rows which have to be deleted"""
+    where: trust_bool_exp!
+  ): trust_mutation_response
+
+  """
+  delete data from the table: "useracct"
+  """
+  delete_useracct(
+    """filter the rows which have to be deleted"""
+    where: useracct_bool_exp!
+  ): useracct_mutation_response
+
+  """
+  insert data into the table: "item"
+  """
+  insert_item(
+    """the rows to be inserted"""
+    objects: [item_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: item_on_conflict
+  ): item_mutation_response
+
+  """
+  insert data into the table: "review"
+  """
+  insert_review(
+    """the rows to be inserted"""
+    objects: [review_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: review_on_conflict
+  ): review_mutation_response
+
+  """
+  insert data into the table: "trust"
+  """
+  insert_trust(
+    """the rows to be inserted"""
+    objects: [trust_insert_input!]!
+  ): trust_mutation_response
+
+  """
+  insert data into the table: "useracct"
+  """
+  insert_useracct(
+    """the rows to be inserted"""
+    objects: [useracct_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: useracct_on_conflict
+  ): useracct_mutation_response
+
+  """
+  update data of the table: "item"
+  """
+  update_item(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: item_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: item_set_input
+
+    """filter the rows which have to be updated"""
+    where: item_bool_exp!
+  ): item_mutation_response
+
+  """
+  update data of the table: "review"
+  """
+  update_review(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: review_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: review_set_input
+
+    """filter the rows which have to be updated"""
+    where: review_bool_exp!
+  ): review_mutation_response
+
+  """
+  update data of the table: "trust"
+  """
+  update_trust(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: trust_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: trust_set_input
+
+    """filter the rows which have to be updated"""
+    where: trust_bool_exp!
+  ): trust_mutation_response
+
+  """
+  update data of the table: "useracct"
+  """
+  update_useracct(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: useracct_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: useracct_set_input
+
+    """filter the rows which have to be updated"""
+    where: useracct_bool_exp!
+  ): useracct_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "item"
+  """
+  item(
+    """distinct select on columns"""
+    distinct_on: [item_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [item_order_by!]
+
+    """filter the rows returned"""
+    where: item_bool_exp
+  ): [item!]!
+
+  """
+  fetch aggregated fields from the table: "item"
+  """
+  item_aggregate(
+    """distinct select on columns"""
+    distinct_on: [item_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [item_order_by!]
+
+    """filter the rows returned"""
+    where: item_bool_exp
+  ): item_aggregate!
+
+  """fetch data from the table: "item" using primary key columns"""
+  item_by_pk(i_id: bigint!): item
+
+  """
+  fetch data from the table: "review"
+  """
+  review(
+    """distinct select on columns"""
+    distinct_on: [review_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [review_order_by!]
+
+    """filter the rows returned"""
+    where: review_bool_exp
+  ): [review!]!
+
+  """
+  fetch aggregated fields from the table: "review"
+  """
+  review_aggregate(
+    """distinct select on columns"""
+    distinct_on: [review_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [review_order_by!]
+
+    """filter the rows returned"""
+    where: review_bool_exp
+  ): review_aggregate!
+
+  """fetch data from the table: "review" using primary key columns"""
+  review_by_pk(a_id: bigint!): review
+
+  """
+  fetch data from the table: "trust"
+  """
+  trust(
+    """distinct select on columns"""
+    distinct_on: [trust_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [trust_order_by!]
+
+    """filter the rows returned"""
+    where: trust_bool_exp
+  ): [trust!]!
+
+  """
+  fetch aggregated fields from the table: "trust"
+  """
+  trust_aggregate(
+    """distinct select on columns"""
+    distinct_on: [trust_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [trust_order_by!]
+
+    """filter the rows returned"""
+    where: trust_bool_exp
+  ): trust_aggregate!
+
+  """
+  fetch data from the table: "useracct"
+  """
+  useracct(
+    """distinct select on columns"""
+    distinct_on: [useracct_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [useracct_order_by!]
+
+    """filter the rows returned"""
+    where: useracct_bool_exp
+  ): [useracct!]!
+
+  """
+  fetch aggregated fields from the table: "useracct"
+  """
+  useracct_aggregate(
+    """distinct select on columns"""
+    distinct_on: [useracct_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [useracct_order_by!]
+
+    """filter the rows returned"""
+    where: useracct_bool_exp
+  ): useracct_aggregate!
+
+  """fetch data from the table: "useracct" using primary key columns"""
+  useracct_by_pk(u_id: bigint!): useracct
+}
+
+"""
+columns and relationships of "review"
+"""
+type review {
+  a_id: bigint!
+  i_id: bigint
+
+  """An object relationship"""
+  item: item
+  rank: bigint
+  rating: bigint
+  u_id: bigint
+
+  """An object relationship"""
+  useracct: useracct
+}
+
+"""
+aggregated selection of "review"
+"""
+type review_aggregate {
+  aggregate: review_aggregate_fields
+  nodes: [review!]!
+}
+
+"""
+aggregate fields of "review"
+"""
+type review_aggregate_fields {
+  avg: review_avg_fields
+  count(columns: [review_select_column!], distinct: Boolean): Int
+  max: review_max_fields
+  min: review_min_fields
+  stddev: review_stddev_fields
+  stddev_pop: review_stddev_pop_fields
+  stddev_samp: review_stddev_samp_fields
+  sum: review_sum_fields
+  var_pop: review_var_pop_fields
+  var_samp: review_var_samp_fields
+  variance: review_variance_fields
+}
+
+"""
+order by aggregate values of table "review"
+"""
+input review_aggregate_order_by {
+  avg: review_avg_order_by
+  count: order_by
+  max: review_max_order_by
+  min: review_min_order_by
+  stddev: review_stddev_order_by
+  stddev_pop: review_stddev_pop_order_by
+  stddev_samp: review_stddev_samp_order_by
+  sum: review_sum_order_by
+  var_pop: review_var_pop_order_by
+  var_samp: review_var_samp_order_by
+  variance: review_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "review"
+"""
+input review_arr_rel_insert_input {
+  data: [review_insert_input!]!
+  on_conflict: review_on_conflict
+}
+
+"""aggregate avg on columns"""
+type review_avg_fields {
+  a_id: Float
+  i_id: Float
+  rank: Float
+  rating: Float
+  u_id: Float
+}
+
+"""
+order by avg() on columns of table "review"
+"""
+input review_avg_order_by {
+  a_id: order_by
+  i_id: order_by
+  rank: order_by
+  rating: order_by
+  u_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "review". All fields are combined with a logical 'AND'.
+"""
+input review_bool_exp {
+  _and: [review_bool_exp]
+  _not: review_bool_exp
+  _or: [review_bool_exp]
+  a_id: bigint_comparison_exp
+  i_id: bigint_comparison_exp
+  item: item_bool_exp
+  rank: bigint_comparison_exp
+  rating: bigint_comparison_exp
+  u_id: bigint_comparison_exp
+  useracct: useracct_bool_exp
+}
+
+"""
+unique or primary key constraints on table "review"
+"""
+enum review_constraint {
+  """unique or primary key constraint"""
+  idx_22313_idx_review_idx_rating_aid
+}
+
+"""
+input type for incrementing integer columne in table "review"
+"""
+input review_inc_input {
+  a_id: bigint
+  i_id: bigint
+  rank: bigint
+  rating: bigint
+  u_id: bigint
+}
+
+"""
+input type for inserting data into table "review"
+"""
+input review_insert_input {
+  a_id: bigint
+  i_id: bigint
+  item: item_obj_rel_insert_input
+  rank: bigint
+  rating: bigint
+  u_id: bigint
+  useracct: useracct_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type review_max_fields {
+  a_id: bigint
+  i_id: bigint
+  rank: bigint
+  rating: bigint
+  u_id: bigint
+}
+
+"""
+order by max() on columns of table "review"
+"""
+input review_max_order_by {
+  a_id: order_by
+  i_id: order_by
+  rank: order_by
+  rating: order_by
+  u_id: order_by
+}
+
+"""aggregate min on columns"""
+type review_min_fields {
+  a_id: bigint
+  i_id: bigint
+  rank: bigint
+  rating: bigint
+  u_id: bigint
+}
+
+"""
+order by min() on columns of table "review"
+"""
+input review_min_order_by {
+  a_id: order_by
+  i_id: order_by
+  rank: order_by
+  rating: order_by
+  u_id: order_by
+}
+
+"""
+response of any mutation on the table "review"
+"""
+type review_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [review!]!
+}
+
+"""
+input type for inserting object relation for remote table "review"
+"""
+input review_obj_rel_insert_input {
+  data: review_insert_input!
+  on_conflict: review_on_conflict
+}
+
+"""
+on conflict condition type for table "review"
+"""
+input review_on_conflict {
+  constraint: review_constraint!
+  update_columns: [review_update_column!]!
+  where: review_bool_exp
+}
+
+"""
+ordering options when selecting data from "review"
+"""
+input review_order_by {
+  a_id: order_by
+  i_id: order_by
+  item: item_order_by
+  rank: order_by
+  rating: order_by
+  u_id: order_by
+  useracct: useracct_order_by
+}
+
+"""
+select columns of table "review"
+"""
+enum review_select_column {
+  """column name"""
+  a_id
+
+  """column name"""
+  i_id
+
+  """column name"""
+  rank
+
+  """column name"""
+  rating
+
+  """column name"""
+  u_id
+}
+
+"""
+input type for updating data in table "review"
+"""
+input review_set_input {
+  a_id: bigint
+  i_id: bigint
+  rank: bigint
+  rating: bigint
+  u_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type review_stddev_fields {
+  a_id: Float
+  i_id: Float
+  rank: Float
+  rating: Float
+  u_id: Float
+}
+
+"""
+order by stddev() on columns of table "review"
+"""
+input review_stddev_order_by {
+  a_id: order_by
+  i_id: order_by
+  rank: order_by
+  rating: order_by
+  u_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type review_stddev_pop_fields {
+  a_id: Float
+  i_id: Float
+  rank: Float
+  rating: Float
+  u_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "review"
+"""
+input review_stddev_pop_order_by {
+  a_id: order_by
+  i_id: order_by
+  rank: order_by
+  rating: order_by
+  u_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type review_stddev_samp_fields {
+  a_id: Float
+  i_id: Float
+  rank: Float
+  rating: Float
+  u_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "review"
+"""
+input review_stddev_samp_order_by {
+  a_id: order_by
+  i_id: order_by
+  rank: order_by
+  rating: order_by
+  u_id: order_by
+}
+
+"""aggregate sum on columns"""
+type review_sum_fields {
+  a_id: bigint
+  i_id: bigint
+  rank: bigint
+  rating: bigint
+  u_id: bigint
+}
+
+"""
+order by sum() on columns of table "review"
+"""
+input review_sum_order_by {
+  a_id: order_by
+  i_id: order_by
+  rank: order_by
+  rating: order_by
+  u_id: order_by
+}
+
+"""
+update columns of table "review"
+"""
+enum review_update_column {
+  """column name"""
+  a_id
+
+  """column name"""
+  i_id
+
+  """column name"""
+  rank
+
+  """column name"""
+  rating
+
+  """column name"""
+  u_id
+}
+
+"""aggregate var_pop on columns"""
+type review_var_pop_fields {
+  a_id: Float
+  i_id: Float
+  rank: Float
+  rating: Float
+  u_id: Float
+}
+
+"""
+order by var_pop() on columns of table "review"
+"""
+input review_var_pop_order_by {
+  a_id: order_by
+  i_id: order_by
+  rank: order_by
+  rating: order_by
+  u_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type review_var_samp_fields {
+  a_id: Float
+  i_id: Float
+  rank: Float
+  rating: Float
+  u_id: Float
+}
+
+"""
+order by var_samp() on columns of table "review"
+"""
+input review_var_samp_order_by {
+  a_id: order_by
+  i_id: order_by
+  rank: order_by
+  rating: order_by
+  u_id: order_by
+}
+
+"""aggregate variance on columns"""
+type review_variance_fields {
+  a_id: Float
+  i_id: Float
+  rank: Float
+  rating: Float
+  u_id: Float
+}
+
+"""
+order by variance() on columns of table "review"
+"""
+input review_variance_order_by {
+  a_id: order_by
+  i_id: order_by
+  rank: order_by
+  rating: order_by
+  u_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "item"
+  """
+  item(
+    """distinct select on columns"""
+    distinct_on: [item_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [item_order_by!]
+
+    """filter the rows returned"""
+    where: item_bool_exp
+  ): [item!]!
+
+  """
+  fetch aggregated fields from the table: "item"
+  """
+  item_aggregate(
+    """distinct select on columns"""
+    distinct_on: [item_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [item_order_by!]
+
+    """filter the rows returned"""
+    where: item_bool_exp
+  ): item_aggregate!
+
+  """fetch data from the table: "item" using primary key columns"""
+  item_by_pk(i_id: bigint!): item
+
+  """
+  fetch data from the table: "review"
+  """
+  review(
+    """distinct select on columns"""
+    distinct_on: [review_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [review_order_by!]
+
+    """filter the rows returned"""
+    where: review_bool_exp
+  ): [review!]!
+
+  """
+  fetch aggregated fields from the table: "review"
+  """
+  review_aggregate(
+    """distinct select on columns"""
+    distinct_on: [review_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [review_order_by!]
+
+    """filter the rows returned"""
+    where: review_bool_exp
+  ): review_aggregate!
+
+  """fetch data from the table: "review" using primary key columns"""
+  review_by_pk(a_id: bigint!): review
+
+  """
+  fetch data from the table: "trust"
+  """
+  trust(
+    """distinct select on columns"""
+    distinct_on: [trust_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [trust_order_by!]
+
+    """filter the rows returned"""
+    where: trust_bool_exp
+  ): [trust!]!
+
+  """
+  fetch aggregated fields from the table: "trust"
+  """
+  trust_aggregate(
+    """distinct select on columns"""
+    distinct_on: [trust_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [trust_order_by!]
+
+    """filter the rows returned"""
+    where: trust_bool_exp
+  ): trust_aggregate!
+
+  """
+  fetch data from the table: "useracct"
+  """
+  useracct(
+    """distinct select on columns"""
+    distinct_on: [useracct_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [useracct_order_by!]
+
+    """filter the rows returned"""
+    where: useracct_bool_exp
+  ): [useracct!]!
+
+  """
+  fetch aggregated fields from the table: "useracct"
+  """
+  useracct_aggregate(
+    """distinct select on columns"""
+    distinct_on: [useracct_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [useracct_order_by!]
+
+    """filter the rows returned"""
+    where: useracct_bool_exp
+  ): useracct_aggregate!
+
+  """fetch data from the table: "useracct" using primary key columns"""
+  useracct_by_pk(u_id: bigint!): useracct
+}
+
+"""
+columns and relationships of "trust"
+"""
+type trust {
+  source_u_id: bigint
+  target_u_id: bigint
+  trust: bigint
+
+  """An object relationship"""
+  useracctBySourceUId: useracct
+
+  """An object relationship"""
+  useracctByTargetUId: useracct
+}
+
+"""
+aggregated selection of "trust"
+"""
+type trust_aggregate {
+  aggregate: trust_aggregate_fields
+  nodes: [trust!]!
+}
+
+"""
+aggregate fields of "trust"
+"""
+type trust_aggregate_fields {
+  avg: trust_avg_fields
+  count(columns: [trust_select_column!], distinct: Boolean): Int
+  max: trust_max_fields
+  min: trust_min_fields
+  stddev: trust_stddev_fields
+  stddev_pop: trust_stddev_pop_fields
+  stddev_samp: trust_stddev_samp_fields
+  sum: trust_sum_fields
+  var_pop: trust_var_pop_fields
+  var_samp: trust_var_samp_fields
+  variance: trust_variance_fields
+}
+
+"""
+order by aggregate values of table "trust"
+"""
+input trust_aggregate_order_by {
+  avg: trust_avg_order_by
+  count: order_by
+  max: trust_max_order_by
+  min: trust_min_order_by
+  stddev: trust_stddev_order_by
+  stddev_pop: trust_stddev_pop_order_by
+  stddev_samp: trust_stddev_samp_order_by
+  sum: trust_sum_order_by
+  var_pop: trust_var_pop_order_by
+  var_samp: trust_var_samp_order_by
+  variance: trust_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "trust"
+"""
+input trust_arr_rel_insert_input {
+  data: [trust_insert_input!]!
+}
+
+"""aggregate avg on columns"""
+type trust_avg_fields {
+  source_u_id: Float
+  target_u_id: Float
+  trust: Float
+}
+
+"""
+order by avg() on columns of table "trust"
+"""
+input trust_avg_order_by {
+  source_u_id: order_by
+  target_u_id: order_by
+  trust: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "trust". All fields are combined with a logical 'AND'.
+"""
+input trust_bool_exp {
+  _and: [trust_bool_exp]
+  _not: trust_bool_exp
+  _or: [trust_bool_exp]
+  source_u_id: bigint_comparison_exp
+  target_u_id: bigint_comparison_exp
+  trust: bigint_comparison_exp
+  useracctBySourceUId: useracct_bool_exp
+  useracctByTargetUId: useracct_bool_exp
+}
+
+"""
+input type for incrementing integer columne in table "trust"
+"""
+input trust_inc_input {
+  source_u_id: bigint
+  target_u_id: bigint
+  trust: bigint
+}
+
+"""
+input type for inserting data into table "trust"
+"""
+input trust_insert_input {
+  source_u_id: bigint
+  target_u_id: bigint
+  trust: bigint
+  useracctBySourceUId: useracct_obj_rel_insert_input
+  useracctByTargetUId: useracct_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type trust_max_fields {
+  source_u_id: bigint
+  target_u_id: bigint
+  trust: bigint
+}
+
+"""
+order by max() on columns of table "trust"
+"""
+input trust_max_order_by {
+  source_u_id: order_by
+  target_u_id: order_by
+  trust: order_by
+}
+
+"""aggregate min on columns"""
+type trust_min_fields {
+  source_u_id: bigint
+  target_u_id: bigint
+  trust: bigint
+}
+
+"""
+order by min() on columns of table "trust"
+"""
+input trust_min_order_by {
+  source_u_id: order_by
+  target_u_id: order_by
+  trust: order_by
+}
+
+"""
+response of any mutation on the table "trust"
+"""
+type trust_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [trust!]!
+}
+
+"""
+input type for inserting object relation for remote table "trust"
+"""
+input trust_obj_rel_insert_input {
+  data: trust_insert_input!
+}
+
+"""
+ordering options when selecting data from "trust"
+"""
+input trust_order_by {
+  source_u_id: order_by
+  target_u_id: order_by
+  trust: order_by
+  useracctBySourceUId: useracct_order_by
+  useracctByTargetUId: useracct_order_by
+}
+
+"""
+select columns of table "trust"
+"""
+enum trust_select_column {
+  """column name"""
+  source_u_id
+
+  """column name"""
+  target_u_id
+
+  """column name"""
+  trust
+}
+
+"""
+input type for updating data in table "trust"
+"""
+input trust_set_input {
+  source_u_id: bigint
+  target_u_id: bigint
+  trust: bigint
+}
+
+"""aggregate stddev on columns"""
+type trust_stddev_fields {
+  source_u_id: Float
+  target_u_id: Float
+  trust: Float
+}
+
+"""
+order by stddev() on columns of table "trust"
+"""
+input trust_stddev_order_by {
+  source_u_id: order_by
+  target_u_id: order_by
+  trust: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type trust_stddev_pop_fields {
+  source_u_id: Float
+  target_u_id: Float
+  trust: Float
+}
+
+"""
+order by stddev_pop() on columns of table "trust"
+"""
+input trust_stddev_pop_order_by {
+  source_u_id: order_by
+  target_u_id: order_by
+  trust: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type trust_stddev_samp_fields {
+  source_u_id: Float
+  target_u_id: Float
+  trust: Float
+}
+
+"""
+order by stddev_samp() on columns of table "trust"
+"""
+input trust_stddev_samp_order_by {
+  source_u_id: order_by
+  target_u_id: order_by
+  trust: order_by
+}
+
+"""aggregate sum on columns"""
+type trust_sum_fields {
+  source_u_id: bigint
+  target_u_id: bigint
+  trust: bigint
+}
+
+"""
+order by sum() on columns of table "trust"
+"""
+input trust_sum_order_by {
+  source_u_id: order_by
+  target_u_id: order_by
+  trust: order_by
+}
+
+"""aggregate var_pop on columns"""
+type trust_var_pop_fields {
+  source_u_id: Float
+  target_u_id: Float
+  trust: Float
+}
+
+"""
+order by var_pop() on columns of table "trust"
+"""
+input trust_var_pop_order_by {
+  source_u_id: order_by
+  target_u_id: order_by
+  trust: order_by
+}
+
+"""aggregate var_samp on columns"""
+type trust_var_samp_fields {
+  source_u_id: Float
+  target_u_id: Float
+  trust: Float
+}
+
+"""
+order by var_samp() on columns of table "trust"
+"""
+input trust_var_samp_order_by {
+  source_u_id: order_by
+  target_u_id: order_by
+  trust: order_by
+}
+
+"""aggregate variance on columns"""
+type trust_variance_fields {
+  source_u_id: Float
+  target_u_id: Float
+  trust: Float
+}
+
+"""
+order by variance() on columns of table "trust"
+"""
+input trust_variance_order_by {
+  source_u_id: order_by
+  target_u_id: order_by
+  trust: order_by
+}
+
+"""
+columns and relationships of "useracct"
+"""
+type useracct {
+  name: String
+
+  """An array relationship"""
+  reviews(
+    """distinct select on columns"""
+    distinct_on: [review_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [review_order_by!]
+
+    """filter the rows returned"""
+    where: review_bool_exp
+  ): [review!]!
+
+  """An aggregated array relationship"""
+  reviews_aggregate(
+    """distinct select on columns"""
+    distinct_on: [review_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [review_order_by!]
+
+    """filter the rows returned"""
+    where: review_bool_exp
+  ): review_aggregate!
+
+  """An array relationship"""
+  trustBySourceUId(
+    """distinct select on columns"""
+    distinct_on: [trust_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [trust_order_by!]
+
+    """filter the rows returned"""
+    where: trust_bool_exp
+  ): [trust!]!
+
+  """An aggregated array relationship"""
+  trustBySourceUId_aggregate(
+    """distinct select on columns"""
+    distinct_on: [trust_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [trust_order_by!]
+
+    """filter the rows returned"""
+    where: trust_bool_exp
+  ): trust_aggregate!
+
+  """An array relationship"""
+  trustByTargetUId(
+    """distinct select on columns"""
+    distinct_on: [trust_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [trust_order_by!]
+
+    """filter the rows returned"""
+    where: trust_bool_exp
+  ): [trust!]!
+
+  """An aggregated array relationship"""
+  trustByTargetUId_aggregate(
+    """distinct select on columns"""
+    distinct_on: [trust_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [trust_order_by!]
+
+    """filter the rows returned"""
+    where: trust_bool_exp
+  ): trust_aggregate!
+  u_id: bigint!
+}
+
+"""
+aggregated selection of "useracct"
+"""
+type useracct_aggregate {
+  aggregate: useracct_aggregate_fields
+  nodes: [useracct!]!
+}
+
+"""
+aggregate fields of "useracct"
+"""
+type useracct_aggregate_fields {
+  avg: useracct_avg_fields
+  count(columns: [useracct_select_column!], distinct: Boolean): Int
+  max: useracct_max_fields
+  min: useracct_min_fields
+  stddev: useracct_stddev_fields
+  stddev_pop: useracct_stddev_pop_fields
+  stddev_samp: useracct_stddev_samp_fields
+  sum: useracct_sum_fields
+  var_pop: useracct_var_pop_fields
+  var_samp: useracct_var_samp_fields
+  variance: useracct_variance_fields
+}
+
+"""
+order by aggregate values of table "useracct"
+"""
+input useracct_aggregate_order_by {
+  avg: useracct_avg_order_by
+  count: order_by
+  max: useracct_max_order_by
+  min: useracct_min_order_by
+  stddev: useracct_stddev_order_by
+  stddev_pop: useracct_stddev_pop_order_by
+  stddev_samp: useracct_stddev_samp_order_by
+  sum: useracct_sum_order_by
+  var_pop: useracct_var_pop_order_by
+  var_samp: useracct_var_samp_order_by
+  variance: useracct_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "useracct"
+"""
+input useracct_arr_rel_insert_input {
+  data: [useracct_insert_input!]!
+  on_conflict: useracct_on_conflict
+}
+
+"""aggregate avg on columns"""
+type useracct_avg_fields {
+  u_id: Float
+}
+
+"""
+order by avg() on columns of table "useracct"
+"""
+input useracct_avg_order_by {
+  u_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "useracct". All fields are combined with a logical 'AND'.
+"""
+input useracct_bool_exp {
+  _and: [useracct_bool_exp]
+  _not: useracct_bool_exp
+  _or: [useracct_bool_exp]
+  name: String_comparison_exp
+  reviews: review_bool_exp
+  trustBySourceUId: trust_bool_exp
+  trustByTargetUId: trust_bool_exp
+  u_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "useracct"
+"""
+enum useracct_constraint {
+  """unique or primary key constraint"""
+  idx_22316_useracct_pkey
+}
+
+"""
+input type for incrementing integer columne in table "useracct"
+"""
+input useracct_inc_input {
+  u_id: bigint
+}
+
+"""
+input type for inserting data into table "useracct"
+"""
+input useracct_insert_input {
+  name: String
+  reviews: review_arr_rel_insert_input
+  trustBySourceUId: trust_arr_rel_insert_input
+  trustByTargetUId: trust_arr_rel_insert_input
+  u_id: bigint
+}
+
+"""aggregate max on columns"""
+type useracct_max_fields {
+  name: String
+  u_id: bigint
+}
+
+"""
+order by max() on columns of table "useracct"
+"""
+input useracct_max_order_by {
+  name: order_by
+  u_id: order_by
+}
+
+"""aggregate min on columns"""
+type useracct_min_fields {
+  name: String
+  u_id: bigint
+}
+
+"""
+order by min() on columns of table "useracct"
+"""
+input useracct_min_order_by {
+  name: order_by
+  u_id: order_by
+}
+
+"""
+response of any mutation on the table "useracct"
+"""
+type useracct_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [useracct!]!
+}
+
+"""
+input type for inserting object relation for remote table "useracct"
+"""
+input useracct_obj_rel_insert_input {
+  data: useracct_insert_input!
+  on_conflict: useracct_on_conflict
+}
+
+"""
+on conflict condition type for table "useracct"
+"""
+input useracct_on_conflict {
+  constraint: useracct_constraint!
+  update_columns: [useracct_update_column!]!
+  where: useracct_bool_exp
+}
+
+"""
+ordering options when selecting data from "useracct"
+"""
+input useracct_order_by {
+  name: order_by
+  reviews_aggregate: review_aggregate_order_by
+  trustBySourceUId_aggregate: trust_aggregate_order_by
+  trustByTargetUId_aggregate: trust_aggregate_order_by
+  u_id: order_by
+}
+
+"""
+select columns of table "useracct"
+"""
+enum useracct_select_column {
+  """column name"""
+  name
+
+  """column name"""
+  u_id
+}
+
+"""
+input type for updating data in table "useracct"
+"""
+input useracct_set_input {
+  name: String
+  u_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type useracct_stddev_fields {
+  u_id: Float
+}
+
+"""
+order by stddev() on columns of table "useracct"
+"""
+input useracct_stddev_order_by {
+  u_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type useracct_stddev_pop_fields {
+  u_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "useracct"
+"""
+input useracct_stddev_pop_order_by {
+  u_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type useracct_stddev_samp_fields {
+  u_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "useracct"
+"""
+input useracct_stddev_samp_order_by {
+  u_id: order_by
+}
+
+"""aggregate sum on columns"""
+type useracct_sum_fields {
+  u_id: bigint
+}
+
+"""
+order by sum() on columns of table "useracct"
+"""
+input useracct_sum_order_by {
+  u_id: order_by
+}
+
+"""
+update columns of table "useracct"
+"""
+enum useracct_update_column {
+  """column name"""
+  name
+
+  """column name"""
+  u_id
+}
+
+"""aggregate var_pop on columns"""
+type useracct_var_pop_fields {
+  u_id: Float
+}
+
+"""
+order by var_pop() on columns of table "useracct"
+"""
+input useracct_var_pop_order_by {
+  u_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type useracct_var_samp_fields {
+  u_id: Float
+}
+
+"""
+order by var_samp() on columns of table "useracct"
+"""
+input useracct_var_samp_order_by {
+  u_id: order_by
+}
+
+"""aggregate variance on columns"""
+type useracct_variance_fields {
+  u_id: Float
+}
+
+"""
+order by variance() on columns of table "useracct"
+"""
+input useracct_variance_order_by {
+  u_id: order_by
+}

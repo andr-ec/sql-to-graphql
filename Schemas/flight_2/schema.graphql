@@ -1,0 +1,1442 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "airlines"
+"""
+type airlines {
+  abbreviation: String
+  airline: String
+  country: String
+
+  """An array relationship"""
+  flights(
+    """distinct select on columns"""
+    distinct_on: [flights_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [flights_order_by!]
+
+    """filter the rows returned"""
+    where: flights_bool_exp
+  ): [flights!]!
+
+  """An aggregated array relationship"""
+  flights_aggregate(
+    """distinct select on columns"""
+    distinct_on: [flights_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [flights_order_by!]
+
+    """filter the rows returned"""
+    where: flights_bool_exp
+  ): flights_aggregate!
+  uid: bigint!
+}
+
+"""
+aggregated selection of "airlines"
+"""
+type airlines_aggregate {
+  aggregate: airlines_aggregate_fields
+  nodes: [airlines!]!
+}
+
+"""
+aggregate fields of "airlines"
+"""
+type airlines_aggregate_fields {
+  avg: airlines_avg_fields
+  count(columns: [airlines_select_column!], distinct: Boolean): Int
+  max: airlines_max_fields
+  min: airlines_min_fields
+  stddev: airlines_stddev_fields
+  stddev_pop: airlines_stddev_pop_fields
+  stddev_samp: airlines_stddev_samp_fields
+  sum: airlines_sum_fields
+  var_pop: airlines_var_pop_fields
+  var_samp: airlines_var_samp_fields
+  variance: airlines_variance_fields
+}
+
+"""
+order by aggregate values of table "airlines"
+"""
+input airlines_aggregate_order_by {
+  avg: airlines_avg_order_by
+  count: order_by
+  max: airlines_max_order_by
+  min: airlines_min_order_by
+  stddev: airlines_stddev_order_by
+  stddev_pop: airlines_stddev_pop_order_by
+  stddev_samp: airlines_stddev_samp_order_by
+  sum: airlines_sum_order_by
+  var_pop: airlines_var_pop_order_by
+  var_samp: airlines_var_samp_order_by
+  variance: airlines_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "airlines"
+"""
+input airlines_arr_rel_insert_input {
+  data: [airlines_insert_input!]!
+  on_conflict: airlines_on_conflict
+}
+
+"""aggregate avg on columns"""
+type airlines_avg_fields {
+  uid: Float
+}
+
+"""
+order by avg() on columns of table "airlines"
+"""
+input airlines_avg_order_by {
+  uid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "airlines". All fields are combined with a logical 'AND'.
+"""
+input airlines_bool_exp {
+  _and: [airlines_bool_exp]
+  _not: airlines_bool_exp
+  _or: [airlines_bool_exp]
+  abbreviation: String_comparison_exp
+  airline: String_comparison_exp
+  country: String_comparison_exp
+  flights: flights_bool_exp
+  uid: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "airlines"
+"""
+enum airlines_constraint {
+  """unique or primary key constraint"""
+  idx_22752_airlines_pkey
+}
+
+"""
+input type for incrementing integer columne in table "airlines"
+"""
+input airlines_inc_input {
+  uid: bigint
+}
+
+"""
+input type for inserting data into table "airlines"
+"""
+input airlines_insert_input {
+  abbreviation: String
+  airline: String
+  country: String
+  flights: flights_arr_rel_insert_input
+  uid: bigint
+}
+
+"""aggregate max on columns"""
+type airlines_max_fields {
+  abbreviation: String
+  airline: String
+  country: String
+  uid: bigint
+}
+
+"""
+order by max() on columns of table "airlines"
+"""
+input airlines_max_order_by {
+  abbreviation: order_by
+  airline: order_by
+  country: order_by
+  uid: order_by
+}
+
+"""aggregate min on columns"""
+type airlines_min_fields {
+  abbreviation: String
+  airline: String
+  country: String
+  uid: bigint
+}
+
+"""
+order by min() on columns of table "airlines"
+"""
+input airlines_min_order_by {
+  abbreviation: order_by
+  airline: order_by
+  country: order_by
+  uid: order_by
+}
+
+"""
+response of any mutation on the table "airlines"
+"""
+type airlines_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [airlines!]!
+}
+
+"""
+input type for inserting object relation for remote table "airlines"
+"""
+input airlines_obj_rel_insert_input {
+  data: airlines_insert_input!
+  on_conflict: airlines_on_conflict
+}
+
+"""
+on conflict condition type for table "airlines"
+"""
+input airlines_on_conflict {
+  constraint: airlines_constraint!
+  update_columns: [airlines_update_column!]!
+  where: airlines_bool_exp
+}
+
+"""
+ordering options when selecting data from "airlines"
+"""
+input airlines_order_by {
+  abbreviation: order_by
+  airline: order_by
+  country: order_by
+  flights_aggregate: flights_aggregate_order_by
+  uid: order_by
+}
+
+"""
+select columns of table "airlines"
+"""
+enum airlines_select_column {
+  """column name"""
+  abbreviation
+
+  """column name"""
+  airline
+
+  """column name"""
+  country
+
+  """column name"""
+  uid
+}
+
+"""
+input type for updating data in table "airlines"
+"""
+input airlines_set_input {
+  abbreviation: String
+  airline: String
+  country: String
+  uid: bigint
+}
+
+"""aggregate stddev on columns"""
+type airlines_stddev_fields {
+  uid: Float
+}
+
+"""
+order by stddev() on columns of table "airlines"
+"""
+input airlines_stddev_order_by {
+  uid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type airlines_stddev_pop_fields {
+  uid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "airlines"
+"""
+input airlines_stddev_pop_order_by {
+  uid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type airlines_stddev_samp_fields {
+  uid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "airlines"
+"""
+input airlines_stddev_samp_order_by {
+  uid: order_by
+}
+
+"""aggregate sum on columns"""
+type airlines_sum_fields {
+  uid: bigint
+}
+
+"""
+order by sum() on columns of table "airlines"
+"""
+input airlines_sum_order_by {
+  uid: order_by
+}
+
+"""
+update columns of table "airlines"
+"""
+enum airlines_update_column {
+  """column name"""
+  abbreviation
+
+  """column name"""
+  airline
+
+  """column name"""
+  country
+
+  """column name"""
+  uid
+}
+
+"""aggregate var_pop on columns"""
+type airlines_var_pop_fields {
+  uid: Float
+}
+
+"""
+order by var_pop() on columns of table "airlines"
+"""
+input airlines_var_pop_order_by {
+  uid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type airlines_var_samp_fields {
+  uid: Float
+}
+
+"""
+order by var_samp() on columns of table "airlines"
+"""
+input airlines_var_samp_order_by {
+  uid: order_by
+}
+
+"""aggregate variance on columns"""
+type airlines_variance_fields {
+  uid: Float
+}
+
+"""
+order by variance() on columns of table "airlines"
+"""
+input airlines_variance_order_by {
+  uid: order_by
+}
+
+"""
+columns and relationships of "airports"
+"""
+type airports {
+  airportcode: String
+  airportname: String
+  city: String
+  country: String
+  countryabbrev: String
+
+  """An array relationship"""
+  flightsByDestairport(
+    """distinct select on columns"""
+    distinct_on: [flights_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [flights_order_by!]
+
+    """filter the rows returned"""
+    where: flights_bool_exp
+  ): [flights!]!
+
+  """An aggregated array relationship"""
+  flightsByDestairport_aggregate(
+    """distinct select on columns"""
+    distinct_on: [flights_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [flights_order_by!]
+
+    """filter the rows returned"""
+    where: flights_bool_exp
+  ): flights_aggregate!
+
+  """An array relationship"""
+  flightsBySourceairport(
+    """distinct select on columns"""
+    distinct_on: [flights_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [flights_order_by!]
+
+    """filter the rows returned"""
+    where: flights_bool_exp
+  ): [flights!]!
+
+  """An aggregated array relationship"""
+  flightsBySourceairport_aggregate(
+    """distinct select on columns"""
+    distinct_on: [flights_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [flights_order_by!]
+
+    """filter the rows returned"""
+    where: flights_bool_exp
+  ): flights_aggregate!
+}
+
+"""
+aggregated selection of "airports"
+"""
+type airports_aggregate {
+  aggregate: airports_aggregate_fields
+  nodes: [airports!]!
+}
+
+"""
+aggregate fields of "airports"
+"""
+type airports_aggregate_fields {
+  count(columns: [airports_select_column!], distinct: Boolean): Int
+  max: airports_max_fields
+  min: airports_min_fields
+}
+
+"""
+order by aggregate values of table "airports"
+"""
+input airports_aggregate_order_by {
+  count: order_by
+  max: airports_max_order_by
+  min: airports_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "airports"
+"""
+input airports_arr_rel_insert_input {
+  data: [airports_insert_input!]!
+  on_conflict: airports_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "airports". All fields are combined with a logical 'AND'.
+"""
+input airports_bool_exp {
+  _and: [airports_bool_exp]
+  _not: airports_bool_exp
+  _or: [airports_bool_exp]
+  airportcode: String_comparison_exp
+  airportname: String_comparison_exp
+  city: String_comparison_exp
+  country: String_comparison_exp
+  countryabbrev: String_comparison_exp
+  flightsByDestairport: flights_bool_exp
+  flightsBySourceairport: flights_bool_exp
+}
+
+"""
+unique or primary key constraints on table "airports"
+"""
+enum airports_constraint {
+  """unique or primary key constraint"""
+  idx_22758_sqlite_autoindex_airports_1
+}
+
+"""
+input type for inserting data into table "airports"
+"""
+input airports_insert_input {
+  airportcode: String
+  airportname: String
+  city: String
+  country: String
+  countryabbrev: String
+  flightsByDestairport: flights_arr_rel_insert_input
+  flightsBySourceairport: flights_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type airports_max_fields {
+  airportcode: String
+  airportname: String
+  city: String
+  country: String
+  countryabbrev: String
+}
+
+"""
+order by max() on columns of table "airports"
+"""
+input airports_max_order_by {
+  airportcode: order_by
+  airportname: order_by
+  city: order_by
+  country: order_by
+  countryabbrev: order_by
+}
+
+"""aggregate min on columns"""
+type airports_min_fields {
+  airportcode: String
+  airportname: String
+  city: String
+  country: String
+  countryabbrev: String
+}
+
+"""
+order by min() on columns of table "airports"
+"""
+input airports_min_order_by {
+  airportcode: order_by
+  airportname: order_by
+  city: order_by
+  country: order_by
+  countryabbrev: order_by
+}
+
+"""
+response of any mutation on the table "airports"
+"""
+type airports_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [airports!]!
+}
+
+"""
+input type for inserting object relation for remote table "airports"
+"""
+input airports_obj_rel_insert_input {
+  data: airports_insert_input!
+  on_conflict: airports_on_conflict
+}
+
+"""
+on conflict condition type for table "airports"
+"""
+input airports_on_conflict {
+  constraint: airports_constraint!
+  update_columns: [airports_update_column!]!
+  where: airports_bool_exp
+}
+
+"""
+ordering options when selecting data from "airports"
+"""
+input airports_order_by {
+  airportcode: order_by
+  airportname: order_by
+  city: order_by
+  country: order_by
+  countryabbrev: order_by
+  flightsByDestairport_aggregate: flights_aggregate_order_by
+  flightsBySourceairport_aggregate: flights_aggregate_order_by
+}
+
+"""
+select columns of table "airports"
+"""
+enum airports_select_column {
+  """column name"""
+  airportcode
+
+  """column name"""
+  airportname
+
+  """column name"""
+  city
+
+  """column name"""
+  country
+
+  """column name"""
+  countryabbrev
+}
+
+"""
+input type for updating data in table "airports"
+"""
+input airports_set_input {
+  airportcode: String
+  airportname: String
+  city: String
+  country: String
+  countryabbrev: String
+}
+
+"""
+update columns of table "airports"
+"""
+enum airports_update_column {
+  """column name"""
+  airportcode
+
+  """column name"""
+  airportname
+
+  """column name"""
+  city
+
+  """column name"""
+  country
+
+  """column name"""
+  countryabbrev
+}
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "flights"
+"""
+type flights {
+  airline: bigint!
+
+  """An object relationship"""
+  airlineByAirline: airlines!
+
+  """An object relationship"""
+  airportByDestairpot: airports
+
+  """An object relationship"""
+  airportBySourceairport: airports
+  destairport: String
+  flightno: bigint!
+  sourceairport: String
+}
+
+"""
+aggregated selection of "flights"
+"""
+type flights_aggregate {
+  aggregate: flights_aggregate_fields
+  nodes: [flights!]!
+}
+
+"""
+aggregate fields of "flights"
+"""
+type flights_aggregate_fields {
+  avg: flights_avg_fields
+  count(columns: [flights_select_column!], distinct: Boolean): Int
+  max: flights_max_fields
+  min: flights_min_fields
+  stddev: flights_stddev_fields
+  stddev_pop: flights_stddev_pop_fields
+  stddev_samp: flights_stddev_samp_fields
+  sum: flights_sum_fields
+  var_pop: flights_var_pop_fields
+  var_samp: flights_var_samp_fields
+  variance: flights_variance_fields
+}
+
+"""
+order by aggregate values of table "flights"
+"""
+input flights_aggregate_order_by {
+  avg: flights_avg_order_by
+  count: order_by
+  max: flights_max_order_by
+  min: flights_min_order_by
+  stddev: flights_stddev_order_by
+  stddev_pop: flights_stddev_pop_order_by
+  stddev_samp: flights_stddev_samp_order_by
+  sum: flights_sum_order_by
+  var_pop: flights_var_pop_order_by
+  var_samp: flights_var_samp_order_by
+  variance: flights_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "flights"
+"""
+input flights_arr_rel_insert_input {
+  data: [flights_insert_input!]!
+  on_conflict: flights_on_conflict
+}
+
+"""aggregate avg on columns"""
+type flights_avg_fields {
+  airline: Float
+  flightno: Float
+}
+
+"""
+order by avg() on columns of table "flights"
+"""
+input flights_avg_order_by {
+  airline: order_by
+  flightno: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "flights". All fields are combined with a logical 'AND'.
+"""
+input flights_bool_exp {
+  _and: [flights_bool_exp]
+  _not: flights_bool_exp
+  _or: [flights_bool_exp]
+  airline: bigint_comparison_exp
+  airlineByAirline: airlines_bool_exp
+  airportByDestairpot: airports_bool_exp
+  airportBySourceairport: airports_bool_exp
+  destairport: String_comparison_exp
+  flightno: bigint_comparison_exp
+  sourceairport: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "flights"
+"""
+enum flights_constraint {
+  """unique or primary key constraint"""
+  idx_22764_flights_pkey
+
+  """unique or primary key constraint"""
+  idx_22764_sqlite_autoindex_flights_1
+}
+
+"""
+input type for incrementing integer columne in table "flights"
+"""
+input flights_inc_input {
+  airline: bigint
+  flightno: bigint
+}
+
+"""
+input type for inserting data into table "flights"
+"""
+input flights_insert_input {
+  airline: bigint
+  airlineByAirline: airlines_obj_rel_insert_input
+  airportByDestairpot: airports_obj_rel_insert_input
+  airportBySourceairport: airports_obj_rel_insert_input
+  destairport: String
+  flightno: bigint
+  sourceairport: String
+}
+
+"""aggregate max on columns"""
+type flights_max_fields {
+  airline: bigint
+  destairport: String
+  flightno: bigint
+  sourceairport: String
+}
+
+"""
+order by max() on columns of table "flights"
+"""
+input flights_max_order_by {
+  airline: order_by
+  destairport: order_by
+  flightno: order_by
+  sourceairport: order_by
+}
+
+"""aggregate min on columns"""
+type flights_min_fields {
+  airline: bigint
+  destairport: String
+  flightno: bigint
+  sourceairport: String
+}
+
+"""
+order by min() on columns of table "flights"
+"""
+input flights_min_order_by {
+  airline: order_by
+  destairport: order_by
+  flightno: order_by
+  sourceairport: order_by
+}
+
+"""
+response of any mutation on the table "flights"
+"""
+type flights_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [flights!]!
+}
+
+"""
+input type for inserting object relation for remote table "flights"
+"""
+input flights_obj_rel_insert_input {
+  data: flights_insert_input!
+  on_conflict: flights_on_conflict
+}
+
+"""
+on conflict condition type for table "flights"
+"""
+input flights_on_conflict {
+  constraint: flights_constraint!
+  update_columns: [flights_update_column!]!
+  where: flights_bool_exp
+}
+
+"""
+ordering options when selecting data from "flights"
+"""
+input flights_order_by {
+  airline: order_by
+  airlineByAirline: airlines_order_by
+  airportByDestairpot: airports_order_by
+  airportBySourceairport: airports_order_by
+  destairport: order_by
+  flightno: order_by
+  sourceairport: order_by
+}
+
+"""
+select columns of table "flights"
+"""
+enum flights_select_column {
+  """column name"""
+  airline
+
+  """column name"""
+  destairport
+
+  """column name"""
+  flightno
+
+  """column name"""
+  sourceairport
+}
+
+"""
+input type for updating data in table "flights"
+"""
+input flights_set_input {
+  airline: bigint
+  destairport: String
+  flightno: bigint
+  sourceairport: String
+}
+
+"""aggregate stddev on columns"""
+type flights_stddev_fields {
+  airline: Float
+  flightno: Float
+}
+
+"""
+order by stddev() on columns of table "flights"
+"""
+input flights_stddev_order_by {
+  airline: order_by
+  flightno: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type flights_stddev_pop_fields {
+  airline: Float
+  flightno: Float
+}
+
+"""
+order by stddev_pop() on columns of table "flights"
+"""
+input flights_stddev_pop_order_by {
+  airline: order_by
+  flightno: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type flights_stddev_samp_fields {
+  airline: Float
+  flightno: Float
+}
+
+"""
+order by stddev_samp() on columns of table "flights"
+"""
+input flights_stddev_samp_order_by {
+  airline: order_by
+  flightno: order_by
+}
+
+"""aggregate sum on columns"""
+type flights_sum_fields {
+  airline: bigint
+  flightno: bigint
+}
+
+"""
+order by sum() on columns of table "flights"
+"""
+input flights_sum_order_by {
+  airline: order_by
+  flightno: order_by
+}
+
+"""
+update columns of table "flights"
+"""
+enum flights_update_column {
+  """column name"""
+  airline
+
+  """column name"""
+  destairport
+
+  """column name"""
+  flightno
+
+  """column name"""
+  sourceairport
+}
+
+"""aggregate var_pop on columns"""
+type flights_var_pop_fields {
+  airline: Float
+  flightno: Float
+}
+
+"""
+order by var_pop() on columns of table "flights"
+"""
+input flights_var_pop_order_by {
+  airline: order_by
+  flightno: order_by
+}
+
+"""aggregate var_samp on columns"""
+type flights_var_samp_fields {
+  airline: Float
+  flightno: Float
+}
+
+"""
+order by var_samp() on columns of table "flights"
+"""
+input flights_var_samp_order_by {
+  airline: order_by
+  flightno: order_by
+}
+
+"""aggregate variance on columns"""
+type flights_variance_fields {
+  airline: Float
+  flightno: Float
+}
+
+"""
+order by variance() on columns of table "flights"
+"""
+input flights_variance_order_by {
+  airline: order_by
+  flightno: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "airlines"
+  """
+  delete_airlines(
+    """filter the rows which have to be deleted"""
+    where: airlines_bool_exp!
+  ): airlines_mutation_response
+
+  """
+  delete data from the table: "airports"
+  """
+  delete_airports(
+    """filter the rows which have to be deleted"""
+    where: airports_bool_exp!
+  ): airports_mutation_response
+
+  """
+  delete data from the table: "flights"
+  """
+  delete_flights(
+    """filter the rows which have to be deleted"""
+    where: flights_bool_exp!
+  ): flights_mutation_response
+
+  """
+  insert data into the table: "airlines"
+  """
+  insert_airlines(
+    """the rows to be inserted"""
+    objects: [airlines_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: airlines_on_conflict
+  ): airlines_mutation_response
+
+  """
+  insert data into the table: "airports"
+  """
+  insert_airports(
+    """the rows to be inserted"""
+    objects: [airports_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: airports_on_conflict
+  ): airports_mutation_response
+
+  """
+  insert data into the table: "flights"
+  """
+  insert_flights(
+    """the rows to be inserted"""
+    objects: [flights_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: flights_on_conflict
+  ): flights_mutation_response
+
+  """
+  update data of the table: "airlines"
+  """
+  update_airlines(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: airlines_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: airlines_set_input
+
+    """filter the rows which have to be updated"""
+    where: airlines_bool_exp!
+  ): airlines_mutation_response
+
+  """
+  update data of the table: "airports"
+  """
+  update_airports(
+    """sets the columns of the filtered rows to the given values"""
+    _set: airports_set_input
+
+    """filter the rows which have to be updated"""
+    where: airports_bool_exp!
+  ): airports_mutation_response
+
+  """
+  update data of the table: "flights"
+  """
+  update_flights(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: flights_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: flights_set_input
+
+    """filter the rows which have to be updated"""
+    where: flights_bool_exp!
+  ): flights_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "airlines"
+  """
+  airlines(
+    """distinct select on columns"""
+    distinct_on: [airlines_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [airlines_order_by!]
+
+    """filter the rows returned"""
+    where: airlines_bool_exp
+  ): [airlines!]!
+
+  """
+  fetch aggregated fields from the table: "airlines"
+  """
+  airlines_aggregate(
+    """distinct select on columns"""
+    distinct_on: [airlines_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [airlines_order_by!]
+
+    """filter the rows returned"""
+    where: airlines_bool_exp
+  ): airlines_aggregate!
+
+  """fetch data from the table: "airlines" using primary key columns"""
+  airlines_by_pk(uid: bigint!): airlines
+
+  """
+  fetch data from the table: "airports"
+  """
+  airports(
+    """distinct select on columns"""
+    distinct_on: [airports_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [airports_order_by!]
+
+    """filter the rows returned"""
+    where: airports_bool_exp
+  ): [airports!]!
+
+  """
+  fetch aggregated fields from the table: "airports"
+  """
+  airports_aggregate(
+    """distinct select on columns"""
+    distinct_on: [airports_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [airports_order_by!]
+
+    """filter the rows returned"""
+    where: airports_bool_exp
+  ): airports_aggregate!
+
+  """
+  fetch data from the table: "flights"
+  """
+  flights(
+    """distinct select on columns"""
+    distinct_on: [flights_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [flights_order_by!]
+
+    """filter the rows returned"""
+    where: flights_bool_exp
+  ): [flights!]!
+
+  """
+  fetch aggregated fields from the table: "flights"
+  """
+  flights_aggregate(
+    """distinct select on columns"""
+    distinct_on: [flights_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [flights_order_by!]
+
+    """filter the rows returned"""
+    where: flights_bool_exp
+  ): flights_aggregate!
+
+  """fetch data from the table: "flights" using primary key columns"""
+  flights_by_pk(airline: bigint!, flightno: bigint!): flights
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "airlines"
+  """
+  airlines(
+    """distinct select on columns"""
+    distinct_on: [airlines_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [airlines_order_by!]
+
+    """filter the rows returned"""
+    where: airlines_bool_exp
+  ): [airlines!]!
+
+  """
+  fetch aggregated fields from the table: "airlines"
+  """
+  airlines_aggregate(
+    """distinct select on columns"""
+    distinct_on: [airlines_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [airlines_order_by!]
+
+    """filter the rows returned"""
+    where: airlines_bool_exp
+  ): airlines_aggregate!
+
+  """fetch data from the table: "airlines" using primary key columns"""
+  airlines_by_pk(uid: bigint!): airlines
+
+  """
+  fetch data from the table: "airports"
+  """
+  airports(
+    """distinct select on columns"""
+    distinct_on: [airports_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [airports_order_by!]
+
+    """filter the rows returned"""
+    where: airports_bool_exp
+  ): [airports!]!
+
+  """
+  fetch aggregated fields from the table: "airports"
+  """
+  airports_aggregate(
+    """distinct select on columns"""
+    distinct_on: [airports_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [airports_order_by!]
+
+    """filter the rows returned"""
+    where: airports_bool_exp
+  ): airports_aggregate!
+
+  """
+  fetch data from the table: "flights"
+  """
+  flights(
+    """distinct select on columns"""
+    distinct_on: [flights_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [flights_order_by!]
+
+    """filter the rows returned"""
+    where: flights_bool_exp
+  ): [flights!]!
+
+  """
+  fetch aggregated fields from the table: "flights"
+  """
+  flights_aggregate(
+    """distinct select on columns"""
+    distinct_on: [flights_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [flights_order_by!]
+
+    """filter the rows returned"""
+    where: flights_bool_exp
+  ): flights_aggregate!
+
+  """fetch data from the table: "flights" using primary key columns"""
+  flights_by_pk(airline: bigint!, flightno: bigint!): flights
+}

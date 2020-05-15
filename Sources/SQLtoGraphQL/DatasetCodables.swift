@@ -773,6 +773,8 @@ enum WhereOperation: Int, Codable {
     /// is
     case isOp
     case exists
+    // only for graphQL
+    case isNull
     
     public init?(rawString: String) {
         switch rawString {
@@ -790,6 +792,7 @@ enum WhereOperation: Int, Codable {
         /// is"
         case "isOp": self = .isOp
         case "exists": self = .exists
+        case "_is_null": self = .isNull
         default:
             return nil
         }
@@ -812,7 +815,8 @@ enum WhereOperation: Int, Codable {
         /// is"
         case .isOp: return "isOp" // never used
             // exists is only for nested sQL
-        case .exists: return "_is_null" // only for sql
+        case .exists: return "_is_null" // only for sql, need to change return value
+        case .isNull: return "_is_null"
         }
     }
 }

@@ -1,0 +1,1017 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "person"
+  """
+  delete_person(
+    """filter the rows which have to be deleted"""
+    where: person_bool_exp!
+  ): person_mutation_response
+
+  """
+  delete data from the table: "personfriend"
+  """
+  delete_personfriend(
+    """filter the rows which have to be deleted"""
+    where: personfriend_bool_exp!
+  ): personfriend_mutation_response
+
+  """
+  insert data into the table: "person"
+  """
+  insert_person(
+    """the rows to be inserted"""
+    objects: [person_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: person_on_conflict
+  ): person_mutation_response
+
+  """
+  insert data into the table: "personfriend"
+  """
+  insert_personfriend(
+    """the rows to be inserted"""
+    objects: [personfriend_insert_input!]!
+  ): personfriend_mutation_response
+
+  """
+  update data of the table: "person"
+  """
+  update_person(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: person_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: person_set_input
+
+    """filter the rows which have to be updated"""
+    where: person_bool_exp!
+  ): person_mutation_response
+
+  """
+  update data of the table: "personfriend"
+  """
+  update_personfriend(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: personfriend_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: personfriend_set_input
+
+    """filter the rows which have to be updated"""
+    where: personfriend_bool_exp!
+  ): personfriend_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "person"
+"""
+type person {
+  age: bigint
+  city: String
+  gender: String
+  job: String
+  name: String!
+
+  """An array relationship"""
+  personfriends(
+    """distinct select on columns"""
+    distinct_on: [personfriend_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [personfriend_order_by!]
+
+    """filter the rows returned"""
+    where: personfriend_bool_exp
+  ): [personfriend!]!
+
+  """An array relationship"""
+  personfriendsByName(
+    """distinct select on columns"""
+    distinct_on: [personfriend_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [personfriend_order_by!]
+
+    """filter the rows returned"""
+    where: personfriend_bool_exp
+  ): [personfriend!]!
+
+  """An aggregated array relationship"""
+  personfriendsByName_aggregate(
+    """distinct select on columns"""
+    distinct_on: [personfriend_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [personfriend_order_by!]
+
+    """filter the rows returned"""
+    where: personfriend_bool_exp
+  ): personfriend_aggregate!
+
+  """An aggregated array relationship"""
+  personfriends_aggregate(
+    """distinct select on columns"""
+    distinct_on: [personfriend_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [personfriend_order_by!]
+
+    """filter the rows returned"""
+    where: personfriend_bool_exp
+  ): personfriend_aggregate!
+}
+
+"""
+aggregated selection of "person"
+"""
+type person_aggregate {
+  aggregate: person_aggregate_fields
+  nodes: [person!]!
+}
+
+"""
+aggregate fields of "person"
+"""
+type person_aggregate_fields {
+  avg: person_avg_fields
+  count(columns: [person_select_column!], distinct: Boolean): Int
+  max: person_max_fields
+  min: person_min_fields
+  stddev: person_stddev_fields
+  stddev_pop: person_stddev_pop_fields
+  stddev_samp: person_stddev_samp_fields
+  sum: person_sum_fields
+  var_pop: person_var_pop_fields
+  var_samp: person_var_samp_fields
+  variance: person_variance_fields
+}
+
+"""
+order by aggregate values of table "person"
+"""
+input person_aggregate_order_by {
+  avg: person_avg_order_by
+  count: order_by
+  max: person_max_order_by
+  min: person_min_order_by
+  stddev: person_stddev_order_by
+  stddev_pop: person_stddev_pop_order_by
+  stddev_samp: person_stddev_samp_order_by
+  sum: person_sum_order_by
+  var_pop: person_var_pop_order_by
+  var_samp: person_var_samp_order_by
+  variance: person_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "person"
+"""
+input person_arr_rel_insert_input {
+  data: [person_insert_input!]!
+  on_conflict: person_on_conflict
+}
+
+"""aggregate avg on columns"""
+type person_avg_fields {
+  age: Float
+}
+
+"""
+order by avg() on columns of table "person"
+"""
+input person_avg_order_by {
+  age: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "person". All fields are combined with a logical 'AND'.
+"""
+input person_bool_exp {
+  _and: [person_bool_exp]
+  _not: person_bool_exp
+  _or: [person_bool_exp]
+  age: bigint_comparison_exp
+  city: String_comparison_exp
+  gender: String_comparison_exp
+  job: String_comparison_exp
+  name: String_comparison_exp
+  personfriends: personfriend_bool_exp
+  personfriendsByName: personfriend_bool_exp
+}
+
+"""
+unique or primary key constraints on table "person"
+"""
+enum person_constraint {
+  """unique or primary key constraint"""
+  idx_19157_sqlite_autoindex_person_1
+}
+
+"""
+input type for incrementing integer columne in table "person"
+"""
+input person_inc_input {
+  age: bigint
+}
+
+"""
+input type for inserting data into table "person"
+"""
+input person_insert_input {
+  age: bigint
+  city: String
+  gender: String
+  job: String
+  name: String
+  personfriends: personfriend_arr_rel_insert_input
+  personfriendsByName: personfriend_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type person_max_fields {
+  age: bigint
+  city: String
+  gender: String
+  job: String
+  name: String
+}
+
+"""
+order by max() on columns of table "person"
+"""
+input person_max_order_by {
+  age: order_by
+  city: order_by
+  gender: order_by
+  job: order_by
+  name: order_by
+}
+
+"""aggregate min on columns"""
+type person_min_fields {
+  age: bigint
+  city: String
+  gender: String
+  job: String
+  name: String
+}
+
+"""
+order by min() on columns of table "person"
+"""
+input person_min_order_by {
+  age: order_by
+  city: order_by
+  gender: order_by
+  job: order_by
+  name: order_by
+}
+
+"""
+response of any mutation on the table "person"
+"""
+type person_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [person!]!
+}
+
+"""
+input type for inserting object relation for remote table "person"
+"""
+input person_obj_rel_insert_input {
+  data: person_insert_input!
+  on_conflict: person_on_conflict
+}
+
+"""
+on conflict condition type for table "person"
+"""
+input person_on_conflict {
+  constraint: person_constraint!
+  update_columns: [person_update_column!]!
+  where: person_bool_exp
+}
+
+"""
+ordering options when selecting data from "person"
+"""
+input person_order_by {
+  age: order_by
+  city: order_by
+  gender: order_by
+  job: order_by
+  name: order_by
+  personfriendsByName_aggregate: personfriend_aggregate_order_by
+  personfriends_aggregate: personfriend_aggregate_order_by
+}
+
+"""
+select columns of table "person"
+"""
+enum person_select_column {
+  """column name"""
+  age
+
+  """column name"""
+  city
+
+  """column name"""
+  gender
+
+  """column name"""
+  job
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "person"
+"""
+input person_set_input {
+  age: bigint
+  city: String
+  gender: String
+  job: String
+  name: String
+}
+
+"""aggregate stddev on columns"""
+type person_stddev_fields {
+  age: Float
+}
+
+"""
+order by stddev() on columns of table "person"
+"""
+input person_stddev_order_by {
+  age: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type person_stddev_pop_fields {
+  age: Float
+}
+
+"""
+order by stddev_pop() on columns of table "person"
+"""
+input person_stddev_pop_order_by {
+  age: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type person_stddev_samp_fields {
+  age: Float
+}
+
+"""
+order by stddev_samp() on columns of table "person"
+"""
+input person_stddev_samp_order_by {
+  age: order_by
+}
+
+"""aggregate sum on columns"""
+type person_sum_fields {
+  age: bigint
+}
+
+"""
+order by sum() on columns of table "person"
+"""
+input person_sum_order_by {
+  age: order_by
+}
+
+"""
+update columns of table "person"
+"""
+enum person_update_column {
+  """column name"""
+  age
+
+  """column name"""
+  city
+
+  """column name"""
+  gender
+
+  """column name"""
+  job
+
+  """column name"""
+  name
+}
+
+"""aggregate var_pop on columns"""
+type person_var_pop_fields {
+  age: Float
+}
+
+"""
+order by var_pop() on columns of table "person"
+"""
+input person_var_pop_order_by {
+  age: order_by
+}
+
+"""aggregate var_samp on columns"""
+type person_var_samp_fields {
+  age: Float
+}
+
+"""
+order by var_samp() on columns of table "person"
+"""
+input person_var_samp_order_by {
+  age: order_by
+}
+
+"""aggregate variance on columns"""
+type person_variance_fields {
+  age: Float
+}
+
+"""
+order by variance() on columns of table "person"
+"""
+input person_variance_order_by {
+  age: order_by
+}
+
+"""
+columns and relationships of "personfriend"
+"""
+type personfriend {
+  friend: String
+  name: String
+
+  """An object relationship"""
+  person: person
+
+  """An object relationship"""
+  personByName: person
+  year: bigint
+}
+
+"""
+aggregated selection of "personfriend"
+"""
+type personfriend_aggregate {
+  aggregate: personfriend_aggregate_fields
+  nodes: [personfriend!]!
+}
+
+"""
+aggregate fields of "personfriend"
+"""
+type personfriend_aggregate_fields {
+  avg: personfriend_avg_fields
+  count(columns: [personfriend_select_column!], distinct: Boolean): Int
+  max: personfriend_max_fields
+  min: personfriend_min_fields
+  stddev: personfriend_stddev_fields
+  stddev_pop: personfriend_stddev_pop_fields
+  stddev_samp: personfriend_stddev_samp_fields
+  sum: personfriend_sum_fields
+  var_pop: personfriend_var_pop_fields
+  var_samp: personfriend_var_samp_fields
+  variance: personfriend_variance_fields
+}
+
+"""
+order by aggregate values of table "personfriend"
+"""
+input personfriend_aggregate_order_by {
+  avg: personfriend_avg_order_by
+  count: order_by
+  max: personfriend_max_order_by
+  min: personfriend_min_order_by
+  stddev: personfriend_stddev_order_by
+  stddev_pop: personfriend_stddev_pop_order_by
+  stddev_samp: personfriend_stddev_samp_order_by
+  sum: personfriend_sum_order_by
+  var_pop: personfriend_var_pop_order_by
+  var_samp: personfriend_var_samp_order_by
+  variance: personfriend_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "personfriend"
+"""
+input personfriend_arr_rel_insert_input {
+  data: [personfriend_insert_input!]!
+}
+
+"""aggregate avg on columns"""
+type personfriend_avg_fields {
+  year: Float
+}
+
+"""
+order by avg() on columns of table "personfriend"
+"""
+input personfriend_avg_order_by {
+  year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "personfriend". All fields are combined with a logical 'AND'.
+"""
+input personfriend_bool_exp {
+  _and: [personfriend_bool_exp]
+  _not: personfriend_bool_exp
+  _or: [personfriend_bool_exp]
+  friend: String_comparison_exp
+  name: String_comparison_exp
+  person: person_bool_exp
+  personByName: person_bool_exp
+  year: bigint_comparison_exp
+}
+
+"""
+input type for incrementing integer columne in table "personfriend"
+"""
+input personfriend_inc_input {
+  year: bigint
+}
+
+"""
+input type for inserting data into table "personfriend"
+"""
+input personfriend_insert_input {
+  friend: String
+  name: String
+  person: person_obj_rel_insert_input
+  personByName: person_obj_rel_insert_input
+  year: bigint
+}
+
+"""aggregate max on columns"""
+type personfriend_max_fields {
+  friend: String
+  name: String
+  year: bigint
+}
+
+"""
+order by max() on columns of table "personfriend"
+"""
+input personfriend_max_order_by {
+  friend: order_by
+  name: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type personfriend_min_fields {
+  friend: String
+  name: String
+  year: bigint
+}
+
+"""
+order by min() on columns of table "personfriend"
+"""
+input personfriend_min_order_by {
+  friend: order_by
+  name: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "personfriend"
+"""
+type personfriend_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [personfriend!]!
+}
+
+"""
+input type for inserting object relation for remote table "personfriend"
+"""
+input personfriend_obj_rel_insert_input {
+  data: personfriend_insert_input!
+}
+
+"""
+ordering options when selecting data from "personfriend"
+"""
+input personfriend_order_by {
+  friend: order_by
+  name: order_by
+  person: person_order_by
+  personByName: person_order_by
+  year: order_by
+}
+
+"""
+select columns of table "personfriend"
+"""
+enum personfriend_select_column {
+  """column name"""
+  friend
+
+  """column name"""
+  name
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "personfriend"
+"""
+input personfriend_set_input {
+  friend: String
+  name: String
+  year: bigint
+}
+
+"""aggregate stddev on columns"""
+type personfriend_stddev_fields {
+  year: Float
+}
+
+"""
+order by stddev() on columns of table "personfriend"
+"""
+input personfriend_stddev_order_by {
+  year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type personfriend_stddev_pop_fields {
+  year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "personfriend"
+"""
+input personfriend_stddev_pop_order_by {
+  year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type personfriend_stddev_samp_fields {
+  year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "personfriend"
+"""
+input personfriend_stddev_samp_order_by {
+  year: order_by
+}
+
+"""aggregate sum on columns"""
+type personfriend_sum_fields {
+  year: bigint
+}
+
+"""
+order by sum() on columns of table "personfriend"
+"""
+input personfriend_sum_order_by {
+  year: order_by
+}
+
+"""aggregate var_pop on columns"""
+type personfriend_var_pop_fields {
+  year: Float
+}
+
+"""
+order by var_pop() on columns of table "personfriend"
+"""
+input personfriend_var_pop_order_by {
+  year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type personfriend_var_samp_fields {
+  year: Float
+}
+
+"""
+order by var_samp() on columns of table "personfriend"
+"""
+input personfriend_var_samp_order_by {
+  year: order_by
+}
+
+"""aggregate variance on columns"""
+type personfriend_variance_fields {
+  year: Float
+}
+
+"""
+order by variance() on columns of table "personfriend"
+"""
+input personfriend_variance_order_by {
+  year: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "person"
+  """
+  person(
+    """distinct select on columns"""
+    distinct_on: [person_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [person_order_by!]
+
+    """filter the rows returned"""
+    where: person_bool_exp
+  ): [person!]!
+
+  """
+  fetch aggregated fields from the table: "person"
+  """
+  person_aggregate(
+    """distinct select on columns"""
+    distinct_on: [person_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [person_order_by!]
+
+    """filter the rows returned"""
+    where: person_bool_exp
+  ): person_aggregate!
+
+  """fetch data from the table: "person" using primary key columns"""
+  person_by_pk(name: String!): person
+
+  """
+  fetch data from the table: "personfriend"
+  """
+  personfriend(
+    """distinct select on columns"""
+    distinct_on: [personfriend_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [personfriend_order_by!]
+
+    """filter the rows returned"""
+    where: personfriend_bool_exp
+  ): [personfriend!]!
+
+  """
+  fetch aggregated fields from the table: "personfriend"
+  """
+  personfriend_aggregate(
+    """distinct select on columns"""
+    distinct_on: [personfriend_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [personfriend_order_by!]
+
+    """filter the rows returned"""
+    where: personfriend_bool_exp
+  ): personfriend_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "person"
+  """
+  person(
+    """distinct select on columns"""
+    distinct_on: [person_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [person_order_by!]
+
+    """filter the rows returned"""
+    where: person_bool_exp
+  ): [person!]!
+
+  """
+  fetch aggregated fields from the table: "person"
+  """
+  person_aggregate(
+    """distinct select on columns"""
+    distinct_on: [person_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [person_order_by!]
+
+    """filter the rows returned"""
+    where: person_bool_exp
+  ): person_aggregate!
+
+  """fetch data from the table: "person" using primary key columns"""
+  person_by_pk(name: String!): person
+
+  """
+  fetch data from the table: "personfriend"
+  """
+  personfriend(
+    """distinct select on columns"""
+    distinct_on: [personfriend_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [personfriend_order_by!]
+
+    """filter the rows returned"""
+    where: personfriend_bool_exp
+  ): [personfriend!]!
+
+  """
+  fetch aggregated fields from the table: "personfriend"
+  """
+  personfriend_aggregate(
+    """distinct select on columns"""
+    distinct_on: [personfriend_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [personfriend_order_by!]
+
+    """filter the rows returned"""
+    where: personfriend_bool_exp
+  ): personfriend_aggregate!
+}

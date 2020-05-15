@@ -1,0 +1,1396 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+columns and relationships of "geographic"
+"""
+type geographic {
+  city_name: String
+  county: String
+
+  """An array relationship"""
+  locations(
+    """distinct select on columns"""
+    distinct_on: [location_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [location_order_by!]
+
+    """filter the rows returned"""
+    where: location_bool_exp
+  ): [location!]!
+
+  """An aggregated array relationship"""
+  locations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [location_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [location_order_by!]
+
+    """filter the rows returned"""
+    where: location_bool_exp
+  ): location_aggregate!
+  region: String
+
+  """An array relationship"""
+  restaurants(
+    """distinct select on columns"""
+    distinct_on: [restaurant_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [restaurant_order_by!]
+
+    """filter the rows returned"""
+    where: restaurant_bool_exp
+  ): [restaurant!]!
+
+  """An aggregated array relationship"""
+  restaurants_aggregate(
+    """distinct select on columns"""
+    distinct_on: [restaurant_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [restaurant_order_by!]
+
+    """filter the rows returned"""
+    where: restaurant_bool_exp
+  ): restaurant_aggregate!
+}
+
+"""
+aggregated selection of "geographic"
+"""
+type geographic_aggregate {
+  aggregate: geographic_aggregate_fields
+  nodes: [geographic!]!
+}
+
+"""
+aggregate fields of "geographic"
+"""
+type geographic_aggregate_fields {
+  count(columns: [geographic_select_column!], distinct: Boolean): Int
+  max: geographic_max_fields
+  min: geographic_min_fields
+}
+
+"""
+order by aggregate values of table "geographic"
+"""
+input geographic_aggregate_order_by {
+  count: order_by
+  max: geographic_max_order_by
+  min: geographic_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "geographic"
+"""
+input geographic_arr_rel_insert_input {
+  data: [geographic_insert_input!]!
+  on_conflict: geographic_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "geographic". All fields are combined with a logical 'AND'.
+"""
+input geographic_bool_exp {
+  _and: [geographic_bool_exp]
+  _not: geographic_bool_exp
+  _or: [geographic_bool_exp]
+  city_name: String_comparison_exp
+  county: String_comparison_exp
+  locations: location_bool_exp
+  region: String_comparison_exp
+  restaurants: restaurant_bool_exp
+}
+
+"""
+unique or primary key constraints on table "geographic"
+"""
+enum geographic_constraint {
+  """unique or primary key constraint"""
+  idx_19796_sqlite_autoindex_geographic_1
+}
+
+"""
+input type for inserting data into table "geographic"
+"""
+input geographic_insert_input {
+  city_name: String
+  county: String
+  locations: location_arr_rel_insert_input
+  region: String
+  restaurants: restaurant_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type geographic_max_fields {
+  city_name: String
+  county: String
+  region: String
+}
+
+"""
+order by max() on columns of table "geographic"
+"""
+input geographic_max_order_by {
+  city_name: order_by
+  county: order_by
+  region: order_by
+}
+
+"""aggregate min on columns"""
+type geographic_min_fields {
+  city_name: String
+  county: String
+  region: String
+}
+
+"""
+order by min() on columns of table "geographic"
+"""
+input geographic_min_order_by {
+  city_name: order_by
+  county: order_by
+  region: order_by
+}
+
+"""
+response of any mutation on the table "geographic"
+"""
+type geographic_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [geographic!]!
+}
+
+"""
+input type for inserting object relation for remote table "geographic"
+"""
+input geographic_obj_rel_insert_input {
+  data: geographic_insert_input!
+  on_conflict: geographic_on_conflict
+}
+
+"""
+on conflict condition type for table "geographic"
+"""
+input geographic_on_conflict {
+  constraint: geographic_constraint!
+  update_columns: [geographic_update_column!]!
+  where: geographic_bool_exp
+}
+
+"""
+ordering options when selecting data from "geographic"
+"""
+input geographic_order_by {
+  city_name: order_by
+  county: order_by
+  locations_aggregate: location_aggregate_order_by
+  region: order_by
+  restaurants_aggregate: restaurant_aggregate_order_by
+}
+
+"""
+select columns of table "geographic"
+"""
+enum geographic_select_column {
+  """column name"""
+  city_name
+
+  """column name"""
+  county
+
+  """column name"""
+  region
+}
+
+"""
+input type for updating data in table "geographic"
+"""
+input geographic_set_input {
+  city_name: String
+  county: String
+  region: String
+}
+
+"""
+update columns of table "geographic"
+"""
+enum geographic_update_column {
+  """column name"""
+  city_name
+
+  """column name"""
+  county
+
+  """column name"""
+  region
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "location"
+"""
+type location {
+  city_name: String
+
+  """An object relationship"""
+  geographic: geographic
+  house_number: Int
+  restaurant_id: Int
+  street_name: String
+}
+
+"""
+aggregated selection of "location"
+"""
+type location_aggregate {
+  aggregate: location_aggregate_fields
+  nodes: [location!]!
+}
+
+"""
+aggregate fields of "location"
+"""
+type location_aggregate_fields {
+  avg: location_avg_fields
+  count(columns: [location_select_column!], distinct: Boolean): Int
+  max: location_max_fields
+  min: location_min_fields
+  stddev: location_stddev_fields
+  stddev_pop: location_stddev_pop_fields
+  stddev_samp: location_stddev_samp_fields
+  sum: location_sum_fields
+  var_pop: location_var_pop_fields
+  var_samp: location_var_samp_fields
+  variance: location_variance_fields
+}
+
+"""
+order by aggregate values of table "location"
+"""
+input location_aggregate_order_by {
+  avg: location_avg_order_by
+  count: order_by
+  max: location_max_order_by
+  min: location_min_order_by
+  stddev: location_stddev_order_by
+  stddev_pop: location_stddev_pop_order_by
+  stddev_samp: location_stddev_samp_order_by
+  sum: location_sum_order_by
+  var_pop: location_var_pop_order_by
+  var_samp: location_var_samp_order_by
+  variance: location_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "location"
+"""
+input location_arr_rel_insert_input {
+  data: [location_insert_input!]!
+  on_conflict: location_on_conflict
+}
+
+"""aggregate avg on columns"""
+type location_avg_fields {
+  house_number: Float
+  restaurant_id: Float
+}
+
+"""
+order by avg() on columns of table "location"
+"""
+input location_avg_order_by {
+  house_number: order_by
+  restaurant_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "location". All fields are combined with a logical 'AND'.
+"""
+input location_bool_exp {
+  _and: [location_bool_exp]
+  _not: location_bool_exp
+  _or: [location_bool_exp]
+  city_name: String_comparison_exp
+  geographic: geographic_bool_exp
+  house_number: Int_comparison_exp
+  restaurant_id: Int_comparison_exp
+  street_name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "location"
+"""
+enum location_constraint {
+  """unique or primary key constraint"""
+  idx_19808_sqlite_autoindex_location_1
+}
+
+"""
+input type for incrementing integer columne in table "location"
+"""
+input location_inc_input {
+  house_number: Int
+  restaurant_id: Int
+}
+
+"""
+input type for inserting data into table "location"
+"""
+input location_insert_input {
+  city_name: String
+  geographic: geographic_obj_rel_insert_input
+  house_number: Int
+  restaurant_id: Int
+  street_name: String
+}
+
+"""aggregate max on columns"""
+type location_max_fields {
+  city_name: String
+  house_number: Int
+  restaurant_id: Int
+  street_name: String
+}
+
+"""
+order by max() on columns of table "location"
+"""
+input location_max_order_by {
+  city_name: order_by
+  house_number: order_by
+  restaurant_id: order_by
+  street_name: order_by
+}
+
+"""aggregate min on columns"""
+type location_min_fields {
+  city_name: String
+  house_number: Int
+  restaurant_id: Int
+  street_name: String
+}
+
+"""
+order by min() on columns of table "location"
+"""
+input location_min_order_by {
+  city_name: order_by
+  house_number: order_by
+  restaurant_id: order_by
+  street_name: order_by
+}
+
+"""
+response of any mutation on the table "location"
+"""
+type location_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [location!]!
+}
+
+"""
+input type for inserting object relation for remote table "location"
+"""
+input location_obj_rel_insert_input {
+  data: location_insert_input!
+  on_conflict: location_on_conflict
+}
+
+"""
+on conflict condition type for table "location"
+"""
+input location_on_conflict {
+  constraint: location_constraint!
+  update_columns: [location_update_column!]!
+  where: location_bool_exp
+}
+
+"""
+ordering options when selecting data from "location"
+"""
+input location_order_by {
+  city_name: order_by
+  geographic: geographic_order_by
+  house_number: order_by
+  restaurant_id: order_by
+  street_name: order_by
+}
+
+"""
+select columns of table "location"
+"""
+enum location_select_column {
+  """column name"""
+  city_name
+
+  """column name"""
+  house_number
+
+  """column name"""
+  restaurant_id
+
+  """column name"""
+  street_name
+}
+
+"""
+input type for updating data in table "location"
+"""
+input location_set_input {
+  city_name: String
+  house_number: Int
+  restaurant_id: Int
+  street_name: String
+}
+
+"""aggregate stddev on columns"""
+type location_stddev_fields {
+  house_number: Float
+  restaurant_id: Float
+}
+
+"""
+order by stddev() on columns of table "location"
+"""
+input location_stddev_order_by {
+  house_number: order_by
+  restaurant_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type location_stddev_pop_fields {
+  house_number: Float
+  restaurant_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "location"
+"""
+input location_stddev_pop_order_by {
+  house_number: order_by
+  restaurant_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type location_stddev_samp_fields {
+  house_number: Float
+  restaurant_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "location"
+"""
+input location_stddev_samp_order_by {
+  house_number: order_by
+  restaurant_id: order_by
+}
+
+"""aggregate sum on columns"""
+type location_sum_fields {
+  house_number: Int
+  restaurant_id: Int
+}
+
+"""
+order by sum() on columns of table "location"
+"""
+input location_sum_order_by {
+  house_number: order_by
+  restaurant_id: order_by
+}
+
+"""
+update columns of table "location"
+"""
+enum location_update_column {
+  """column name"""
+  city_name
+
+  """column name"""
+  house_number
+
+  """column name"""
+  restaurant_id
+
+  """column name"""
+  street_name
+}
+
+"""aggregate var_pop on columns"""
+type location_var_pop_fields {
+  house_number: Float
+  restaurant_id: Float
+}
+
+"""
+order by var_pop() on columns of table "location"
+"""
+input location_var_pop_order_by {
+  house_number: order_by
+  restaurant_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type location_var_samp_fields {
+  house_number: Float
+  restaurant_id: Float
+}
+
+"""
+order by var_samp() on columns of table "location"
+"""
+input location_var_samp_order_by {
+  house_number: order_by
+  restaurant_id: order_by
+}
+
+"""aggregate variance on columns"""
+type location_variance_fields {
+  house_number: Float
+  restaurant_id: Float
+}
+
+"""
+order by variance() on columns of table "location"
+"""
+input location_variance_order_by {
+  house_number: order_by
+  restaurant_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "geographic"
+  """
+  delete_geographic(
+    """filter the rows which have to be deleted"""
+    where: geographic_bool_exp!
+  ): geographic_mutation_response
+
+  """
+  delete data from the table: "location"
+  """
+  delete_location(
+    """filter the rows which have to be deleted"""
+    where: location_bool_exp!
+  ): location_mutation_response
+
+  """
+  delete data from the table: "restaurant"
+  """
+  delete_restaurant(
+    """filter the rows which have to be deleted"""
+    where: restaurant_bool_exp!
+  ): restaurant_mutation_response
+
+  """
+  insert data into the table: "geographic"
+  """
+  insert_geographic(
+    """the rows to be inserted"""
+    objects: [geographic_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: geographic_on_conflict
+  ): geographic_mutation_response
+
+  """
+  insert data into the table: "location"
+  """
+  insert_location(
+    """the rows to be inserted"""
+    objects: [location_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: location_on_conflict
+  ): location_mutation_response
+
+  """
+  insert data into the table: "restaurant"
+  """
+  insert_restaurant(
+    """the rows to be inserted"""
+    objects: [restaurant_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: restaurant_on_conflict
+  ): restaurant_mutation_response
+
+  """
+  update data of the table: "geographic"
+  """
+  update_geographic(
+    """sets the columns of the filtered rows to the given values"""
+    _set: geographic_set_input
+
+    """filter the rows which have to be updated"""
+    where: geographic_bool_exp!
+  ): geographic_mutation_response
+
+  """
+  update data of the table: "location"
+  """
+  update_location(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: location_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: location_set_input
+
+    """filter the rows which have to be updated"""
+    where: location_bool_exp!
+  ): location_mutation_response
+
+  """
+  update data of the table: "restaurant"
+  """
+  update_restaurant(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: restaurant_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: restaurant_set_input
+
+    """filter the rows which have to be updated"""
+    where: restaurant_bool_exp!
+  ): restaurant_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "geographic"
+  """
+  geographic(
+    """distinct select on columns"""
+    distinct_on: [geographic_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [geographic_order_by!]
+
+    """filter the rows returned"""
+    where: geographic_bool_exp
+  ): [geographic!]!
+
+  """
+  fetch aggregated fields from the table: "geographic"
+  """
+  geographic_aggregate(
+    """distinct select on columns"""
+    distinct_on: [geographic_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [geographic_order_by!]
+
+    """filter the rows returned"""
+    where: geographic_bool_exp
+  ): geographic_aggregate!
+
+  """
+  fetch data from the table: "location"
+  """
+  location(
+    """distinct select on columns"""
+    distinct_on: [location_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [location_order_by!]
+
+    """filter the rows returned"""
+    where: location_bool_exp
+  ): [location!]!
+
+  """
+  fetch aggregated fields from the table: "location"
+  """
+  location_aggregate(
+    """distinct select on columns"""
+    distinct_on: [location_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [location_order_by!]
+
+    """filter the rows returned"""
+    where: location_bool_exp
+  ): location_aggregate!
+
+  """
+  fetch data from the table: "restaurant"
+  """
+  restaurant(
+    """distinct select on columns"""
+    distinct_on: [restaurant_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [restaurant_order_by!]
+
+    """filter the rows returned"""
+    where: restaurant_bool_exp
+  ): [restaurant!]!
+
+  """
+  fetch aggregated fields from the table: "restaurant"
+  """
+  restaurant_aggregate(
+    """distinct select on columns"""
+    distinct_on: [restaurant_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [restaurant_order_by!]
+
+    """filter the rows returned"""
+    where: restaurant_bool_exp
+  ): restaurant_aggregate!
+}
+
+"""
+columns and relationships of "restaurant"
+"""
+type restaurant {
+  city_name: String
+  food_type: String
+
+  """An object relationship"""
+  geographic: geographic
+  id: Int
+  name: String
+  rating: Float
+}
+
+"""
+aggregated selection of "restaurant"
+"""
+type restaurant_aggregate {
+  aggregate: restaurant_aggregate_fields
+  nodes: [restaurant!]!
+}
+
+"""
+aggregate fields of "restaurant"
+"""
+type restaurant_aggregate_fields {
+  avg: restaurant_avg_fields
+  count(columns: [restaurant_select_column!], distinct: Boolean): Int
+  max: restaurant_max_fields
+  min: restaurant_min_fields
+  stddev: restaurant_stddev_fields
+  stddev_pop: restaurant_stddev_pop_fields
+  stddev_samp: restaurant_stddev_samp_fields
+  sum: restaurant_sum_fields
+  var_pop: restaurant_var_pop_fields
+  var_samp: restaurant_var_samp_fields
+  variance: restaurant_variance_fields
+}
+
+"""
+order by aggregate values of table "restaurant"
+"""
+input restaurant_aggregate_order_by {
+  avg: restaurant_avg_order_by
+  count: order_by
+  max: restaurant_max_order_by
+  min: restaurant_min_order_by
+  stddev: restaurant_stddev_order_by
+  stddev_pop: restaurant_stddev_pop_order_by
+  stddev_samp: restaurant_stddev_samp_order_by
+  sum: restaurant_sum_order_by
+  var_pop: restaurant_var_pop_order_by
+  var_samp: restaurant_var_samp_order_by
+  variance: restaurant_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "restaurant"
+"""
+input restaurant_arr_rel_insert_input {
+  data: [restaurant_insert_input!]!
+  on_conflict: restaurant_on_conflict
+}
+
+"""aggregate avg on columns"""
+type restaurant_avg_fields {
+  id: Float
+  rating: Float
+}
+
+"""
+order by avg() on columns of table "restaurant"
+"""
+input restaurant_avg_order_by {
+  id: order_by
+  rating: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "restaurant". All fields are combined with a logical 'AND'.
+"""
+input restaurant_bool_exp {
+  _and: [restaurant_bool_exp]
+  _not: restaurant_bool_exp
+  _or: [restaurant_bool_exp]
+  city_name: String_comparison_exp
+  food_type: String_comparison_exp
+  geographic: geographic_bool_exp
+  id: Int_comparison_exp
+  name: String_comparison_exp
+  rating: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "restaurant"
+"""
+enum restaurant_constraint {
+  """unique or primary key constraint"""
+  idx_19802_sqlite_autoindex_restaurant_1
+}
+
+"""
+input type for incrementing integer columne in table "restaurant"
+"""
+input restaurant_inc_input {
+  id: Int
+}
+
+"""
+input type for inserting data into table "restaurant"
+"""
+input restaurant_insert_input {
+  city_name: String
+  food_type: String
+  geographic: geographic_obj_rel_insert_input
+  id: Int
+  name: String
+  rating: Float
+}
+
+"""aggregate max on columns"""
+type restaurant_max_fields {
+  city_name: String
+  food_type: String
+  id: Int
+  name: String
+  rating: Float
+}
+
+"""
+order by max() on columns of table "restaurant"
+"""
+input restaurant_max_order_by {
+  city_name: order_by
+  food_type: order_by
+  id: order_by
+  name: order_by
+  rating: order_by
+}
+
+"""aggregate min on columns"""
+type restaurant_min_fields {
+  city_name: String
+  food_type: String
+  id: Int
+  name: String
+  rating: Float
+}
+
+"""
+order by min() on columns of table "restaurant"
+"""
+input restaurant_min_order_by {
+  city_name: order_by
+  food_type: order_by
+  id: order_by
+  name: order_by
+  rating: order_by
+}
+
+"""
+response of any mutation on the table "restaurant"
+"""
+type restaurant_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [restaurant!]!
+}
+
+"""
+input type for inserting object relation for remote table "restaurant"
+"""
+input restaurant_obj_rel_insert_input {
+  data: restaurant_insert_input!
+  on_conflict: restaurant_on_conflict
+}
+
+"""
+on conflict condition type for table "restaurant"
+"""
+input restaurant_on_conflict {
+  constraint: restaurant_constraint!
+  update_columns: [restaurant_update_column!]!
+  where: restaurant_bool_exp
+}
+
+"""
+ordering options when selecting data from "restaurant"
+"""
+input restaurant_order_by {
+  city_name: order_by
+  food_type: order_by
+  geographic: geographic_order_by
+  id: order_by
+  name: order_by
+  rating: order_by
+}
+
+"""
+select columns of table "restaurant"
+"""
+enum restaurant_select_column {
+  """column name"""
+  city_name
+
+  """column name"""
+  food_type
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  rating
+}
+
+"""
+input type for updating data in table "restaurant"
+"""
+input restaurant_set_input {
+  city_name: String
+  food_type: String
+  id: Int
+  name: String
+  rating: Float
+}
+
+"""aggregate stddev on columns"""
+type restaurant_stddev_fields {
+  id: Float
+  rating: Float
+}
+
+"""
+order by stddev() on columns of table "restaurant"
+"""
+input restaurant_stddev_order_by {
+  id: order_by
+  rating: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type restaurant_stddev_pop_fields {
+  id: Float
+  rating: Float
+}
+
+"""
+order by stddev_pop() on columns of table "restaurant"
+"""
+input restaurant_stddev_pop_order_by {
+  id: order_by
+  rating: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type restaurant_stddev_samp_fields {
+  id: Float
+  rating: Float
+}
+
+"""
+order by stddev_samp() on columns of table "restaurant"
+"""
+input restaurant_stddev_samp_order_by {
+  id: order_by
+  rating: order_by
+}
+
+"""aggregate sum on columns"""
+type restaurant_sum_fields {
+  id: Int
+  rating: Float
+}
+
+"""
+order by sum() on columns of table "restaurant"
+"""
+input restaurant_sum_order_by {
+  id: order_by
+  rating: order_by
+}
+
+"""
+update columns of table "restaurant"
+"""
+enum restaurant_update_column {
+  """column name"""
+  city_name
+
+  """column name"""
+  food_type
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  rating
+}
+
+"""aggregate var_pop on columns"""
+type restaurant_var_pop_fields {
+  id: Float
+  rating: Float
+}
+
+"""
+order by var_pop() on columns of table "restaurant"
+"""
+input restaurant_var_pop_order_by {
+  id: order_by
+  rating: order_by
+}
+
+"""aggregate var_samp on columns"""
+type restaurant_var_samp_fields {
+  id: Float
+  rating: Float
+}
+
+"""
+order by var_samp() on columns of table "restaurant"
+"""
+input restaurant_var_samp_order_by {
+  id: order_by
+  rating: order_by
+}
+
+"""aggregate variance on columns"""
+type restaurant_variance_fields {
+  id: Float
+  rating: Float
+}
+
+"""
+order by variance() on columns of table "restaurant"
+"""
+input restaurant_variance_order_by {
+  id: order_by
+  rating: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "geographic"
+  """
+  geographic(
+    """distinct select on columns"""
+    distinct_on: [geographic_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [geographic_order_by!]
+
+    """filter the rows returned"""
+    where: geographic_bool_exp
+  ): [geographic!]!
+
+  """
+  fetch aggregated fields from the table: "geographic"
+  """
+  geographic_aggregate(
+    """distinct select on columns"""
+    distinct_on: [geographic_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [geographic_order_by!]
+
+    """filter the rows returned"""
+    where: geographic_bool_exp
+  ): geographic_aggregate!
+
+  """
+  fetch data from the table: "location"
+  """
+  location(
+    """distinct select on columns"""
+    distinct_on: [location_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [location_order_by!]
+
+    """filter the rows returned"""
+    where: location_bool_exp
+  ): [location!]!
+
+  """
+  fetch aggregated fields from the table: "location"
+  """
+  location_aggregate(
+    """distinct select on columns"""
+    distinct_on: [location_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [location_order_by!]
+
+    """filter the rows returned"""
+    where: location_bool_exp
+  ): location_aggregate!
+
+  """
+  fetch data from the table: "restaurant"
+  """
+  restaurant(
+    """distinct select on columns"""
+    distinct_on: [restaurant_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [restaurant_order_by!]
+
+    """filter the rows returned"""
+    where: restaurant_bool_exp
+  ): [restaurant!]!
+
+  """
+  fetch aggregated fields from the table: "restaurant"
+  """
+  restaurant_aggregate(
+    """distinct select on columns"""
+    distinct_on: [restaurant_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [restaurant_order_by!]
+
+    """filter the rows returned"""
+    where: restaurant_bool_exp
+  ): restaurant_aggregate!
+}

@@ -1,0 +1,5740 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "addresses"
+"""
+type addresses {
+  address_details: String
+  address_id: bigint!
+
+  """An array relationship"""
+  events(
+    """distinct select on columns"""
+    distinct_on: [events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [events_order_by!]
+
+    """filter the rows returned"""
+    where: events_bool_exp
+  ): [events!]!
+
+  """An aggregated array relationship"""
+  events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [events_order_by!]
+
+    """filter the rows returned"""
+    where: events_bool_exp
+  ): events_aggregate!
+}
+
+"""
+aggregated selection of "addresses"
+"""
+type addresses_aggregate {
+  aggregate: addresses_aggregate_fields
+  nodes: [addresses!]!
+}
+
+"""
+aggregate fields of "addresses"
+"""
+type addresses_aggregate_fields {
+  avg: addresses_avg_fields
+  count(columns: [addresses_select_column!], distinct: Boolean): Int
+  max: addresses_max_fields
+  min: addresses_min_fields
+  stddev: addresses_stddev_fields
+  stddev_pop: addresses_stddev_pop_fields
+  stddev_samp: addresses_stddev_samp_fields
+  sum: addresses_sum_fields
+  var_pop: addresses_var_pop_fields
+  var_samp: addresses_var_samp_fields
+  variance: addresses_variance_fields
+}
+
+"""
+order by aggregate values of table "addresses"
+"""
+input addresses_aggregate_order_by {
+  avg: addresses_avg_order_by
+  count: order_by
+  max: addresses_max_order_by
+  min: addresses_min_order_by
+  stddev: addresses_stddev_order_by
+  stddev_pop: addresses_stddev_pop_order_by
+  stddev_samp: addresses_stddev_samp_order_by
+  sum: addresses_sum_order_by
+  var_pop: addresses_var_pop_order_by
+  var_samp: addresses_var_samp_order_by
+  variance: addresses_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "addresses"
+"""
+input addresses_arr_rel_insert_input {
+  data: [addresses_insert_input!]!
+  on_conflict: addresses_on_conflict
+}
+
+"""aggregate avg on columns"""
+type addresses_avg_fields {
+  address_id: Float
+}
+
+"""
+order by avg() on columns of table "addresses"
+"""
+input addresses_avg_order_by {
+  address_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "addresses". All fields are combined with a logical 'AND'.
+"""
+input addresses_bool_exp {
+  _and: [addresses_bool_exp]
+  _not: addresses_bool_exp
+  _or: [addresses_bool_exp]
+  address_details: String_comparison_exp
+  address_id: bigint_comparison_exp
+  events: events_bool_exp
+}
+
+"""
+unique or primary key constraints on table "addresses"
+"""
+enum addresses_constraint {
+  """unique or primary key constraint"""
+  idx_18318_addresses_pkey
+
+  """unique or primary key constraint"""
+  idx_18318_sqlite_autoindex_addresses_1
+}
+
+"""
+input type for incrementing integer columne in table "addresses"
+"""
+input addresses_inc_input {
+  address_id: bigint
+}
+
+"""
+input type for inserting data into table "addresses"
+"""
+input addresses_insert_input {
+  address_details: String
+  address_id: bigint
+  events: events_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type addresses_max_fields {
+  address_details: String
+  address_id: bigint
+}
+
+"""
+order by max() on columns of table "addresses"
+"""
+input addresses_max_order_by {
+  address_details: order_by
+  address_id: order_by
+}
+
+"""aggregate min on columns"""
+type addresses_min_fields {
+  address_details: String
+  address_id: bigint
+}
+
+"""
+order by min() on columns of table "addresses"
+"""
+input addresses_min_order_by {
+  address_details: order_by
+  address_id: order_by
+}
+
+"""
+response of any mutation on the table "addresses"
+"""
+type addresses_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [addresses!]!
+}
+
+"""
+input type for inserting object relation for remote table "addresses"
+"""
+input addresses_obj_rel_insert_input {
+  data: addresses_insert_input!
+  on_conflict: addresses_on_conflict
+}
+
+"""
+on conflict condition type for table "addresses"
+"""
+input addresses_on_conflict {
+  constraint: addresses_constraint!
+  update_columns: [addresses_update_column!]!
+  where: addresses_bool_exp
+}
+
+"""
+ordering options when selecting data from "addresses"
+"""
+input addresses_order_by {
+  address_details: order_by
+  address_id: order_by
+  events_aggregate: events_aggregate_order_by
+}
+
+"""
+select columns of table "addresses"
+"""
+enum addresses_select_column {
+  """column name"""
+  address_details
+
+  """column name"""
+  address_id
+}
+
+"""
+input type for updating data in table "addresses"
+"""
+input addresses_set_input {
+  address_details: String
+  address_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type addresses_stddev_fields {
+  address_id: Float
+}
+
+"""
+order by stddev() on columns of table "addresses"
+"""
+input addresses_stddev_order_by {
+  address_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type addresses_stddev_pop_fields {
+  address_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "addresses"
+"""
+input addresses_stddev_pop_order_by {
+  address_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type addresses_stddev_samp_fields {
+  address_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "addresses"
+"""
+input addresses_stddev_samp_order_by {
+  address_id: order_by
+}
+
+"""aggregate sum on columns"""
+type addresses_sum_fields {
+  address_id: bigint
+}
+
+"""
+order by sum() on columns of table "addresses"
+"""
+input addresses_sum_order_by {
+  address_id: order_by
+}
+
+"""
+update columns of table "addresses"
+"""
+enum addresses_update_column {
+  """column name"""
+  address_details
+
+  """column name"""
+  address_id
+}
+
+"""aggregate var_pop on columns"""
+type addresses_var_pop_fields {
+  address_id: Float
+}
+
+"""
+order by var_pop() on columns of table "addresses"
+"""
+input addresses_var_pop_order_by {
+  address_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type addresses_var_samp_fields {
+  address_id: Float
+}
+
+"""
+order by var_samp() on columns of table "addresses"
+"""
+input addresses_var_samp_order_by {
+  address_id: order_by
+}
+
+"""aggregate variance on columns"""
+type addresses_variance_fields {
+  address_id: Float
+}
+
+"""
+order by variance() on columns of table "addresses"
+"""
+input addresses_variance_order_by {
+  address_id: order_by
+}
+
+"""
+columns and relationships of "agreements"
+"""
+type agreements {
+  document_id: bigint!
+
+  """An object relationship"""
+  event: events
+  event_id: bigint
+}
+
+"""
+aggregated selection of "agreements"
+"""
+type agreements_aggregate {
+  aggregate: agreements_aggregate_fields
+  nodes: [agreements!]!
+}
+
+"""
+aggregate fields of "agreements"
+"""
+type agreements_aggregate_fields {
+  avg: agreements_avg_fields
+  count(columns: [agreements_select_column!], distinct: Boolean): Int
+  max: agreements_max_fields
+  min: agreements_min_fields
+  stddev: agreements_stddev_fields
+  stddev_pop: agreements_stddev_pop_fields
+  stddev_samp: agreements_stddev_samp_fields
+  sum: agreements_sum_fields
+  var_pop: agreements_var_pop_fields
+  var_samp: agreements_var_samp_fields
+  variance: agreements_variance_fields
+}
+
+"""
+order by aggregate values of table "agreements"
+"""
+input agreements_aggregate_order_by {
+  avg: agreements_avg_order_by
+  count: order_by
+  max: agreements_max_order_by
+  min: agreements_min_order_by
+  stddev: agreements_stddev_order_by
+  stddev_pop: agreements_stddev_pop_order_by
+  stddev_samp: agreements_stddev_samp_order_by
+  sum: agreements_sum_order_by
+  var_pop: agreements_var_pop_order_by
+  var_samp: agreements_var_samp_order_by
+  variance: agreements_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "agreements"
+"""
+input agreements_arr_rel_insert_input {
+  data: [agreements_insert_input!]!
+  on_conflict: agreements_on_conflict
+}
+
+"""aggregate avg on columns"""
+type agreements_avg_fields {
+  document_id: Float
+  event_id: Float
+}
+
+"""
+order by avg() on columns of table "agreements"
+"""
+input agreements_avg_order_by {
+  document_id: order_by
+  event_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "agreements". All fields are combined with a logical 'AND'.
+"""
+input agreements_bool_exp {
+  _and: [agreements_bool_exp]
+  _not: agreements_bool_exp
+  _or: [agreements_bool_exp]
+  document_id: bigint_comparison_exp
+  event: events_bool_exp
+  event_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "agreements"
+"""
+enum agreements_constraint {
+  """unique or primary key constraint"""
+  idx_18375_agreements_pkey
+}
+
+"""
+input type for incrementing integer columne in table "agreements"
+"""
+input agreements_inc_input {
+  document_id: bigint
+  event_id: bigint
+}
+
+"""
+input type for inserting data into table "agreements"
+"""
+input agreements_insert_input {
+  document_id: bigint
+  event: events_obj_rel_insert_input
+  event_id: bigint
+}
+
+"""aggregate max on columns"""
+type agreements_max_fields {
+  document_id: bigint
+  event_id: bigint
+}
+
+"""
+order by max() on columns of table "agreements"
+"""
+input agreements_max_order_by {
+  document_id: order_by
+  event_id: order_by
+}
+
+"""aggregate min on columns"""
+type agreements_min_fields {
+  document_id: bigint
+  event_id: bigint
+}
+
+"""
+order by min() on columns of table "agreements"
+"""
+input agreements_min_order_by {
+  document_id: order_by
+  event_id: order_by
+}
+
+"""
+response of any mutation on the table "agreements"
+"""
+type agreements_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [agreements!]!
+}
+
+"""
+input type for inserting object relation for remote table "agreements"
+"""
+input agreements_obj_rel_insert_input {
+  data: agreements_insert_input!
+  on_conflict: agreements_on_conflict
+}
+
+"""
+on conflict condition type for table "agreements"
+"""
+input agreements_on_conflict {
+  constraint: agreements_constraint!
+  update_columns: [agreements_update_column!]!
+  where: agreements_bool_exp
+}
+
+"""
+ordering options when selecting data from "agreements"
+"""
+input agreements_order_by {
+  document_id: order_by
+  event: events_order_by
+  event_id: order_by
+}
+
+"""
+select columns of table "agreements"
+"""
+enum agreements_select_column {
+  """column name"""
+  document_id
+
+  """column name"""
+  event_id
+}
+
+"""
+input type for updating data in table "agreements"
+"""
+input agreements_set_input {
+  document_id: bigint
+  event_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type agreements_stddev_fields {
+  document_id: Float
+  event_id: Float
+}
+
+"""
+order by stddev() on columns of table "agreements"
+"""
+input agreements_stddev_order_by {
+  document_id: order_by
+  event_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type agreements_stddev_pop_fields {
+  document_id: Float
+  event_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "agreements"
+"""
+input agreements_stddev_pop_order_by {
+  document_id: order_by
+  event_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type agreements_stddev_samp_fields {
+  document_id: Float
+  event_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "agreements"
+"""
+input agreements_stddev_samp_order_by {
+  document_id: order_by
+  event_id: order_by
+}
+
+"""aggregate sum on columns"""
+type agreements_sum_fields {
+  document_id: bigint
+  event_id: bigint
+}
+
+"""
+order by sum() on columns of table "agreements"
+"""
+input agreements_sum_order_by {
+  document_id: order_by
+  event_id: order_by
+}
+
+"""
+update columns of table "agreements"
+"""
+enum agreements_update_column {
+  """column name"""
+  document_id
+
+  """column name"""
+  event_id
+}
+
+"""aggregate var_pop on columns"""
+type agreements_var_pop_fields {
+  document_id: Float
+  event_id: Float
+}
+
+"""
+order by var_pop() on columns of table "agreements"
+"""
+input agreements_var_pop_order_by {
+  document_id: order_by
+  event_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type agreements_var_samp_fields {
+  document_id: Float
+  event_id: Float
+}
+
+"""
+order by var_samp() on columns of table "agreements"
+"""
+input agreements_var_samp_order_by {
+  document_id: order_by
+  event_id: order_by
+}
+
+"""aggregate variance on columns"""
+type agreements_variance_fields {
+  document_id: Float
+  event_id: Float
+}
+
+"""
+order by variance() on columns of table "agreements"
+"""
+input agreements_variance_order_by {
+  document_id: order_by
+  event_id: order_by
+}
+
+"""
+columns and relationships of "assets"
+"""
+type assets {
+  asset_id: bigint!
+
+  """An array relationship"""
+  assets_in_events(
+    """distinct select on columns"""
+    distinct_on: [assets_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [assets_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: assets_in_events_bool_exp
+  ): [assets_in_events!]!
+
+  """An aggregated array relationship"""
+  assets_in_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [assets_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [assets_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: assets_in_events_bool_exp
+  ): assets_in_events_aggregate!
+  other_details: String
+}
+
+"""
+aggregated selection of "assets"
+"""
+type assets_aggregate {
+  aggregate: assets_aggregate_fields
+  nodes: [assets!]!
+}
+
+"""
+aggregate fields of "assets"
+"""
+type assets_aggregate_fields {
+  avg: assets_avg_fields
+  count(columns: [assets_select_column!], distinct: Boolean): Int
+  max: assets_max_fields
+  min: assets_min_fields
+  stddev: assets_stddev_fields
+  stddev_pop: assets_stddev_pop_fields
+  stddev_samp: assets_stddev_samp_fields
+  sum: assets_sum_fields
+  var_pop: assets_var_pop_fields
+  var_samp: assets_var_samp_fields
+  variance: assets_variance_fields
+}
+
+"""
+order by aggregate values of table "assets"
+"""
+input assets_aggregate_order_by {
+  avg: assets_avg_order_by
+  count: order_by
+  max: assets_max_order_by
+  min: assets_min_order_by
+  stddev: assets_stddev_order_by
+  stddev_pop: assets_stddev_pop_order_by
+  stddev_samp: assets_stddev_samp_order_by
+  sum: assets_sum_order_by
+  var_pop: assets_var_pop_order_by
+  var_samp: assets_var_samp_order_by
+  variance: assets_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "assets"
+"""
+input assets_arr_rel_insert_input {
+  data: [assets_insert_input!]!
+  on_conflict: assets_on_conflict
+}
+
+"""aggregate avg on columns"""
+type assets_avg_fields {
+  asset_id: Float
+}
+
+"""
+order by avg() on columns of table "assets"
+"""
+input assets_avg_order_by {
+  asset_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "assets". All fields are combined with a logical 'AND'.
+"""
+input assets_bool_exp {
+  _and: [assets_bool_exp]
+  _not: assets_bool_exp
+  _or: [assets_bool_exp]
+  asset_id: bigint_comparison_exp
+  assets_in_events: assets_in_events_bool_exp
+  other_details: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "assets"
+"""
+enum assets_constraint {
+  """unique or primary key constraint"""
+  idx_18342_assets_pkey
+}
+
+"""
+columns and relationships of "assets_in_events"
+"""
+type assets_in_events {
+  """An object relationship"""
+  asset: assets!
+  asset_id: bigint!
+
+  """An object relationship"""
+  event: events!
+  event_id: bigint!
+}
+
+"""
+aggregated selection of "assets_in_events"
+"""
+type assets_in_events_aggregate {
+  aggregate: assets_in_events_aggregate_fields
+  nodes: [assets_in_events!]!
+}
+
+"""
+aggregate fields of "assets_in_events"
+"""
+type assets_in_events_aggregate_fields {
+  avg: assets_in_events_avg_fields
+  count(columns: [assets_in_events_select_column!], distinct: Boolean): Int
+  max: assets_in_events_max_fields
+  min: assets_in_events_min_fields
+  stddev: assets_in_events_stddev_fields
+  stddev_pop: assets_in_events_stddev_pop_fields
+  stddev_samp: assets_in_events_stddev_samp_fields
+  sum: assets_in_events_sum_fields
+  var_pop: assets_in_events_var_pop_fields
+  var_samp: assets_in_events_var_samp_fields
+  variance: assets_in_events_variance_fields
+}
+
+"""
+order by aggregate values of table "assets_in_events"
+"""
+input assets_in_events_aggregate_order_by {
+  avg: assets_in_events_avg_order_by
+  count: order_by
+  max: assets_in_events_max_order_by
+  min: assets_in_events_min_order_by
+  stddev: assets_in_events_stddev_order_by
+  stddev_pop: assets_in_events_stddev_pop_order_by
+  stddev_samp: assets_in_events_stddev_samp_order_by
+  sum: assets_in_events_sum_order_by
+  var_pop: assets_in_events_var_pop_order_by
+  var_samp: assets_in_events_var_samp_order_by
+  variance: assets_in_events_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "assets_in_events"
+"""
+input assets_in_events_arr_rel_insert_input {
+  data: [assets_in_events_insert_input!]!
+  on_conflict: assets_in_events_on_conflict
+}
+
+"""aggregate avg on columns"""
+type assets_in_events_avg_fields {
+  asset_id: Float
+  event_id: Float
+}
+
+"""
+order by avg() on columns of table "assets_in_events"
+"""
+input assets_in_events_avg_order_by {
+  asset_id: order_by
+  event_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "assets_in_events". All fields are combined with a logical 'AND'.
+"""
+input assets_in_events_bool_exp {
+  _and: [assets_in_events_bool_exp]
+  _not: assets_in_events_bool_exp
+  _or: [assets_in_events_bool_exp]
+  asset: assets_bool_exp
+  asset_id: bigint_comparison_exp
+  event: events_bool_exp
+  event_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "assets_in_events"
+"""
+enum assets_in_events_constraint {
+  """unique or primary key constraint"""
+  idx_18378_assets_in_events_pkey
+
+  """unique or primary key constraint"""
+  idx_18378_sqlite_autoindex_assets_in_events_1
+}
+
+"""
+input type for incrementing integer columne in table "assets_in_events"
+"""
+input assets_in_events_inc_input {
+  asset_id: bigint
+  event_id: bigint
+}
+
+"""
+input type for inserting data into table "assets_in_events"
+"""
+input assets_in_events_insert_input {
+  asset: assets_obj_rel_insert_input
+  asset_id: bigint
+  event: events_obj_rel_insert_input
+  event_id: bigint
+}
+
+"""aggregate max on columns"""
+type assets_in_events_max_fields {
+  asset_id: bigint
+  event_id: bigint
+}
+
+"""
+order by max() on columns of table "assets_in_events"
+"""
+input assets_in_events_max_order_by {
+  asset_id: order_by
+  event_id: order_by
+}
+
+"""aggregate min on columns"""
+type assets_in_events_min_fields {
+  asset_id: bigint
+  event_id: bigint
+}
+
+"""
+order by min() on columns of table "assets_in_events"
+"""
+input assets_in_events_min_order_by {
+  asset_id: order_by
+  event_id: order_by
+}
+
+"""
+response of any mutation on the table "assets_in_events"
+"""
+type assets_in_events_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [assets_in_events!]!
+}
+
+"""
+input type for inserting object relation for remote table "assets_in_events"
+"""
+input assets_in_events_obj_rel_insert_input {
+  data: assets_in_events_insert_input!
+  on_conflict: assets_in_events_on_conflict
+}
+
+"""
+on conflict condition type for table "assets_in_events"
+"""
+input assets_in_events_on_conflict {
+  constraint: assets_in_events_constraint!
+  update_columns: [assets_in_events_update_column!]!
+  where: assets_in_events_bool_exp
+}
+
+"""
+ordering options when selecting data from "assets_in_events"
+"""
+input assets_in_events_order_by {
+  asset: assets_order_by
+  asset_id: order_by
+  event: events_order_by
+  event_id: order_by
+}
+
+"""
+select columns of table "assets_in_events"
+"""
+enum assets_in_events_select_column {
+  """column name"""
+  asset_id
+
+  """column name"""
+  event_id
+}
+
+"""
+input type for updating data in table "assets_in_events"
+"""
+input assets_in_events_set_input {
+  asset_id: bigint
+  event_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type assets_in_events_stddev_fields {
+  asset_id: Float
+  event_id: Float
+}
+
+"""
+order by stddev() on columns of table "assets_in_events"
+"""
+input assets_in_events_stddev_order_by {
+  asset_id: order_by
+  event_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type assets_in_events_stddev_pop_fields {
+  asset_id: Float
+  event_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "assets_in_events"
+"""
+input assets_in_events_stddev_pop_order_by {
+  asset_id: order_by
+  event_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type assets_in_events_stddev_samp_fields {
+  asset_id: Float
+  event_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "assets_in_events"
+"""
+input assets_in_events_stddev_samp_order_by {
+  asset_id: order_by
+  event_id: order_by
+}
+
+"""aggregate sum on columns"""
+type assets_in_events_sum_fields {
+  asset_id: bigint
+  event_id: bigint
+}
+
+"""
+order by sum() on columns of table "assets_in_events"
+"""
+input assets_in_events_sum_order_by {
+  asset_id: order_by
+  event_id: order_by
+}
+
+"""
+update columns of table "assets_in_events"
+"""
+enum assets_in_events_update_column {
+  """column name"""
+  asset_id
+
+  """column name"""
+  event_id
+}
+
+"""aggregate var_pop on columns"""
+type assets_in_events_var_pop_fields {
+  asset_id: Float
+  event_id: Float
+}
+
+"""
+order by var_pop() on columns of table "assets_in_events"
+"""
+input assets_in_events_var_pop_order_by {
+  asset_id: order_by
+  event_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type assets_in_events_var_samp_fields {
+  asset_id: Float
+  event_id: Float
+}
+
+"""
+order by var_samp() on columns of table "assets_in_events"
+"""
+input assets_in_events_var_samp_order_by {
+  asset_id: order_by
+  event_id: order_by
+}
+
+"""aggregate variance on columns"""
+type assets_in_events_variance_fields {
+  asset_id: Float
+  event_id: Float
+}
+
+"""
+order by variance() on columns of table "assets_in_events"
+"""
+input assets_in_events_variance_order_by {
+  asset_id: order_by
+  event_id: order_by
+}
+
+"""
+input type for incrementing integer columne in table "assets"
+"""
+input assets_inc_input {
+  asset_id: bigint
+}
+
+"""
+input type for inserting data into table "assets"
+"""
+input assets_insert_input {
+  asset_id: bigint
+  assets_in_events: assets_in_events_arr_rel_insert_input
+  other_details: String
+}
+
+"""aggregate max on columns"""
+type assets_max_fields {
+  asset_id: bigint
+  other_details: String
+}
+
+"""
+order by max() on columns of table "assets"
+"""
+input assets_max_order_by {
+  asset_id: order_by
+  other_details: order_by
+}
+
+"""aggregate min on columns"""
+type assets_min_fields {
+  asset_id: bigint
+  other_details: String
+}
+
+"""
+order by min() on columns of table "assets"
+"""
+input assets_min_order_by {
+  asset_id: order_by
+  other_details: order_by
+}
+
+"""
+response of any mutation on the table "assets"
+"""
+type assets_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [assets!]!
+}
+
+"""
+input type for inserting object relation for remote table "assets"
+"""
+input assets_obj_rel_insert_input {
+  data: assets_insert_input!
+  on_conflict: assets_on_conflict
+}
+
+"""
+on conflict condition type for table "assets"
+"""
+input assets_on_conflict {
+  constraint: assets_constraint!
+  update_columns: [assets_update_column!]!
+  where: assets_bool_exp
+}
+
+"""
+ordering options when selecting data from "assets"
+"""
+input assets_order_by {
+  asset_id: order_by
+  assets_in_events_aggregate: assets_in_events_aggregate_order_by
+  other_details: order_by
+}
+
+"""
+select columns of table "assets"
+"""
+enum assets_select_column {
+  """column name"""
+  asset_id
+
+  """column name"""
+  other_details
+}
+
+"""
+input type for updating data in table "assets"
+"""
+input assets_set_input {
+  asset_id: bigint
+  other_details: String
+}
+
+"""aggregate stddev on columns"""
+type assets_stddev_fields {
+  asset_id: Float
+}
+
+"""
+order by stddev() on columns of table "assets"
+"""
+input assets_stddev_order_by {
+  asset_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type assets_stddev_pop_fields {
+  asset_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "assets"
+"""
+input assets_stddev_pop_order_by {
+  asset_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type assets_stddev_samp_fields {
+  asset_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "assets"
+"""
+input assets_stddev_samp_order_by {
+  asset_id: order_by
+}
+
+"""aggregate sum on columns"""
+type assets_sum_fields {
+  asset_id: bigint
+}
+
+"""
+order by sum() on columns of table "assets"
+"""
+input assets_sum_order_by {
+  asset_id: order_by
+}
+
+"""
+update columns of table "assets"
+"""
+enum assets_update_column {
+  """column name"""
+  asset_id
+
+  """column name"""
+  other_details
+}
+
+"""aggregate var_pop on columns"""
+type assets_var_pop_fields {
+  asset_id: Float
+}
+
+"""
+order by var_pop() on columns of table "assets"
+"""
+input assets_var_pop_order_by {
+  asset_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type assets_var_samp_fields {
+  asset_id: Float
+}
+
+"""
+order by var_samp() on columns of table "assets"
+"""
+input assets_var_samp_order_by {
+  asset_id: order_by
+}
+
+"""aggregate variance on columns"""
+type assets_variance_fields {
+  asset_id: Float
+}
+
+"""
+order by variance() on columns of table "assets"
+"""
+input assets_variance_order_by {
+  asset_id: order_by
+}
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "channels"
+"""
+type channels {
+  channel_id: bigint!
+
+  """An array relationship"""
+  events(
+    """distinct select on columns"""
+    distinct_on: [events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [events_order_by!]
+
+    """filter the rows returned"""
+    where: events_bool_exp
+  ): [events!]!
+
+  """An aggregated array relationship"""
+  events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [events_order_by!]
+
+    """filter the rows returned"""
+    where: events_bool_exp
+  ): events_aggregate!
+  other_details: String
+}
+
+"""
+aggregated selection of "channels"
+"""
+type channels_aggregate {
+  aggregate: channels_aggregate_fields
+  nodes: [channels!]!
+}
+
+"""
+aggregate fields of "channels"
+"""
+type channels_aggregate_fields {
+  avg: channels_avg_fields
+  count(columns: [channels_select_column!], distinct: Boolean): Int
+  max: channels_max_fields
+  min: channels_min_fields
+  stddev: channels_stddev_fields
+  stddev_pop: channels_stddev_pop_fields
+  stddev_samp: channels_stddev_samp_fields
+  sum: channels_sum_fields
+  var_pop: channels_var_pop_fields
+  var_samp: channels_var_samp_fields
+  variance: channels_variance_fields
+}
+
+"""
+order by aggregate values of table "channels"
+"""
+input channels_aggregate_order_by {
+  avg: channels_avg_order_by
+  count: order_by
+  max: channels_max_order_by
+  min: channels_min_order_by
+  stddev: channels_stddev_order_by
+  stddev_pop: channels_stddev_pop_order_by
+  stddev_samp: channels_stddev_samp_order_by
+  sum: channels_sum_order_by
+  var_pop: channels_var_pop_order_by
+  var_samp: channels_var_samp_order_by
+  variance: channels_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "channels"
+"""
+input channels_arr_rel_insert_input {
+  data: [channels_insert_input!]!
+  on_conflict: channels_on_conflict
+}
+
+"""aggregate avg on columns"""
+type channels_avg_fields {
+  channel_id: Float
+}
+
+"""
+order by avg() on columns of table "channels"
+"""
+input channels_avg_order_by {
+  channel_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "channels". All fields are combined with a logical 'AND'.
+"""
+input channels_bool_exp {
+  _and: [channels_bool_exp]
+  _not: channels_bool_exp
+  _or: [channels_bool_exp]
+  channel_id: bigint_comparison_exp
+  events: events_bool_exp
+  other_details: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "channels"
+"""
+enum channels_constraint {
+  """unique or primary key constraint"""
+  idx_18348_channels_pkey
+}
+
+"""
+input type for incrementing integer columne in table "channels"
+"""
+input channels_inc_input {
+  channel_id: bigint
+}
+
+"""
+input type for inserting data into table "channels"
+"""
+input channels_insert_input {
+  channel_id: bigint
+  events: events_arr_rel_insert_input
+  other_details: String
+}
+
+"""aggregate max on columns"""
+type channels_max_fields {
+  channel_id: bigint
+  other_details: String
+}
+
+"""
+order by max() on columns of table "channels"
+"""
+input channels_max_order_by {
+  channel_id: order_by
+  other_details: order_by
+}
+
+"""aggregate min on columns"""
+type channels_min_fields {
+  channel_id: bigint
+  other_details: String
+}
+
+"""
+order by min() on columns of table "channels"
+"""
+input channels_min_order_by {
+  channel_id: order_by
+  other_details: order_by
+}
+
+"""
+response of any mutation on the table "channels"
+"""
+type channels_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [channels!]!
+}
+
+"""
+input type for inserting object relation for remote table "channels"
+"""
+input channels_obj_rel_insert_input {
+  data: channels_insert_input!
+  on_conflict: channels_on_conflict
+}
+
+"""
+on conflict condition type for table "channels"
+"""
+input channels_on_conflict {
+  constraint: channels_constraint!
+  update_columns: [channels_update_column!]!
+  where: channels_bool_exp
+}
+
+"""
+ordering options when selecting data from "channels"
+"""
+input channels_order_by {
+  channel_id: order_by
+  events_aggregate: events_aggregate_order_by
+  other_details: order_by
+}
+
+"""
+select columns of table "channels"
+"""
+enum channels_select_column {
+  """column name"""
+  channel_id
+
+  """column name"""
+  other_details
+}
+
+"""
+input type for updating data in table "channels"
+"""
+input channels_set_input {
+  channel_id: bigint
+  other_details: String
+}
+
+"""aggregate stddev on columns"""
+type channels_stddev_fields {
+  channel_id: Float
+}
+
+"""
+order by stddev() on columns of table "channels"
+"""
+input channels_stddev_order_by {
+  channel_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type channels_stddev_pop_fields {
+  channel_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "channels"
+"""
+input channels_stddev_pop_order_by {
+  channel_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type channels_stddev_samp_fields {
+  channel_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "channels"
+"""
+input channels_stddev_samp_order_by {
+  channel_id: order_by
+}
+
+"""aggregate sum on columns"""
+type channels_sum_fields {
+  channel_id: bigint
+}
+
+"""
+order by sum() on columns of table "channels"
+"""
+input channels_sum_order_by {
+  channel_id: order_by
+}
+
+"""
+update columns of table "channels"
+"""
+enum channels_update_column {
+  """column name"""
+  channel_id
+
+  """column name"""
+  other_details
+}
+
+"""aggregate var_pop on columns"""
+type channels_var_pop_fields {
+  channel_id: Float
+}
+
+"""
+order by var_pop() on columns of table "channels"
+"""
+input channels_var_pop_order_by {
+  channel_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type channels_var_samp_fields {
+  channel_id: Float
+}
+
+"""
+order by var_samp() on columns of table "channels"
+"""
+input channels_var_samp_order_by {
+  channel_id: order_by
+}
+
+"""aggregate variance on columns"""
+type channels_variance_fields {
+  channel_id: Float
+}
+
+"""
+order by variance() on columns of table "channels"
+"""
+input channels_variance_order_by {
+  channel_id: order_by
+}
+
+"""
+columns and relationships of "events"
+"""
+type events {
+  """An object relationship"""
+  address: addresses
+  address_id: bigint
+
+  """An array relationship"""
+  agreements(
+    """distinct select on columns"""
+    distinct_on: [agreements_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [agreements_order_by!]
+
+    """filter the rows returned"""
+    where: agreements_bool_exp
+  ): [agreements!]!
+
+  """An aggregated array relationship"""
+  agreements_aggregate(
+    """distinct select on columns"""
+    distinct_on: [agreements_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [agreements_order_by!]
+
+    """filter the rows returned"""
+    where: agreements_bool_exp
+  ): agreements_aggregate!
+
+  """An array relationship"""
+  assets_in_events(
+    """distinct select on columns"""
+    distinct_on: [assets_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [assets_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: assets_in_events_bool_exp
+  ): [assets_in_events!]!
+
+  """An aggregated array relationship"""
+  assets_in_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [assets_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [assets_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: assets_in_events_bool_exp
+  ): assets_in_events_aggregate!
+
+  """An object relationship"""
+  channel: channels
+  channel_id: bigint
+  event_id: bigint!
+  event_type_code: String
+
+  """An object relationship"""
+  finance: finances
+  finance_id: bigint
+
+  """An object relationship"""
+  location: locations
+  location_id: bigint
+
+  """An array relationship"""
+  parties_in_events(
+    """distinct select on columns"""
+    distinct_on: [parties_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [parties_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: parties_in_events_bool_exp
+  ): [parties_in_events!]!
+
+  """An aggregated array relationship"""
+  parties_in_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [parties_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [parties_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: parties_in_events_bool_exp
+  ): parties_in_events_aggregate!
+
+  """An array relationship"""
+  products_in_events(
+    """distinct select on columns"""
+    distinct_on: [products_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: products_in_events_bool_exp
+  ): [products_in_events!]!
+
+  """An aggregated array relationship"""
+  products_in_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: products_in_events_bool_exp
+  ): products_in_events_aggregate!
+}
+
+"""
+aggregated selection of "events"
+"""
+type events_aggregate {
+  aggregate: events_aggregate_fields
+  nodes: [events!]!
+}
+
+"""
+aggregate fields of "events"
+"""
+type events_aggregate_fields {
+  avg: events_avg_fields
+  count(columns: [events_select_column!], distinct: Boolean): Int
+  max: events_max_fields
+  min: events_min_fields
+  stddev: events_stddev_fields
+  stddev_pop: events_stddev_pop_fields
+  stddev_samp: events_stddev_samp_fields
+  sum: events_sum_fields
+  var_pop: events_var_pop_fields
+  var_samp: events_var_samp_fields
+  variance: events_variance_fields
+}
+
+"""
+order by aggregate values of table "events"
+"""
+input events_aggregate_order_by {
+  avg: events_avg_order_by
+  count: order_by
+  max: events_max_order_by
+  min: events_min_order_by
+  stddev: events_stddev_order_by
+  stddev_pop: events_stddev_pop_order_by
+  stddev_samp: events_stddev_samp_order_by
+  sum: events_sum_order_by
+  var_pop: events_var_pop_order_by
+  var_samp: events_var_samp_order_by
+  variance: events_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "events"
+"""
+input events_arr_rel_insert_input {
+  data: [events_insert_input!]!
+  on_conflict: events_on_conflict
+}
+
+"""aggregate avg on columns"""
+type events_avg_fields {
+  address_id: Float
+  channel_id: Float
+  event_id: Float
+  finance_id: Float
+  location_id: Float
+}
+
+"""
+order by avg() on columns of table "events"
+"""
+input events_avg_order_by {
+  address_id: order_by
+  channel_id: order_by
+  event_id: order_by
+  finance_id: order_by
+  location_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "events". All fields are combined with a logical 'AND'.
+"""
+input events_bool_exp {
+  _and: [events_bool_exp]
+  _not: events_bool_exp
+  _or: [events_bool_exp]
+  address: addresses_bool_exp
+  address_id: bigint_comparison_exp
+  agreements: agreements_bool_exp
+  assets_in_events: assets_in_events_bool_exp
+  channel: channels_bool_exp
+  channel_id: bigint_comparison_exp
+  event_id: bigint_comparison_exp
+  event_type_code: String_comparison_exp
+  finance: finances_bool_exp
+  finance_id: bigint_comparison_exp
+  location: locations_bool_exp
+  location_id: bigint_comparison_exp
+  parties_in_events: parties_in_events_bool_exp
+  products_in_events: products_in_events_bool_exp
+}
+
+"""
+unique or primary key constraints on table "events"
+"""
+enum events_constraint {
+  """unique or primary key constraint"""
+  idx_18360_events_pkey
+
+  """unique or primary key constraint"""
+  idx_18360_sqlite_autoindex_events_1
+}
+
+"""
+input type for incrementing integer columne in table "events"
+"""
+input events_inc_input {
+  address_id: bigint
+  channel_id: bigint
+  event_id: bigint
+  finance_id: bigint
+  location_id: bigint
+}
+
+"""
+input type for inserting data into table "events"
+"""
+input events_insert_input {
+  address: addresses_obj_rel_insert_input
+  address_id: bigint
+  agreements: agreements_arr_rel_insert_input
+  assets_in_events: assets_in_events_arr_rel_insert_input
+  channel: channels_obj_rel_insert_input
+  channel_id: bigint
+  event_id: bigint
+  event_type_code: String
+  finance: finances_obj_rel_insert_input
+  finance_id: bigint
+  location: locations_obj_rel_insert_input
+  location_id: bigint
+  parties_in_events: parties_in_events_arr_rel_insert_input
+  products_in_events: products_in_events_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type events_max_fields {
+  address_id: bigint
+  channel_id: bigint
+  event_id: bigint
+  event_type_code: String
+  finance_id: bigint
+  location_id: bigint
+}
+
+"""
+order by max() on columns of table "events"
+"""
+input events_max_order_by {
+  address_id: order_by
+  channel_id: order_by
+  event_id: order_by
+  event_type_code: order_by
+  finance_id: order_by
+  location_id: order_by
+}
+
+"""aggregate min on columns"""
+type events_min_fields {
+  address_id: bigint
+  channel_id: bigint
+  event_id: bigint
+  event_type_code: String
+  finance_id: bigint
+  location_id: bigint
+}
+
+"""
+order by min() on columns of table "events"
+"""
+input events_min_order_by {
+  address_id: order_by
+  channel_id: order_by
+  event_id: order_by
+  event_type_code: order_by
+  finance_id: order_by
+  location_id: order_by
+}
+
+"""
+response of any mutation on the table "events"
+"""
+type events_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [events!]!
+}
+
+"""
+input type for inserting object relation for remote table "events"
+"""
+input events_obj_rel_insert_input {
+  data: events_insert_input!
+  on_conflict: events_on_conflict
+}
+
+"""
+on conflict condition type for table "events"
+"""
+input events_on_conflict {
+  constraint: events_constraint!
+  update_columns: [events_update_column!]!
+  where: events_bool_exp
+}
+
+"""
+ordering options when selecting data from "events"
+"""
+input events_order_by {
+  address: addresses_order_by
+  address_id: order_by
+  agreements_aggregate: agreements_aggregate_order_by
+  assets_in_events_aggregate: assets_in_events_aggregate_order_by
+  channel: channels_order_by
+  channel_id: order_by
+  event_id: order_by
+  event_type_code: order_by
+  finance: finances_order_by
+  finance_id: order_by
+  location: locations_order_by
+  location_id: order_by
+  parties_in_events_aggregate: parties_in_events_aggregate_order_by
+  products_in_events_aggregate: products_in_events_aggregate_order_by
+}
+
+"""
+select columns of table "events"
+"""
+enum events_select_column {
+  """column name"""
+  address_id
+
+  """column name"""
+  channel_id
+
+  """column name"""
+  event_id
+
+  """column name"""
+  event_type_code
+
+  """column name"""
+  finance_id
+
+  """column name"""
+  location_id
+}
+
+"""
+input type for updating data in table "events"
+"""
+input events_set_input {
+  address_id: bigint
+  channel_id: bigint
+  event_id: bigint
+  event_type_code: String
+  finance_id: bigint
+  location_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type events_stddev_fields {
+  address_id: Float
+  channel_id: Float
+  event_id: Float
+  finance_id: Float
+  location_id: Float
+}
+
+"""
+order by stddev() on columns of table "events"
+"""
+input events_stddev_order_by {
+  address_id: order_by
+  channel_id: order_by
+  event_id: order_by
+  finance_id: order_by
+  location_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type events_stddev_pop_fields {
+  address_id: Float
+  channel_id: Float
+  event_id: Float
+  finance_id: Float
+  location_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "events"
+"""
+input events_stddev_pop_order_by {
+  address_id: order_by
+  channel_id: order_by
+  event_id: order_by
+  finance_id: order_by
+  location_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type events_stddev_samp_fields {
+  address_id: Float
+  channel_id: Float
+  event_id: Float
+  finance_id: Float
+  location_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "events"
+"""
+input events_stddev_samp_order_by {
+  address_id: order_by
+  channel_id: order_by
+  event_id: order_by
+  finance_id: order_by
+  location_id: order_by
+}
+
+"""aggregate sum on columns"""
+type events_sum_fields {
+  address_id: bigint
+  channel_id: bigint
+  event_id: bigint
+  finance_id: bigint
+  location_id: bigint
+}
+
+"""
+order by sum() on columns of table "events"
+"""
+input events_sum_order_by {
+  address_id: order_by
+  channel_id: order_by
+  event_id: order_by
+  finance_id: order_by
+  location_id: order_by
+}
+
+"""
+update columns of table "events"
+"""
+enum events_update_column {
+  """column name"""
+  address_id
+
+  """column name"""
+  channel_id
+
+  """column name"""
+  event_id
+
+  """column name"""
+  event_type_code
+
+  """column name"""
+  finance_id
+
+  """column name"""
+  location_id
+}
+
+"""aggregate var_pop on columns"""
+type events_var_pop_fields {
+  address_id: Float
+  channel_id: Float
+  event_id: Float
+  finance_id: Float
+  location_id: Float
+}
+
+"""
+order by var_pop() on columns of table "events"
+"""
+input events_var_pop_order_by {
+  address_id: order_by
+  channel_id: order_by
+  event_id: order_by
+  finance_id: order_by
+  location_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type events_var_samp_fields {
+  address_id: Float
+  channel_id: Float
+  event_id: Float
+  finance_id: Float
+  location_id: Float
+}
+
+"""
+order by var_samp() on columns of table "events"
+"""
+input events_var_samp_order_by {
+  address_id: order_by
+  channel_id: order_by
+  event_id: order_by
+  finance_id: order_by
+  location_id: order_by
+}
+
+"""aggregate variance on columns"""
+type events_variance_fields {
+  address_id: Float
+  channel_id: Float
+  event_id: Float
+  finance_id: Float
+  location_id: Float
+}
+
+"""
+order by variance() on columns of table "events"
+"""
+input events_variance_order_by {
+  address_id: order_by
+  channel_id: order_by
+  event_id: order_by
+  finance_id: order_by
+  location_id: order_by
+}
+
+"""
+columns and relationships of "finances"
+"""
+type finances {
+  """An array relationship"""
+  events(
+    """distinct select on columns"""
+    distinct_on: [events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [events_order_by!]
+
+    """filter the rows returned"""
+    where: events_bool_exp
+  ): [events!]!
+
+  """An aggregated array relationship"""
+  events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [events_order_by!]
+
+    """filter the rows returned"""
+    where: events_bool_exp
+  ): events_aggregate!
+  finance_id: bigint!
+  other_details: String
+}
+
+"""
+aggregated selection of "finances"
+"""
+type finances_aggregate {
+  aggregate: finances_aggregate_fields
+  nodes: [finances!]!
+}
+
+"""
+aggregate fields of "finances"
+"""
+type finances_aggregate_fields {
+  avg: finances_avg_fields
+  count(columns: [finances_select_column!], distinct: Boolean): Int
+  max: finances_max_fields
+  min: finances_min_fields
+  stddev: finances_stddev_fields
+  stddev_pop: finances_stddev_pop_fields
+  stddev_samp: finances_stddev_samp_fields
+  sum: finances_sum_fields
+  var_pop: finances_var_pop_fields
+  var_samp: finances_var_samp_fields
+  variance: finances_variance_fields
+}
+
+"""
+order by aggregate values of table "finances"
+"""
+input finances_aggregate_order_by {
+  avg: finances_avg_order_by
+  count: order_by
+  max: finances_max_order_by
+  min: finances_min_order_by
+  stddev: finances_stddev_order_by
+  stddev_pop: finances_stddev_pop_order_by
+  stddev_samp: finances_stddev_samp_order_by
+  sum: finances_sum_order_by
+  var_pop: finances_var_pop_order_by
+  var_samp: finances_var_samp_order_by
+  variance: finances_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "finances"
+"""
+input finances_arr_rel_insert_input {
+  data: [finances_insert_input!]!
+  on_conflict: finances_on_conflict
+}
+
+"""aggregate avg on columns"""
+type finances_avg_fields {
+  finance_id: Float
+}
+
+"""
+order by avg() on columns of table "finances"
+"""
+input finances_avg_order_by {
+  finance_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "finances". All fields are combined with a logical 'AND'.
+"""
+input finances_bool_exp {
+  _and: [finances_bool_exp]
+  _not: finances_bool_exp
+  _or: [finances_bool_exp]
+  events: events_bool_exp
+  finance_id: bigint_comparison_exp
+  other_details: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "finances"
+"""
+enum finances_constraint {
+  """unique or primary key constraint"""
+  idx_18354_finances_pkey
+}
+
+"""
+input type for incrementing integer columne in table "finances"
+"""
+input finances_inc_input {
+  finance_id: bigint
+}
+
+"""
+input type for inserting data into table "finances"
+"""
+input finances_insert_input {
+  events: events_arr_rel_insert_input
+  finance_id: bigint
+  other_details: String
+}
+
+"""aggregate max on columns"""
+type finances_max_fields {
+  finance_id: bigint
+  other_details: String
+}
+
+"""
+order by max() on columns of table "finances"
+"""
+input finances_max_order_by {
+  finance_id: order_by
+  other_details: order_by
+}
+
+"""aggregate min on columns"""
+type finances_min_fields {
+  finance_id: bigint
+  other_details: String
+}
+
+"""
+order by min() on columns of table "finances"
+"""
+input finances_min_order_by {
+  finance_id: order_by
+  other_details: order_by
+}
+
+"""
+response of any mutation on the table "finances"
+"""
+type finances_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [finances!]!
+}
+
+"""
+input type for inserting object relation for remote table "finances"
+"""
+input finances_obj_rel_insert_input {
+  data: finances_insert_input!
+  on_conflict: finances_on_conflict
+}
+
+"""
+on conflict condition type for table "finances"
+"""
+input finances_on_conflict {
+  constraint: finances_constraint!
+  update_columns: [finances_update_column!]!
+  where: finances_bool_exp
+}
+
+"""
+ordering options when selecting data from "finances"
+"""
+input finances_order_by {
+  events_aggregate: events_aggregate_order_by
+  finance_id: order_by
+  other_details: order_by
+}
+
+"""
+select columns of table "finances"
+"""
+enum finances_select_column {
+  """column name"""
+  finance_id
+
+  """column name"""
+  other_details
+}
+
+"""
+input type for updating data in table "finances"
+"""
+input finances_set_input {
+  finance_id: bigint
+  other_details: String
+}
+
+"""aggregate stddev on columns"""
+type finances_stddev_fields {
+  finance_id: Float
+}
+
+"""
+order by stddev() on columns of table "finances"
+"""
+input finances_stddev_order_by {
+  finance_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type finances_stddev_pop_fields {
+  finance_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "finances"
+"""
+input finances_stddev_pop_order_by {
+  finance_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type finances_stddev_samp_fields {
+  finance_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "finances"
+"""
+input finances_stddev_samp_order_by {
+  finance_id: order_by
+}
+
+"""aggregate sum on columns"""
+type finances_sum_fields {
+  finance_id: bigint
+}
+
+"""
+order by sum() on columns of table "finances"
+"""
+input finances_sum_order_by {
+  finance_id: order_by
+}
+
+"""
+update columns of table "finances"
+"""
+enum finances_update_column {
+  """column name"""
+  finance_id
+
+  """column name"""
+  other_details
+}
+
+"""aggregate var_pop on columns"""
+type finances_var_pop_fields {
+  finance_id: Float
+}
+
+"""
+order by var_pop() on columns of table "finances"
+"""
+input finances_var_pop_order_by {
+  finance_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type finances_var_samp_fields {
+  finance_id: Float
+}
+
+"""
+order by var_samp() on columns of table "finances"
+"""
+input finances_var_samp_order_by {
+  finance_id: order_by
+}
+
+"""aggregate variance on columns"""
+type finances_variance_fields {
+  finance_id: Float
+}
+
+"""
+order by variance() on columns of table "finances"
+"""
+input finances_variance_order_by {
+  finance_id: order_by
+}
+
+"""
+columns and relationships of "locations"
+"""
+type locations {
+  """An array relationship"""
+  events(
+    """distinct select on columns"""
+    distinct_on: [events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [events_order_by!]
+
+    """filter the rows returned"""
+    where: events_bool_exp
+  ): [events!]!
+
+  """An aggregated array relationship"""
+  events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [events_order_by!]
+
+    """filter the rows returned"""
+    where: events_bool_exp
+  ): events_aggregate!
+  location_id: bigint!
+  other_details: String
+}
+
+"""
+aggregated selection of "locations"
+"""
+type locations_aggregate {
+  aggregate: locations_aggregate_fields
+  nodes: [locations!]!
+}
+
+"""
+aggregate fields of "locations"
+"""
+type locations_aggregate_fields {
+  avg: locations_avg_fields
+  count(columns: [locations_select_column!], distinct: Boolean): Int
+  max: locations_max_fields
+  min: locations_min_fields
+  stddev: locations_stddev_fields
+  stddev_pop: locations_stddev_pop_fields
+  stddev_samp: locations_stddev_samp_fields
+  sum: locations_sum_fields
+  var_pop: locations_var_pop_fields
+  var_samp: locations_var_samp_fields
+  variance: locations_variance_fields
+}
+
+"""
+order by aggregate values of table "locations"
+"""
+input locations_aggregate_order_by {
+  avg: locations_avg_order_by
+  count: order_by
+  max: locations_max_order_by
+  min: locations_min_order_by
+  stddev: locations_stddev_order_by
+  stddev_pop: locations_stddev_pop_order_by
+  stddev_samp: locations_stddev_samp_order_by
+  sum: locations_sum_order_by
+  var_pop: locations_var_pop_order_by
+  var_samp: locations_var_samp_order_by
+  variance: locations_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "locations"
+"""
+input locations_arr_rel_insert_input {
+  data: [locations_insert_input!]!
+  on_conflict: locations_on_conflict
+}
+
+"""aggregate avg on columns"""
+type locations_avg_fields {
+  location_id: Float
+}
+
+"""
+order by avg() on columns of table "locations"
+"""
+input locations_avg_order_by {
+  location_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "locations". All fields are combined with a logical 'AND'.
+"""
+input locations_bool_exp {
+  _and: [locations_bool_exp]
+  _not: locations_bool_exp
+  _or: [locations_bool_exp]
+  events: events_bool_exp
+  location_id: bigint_comparison_exp
+  other_details: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "locations"
+"""
+enum locations_constraint {
+  """unique or primary key constraint"""
+  idx_18324_locations_pkey
+}
+
+"""
+input type for incrementing integer columne in table "locations"
+"""
+input locations_inc_input {
+  location_id: bigint
+}
+
+"""
+input type for inserting data into table "locations"
+"""
+input locations_insert_input {
+  events: events_arr_rel_insert_input
+  location_id: bigint
+  other_details: String
+}
+
+"""aggregate max on columns"""
+type locations_max_fields {
+  location_id: bigint
+  other_details: String
+}
+
+"""
+order by max() on columns of table "locations"
+"""
+input locations_max_order_by {
+  location_id: order_by
+  other_details: order_by
+}
+
+"""aggregate min on columns"""
+type locations_min_fields {
+  location_id: bigint
+  other_details: String
+}
+
+"""
+order by min() on columns of table "locations"
+"""
+input locations_min_order_by {
+  location_id: order_by
+  other_details: order_by
+}
+
+"""
+response of any mutation on the table "locations"
+"""
+type locations_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [locations!]!
+}
+
+"""
+input type for inserting object relation for remote table "locations"
+"""
+input locations_obj_rel_insert_input {
+  data: locations_insert_input!
+  on_conflict: locations_on_conflict
+}
+
+"""
+on conflict condition type for table "locations"
+"""
+input locations_on_conflict {
+  constraint: locations_constraint!
+  update_columns: [locations_update_column!]!
+  where: locations_bool_exp
+}
+
+"""
+ordering options when selecting data from "locations"
+"""
+input locations_order_by {
+  events_aggregate: events_aggregate_order_by
+  location_id: order_by
+  other_details: order_by
+}
+
+"""
+select columns of table "locations"
+"""
+enum locations_select_column {
+  """column name"""
+  location_id
+
+  """column name"""
+  other_details
+}
+
+"""
+input type for updating data in table "locations"
+"""
+input locations_set_input {
+  location_id: bigint
+  other_details: String
+}
+
+"""aggregate stddev on columns"""
+type locations_stddev_fields {
+  location_id: Float
+}
+
+"""
+order by stddev() on columns of table "locations"
+"""
+input locations_stddev_order_by {
+  location_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type locations_stddev_pop_fields {
+  location_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "locations"
+"""
+input locations_stddev_pop_order_by {
+  location_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type locations_stddev_samp_fields {
+  location_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "locations"
+"""
+input locations_stddev_samp_order_by {
+  location_id: order_by
+}
+
+"""aggregate sum on columns"""
+type locations_sum_fields {
+  location_id: bigint
+}
+
+"""
+order by sum() on columns of table "locations"
+"""
+input locations_sum_order_by {
+  location_id: order_by
+}
+
+"""
+update columns of table "locations"
+"""
+enum locations_update_column {
+  """column name"""
+  location_id
+
+  """column name"""
+  other_details
+}
+
+"""aggregate var_pop on columns"""
+type locations_var_pop_fields {
+  location_id: Float
+}
+
+"""
+order by var_pop() on columns of table "locations"
+"""
+input locations_var_pop_order_by {
+  location_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type locations_var_samp_fields {
+  location_id: Float
+}
+
+"""
+order by var_samp() on columns of table "locations"
+"""
+input locations_var_samp_order_by {
+  location_id: order_by
+}
+
+"""aggregate variance on columns"""
+type locations_variance_fields {
+  location_id: Float
+}
+
+"""
+order by variance() on columns of table "locations"
+"""
+input locations_variance_order_by {
+  location_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "addresses"
+  """
+  delete_addresses(
+    """filter the rows which have to be deleted"""
+    where: addresses_bool_exp!
+  ): addresses_mutation_response
+
+  """
+  delete data from the table: "agreements"
+  """
+  delete_agreements(
+    """filter the rows which have to be deleted"""
+    where: agreements_bool_exp!
+  ): agreements_mutation_response
+
+  """
+  delete data from the table: "assets"
+  """
+  delete_assets(
+    """filter the rows which have to be deleted"""
+    where: assets_bool_exp!
+  ): assets_mutation_response
+
+  """
+  delete data from the table: "assets_in_events"
+  """
+  delete_assets_in_events(
+    """filter the rows which have to be deleted"""
+    where: assets_in_events_bool_exp!
+  ): assets_in_events_mutation_response
+
+  """
+  delete data from the table: "channels"
+  """
+  delete_channels(
+    """filter the rows which have to be deleted"""
+    where: channels_bool_exp!
+  ): channels_mutation_response
+
+  """
+  delete data from the table: "events"
+  """
+  delete_events(
+    """filter the rows which have to be deleted"""
+    where: events_bool_exp!
+  ): events_mutation_response
+
+  """
+  delete data from the table: "finances"
+  """
+  delete_finances(
+    """filter the rows which have to be deleted"""
+    where: finances_bool_exp!
+  ): finances_mutation_response
+
+  """
+  delete data from the table: "locations"
+  """
+  delete_locations(
+    """filter the rows which have to be deleted"""
+    where: locations_bool_exp!
+  ): locations_mutation_response
+
+  """
+  delete data from the table: "parties"
+  """
+  delete_parties(
+    """filter the rows which have to be deleted"""
+    where: parties_bool_exp!
+  ): parties_mutation_response
+
+  """
+  delete data from the table: "parties_in_events"
+  """
+  delete_parties_in_events(
+    """filter the rows which have to be deleted"""
+    where: parties_in_events_bool_exp!
+  ): parties_in_events_mutation_response
+
+  """
+  delete data from the table: "products"
+  """
+  delete_products(
+    """filter the rows which have to be deleted"""
+    where: products_bool_exp!
+  ): products_mutation_response
+
+  """
+  delete data from the table: "products_in_events"
+  """
+  delete_products_in_events(
+    """filter the rows which have to be deleted"""
+    where: products_in_events_bool_exp!
+  ): products_in_events_mutation_response
+
+  """
+  insert data into the table: "addresses"
+  """
+  insert_addresses(
+    """the rows to be inserted"""
+    objects: [addresses_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: addresses_on_conflict
+  ): addresses_mutation_response
+
+  """
+  insert data into the table: "agreements"
+  """
+  insert_agreements(
+    """the rows to be inserted"""
+    objects: [agreements_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: agreements_on_conflict
+  ): agreements_mutation_response
+
+  """
+  insert data into the table: "assets"
+  """
+  insert_assets(
+    """the rows to be inserted"""
+    objects: [assets_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: assets_on_conflict
+  ): assets_mutation_response
+
+  """
+  insert data into the table: "assets_in_events"
+  """
+  insert_assets_in_events(
+    """the rows to be inserted"""
+    objects: [assets_in_events_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: assets_in_events_on_conflict
+  ): assets_in_events_mutation_response
+
+  """
+  insert data into the table: "channels"
+  """
+  insert_channels(
+    """the rows to be inserted"""
+    objects: [channels_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: channels_on_conflict
+  ): channels_mutation_response
+
+  """
+  insert data into the table: "events"
+  """
+  insert_events(
+    """the rows to be inserted"""
+    objects: [events_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: events_on_conflict
+  ): events_mutation_response
+
+  """
+  insert data into the table: "finances"
+  """
+  insert_finances(
+    """the rows to be inserted"""
+    objects: [finances_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: finances_on_conflict
+  ): finances_mutation_response
+
+  """
+  insert data into the table: "locations"
+  """
+  insert_locations(
+    """the rows to be inserted"""
+    objects: [locations_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: locations_on_conflict
+  ): locations_mutation_response
+
+  """
+  insert data into the table: "parties"
+  """
+  insert_parties(
+    """the rows to be inserted"""
+    objects: [parties_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: parties_on_conflict
+  ): parties_mutation_response
+
+  """
+  insert data into the table: "parties_in_events"
+  """
+  insert_parties_in_events(
+    """the rows to be inserted"""
+    objects: [parties_in_events_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: parties_in_events_on_conflict
+  ): parties_in_events_mutation_response
+
+  """
+  insert data into the table: "products"
+  """
+  insert_products(
+    """the rows to be inserted"""
+    objects: [products_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: products_on_conflict
+  ): products_mutation_response
+
+  """
+  insert data into the table: "products_in_events"
+  """
+  insert_products_in_events(
+    """the rows to be inserted"""
+    objects: [products_in_events_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: products_in_events_on_conflict
+  ): products_in_events_mutation_response
+
+  """
+  update data of the table: "addresses"
+  """
+  update_addresses(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: addresses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: addresses_set_input
+
+    """filter the rows which have to be updated"""
+    where: addresses_bool_exp!
+  ): addresses_mutation_response
+
+  """
+  update data of the table: "agreements"
+  """
+  update_agreements(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: agreements_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: agreements_set_input
+
+    """filter the rows which have to be updated"""
+    where: agreements_bool_exp!
+  ): agreements_mutation_response
+
+  """
+  update data of the table: "assets"
+  """
+  update_assets(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: assets_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: assets_set_input
+
+    """filter the rows which have to be updated"""
+    where: assets_bool_exp!
+  ): assets_mutation_response
+
+  """
+  update data of the table: "assets_in_events"
+  """
+  update_assets_in_events(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: assets_in_events_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: assets_in_events_set_input
+
+    """filter the rows which have to be updated"""
+    where: assets_in_events_bool_exp!
+  ): assets_in_events_mutation_response
+
+  """
+  update data of the table: "channels"
+  """
+  update_channels(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: channels_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: channels_set_input
+
+    """filter the rows which have to be updated"""
+    where: channels_bool_exp!
+  ): channels_mutation_response
+
+  """
+  update data of the table: "events"
+  """
+  update_events(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: events_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: events_set_input
+
+    """filter the rows which have to be updated"""
+    where: events_bool_exp!
+  ): events_mutation_response
+
+  """
+  update data of the table: "finances"
+  """
+  update_finances(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: finances_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: finances_set_input
+
+    """filter the rows which have to be updated"""
+    where: finances_bool_exp!
+  ): finances_mutation_response
+
+  """
+  update data of the table: "locations"
+  """
+  update_locations(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: locations_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: locations_set_input
+
+    """filter the rows which have to be updated"""
+    where: locations_bool_exp!
+  ): locations_mutation_response
+
+  """
+  update data of the table: "parties"
+  """
+  update_parties(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: parties_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: parties_set_input
+
+    """filter the rows which have to be updated"""
+    where: parties_bool_exp!
+  ): parties_mutation_response
+
+  """
+  update data of the table: "parties_in_events"
+  """
+  update_parties_in_events(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: parties_in_events_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: parties_in_events_set_input
+
+    """filter the rows which have to be updated"""
+    where: parties_in_events_bool_exp!
+  ): parties_in_events_mutation_response
+
+  """
+  update data of the table: "products"
+  """
+  update_products(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: products_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: products_set_input
+
+    """filter the rows which have to be updated"""
+    where: products_bool_exp!
+  ): products_mutation_response
+
+  """
+  update data of the table: "products_in_events"
+  """
+  update_products_in_events(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: products_in_events_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: products_in_events_set_input
+
+    """filter the rows which have to be updated"""
+    where: products_in_events_bool_exp!
+  ): products_in_events_mutation_response
+}
+
+scalar numeric
+
+"""
+expression to compare columns of type numeric. All fields are combined with logical 'AND'.
+"""
+input numeric_comparison_exp {
+  _eq: numeric
+  _gt: numeric
+  _gte: numeric
+  _in: [numeric!]
+  _is_null: Boolean
+  _lt: numeric
+  _lte: numeric
+  _neq: numeric
+  _nin: [numeric!]
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "parties"
+"""
+type parties {
+  """An array relationship"""
+  parties_in_events(
+    """distinct select on columns"""
+    distinct_on: [parties_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [parties_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: parties_in_events_bool_exp
+  ): [parties_in_events!]!
+
+  """An aggregated array relationship"""
+  parties_in_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [parties_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [parties_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: parties_in_events_bool_exp
+  ): parties_in_events_aggregate!
+  party_details: String
+  party_id: bigint!
+}
+
+"""
+aggregated selection of "parties"
+"""
+type parties_aggregate {
+  aggregate: parties_aggregate_fields
+  nodes: [parties!]!
+}
+
+"""
+aggregate fields of "parties"
+"""
+type parties_aggregate_fields {
+  avg: parties_avg_fields
+  count(columns: [parties_select_column!], distinct: Boolean): Int
+  max: parties_max_fields
+  min: parties_min_fields
+  stddev: parties_stddev_fields
+  stddev_pop: parties_stddev_pop_fields
+  stddev_samp: parties_stddev_samp_fields
+  sum: parties_sum_fields
+  var_pop: parties_var_pop_fields
+  var_samp: parties_var_samp_fields
+  variance: parties_variance_fields
+}
+
+"""
+order by aggregate values of table "parties"
+"""
+input parties_aggregate_order_by {
+  avg: parties_avg_order_by
+  count: order_by
+  max: parties_max_order_by
+  min: parties_min_order_by
+  stddev: parties_stddev_order_by
+  stddev_pop: parties_stddev_pop_order_by
+  stddev_samp: parties_stddev_samp_order_by
+  sum: parties_sum_order_by
+  var_pop: parties_var_pop_order_by
+  var_samp: parties_var_samp_order_by
+  variance: parties_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "parties"
+"""
+input parties_arr_rel_insert_input {
+  data: [parties_insert_input!]!
+  on_conflict: parties_on_conflict
+}
+
+"""aggregate avg on columns"""
+type parties_avg_fields {
+  party_id: Float
+}
+
+"""
+order by avg() on columns of table "parties"
+"""
+input parties_avg_order_by {
+  party_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "parties". All fields are combined with a logical 'AND'.
+"""
+input parties_bool_exp {
+  _and: [parties_bool_exp]
+  _not: parties_bool_exp
+  _or: [parties_bool_exp]
+  parties_in_events: parties_in_events_bool_exp
+  party_details: String_comparison_exp
+  party_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "parties"
+"""
+enum parties_constraint {
+  """unique or primary key constraint"""
+  idx_18336_parties_pkey
+}
+
+"""
+columns and relationships of "parties_in_events"
+"""
+type parties_in_events {
+  """An object relationship"""
+  event: events!
+  event_id: bigint!
+
+  """An object relationship"""
+  party: parties!
+  party_id: bigint!
+  role_code: String
+}
+
+"""
+aggregated selection of "parties_in_events"
+"""
+type parties_in_events_aggregate {
+  aggregate: parties_in_events_aggregate_fields
+  nodes: [parties_in_events!]!
+}
+
+"""
+aggregate fields of "parties_in_events"
+"""
+type parties_in_events_aggregate_fields {
+  avg: parties_in_events_avg_fields
+  count(columns: [parties_in_events_select_column!], distinct: Boolean): Int
+  max: parties_in_events_max_fields
+  min: parties_in_events_min_fields
+  stddev: parties_in_events_stddev_fields
+  stddev_pop: parties_in_events_stddev_pop_fields
+  stddev_samp: parties_in_events_stddev_samp_fields
+  sum: parties_in_events_sum_fields
+  var_pop: parties_in_events_var_pop_fields
+  var_samp: parties_in_events_var_samp_fields
+  variance: parties_in_events_variance_fields
+}
+
+"""
+order by aggregate values of table "parties_in_events"
+"""
+input parties_in_events_aggregate_order_by {
+  avg: parties_in_events_avg_order_by
+  count: order_by
+  max: parties_in_events_max_order_by
+  min: parties_in_events_min_order_by
+  stddev: parties_in_events_stddev_order_by
+  stddev_pop: parties_in_events_stddev_pop_order_by
+  stddev_samp: parties_in_events_stddev_samp_order_by
+  sum: parties_in_events_sum_order_by
+  var_pop: parties_in_events_var_pop_order_by
+  var_samp: parties_in_events_var_samp_order_by
+  variance: parties_in_events_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "parties_in_events"
+"""
+input parties_in_events_arr_rel_insert_input {
+  data: [parties_in_events_insert_input!]!
+  on_conflict: parties_in_events_on_conflict
+}
+
+"""aggregate avg on columns"""
+type parties_in_events_avg_fields {
+  event_id: Float
+  party_id: Float
+}
+
+"""
+order by avg() on columns of table "parties_in_events"
+"""
+input parties_in_events_avg_order_by {
+  event_id: order_by
+  party_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "parties_in_events". All fields are combined with a logical 'AND'.
+"""
+input parties_in_events_bool_exp {
+  _and: [parties_in_events_bool_exp]
+  _not: parties_in_events_bool_exp
+  _or: [parties_in_events_bool_exp]
+  event: events_bool_exp
+  event_id: bigint_comparison_exp
+  party: parties_bool_exp
+  party_id: bigint_comparison_exp
+  role_code: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "parties_in_events"
+"""
+enum parties_in_events_constraint {
+  """unique or primary key constraint"""
+  idx_18369_parties_in_events_pkey
+
+  """unique or primary key constraint"""
+  idx_18369_sqlite_autoindex_parties_in_events_1
+}
+
+"""
+input type for incrementing integer columne in table "parties_in_events"
+"""
+input parties_in_events_inc_input {
+  event_id: bigint
+  party_id: bigint
+}
+
+"""
+input type for inserting data into table "parties_in_events"
+"""
+input parties_in_events_insert_input {
+  event: events_obj_rel_insert_input
+  event_id: bigint
+  party: parties_obj_rel_insert_input
+  party_id: bigint
+  role_code: String
+}
+
+"""aggregate max on columns"""
+type parties_in_events_max_fields {
+  event_id: bigint
+  party_id: bigint
+  role_code: String
+}
+
+"""
+order by max() on columns of table "parties_in_events"
+"""
+input parties_in_events_max_order_by {
+  event_id: order_by
+  party_id: order_by
+  role_code: order_by
+}
+
+"""aggregate min on columns"""
+type parties_in_events_min_fields {
+  event_id: bigint
+  party_id: bigint
+  role_code: String
+}
+
+"""
+order by min() on columns of table "parties_in_events"
+"""
+input parties_in_events_min_order_by {
+  event_id: order_by
+  party_id: order_by
+  role_code: order_by
+}
+
+"""
+response of any mutation on the table "parties_in_events"
+"""
+type parties_in_events_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [parties_in_events!]!
+}
+
+"""
+input type for inserting object relation for remote table "parties_in_events"
+"""
+input parties_in_events_obj_rel_insert_input {
+  data: parties_in_events_insert_input!
+  on_conflict: parties_in_events_on_conflict
+}
+
+"""
+on conflict condition type for table "parties_in_events"
+"""
+input parties_in_events_on_conflict {
+  constraint: parties_in_events_constraint!
+  update_columns: [parties_in_events_update_column!]!
+  where: parties_in_events_bool_exp
+}
+
+"""
+ordering options when selecting data from "parties_in_events"
+"""
+input parties_in_events_order_by {
+  event: events_order_by
+  event_id: order_by
+  party: parties_order_by
+  party_id: order_by
+  role_code: order_by
+}
+
+"""
+select columns of table "parties_in_events"
+"""
+enum parties_in_events_select_column {
+  """column name"""
+  event_id
+
+  """column name"""
+  party_id
+
+  """column name"""
+  role_code
+}
+
+"""
+input type for updating data in table "parties_in_events"
+"""
+input parties_in_events_set_input {
+  event_id: bigint
+  party_id: bigint
+  role_code: String
+}
+
+"""aggregate stddev on columns"""
+type parties_in_events_stddev_fields {
+  event_id: Float
+  party_id: Float
+}
+
+"""
+order by stddev() on columns of table "parties_in_events"
+"""
+input parties_in_events_stddev_order_by {
+  event_id: order_by
+  party_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type parties_in_events_stddev_pop_fields {
+  event_id: Float
+  party_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "parties_in_events"
+"""
+input parties_in_events_stddev_pop_order_by {
+  event_id: order_by
+  party_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type parties_in_events_stddev_samp_fields {
+  event_id: Float
+  party_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "parties_in_events"
+"""
+input parties_in_events_stddev_samp_order_by {
+  event_id: order_by
+  party_id: order_by
+}
+
+"""aggregate sum on columns"""
+type parties_in_events_sum_fields {
+  event_id: bigint
+  party_id: bigint
+}
+
+"""
+order by sum() on columns of table "parties_in_events"
+"""
+input parties_in_events_sum_order_by {
+  event_id: order_by
+  party_id: order_by
+}
+
+"""
+update columns of table "parties_in_events"
+"""
+enum parties_in_events_update_column {
+  """column name"""
+  event_id
+
+  """column name"""
+  party_id
+
+  """column name"""
+  role_code
+}
+
+"""aggregate var_pop on columns"""
+type parties_in_events_var_pop_fields {
+  event_id: Float
+  party_id: Float
+}
+
+"""
+order by var_pop() on columns of table "parties_in_events"
+"""
+input parties_in_events_var_pop_order_by {
+  event_id: order_by
+  party_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type parties_in_events_var_samp_fields {
+  event_id: Float
+  party_id: Float
+}
+
+"""
+order by var_samp() on columns of table "parties_in_events"
+"""
+input parties_in_events_var_samp_order_by {
+  event_id: order_by
+  party_id: order_by
+}
+
+"""aggregate variance on columns"""
+type parties_in_events_variance_fields {
+  event_id: Float
+  party_id: Float
+}
+
+"""
+order by variance() on columns of table "parties_in_events"
+"""
+input parties_in_events_variance_order_by {
+  event_id: order_by
+  party_id: order_by
+}
+
+"""
+input type for incrementing integer columne in table "parties"
+"""
+input parties_inc_input {
+  party_id: bigint
+}
+
+"""
+input type for inserting data into table "parties"
+"""
+input parties_insert_input {
+  parties_in_events: parties_in_events_arr_rel_insert_input
+  party_details: String
+  party_id: bigint
+}
+
+"""aggregate max on columns"""
+type parties_max_fields {
+  party_details: String
+  party_id: bigint
+}
+
+"""
+order by max() on columns of table "parties"
+"""
+input parties_max_order_by {
+  party_details: order_by
+  party_id: order_by
+}
+
+"""aggregate min on columns"""
+type parties_min_fields {
+  party_details: String
+  party_id: bigint
+}
+
+"""
+order by min() on columns of table "parties"
+"""
+input parties_min_order_by {
+  party_details: order_by
+  party_id: order_by
+}
+
+"""
+response of any mutation on the table "parties"
+"""
+type parties_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [parties!]!
+}
+
+"""
+input type for inserting object relation for remote table "parties"
+"""
+input parties_obj_rel_insert_input {
+  data: parties_insert_input!
+  on_conflict: parties_on_conflict
+}
+
+"""
+on conflict condition type for table "parties"
+"""
+input parties_on_conflict {
+  constraint: parties_constraint!
+  update_columns: [parties_update_column!]!
+  where: parties_bool_exp
+}
+
+"""
+ordering options when selecting data from "parties"
+"""
+input parties_order_by {
+  parties_in_events_aggregate: parties_in_events_aggregate_order_by
+  party_details: order_by
+  party_id: order_by
+}
+
+"""
+select columns of table "parties"
+"""
+enum parties_select_column {
+  """column name"""
+  party_details
+
+  """column name"""
+  party_id
+}
+
+"""
+input type for updating data in table "parties"
+"""
+input parties_set_input {
+  party_details: String
+  party_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type parties_stddev_fields {
+  party_id: Float
+}
+
+"""
+order by stddev() on columns of table "parties"
+"""
+input parties_stddev_order_by {
+  party_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type parties_stddev_pop_fields {
+  party_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "parties"
+"""
+input parties_stddev_pop_order_by {
+  party_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type parties_stddev_samp_fields {
+  party_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "parties"
+"""
+input parties_stddev_samp_order_by {
+  party_id: order_by
+}
+
+"""aggregate sum on columns"""
+type parties_sum_fields {
+  party_id: bigint
+}
+
+"""
+order by sum() on columns of table "parties"
+"""
+input parties_sum_order_by {
+  party_id: order_by
+}
+
+"""
+update columns of table "parties"
+"""
+enum parties_update_column {
+  """column name"""
+  party_details
+
+  """column name"""
+  party_id
+}
+
+"""aggregate var_pop on columns"""
+type parties_var_pop_fields {
+  party_id: Float
+}
+
+"""
+order by var_pop() on columns of table "parties"
+"""
+input parties_var_pop_order_by {
+  party_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type parties_var_samp_fields {
+  party_id: Float
+}
+
+"""
+order by var_samp() on columns of table "parties"
+"""
+input parties_var_samp_order_by {
+  party_id: order_by
+}
+
+"""aggregate variance on columns"""
+type parties_variance_fields {
+  party_id: Float
+}
+
+"""
+order by variance() on columns of table "parties"
+"""
+input parties_variance_order_by {
+  party_id: order_by
+}
+
+"""
+columns and relationships of "products"
+"""
+type products {
+  product_id: bigint!
+  product_name: String
+  product_price: numeric
+  product_type_code: String
+
+  """An array relationship"""
+  products_in_events(
+    """distinct select on columns"""
+    distinct_on: [products_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: products_in_events_bool_exp
+  ): [products_in_events!]!
+
+  """An aggregated array relationship"""
+  products_in_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: products_in_events_bool_exp
+  ): products_in_events_aggregate!
+}
+
+"""
+aggregated selection of "products"
+"""
+type products_aggregate {
+  aggregate: products_aggregate_fields
+  nodes: [products!]!
+}
+
+"""
+aggregate fields of "products"
+"""
+type products_aggregate_fields {
+  avg: products_avg_fields
+  count(columns: [products_select_column!], distinct: Boolean): Int
+  max: products_max_fields
+  min: products_min_fields
+  stddev: products_stddev_fields
+  stddev_pop: products_stddev_pop_fields
+  stddev_samp: products_stddev_samp_fields
+  sum: products_sum_fields
+  var_pop: products_var_pop_fields
+  var_samp: products_var_samp_fields
+  variance: products_variance_fields
+}
+
+"""
+order by aggregate values of table "products"
+"""
+input products_aggregate_order_by {
+  avg: products_avg_order_by
+  count: order_by
+  max: products_max_order_by
+  min: products_min_order_by
+  stddev: products_stddev_order_by
+  stddev_pop: products_stddev_pop_order_by
+  stddev_samp: products_stddev_samp_order_by
+  sum: products_sum_order_by
+  var_pop: products_var_pop_order_by
+  var_samp: products_var_samp_order_by
+  variance: products_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "products"
+"""
+input products_arr_rel_insert_input {
+  data: [products_insert_input!]!
+  on_conflict: products_on_conflict
+}
+
+"""aggregate avg on columns"""
+type products_avg_fields {
+  product_id: Float
+  product_price: Float
+}
+
+"""
+order by avg() on columns of table "products"
+"""
+input products_avg_order_by {
+  product_id: order_by
+  product_price: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "products". All fields are combined with a logical 'AND'.
+"""
+input products_bool_exp {
+  _and: [products_bool_exp]
+  _not: products_bool_exp
+  _or: [products_bool_exp]
+  product_id: bigint_comparison_exp
+  product_name: String_comparison_exp
+  product_price: numeric_comparison_exp
+  product_type_code: String_comparison_exp
+  products_in_events: products_in_events_bool_exp
+}
+
+"""
+unique or primary key constraints on table "products"
+"""
+enum products_constraint {
+  """unique or primary key constraint"""
+  idx_18330_products_pkey
+
+  """unique or primary key constraint"""
+  idx_18330_sqlite_autoindex_products_1
+}
+
+"""
+columns and relationships of "products_in_events"
+"""
+type products_in_events {
+  """An object relationship"""
+  event: events
+  event_id: bigint
+
+  """An object relationship"""
+  product: products
+  product_id: bigint
+  product_in_event_id: bigint!
+}
+
+"""
+aggregated selection of "products_in_events"
+"""
+type products_in_events_aggregate {
+  aggregate: products_in_events_aggregate_fields
+  nodes: [products_in_events!]!
+}
+
+"""
+aggregate fields of "products_in_events"
+"""
+type products_in_events_aggregate_fields {
+  avg: products_in_events_avg_fields
+  count(columns: [products_in_events_select_column!], distinct: Boolean): Int
+  max: products_in_events_max_fields
+  min: products_in_events_min_fields
+  stddev: products_in_events_stddev_fields
+  stddev_pop: products_in_events_stddev_pop_fields
+  stddev_samp: products_in_events_stddev_samp_fields
+  sum: products_in_events_sum_fields
+  var_pop: products_in_events_var_pop_fields
+  var_samp: products_in_events_var_samp_fields
+  variance: products_in_events_variance_fields
+}
+
+"""
+order by aggregate values of table "products_in_events"
+"""
+input products_in_events_aggregate_order_by {
+  avg: products_in_events_avg_order_by
+  count: order_by
+  max: products_in_events_max_order_by
+  min: products_in_events_min_order_by
+  stddev: products_in_events_stddev_order_by
+  stddev_pop: products_in_events_stddev_pop_order_by
+  stddev_samp: products_in_events_stddev_samp_order_by
+  sum: products_in_events_sum_order_by
+  var_pop: products_in_events_var_pop_order_by
+  var_samp: products_in_events_var_samp_order_by
+  variance: products_in_events_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "products_in_events"
+"""
+input products_in_events_arr_rel_insert_input {
+  data: [products_in_events_insert_input!]!
+  on_conflict: products_in_events_on_conflict
+}
+
+"""aggregate avg on columns"""
+type products_in_events_avg_fields {
+  event_id: Float
+  product_id: Float
+  product_in_event_id: Float
+}
+
+"""
+order by avg() on columns of table "products_in_events"
+"""
+input products_in_events_avg_order_by {
+  event_id: order_by
+  product_id: order_by
+  product_in_event_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "products_in_events". All fields are combined with a logical 'AND'.
+"""
+input products_in_events_bool_exp {
+  _and: [products_in_events_bool_exp]
+  _not: products_in_events_bool_exp
+  _or: [products_in_events_bool_exp]
+  event: events_bool_exp
+  event_id: bigint_comparison_exp
+  product: products_bool_exp
+  product_id: bigint_comparison_exp
+  product_in_event_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "products_in_events"
+"""
+enum products_in_events_constraint {
+  """unique or primary key constraint"""
+  idx_18366_products_in_events_pkey
+}
+
+"""
+input type for incrementing integer columne in table "products_in_events"
+"""
+input products_in_events_inc_input {
+  event_id: bigint
+  product_id: bigint
+  product_in_event_id: bigint
+}
+
+"""
+input type for inserting data into table "products_in_events"
+"""
+input products_in_events_insert_input {
+  event: events_obj_rel_insert_input
+  event_id: bigint
+  product: products_obj_rel_insert_input
+  product_id: bigint
+  product_in_event_id: bigint
+}
+
+"""aggregate max on columns"""
+type products_in_events_max_fields {
+  event_id: bigint
+  product_id: bigint
+  product_in_event_id: bigint
+}
+
+"""
+order by max() on columns of table "products_in_events"
+"""
+input products_in_events_max_order_by {
+  event_id: order_by
+  product_id: order_by
+  product_in_event_id: order_by
+}
+
+"""aggregate min on columns"""
+type products_in_events_min_fields {
+  event_id: bigint
+  product_id: bigint
+  product_in_event_id: bigint
+}
+
+"""
+order by min() on columns of table "products_in_events"
+"""
+input products_in_events_min_order_by {
+  event_id: order_by
+  product_id: order_by
+  product_in_event_id: order_by
+}
+
+"""
+response of any mutation on the table "products_in_events"
+"""
+type products_in_events_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [products_in_events!]!
+}
+
+"""
+input type for inserting object relation for remote table "products_in_events"
+"""
+input products_in_events_obj_rel_insert_input {
+  data: products_in_events_insert_input!
+  on_conflict: products_in_events_on_conflict
+}
+
+"""
+on conflict condition type for table "products_in_events"
+"""
+input products_in_events_on_conflict {
+  constraint: products_in_events_constraint!
+  update_columns: [products_in_events_update_column!]!
+  where: products_in_events_bool_exp
+}
+
+"""
+ordering options when selecting data from "products_in_events"
+"""
+input products_in_events_order_by {
+  event: events_order_by
+  event_id: order_by
+  product: products_order_by
+  product_id: order_by
+  product_in_event_id: order_by
+}
+
+"""
+select columns of table "products_in_events"
+"""
+enum products_in_events_select_column {
+  """column name"""
+  event_id
+
+  """column name"""
+  product_id
+
+  """column name"""
+  product_in_event_id
+}
+
+"""
+input type for updating data in table "products_in_events"
+"""
+input products_in_events_set_input {
+  event_id: bigint
+  product_id: bigint
+  product_in_event_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type products_in_events_stddev_fields {
+  event_id: Float
+  product_id: Float
+  product_in_event_id: Float
+}
+
+"""
+order by stddev() on columns of table "products_in_events"
+"""
+input products_in_events_stddev_order_by {
+  event_id: order_by
+  product_id: order_by
+  product_in_event_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type products_in_events_stddev_pop_fields {
+  event_id: Float
+  product_id: Float
+  product_in_event_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "products_in_events"
+"""
+input products_in_events_stddev_pop_order_by {
+  event_id: order_by
+  product_id: order_by
+  product_in_event_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type products_in_events_stddev_samp_fields {
+  event_id: Float
+  product_id: Float
+  product_in_event_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "products_in_events"
+"""
+input products_in_events_stddev_samp_order_by {
+  event_id: order_by
+  product_id: order_by
+  product_in_event_id: order_by
+}
+
+"""aggregate sum on columns"""
+type products_in_events_sum_fields {
+  event_id: bigint
+  product_id: bigint
+  product_in_event_id: bigint
+}
+
+"""
+order by sum() on columns of table "products_in_events"
+"""
+input products_in_events_sum_order_by {
+  event_id: order_by
+  product_id: order_by
+  product_in_event_id: order_by
+}
+
+"""
+update columns of table "products_in_events"
+"""
+enum products_in_events_update_column {
+  """column name"""
+  event_id
+
+  """column name"""
+  product_id
+
+  """column name"""
+  product_in_event_id
+}
+
+"""aggregate var_pop on columns"""
+type products_in_events_var_pop_fields {
+  event_id: Float
+  product_id: Float
+  product_in_event_id: Float
+}
+
+"""
+order by var_pop() on columns of table "products_in_events"
+"""
+input products_in_events_var_pop_order_by {
+  event_id: order_by
+  product_id: order_by
+  product_in_event_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type products_in_events_var_samp_fields {
+  event_id: Float
+  product_id: Float
+  product_in_event_id: Float
+}
+
+"""
+order by var_samp() on columns of table "products_in_events"
+"""
+input products_in_events_var_samp_order_by {
+  event_id: order_by
+  product_id: order_by
+  product_in_event_id: order_by
+}
+
+"""aggregate variance on columns"""
+type products_in_events_variance_fields {
+  event_id: Float
+  product_id: Float
+  product_in_event_id: Float
+}
+
+"""
+order by variance() on columns of table "products_in_events"
+"""
+input products_in_events_variance_order_by {
+  event_id: order_by
+  product_id: order_by
+  product_in_event_id: order_by
+}
+
+"""
+input type for incrementing integer columne in table "products"
+"""
+input products_inc_input {
+  product_id: bigint
+}
+
+"""
+input type for inserting data into table "products"
+"""
+input products_insert_input {
+  product_id: bigint
+  product_name: String
+  product_price: numeric
+  product_type_code: String
+  products_in_events: products_in_events_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type products_max_fields {
+  product_id: bigint
+  product_name: String
+  product_price: numeric
+  product_type_code: String
+}
+
+"""
+order by max() on columns of table "products"
+"""
+input products_max_order_by {
+  product_id: order_by
+  product_name: order_by
+  product_price: order_by
+  product_type_code: order_by
+}
+
+"""aggregate min on columns"""
+type products_min_fields {
+  product_id: bigint
+  product_name: String
+  product_price: numeric
+  product_type_code: String
+}
+
+"""
+order by min() on columns of table "products"
+"""
+input products_min_order_by {
+  product_id: order_by
+  product_name: order_by
+  product_price: order_by
+  product_type_code: order_by
+}
+
+"""
+response of any mutation on the table "products"
+"""
+type products_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [products!]!
+}
+
+"""
+input type for inserting object relation for remote table "products"
+"""
+input products_obj_rel_insert_input {
+  data: products_insert_input!
+  on_conflict: products_on_conflict
+}
+
+"""
+on conflict condition type for table "products"
+"""
+input products_on_conflict {
+  constraint: products_constraint!
+  update_columns: [products_update_column!]!
+  where: products_bool_exp
+}
+
+"""
+ordering options when selecting data from "products"
+"""
+input products_order_by {
+  product_id: order_by
+  product_name: order_by
+  product_price: order_by
+  product_type_code: order_by
+  products_in_events_aggregate: products_in_events_aggregate_order_by
+}
+
+"""
+select columns of table "products"
+"""
+enum products_select_column {
+  """column name"""
+  product_id
+
+  """column name"""
+  product_name
+
+  """column name"""
+  product_price
+
+  """column name"""
+  product_type_code
+}
+
+"""
+input type for updating data in table "products"
+"""
+input products_set_input {
+  product_id: bigint
+  product_name: String
+  product_price: numeric
+  product_type_code: String
+}
+
+"""aggregate stddev on columns"""
+type products_stddev_fields {
+  product_id: Float
+  product_price: Float
+}
+
+"""
+order by stddev() on columns of table "products"
+"""
+input products_stddev_order_by {
+  product_id: order_by
+  product_price: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type products_stddev_pop_fields {
+  product_id: Float
+  product_price: Float
+}
+
+"""
+order by stddev_pop() on columns of table "products"
+"""
+input products_stddev_pop_order_by {
+  product_id: order_by
+  product_price: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type products_stddev_samp_fields {
+  product_id: Float
+  product_price: Float
+}
+
+"""
+order by stddev_samp() on columns of table "products"
+"""
+input products_stddev_samp_order_by {
+  product_id: order_by
+  product_price: order_by
+}
+
+"""aggregate sum on columns"""
+type products_sum_fields {
+  product_id: bigint
+  product_price: numeric
+}
+
+"""
+order by sum() on columns of table "products"
+"""
+input products_sum_order_by {
+  product_id: order_by
+  product_price: order_by
+}
+
+"""
+update columns of table "products"
+"""
+enum products_update_column {
+  """column name"""
+  product_id
+
+  """column name"""
+  product_name
+
+  """column name"""
+  product_price
+
+  """column name"""
+  product_type_code
+}
+
+"""aggregate var_pop on columns"""
+type products_var_pop_fields {
+  product_id: Float
+  product_price: Float
+}
+
+"""
+order by var_pop() on columns of table "products"
+"""
+input products_var_pop_order_by {
+  product_id: order_by
+  product_price: order_by
+}
+
+"""aggregate var_samp on columns"""
+type products_var_samp_fields {
+  product_id: Float
+  product_price: Float
+}
+
+"""
+order by var_samp() on columns of table "products"
+"""
+input products_var_samp_order_by {
+  product_id: order_by
+  product_price: order_by
+}
+
+"""aggregate variance on columns"""
+type products_variance_fields {
+  product_id: Float
+  product_price: Float
+}
+
+"""
+order by variance() on columns of table "products"
+"""
+input products_variance_order_by {
+  product_id: order_by
+  product_price: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "addresses"
+  """
+  addresses(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): [addresses!]!
+
+  """
+  fetch aggregated fields from the table: "addresses"
+  """
+  addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): addresses_aggregate!
+
+  """fetch data from the table: "addresses" using primary key columns"""
+  addresses_by_pk(address_id: bigint!): addresses
+
+  """
+  fetch data from the table: "agreements"
+  """
+  agreements(
+    """distinct select on columns"""
+    distinct_on: [agreements_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [agreements_order_by!]
+
+    """filter the rows returned"""
+    where: agreements_bool_exp
+  ): [agreements!]!
+
+  """
+  fetch aggregated fields from the table: "agreements"
+  """
+  agreements_aggregate(
+    """distinct select on columns"""
+    distinct_on: [agreements_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [agreements_order_by!]
+
+    """filter the rows returned"""
+    where: agreements_bool_exp
+  ): agreements_aggregate!
+
+  """fetch data from the table: "agreements" using primary key columns"""
+  agreements_by_pk(document_id: bigint!): agreements
+
+  """
+  fetch data from the table: "assets"
+  """
+  assets(
+    """distinct select on columns"""
+    distinct_on: [assets_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [assets_order_by!]
+
+    """filter the rows returned"""
+    where: assets_bool_exp
+  ): [assets!]!
+
+  """
+  fetch aggregated fields from the table: "assets"
+  """
+  assets_aggregate(
+    """distinct select on columns"""
+    distinct_on: [assets_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [assets_order_by!]
+
+    """filter the rows returned"""
+    where: assets_bool_exp
+  ): assets_aggregate!
+
+  """fetch data from the table: "assets" using primary key columns"""
+  assets_by_pk(asset_id: bigint!): assets
+
+  """
+  fetch data from the table: "assets_in_events"
+  """
+  assets_in_events(
+    """distinct select on columns"""
+    distinct_on: [assets_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [assets_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: assets_in_events_bool_exp
+  ): [assets_in_events!]!
+
+  """
+  fetch aggregated fields from the table: "assets_in_events"
+  """
+  assets_in_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [assets_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [assets_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: assets_in_events_bool_exp
+  ): assets_in_events_aggregate!
+
+  """
+  fetch data from the table: "assets_in_events" using primary key columns
+  """
+  assets_in_events_by_pk(asset_id: bigint!, event_id: bigint!): assets_in_events
+
+  """
+  fetch data from the table: "channels"
+  """
+  channels(
+    """distinct select on columns"""
+    distinct_on: [channels_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [channels_order_by!]
+
+    """filter the rows returned"""
+    where: channels_bool_exp
+  ): [channels!]!
+
+  """
+  fetch aggregated fields from the table: "channels"
+  """
+  channels_aggregate(
+    """distinct select on columns"""
+    distinct_on: [channels_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [channels_order_by!]
+
+    """filter the rows returned"""
+    where: channels_bool_exp
+  ): channels_aggregate!
+
+  """fetch data from the table: "channels" using primary key columns"""
+  channels_by_pk(channel_id: bigint!): channels
+
+  """
+  fetch data from the table: "events"
+  """
+  events(
+    """distinct select on columns"""
+    distinct_on: [events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [events_order_by!]
+
+    """filter the rows returned"""
+    where: events_bool_exp
+  ): [events!]!
+
+  """
+  fetch aggregated fields from the table: "events"
+  """
+  events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [events_order_by!]
+
+    """filter the rows returned"""
+    where: events_bool_exp
+  ): events_aggregate!
+
+  """fetch data from the table: "events" using primary key columns"""
+  events_by_pk(event_id: bigint!): events
+
+  """
+  fetch data from the table: "finances"
+  """
+  finances(
+    """distinct select on columns"""
+    distinct_on: [finances_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [finances_order_by!]
+
+    """filter the rows returned"""
+    where: finances_bool_exp
+  ): [finances!]!
+
+  """
+  fetch aggregated fields from the table: "finances"
+  """
+  finances_aggregate(
+    """distinct select on columns"""
+    distinct_on: [finances_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [finances_order_by!]
+
+    """filter the rows returned"""
+    where: finances_bool_exp
+  ): finances_aggregate!
+
+  """fetch data from the table: "finances" using primary key columns"""
+  finances_by_pk(finance_id: bigint!): finances
+
+  """
+  fetch data from the table: "locations"
+  """
+  locations(
+    """distinct select on columns"""
+    distinct_on: [locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [locations_order_by!]
+
+    """filter the rows returned"""
+    where: locations_bool_exp
+  ): [locations!]!
+
+  """
+  fetch aggregated fields from the table: "locations"
+  """
+  locations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [locations_order_by!]
+
+    """filter the rows returned"""
+    where: locations_bool_exp
+  ): locations_aggregate!
+
+  """fetch data from the table: "locations" using primary key columns"""
+  locations_by_pk(location_id: bigint!): locations
+
+  """
+  fetch data from the table: "parties"
+  """
+  parties(
+    """distinct select on columns"""
+    distinct_on: [parties_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [parties_order_by!]
+
+    """filter the rows returned"""
+    where: parties_bool_exp
+  ): [parties!]!
+
+  """
+  fetch aggregated fields from the table: "parties"
+  """
+  parties_aggregate(
+    """distinct select on columns"""
+    distinct_on: [parties_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [parties_order_by!]
+
+    """filter the rows returned"""
+    where: parties_bool_exp
+  ): parties_aggregate!
+
+  """fetch data from the table: "parties" using primary key columns"""
+  parties_by_pk(party_id: bigint!): parties
+
+  """
+  fetch data from the table: "parties_in_events"
+  """
+  parties_in_events(
+    """distinct select on columns"""
+    distinct_on: [parties_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [parties_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: parties_in_events_bool_exp
+  ): [parties_in_events!]!
+
+  """
+  fetch aggregated fields from the table: "parties_in_events"
+  """
+  parties_in_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [parties_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [parties_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: parties_in_events_bool_exp
+  ): parties_in_events_aggregate!
+
+  """
+  fetch data from the table: "parties_in_events" using primary key columns
+  """
+  parties_in_events_by_pk(event_id: bigint!, party_id: bigint!): parties_in_events
+
+  """
+  fetch data from the table: "products"
+  """
+  products(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): [products!]!
+
+  """
+  fetch aggregated fields from the table: "products"
+  """
+  products_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): products_aggregate!
+
+  """fetch data from the table: "products" using primary key columns"""
+  products_by_pk(product_id: bigint!): products
+
+  """
+  fetch data from the table: "products_in_events"
+  """
+  products_in_events(
+    """distinct select on columns"""
+    distinct_on: [products_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: products_in_events_bool_exp
+  ): [products_in_events!]!
+
+  """
+  fetch aggregated fields from the table: "products_in_events"
+  """
+  products_in_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: products_in_events_bool_exp
+  ): products_in_events_aggregate!
+
+  """
+  fetch data from the table: "products_in_events" using primary key columns
+  """
+  products_in_events_by_pk(product_in_event_id: bigint!): products_in_events
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "addresses"
+  """
+  addresses(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): [addresses!]!
+
+  """
+  fetch aggregated fields from the table: "addresses"
+  """
+  addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): addresses_aggregate!
+
+  """fetch data from the table: "addresses" using primary key columns"""
+  addresses_by_pk(address_id: bigint!): addresses
+
+  """
+  fetch data from the table: "agreements"
+  """
+  agreements(
+    """distinct select on columns"""
+    distinct_on: [agreements_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [agreements_order_by!]
+
+    """filter the rows returned"""
+    where: agreements_bool_exp
+  ): [agreements!]!
+
+  """
+  fetch aggregated fields from the table: "agreements"
+  """
+  agreements_aggregate(
+    """distinct select on columns"""
+    distinct_on: [agreements_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [agreements_order_by!]
+
+    """filter the rows returned"""
+    where: agreements_bool_exp
+  ): agreements_aggregate!
+
+  """fetch data from the table: "agreements" using primary key columns"""
+  agreements_by_pk(document_id: bigint!): agreements
+
+  """
+  fetch data from the table: "assets"
+  """
+  assets(
+    """distinct select on columns"""
+    distinct_on: [assets_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [assets_order_by!]
+
+    """filter the rows returned"""
+    where: assets_bool_exp
+  ): [assets!]!
+
+  """
+  fetch aggregated fields from the table: "assets"
+  """
+  assets_aggregate(
+    """distinct select on columns"""
+    distinct_on: [assets_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [assets_order_by!]
+
+    """filter the rows returned"""
+    where: assets_bool_exp
+  ): assets_aggregate!
+
+  """fetch data from the table: "assets" using primary key columns"""
+  assets_by_pk(asset_id: bigint!): assets
+
+  """
+  fetch data from the table: "assets_in_events"
+  """
+  assets_in_events(
+    """distinct select on columns"""
+    distinct_on: [assets_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [assets_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: assets_in_events_bool_exp
+  ): [assets_in_events!]!
+
+  """
+  fetch aggregated fields from the table: "assets_in_events"
+  """
+  assets_in_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [assets_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [assets_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: assets_in_events_bool_exp
+  ): assets_in_events_aggregate!
+
+  """
+  fetch data from the table: "assets_in_events" using primary key columns
+  """
+  assets_in_events_by_pk(asset_id: bigint!, event_id: bigint!): assets_in_events
+
+  """
+  fetch data from the table: "channels"
+  """
+  channels(
+    """distinct select on columns"""
+    distinct_on: [channels_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [channels_order_by!]
+
+    """filter the rows returned"""
+    where: channels_bool_exp
+  ): [channels!]!
+
+  """
+  fetch aggregated fields from the table: "channels"
+  """
+  channels_aggregate(
+    """distinct select on columns"""
+    distinct_on: [channels_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [channels_order_by!]
+
+    """filter the rows returned"""
+    where: channels_bool_exp
+  ): channels_aggregate!
+
+  """fetch data from the table: "channels" using primary key columns"""
+  channels_by_pk(channel_id: bigint!): channels
+
+  """
+  fetch data from the table: "events"
+  """
+  events(
+    """distinct select on columns"""
+    distinct_on: [events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [events_order_by!]
+
+    """filter the rows returned"""
+    where: events_bool_exp
+  ): [events!]!
+
+  """
+  fetch aggregated fields from the table: "events"
+  """
+  events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [events_order_by!]
+
+    """filter the rows returned"""
+    where: events_bool_exp
+  ): events_aggregate!
+
+  """fetch data from the table: "events" using primary key columns"""
+  events_by_pk(event_id: bigint!): events
+
+  """
+  fetch data from the table: "finances"
+  """
+  finances(
+    """distinct select on columns"""
+    distinct_on: [finances_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [finances_order_by!]
+
+    """filter the rows returned"""
+    where: finances_bool_exp
+  ): [finances!]!
+
+  """
+  fetch aggregated fields from the table: "finances"
+  """
+  finances_aggregate(
+    """distinct select on columns"""
+    distinct_on: [finances_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [finances_order_by!]
+
+    """filter the rows returned"""
+    where: finances_bool_exp
+  ): finances_aggregate!
+
+  """fetch data from the table: "finances" using primary key columns"""
+  finances_by_pk(finance_id: bigint!): finances
+
+  """
+  fetch data from the table: "locations"
+  """
+  locations(
+    """distinct select on columns"""
+    distinct_on: [locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [locations_order_by!]
+
+    """filter the rows returned"""
+    where: locations_bool_exp
+  ): [locations!]!
+
+  """
+  fetch aggregated fields from the table: "locations"
+  """
+  locations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [locations_order_by!]
+
+    """filter the rows returned"""
+    where: locations_bool_exp
+  ): locations_aggregate!
+
+  """fetch data from the table: "locations" using primary key columns"""
+  locations_by_pk(location_id: bigint!): locations
+
+  """
+  fetch data from the table: "parties"
+  """
+  parties(
+    """distinct select on columns"""
+    distinct_on: [parties_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [parties_order_by!]
+
+    """filter the rows returned"""
+    where: parties_bool_exp
+  ): [parties!]!
+
+  """
+  fetch aggregated fields from the table: "parties"
+  """
+  parties_aggregate(
+    """distinct select on columns"""
+    distinct_on: [parties_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [parties_order_by!]
+
+    """filter the rows returned"""
+    where: parties_bool_exp
+  ): parties_aggregate!
+
+  """fetch data from the table: "parties" using primary key columns"""
+  parties_by_pk(party_id: bigint!): parties
+
+  """
+  fetch data from the table: "parties_in_events"
+  """
+  parties_in_events(
+    """distinct select on columns"""
+    distinct_on: [parties_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [parties_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: parties_in_events_bool_exp
+  ): [parties_in_events!]!
+
+  """
+  fetch aggregated fields from the table: "parties_in_events"
+  """
+  parties_in_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [parties_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [parties_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: parties_in_events_bool_exp
+  ): parties_in_events_aggregate!
+
+  """
+  fetch data from the table: "parties_in_events" using primary key columns
+  """
+  parties_in_events_by_pk(event_id: bigint!, party_id: bigint!): parties_in_events
+
+  """
+  fetch data from the table: "products"
+  """
+  products(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): [products!]!
+
+  """
+  fetch aggregated fields from the table: "products"
+  """
+  products_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): products_aggregate!
+
+  """fetch data from the table: "products" using primary key columns"""
+  products_by_pk(product_id: bigint!): products
+
+  """
+  fetch data from the table: "products_in_events"
+  """
+  products_in_events(
+    """distinct select on columns"""
+    distinct_on: [products_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: products_in_events_bool_exp
+  ): [products_in_events!]!
+
+  """
+  fetch aggregated fields from the table: "products_in_events"
+  """
+  products_in_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: products_in_events_bool_exp
+  ): products_in_events_aggregate!
+
+  """
+  fetch data from the table: "products_in_events" using primary key columns
+  """
+  products_in_events_by_pk(product_in_event_id: bigint!): products_in_events
+}

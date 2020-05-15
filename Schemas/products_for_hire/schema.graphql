@@ -1,0 +1,4064 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "bookings"
+"""
+type bookings {
+  amount_of_discount: numeric
+  amount_of_refund: numeric
+  amount_outstanding: numeric
+  amount_payable: numeric
+  booking_end_date: timestamptz
+  booking_id: bigint!
+  booking_start_date: timestamptz
+  booking_status_code: String
+  count_hired: String
+
+  """An object relationship"""
+  customer: customers
+  customer_id: bigint
+
+  """An array relationship"""
+  payments(
+    """distinct select on columns"""
+    distinct_on: [payments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payments_order_by!]
+
+    """filter the rows returned"""
+    where: payments_bool_exp
+  ): [payments!]!
+
+  """An aggregated array relationship"""
+  payments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [payments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payments_order_by!]
+
+    """filter the rows returned"""
+    where: payments_bool_exp
+  ): payments_aggregate!
+
+  """An array relationship"""
+  products_bookeds(
+    """distinct select on columns"""
+    distinct_on: [products_booked_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_booked_order_by!]
+
+    """filter the rows returned"""
+    where: products_booked_bool_exp
+  ): [products_booked!]!
+
+  """An aggregated array relationship"""
+  products_bookeds_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_booked_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_booked_order_by!]
+
+    """filter the rows returned"""
+    where: products_booked_bool_exp
+  ): products_booked_aggregate!
+  returned_damaged_yn: String
+
+  """An array relationship"""
+  view_product_availabilities(
+    """distinct select on columns"""
+    distinct_on: [view_product_availability_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [view_product_availability_order_by!]
+
+    """filter the rows returned"""
+    where: view_product_availability_bool_exp
+  ): [view_product_availability!]!
+
+  """An aggregated array relationship"""
+  view_product_availabilities_aggregate(
+    """distinct select on columns"""
+    distinct_on: [view_product_availability_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [view_product_availability_order_by!]
+
+    """filter the rows returned"""
+    where: view_product_availability_bool_exp
+  ): view_product_availability_aggregate!
+}
+
+"""
+aggregated selection of "bookings"
+"""
+type bookings_aggregate {
+  aggregate: bookings_aggregate_fields
+  nodes: [bookings!]!
+}
+
+"""
+aggregate fields of "bookings"
+"""
+type bookings_aggregate_fields {
+  avg: bookings_avg_fields
+  count(columns: [bookings_select_column!], distinct: Boolean): Int
+  max: bookings_max_fields
+  min: bookings_min_fields
+  stddev: bookings_stddev_fields
+  stddev_pop: bookings_stddev_pop_fields
+  stddev_samp: bookings_stddev_samp_fields
+  sum: bookings_sum_fields
+  var_pop: bookings_var_pop_fields
+  var_samp: bookings_var_samp_fields
+  variance: bookings_variance_fields
+}
+
+"""
+order by aggregate values of table "bookings"
+"""
+input bookings_aggregate_order_by {
+  avg: bookings_avg_order_by
+  count: order_by
+  max: bookings_max_order_by
+  min: bookings_min_order_by
+  stddev: bookings_stddev_order_by
+  stddev_pop: bookings_stddev_pop_order_by
+  stddev_samp: bookings_stddev_samp_order_by
+  sum: bookings_sum_order_by
+  var_pop: bookings_var_pop_order_by
+  var_samp: bookings_var_samp_order_by
+  variance: bookings_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "bookings"
+"""
+input bookings_arr_rel_insert_input {
+  data: [bookings_insert_input!]!
+  on_conflict: bookings_on_conflict
+}
+
+"""aggregate avg on columns"""
+type bookings_avg_fields {
+  amount_of_discount: Float
+  amount_of_refund: Float
+  amount_outstanding: Float
+  amount_payable: Float
+  booking_id: Float
+  customer_id: Float
+}
+
+"""
+order by avg() on columns of table "bookings"
+"""
+input bookings_avg_order_by {
+  amount_of_discount: order_by
+  amount_of_refund: order_by
+  amount_outstanding: order_by
+  amount_payable: order_by
+  booking_id: order_by
+  customer_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "bookings". All fields are combined with a logical 'AND'.
+"""
+input bookings_bool_exp {
+  _and: [bookings_bool_exp]
+  _not: bookings_bool_exp
+  _or: [bookings_bool_exp]
+  amount_of_discount: numeric_comparison_exp
+  amount_of_refund: numeric_comparison_exp
+  amount_outstanding: numeric_comparison_exp
+  amount_payable: numeric_comparison_exp
+  booking_end_date: timestamptz_comparison_exp
+  booking_id: bigint_comparison_exp
+  booking_start_date: timestamptz_comparison_exp
+  booking_status_code: String_comparison_exp
+  count_hired: String_comparison_exp
+  customer: customers_bool_exp
+  customer_id: bigint_comparison_exp
+  payments: payments_bool_exp
+  products_bookeds: products_booked_bool_exp
+  returned_damaged_yn: String_comparison_exp
+  view_product_availabilities: view_product_availability_bool_exp
+}
+
+"""
+unique or primary key constraints on table "bookings"
+"""
+enum bookings_constraint {
+  """unique or primary key constraint"""
+  idx_25433_bookings_pkey
+}
+
+"""
+input type for incrementing integer columne in table "bookings"
+"""
+input bookings_inc_input {
+  booking_id: bigint
+  customer_id: bigint
+}
+
+"""
+input type for inserting data into table "bookings"
+"""
+input bookings_insert_input {
+  amount_of_discount: numeric
+  amount_of_refund: numeric
+  amount_outstanding: numeric
+  amount_payable: numeric
+  booking_end_date: timestamptz
+  booking_id: bigint
+  booking_start_date: timestamptz
+  booking_status_code: String
+  count_hired: String
+  customer: customers_obj_rel_insert_input
+  customer_id: bigint
+  payments: payments_arr_rel_insert_input
+  products_bookeds: products_booked_arr_rel_insert_input
+  returned_damaged_yn: String
+  view_product_availabilities: view_product_availability_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type bookings_max_fields {
+  amount_of_discount: numeric
+  amount_of_refund: numeric
+  amount_outstanding: numeric
+  amount_payable: numeric
+  booking_end_date: timestamptz
+  booking_id: bigint
+  booking_start_date: timestamptz
+  booking_status_code: String
+  count_hired: String
+  customer_id: bigint
+  returned_damaged_yn: String
+}
+
+"""
+order by max() on columns of table "bookings"
+"""
+input bookings_max_order_by {
+  amount_of_discount: order_by
+  amount_of_refund: order_by
+  amount_outstanding: order_by
+  amount_payable: order_by
+  booking_end_date: order_by
+  booking_id: order_by
+  booking_start_date: order_by
+  booking_status_code: order_by
+  count_hired: order_by
+  customer_id: order_by
+  returned_damaged_yn: order_by
+}
+
+"""aggregate min on columns"""
+type bookings_min_fields {
+  amount_of_discount: numeric
+  amount_of_refund: numeric
+  amount_outstanding: numeric
+  amount_payable: numeric
+  booking_end_date: timestamptz
+  booking_id: bigint
+  booking_start_date: timestamptz
+  booking_status_code: String
+  count_hired: String
+  customer_id: bigint
+  returned_damaged_yn: String
+}
+
+"""
+order by min() on columns of table "bookings"
+"""
+input bookings_min_order_by {
+  amount_of_discount: order_by
+  amount_of_refund: order_by
+  amount_outstanding: order_by
+  amount_payable: order_by
+  booking_end_date: order_by
+  booking_id: order_by
+  booking_start_date: order_by
+  booking_status_code: order_by
+  count_hired: order_by
+  customer_id: order_by
+  returned_damaged_yn: order_by
+}
+
+"""
+response of any mutation on the table "bookings"
+"""
+type bookings_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [bookings!]!
+}
+
+"""
+input type for inserting object relation for remote table "bookings"
+"""
+input bookings_obj_rel_insert_input {
+  data: bookings_insert_input!
+  on_conflict: bookings_on_conflict
+}
+
+"""
+on conflict condition type for table "bookings"
+"""
+input bookings_on_conflict {
+  constraint: bookings_constraint!
+  update_columns: [bookings_update_column!]!
+  where: bookings_bool_exp
+}
+
+"""
+ordering options when selecting data from "bookings"
+"""
+input bookings_order_by {
+  amount_of_discount: order_by
+  amount_of_refund: order_by
+  amount_outstanding: order_by
+  amount_payable: order_by
+  booking_end_date: order_by
+  booking_id: order_by
+  booking_start_date: order_by
+  booking_status_code: order_by
+  count_hired: order_by
+  customer: customers_order_by
+  customer_id: order_by
+  payments_aggregate: payments_aggregate_order_by
+  products_bookeds_aggregate: products_booked_aggregate_order_by
+  returned_damaged_yn: order_by
+  view_product_availabilities_aggregate: view_product_availability_aggregate_order_by
+}
+
+"""
+select columns of table "bookings"
+"""
+enum bookings_select_column {
+  """column name"""
+  amount_of_discount
+
+  """column name"""
+  amount_of_refund
+
+  """column name"""
+  amount_outstanding
+
+  """column name"""
+  amount_payable
+
+  """column name"""
+  booking_end_date
+
+  """column name"""
+  booking_id
+
+  """column name"""
+  booking_start_date
+
+  """column name"""
+  booking_status_code
+
+  """column name"""
+  count_hired
+
+  """column name"""
+  customer_id
+
+  """column name"""
+  returned_damaged_yn
+}
+
+"""
+input type for updating data in table "bookings"
+"""
+input bookings_set_input {
+  amount_of_discount: numeric
+  amount_of_refund: numeric
+  amount_outstanding: numeric
+  amount_payable: numeric
+  booking_end_date: timestamptz
+  booking_id: bigint
+  booking_start_date: timestamptz
+  booking_status_code: String
+  count_hired: String
+  customer_id: bigint
+  returned_damaged_yn: String
+}
+
+"""aggregate stddev on columns"""
+type bookings_stddev_fields {
+  amount_of_discount: Float
+  amount_of_refund: Float
+  amount_outstanding: Float
+  amount_payable: Float
+  booking_id: Float
+  customer_id: Float
+}
+
+"""
+order by stddev() on columns of table "bookings"
+"""
+input bookings_stddev_order_by {
+  amount_of_discount: order_by
+  amount_of_refund: order_by
+  amount_outstanding: order_by
+  amount_payable: order_by
+  booking_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type bookings_stddev_pop_fields {
+  amount_of_discount: Float
+  amount_of_refund: Float
+  amount_outstanding: Float
+  amount_payable: Float
+  booking_id: Float
+  customer_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "bookings"
+"""
+input bookings_stddev_pop_order_by {
+  amount_of_discount: order_by
+  amount_of_refund: order_by
+  amount_outstanding: order_by
+  amount_payable: order_by
+  booking_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type bookings_stddev_samp_fields {
+  amount_of_discount: Float
+  amount_of_refund: Float
+  amount_outstanding: Float
+  amount_payable: Float
+  booking_id: Float
+  customer_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "bookings"
+"""
+input bookings_stddev_samp_order_by {
+  amount_of_discount: order_by
+  amount_of_refund: order_by
+  amount_outstanding: order_by
+  amount_payable: order_by
+  booking_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate sum on columns"""
+type bookings_sum_fields {
+  amount_of_discount: numeric
+  amount_of_refund: numeric
+  amount_outstanding: numeric
+  amount_payable: numeric
+  booking_id: bigint
+  customer_id: bigint
+}
+
+"""
+order by sum() on columns of table "bookings"
+"""
+input bookings_sum_order_by {
+  amount_of_discount: order_by
+  amount_of_refund: order_by
+  amount_outstanding: order_by
+  amount_payable: order_by
+  booking_id: order_by
+  customer_id: order_by
+}
+
+"""
+update columns of table "bookings"
+"""
+enum bookings_update_column {
+  """column name"""
+  amount_of_discount
+
+  """column name"""
+  amount_of_refund
+
+  """column name"""
+  amount_outstanding
+
+  """column name"""
+  amount_payable
+
+  """column name"""
+  booking_end_date
+
+  """column name"""
+  booking_id
+
+  """column name"""
+  booking_start_date
+
+  """column name"""
+  booking_status_code
+
+  """column name"""
+  count_hired
+
+  """column name"""
+  customer_id
+
+  """column name"""
+  returned_damaged_yn
+}
+
+"""aggregate var_pop on columns"""
+type bookings_var_pop_fields {
+  amount_of_discount: Float
+  amount_of_refund: Float
+  amount_outstanding: Float
+  amount_payable: Float
+  booking_id: Float
+  customer_id: Float
+}
+
+"""
+order by var_pop() on columns of table "bookings"
+"""
+input bookings_var_pop_order_by {
+  amount_of_discount: order_by
+  amount_of_refund: order_by
+  amount_outstanding: order_by
+  amount_payable: order_by
+  booking_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type bookings_var_samp_fields {
+  amount_of_discount: Float
+  amount_of_refund: Float
+  amount_outstanding: Float
+  amount_payable: Float
+  booking_id: Float
+  customer_id: Float
+}
+
+"""
+order by var_samp() on columns of table "bookings"
+"""
+input bookings_var_samp_order_by {
+  amount_of_discount: order_by
+  amount_of_refund: order_by
+  amount_outstanding: order_by
+  amount_payable: order_by
+  booking_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate variance on columns"""
+type bookings_variance_fields {
+  amount_of_discount: Float
+  amount_of_refund: Float
+  amount_outstanding: Float
+  amount_payable: Float
+  booking_id: Float
+  customer_id: Float
+}
+
+"""
+order by variance() on columns of table "bookings"
+"""
+input bookings_variance_order_by {
+  amount_of_discount: order_by
+  amount_of_refund: order_by
+  amount_outstanding: order_by
+  amount_payable: order_by
+  booking_id: order_by
+  customer_id: order_by
+}
+
+"""
+columns and relationships of "customers"
+"""
+type customers {
+  """An array relationship"""
+  bookings(
+    """distinct select on columns"""
+    distinct_on: [bookings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [bookings_order_by!]
+
+    """filter the rows returned"""
+    where: bookings_bool_exp
+  ): [bookings!]!
+
+  """An aggregated array relationship"""
+  bookings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [bookings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [bookings_order_by!]
+
+    """filter the rows returned"""
+    where: bookings_bool_exp
+  ): bookings_aggregate!
+  coupon_id: bigint
+  customer_id: bigint!
+  date_became_customer: timestamptz
+  date_last_hire: timestamptz
+
+  """An object relationship"""
+  discount_coupon: discount_coupons
+  first_name: String
+  gender_mf: String
+  good_or_bad_customer: String
+  last_name: String
+
+  """An array relationship"""
+  payments(
+    """distinct select on columns"""
+    distinct_on: [payments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payments_order_by!]
+
+    """filter the rows returned"""
+    where: payments_bool_exp
+  ): [payments!]!
+
+  """An aggregated array relationship"""
+  payments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [payments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payments_order_by!]
+
+    """filter the rows returned"""
+    where: payments_bool_exp
+  ): payments_aggregate!
+}
+
+"""
+aggregated selection of "customers"
+"""
+type customers_aggregate {
+  aggregate: customers_aggregate_fields
+  nodes: [customers!]!
+}
+
+"""
+aggregate fields of "customers"
+"""
+type customers_aggregate_fields {
+  avg: customers_avg_fields
+  count(columns: [customers_select_column!], distinct: Boolean): Int
+  max: customers_max_fields
+  min: customers_min_fields
+  stddev: customers_stddev_fields
+  stddev_pop: customers_stddev_pop_fields
+  stddev_samp: customers_stddev_samp_fields
+  sum: customers_sum_fields
+  var_pop: customers_var_pop_fields
+  var_samp: customers_var_samp_fields
+  variance: customers_variance_fields
+}
+
+"""
+order by aggregate values of table "customers"
+"""
+input customers_aggregate_order_by {
+  avg: customers_avg_order_by
+  count: order_by
+  max: customers_max_order_by
+  min: customers_min_order_by
+  stddev: customers_stddev_order_by
+  stddev_pop: customers_stddev_pop_order_by
+  stddev_samp: customers_stddev_samp_order_by
+  sum: customers_sum_order_by
+  var_pop: customers_var_pop_order_by
+  var_samp: customers_var_samp_order_by
+  variance: customers_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "customers"
+"""
+input customers_arr_rel_insert_input {
+  data: [customers_insert_input!]!
+  on_conflict: customers_on_conflict
+}
+
+"""aggregate avg on columns"""
+type customers_avg_fields {
+  coupon_id: Float
+  customer_id: Float
+}
+
+"""
+order by avg() on columns of table "customers"
+"""
+input customers_avg_order_by {
+  coupon_id: order_by
+  customer_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "customers". All fields are combined with a logical 'AND'.
+"""
+input customers_bool_exp {
+  _and: [customers_bool_exp]
+  _not: customers_bool_exp
+  _or: [customers_bool_exp]
+  bookings: bookings_bool_exp
+  coupon_id: bigint_comparison_exp
+  customer_id: bigint_comparison_exp
+  date_became_customer: timestamptz_comparison_exp
+  date_last_hire: timestamptz_comparison_exp
+  discount_coupon: discount_coupons_bool_exp
+  first_name: String_comparison_exp
+  gender_mf: String_comparison_exp
+  good_or_bad_customer: String_comparison_exp
+  last_name: String_comparison_exp
+  payments: payments_bool_exp
+}
+
+"""
+unique or primary key constraints on table "customers"
+"""
+enum customers_constraint {
+  """unique or primary key constraint"""
+  idx_25427_customers_pkey
+}
+
+"""
+input type for incrementing integer columne in table "customers"
+"""
+input customers_inc_input {
+  coupon_id: bigint
+  customer_id: bigint
+}
+
+"""
+input type for inserting data into table "customers"
+"""
+input customers_insert_input {
+  bookings: bookings_arr_rel_insert_input
+  coupon_id: bigint
+  customer_id: bigint
+  date_became_customer: timestamptz
+  date_last_hire: timestamptz
+  discount_coupon: discount_coupons_obj_rel_insert_input
+  first_name: String
+  gender_mf: String
+  good_or_bad_customer: String
+  last_name: String
+  payments: payments_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type customers_max_fields {
+  coupon_id: bigint
+  customer_id: bigint
+  date_became_customer: timestamptz
+  date_last_hire: timestamptz
+  first_name: String
+  gender_mf: String
+  good_or_bad_customer: String
+  last_name: String
+}
+
+"""
+order by max() on columns of table "customers"
+"""
+input customers_max_order_by {
+  coupon_id: order_by
+  customer_id: order_by
+  date_became_customer: order_by
+  date_last_hire: order_by
+  first_name: order_by
+  gender_mf: order_by
+  good_or_bad_customer: order_by
+  last_name: order_by
+}
+
+"""aggregate min on columns"""
+type customers_min_fields {
+  coupon_id: bigint
+  customer_id: bigint
+  date_became_customer: timestamptz
+  date_last_hire: timestamptz
+  first_name: String
+  gender_mf: String
+  good_or_bad_customer: String
+  last_name: String
+}
+
+"""
+order by min() on columns of table "customers"
+"""
+input customers_min_order_by {
+  coupon_id: order_by
+  customer_id: order_by
+  date_became_customer: order_by
+  date_last_hire: order_by
+  first_name: order_by
+  gender_mf: order_by
+  good_or_bad_customer: order_by
+  last_name: order_by
+}
+
+"""
+response of any mutation on the table "customers"
+"""
+type customers_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [customers!]!
+}
+
+"""
+input type for inserting object relation for remote table "customers"
+"""
+input customers_obj_rel_insert_input {
+  data: customers_insert_input!
+  on_conflict: customers_on_conflict
+}
+
+"""
+on conflict condition type for table "customers"
+"""
+input customers_on_conflict {
+  constraint: customers_constraint!
+  update_columns: [customers_update_column!]!
+  where: customers_bool_exp
+}
+
+"""
+ordering options when selecting data from "customers"
+"""
+input customers_order_by {
+  bookings_aggregate: bookings_aggregate_order_by
+  coupon_id: order_by
+  customer_id: order_by
+  date_became_customer: order_by
+  date_last_hire: order_by
+  discount_coupon: discount_coupons_order_by
+  first_name: order_by
+  gender_mf: order_by
+  good_or_bad_customer: order_by
+  last_name: order_by
+  payments_aggregate: payments_aggregate_order_by
+}
+
+"""
+select columns of table "customers"
+"""
+enum customers_select_column {
+  """column name"""
+  coupon_id
+
+  """column name"""
+  customer_id
+
+  """column name"""
+  date_became_customer
+
+  """column name"""
+  date_last_hire
+
+  """column name"""
+  first_name
+
+  """column name"""
+  gender_mf
+
+  """column name"""
+  good_or_bad_customer
+
+  """column name"""
+  last_name
+}
+
+"""
+input type for updating data in table "customers"
+"""
+input customers_set_input {
+  coupon_id: bigint
+  customer_id: bigint
+  date_became_customer: timestamptz
+  date_last_hire: timestamptz
+  first_name: String
+  gender_mf: String
+  good_or_bad_customer: String
+  last_name: String
+}
+
+"""aggregate stddev on columns"""
+type customers_stddev_fields {
+  coupon_id: Float
+  customer_id: Float
+}
+
+"""
+order by stddev() on columns of table "customers"
+"""
+input customers_stddev_order_by {
+  coupon_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type customers_stddev_pop_fields {
+  coupon_id: Float
+  customer_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "customers"
+"""
+input customers_stddev_pop_order_by {
+  coupon_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type customers_stddev_samp_fields {
+  coupon_id: Float
+  customer_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "customers"
+"""
+input customers_stddev_samp_order_by {
+  coupon_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate sum on columns"""
+type customers_sum_fields {
+  coupon_id: bigint
+  customer_id: bigint
+}
+
+"""
+order by sum() on columns of table "customers"
+"""
+input customers_sum_order_by {
+  coupon_id: order_by
+  customer_id: order_by
+}
+
+"""
+update columns of table "customers"
+"""
+enum customers_update_column {
+  """column name"""
+  coupon_id
+
+  """column name"""
+  customer_id
+
+  """column name"""
+  date_became_customer
+
+  """column name"""
+  date_last_hire
+
+  """column name"""
+  first_name
+
+  """column name"""
+  gender_mf
+
+  """column name"""
+  good_or_bad_customer
+
+  """column name"""
+  last_name
+}
+
+"""aggregate var_pop on columns"""
+type customers_var_pop_fields {
+  coupon_id: Float
+  customer_id: Float
+}
+
+"""
+order by var_pop() on columns of table "customers"
+"""
+input customers_var_pop_order_by {
+  coupon_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type customers_var_samp_fields {
+  coupon_id: Float
+  customer_id: Float
+}
+
+"""
+order by var_samp() on columns of table "customers"
+"""
+input customers_var_samp_order_by {
+  coupon_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate variance on columns"""
+type customers_variance_fields {
+  coupon_id: Float
+  customer_id: Float
+}
+
+"""
+order by variance() on columns of table "customers"
+"""
+input customers_variance_order_by {
+  coupon_id: order_by
+  customer_id: order_by
+}
+
+"""
+columns and relationships of "discount_coupons"
+"""
+type discount_coupons {
+  coupon_amount: numeric
+  coupon_id: bigint!
+
+  """An array relationship"""
+  customers(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): [customers!]!
+
+  """An aggregated array relationship"""
+  customers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): customers_aggregate!
+  date_issued: timestamptz
+}
+
+"""
+aggregated selection of "discount_coupons"
+"""
+type discount_coupons_aggregate {
+  aggregate: discount_coupons_aggregate_fields
+  nodes: [discount_coupons!]!
+}
+
+"""
+aggregate fields of "discount_coupons"
+"""
+type discount_coupons_aggregate_fields {
+  avg: discount_coupons_avg_fields
+  count(columns: [discount_coupons_select_column!], distinct: Boolean): Int
+  max: discount_coupons_max_fields
+  min: discount_coupons_min_fields
+  stddev: discount_coupons_stddev_fields
+  stddev_pop: discount_coupons_stddev_pop_fields
+  stddev_samp: discount_coupons_stddev_samp_fields
+  sum: discount_coupons_sum_fields
+  var_pop: discount_coupons_var_pop_fields
+  var_samp: discount_coupons_var_samp_fields
+  variance: discount_coupons_variance_fields
+}
+
+"""
+order by aggregate values of table "discount_coupons"
+"""
+input discount_coupons_aggregate_order_by {
+  avg: discount_coupons_avg_order_by
+  count: order_by
+  max: discount_coupons_max_order_by
+  min: discount_coupons_min_order_by
+  stddev: discount_coupons_stddev_order_by
+  stddev_pop: discount_coupons_stddev_pop_order_by
+  stddev_samp: discount_coupons_stddev_samp_order_by
+  sum: discount_coupons_sum_order_by
+  var_pop: discount_coupons_var_pop_order_by
+  var_samp: discount_coupons_var_samp_order_by
+  variance: discount_coupons_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "discount_coupons"
+"""
+input discount_coupons_arr_rel_insert_input {
+  data: [discount_coupons_insert_input!]!
+  on_conflict: discount_coupons_on_conflict
+}
+
+"""aggregate avg on columns"""
+type discount_coupons_avg_fields {
+  coupon_amount: Float
+  coupon_id: Float
+}
+
+"""
+order by avg() on columns of table "discount_coupons"
+"""
+input discount_coupons_avg_order_by {
+  coupon_amount: order_by
+  coupon_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "discount_coupons". All fields are combined with a logical 'AND'.
+"""
+input discount_coupons_bool_exp {
+  _and: [discount_coupons_bool_exp]
+  _not: discount_coupons_bool_exp
+  _or: [discount_coupons_bool_exp]
+  coupon_amount: numeric_comparison_exp
+  coupon_id: bigint_comparison_exp
+  customers: customers_bool_exp
+  date_issued: timestamptz_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "discount_coupons"
+"""
+enum discount_coupons_constraint {
+  """unique or primary key constraint"""
+  idx_25424_discount_coupons_pkey
+}
+
+"""
+input type for incrementing integer columne in table "discount_coupons"
+"""
+input discount_coupons_inc_input {
+  coupon_id: bigint
+}
+
+"""
+input type for inserting data into table "discount_coupons"
+"""
+input discount_coupons_insert_input {
+  coupon_amount: numeric
+  coupon_id: bigint
+  customers: customers_arr_rel_insert_input
+  date_issued: timestamptz
+}
+
+"""aggregate max on columns"""
+type discount_coupons_max_fields {
+  coupon_amount: numeric
+  coupon_id: bigint
+  date_issued: timestamptz
+}
+
+"""
+order by max() on columns of table "discount_coupons"
+"""
+input discount_coupons_max_order_by {
+  coupon_amount: order_by
+  coupon_id: order_by
+  date_issued: order_by
+}
+
+"""aggregate min on columns"""
+type discount_coupons_min_fields {
+  coupon_amount: numeric
+  coupon_id: bigint
+  date_issued: timestamptz
+}
+
+"""
+order by min() on columns of table "discount_coupons"
+"""
+input discount_coupons_min_order_by {
+  coupon_amount: order_by
+  coupon_id: order_by
+  date_issued: order_by
+}
+
+"""
+response of any mutation on the table "discount_coupons"
+"""
+type discount_coupons_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [discount_coupons!]!
+}
+
+"""
+input type for inserting object relation for remote table "discount_coupons"
+"""
+input discount_coupons_obj_rel_insert_input {
+  data: discount_coupons_insert_input!
+  on_conflict: discount_coupons_on_conflict
+}
+
+"""
+on conflict condition type for table "discount_coupons"
+"""
+input discount_coupons_on_conflict {
+  constraint: discount_coupons_constraint!
+  update_columns: [discount_coupons_update_column!]!
+  where: discount_coupons_bool_exp
+}
+
+"""
+ordering options when selecting data from "discount_coupons"
+"""
+input discount_coupons_order_by {
+  coupon_amount: order_by
+  coupon_id: order_by
+  customers_aggregate: customers_aggregate_order_by
+  date_issued: order_by
+}
+
+"""
+select columns of table "discount_coupons"
+"""
+enum discount_coupons_select_column {
+  """column name"""
+  coupon_amount
+
+  """column name"""
+  coupon_id
+
+  """column name"""
+  date_issued
+}
+
+"""
+input type for updating data in table "discount_coupons"
+"""
+input discount_coupons_set_input {
+  coupon_amount: numeric
+  coupon_id: bigint
+  date_issued: timestamptz
+}
+
+"""aggregate stddev on columns"""
+type discount_coupons_stddev_fields {
+  coupon_amount: Float
+  coupon_id: Float
+}
+
+"""
+order by stddev() on columns of table "discount_coupons"
+"""
+input discount_coupons_stddev_order_by {
+  coupon_amount: order_by
+  coupon_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type discount_coupons_stddev_pop_fields {
+  coupon_amount: Float
+  coupon_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "discount_coupons"
+"""
+input discount_coupons_stddev_pop_order_by {
+  coupon_amount: order_by
+  coupon_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type discount_coupons_stddev_samp_fields {
+  coupon_amount: Float
+  coupon_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "discount_coupons"
+"""
+input discount_coupons_stddev_samp_order_by {
+  coupon_amount: order_by
+  coupon_id: order_by
+}
+
+"""aggregate sum on columns"""
+type discount_coupons_sum_fields {
+  coupon_amount: numeric
+  coupon_id: bigint
+}
+
+"""
+order by sum() on columns of table "discount_coupons"
+"""
+input discount_coupons_sum_order_by {
+  coupon_amount: order_by
+  coupon_id: order_by
+}
+
+"""
+update columns of table "discount_coupons"
+"""
+enum discount_coupons_update_column {
+  """column name"""
+  coupon_amount
+
+  """column name"""
+  coupon_id
+
+  """column name"""
+  date_issued
+}
+
+"""aggregate var_pop on columns"""
+type discount_coupons_var_pop_fields {
+  coupon_amount: Float
+  coupon_id: Float
+}
+
+"""
+order by var_pop() on columns of table "discount_coupons"
+"""
+input discount_coupons_var_pop_order_by {
+  coupon_amount: order_by
+  coupon_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type discount_coupons_var_samp_fields {
+  coupon_amount: Float
+  coupon_id: Float
+}
+
+"""
+order by var_samp() on columns of table "discount_coupons"
+"""
+input discount_coupons_var_samp_order_by {
+  coupon_amount: order_by
+  coupon_id: order_by
+}
+
+"""aggregate variance on columns"""
+type discount_coupons_variance_fields {
+  coupon_amount: Float
+  coupon_id: Float
+}
+
+"""
+order by variance() on columns of table "discount_coupons"
+"""
+input discount_coupons_variance_order_by {
+  coupon_amount: order_by
+  coupon_id: order_by
+}
+
+scalar float8
+
+"""
+expression to compare columns of type float8. All fields are combined with logical 'AND'.
+"""
+input float8_comparison_exp {
+  _eq: float8
+  _gt: float8
+  _gte: float8
+  _in: [float8!]
+  _is_null: Boolean
+  _lt: float8
+  _lte: float8
+  _neq: float8
+  _nin: [float8!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "bookings"
+  """
+  delete_bookings(
+    """filter the rows which have to be deleted"""
+    where: bookings_bool_exp!
+  ): bookings_mutation_response
+
+  """
+  delete data from the table: "customers"
+  """
+  delete_customers(
+    """filter the rows which have to be deleted"""
+    where: customers_bool_exp!
+  ): customers_mutation_response
+
+  """
+  delete data from the table: "discount_coupons"
+  """
+  delete_discount_coupons(
+    """filter the rows which have to be deleted"""
+    where: discount_coupons_bool_exp!
+  ): discount_coupons_mutation_response
+
+  """
+  delete data from the table: "payments"
+  """
+  delete_payments(
+    """filter the rows which have to be deleted"""
+    where: payments_bool_exp!
+  ): payments_mutation_response
+
+  """
+  delete data from the table: "products_booked"
+  """
+  delete_products_booked(
+    """filter the rows which have to be deleted"""
+    where: products_booked_bool_exp!
+  ): products_booked_mutation_response
+
+  """
+  delete data from the table: "products_for_hire"
+  """
+  delete_products_for_hire(
+    """filter the rows which have to be deleted"""
+    where: products_for_hire_bool_exp!
+  ): products_for_hire_mutation_response
+
+  """
+  delete data from the table: "view_product_availability"
+  """
+  delete_view_product_availability(
+    """filter the rows which have to be deleted"""
+    where: view_product_availability_bool_exp!
+  ): view_product_availability_mutation_response
+
+  """
+  insert data into the table: "bookings"
+  """
+  insert_bookings(
+    """the rows to be inserted"""
+    objects: [bookings_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: bookings_on_conflict
+  ): bookings_mutation_response
+
+  """
+  insert data into the table: "customers"
+  """
+  insert_customers(
+    """the rows to be inserted"""
+    objects: [customers_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: customers_on_conflict
+  ): customers_mutation_response
+
+  """
+  insert data into the table: "discount_coupons"
+  """
+  insert_discount_coupons(
+    """the rows to be inserted"""
+    objects: [discount_coupons_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: discount_coupons_on_conflict
+  ): discount_coupons_mutation_response
+
+  """
+  insert data into the table: "payments"
+  """
+  insert_payments(
+    """the rows to be inserted"""
+    objects: [payments_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: payments_on_conflict
+  ): payments_mutation_response
+
+  """
+  insert data into the table: "products_booked"
+  """
+  insert_products_booked(
+    """the rows to be inserted"""
+    objects: [products_booked_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: products_booked_on_conflict
+  ): products_booked_mutation_response
+
+  """
+  insert data into the table: "products_for_hire"
+  """
+  insert_products_for_hire(
+    """the rows to be inserted"""
+    objects: [products_for_hire_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: products_for_hire_on_conflict
+  ): products_for_hire_mutation_response
+
+  """
+  insert data into the table: "view_product_availability"
+  """
+  insert_view_product_availability(
+    """the rows to be inserted"""
+    objects: [view_product_availability_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: view_product_availability_on_conflict
+  ): view_product_availability_mutation_response
+
+  """
+  update data of the table: "bookings"
+  """
+  update_bookings(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: bookings_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: bookings_set_input
+
+    """filter the rows which have to be updated"""
+    where: bookings_bool_exp!
+  ): bookings_mutation_response
+
+  """
+  update data of the table: "customers"
+  """
+  update_customers(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customers_set_input
+
+    """filter the rows which have to be updated"""
+    where: customers_bool_exp!
+  ): customers_mutation_response
+
+  """
+  update data of the table: "discount_coupons"
+  """
+  update_discount_coupons(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: discount_coupons_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: discount_coupons_set_input
+
+    """filter the rows which have to be updated"""
+    where: discount_coupons_bool_exp!
+  ): discount_coupons_mutation_response
+
+  """
+  update data of the table: "payments"
+  """
+  update_payments(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: payments_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: payments_set_input
+
+    """filter the rows which have to be updated"""
+    where: payments_bool_exp!
+  ): payments_mutation_response
+
+  """
+  update data of the table: "products_booked"
+  """
+  update_products_booked(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: products_booked_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: products_booked_set_input
+
+    """filter the rows which have to be updated"""
+    where: products_booked_bool_exp!
+  ): products_booked_mutation_response
+
+  """
+  update data of the table: "products_for_hire"
+  """
+  update_products_for_hire(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: products_for_hire_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: products_for_hire_set_input
+
+    """filter the rows which have to be updated"""
+    where: products_for_hire_bool_exp!
+  ): products_for_hire_mutation_response
+
+  """
+  update data of the table: "view_product_availability"
+  """
+  update_view_product_availability(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: view_product_availability_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: view_product_availability_set_input
+
+    """filter the rows which have to be updated"""
+    where: view_product_availability_bool_exp!
+  ): view_product_availability_mutation_response
+}
+
+scalar numeric
+
+"""
+expression to compare columns of type numeric. All fields are combined with logical 'AND'.
+"""
+input numeric_comparison_exp {
+  _eq: numeric
+  _gt: numeric
+  _gte: numeric
+  _in: [numeric!]
+  _is_null: Boolean
+  _lt: numeric
+  _lte: numeric
+  _neq: numeric
+  _nin: [numeric!]
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "payments"
+"""
+type payments {
+  amount_due: numeric
+  amount_paid: numeric
+  amount_paid_in_full_yn: String
+
+  """An object relationship"""
+  booking: bookings
+  booking_id: bigint
+
+  """An object relationship"""
+  customer: customers
+  customer_id: bigint
+  payment_date: timestamptz
+  payment_id: bigint!
+  payment_type_code: String
+}
+
+"""
+aggregated selection of "payments"
+"""
+type payments_aggregate {
+  aggregate: payments_aggregate_fields
+  nodes: [payments!]!
+}
+
+"""
+aggregate fields of "payments"
+"""
+type payments_aggregate_fields {
+  avg: payments_avg_fields
+  count(columns: [payments_select_column!], distinct: Boolean): Int
+  max: payments_max_fields
+  min: payments_min_fields
+  stddev: payments_stddev_fields
+  stddev_pop: payments_stddev_pop_fields
+  stddev_samp: payments_stddev_samp_fields
+  sum: payments_sum_fields
+  var_pop: payments_var_pop_fields
+  var_samp: payments_var_samp_fields
+  variance: payments_variance_fields
+}
+
+"""
+order by aggregate values of table "payments"
+"""
+input payments_aggregate_order_by {
+  avg: payments_avg_order_by
+  count: order_by
+  max: payments_max_order_by
+  min: payments_min_order_by
+  stddev: payments_stddev_order_by
+  stddev_pop: payments_stddev_pop_order_by
+  stddev_samp: payments_stddev_samp_order_by
+  sum: payments_sum_order_by
+  var_pop: payments_var_pop_order_by
+  var_samp: payments_var_samp_order_by
+  variance: payments_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "payments"
+"""
+input payments_arr_rel_insert_input {
+  data: [payments_insert_input!]!
+  on_conflict: payments_on_conflict
+}
+
+"""aggregate avg on columns"""
+type payments_avg_fields {
+  amount_due: Float
+  amount_paid: Float
+  booking_id: Float
+  customer_id: Float
+  payment_id: Float
+}
+
+"""
+order by avg() on columns of table "payments"
+"""
+input payments_avg_order_by {
+  amount_due: order_by
+  amount_paid: order_by
+  booking_id: order_by
+  customer_id: order_by
+  payment_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "payments". All fields are combined with a logical 'AND'.
+"""
+input payments_bool_exp {
+  _and: [payments_bool_exp]
+  _not: payments_bool_exp
+  _or: [payments_bool_exp]
+  amount_due: numeric_comparison_exp
+  amount_paid: numeric_comparison_exp
+  amount_paid_in_full_yn: String_comparison_exp
+  booking: bookings_bool_exp
+  booking_id: bigint_comparison_exp
+  customer: customers_bool_exp
+  customer_id: bigint_comparison_exp
+  payment_date: timestamptz_comparison_exp
+  payment_id: bigint_comparison_exp
+  payment_type_code: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "payments"
+"""
+enum payments_constraint {
+  """unique or primary key constraint"""
+  idx_25445_payments_pkey
+}
+
+"""
+input type for incrementing integer columne in table "payments"
+"""
+input payments_inc_input {
+  booking_id: bigint
+  customer_id: bigint
+  payment_id: bigint
+}
+
+"""
+input type for inserting data into table "payments"
+"""
+input payments_insert_input {
+  amount_due: numeric
+  amount_paid: numeric
+  amount_paid_in_full_yn: String
+  booking: bookings_obj_rel_insert_input
+  booking_id: bigint
+  customer: customers_obj_rel_insert_input
+  customer_id: bigint
+  payment_date: timestamptz
+  payment_id: bigint
+  payment_type_code: String
+}
+
+"""aggregate max on columns"""
+type payments_max_fields {
+  amount_due: numeric
+  amount_paid: numeric
+  amount_paid_in_full_yn: String
+  booking_id: bigint
+  customer_id: bigint
+  payment_date: timestamptz
+  payment_id: bigint
+  payment_type_code: String
+}
+
+"""
+order by max() on columns of table "payments"
+"""
+input payments_max_order_by {
+  amount_due: order_by
+  amount_paid: order_by
+  amount_paid_in_full_yn: order_by
+  booking_id: order_by
+  customer_id: order_by
+  payment_date: order_by
+  payment_id: order_by
+  payment_type_code: order_by
+}
+
+"""aggregate min on columns"""
+type payments_min_fields {
+  amount_due: numeric
+  amount_paid: numeric
+  amount_paid_in_full_yn: String
+  booking_id: bigint
+  customer_id: bigint
+  payment_date: timestamptz
+  payment_id: bigint
+  payment_type_code: String
+}
+
+"""
+order by min() on columns of table "payments"
+"""
+input payments_min_order_by {
+  amount_due: order_by
+  amount_paid: order_by
+  amount_paid_in_full_yn: order_by
+  booking_id: order_by
+  customer_id: order_by
+  payment_date: order_by
+  payment_id: order_by
+  payment_type_code: order_by
+}
+
+"""
+response of any mutation on the table "payments"
+"""
+type payments_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [payments!]!
+}
+
+"""
+input type for inserting object relation for remote table "payments"
+"""
+input payments_obj_rel_insert_input {
+  data: payments_insert_input!
+  on_conflict: payments_on_conflict
+}
+
+"""
+on conflict condition type for table "payments"
+"""
+input payments_on_conflict {
+  constraint: payments_constraint!
+  update_columns: [payments_update_column!]!
+  where: payments_bool_exp
+}
+
+"""
+ordering options when selecting data from "payments"
+"""
+input payments_order_by {
+  amount_due: order_by
+  amount_paid: order_by
+  amount_paid_in_full_yn: order_by
+  booking: bookings_order_by
+  booking_id: order_by
+  customer: customers_order_by
+  customer_id: order_by
+  payment_date: order_by
+  payment_id: order_by
+  payment_type_code: order_by
+}
+
+"""
+select columns of table "payments"
+"""
+enum payments_select_column {
+  """column name"""
+  amount_due
+
+  """column name"""
+  amount_paid
+
+  """column name"""
+  amount_paid_in_full_yn
+
+  """column name"""
+  booking_id
+
+  """column name"""
+  customer_id
+
+  """column name"""
+  payment_date
+
+  """column name"""
+  payment_id
+
+  """column name"""
+  payment_type_code
+}
+
+"""
+input type for updating data in table "payments"
+"""
+input payments_set_input {
+  amount_due: numeric
+  amount_paid: numeric
+  amount_paid_in_full_yn: String
+  booking_id: bigint
+  customer_id: bigint
+  payment_date: timestamptz
+  payment_id: bigint
+  payment_type_code: String
+}
+
+"""aggregate stddev on columns"""
+type payments_stddev_fields {
+  amount_due: Float
+  amount_paid: Float
+  booking_id: Float
+  customer_id: Float
+  payment_id: Float
+}
+
+"""
+order by stddev() on columns of table "payments"
+"""
+input payments_stddev_order_by {
+  amount_due: order_by
+  amount_paid: order_by
+  booking_id: order_by
+  customer_id: order_by
+  payment_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type payments_stddev_pop_fields {
+  amount_due: Float
+  amount_paid: Float
+  booking_id: Float
+  customer_id: Float
+  payment_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "payments"
+"""
+input payments_stddev_pop_order_by {
+  amount_due: order_by
+  amount_paid: order_by
+  booking_id: order_by
+  customer_id: order_by
+  payment_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type payments_stddev_samp_fields {
+  amount_due: Float
+  amount_paid: Float
+  booking_id: Float
+  customer_id: Float
+  payment_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "payments"
+"""
+input payments_stddev_samp_order_by {
+  amount_due: order_by
+  amount_paid: order_by
+  booking_id: order_by
+  customer_id: order_by
+  payment_id: order_by
+}
+
+"""aggregate sum on columns"""
+type payments_sum_fields {
+  amount_due: numeric
+  amount_paid: numeric
+  booking_id: bigint
+  customer_id: bigint
+  payment_id: bigint
+}
+
+"""
+order by sum() on columns of table "payments"
+"""
+input payments_sum_order_by {
+  amount_due: order_by
+  amount_paid: order_by
+  booking_id: order_by
+  customer_id: order_by
+  payment_id: order_by
+}
+
+"""
+update columns of table "payments"
+"""
+enum payments_update_column {
+  """column name"""
+  amount_due
+
+  """column name"""
+  amount_paid
+
+  """column name"""
+  amount_paid_in_full_yn
+
+  """column name"""
+  booking_id
+
+  """column name"""
+  customer_id
+
+  """column name"""
+  payment_date
+
+  """column name"""
+  payment_id
+
+  """column name"""
+  payment_type_code
+}
+
+"""aggregate var_pop on columns"""
+type payments_var_pop_fields {
+  amount_due: Float
+  amount_paid: Float
+  booking_id: Float
+  customer_id: Float
+  payment_id: Float
+}
+
+"""
+order by var_pop() on columns of table "payments"
+"""
+input payments_var_pop_order_by {
+  amount_due: order_by
+  amount_paid: order_by
+  booking_id: order_by
+  customer_id: order_by
+  payment_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type payments_var_samp_fields {
+  amount_due: Float
+  amount_paid: Float
+  booking_id: Float
+  customer_id: Float
+  payment_id: Float
+}
+
+"""
+order by var_samp() on columns of table "payments"
+"""
+input payments_var_samp_order_by {
+  amount_due: order_by
+  amount_paid: order_by
+  booking_id: order_by
+  customer_id: order_by
+  payment_id: order_by
+}
+
+"""aggregate variance on columns"""
+type payments_variance_fields {
+  amount_due: Float
+  amount_paid: Float
+  booking_id: Float
+  customer_id: Float
+  payment_id: Float
+}
+
+"""
+order by variance() on columns of table "payments"
+"""
+input payments_variance_order_by {
+  amount_due: order_by
+  amount_paid: order_by
+  booking_id: order_by
+  customer_id: order_by
+  payment_id: order_by
+}
+
+"""
+columns and relationships of "products_booked"
+"""
+type products_booked {
+  booked_amount: float8
+  booked_count: bigint
+
+  """An object relationship"""
+  booking: bookings!
+  booking_id: bigint!
+  product_id: bigint!
+
+  """An object relationship"""
+  products_for_hire: products_for_hire!
+  returned_late_yn: String
+  returned_yn: String
+}
+
+"""
+aggregated selection of "products_booked"
+"""
+type products_booked_aggregate {
+  aggregate: products_booked_aggregate_fields
+  nodes: [products_booked!]!
+}
+
+"""
+aggregate fields of "products_booked"
+"""
+type products_booked_aggregate_fields {
+  avg: products_booked_avg_fields
+  count(columns: [products_booked_select_column!], distinct: Boolean): Int
+  max: products_booked_max_fields
+  min: products_booked_min_fields
+  stddev: products_booked_stddev_fields
+  stddev_pop: products_booked_stddev_pop_fields
+  stddev_samp: products_booked_stddev_samp_fields
+  sum: products_booked_sum_fields
+  var_pop: products_booked_var_pop_fields
+  var_samp: products_booked_var_samp_fields
+  variance: products_booked_variance_fields
+}
+
+"""
+order by aggregate values of table "products_booked"
+"""
+input products_booked_aggregate_order_by {
+  avg: products_booked_avg_order_by
+  count: order_by
+  max: products_booked_max_order_by
+  min: products_booked_min_order_by
+  stddev: products_booked_stddev_order_by
+  stddev_pop: products_booked_stddev_pop_order_by
+  stddev_samp: products_booked_stddev_samp_order_by
+  sum: products_booked_sum_order_by
+  var_pop: products_booked_var_pop_order_by
+  var_samp: products_booked_var_samp_order_by
+  variance: products_booked_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "products_booked"
+"""
+input products_booked_arr_rel_insert_input {
+  data: [products_booked_insert_input!]!
+  on_conflict: products_booked_on_conflict
+}
+
+"""aggregate avg on columns"""
+type products_booked_avg_fields {
+  booked_amount: Float
+  booked_count: Float
+  booking_id: Float
+  product_id: Float
+}
+
+"""
+order by avg() on columns of table "products_booked"
+"""
+input products_booked_avg_order_by {
+  booked_amount: order_by
+  booked_count: order_by
+  booking_id: order_by
+  product_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "products_booked". All fields are combined with a logical 'AND'.
+"""
+input products_booked_bool_exp {
+  _and: [products_booked_bool_exp]
+  _not: products_booked_bool_exp
+  _or: [products_booked_bool_exp]
+  booked_amount: float8_comparison_exp
+  booked_count: bigint_comparison_exp
+  booking: bookings_bool_exp
+  booking_id: bigint_comparison_exp
+  product_id: bigint_comparison_exp
+  products_for_hire: products_for_hire_bool_exp
+  returned_late_yn: String_comparison_exp
+  returned_yn: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "products_booked"
+"""
+enum products_booked_constraint {
+  """unique or primary key constraint"""
+  idx_25451_sqlite_autoindex_products_booked_1
+}
+
+"""
+input type for incrementing integer columne in table "products_booked"
+"""
+input products_booked_inc_input {
+  booked_count: bigint
+  booking_id: bigint
+  product_id: bigint
+}
+
+"""
+input type for inserting data into table "products_booked"
+"""
+input products_booked_insert_input {
+  booked_amount: float8
+  booked_count: bigint
+  booking: bookings_obj_rel_insert_input
+  booking_id: bigint
+  product_id: bigint
+  products_for_hire: products_for_hire_obj_rel_insert_input
+  returned_late_yn: String
+  returned_yn: String
+}
+
+"""aggregate max on columns"""
+type products_booked_max_fields {
+  booked_amount: float8
+  booked_count: bigint
+  booking_id: bigint
+  product_id: bigint
+  returned_late_yn: String
+  returned_yn: String
+}
+
+"""
+order by max() on columns of table "products_booked"
+"""
+input products_booked_max_order_by {
+  booked_amount: order_by
+  booked_count: order_by
+  booking_id: order_by
+  product_id: order_by
+  returned_late_yn: order_by
+  returned_yn: order_by
+}
+
+"""aggregate min on columns"""
+type products_booked_min_fields {
+  booked_amount: float8
+  booked_count: bigint
+  booking_id: bigint
+  product_id: bigint
+  returned_late_yn: String
+  returned_yn: String
+}
+
+"""
+order by min() on columns of table "products_booked"
+"""
+input products_booked_min_order_by {
+  booked_amount: order_by
+  booked_count: order_by
+  booking_id: order_by
+  product_id: order_by
+  returned_late_yn: order_by
+  returned_yn: order_by
+}
+
+"""
+response of any mutation on the table "products_booked"
+"""
+type products_booked_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [products_booked!]!
+}
+
+"""
+input type for inserting object relation for remote table "products_booked"
+"""
+input products_booked_obj_rel_insert_input {
+  data: products_booked_insert_input!
+  on_conflict: products_booked_on_conflict
+}
+
+"""
+on conflict condition type for table "products_booked"
+"""
+input products_booked_on_conflict {
+  constraint: products_booked_constraint!
+  update_columns: [products_booked_update_column!]!
+  where: products_booked_bool_exp
+}
+
+"""
+ordering options when selecting data from "products_booked"
+"""
+input products_booked_order_by {
+  booked_amount: order_by
+  booked_count: order_by
+  booking: bookings_order_by
+  booking_id: order_by
+  product_id: order_by
+  products_for_hire: products_for_hire_order_by
+  returned_late_yn: order_by
+  returned_yn: order_by
+}
+
+"""
+select columns of table "products_booked"
+"""
+enum products_booked_select_column {
+  """column name"""
+  booked_amount
+
+  """column name"""
+  booked_count
+
+  """column name"""
+  booking_id
+
+  """column name"""
+  product_id
+
+  """column name"""
+  returned_late_yn
+
+  """column name"""
+  returned_yn
+}
+
+"""
+input type for updating data in table "products_booked"
+"""
+input products_booked_set_input {
+  booked_amount: float8
+  booked_count: bigint
+  booking_id: bigint
+  product_id: bigint
+  returned_late_yn: String
+  returned_yn: String
+}
+
+"""aggregate stddev on columns"""
+type products_booked_stddev_fields {
+  booked_amount: Float
+  booked_count: Float
+  booking_id: Float
+  product_id: Float
+}
+
+"""
+order by stddev() on columns of table "products_booked"
+"""
+input products_booked_stddev_order_by {
+  booked_amount: order_by
+  booked_count: order_by
+  booking_id: order_by
+  product_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type products_booked_stddev_pop_fields {
+  booked_amount: Float
+  booked_count: Float
+  booking_id: Float
+  product_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "products_booked"
+"""
+input products_booked_stddev_pop_order_by {
+  booked_amount: order_by
+  booked_count: order_by
+  booking_id: order_by
+  product_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type products_booked_stddev_samp_fields {
+  booked_amount: Float
+  booked_count: Float
+  booking_id: Float
+  product_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "products_booked"
+"""
+input products_booked_stddev_samp_order_by {
+  booked_amount: order_by
+  booked_count: order_by
+  booking_id: order_by
+  product_id: order_by
+}
+
+"""aggregate sum on columns"""
+type products_booked_sum_fields {
+  booked_amount: float8
+  booked_count: bigint
+  booking_id: bigint
+  product_id: bigint
+}
+
+"""
+order by sum() on columns of table "products_booked"
+"""
+input products_booked_sum_order_by {
+  booked_amount: order_by
+  booked_count: order_by
+  booking_id: order_by
+  product_id: order_by
+}
+
+"""
+update columns of table "products_booked"
+"""
+enum products_booked_update_column {
+  """column name"""
+  booked_amount
+
+  """column name"""
+  booked_count
+
+  """column name"""
+  booking_id
+
+  """column name"""
+  product_id
+
+  """column name"""
+  returned_late_yn
+
+  """column name"""
+  returned_yn
+}
+
+"""aggregate var_pop on columns"""
+type products_booked_var_pop_fields {
+  booked_amount: Float
+  booked_count: Float
+  booking_id: Float
+  product_id: Float
+}
+
+"""
+order by var_pop() on columns of table "products_booked"
+"""
+input products_booked_var_pop_order_by {
+  booked_amount: order_by
+  booked_count: order_by
+  booking_id: order_by
+  product_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type products_booked_var_samp_fields {
+  booked_amount: Float
+  booked_count: Float
+  booking_id: Float
+  product_id: Float
+}
+
+"""
+order by var_samp() on columns of table "products_booked"
+"""
+input products_booked_var_samp_order_by {
+  booked_amount: order_by
+  booked_count: order_by
+  booking_id: order_by
+  product_id: order_by
+}
+
+"""aggregate variance on columns"""
+type products_booked_variance_fields {
+  booked_amount: Float
+  booked_count: Float
+  booking_id: Float
+  product_id: Float
+}
+
+"""
+order by variance() on columns of table "products_booked"
+"""
+input products_booked_variance_order_by {
+  booked_amount: order_by
+  booked_count: order_by
+  booking_id: order_by
+  product_id: order_by
+}
+
+"""
+columns and relationships of "products_for_hire"
+"""
+type products_for_hire {
+  daily_hire_cost: numeric
+  product_description: String
+  product_id: bigint!
+  product_name: String
+  product_type_code: String
+
+  """An array relationship"""
+  products_bookeds(
+    """distinct select on columns"""
+    distinct_on: [products_booked_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_booked_order_by!]
+
+    """filter the rows returned"""
+    where: products_booked_bool_exp
+  ): [products_booked!]!
+
+  """An aggregated array relationship"""
+  products_bookeds_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_booked_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_booked_order_by!]
+
+    """filter the rows returned"""
+    where: products_booked_bool_exp
+  ): products_booked_aggregate!
+
+  """An array relationship"""
+  view_product_availabilities(
+    """distinct select on columns"""
+    distinct_on: [view_product_availability_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [view_product_availability_order_by!]
+
+    """filter the rows returned"""
+    where: view_product_availability_bool_exp
+  ): [view_product_availability!]!
+
+  """An aggregated array relationship"""
+  view_product_availabilities_aggregate(
+    """distinct select on columns"""
+    distinct_on: [view_product_availability_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [view_product_availability_order_by!]
+
+    """filter the rows returned"""
+    where: view_product_availability_bool_exp
+  ): view_product_availability_aggregate!
+}
+
+"""
+aggregated selection of "products_for_hire"
+"""
+type products_for_hire_aggregate {
+  aggregate: products_for_hire_aggregate_fields
+  nodes: [products_for_hire!]!
+}
+
+"""
+aggregate fields of "products_for_hire"
+"""
+type products_for_hire_aggregate_fields {
+  avg: products_for_hire_avg_fields
+  count(columns: [products_for_hire_select_column!], distinct: Boolean): Int
+  max: products_for_hire_max_fields
+  min: products_for_hire_min_fields
+  stddev: products_for_hire_stddev_fields
+  stddev_pop: products_for_hire_stddev_pop_fields
+  stddev_samp: products_for_hire_stddev_samp_fields
+  sum: products_for_hire_sum_fields
+  var_pop: products_for_hire_var_pop_fields
+  var_samp: products_for_hire_var_samp_fields
+  variance: products_for_hire_variance_fields
+}
+
+"""
+order by aggregate values of table "products_for_hire"
+"""
+input products_for_hire_aggregate_order_by {
+  avg: products_for_hire_avg_order_by
+  count: order_by
+  max: products_for_hire_max_order_by
+  min: products_for_hire_min_order_by
+  stddev: products_for_hire_stddev_order_by
+  stddev_pop: products_for_hire_stddev_pop_order_by
+  stddev_samp: products_for_hire_stddev_samp_order_by
+  sum: products_for_hire_sum_order_by
+  var_pop: products_for_hire_var_pop_order_by
+  var_samp: products_for_hire_var_samp_order_by
+  variance: products_for_hire_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "products_for_hire"
+"""
+input products_for_hire_arr_rel_insert_input {
+  data: [products_for_hire_insert_input!]!
+  on_conflict: products_for_hire_on_conflict
+}
+
+"""aggregate avg on columns"""
+type products_for_hire_avg_fields {
+  daily_hire_cost: Float
+  product_id: Float
+}
+
+"""
+order by avg() on columns of table "products_for_hire"
+"""
+input products_for_hire_avg_order_by {
+  daily_hire_cost: order_by
+  product_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "products_for_hire". All fields are combined with a logical 'AND'.
+"""
+input products_for_hire_bool_exp {
+  _and: [products_for_hire_bool_exp]
+  _not: products_for_hire_bool_exp
+  _or: [products_for_hire_bool_exp]
+  daily_hire_cost: numeric_comparison_exp
+  product_description: String_comparison_exp
+  product_id: bigint_comparison_exp
+  product_name: String_comparison_exp
+  product_type_code: String_comparison_exp
+  products_bookeds: products_booked_bool_exp
+  view_product_availabilities: view_product_availability_bool_exp
+}
+
+"""
+unique or primary key constraints on table "products_for_hire"
+"""
+enum products_for_hire_constraint {
+  """unique or primary key constraint"""
+  idx_25439_products_for_hire_pkey
+}
+
+"""
+input type for incrementing integer columne in table "products_for_hire"
+"""
+input products_for_hire_inc_input {
+  product_id: bigint
+}
+
+"""
+input type for inserting data into table "products_for_hire"
+"""
+input products_for_hire_insert_input {
+  daily_hire_cost: numeric
+  product_description: String
+  product_id: bigint
+  product_name: String
+  product_type_code: String
+  products_bookeds: products_booked_arr_rel_insert_input
+  view_product_availabilities: view_product_availability_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type products_for_hire_max_fields {
+  daily_hire_cost: numeric
+  product_description: String
+  product_id: bigint
+  product_name: String
+  product_type_code: String
+}
+
+"""
+order by max() on columns of table "products_for_hire"
+"""
+input products_for_hire_max_order_by {
+  daily_hire_cost: order_by
+  product_description: order_by
+  product_id: order_by
+  product_name: order_by
+  product_type_code: order_by
+}
+
+"""aggregate min on columns"""
+type products_for_hire_min_fields {
+  daily_hire_cost: numeric
+  product_description: String
+  product_id: bigint
+  product_name: String
+  product_type_code: String
+}
+
+"""
+order by min() on columns of table "products_for_hire"
+"""
+input products_for_hire_min_order_by {
+  daily_hire_cost: order_by
+  product_description: order_by
+  product_id: order_by
+  product_name: order_by
+  product_type_code: order_by
+}
+
+"""
+response of any mutation on the table "products_for_hire"
+"""
+type products_for_hire_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [products_for_hire!]!
+}
+
+"""
+input type for inserting object relation for remote table "products_for_hire"
+"""
+input products_for_hire_obj_rel_insert_input {
+  data: products_for_hire_insert_input!
+  on_conflict: products_for_hire_on_conflict
+}
+
+"""
+on conflict condition type for table "products_for_hire"
+"""
+input products_for_hire_on_conflict {
+  constraint: products_for_hire_constraint!
+  update_columns: [products_for_hire_update_column!]!
+  where: products_for_hire_bool_exp
+}
+
+"""
+ordering options when selecting data from "products_for_hire"
+"""
+input products_for_hire_order_by {
+  daily_hire_cost: order_by
+  product_description: order_by
+  product_id: order_by
+  product_name: order_by
+  product_type_code: order_by
+  products_bookeds_aggregate: products_booked_aggregate_order_by
+  view_product_availabilities_aggregate: view_product_availability_aggregate_order_by
+}
+
+"""
+select columns of table "products_for_hire"
+"""
+enum products_for_hire_select_column {
+  """column name"""
+  daily_hire_cost
+
+  """column name"""
+  product_description
+
+  """column name"""
+  product_id
+
+  """column name"""
+  product_name
+
+  """column name"""
+  product_type_code
+}
+
+"""
+input type for updating data in table "products_for_hire"
+"""
+input products_for_hire_set_input {
+  daily_hire_cost: numeric
+  product_description: String
+  product_id: bigint
+  product_name: String
+  product_type_code: String
+}
+
+"""aggregate stddev on columns"""
+type products_for_hire_stddev_fields {
+  daily_hire_cost: Float
+  product_id: Float
+}
+
+"""
+order by stddev() on columns of table "products_for_hire"
+"""
+input products_for_hire_stddev_order_by {
+  daily_hire_cost: order_by
+  product_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type products_for_hire_stddev_pop_fields {
+  daily_hire_cost: Float
+  product_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "products_for_hire"
+"""
+input products_for_hire_stddev_pop_order_by {
+  daily_hire_cost: order_by
+  product_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type products_for_hire_stddev_samp_fields {
+  daily_hire_cost: Float
+  product_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "products_for_hire"
+"""
+input products_for_hire_stddev_samp_order_by {
+  daily_hire_cost: order_by
+  product_id: order_by
+}
+
+"""aggregate sum on columns"""
+type products_for_hire_sum_fields {
+  daily_hire_cost: numeric
+  product_id: bigint
+}
+
+"""
+order by sum() on columns of table "products_for_hire"
+"""
+input products_for_hire_sum_order_by {
+  daily_hire_cost: order_by
+  product_id: order_by
+}
+
+"""
+update columns of table "products_for_hire"
+"""
+enum products_for_hire_update_column {
+  """column name"""
+  daily_hire_cost
+
+  """column name"""
+  product_description
+
+  """column name"""
+  product_id
+
+  """column name"""
+  product_name
+
+  """column name"""
+  product_type_code
+}
+
+"""aggregate var_pop on columns"""
+type products_for_hire_var_pop_fields {
+  daily_hire_cost: Float
+  product_id: Float
+}
+
+"""
+order by var_pop() on columns of table "products_for_hire"
+"""
+input products_for_hire_var_pop_order_by {
+  daily_hire_cost: order_by
+  product_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type products_for_hire_var_samp_fields {
+  daily_hire_cost: Float
+  product_id: Float
+}
+
+"""
+order by var_samp() on columns of table "products_for_hire"
+"""
+input products_for_hire_var_samp_order_by {
+  daily_hire_cost: order_by
+  product_id: order_by
+}
+
+"""aggregate variance on columns"""
+type products_for_hire_variance_fields {
+  daily_hire_cost: Float
+  product_id: Float
+}
+
+"""
+order by variance() on columns of table "products_for_hire"
+"""
+input products_for_hire_variance_order_by {
+  daily_hire_cost: order_by
+  product_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "bookings"
+  """
+  bookings(
+    """distinct select on columns"""
+    distinct_on: [bookings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [bookings_order_by!]
+
+    """filter the rows returned"""
+    where: bookings_bool_exp
+  ): [bookings!]!
+
+  """
+  fetch aggregated fields from the table: "bookings"
+  """
+  bookings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [bookings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [bookings_order_by!]
+
+    """filter the rows returned"""
+    where: bookings_bool_exp
+  ): bookings_aggregate!
+
+  """fetch data from the table: "bookings" using primary key columns"""
+  bookings_by_pk(booking_id: bigint!): bookings
+
+  """
+  fetch data from the table: "customers"
+  """
+  customers(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): [customers!]!
+
+  """
+  fetch aggregated fields from the table: "customers"
+  """
+  customers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): customers_aggregate!
+
+  """fetch data from the table: "customers" using primary key columns"""
+  customers_by_pk(customer_id: bigint!): customers
+
+  """
+  fetch data from the table: "discount_coupons"
+  """
+  discount_coupons(
+    """distinct select on columns"""
+    distinct_on: [discount_coupons_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [discount_coupons_order_by!]
+
+    """filter the rows returned"""
+    where: discount_coupons_bool_exp
+  ): [discount_coupons!]!
+
+  """
+  fetch aggregated fields from the table: "discount_coupons"
+  """
+  discount_coupons_aggregate(
+    """distinct select on columns"""
+    distinct_on: [discount_coupons_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [discount_coupons_order_by!]
+
+    """filter the rows returned"""
+    where: discount_coupons_bool_exp
+  ): discount_coupons_aggregate!
+
+  """
+  fetch data from the table: "discount_coupons" using primary key columns
+  """
+  discount_coupons_by_pk(coupon_id: bigint!): discount_coupons
+
+  """
+  fetch data from the table: "payments"
+  """
+  payments(
+    """distinct select on columns"""
+    distinct_on: [payments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payments_order_by!]
+
+    """filter the rows returned"""
+    where: payments_bool_exp
+  ): [payments!]!
+
+  """
+  fetch aggregated fields from the table: "payments"
+  """
+  payments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [payments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payments_order_by!]
+
+    """filter the rows returned"""
+    where: payments_bool_exp
+  ): payments_aggregate!
+
+  """fetch data from the table: "payments" using primary key columns"""
+  payments_by_pk(payment_id: bigint!): payments
+
+  """
+  fetch data from the table: "products_booked"
+  """
+  products_booked(
+    """distinct select on columns"""
+    distinct_on: [products_booked_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_booked_order_by!]
+
+    """filter the rows returned"""
+    where: products_booked_bool_exp
+  ): [products_booked!]!
+
+  """
+  fetch aggregated fields from the table: "products_booked"
+  """
+  products_booked_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_booked_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_booked_order_by!]
+
+    """filter the rows returned"""
+    where: products_booked_bool_exp
+  ): products_booked_aggregate!
+
+  """fetch data from the table: "products_booked" using primary key columns"""
+  products_booked_by_pk(booking_id: bigint!, product_id: bigint!): products_booked
+
+  """
+  fetch data from the table: "products_for_hire"
+  """
+  products_for_hire(
+    """distinct select on columns"""
+    distinct_on: [products_for_hire_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_for_hire_order_by!]
+
+    """filter the rows returned"""
+    where: products_for_hire_bool_exp
+  ): [products_for_hire!]!
+
+  """
+  fetch aggregated fields from the table: "products_for_hire"
+  """
+  products_for_hire_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_for_hire_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_for_hire_order_by!]
+
+    """filter the rows returned"""
+    where: products_for_hire_bool_exp
+  ): products_for_hire_aggregate!
+
+  """
+  fetch data from the table: "products_for_hire" using primary key columns
+  """
+  products_for_hire_by_pk(product_id: bigint!): products_for_hire
+
+  """
+  fetch data from the table: "view_product_availability"
+  """
+  view_product_availability(
+    """distinct select on columns"""
+    distinct_on: [view_product_availability_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [view_product_availability_order_by!]
+
+    """filter the rows returned"""
+    where: view_product_availability_bool_exp
+  ): [view_product_availability!]!
+
+  """
+  fetch aggregated fields from the table: "view_product_availability"
+  """
+  view_product_availability_aggregate(
+    """distinct select on columns"""
+    distinct_on: [view_product_availability_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [view_product_availability_order_by!]
+
+    """filter the rows returned"""
+    where: view_product_availability_bool_exp
+  ): view_product_availability_aggregate!
+
+  """
+  fetch data from the table: "view_product_availability" using primary key columns
+  """
+  view_product_availability_by_pk(status_date: timestamptz!): view_product_availability
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "bookings"
+  """
+  bookings(
+    """distinct select on columns"""
+    distinct_on: [bookings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [bookings_order_by!]
+
+    """filter the rows returned"""
+    where: bookings_bool_exp
+  ): [bookings!]!
+
+  """
+  fetch aggregated fields from the table: "bookings"
+  """
+  bookings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [bookings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [bookings_order_by!]
+
+    """filter the rows returned"""
+    where: bookings_bool_exp
+  ): bookings_aggregate!
+
+  """fetch data from the table: "bookings" using primary key columns"""
+  bookings_by_pk(booking_id: bigint!): bookings
+
+  """
+  fetch data from the table: "customers"
+  """
+  customers(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): [customers!]!
+
+  """
+  fetch aggregated fields from the table: "customers"
+  """
+  customers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): customers_aggregate!
+
+  """fetch data from the table: "customers" using primary key columns"""
+  customers_by_pk(customer_id: bigint!): customers
+
+  """
+  fetch data from the table: "discount_coupons"
+  """
+  discount_coupons(
+    """distinct select on columns"""
+    distinct_on: [discount_coupons_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [discount_coupons_order_by!]
+
+    """filter the rows returned"""
+    where: discount_coupons_bool_exp
+  ): [discount_coupons!]!
+
+  """
+  fetch aggregated fields from the table: "discount_coupons"
+  """
+  discount_coupons_aggregate(
+    """distinct select on columns"""
+    distinct_on: [discount_coupons_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [discount_coupons_order_by!]
+
+    """filter the rows returned"""
+    where: discount_coupons_bool_exp
+  ): discount_coupons_aggregate!
+
+  """
+  fetch data from the table: "discount_coupons" using primary key columns
+  """
+  discount_coupons_by_pk(coupon_id: bigint!): discount_coupons
+
+  """
+  fetch data from the table: "payments"
+  """
+  payments(
+    """distinct select on columns"""
+    distinct_on: [payments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payments_order_by!]
+
+    """filter the rows returned"""
+    where: payments_bool_exp
+  ): [payments!]!
+
+  """
+  fetch aggregated fields from the table: "payments"
+  """
+  payments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [payments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payments_order_by!]
+
+    """filter the rows returned"""
+    where: payments_bool_exp
+  ): payments_aggregate!
+
+  """fetch data from the table: "payments" using primary key columns"""
+  payments_by_pk(payment_id: bigint!): payments
+
+  """
+  fetch data from the table: "products_booked"
+  """
+  products_booked(
+    """distinct select on columns"""
+    distinct_on: [products_booked_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_booked_order_by!]
+
+    """filter the rows returned"""
+    where: products_booked_bool_exp
+  ): [products_booked!]!
+
+  """
+  fetch aggregated fields from the table: "products_booked"
+  """
+  products_booked_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_booked_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_booked_order_by!]
+
+    """filter the rows returned"""
+    where: products_booked_bool_exp
+  ): products_booked_aggregate!
+
+  """fetch data from the table: "products_booked" using primary key columns"""
+  products_booked_by_pk(booking_id: bigint!, product_id: bigint!): products_booked
+
+  """
+  fetch data from the table: "products_for_hire"
+  """
+  products_for_hire(
+    """distinct select on columns"""
+    distinct_on: [products_for_hire_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_for_hire_order_by!]
+
+    """filter the rows returned"""
+    where: products_for_hire_bool_exp
+  ): [products_for_hire!]!
+
+  """
+  fetch aggregated fields from the table: "products_for_hire"
+  """
+  products_for_hire_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_for_hire_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_for_hire_order_by!]
+
+    """filter the rows returned"""
+    where: products_for_hire_bool_exp
+  ): products_for_hire_aggregate!
+
+  """
+  fetch data from the table: "products_for_hire" using primary key columns
+  """
+  products_for_hire_by_pk(product_id: bigint!): products_for_hire
+
+  """
+  fetch data from the table: "view_product_availability"
+  """
+  view_product_availability(
+    """distinct select on columns"""
+    distinct_on: [view_product_availability_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [view_product_availability_order_by!]
+
+    """filter the rows returned"""
+    where: view_product_availability_bool_exp
+  ): [view_product_availability!]!
+
+  """
+  fetch aggregated fields from the table: "view_product_availability"
+  """
+  view_product_availability_aggregate(
+    """distinct select on columns"""
+    distinct_on: [view_product_availability_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [view_product_availability_order_by!]
+
+    """filter the rows returned"""
+    where: view_product_availability_bool_exp
+  ): view_product_availability_aggregate!
+
+  """
+  fetch data from the table: "view_product_availability" using primary key columns
+  """
+  view_product_availability_by_pk(status_date: timestamptz!): view_product_availability
+}
+
+scalar timestamptz
+
+"""
+expression to compare columns of type timestamptz. All fields are combined with logical 'AND'.
+"""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}
+
+"""
+columns and relationships of "view_product_availability"
+"""
+type view_product_availability {
+  available_yn: String
+
+  """An object relationship"""
+  booking: bookings
+  booking_id: bigint
+  product_id: bigint
+
+  """An object relationship"""
+  products_for_hire: products_for_hire
+  status_date: timestamptz!
+}
+
+"""
+aggregated selection of "view_product_availability"
+"""
+type view_product_availability_aggregate {
+  aggregate: view_product_availability_aggregate_fields
+  nodes: [view_product_availability!]!
+}
+
+"""
+aggregate fields of "view_product_availability"
+"""
+type view_product_availability_aggregate_fields {
+  avg: view_product_availability_avg_fields
+  count(columns: [view_product_availability_select_column!], distinct: Boolean): Int
+  max: view_product_availability_max_fields
+  min: view_product_availability_min_fields
+  stddev: view_product_availability_stddev_fields
+  stddev_pop: view_product_availability_stddev_pop_fields
+  stddev_samp: view_product_availability_stddev_samp_fields
+  sum: view_product_availability_sum_fields
+  var_pop: view_product_availability_var_pop_fields
+  var_samp: view_product_availability_var_samp_fields
+  variance: view_product_availability_variance_fields
+}
+
+"""
+order by aggregate values of table "view_product_availability"
+"""
+input view_product_availability_aggregate_order_by {
+  avg: view_product_availability_avg_order_by
+  count: order_by
+  max: view_product_availability_max_order_by
+  min: view_product_availability_min_order_by
+  stddev: view_product_availability_stddev_order_by
+  stddev_pop: view_product_availability_stddev_pop_order_by
+  stddev_samp: view_product_availability_stddev_samp_order_by
+  sum: view_product_availability_sum_order_by
+  var_pop: view_product_availability_var_pop_order_by
+  var_samp: view_product_availability_var_samp_order_by
+  variance: view_product_availability_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "view_product_availability"
+"""
+input view_product_availability_arr_rel_insert_input {
+  data: [view_product_availability_insert_input!]!
+  on_conflict: view_product_availability_on_conflict
+}
+
+"""aggregate avg on columns"""
+type view_product_availability_avg_fields {
+  booking_id: Float
+  product_id: Float
+}
+
+"""
+order by avg() on columns of table "view_product_availability"
+"""
+input view_product_availability_avg_order_by {
+  booking_id: order_by
+  product_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "view_product_availability". All fields are combined with a logical 'AND'.
+"""
+input view_product_availability_bool_exp {
+  _and: [view_product_availability_bool_exp]
+  _not: view_product_availability_bool_exp
+  _or: [view_product_availability_bool_exp]
+  available_yn: String_comparison_exp
+  booking: bookings_bool_exp
+  booking_id: bigint_comparison_exp
+  product_id: bigint_comparison_exp
+  products_for_hire: products_for_hire_bool_exp
+  status_date: timestamptz_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "view_product_availability"
+"""
+enum view_product_availability_constraint {
+  """unique or primary key constraint"""
+  idx_25457_sqlite_autoindex_view_product_availability_1
+}
+
+"""
+input type for incrementing integer columne in table "view_product_availability"
+"""
+input view_product_availability_inc_input {
+  booking_id: bigint
+  product_id: bigint
+}
+
+"""
+input type for inserting data into table "view_product_availability"
+"""
+input view_product_availability_insert_input {
+  available_yn: String
+  booking: bookings_obj_rel_insert_input
+  booking_id: bigint
+  product_id: bigint
+  products_for_hire: products_for_hire_obj_rel_insert_input
+  status_date: timestamptz
+}
+
+"""aggregate max on columns"""
+type view_product_availability_max_fields {
+  available_yn: String
+  booking_id: bigint
+  product_id: bigint
+  status_date: timestamptz
+}
+
+"""
+order by max() on columns of table "view_product_availability"
+"""
+input view_product_availability_max_order_by {
+  available_yn: order_by
+  booking_id: order_by
+  product_id: order_by
+  status_date: order_by
+}
+
+"""aggregate min on columns"""
+type view_product_availability_min_fields {
+  available_yn: String
+  booking_id: bigint
+  product_id: bigint
+  status_date: timestamptz
+}
+
+"""
+order by min() on columns of table "view_product_availability"
+"""
+input view_product_availability_min_order_by {
+  available_yn: order_by
+  booking_id: order_by
+  product_id: order_by
+  status_date: order_by
+}
+
+"""
+response of any mutation on the table "view_product_availability"
+"""
+type view_product_availability_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [view_product_availability!]!
+}
+
+"""
+input type for inserting object relation for remote table "view_product_availability"
+"""
+input view_product_availability_obj_rel_insert_input {
+  data: view_product_availability_insert_input!
+  on_conflict: view_product_availability_on_conflict
+}
+
+"""
+on conflict condition type for table "view_product_availability"
+"""
+input view_product_availability_on_conflict {
+  constraint: view_product_availability_constraint!
+  update_columns: [view_product_availability_update_column!]!
+  where: view_product_availability_bool_exp
+}
+
+"""
+ordering options when selecting data from "view_product_availability"
+"""
+input view_product_availability_order_by {
+  available_yn: order_by
+  booking: bookings_order_by
+  booking_id: order_by
+  product_id: order_by
+  products_for_hire: products_for_hire_order_by
+  status_date: order_by
+}
+
+"""
+select columns of table "view_product_availability"
+"""
+enum view_product_availability_select_column {
+  """column name"""
+  available_yn
+
+  """column name"""
+  booking_id
+
+  """column name"""
+  product_id
+
+  """column name"""
+  status_date
+}
+
+"""
+input type for updating data in table "view_product_availability"
+"""
+input view_product_availability_set_input {
+  available_yn: String
+  booking_id: bigint
+  product_id: bigint
+  status_date: timestamptz
+}
+
+"""aggregate stddev on columns"""
+type view_product_availability_stddev_fields {
+  booking_id: Float
+  product_id: Float
+}
+
+"""
+order by stddev() on columns of table "view_product_availability"
+"""
+input view_product_availability_stddev_order_by {
+  booking_id: order_by
+  product_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type view_product_availability_stddev_pop_fields {
+  booking_id: Float
+  product_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "view_product_availability"
+"""
+input view_product_availability_stddev_pop_order_by {
+  booking_id: order_by
+  product_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type view_product_availability_stddev_samp_fields {
+  booking_id: Float
+  product_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "view_product_availability"
+"""
+input view_product_availability_stddev_samp_order_by {
+  booking_id: order_by
+  product_id: order_by
+}
+
+"""aggregate sum on columns"""
+type view_product_availability_sum_fields {
+  booking_id: bigint
+  product_id: bigint
+}
+
+"""
+order by sum() on columns of table "view_product_availability"
+"""
+input view_product_availability_sum_order_by {
+  booking_id: order_by
+  product_id: order_by
+}
+
+"""
+update columns of table "view_product_availability"
+"""
+enum view_product_availability_update_column {
+  """column name"""
+  available_yn
+
+  """column name"""
+  booking_id
+
+  """column name"""
+  product_id
+
+  """column name"""
+  status_date
+}
+
+"""aggregate var_pop on columns"""
+type view_product_availability_var_pop_fields {
+  booking_id: Float
+  product_id: Float
+}
+
+"""
+order by var_pop() on columns of table "view_product_availability"
+"""
+input view_product_availability_var_pop_order_by {
+  booking_id: order_by
+  product_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type view_product_availability_var_samp_fields {
+  booking_id: Float
+  product_id: Float
+}
+
+"""
+order by var_samp() on columns of table "view_product_availability"
+"""
+input view_product_availability_var_samp_order_by {
+  booking_id: order_by
+  product_id: order_by
+}
+
+"""aggregate variance on columns"""
+type view_product_availability_variance_fields {
+  booking_id: Float
+  product_id: Float
+}
+
+"""
+order by variance() on columns of table "view_product_availability"
+"""
+input view_product_availability_variance_order_by {
+  booking_id: order_by
+  product_id: order_by
+}

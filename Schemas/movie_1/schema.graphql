@@ -1,0 +1,1469 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar date
+
+"""
+expression to compare columns of type date. All fields are combined with logical 'AND'.
+"""
+input date_comparison_exp {
+  _eq: date
+  _gt: date
+  _gte: date
+  _in: [date!]
+  _is_null: Boolean
+  _lt: date
+  _lte: date
+  _neq: date
+  _nin: [date!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "movie"
+"""
+type movie {
+  director: String
+  mid: Int
+
+  """An array relationship"""
+  ratings(
+    """distinct select on columns"""
+    distinct_on: [rating_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rating_order_by!]
+
+    """filter the rows returned"""
+    where: rating_bool_exp
+  ): [rating!]!
+
+  """An aggregated array relationship"""
+  ratings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [rating_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rating_order_by!]
+
+    """filter the rows returned"""
+    where: rating_bool_exp
+  ): rating_aggregate!
+  title: String
+  year: Int
+}
+
+"""
+aggregated selection of "movie"
+"""
+type movie_aggregate {
+  aggregate: movie_aggregate_fields
+  nodes: [movie!]!
+}
+
+"""
+aggregate fields of "movie"
+"""
+type movie_aggregate_fields {
+  avg: movie_avg_fields
+  count(columns: [movie_select_column!], distinct: Boolean): Int
+  max: movie_max_fields
+  min: movie_min_fields
+  stddev: movie_stddev_fields
+  stddev_pop: movie_stddev_pop_fields
+  stddev_samp: movie_stddev_samp_fields
+  sum: movie_sum_fields
+  var_pop: movie_var_pop_fields
+  var_samp: movie_var_samp_fields
+  variance: movie_variance_fields
+}
+
+"""
+order by aggregate values of table "movie"
+"""
+input movie_aggregate_order_by {
+  avg: movie_avg_order_by
+  count: order_by
+  max: movie_max_order_by
+  min: movie_min_order_by
+  stddev: movie_stddev_order_by
+  stddev_pop: movie_stddev_pop_order_by
+  stddev_samp: movie_stddev_samp_order_by
+  sum: movie_sum_order_by
+  var_pop: movie_var_pop_order_by
+  var_samp: movie_var_samp_order_by
+  variance: movie_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "movie"
+"""
+input movie_arr_rel_insert_input {
+  data: [movie_insert_input!]!
+  on_conflict: movie_on_conflict
+}
+
+"""aggregate avg on columns"""
+type movie_avg_fields {
+  mid: Float
+  year: Float
+}
+
+"""
+order by avg() on columns of table "movie"
+"""
+input movie_avg_order_by {
+  mid: order_by
+  year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "movie". All fields are combined with a logical 'AND'.
+"""
+input movie_bool_exp {
+  _and: [movie_bool_exp]
+  _not: movie_bool_exp
+  _or: [movie_bool_exp]
+  director: String_comparison_exp
+  mid: Int_comparison_exp
+  ratings: rating_bool_exp
+  title: String_comparison_exp
+  year: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "movie"
+"""
+enum movie_constraint {
+  """unique or primary key constraint"""
+  idx_20658_sqlite_autoindex_movie_1
+}
+
+"""
+input type for incrementing integer columne in table "movie"
+"""
+input movie_inc_input {
+  mid: Int
+  year: Int
+}
+
+"""
+input type for inserting data into table "movie"
+"""
+input movie_insert_input {
+  director: String
+  mid: Int
+  ratings: rating_arr_rel_insert_input
+  title: String
+  year: Int
+}
+
+"""aggregate max on columns"""
+type movie_max_fields {
+  director: String
+  mid: Int
+  title: String
+  year: Int
+}
+
+"""
+order by max() on columns of table "movie"
+"""
+input movie_max_order_by {
+  director: order_by
+  mid: order_by
+  title: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type movie_min_fields {
+  director: String
+  mid: Int
+  title: String
+  year: Int
+}
+
+"""
+order by min() on columns of table "movie"
+"""
+input movie_min_order_by {
+  director: order_by
+  mid: order_by
+  title: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "movie"
+"""
+type movie_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [movie!]!
+}
+
+"""
+input type for inserting object relation for remote table "movie"
+"""
+input movie_obj_rel_insert_input {
+  data: movie_insert_input!
+  on_conflict: movie_on_conflict
+}
+
+"""
+on conflict condition type for table "movie"
+"""
+input movie_on_conflict {
+  constraint: movie_constraint!
+  update_columns: [movie_update_column!]!
+  where: movie_bool_exp
+}
+
+"""
+ordering options when selecting data from "movie"
+"""
+input movie_order_by {
+  director: order_by
+  mid: order_by
+  ratings_aggregate: rating_aggregate_order_by
+  title: order_by
+  year: order_by
+}
+
+"""
+select columns of table "movie"
+"""
+enum movie_select_column {
+  """column name"""
+  director
+
+  """column name"""
+  mid
+
+  """column name"""
+  title
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "movie"
+"""
+input movie_set_input {
+  director: String
+  mid: Int
+  title: String
+  year: Int
+}
+
+"""aggregate stddev on columns"""
+type movie_stddev_fields {
+  mid: Float
+  year: Float
+}
+
+"""
+order by stddev() on columns of table "movie"
+"""
+input movie_stddev_order_by {
+  mid: order_by
+  year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type movie_stddev_pop_fields {
+  mid: Float
+  year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "movie"
+"""
+input movie_stddev_pop_order_by {
+  mid: order_by
+  year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type movie_stddev_samp_fields {
+  mid: Float
+  year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "movie"
+"""
+input movie_stddev_samp_order_by {
+  mid: order_by
+  year: order_by
+}
+
+"""aggregate sum on columns"""
+type movie_sum_fields {
+  mid: Int
+  year: Int
+}
+
+"""
+order by sum() on columns of table "movie"
+"""
+input movie_sum_order_by {
+  mid: order_by
+  year: order_by
+}
+
+"""
+update columns of table "movie"
+"""
+enum movie_update_column {
+  """column name"""
+  director
+
+  """column name"""
+  mid
+
+  """column name"""
+  title
+
+  """column name"""
+  year
+}
+
+"""aggregate var_pop on columns"""
+type movie_var_pop_fields {
+  mid: Float
+  year: Float
+}
+
+"""
+order by var_pop() on columns of table "movie"
+"""
+input movie_var_pop_order_by {
+  mid: order_by
+  year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type movie_var_samp_fields {
+  mid: Float
+  year: Float
+}
+
+"""
+order by var_samp() on columns of table "movie"
+"""
+input movie_var_samp_order_by {
+  mid: order_by
+  year: order_by
+}
+
+"""aggregate variance on columns"""
+type movie_variance_fields {
+  mid: Float
+  year: Float
+}
+
+"""
+order by variance() on columns of table "movie"
+"""
+input movie_variance_order_by {
+  mid: order_by
+  year: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "movie"
+  """
+  delete_movie(
+    """filter the rows which have to be deleted"""
+    where: movie_bool_exp!
+  ): movie_mutation_response
+
+  """
+  delete data from the table: "rating"
+  """
+  delete_rating(
+    """filter the rows which have to be deleted"""
+    where: rating_bool_exp!
+  ): rating_mutation_response
+
+  """
+  delete data from the table: "reviewer"
+  """
+  delete_reviewer(
+    """filter the rows which have to be deleted"""
+    where: reviewer_bool_exp!
+  ): reviewer_mutation_response
+
+  """
+  insert data into the table: "movie"
+  """
+  insert_movie(
+    """the rows to be inserted"""
+    objects: [movie_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: movie_on_conflict
+  ): movie_mutation_response
+
+  """
+  insert data into the table: "rating"
+  """
+  insert_rating(
+    """the rows to be inserted"""
+    objects: [rating_insert_input!]!
+  ): rating_mutation_response
+
+  """
+  insert data into the table: "reviewer"
+  """
+  insert_reviewer(
+    """the rows to be inserted"""
+    objects: [reviewer_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: reviewer_on_conflict
+  ): reviewer_mutation_response
+
+  """
+  update data of the table: "movie"
+  """
+  update_movie(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: movie_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: movie_set_input
+
+    """filter the rows which have to be updated"""
+    where: movie_bool_exp!
+  ): movie_mutation_response
+
+  """
+  update data of the table: "rating"
+  """
+  update_rating(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: rating_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: rating_set_input
+
+    """filter the rows which have to be updated"""
+    where: rating_bool_exp!
+  ): rating_mutation_response
+
+  """
+  update data of the table: "reviewer"
+  """
+  update_reviewer(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: reviewer_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: reviewer_set_input
+
+    """filter the rows which have to be updated"""
+    where: reviewer_bool_exp!
+  ): reviewer_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "movie"
+  """
+  movie(
+    """distinct select on columns"""
+    distinct_on: [movie_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [movie_order_by!]
+
+    """filter the rows returned"""
+    where: movie_bool_exp
+  ): [movie!]!
+
+  """
+  fetch aggregated fields from the table: "movie"
+  """
+  movie_aggregate(
+    """distinct select on columns"""
+    distinct_on: [movie_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [movie_order_by!]
+
+    """filter the rows returned"""
+    where: movie_bool_exp
+  ): movie_aggregate!
+
+  """
+  fetch data from the table: "rating"
+  """
+  rating(
+    """distinct select on columns"""
+    distinct_on: [rating_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rating_order_by!]
+
+    """filter the rows returned"""
+    where: rating_bool_exp
+  ): [rating!]!
+
+  """
+  fetch aggregated fields from the table: "rating"
+  """
+  rating_aggregate(
+    """distinct select on columns"""
+    distinct_on: [rating_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rating_order_by!]
+
+    """filter the rows returned"""
+    where: rating_bool_exp
+  ): rating_aggregate!
+
+  """
+  fetch data from the table: "reviewer"
+  """
+  reviewer(
+    """distinct select on columns"""
+    distinct_on: [reviewer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [reviewer_order_by!]
+
+    """filter the rows returned"""
+    where: reviewer_bool_exp
+  ): [reviewer!]!
+
+  """
+  fetch aggregated fields from the table: "reviewer"
+  """
+  reviewer_aggregate(
+    """distinct select on columns"""
+    distinct_on: [reviewer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [reviewer_order_by!]
+
+    """filter the rows returned"""
+    where: reviewer_bool_exp
+  ): reviewer_aggregate!
+}
+
+"""
+columns and relationships of "rating"
+"""
+type rating {
+  mid: Int
+
+  """An object relationship"""
+  movie: movie
+  ratingdate: date
+
+  """An object relationship"""
+  reviewer: reviewer
+  rid: Int
+  stars: Int
+}
+
+"""
+aggregated selection of "rating"
+"""
+type rating_aggregate {
+  aggregate: rating_aggregate_fields
+  nodes: [rating!]!
+}
+
+"""
+aggregate fields of "rating"
+"""
+type rating_aggregate_fields {
+  avg: rating_avg_fields
+  count(columns: [rating_select_column!], distinct: Boolean): Int
+  max: rating_max_fields
+  min: rating_min_fields
+  stddev: rating_stddev_fields
+  stddev_pop: rating_stddev_pop_fields
+  stddev_samp: rating_stddev_samp_fields
+  sum: rating_sum_fields
+  var_pop: rating_var_pop_fields
+  var_samp: rating_var_samp_fields
+  variance: rating_variance_fields
+}
+
+"""
+order by aggregate values of table "rating"
+"""
+input rating_aggregate_order_by {
+  avg: rating_avg_order_by
+  count: order_by
+  max: rating_max_order_by
+  min: rating_min_order_by
+  stddev: rating_stddev_order_by
+  stddev_pop: rating_stddev_pop_order_by
+  stddev_samp: rating_stddev_samp_order_by
+  sum: rating_sum_order_by
+  var_pop: rating_var_pop_order_by
+  var_samp: rating_var_samp_order_by
+  variance: rating_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "rating"
+"""
+input rating_arr_rel_insert_input {
+  data: [rating_insert_input!]!
+}
+
+"""aggregate avg on columns"""
+type rating_avg_fields {
+  mid: Float
+  rid: Float
+  stars: Float
+}
+
+"""
+order by avg() on columns of table "rating"
+"""
+input rating_avg_order_by {
+  mid: order_by
+  rid: order_by
+  stars: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "rating". All fields are combined with a logical 'AND'.
+"""
+input rating_bool_exp {
+  _and: [rating_bool_exp]
+  _not: rating_bool_exp
+  _or: [rating_bool_exp]
+  mid: Int_comparison_exp
+  movie: movie_bool_exp
+  ratingdate: date_comparison_exp
+  reviewer: reviewer_bool_exp
+  rid: Int_comparison_exp
+  stars: Int_comparison_exp
+}
+
+"""
+input type for incrementing integer columne in table "rating"
+"""
+input rating_inc_input {
+  mid: Int
+  rid: Int
+  stars: Int
+}
+
+"""
+input type for inserting data into table "rating"
+"""
+input rating_insert_input {
+  mid: Int
+  movie: movie_obj_rel_insert_input
+  ratingdate: date
+  reviewer: reviewer_obj_rel_insert_input
+  rid: Int
+  stars: Int
+}
+
+"""aggregate max on columns"""
+type rating_max_fields {
+  mid: Int
+  ratingdate: date
+  rid: Int
+  stars: Int
+}
+
+"""
+order by max() on columns of table "rating"
+"""
+input rating_max_order_by {
+  mid: order_by
+  ratingdate: order_by
+  rid: order_by
+  stars: order_by
+}
+
+"""aggregate min on columns"""
+type rating_min_fields {
+  mid: Int
+  ratingdate: date
+  rid: Int
+  stars: Int
+}
+
+"""
+order by min() on columns of table "rating"
+"""
+input rating_min_order_by {
+  mid: order_by
+  ratingdate: order_by
+  rid: order_by
+  stars: order_by
+}
+
+"""
+response of any mutation on the table "rating"
+"""
+type rating_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [rating!]!
+}
+
+"""
+input type for inserting object relation for remote table "rating"
+"""
+input rating_obj_rel_insert_input {
+  data: rating_insert_input!
+}
+
+"""
+ordering options when selecting data from "rating"
+"""
+input rating_order_by {
+  mid: order_by
+  movie: movie_order_by
+  ratingdate: order_by
+  reviewer: reviewer_order_by
+  rid: order_by
+  stars: order_by
+}
+
+"""
+select columns of table "rating"
+"""
+enum rating_select_column {
+  """column name"""
+  mid
+
+  """column name"""
+  ratingdate
+
+  """column name"""
+  rid
+
+  """column name"""
+  stars
+}
+
+"""
+input type for updating data in table "rating"
+"""
+input rating_set_input {
+  mid: Int
+  ratingdate: date
+  rid: Int
+  stars: Int
+}
+
+"""aggregate stddev on columns"""
+type rating_stddev_fields {
+  mid: Float
+  rid: Float
+  stars: Float
+}
+
+"""
+order by stddev() on columns of table "rating"
+"""
+input rating_stddev_order_by {
+  mid: order_by
+  rid: order_by
+  stars: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type rating_stddev_pop_fields {
+  mid: Float
+  rid: Float
+  stars: Float
+}
+
+"""
+order by stddev_pop() on columns of table "rating"
+"""
+input rating_stddev_pop_order_by {
+  mid: order_by
+  rid: order_by
+  stars: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type rating_stddev_samp_fields {
+  mid: Float
+  rid: Float
+  stars: Float
+}
+
+"""
+order by stddev_samp() on columns of table "rating"
+"""
+input rating_stddev_samp_order_by {
+  mid: order_by
+  rid: order_by
+  stars: order_by
+}
+
+"""aggregate sum on columns"""
+type rating_sum_fields {
+  mid: Int
+  rid: Int
+  stars: Int
+}
+
+"""
+order by sum() on columns of table "rating"
+"""
+input rating_sum_order_by {
+  mid: order_by
+  rid: order_by
+  stars: order_by
+}
+
+"""aggregate var_pop on columns"""
+type rating_var_pop_fields {
+  mid: Float
+  rid: Float
+  stars: Float
+}
+
+"""
+order by var_pop() on columns of table "rating"
+"""
+input rating_var_pop_order_by {
+  mid: order_by
+  rid: order_by
+  stars: order_by
+}
+
+"""aggregate var_samp on columns"""
+type rating_var_samp_fields {
+  mid: Float
+  rid: Float
+  stars: Float
+}
+
+"""
+order by var_samp() on columns of table "rating"
+"""
+input rating_var_samp_order_by {
+  mid: order_by
+  rid: order_by
+  stars: order_by
+}
+
+"""aggregate variance on columns"""
+type rating_variance_fields {
+  mid: Float
+  rid: Float
+  stars: Float
+}
+
+"""
+order by variance() on columns of table "rating"
+"""
+input rating_variance_order_by {
+  mid: order_by
+  rid: order_by
+  stars: order_by
+}
+
+"""
+columns and relationships of "reviewer"
+"""
+type reviewer {
+  name: String
+
+  """An array relationship"""
+  ratings(
+    """distinct select on columns"""
+    distinct_on: [rating_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rating_order_by!]
+
+    """filter the rows returned"""
+    where: rating_bool_exp
+  ): [rating!]!
+
+  """An aggregated array relationship"""
+  ratings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [rating_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rating_order_by!]
+
+    """filter the rows returned"""
+    where: rating_bool_exp
+  ): rating_aggregate!
+  rid: Int
+}
+
+"""
+aggregated selection of "reviewer"
+"""
+type reviewer_aggregate {
+  aggregate: reviewer_aggregate_fields
+  nodes: [reviewer!]!
+}
+
+"""
+aggregate fields of "reviewer"
+"""
+type reviewer_aggregate_fields {
+  avg: reviewer_avg_fields
+  count(columns: [reviewer_select_column!], distinct: Boolean): Int
+  max: reviewer_max_fields
+  min: reviewer_min_fields
+  stddev: reviewer_stddev_fields
+  stddev_pop: reviewer_stddev_pop_fields
+  stddev_samp: reviewer_stddev_samp_fields
+  sum: reviewer_sum_fields
+  var_pop: reviewer_var_pop_fields
+  var_samp: reviewer_var_samp_fields
+  variance: reviewer_variance_fields
+}
+
+"""
+order by aggregate values of table "reviewer"
+"""
+input reviewer_aggregate_order_by {
+  avg: reviewer_avg_order_by
+  count: order_by
+  max: reviewer_max_order_by
+  min: reviewer_min_order_by
+  stddev: reviewer_stddev_order_by
+  stddev_pop: reviewer_stddev_pop_order_by
+  stddev_samp: reviewer_stddev_samp_order_by
+  sum: reviewer_sum_order_by
+  var_pop: reviewer_var_pop_order_by
+  var_samp: reviewer_var_samp_order_by
+  variance: reviewer_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "reviewer"
+"""
+input reviewer_arr_rel_insert_input {
+  data: [reviewer_insert_input!]!
+  on_conflict: reviewer_on_conflict
+}
+
+"""aggregate avg on columns"""
+type reviewer_avg_fields {
+  rid: Float
+}
+
+"""
+order by avg() on columns of table "reviewer"
+"""
+input reviewer_avg_order_by {
+  rid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "reviewer". All fields are combined with a logical 'AND'.
+"""
+input reviewer_bool_exp {
+  _and: [reviewer_bool_exp]
+  _not: reviewer_bool_exp
+  _or: [reviewer_bool_exp]
+  name: String_comparison_exp
+  ratings: rating_bool_exp
+  rid: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "reviewer"
+"""
+enum reviewer_constraint {
+  """unique or primary key constraint"""
+  idx_20664_sqlite_autoindex_reviewer_1
+}
+
+"""
+input type for incrementing integer columne in table "reviewer"
+"""
+input reviewer_inc_input {
+  rid: Int
+}
+
+"""
+input type for inserting data into table "reviewer"
+"""
+input reviewer_insert_input {
+  name: String
+  ratings: rating_arr_rel_insert_input
+  rid: Int
+}
+
+"""aggregate max on columns"""
+type reviewer_max_fields {
+  name: String
+  rid: Int
+}
+
+"""
+order by max() on columns of table "reviewer"
+"""
+input reviewer_max_order_by {
+  name: order_by
+  rid: order_by
+}
+
+"""aggregate min on columns"""
+type reviewer_min_fields {
+  name: String
+  rid: Int
+}
+
+"""
+order by min() on columns of table "reviewer"
+"""
+input reviewer_min_order_by {
+  name: order_by
+  rid: order_by
+}
+
+"""
+response of any mutation on the table "reviewer"
+"""
+type reviewer_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [reviewer!]!
+}
+
+"""
+input type for inserting object relation for remote table "reviewer"
+"""
+input reviewer_obj_rel_insert_input {
+  data: reviewer_insert_input!
+  on_conflict: reviewer_on_conflict
+}
+
+"""
+on conflict condition type for table "reviewer"
+"""
+input reviewer_on_conflict {
+  constraint: reviewer_constraint!
+  update_columns: [reviewer_update_column!]!
+  where: reviewer_bool_exp
+}
+
+"""
+ordering options when selecting data from "reviewer"
+"""
+input reviewer_order_by {
+  name: order_by
+  ratings_aggregate: rating_aggregate_order_by
+  rid: order_by
+}
+
+"""
+select columns of table "reviewer"
+"""
+enum reviewer_select_column {
+  """column name"""
+  name
+
+  """column name"""
+  rid
+}
+
+"""
+input type for updating data in table "reviewer"
+"""
+input reviewer_set_input {
+  name: String
+  rid: Int
+}
+
+"""aggregate stddev on columns"""
+type reviewer_stddev_fields {
+  rid: Float
+}
+
+"""
+order by stddev() on columns of table "reviewer"
+"""
+input reviewer_stddev_order_by {
+  rid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type reviewer_stddev_pop_fields {
+  rid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "reviewer"
+"""
+input reviewer_stddev_pop_order_by {
+  rid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type reviewer_stddev_samp_fields {
+  rid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "reviewer"
+"""
+input reviewer_stddev_samp_order_by {
+  rid: order_by
+}
+
+"""aggregate sum on columns"""
+type reviewer_sum_fields {
+  rid: Int
+}
+
+"""
+order by sum() on columns of table "reviewer"
+"""
+input reviewer_sum_order_by {
+  rid: order_by
+}
+
+"""
+update columns of table "reviewer"
+"""
+enum reviewer_update_column {
+  """column name"""
+  name
+
+  """column name"""
+  rid
+}
+
+"""aggregate var_pop on columns"""
+type reviewer_var_pop_fields {
+  rid: Float
+}
+
+"""
+order by var_pop() on columns of table "reviewer"
+"""
+input reviewer_var_pop_order_by {
+  rid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type reviewer_var_samp_fields {
+  rid: Float
+}
+
+"""
+order by var_samp() on columns of table "reviewer"
+"""
+input reviewer_var_samp_order_by {
+  rid: order_by
+}
+
+"""aggregate variance on columns"""
+type reviewer_variance_fields {
+  rid: Float
+}
+
+"""
+order by variance() on columns of table "reviewer"
+"""
+input reviewer_variance_order_by {
+  rid: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "movie"
+  """
+  movie(
+    """distinct select on columns"""
+    distinct_on: [movie_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [movie_order_by!]
+
+    """filter the rows returned"""
+    where: movie_bool_exp
+  ): [movie!]!
+
+  """
+  fetch aggregated fields from the table: "movie"
+  """
+  movie_aggregate(
+    """distinct select on columns"""
+    distinct_on: [movie_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [movie_order_by!]
+
+    """filter the rows returned"""
+    where: movie_bool_exp
+  ): movie_aggregate!
+
+  """
+  fetch data from the table: "rating"
+  """
+  rating(
+    """distinct select on columns"""
+    distinct_on: [rating_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rating_order_by!]
+
+    """filter the rows returned"""
+    where: rating_bool_exp
+  ): [rating!]!
+
+  """
+  fetch aggregated fields from the table: "rating"
+  """
+  rating_aggregate(
+    """distinct select on columns"""
+    distinct_on: [rating_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rating_order_by!]
+
+    """filter the rows returned"""
+    where: rating_bool_exp
+  ): rating_aggregate!
+
+  """
+  fetch data from the table: "reviewer"
+  """
+  reviewer(
+    """distinct select on columns"""
+    distinct_on: [reviewer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [reviewer_order_by!]
+
+    """filter the rows returned"""
+    where: reviewer_bool_exp
+  ): [reviewer!]!
+
+  """
+  fetch aggregated fields from the table: "reviewer"
+  """
+  reviewer_aggregate(
+    """distinct select on columns"""
+    distinct_on: [reviewer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [reviewer_order_by!]
+
+    """filter the rows returned"""
+    where: reviewer_bool_exp
+  ): reviewer_aggregate!
+}

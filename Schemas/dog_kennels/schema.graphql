@@ -1,0 +1,3830 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "breeds"
+"""
+type breeds {
+  breed_code: String!
+  breed_name: String
+
+  """An array relationship"""
+  dogs(
+    """distinct select on columns"""
+    distinct_on: [dogs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dogs_order_by!]
+
+    """filter the rows returned"""
+    where: dogs_bool_exp
+  ): [dogs!]!
+
+  """An aggregated array relationship"""
+  dogs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [dogs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dogs_order_by!]
+
+    """filter the rows returned"""
+    where: dogs_bool_exp
+  ): dogs_aggregate!
+}
+
+"""
+aggregated selection of "breeds"
+"""
+type breeds_aggregate {
+  aggregate: breeds_aggregate_fields
+  nodes: [breeds!]!
+}
+
+"""
+aggregate fields of "breeds"
+"""
+type breeds_aggregate_fields {
+  count(columns: [breeds_select_column!], distinct: Boolean): Int
+  max: breeds_max_fields
+  min: breeds_min_fields
+}
+
+"""
+order by aggregate values of table "breeds"
+"""
+input breeds_aggregate_order_by {
+  count: order_by
+  max: breeds_max_order_by
+  min: breeds_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "breeds"
+"""
+input breeds_arr_rel_insert_input {
+  data: [breeds_insert_input!]!
+  on_conflict: breeds_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "breeds". All fields are combined with a logical 'AND'.
+"""
+input breeds_bool_exp {
+  _and: [breeds_bool_exp]
+  _not: breeds_bool_exp
+  _or: [breeds_bool_exp]
+  breed_code: String_comparison_exp
+  breed_name: String_comparison_exp
+  dogs: dogs_bool_exp
+}
+
+"""
+unique or primary key constraints on table "breeds"
+"""
+enum breeds_constraint {
+  """unique or primary key constraint"""
+  idx_18541_sqlite_autoindex_breeds_1
+}
+
+"""
+input type for inserting data into table "breeds"
+"""
+input breeds_insert_input {
+  breed_code: String
+  breed_name: String
+  dogs: dogs_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type breeds_max_fields {
+  breed_code: String
+  breed_name: String
+}
+
+"""
+order by max() on columns of table "breeds"
+"""
+input breeds_max_order_by {
+  breed_code: order_by
+  breed_name: order_by
+}
+
+"""aggregate min on columns"""
+type breeds_min_fields {
+  breed_code: String
+  breed_name: String
+}
+
+"""
+order by min() on columns of table "breeds"
+"""
+input breeds_min_order_by {
+  breed_code: order_by
+  breed_name: order_by
+}
+
+"""
+response of any mutation on the table "breeds"
+"""
+type breeds_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [breeds!]!
+}
+
+"""
+input type for inserting object relation for remote table "breeds"
+"""
+input breeds_obj_rel_insert_input {
+  data: breeds_insert_input!
+  on_conflict: breeds_on_conflict
+}
+
+"""
+on conflict condition type for table "breeds"
+"""
+input breeds_on_conflict {
+  constraint: breeds_constraint!
+  update_columns: [breeds_update_column!]!
+  where: breeds_bool_exp
+}
+
+"""
+ordering options when selecting data from "breeds"
+"""
+input breeds_order_by {
+  breed_code: order_by
+  breed_name: order_by
+  dogs_aggregate: dogs_aggregate_order_by
+}
+
+"""
+select columns of table "breeds"
+"""
+enum breeds_select_column {
+  """column name"""
+  breed_code
+
+  """column name"""
+  breed_name
+}
+
+"""
+input type for updating data in table "breeds"
+"""
+input breeds_set_input {
+  breed_code: String
+  breed_name: String
+}
+
+"""
+update columns of table "breeds"
+"""
+enum breeds_update_column {
+  """column name"""
+  breed_code
+
+  """column name"""
+  breed_name
+}
+
+"""
+columns and relationships of "charges"
+"""
+type charges {
+  charge_amount: numeric
+  charge_id: bigint!
+  charge_type: String
+}
+
+"""
+aggregated selection of "charges"
+"""
+type charges_aggregate {
+  aggregate: charges_aggregate_fields
+  nodes: [charges!]!
+}
+
+"""
+aggregate fields of "charges"
+"""
+type charges_aggregate_fields {
+  avg: charges_avg_fields
+  count(columns: [charges_select_column!], distinct: Boolean): Int
+  max: charges_max_fields
+  min: charges_min_fields
+  stddev: charges_stddev_fields
+  stddev_pop: charges_stddev_pop_fields
+  stddev_samp: charges_stddev_samp_fields
+  sum: charges_sum_fields
+  var_pop: charges_var_pop_fields
+  var_samp: charges_var_samp_fields
+  variance: charges_variance_fields
+}
+
+"""
+order by aggregate values of table "charges"
+"""
+input charges_aggregate_order_by {
+  avg: charges_avg_order_by
+  count: order_by
+  max: charges_max_order_by
+  min: charges_min_order_by
+  stddev: charges_stddev_order_by
+  stddev_pop: charges_stddev_pop_order_by
+  stddev_samp: charges_stddev_samp_order_by
+  sum: charges_sum_order_by
+  var_pop: charges_var_pop_order_by
+  var_samp: charges_var_samp_order_by
+  variance: charges_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "charges"
+"""
+input charges_arr_rel_insert_input {
+  data: [charges_insert_input!]!
+  on_conflict: charges_on_conflict
+}
+
+"""aggregate avg on columns"""
+type charges_avg_fields {
+  charge_amount: Float
+  charge_id: Float
+}
+
+"""
+order by avg() on columns of table "charges"
+"""
+input charges_avg_order_by {
+  charge_amount: order_by
+  charge_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "charges". All fields are combined with a logical 'AND'.
+"""
+input charges_bool_exp {
+  _and: [charges_bool_exp]
+  _not: charges_bool_exp
+  _or: [charges_bool_exp]
+  charge_amount: numeric_comparison_exp
+  charge_id: bigint_comparison_exp
+  charge_type: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "charges"
+"""
+enum charges_constraint {
+  """unique or primary key constraint"""
+  idx_18547_charges_pkey
+}
+
+"""
+input type for incrementing integer columne in table "charges"
+"""
+input charges_inc_input {
+  charge_id: bigint
+}
+
+"""
+input type for inserting data into table "charges"
+"""
+input charges_insert_input {
+  charge_amount: numeric
+  charge_id: bigint
+  charge_type: String
+}
+
+"""aggregate max on columns"""
+type charges_max_fields {
+  charge_amount: numeric
+  charge_id: bigint
+  charge_type: String
+}
+
+"""
+order by max() on columns of table "charges"
+"""
+input charges_max_order_by {
+  charge_amount: order_by
+  charge_id: order_by
+  charge_type: order_by
+}
+
+"""aggregate min on columns"""
+type charges_min_fields {
+  charge_amount: numeric
+  charge_id: bigint
+  charge_type: String
+}
+
+"""
+order by min() on columns of table "charges"
+"""
+input charges_min_order_by {
+  charge_amount: order_by
+  charge_id: order_by
+  charge_type: order_by
+}
+
+"""
+response of any mutation on the table "charges"
+"""
+type charges_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [charges!]!
+}
+
+"""
+input type for inserting object relation for remote table "charges"
+"""
+input charges_obj_rel_insert_input {
+  data: charges_insert_input!
+  on_conflict: charges_on_conflict
+}
+
+"""
+on conflict condition type for table "charges"
+"""
+input charges_on_conflict {
+  constraint: charges_constraint!
+  update_columns: [charges_update_column!]!
+  where: charges_bool_exp
+}
+
+"""
+ordering options when selecting data from "charges"
+"""
+input charges_order_by {
+  charge_amount: order_by
+  charge_id: order_by
+  charge_type: order_by
+}
+
+"""
+select columns of table "charges"
+"""
+enum charges_select_column {
+  """column name"""
+  charge_amount
+
+  """column name"""
+  charge_id
+
+  """column name"""
+  charge_type
+}
+
+"""
+input type for updating data in table "charges"
+"""
+input charges_set_input {
+  charge_amount: numeric
+  charge_id: bigint
+  charge_type: String
+}
+
+"""aggregate stddev on columns"""
+type charges_stddev_fields {
+  charge_amount: Float
+  charge_id: Float
+}
+
+"""
+order by stddev() on columns of table "charges"
+"""
+input charges_stddev_order_by {
+  charge_amount: order_by
+  charge_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type charges_stddev_pop_fields {
+  charge_amount: Float
+  charge_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "charges"
+"""
+input charges_stddev_pop_order_by {
+  charge_amount: order_by
+  charge_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type charges_stddev_samp_fields {
+  charge_amount: Float
+  charge_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "charges"
+"""
+input charges_stddev_samp_order_by {
+  charge_amount: order_by
+  charge_id: order_by
+}
+
+"""aggregate sum on columns"""
+type charges_sum_fields {
+  charge_amount: numeric
+  charge_id: bigint
+}
+
+"""
+order by sum() on columns of table "charges"
+"""
+input charges_sum_order_by {
+  charge_amount: order_by
+  charge_id: order_by
+}
+
+"""
+update columns of table "charges"
+"""
+enum charges_update_column {
+  """column name"""
+  charge_amount
+
+  """column name"""
+  charge_id
+
+  """column name"""
+  charge_type
+}
+
+"""aggregate var_pop on columns"""
+type charges_var_pop_fields {
+  charge_amount: Float
+  charge_id: Float
+}
+
+"""
+order by var_pop() on columns of table "charges"
+"""
+input charges_var_pop_order_by {
+  charge_amount: order_by
+  charge_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type charges_var_samp_fields {
+  charge_amount: Float
+  charge_id: Float
+}
+
+"""
+order by var_samp() on columns of table "charges"
+"""
+input charges_var_samp_order_by {
+  charge_amount: order_by
+  charge_id: order_by
+}
+
+"""aggregate variance on columns"""
+type charges_variance_fields {
+  charge_amount: Float
+  charge_id: Float
+}
+
+"""
+order by variance() on columns of table "charges"
+"""
+input charges_variance_order_by {
+  charge_amount: order_by
+  charge_id: order_by
+}
+
+"""
+columns and relationships of "dogs"
+"""
+type dogs {
+  abandoned_yn: String
+  age: String
+
+  """An object relationship"""
+  breed: breeds
+  breed_code: String
+  date_adopted: timestamptz
+  date_arrived: timestamptz
+  date_departed: timestamptz
+  date_of_birth: timestamptz
+  dog_id: bigint!
+  gender: String
+  name: String
+
+  """An object relationship"""
+  owner: owners
+  owner_id: bigint
+
+  """An object relationship"""
+  size: sizes
+  size_code: String
+
+  """An array relationship"""
+  treatments(
+    """distinct select on columns"""
+    distinct_on: [treatments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [treatments_order_by!]
+
+    """filter the rows returned"""
+    where: treatments_bool_exp
+  ): [treatments!]!
+
+  """An aggregated array relationship"""
+  treatments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [treatments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [treatments_order_by!]
+
+    """filter the rows returned"""
+    where: treatments_bool_exp
+  ): treatments_aggregate!
+  weight: String
+}
+
+"""
+aggregated selection of "dogs"
+"""
+type dogs_aggregate {
+  aggregate: dogs_aggregate_fields
+  nodes: [dogs!]!
+}
+
+"""
+aggregate fields of "dogs"
+"""
+type dogs_aggregate_fields {
+  avg: dogs_avg_fields
+  count(columns: [dogs_select_column!], distinct: Boolean): Int
+  max: dogs_max_fields
+  min: dogs_min_fields
+  stddev: dogs_stddev_fields
+  stddev_pop: dogs_stddev_pop_fields
+  stddev_samp: dogs_stddev_samp_fields
+  sum: dogs_sum_fields
+  var_pop: dogs_var_pop_fields
+  var_samp: dogs_var_samp_fields
+  variance: dogs_variance_fields
+}
+
+"""
+order by aggregate values of table "dogs"
+"""
+input dogs_aggregate_order_by {
+  avg: dogs_avg_order_by
+  count: order_by
+  max: dogs_max_order_by
+  min: dogs_min_order_by
+  stddev: dogs_stddev_order_by
+  stddev_pop: dogs_stddev_pop_order_by
+  stddev_samp: dogs_stddev_samp_order_by
+  sum: dogs_sum_order_by
+  var_pop: dogs_var_pop_order_by
+  var_samp: dogs_var_samp_order_by
+  variance: dogs_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "dogs"
+"""
+input dogs_arr_rel_insert_input {
+  data: [dogs_insert_input!]!
+  on_conflict: dogs_on_conflict
+}
+
+"""aggregate avg on columns"""
+type dogs_avg_fields {
+  dog_id: Float
+  owner_id: Float
+}
+
+"""
+order by avg() on columns of table "dogs"
+"""
+input dogs_avg_order_by {
+  dog_id: order_by
+  owner_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "dogs". All fields are combined with a logical 'AND'.
+"""
+input dogs_bool_exp {
+  _and: [dogs_bool_exp]
+  _not: dogs_bool_exp
+  _or: [dogs_bool_exp]
+  abandoned_yn: String_comparison_exp
+  age: String_comparison_exp
+  breed: breeds_bool_exp
+  breed_code: String_comparison_exp
+  date_adopted: timestamptz_comparison_exp
+  date_arrived: timestamptz_comparison_exp
+  date_departed: timestamptz_comparison_exp
+  date_of_birth: timestamptz_comparison_exp
+  dog_id: bigint_comparison_exp
+  gender: String_comparison_exp
+  name: String_comparison_exp
+  owner: owners_bool_exp
+  owner_id: bigint_comparison_exp
+  size: sizes_bool_exp
+  size_code: String_comparison_exp
+  treatments: treatments_bool_exp
+  weight: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "dogs"
+"""
+enum dogs_constraint {
+  """unique or primary key constraint"""
+  idx_18571_dogs_pkey
+}
+
+"""
+input type for incrementing integer columne in table "dogs"
+"""
+input dogs_inc_input {
+  dog_id: bigint
+  owner_id: bigint
+}
+
+"""
+input type for inserting data into table "dogs"
+"""
+input dogs_insert_input {
+  abandoned_yn: String
+  age: String
+  breed: breeds_obj_rel_insert_input
+  breed_code: String
+  date_adopted: timestamptz
+  date_arrived: timestamptz
+  date_departed: timestamptz
+  date_of_birth: timestamptz
+  dog_id: bigint
+  gender: String
+  name: String
+  owner: owners_obj_rel_insert_input
+  owner_id: bigint
+  size: sizes_obj_rel_insert_input
+  size_code: String
+  treatments: treatments_arr_rel_insert_input
+  weight: String
+}
+
+"""aggregate max on columns"""
+type dogs_max_fields {
+  abandoned_yn: String
+  age: String
+  breed_code: String
+  date_adopted: timestamptz
+  date_arrived: timestamptz
+  date_departed: timestamptz
+  date_of_birth: timestamptz
+  dog_id: bigint
+  gender: String
+  name: String
+  owner_id: bigint
+  size_code: String
+  weight: String
+}
+
+"""
+order by max() on columns of table "dogs"
+"""
+input dogs_max_order_by {
+  abandoned_yn: order_by
+  age: order_by
+  breed_code: order_by
+  date_adopted: order_by
+  date_arrived: order_by
+  date_departed: order_by
+  date_of_birth: order_by
+  dog_id: order_by
+  gender: order_by
+  name: order_by
+  owner_id: order_by
+  size_code: order_by
+  weight: order_by
+}
+
+"""aggregate min on columns"""
+type dogs_min_fields {
+  abandoned_yn: String
+  age: String
+  breed_code: String
+  date_adopted: timestamptz
+  date_arrived: timestamptz
+  date_departed: timestamptz
+  date_of_birth: timestamptz
+  dog_id: bigint
+  gender: String
+  name: String
+  owner_id: bigint
+  size_code: String
+  weight: String
+}
+
+"""
+order by min() on columns of table "dogs"
+"""
+input dogs_min_order_by {
+  abandoned_yn: order_by
+  age: order_by
+  breed_code: order_by
+  date_adopted: order_by
+  date_arrived: order_by
+  date_departed: order_by
+  date_of_birth: order_by
+  dog_id: order_by
+  gender: order_by
+  name: order_by
+  owner_id: order_by
+  size_code: order_by
+  weight: order_by
+}
+
+"""
+response of any mutation on the table "dogs"
+"""
+type dogs_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [dogs!]!
+}
+
+"""
+input type for inserting object relation for remote table "dogs"
+"""
+input dogs_obj_rel_insert_input {
+  data: dogs_insert_input!
+  on_conflict: dogs_on_conflict
+}
+
+"""
+on conflict condition type for table "dogs"
+"""
+input dogs_on_conflict {
+  constraint: dogs_constraint!
+  update_columns: [dogs_update_column!]!
+  where: dogs_bool_exp
+}
+
+"""
+ordering options when selecting data from "dogs"
+"""
+input dogs_order_by {
+  abandoned_yn: order_by
+  age: order_by
+  breed: breeds_order_by
+  breed_code: order_by
+  date_adopted: order_by
+  date_arrived: order_by
+  date_departed: order_by
+  date_of_birth: order_by
+  dog_id: order_by
+  gender: order_by
+  name: order_by
+  owner: owners_order_by
+  owner_id: order_by
+  size: sizes_order_by
+  size_code: order_by
+  treatments_aggregate: treatments_aggregate_order_by
+  weight: order_by
+}
+
+"""
+select columns of table "dogs"
+"""
+enum dogs_select_column {
+  """column name"""
+  abandoned_yn
+
+  """column name"""
+  age
+
+  """column name"""
+  breed_code
+
+  """column name"""
+  date_adopted
+
+  """column name"""
+  date_arrived
+
+  """column name"""
+  date_departed
+
+  """column name"""
+  date_of_birth
+
+  """column name"""
+  dog_id
+
+  """column name"""
+  gender
+
+  """column name"""
+  name
+
+  """column name"""
+  owner_id
+
+  """column name"""
+  size_code
+
+  """column name"""
+  weight
+}
+
+"""
+input type for updating data in table "dogs"
+"""
+input dogs_set_input {
+  abandoned_yn: String
+  age: String
+  breed_code: String
+  date_adopted: timestamptz
+  date_arrived: timestamptz
+  date_departed: timestamptz
+  date_of_birth: timestamptz
+  dog_id: bigint
+  gender: String
+  name: String
+  owner_id: bigint
+  size_code: String
+  weight: String
+}
+
+"""aggregate stddev on columns"""
+type dogs_stddev_fields {
+  dog_id: Float
+  owner_id: Float
+}
+
+"""
+order by stddev() on columns of table "dogs"
+"""
+input dogs_stddev_order_by {
+  dog_id: order_by
+  owner_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type dogs_stddev_pop_fields {
+  dog_id: Float
+  owner_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "dogs"
+"""
+input dogs_stddev_pop_order_by {
+  dog_id: order_by
+  owner_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type dogs_stddev_samp_fields {
+  dog_id: Float
+  owner_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "dogs"
+"""
+input dogs_stddev_samp_order_by {
+  dog_id: order_by
+  owner_id: order_by
+}
+
+"""aggregate sum on columns"""
+type dogs_sum_fields {
+  dog_id: bigint
+  owner_id: bigint
+}
+
+"""
+order by sum() on columns of table "dogs"
+"""
+input dogs_sum_order_by {
+  dog_id: order_by
+  owner_id: order_by
+}
+
+"""
+update columns of table "dogs"
+"""
+enum dogs_update_column {
+  """column name"""
+  abandoned_yn
+
+  """column name"""
+  age
+
+  """column name"""
+  breed_code
+
+  """column name"""
+  date_adopted
+
+  """column name"""
+  date_arrived
+
+  """column name"""
+  date_departed
+
+  """column name"""
+  date_of_birth
+
+  """column name"""
+  dog_id
+
+  """column name"""
+  gender
+
+  """column name"""
+  name
+
+  """column name"""
+  owner_id
+
+  """column name"""
+  size_code
+
+  """column name"""
+  weight
+}
+
+"""aggregate var_pop on columns"""
+type dogs_var_pop_fields {
+  dog_id: Float
+  owner_id: Float
+}
+
+"""
+order by var_pop() on columns of table "dogs"
+"""
+input dogs_var_pop_order_by {
+  dog_id: order_by
+  owner_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type dogs_var_samp_fields {
+  dog_id: Float
+  owner_id: Float
+}
+
+"""
+order by var_samp() on columns of table "dogs"
+"""
+input dogs_var_samp_order_by {
+  dog_id: order_by
+  owner_id: order_by
+}
+
+"""aggregate variance on columns"""
+type dogs_variance_fields {
+  dog_id: Float
+  owner_id: Float
+}
+
+"""
+order by variance() on columns of table "dogs"
+"""
+input dogs_variance_order_by {
+  dog_id: order_by
+  owner_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "breeds"
+  """
+  delete_breeds(
+    """filter the rows which have to be deleted"""
+    where: breeds_bool_exp!
+  ): breeds_mutation_response
+
+  """
+  delete data from the table: "charges"
+  """
+  delete_charges(
+    """filter the rows which have to be deleted"""
+    where: charges_bool_exp!
+  ): charges_mutation_response
+
+  """
+  delete data from the table: "dogs"
+  """
+  delete_dogs(
+    """filter the rows which have to be deleted"""
+    where: dogs_bool_exp!
+  ): dogs_mutation_response
+
+  """
+  delete data from the table: "owners"
+  """
+  delete_owners(
+    """filter the rows which have to be deleted"""
+    where: owners_bool_exp!
+  ): owners_mutation_response
+
+  """
+  delete data from the table: "professionals"
+  """
+  delete_professionals(
+    """filter the rows which have to be deleted"""
+    where: professionals_bool_exp!
+  ): professionals_mutation_response
+
+  """
+  delete data from the table: "sizes"
+  """
+  delete_sizes(
+    """filter the rows which have to be deleted"""
+    where: sizes_bool_exp!
+  ): sizes_mutation_response
+
+  """
+  delete data from the table: "treatment_types"
+  """
+  delete_treatment_types(
+    """filter the rows which have to be deleted"""
+    where: treatment_types_bool_exp!
+  ): treatment_types_mutation_response
+
+  """
+  delete data from the table: "treatments"
+  """
+  delete_treatments(
+    """filter the rows which have to be deleted"""
+    where: treatments_bool_exp!
+  ): treatments_mutation_response
+
+  """
+  insert data into the table: "breeds"
+  """
+  insert_breeds(
+    """the rows to be inserted"""
+    objects: [breeds_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: breeds_on_conflict
+  ): breeds_mutation_response
+
+  """
+  insert data into the table: "charges"
+  """
+  insert_charges(
+    """the rows to be inserted"""
+    objects: [charges_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: charges_on_conflict
+  ): charges_mutation_response
+
+  """
+  insert data into the table: "dogs"
+  """
+  insert_dogs(
+    """the rows to be inserted"""
+    objects: [dogs_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: dogs_on_conflict
+  ): dogs_mutation_response
+
+  """
+  insert data into the table: "owners"
+  """
+  insert_owners(
+    """the rows to be inserted"""
+    objects: [owners_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: owners_on_conflict
+  ): owners_mutation_response
+
+  """
+  insert data into the table: "professionals"
+  """
+  insert_professionals(
+    """the rows to be inserted"""
+    objects: [professionals_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: professionals_on_conflict
+  ): professionals_mutation_response
+
+  """
+  insert data into the table: "sizes"
+  """
+  insert_sizes(
+    """the rows to be inserted"""
+    objects: [sizes_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: sizes_on_conflict
+  ): sizes_mutation_response
+
+  """
+  insert data into the table: "treatment_types"
+  """
+  insert_treatment_types(
+    """the rows to be inserted"""
+    objects: [treatment_types_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: treatment_types_on_conflict
+  ): treatment_types_mutation_response
+
+  """
+  insert data into the table: "treatments"
+  """
+  insert_treatments(
+    """the rows to be inserted"""
+    objects: [treatments_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: treatments_on_conflict
+  ): treatments_mutation_response
+
+  """
+  update data of the table: "breeds"
+  """
+  update_breeds(
+    """sets the columns of the filtered rows to the given values"""
+    _set: breeds_set_input
+
+    """filter the rows which have to be updated"""
+    where: breeds_bool_exp!
+  ): breeds_mutation_response
+
+  """
+  update data of the table: "charges"
+  """
+  update_charges(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: charges_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: charges_set_input
+
+    """filter the rows which have to be updated"""
+    where: charges_bool_exp!
+  ): charges_mutation_response
+
+  """
+  update data of the table: "dogs"
+  """
+  update_dogs(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: dogs_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: dogs_set_input
+
+    """filter the rows which have to be updated"""
+    where: dogs_bool_exp!
+  ): dogs_mutation_response
+
+  """
+  update data of the table: "owners"
+  """
+  update_owners(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: owners_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: owners_set_input
+
+    """filter the rows which have to be updated"""
+    where: owners_bool_exp!
+  ): owners_mutation_response
+
+  """
+  update data of the table: "professionals"
+  """
+  update_professionals(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: professionals_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: professionals_set_input
+
+    """filter the rows which have to be updated"""
+    where: professionals_bool_exp!
+  ): professionals_mutation_response
+
+  """
+  update data of the table: "sizes"
+  """
+  update_sizes(
+    """sets the columns of the filtered rows to the given values"""
+    _set: sizes_set_input
+
+    """filter the rows which have to be updated"""
+    where: sizes_bool_exp!
+  ): sizes_mutation_response
+
+  """
+  update data of the table: "treatment_types"
+  """
+  update_treatment_types(
+    """sets the columns of the filtered rows to the given values"""
+    _set: treatment_types_set_input
+
+    """filter the rows which have to be updated"""
+    where: treatment_types_bool_exp!
+  ): treatment_types_mutation_response
+
+  """
+  update data of the table: "treatments"
+  """
+  update_treatments(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: treatments_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: treatments_set_input
+
+    """filter the rows which have to be updated"""
+    where: treatments_bool_exp!
+  ): treatments_mutation_response
+}
+
+scalar numeric
+
+"""
+expression to compare columns of type numeric. All fields are combined with logical 'AND'.
+"""
+input numeric_comparison_exp {
+  _eq: numeric
+  _gt: numeric
+  _gte: numeric
+  _in: [numeric!]
+  _is_null: Boolean
+  _lt: numeric
+  _lte: numeric
+  _neq: numeric
+  _nin: [numeric!]
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "owners"
+"""
+type owners {
+  cell_number: String
+  city: String
+
+  """An array relationship"""
+  dogs(
+    """distinct select on columns"""
+    distinct_on: [dogs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dogs_order_by!]
+
+    """filter the rows returned"""
+    where: dogs_bool_exp
+  ): [dogs!]!
+
+  """An aggregated array relationship"""
+  dogs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [dogs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dogs_order_by!]
+
+    """filter the rows returned"""
+    where: dogs_bool_exp
+  ): dogs_aggregate!
+  email_address: String
+  first_name: String
+  home_phone: String
+  last_name: String
+  owner_id: bigint!
+  state: String
+  street: String
+  zip_code: String
+}
+
+"""
+aggregated selection of "owners"
+"""
+type owners_aggregate {
+  aggregate: owners_aggregate_fields
+  nodes: [owners!]!
+}
+
+"""
+aggregate fields of "owners"
+"""
+type owners_aggregate_fields {
+  avg: owners_avg_fields
+  count(columns: [owners_select_column!], distinct: Boolean): Int
+  max: owners_max_fields
+  min: owners_min_fields
+  stddev: owners_stddev_fields
+  stddev_pop: owners_stddev_pop_fields
+  stddev_samp: owners_stddev_samp_fields
+  sum: owners_sum_fields
+  var_pop: owners_var_pop_fields
+  var_samp: owners_var_samp_fields
+  variance: owners_variance_fields
+}
+
+"""
+order by aggregate values of table "owners"
+"""
+input owners_aggregate_order_by {
+  avg: owners_avg_order_by
+  count: order_by
+  max: owners_max_order_by
+  min: owners_min_order_by
+  stddev: owners_stddev_order_by
+  stddev_pop: owners_stddev_pop_order_by
+  stddev_samp: owners_stddev_samp_order_by
+  sum: owners_sum_order_by
+  var_pop: owners_var_pop_order_by
+  var_samp: owners_var_samp_order_by
+  variance: owners_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "owners"
+"""
+input owners_arr_rel_insert_input {
+  data: [owners_insert_input!]!
+  on_conflict: owners_on_conflict
+}
+
+"""aggregate avg on columns"""
+type owners_avg_fields {
+  owner_id: Float
+}
+
+"""
+order by avg() on columns of table "owners"
+"""
+input owners_avg_order_by {
+  owner_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "owners". All fields are combined with a logical 'AND'.
+"""
+input owners_bool_exp {
+  _and: [owners_bool_exp]
+  _not: owners_bool_exp
+  _or: [owners_bool_exp]
+  cell_number: String_comparison_exp
+  city: String_comparison_exp
+  dogs: dogs_bool_exp
+  email_address: String_comparison_exp
+  first_name: String_comparison_exp
+  home_phone: String_comparison_exp
+  last_name: String_comparison_exp
+  owner_id: bigint_comparison_exp
+  state: String_comparison_exp
+  street: String_comparison_exp
+  zip_code: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "owners"
+"""
+enum owners_constraint {
+  """unique or primary key constraint"""
+  idx_18565_owners_pkey
+}
+
+"""
+input type for incrementing integer columne in table "owners"
+"""
+input owners_inc_input {
+  owner_id: bigint
+}
+
+"""
+input type for inserting data into table "owners"
+"""
+input owners_insert_input {
+  cell_number: String
+  city: String
+  dogs: dogs_arr_rel_insert_input
+  email_address: String
+  first_name: String
+  home_phone: String
+  last_name: String
+  owner_id: bigint
+  state: String
+  street: String
+  zip_code: String
+}
+
+"""aggregate max on columns"""
+type owners_max_fields {
+  cell_number: String
+  city: String
+  email_address: String
+  first_name: String
+  home_phone: String
+  last_name: String
+  owner_id: bigint
+  state: String
+  street: String
+  zip_code: String
+}
+
+"""
+order by max() on columns of table "owners"
+"""
+input owners_max_order_by {
+  cell_number: order_by
+  city: order_by
+  email_address: order_by
+  first_name: order_by
+  home_phone: order_by
+  last_name: order_by
+  owner_id: order_by
+  state: order_by
+  street: order_by
+  zip_code: order_by
+}
+
+"""aggregate min on columns"""
+type owners_min_fields {
+  cell_number: String
+  city: String
+  email_address: String
+  first_name: String
+  home_phone: String
+  last_name: String
+  owner_id: bigint
+  state: String
+  street: String
+  zip_code: String
+}
+
+"""
+order by min() on columns of table "owners"
+"""
+input owners_min_order_by {
+  cell_number: order_by
+  city: order_by
+  email_address: order_by
+  first_name: order_by
+  home_phone: order_by
+  last_name: order_by
+  owner_id: order_by
+  state: order_by
+  street: order_by
+  zip_code: order_by
+}
+
+"""
+response of any mutation on the table "owners"
+"""
+type owners_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [owners!]!
+}
+
+"""
+input type for inserting object relation for remote table "owners"
+"""
+input owners_obj_rel_insert_input {
+  data: owners_insert_input!
+  on_conflict: owners_on_conflict
+}
+
+"""
+on conflict condition type for table "owners"
+"""
+input owners_on_conflict {
+  constraint: owners_constraint!
+  update_columns: [owners_update_column!]!
+  where: owners_bool_exp
+}
+
+"""
+ordering options when selecting data from "owners"
+"""
+input owners_order_by {
+  cell_number: order_by
+  city: order_by
+  dogs_aggregate: dogs_aggregate_order_by
+  email_address: order_by
+  first_name: order_by
+  home_phone: order_by
+  last_name: order_by
+  owner_id: order_by
+  state: order_by
+  street: order_by
+  zip_code: order_by
+}
+
+"""
+select columns of table "owners"
+"""
+enum owners_select_column {
+  """column name"""
+  cell_number
+
+  """column name"""
+  city
+
+  """column name"""
+  email_address
+
+  """column name"""
+  first_name
+
+  """column name"""
+  home_phone
+
+  """column name"""
+  last_name
+
+  """column name"""
+  owner_id
+
+  """column name"""
+  state
+
+  """column name"""
+  street
+
+  """column name"""
+  zip_code
+}
+
+"""
+input type for updating data in table "owners"
+"""
+input owners_set_input {
+  cell_number: String
+  city: String
+  email_address: String
+  first_name: String
+  home_phone: String
+  last_name: String
+  owner_id: bigint
+  state: String
+  street: String
+  zip_code: String
+}
+
+"""aggregate stddev on columns"""
+type owners_stddev_fields {
+  owner_id: Float
+}
+
+"""
+order by stddev() on columns of table "owners"
+"""
+input owners_stddev_order_by {
+  owner_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type owners_stddev_pop_fields {
+  owner_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "owners"
+"""
+input owners_stddev_pop_order_by {
+  owner_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type owners_stddev_samp_fields {
+  owner_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "owners"
+"""
+input owners_stddev_samp_order_by {
+  owner_id: order_by
+}
+
+"""aggregate sum on columns"""
+type owners_sum_fields {
+  owner_id: bigint
+}
+
+"""
+order by sum() on columns of table "owners"
+"""
+input owners_sum_order_by {
+  owner_id: order_by
+}
+
+"""
+update columns of table "owners"
+"""
+enum owners_update_column {
+  """column name"""
+  cell_number
+
+  """column name"""
+  city
+
+  """column name"""
+  email_address
+
+  """column name"""
+  first_name
+
+  """column name"""
+  home_phone
+
+  """column name"""
+  last_name
+
+  """column name"""
+  owner_id
+
+  """column name"""
+  state
+
+  """column name"""
+  street
+
+  """column name"""
+  zip_code
+}
+
+"""aggregate var_pop on columns"""
+type owners_var_pop_fields {
+  owner_id: Float
+}
+
+"""
+order by var_pop() on columns of table "owners"
+"""
+input owners_var_pop_order_by {
+  owner_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type owners_var_samp_fields {
+  owner_id: Float
+}
+
+"""
+order by var_samp() on columns of table "owners"
+"""
+input owners_var_samp_order_by {
+  owner_id: order_by
+}
+
+"""aggregate variance on columns"""
+type owners_variance_fields {
+  owner_id: Float
+}
+
+"""
+order by variance() on columns of table "owners"
+"""
+input owners_variance_order_by {
+  owner_id: order_by
+}
+
+"""
+columns and relationships of "professionals"
+"""
+type professionals {
+  cell_number: String
+  city: String
+  email_address: String
+  first_name: String
+  home_phone: String
+  last_name: String
+  professional_id: bigint!
+  role_code: String
+  state: String
+  street: String
+
+  """An array relationship"""
+  treatments(
+    """distinct select on columns"""
+    distinct_on: [treatments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [treatments_order_by!]
+
+    """filter the rows returned"""
+    where: treatments_bool_exp
+  ): [treatments!]!
+
+  """An aggregated array relationship"""
+  treatments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [treatments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [treatments_order_by!]
+
+    """filter the rows returned"""
+    where: treatments_bool_exp
+  ): treatments_aggregate!
+  zip_code: String
+}
+
+"""
+aggregated selection of "professionals"
+"""
+type professionals_aggregate {
+  aggregate: professionals_aggregate_fields
+  nodes: [professionals!]!
+}
+
+"""
+aggregate fields of "professionals"
+"""
+type professionals_aggregate_fields {
+  avg: professionals_avg_fields
+  count(columns: [professionals_select_column!], distinct: Boolean): Int
+  max: professionals_max_fields
+  min: professionals_min_fields
+  stddev: professionals_stddev_fields
+  stddev_pop: professionals_stddev_pop_fields
+  stddev_samp: professionals_stddev_samp_fields
+  sum: professionals_sum_fields
+  var_pop: professionals_var_pop_fields
+  var_samp: professionals_var_samp_fields
+  variance: professionals_variance_fields
+}
+
+"""
+order by aggregate values of table "professionals"
+"""
+input professionals_aggregate_order_by {
+  avg: professionals_avg_order_by
+  count: order_by
+  max: professionals_max_order_by
+  min: professionals_min_order_by
+  stddev: professionals_stddev_order_by
+  stddev_pop: professionals_stddev_pop_order_by
+  stddev_samp: professionals_stddev_samp_order_by
+  sum: professionals_sum_order_by
+  var_pop: professionals_var_pop_order_by
+  var_samp: professionals_var_samp_order_by
+  variance: professionals_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "professionals"
+"""
+input professionals_arr_rel_insert_input {
+  data: [professionals_insert_input!]!
+  on_conflict: professionals_on_conflict
+}
+
+"""aggregate avg on columns"""
+type professionals_avg_fields {
+  professional_id: Float
+}
+
+"""
+order by avg() on columns of table "professionals"
+"""
+input professionals_avg_order_by {
+  professional_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "professionals". All fields are combined with a logical 'AND'.
+"""
+input professionals_bool_exp {
+  _and: [professionals_bool_exp]
+  _not: professionals_bool_exp
+  _or: [professionals_bool_exp]
+  cell_number: String_comparison_exp
+  city: String_comparison_exp
+  email_address: String_comparison_exp
+  first_name: String_comparison_exp
+  home_phone: String_comparison_exp
+  last_name: String_comparison_exp
+  professional_id: bigint_comparison_exp
+  role_code: String_comparison_exp
+  state: String_comparison_exp
+  street: String_comparison_exp
+  treatments: treatments_bool_exp
+  zip_code: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "professionals"
+"""
+enum professionals_constraint {
+  """unique or primary key constraint"""
+  idx_18577_professionals_pkey
+}
+
+"""
+input type for incrementing integer columne in table "professionals"
+"""
+input professionals_inc_input {
+  professional_id: bigint
+}
+
+"""
+input type for inserting data into table "professionals"
+"""
+input professionals_insert_input {
+  cell_number: String
+  city: String
+  email_address: String
+  first_name: String
+  home_phone: String
+  last_name: String
+  professional_id: bigint
+  role_code: String
+  state: String
+  street: String
+  treatments: treatments_arr_rel_insert_input
+  zip_code: String
+}
+
+"""aggregate max on columns"""
+type professionals_max_fields {
+  cell_number: String
+  city: String
+  email_address: String
+  first_name: String
+  home_phone: String
+  last_name: String
+  professional_id: bigint
+  role_code: String
+  state: String
+  street: String
+  zip_code: String
+}
+
+"""
+order by max() on columns of table "professionals"
+"""
+input professionals_max_order_by {
+  cell_number: order_by
+  city: order_by
+  email_address: order_by
+  first_name: order_by
+  home_phone: order_by
+  last_name: order_by
+  professional_id: order_by
+  role_code: order_by
+  state: order_by
+  street: order_by
+  zip_code: order_by
+}
+
+"""aggregate min on columns"""
+type professionals_min_fields {
+  cell_number: String
+  city: String
+  email_address: String
+  first_name: String
+  home_phone: String
+  last_name: String
+  professional_id: bigint
+  role_code: String
+  state: String
+  street: String
+  zip_code: String
+}
+
+"""
+order by min() on columns of table "professionals"
+"""
+input professionals_min_order_by {
+  cell_number: order_by
+  city: order_by
+  email_address: order_by
+  first_name: order_by
+  home_phone: order_by
+  last_name: order_by
+  professional_id: order_by
+  role_code: order_by
+  state: order_by
+  street: order_by
+  zip_code: order_by
+}
+
+"""
+response of any mutation on the table "professionals"
+"""
+type professionals_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [professionals!]!
+}
+
+"""
+input type for inserting object relation for remote table "professionals"
+"""
+input professionals_obj_rel_insert_input {
+  data: professionals_insert_input!
+  on_conflict: professionals_on_conflict
+}
+
+"""
+on conflict condition type for table "professionals"
+"""
+input professionals_on_conflict {
+  constraint: professionals_constraint!
+  update_columns: [professionals_update_column!]!
+  where: professionals_bool_exp
+}
+
+"""
+ordering options when selecting data from "professionals"
+"""
+input professionals_order_by {
+  cell_number: order_by
+  city: order_by
+  email_address: order_by
+  first_name: order_by
+  home_phone: order_by
+  last_name: order_by
+  professional_id: order_by
+  role_code: order_by
+  state: order_by
+  street: order_by
+  treatments_aggregate: treatments_aggregate_order_by
+  zip_code: order_by
+}
+
+"""
+select columns of table "professionals"
+"""
+enum professionals_select_column {
+  """column name"""
+  cell_number
+
+  """column name"""
+  city
+
+  """column name"""
+  email_address
+
+  """column name"""
+  first_name
+
+  """column name"""
+  home_phone
+
+  """column name"""
+  last_name
+
+  """column name"""
+  professional_id
+
+  """column name"""
+  role_code
+
+  """column name"""
+  state
+
+  """column name"""
+  street
+
+  """column name"""
+  zip_code
+}
+
+"""
+input type for updating data in table "professionals"
+"""
+input professionals_set_input {
+  cell_number: String
+  city: String
+  email_address: String
+  first_name: String
+  home_phone: String
+  last_name: String
+  professional_id: bigint
+  role_code: String
+  state: String
+  street: String
+  zip_code: String
+}
+
+"""aggregate stddev on columns"""
+type professionals_stddev_fields {
+  professional_id: Float
+}
+
+"""
+order by stddev() on columns of table "professionals"
+"""
+input professionals_stddev_order_by {
+  professional_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type professionals_stddev_pop_fields {
+  professional_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "professionals"
+"""
+input professionals_stddev_pop_order_by {
+  professional_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type professionals_stddev_samp_fields {
+  professional_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "professionals"
+"""
+input professionals_stddev_samp_order_by {
+  professional_id: order_by
+}
+
+"""aggregate sum on columns"""
+type professionals_sum_fields {
+  professional_id: bigint
+}
+
+"""
+order by sum() on columns of table "professionals"
+"""
+input professionals_sum_order_by {
+  professional_id: order_by
+}
+
+"""
+update columns of table "professionals"
+"""
+enum professionals_update_column {
+  """column name"""
+  cell_number
+
+  """column name"""
+  city
+
+  """column name"""
+  email_address
+
+  """column name"""
+  first_name
+
+  """column name"""
+  home_phone
+
+  """column name"""
+  last_name
+
+  """column name"""
+  professional_id
+
+  """column name"""
+  role_code
+
+  """column name"""
+  state
+
+  """column name"""
+  street
+
+  """column name"""
+  zip_code
+}
+
+"""aggregate var_pop on columns"""
+type professionals_var_pop_fields {
+  professional_id: Float
+}
+
+"""
+order by var_pop() on columns of table "professionals"
+"""
+input professionals_var_pop_order_by {
+  professional_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type professionals_var_samp_fields {
+  professional_id: Float
+}
+
+"""
+order by var_samp() on columns of table "professionals"
+"""
+input professionals_var_samp_order_by {
+  professional_id: order_by
+}
+
+"""aggregate variance on columns"""
+type professionals_variance_fields {
+  professional_id: Float
+}
+
+"""
+order by variance() on columns of table "professionals"
+"""
+input professionals_variance_order_by {
+  professional_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "breeds"
+  """
+  breeds(
+    """distinct select on columns"""
+    distinct_on: [breeds_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [breeds_order_by!]
+
+    """filter the rows returned"""
+    where: breeds_bool_exp
+  ): [breeds!]!
+
+  """
+  fetch aggregated fields from the table: "breeds"
+  """
+  breeds_aggregate(
+    """distinct select on columns"""
+    distinct_on: [breeds_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [breeds_order_by!]
+
+    """filter the rows returned"""
+    where: breeds_bool_exp
+  ): breeds_aggregate!
+
+  """fetch data from the table: "breeds" using primary key columns"""
+  breeds_by_pk(breed_code: String!): breeds
+
+  """
+  fetch data from the table: "charges"
+  """
+  charges(
+    """distinct select on columns"""
+    distinct_on: [charges_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [charges_order_by!]
+
+    """filter the rows returned"""
+    where: charges_bool_exp
+  ): [charges!]!
+
+  """
+  fetch aggregated fields from the table: "charges"
+  """
+  charges_aggregate(
+    """distinct select on columns"""
+    distinct_on: [charges_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [charges_order_by!]
+
+    """filter the rows returned"""
+    where: charges_bool_exp
+  ): charges_aggregate!
+
+  """fetch data from the table: "charges" using primary key columns"""
+  charges_by_pk(charge_id: bigint!): charges
+
+  """
+  fetch data from the table: "dogs"
+  """
+  dogs(
+    """distinct select on columns"""
+    distinct_on: [dogs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dogs_order_by!]
+
+    """filter the rows returned"""
+    where: dogs_bool_exp
+  ): [dogs!]!
+
+  """
+  fetch aggregated fields from the table: "dogs"
+  """
+  dogs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [dogs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dogs_order_by!]
+
+    """filter the rows returned"""
+    where: dogs_bool_exp
+  ): dogs_aggregate!
+
+  """fetch data from the table: "dogs" using primary key columns"""
+  dogs_by_pk(dog_id: bigint!): dogs
+
+  """
+  fetch data from the table: "owners"
+  """
+  owners(
+    """distinct select on columns"""
+    distinct_on: [owners_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [owners_order_by!]
+
+    """filter the rows returned"""
+    where: owners_bool_exp
+  ): [owners!]!
+
+  """
+  fetch aggregated fields from the table: "owners"
+  """
+  owners_aggregate(
+    """distinct select on columns"""
+    distinct_on: [owners_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [owners_order_by!]
+
+    """filter the rows returned"""
+    where: owners_bool_exp
+  ): owners_aggregate!
+
+  """fetch data from the table: "owners" using primary key columns"""
+  owners_by_pk(owner_id: bigint!): owners
+
+  """
+  fetch data from the table: "professionals"
+  """
+  professionals(
+    """distinct select on columns"""
+    distinct_on: [professionals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [professionals_order_by!]
+
+    """filter the rows returned"""
+    where: professionals_bool_exp
+  ): [professionals!]!
+
+  """
+  fetch aggregated fields from the table: "professionals"
+  """
+  professionals_aggregate(
+    """distinct select on columns"""
+    distinct_on: [professionals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [professionals_order_by!]
+
+    """filter the rows returned"""
+    where: professionals_bool_exp
+  ): professionals_aggregate!
+
+  """fetch data from the table: "professionals" using primary key columns"""
+  professionals_by_pk(professional_id: bigint!): professionals
+
+  """
+  fetch data from the table: "sizes"
+  """
+  sizes(
+    """distinct select on columns"""
+    distinct_on: [sizes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [sizes_order_by!]
+
+    """filter the rows returned"""
+    where: sizes_bool_exp
+  ): [sizes!]!
+
+  """
+  fetch aggregated fields from the table: "sizes"
+  """
+  sizes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [sizes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [sizes_order_by!]
+
+    """filter the rows returned"""
+    where: sizes_bool_exp
+  ): sizes_aggregate!
+
+  """fetch data from the table: "sizes" using primary key columns"""
+  sizes_by_pk(size_code: String!): sizes
+
+  """
+  fetch data from the table: "treatment_types"
+  """
+  treatment_types(
+    """distinct select on columns"""
+    distinct_on: [treatment_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [treatment_types_order_by!]
+
+    """filter the rows returned"""
+    where: treatment_types_bool_exp
+  ): [treatment_types!]!
+
+  """
+  fetch aggregated fields from the table: "treatment_types"
+  """
+  treatment_types_aggregate(
+    """distinct select on columns"""
+    distinct_on: [treatment_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [treatment_types_order_by!]
+
+    """filter the rows returned"""
+    where: treatment_types_bool_exp
+  ): treatment_types_aggregate!
+
+  """fetch data from the table: "treatment_types" using primary key columns"""
+  treatment_types_by_pk(treatment_type_code: String!): treatment_types
+
+  """
+  fetch data from the table: "treatments"
+  """
+  treatments(
+    """distinct select on columns"""
+    distinct_on: [treatments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [treatments_order_by!]
+
+    """filter the rows returned"""
+    where: treatments_bool_exp
+  ): [treatments!]!
+
+  """
+  fetch aggregated fields from the table: "treatments"
+  """
+  treatments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [treatments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [treatments_order_by!]
+
+    """filter the rows returned"""
+    where: treatments_bool_exp
+  ): treatments_aggregate!
+
+  """fetch data from the table: "treatments" using primary key columns"""
+  treatments_by_pk(treatment_id: bigint!): treatments
+}
+
+"""
+columns and relationships of "sizes"
+"""
+type sizes {
+  """An array relationship"""
+  dogs(
+    """distinct select on columns"""
+    distinct_on: [dogs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dogs_order_by!]
+
+    """filter the rows returned"""
+    where: dogs_bool_exp
+  ): [dogs!]!
+
+  """An aggregated array relationship"""
+  dogs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [dogs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dogs_order_by!]
+
+    """filter the rows returned"""
+    where: dogs_bool_exp
+  ): dogs_aggregate!
+  size_code: String!
+  size_description: String
+}
+
+"""
+aggregated selection of "sizes"
+"""
+type sizes_aggregate {
+  aggregate: sizes_aggregate_fields
+  nodes: [sizes!]!
+}
+
+"""
+aggregate fields of "sizes"
+"""
+type sizes_aggregate_fields {
+  count(columns: [sizes_select_column!], distinct: Boolean): Int
+  max: sizes_max_fields
+  min: sizes_min_fields
+}
+
+"""
+order by aggregate values of table "sizes"
+"""
+input sizes_aggregate_order_by {
+  count: order_by
+  max: sizes_max_order_by
+  min: sizes_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "sizes"
+"""
+input sizes_arr_rel_insert_input {
+  data: [sizes_insert_input!]!
+  on_conflict: sizes_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "sizes". All fields are combined with a logical 'AND'.
+"""
+input sizes_bool_exp {
+  _and: [sizes_bool_exp]
+  _not: sizes_bool_exp
+  _or: [sizes_bool_exp]
+  dogs: dogs_bool_exp
+  size_code: String_comparison_exp
+  size_description: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "sizes"
+"""
+enum sizes_constraint {
+  """unique or primary key constraint"""
+  idx_18553_sqlite_autoindex_sizes_1
+}
+
+"""
+input type for inserting data into table "sizes"
+"""
+input sizes_insert_input {
+  dogs: dogs_arr_rel_insert_input
+  size_code: String
+  size_description: String
+}
+
+"""aggregate max on columns"""
+type sizes_max_fields {
+  size_code: String
+  size_description: String
+}
+
+"""
+order by max() on columns of table "sizes"
+"""
+input sizes_max_order_by {
+  size_code: order_by
+  size_description: order_by
+}
+
+"""aggregate min on columns"""
+type sizes_min_fields {
+  size_code: String
+  size_description: String
+}
+
+"""
+order by min() on columns of table "sizes"
+"""
+input sizes_min_order_by {
+  size_code: order_by
+  size_description: order_by
+}
+
+"""
+response of any mutation on the table "sizes"
+"""
+type sizes_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [sizes!]!
+}
+
+"""
+input type for inserting object relation for remote table "sizes"
+"""
+input sizes_obj_rel_insert_input {
+  data: sizes_insert_input!
+  on_conflict: sizes_on_conflict
+}
+
+"""
+on conflict condition type for table "sizes"
+"""
+input sizes_on_conflict {
+  constraint: sizes_constraint!
+  update_columns: [sizes_update_column!]!
+  where: sizes_bool_exp
+}
+
+"""
+ordering options when selecting data from "sizes"
+"""
+input sizes_order_by {
+  dogs_aggregate: dogs_aggregate_order_by
+  size_code: order_by
+  size_description: order_by
+}
+
+"""
+select columns of table "sizes"
+"""
+enum sizes_select_column {
+  """column name"""
+  size_code
+
+  """column name"""
+  size_description
+}
+
+"""
+input type for updating data in table "sizes"
+"""
+input sizes_set_input {
+  size_code: String
+  size_description: String
+}
+
+"""
+update columns of table "sizes"
+"""
+enum sizes_update_column {
+  """column name"""
+  size_code
+
+  """column name"""
+  size_description
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "breeds"
+  """
+  breeds(
+    """distinct select on columns"""
+    distinct_on: [breeds_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [breeds_order_by!]
+
+    """filter the rows returned"""
+    where: breeds_bool_exp
+  ): [breeds!]!
+
+  """
+  fetch aggregated fields from the table: "breeds"
+  """
+  breeds_aggregate(
+    """distinct select on columns"""
+    distinct_on: [breeds_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [breeds_order_by!]
+
+    """filter the rows returned"""
+    where: breeds_bool_exp
+  ): breeds_aggregate!
+
+  """fetch data from the table: "breeds" using primary key columns"""
+  breeds_by_pk(breed_code: String!): breeds
+
+  """
+  fetch data from the table: "charges"
+  """
+  charges(
+    """distinct select on columns"""
+    distinct_on: [charges_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [charges_order_by!]
+
+    """filter the rows returned"""
+    where: charges_bool_exp
+  ): [charges!]!
+
+  """
+  fetch aggregated fields from the table: "charges"
+  """
+  charges_aggregate(
+    """distinct select on columns"""
+    distinct_on: [charges_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [charges_order_by!]
+
+    """filter the rows returned"""
+    where: charges_bool_exp
+  ): charges_aggregate!
+
+  """fetch data from the table: "charges" using primary key columns"""
+  charges_by_pk(charge_id: bigint!): charges
+
+  """
+  fetch data from the table: "dogs"
+  """
+  dogs(
+    """distinct select on columns"""
+    distinct_on: [dogs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dogs_order_by!]
+
+    """filter the rows returned"""
+    where: dogs_bool_exp
+  ): [dogs!]!
+
+  """
+  fetch aggregated fields from the table: "dogs"
+  """
+  dogs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [dogs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dogs_order_by!]
+
+    """filter the rows returned"""
+    where: dogs_bool_exp
+  ): dogs_aggregate!
+
+  """fetch data from the table: "dogs" using primary key columns"""
+  dogs_by_pk(dog_id: bigint!): dogs
+
+  """
+  fetch data from the table: "owners"
+  """
+  owners(
+    """distinct select on columns"""
+    distinct_on: [owners_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [owners_order_by!]
+
+    """filter the rows returned"""
+    where: owners_bool_exp
+  ): [owners!]!
+
+  """
+  fetch aggregated fields from the table: "owners"
+  """
+  owners_aggregate(
+    """distinct select on columns"""
+    distinct_on: [owners_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [owners_order_by!]
+
+    """filter the rows returned"""
+    where: owners_bool_exp
+  ): owners_aggregate!
+
+  """fetch data from the table: "owners" using primary key columns"""
+  owners_by_pk(owner_id: bigint!): owners
+
+  """
+  fetch data from the table: "professionals"
+  """
+  professionals(
+    """distinct select on columns"""
+    distinct_on: [professionals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [professionals_order_by!]
+
+    """filter the rows returned"""
+    where: professionals_bool_exp
+  ): [professionals!]!
+
+  """
+  fetch aggregated fields from the table: "professionals"
+  """
+  professionals_aggregate(
+    """distinct select on columns"""
+    distinct_on: [professionals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [professionals_order_by!]
+
+    """filter the rows returned"""
+    where: professionals_bool_exp
+  ): professionals_aggregate!
+
+  """fetch data from the table: "professionals" using primary key columns"""
+  professionals_by_pk(professional_id: bigint!): professionals
+
+  """
+  fetch data from the table: "sizes"
+  """
+  sizes(
+    """distinct select on columns"""
+    distinct_on: [sizes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [sizes_order_by!]
+
+    """filter the rows returned"""
+    where: sizes_bool_exp
+  ): [sizes!]!
+
+  """
+  fetch aggregated fields from the table: "sizes"
+  """
+  sizes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [sizes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [sizes_order_by!]
+
+    """filter the rows returned"""
+    where: sizes_bool_exp
+  ): sizes_aggregate!
+
+  """fetch data from the table: "sizes" using primary key columns"""
+  sizes_by_pk(size_code: String!): sizes
+
+  """
+  fetch data from the table: "treatment_types"
+  """
+  treatment_types(
+    """distinct select on columns"""
+    distinct_on: [treatment_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [treatment_types_order_by!]
+
+    """filter the rows returned"""
+    where: treatment_types_bool_exp
+  ): [treatment_types!]!
+
+  """
+  fetch aggregated fields from the table: "treatment_types"
+  """
+  treatment_types_aggregate(
+    """distinct select on columns"""
+    distinct_on: [treatment_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [treatment_types_order_by!]
+
+    """filter the rows returned"""
+    where: treatment_types_bool_exp
+  ): treatment_types_aggregate!
+
+  """fetch data from the table: "treatment_types" using primary key columns"""
+  treatment_types_by_pk(treatment_type_code: String!): treatment_types
+
+  """
+  fetch data from the table: "treatments"
+  """
+  treatments(
+    """distinct select on columns"""
+    distinct_on: [treatments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [treatments_order_by!]
+
+    """filter the rows returned"""
+    where: treatments_bool_exp
+  ): [treatments!]!
+
+  """
+  fetch aggregated fields from the table: "treatments"
+  """
+  treatments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [treatments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [treatments_order_by!]
+
+    """filter the rows returned"""
+    where: treatments_bool_exp
+  ): treatments_aggregate!
+
+  """fetch data from the table: "treatments" using primary key columns"""
+  treatments_by_pk(treatment_id: bigint!): treatments
+}
+
+scalar timestamptz
+
+"""
+expression to compare columns of type timestamptz. All fields are combined with logical 'AND'.
+"""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}
+
+"""
+columns and relationships of "treatment_types"
+"""
+type treatment_types {
+  treatment_type_code: String!
+  treatment_type_description: String
+
+  """An array relationship"""
+  treatments(
+    """distinct select on columns"""
+    distinct_on: [treatments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [treatments_order_by!]
+
+    """filter the rows returned"""
+    where: treatments_bool_exp
+  ): [treatments!]!
+
+  """An aggregated array relationship"""
+  treatments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [treatments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [treatments_order_by!]
+
+    """filter the rows returned"""
+    where: treatments_bool_exp
+  ): treatments_aggregate!
+}
+
+"""
+aggregated selection of "treatment_types"
+"""
+type treatment_types_aggregate {
+  aggregate: treatment_types_aggregate_fields
+  nodes: [treatment_types!]!
+}
+
+"""
+aggregate fields of "treatment_types"
+"""
+type treatment_types_aggregate_fields {
+  count(columns: [treatment_types_select_column!], distinct: Boolean): Int
+  max: treatment_types_max_fields
+  min: treatment_types_min_fields
+}
+
+"""
+order by aggregate values of table "treatment_types"
+"""
+input treatment_types_aggregate_order_by {
+  count: order_by
+  max: treatment_types_max_order_by
+  min: treatment_types_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "treatment_types"
+"""
+input treatment_types_arr_rel_insert_input {
+  data: [treatment_types_insert_input!]!
+  on_conflict: treatment_types_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "treatment_types". All fields are combined with a logical 'AND'.
+"""
+input treatment_types_bool_exp {
+  _and: [treatment_types_bool_exp]
+  _not: treatment_types_bool_exp
+  _or: [treatment_types_bool_exp]
+  treatment_type_code: String_comparison_exp
+  treatment_type_description: String_comparison_exp
+  treatments: treatments_bool_exp
+}
+
+"""
+unique or primary key constraints on table "treatment_types"
+"""
+enum treatment_types_constraint {
+  """unique or primary key constraint"""
+  idx_18559_sqlite_autoindex_treatment_types_1
+}
+
+"""
+input type for inserting data into table "treatment_types"
+"""
+input treatment_types_insert_input {
+  treatment_type_code: String
+  treatment_type_description: String
+  treatments: treatments_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type treatment_types_max_fields {
+  treatment_type_code: String
+  treatment_type_description: String
+}
+
+"""
+order by max() on columns of table "treatment_types"
+"""
+input treatment_types_max_order_by {
+  treatment_type_code: order_by
+  treatment_type_description: order_by
+}
+
+"""aggregate min on columns"""
+type treatment_types_min_fields {
+  treatment_type_code: String
+  treatment_type_description: String
+}
+
+"""
+order by min() on columns of table "treatment_types"
+"""
+input treatment_types_min_order_by {
+  treatment_type_code: order_by
+  treatment_type_description: order_by
+}
+
+"""
+response of any mutation on the table "treatment_types"
+"""
+type treatment_types_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [treatment_types!]!
+}
+
+"""
+input type for inserting object relation for remote table "treatment_types"
+"""
+input treatment_types_obj_rel_insert_input {
+  data: treatment_types_insert_input!
+  on_conflict: treatment_types_on_conflict
+}
+
+"""
+on conflict condition type for table "treatment_types"
+"""
+input treatment_types_on_conflict {
+  constraint: treatment_types_constraint!
+  update_columns: [treatment_types_update_column!]!
+  where: treatment_types_bool_exp
+}
+
+"""
+ordering options when selecting data from "treatment_types"
+"""
+input treatment_types_order_by {
+  treatment_type_code: order_by
+  treatment_type_description: order_by
+  treatments_aggregate: treatments_aggregate_order_by
+}
+
+"""
+select columns of table "treatment_types"
+"""
+enum treatment_types_select_column {
+  """column name"""
+  treatment_type_code
+
+  """column name"""
+  treatment_type_description
+}
+
+"""
+input type for updating data in table "treatment_types"
+"""
+input treatment_types_set_input {
+  treatment_type_code: String
+  treatment_type_description: String
+}
+
+"""
+update columns of table "treatment_types"
+"""
+enum treatment_types_update_column {
+  """column name"""
+  treatment_type_code
+
+  """column name"""
+  treatment_type_description
+}
+
+"""
+columns and relationships of "treatments"
+"""
+type treatments {
+  cost_of_treatment: numeric
+  date_of_treatment: timestamptz
+
+  """An object relationship"""
+  dog: dogs
+  dog_id: bigint
+
+  """An object relationship"""
+  professional: professionals
+  professional_id: bigint
+  treatment_id: bigint!
+
+  """An object relationship"""
+  treatment_type: treatment_types
+  treatment_type_code: String
+}
+
+"""
+aggregated selection of "treatments"
+"""
+type treatments_aggregate {
+  aggregate: treatments_aggregate_fields
+  nodes: [treatments!]!
+}
+
+"""
+aggregate fields of "treatments"
+"""
+type treatments_aggregate_fields {
+  avg: treatments_avg_fields
+  count(columns: [treatments_select_column!], distinct: Boolean): Int
+  max: treatments_max_fields
+  min: treatments_min_fields
+  stddev: treatments_stddev_fields
+  stddev_pop: treatments_stddev_pop_fields
+  stddev_samp: treatments_stddev_samp_fields
+  sum: treatments_sum_fields
+  var_pop: treatments_var_pop_fields
+  var_samp: treatments_var_samp_fields
+  variance: treatments_variance_fields
+}
+
+"""
+order by aggregate values of table "treatments"
+"""
+input treatments_aggregate_order_by {
+  avg: treatments_avg_order_by
+  count: order_by
+  max: treatments_max_order_by
+  min: treatments_min_order_by
+  stddev: treatments_stddev_order_by
+  stddev_pop: treatments_stddev_pop_order_by
+  stddev_samp: treatments_stddev_samp_order_by
+  sum: treatments_sum_order_by
+  var_pop: treatments_var_pop_order_by
+  var_samp: treatments_var_samp_order_by
+  variance: treatments_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "treatments"
+"""
+input treatments_arr_rel_insert_input {
+  data: [treatments_insert_input!]!
+  on_conflict: treatments_on_conflict
+}
+
+"""aggregate avg on columns"""
+type treatments_avg_fields {
+  cost_of_treatment: Float
+  dog_id: Float
+  professional_id: Float
+  treatment_id: Float
+}
+
+"""
+order by avg() on columns of table "treatments"
+"""
+input treatments_avg_order_by {
+  cost_of_treatment: order_by
+  dog_id: order_by
+  professional_id: order_by
+  treatment_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "treatments". All fields are combined with a logical 'AND'.
+"""
+input treatments_bool_exp {
+  _and: [treatments_bool_exp]
+  _not: treatments_bool_exp
+  _or: [treatments_bool_exp]
+  cost_of_treatment: numeric_comparison_exp
+  date_of_treatment: timestamptz_comparison_exp
+  dog: dogs_bool_exp
+  dog_id: bigint_comparison_exp
+  professional: professionals_bool_exp
+  professional_id: bigint_comparison_exp
+  treatment_id: bigint_comparison_exp
+  treatment_type: treatment_types_bool_exp
+  treatment_type_code: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "treatments"
+"""
+enum treatments_constraint {
+  """unique or primary key constraint"""
+  idx_18583_treatments_pkey
+}
+
+"""
+input type for incrementing integer columne in table "treatments"
+"""
+input treatments_inc_input {
+  dog_id: bigint
+  professional_id: bigint
+  treatment_id: bigint
+}
+
+"""
+input type for inserting data into table "treatments"
+"""
+input treatments_insert_input {
+  cost_of_treatment: numeric
+  date_of_treatment: timestamptz
+  dog: dogs_obj_rel_insert_input
+  dog_id: bigint
+  professional: professionals_obj_rel_insert_input
+  professional_id: bigint
+  treatment_id: bigint
+  treatment_type: treatment_types_obj_rel_insert_input
+  treatment_type_code: String
+}
+
+"""aggregate max on columns"""
+type treatments_max_fields {
+  cost_of_treatment: numeric
+  date_of_treatment: timestamptz
+  dog_id: bigint
+  professional_id: bigint
+  treatment_id: bigint
+  treatment_type_code: String
+}
+
+"""
+order by max() on columns of table "treatments"
+"""
+input treatments_max_order_by {
+  cost_of_treatment: order_by
+  date_of_treatment: order_by
+  dog_id: order_by
+  professional_id: order_by
+  treatment_id: order_by
+  treatment_type_code: order_by
+}
+
+"""aggregate min on columns"""
+type treatments_min_fields {
+  cost_of_treatment: numeric
+  date_of_treatment: timestamptz
+  dog_id: bigint
+  professional_id: bigint
+  treatment_id: bigint
+  treatment_type_code: String
+}
+
+"""
+order by min() on columns of table "treatments"
+"""
+input treatments_min_order_by {
+  cost_of_treatment: order_by
+  date_of_treatment: order_by
+  dog_id: order_by
+  professional_id: order_by
+  treatment_id: order_by
+  treatment_type_code: order_by
+}
+
+"""
+response of any mutation on the table "treatments"
+"""
+type treatments_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [treatments!]!
+}
+
+"""
+input type for inserting object relation for remote table "treatments"
+"""
+input treatments_obj_rel_insert_input {
+  data: treatments_insert_input!
+  on_conflict: treatments_on_conflict
+}
+
+"""
+on conflict condition type for table "treatments"
+"""
+input treatments_on_conflict {
+  constraint: treatments_constraint!
+  update_columns: [treatments_update_column!]!
+  where: treatments_bool_exp
+}
+
+"""
+ordering options when selecting data from "treatments"
+"""
+input treatments_order_by {
+  cost_of_treatment: order_by
+  date_of_treatment: order_by
+  dog: dogs_order_by
+  dog_id: order_by
+  professional: professionals_order_by
+  professional_id: order_by
+  treatment_id: order_by
+  treatment_type: treatment_types_order_by
+  treatment_type_code: order_by
+}
+
+"""
+select columns of table "treatments"
+"""
+enum treatments_select_column {
+  """column name"""
+  cost_of_treatment
+
+  """column name"""
+  date_of_treatment
+
+  """column name"""
+  dog_id
+
+  """column name"""
+  professional_id
+
+  """column name"""
+  treatment_id
+
+  """column name"""
+  treatment_type_code
+}
+
+"""
+input type for updating data in table "treatments"
+"""
+input treatments_set_input {
+  cost_of_treatment: numeric
+  date_of_treatment: timestamptz
+  dog_id: bigint
+  professional_id: bigint
+  treatment_id: bigint
+  treatment_type_code: String
+}
+
+"""aggregate stddev on columns"""
+type treatments_stddev_fields {
+  cost_of_treatment: Float
+  dog_id: Float
+  professional_id: Float
+  treatment_id: Float
+}
+
+"""
+order by stddev() on columns of table "treatments"
+"""
+input treatments_stddev_order_by {
+  cost_of_treatment: order_by
+  dog_id: order_by
+  professional_id: order_by
+  treatment_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type treatments_stddev_pop_fields {
+  cost_of_treatment: Float
+  dog_id: Float
+  professional_id: Float
+  treatment_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "treatments"
+"""
+input treatments_stddev_pop_order_by {
+  cost_of_treatment: order_by
+  dog_id: order_by
+  professional_id: order_by
+  treatment_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type treatments_stddev_samp_fields {
+  cost_of_treatment: Float
+  dog_id: Float
+  professional_id: Float
+  treatment_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "treatments"
+"""
+input treatments_stddev_samp_order_by {
+  cost_of_treatment: order_by
+  dog_id: order_by
+  professional_id: order_by
+  treatment_id: order_by
+}
+
+"""aggregate sum on columns"""
+type treatments_sum_fields {
+  cost_of_treatment: numeric
+  dog_id: bigint
+  professional_id: bigint
+  treatment_id: bigint
+}
+
+"""
+order by sum() on columns of table "treatments"
+"""
+input treatments_sum_order_by {
+  cost_of_treatment: order_by
+  dog_id: order_by
+  professional_id: order_by
+  treatment_id: order_by
+}
+
+"""
+update columns of table "treatments"
+"""
+enum treatments_update_column {
+  """column name"""
+  cost_of_treatment
+
+  """column name"""
+  date_of_treatment
+
+  """column name"""
+  dog_id
+
+  """column name"""
+  professional_id
+
+  """column name"""
+  treatment_id
+
+  """column name"""
+  treatment_type_code
+}
+
+"""aggregate var_pop on columns"""
+type treatments_var_pop_fields {
+  cost_of_treatment: Float
+  dog_id: Float
+  professional_id: Float
+  treatment_id: Float
+}
+
+"""
+order by var_pop() on columns of table "treatments"
+"""
+input treatments_var_pop_order_by {
+  cost_of_treatment: order_by
+  dog_id: order_by
+  professional_id: order_by
+  treatment_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type treatments_var_samp_fields {
+  cost_of_treatment: Float
+  dog_id: Float
+  professional_id: Float
+  treatment_id: Float
+}
+
+"""
+order by var_samp() on columns of table "treatments"
+"""
+input treatments_var_samp_order_by {
+  cost_of_treatment: order_by
+  dog_id: order_by
+  professional_id: order_by
+  treatment_id: order_by
+}
+
+"""aggregate variance on columns"""
+type treatments_variance_fields {
+  cost_of_treatment: Float
+  dog_id: Float
+  professional_id: Float
+  treatment_id: Float
+}
+
+"""
+order by variance() on columns of table "treatments"
+"""
+input treatments_variance_order_by {
+  cost_of_treatment: order_by
+  dog_id: order_by
+  professional_id: order_by
+  treatment_id: order_by
+}

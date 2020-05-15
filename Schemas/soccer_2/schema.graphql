@@ -1,0 +1,1443 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "college"
+"""
+type college {
+  cname: String
+  enr: numeric
+  state: String
+
+  """An array relationship"""
+  tryouts(
+    """distinct select on columns"""
+    distinct_on: [tryout_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tryout_order_by!]
+
+    """filter the rows returned"""
+    where: tryout_bool_exp
+  ): [tryout!]!
+
+  """An aggregated array relationship"""
+  tryouts_aggregate(
+    """distinct select on columns"""
+    distinct_on: [tryout_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tryout_order_by!]
+
+    """filter the rows returned"""
+    where: tryout_bool_exp
+  ): tryout_aggregate!
+}
+
+"""
+aggregated selection of "college"
+"""
+type college_aggregate {
+  aggregate: college_aggregate_fields
+  nodes: [college!]!
+}
+
+"""
+aggregate fields of "college"
+"""
+type college_aggregate_fields {
+  avg: college_avg_fields
+  count(columns: [college_select_column!], distinct: Boolean): Int
+  max: college_max_fields
+  min: college_min_fields
+  stddev: college_stddev_fields
+  stddev_pop: college_stddev_pop_fields
+  stddev_samp: college_stddev_samp_fields
+  sum: college_sum_fields
+  var_pop: college_var_pop_fields
+  var_samp: college_var_samp_fields
+  variance: college_variance_fields
+}
+
+"""
+order by aggregate values of table "college"
+"""
+input college_aggregate_order_by {
+  avg: college_avg_order_by
+  count: order_by
+  max: college_max_order_by
+  min: college_min_order_by
+  stddev: college_stddev_order_by
+  stddev_pop: college_stddev_pop_order_by
+  stddev_samp: college_stddev_samp_order_by
+  sum: college_sum_order_by
+  var_pop: college_var_pop_order_by
+  var_samp: college_var_samp_order_by
+  variance: college_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "college"
+"""
+input college_arr_rel_insert_input {
+  data: [college_insert_input!]!
+  on_conflict: college_on_conflict
+}
+
+"""aggregate avg on columns"""
+type college_avg_fields {
+  enr: Float
+}
+
+"""
+order by avg() on columns of table "college"
+"""
+input college_avg_order_by {
+  enr: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "college". All fields are combined with a logical 'AND'.
+"""
+input college_bool_exp {
+  _and: [college_bool_exp]
+  _not: college_bool_exp
+  _or: [college_bool_exp]
+  cname: String_comparison_exp
+  enr: numeric_comparison_exp
+  state: String_comparison_exp
+  tryouts: tryout_bool_exp
+}
+
+"""
+unique or primary key constraints on table "college"
+"""
+enum college_constraint {
+  """unique or primary key constraint"""
+  idx_17860_sqlite_autoindex_college_1
+}
+
+"""
+input type for inserting data into table "college"
+"""
+input college_insert_input {
+  cname: String
+  enr: numeric
+  state: String
+  tryouts: tryout_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type college_max_fields {
+  cname: String
+  enr: numeric
+  state: String
+}
+
+"""
+order by max() on columns of table "college"
+"""
+input college_max_order_by {
+  cname: order_by
+  enr: order_by
+  state: order_by
+}
+
+"""aggregate min on columns"""
+type college_min_fields {
+  cname: String
+  enr: numeric
+  state: String
+}
+
+"""
+order by min() on columns of table "college"
+"""
+input college_min_order_by {
+  cname: order_by
+  enr: order_by
+  state: order_by
+}
+
+"""
+response of any mutation on the table "college"
+"""
+type college_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [college!]!
+}
+
+"""
+input type for inserting object relation for remote table "college"
+"""
+input college_obj_rel_insert_input {
+  data: college_insert_input!
+  on_conflict: college_on_conflict
+}
+
+"""
+on conflict condition type for table "college"
+"""
+input college_on_conflict {
+  constraint: college_constraint!
+  update_columns: [college_update_column!]!
+  where: college_bool_exp
+}
+
+"""
+ordering options when selecting data from "college"
+"""
+input college_order_by {
+  cname: order_by
+  enr: order_by
+  state: order_by
+  tryouts_aggregate: tryout_aggregate_order_by
+}
+
+"""
+select columns of table "college"
+"""
+enum college_select_column {
+  """column name"""
+  cname
+
+  """column name"""
+  enr
+
+  """column name"""
+  state
+}
+
+"""
+input type for updating data in table "college"
+"""
+input college_set_input {
+  cname: String
+  enr: numeric
+  state: String
+}
+
+"""aggregate stddev on columns"""
+type college_stddev_fields {
+  enr: Float
+}
+
+"""
+order by stddev() on columns of table "college"
+"""
+input college_stddev_order_by {
+  enr: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type college_stddev_pop_fields {
+  enr: Float
+}
+
+"""
+order by stddev_pop() on columns of table "college"
+"""
+input college_stddev_pop_order_by {
+  enr: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type college_stddev_samp_fields {
+  enr: Float
+}
+
+"""
+order by stddev_samp() on columns of table "college"
+"""
+input college_stddev_samp_order_by {
+  enr: order_by
+}
+
+"""aggregate sum on columns"""
+type college_sum_fields {
+  enr: numeric
+}
+
+"""
+order by sum() on columns of table "college"
+"""
+input college_sum_order_by {
+  enr: order_by
+}
+
+"""
+update columns of table "college"
+"""
+enum college_update_column {
+  """column name"""
+  cname
+
+  """column name"""
+  enr
+
+  """column name"""
+  state
+}
+
+"""aggregate var_pop on columns"""
+type college_var_pop_fields {
+  enr: Float
+}
+
+"""
+order by var_pop() on columns of table "college"
+"""
+input college_var_pop_order_by {
+  enr: order_by
+}
+
+"""aggregate var_samp on columns"""
+type college_var_samp_fields {
+  enr: Float
+}
+
+"""
+order by var_samp() on columns of table "college"
+"""
+input college_var_samp_order_by {
+  enr: order_by
+}
+
+"""aggregate variance on columns"""
+type college_variance_fields {
+  enr: Float
+}
+
+"""
+order by variance() on columns of table "college"
+"""
+input college_variance_order_by {
+  enr: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "college"
+  """
+  delete_college(
+    """filter the rows which have to be deleted"""
+    where: college_bool_exp!
+  ): college_mutation_response
+
+  """
+  delete data from the table: "player"
+  """
+  delete_player(
+    """filter the rows which have to be deleted"""
+    where: player_bool_exp!
+  ): player_mutation_response
+
+  """
+  delete data from the table: "tryout"
+  """
+  delete_tryout(
+    """filter the rows which have to be deleted"""
+    where: tryout_bool_exp!
+  ): tryout_mutation_response
+
+  """
+  insert data into the table: "college"
+  """
+  insert_college(
+    """the rows to be inserted"""
+    objects: [college_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: college_on_conflict
+  ): college_mutation_response
+
+  """
+  insert data into the table: "player"
+  """
+  insert_player(
+    """the rows to be inserted"""
+    objects: [player_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: player_on_conflict
+  ): player_mutation_response
+
+  """
+  insert data into the table: "tryout"
+  """
+  insert_tryout(
+    """the rows to be inserted"""
+    objects: [tryout_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: tryout_on_conflict
+  ): tryout_mutation_response
+
+  """
+  update data of the table: "college"
+  """
+  update_college(
+    """sets the columns of the filtered rows to the given values"""
+    _set: college_set_input
+
+    """filter the rows which have to be updated"""
+    where: college_bool_exp!
+  ): college_mutation_response
+
+  """
+  update data of the table: "player"
+  """
+  update_player(
+    """sets the columns of the filtered rows to the given values"""
+    _set: player_set_input
+
+    """filter the rows which have to be updated"""
+    where: player_bool_exp!
+  ): player_mutation_response
+
+  """
+  update data of the table: "tryout"
+  """
+  update_tryout(
+    """sets the columns of the filtered rows to the given values"""
+    _set: tryout_set_input
+
+    """filter the rows which have to be updated"""
+    where: tryout_bool_exp!
+  ): tryout_mutation_response
+}
+
+scalar numeric
+
+"""
+expression to compare columns of type numeric. All fields are combined with logical 'AND'.
+"""
+input numeric_comparison_exp {
+  _eq: numeric
+  _gt: numeric
+  _gte: numeric
+  _in: [numeric!]
+  _is_null: Boolean
+  _lt: numeric
+  _lte: numeric
+  _neq: numeric
+  _nin: [numeric!]
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "player"
+"""
+type player {
+  hs: numeric
+  pid: numeric
+  pname: String
+
+  """An array relationship"""
+  tryouts(
+    """distinct select on columns"""
+    distinct_on: [tryout_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tryout_order_by!]
+
+    """filter the rows returned"""
+    where: tryout_bool_exp
+  ): [tryout!]!
+
+  """An aggregated array relationship"""
+  tryouts_aggregate(
+    """distinct select on columns"""
+    distinct_on: [tryout_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tryout_order_by!]
+
+    """filter the rows returned"""
+    where: tryout_bool_exp
+  ): tryout_aggregate!
+  ycard: String
+}
+
+"""
+aggregated selection of "player"
+"""
+type player_aggregate {
+  aggregate: player_aggregate_fields
+  nodes: [player!]!
+}
+
+"""
+aggregate fields of "player"
+"""
+type player_aggregate_fields {
+  avg: player_avg_fields
+  count(columns: [player_select_column!], distinct: Boolean): Int
+  max: player_max_fields
+  min: player_min_fields
+  stddev: player_stddev_fields
+  stddev_pop: player_stddev_pop_fields
+  stddev_samp: player_stddev_samp_fields
+  sum: player_sum_fields
+  var_pop: player_var_pop_fields
+  var_samp: player_var_samp_fields
+  variance: player_variance_fields
+}
+
+"""
+order by aggregate values of table "player"
+"""
+input player_aggregate_order_by {
+  avg: player_avg_order_by
+  count: order_by
+  max: player_max_order_by
+  min: player_min_order_by
+  stddev: player_stddev_order_by
+  stddev_pop: player_stddev_pop_order_by
+  stddev_samp: player_stddev_samp_order_by
+  sum: player_sum_order_by
+  var_pop: player_var_pop_order_by
+  var_samp: player_var_samp_order_by
+  variance: player_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "player"
+"""
+input player_arr_rel_insert_input {
+  data: [player_insert_input!]!
+  on_conflict: player_on_conflict
+}
+
+"""aggregate avg on columns"""
+type player_avg_fields {
+  hs: Float
+  pid: Float
+}
+
+"""
+order by avg() on columns of table "player"
+"""
+input player_avg_order_by {
+  hs: order_by
+  pid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "player". All fields are combined with a logical 'AND'.
+"""
+input player_bool_exp {
+  _and: [player_bool_exp]
+  _not: player_bool_exp
+  _or: [player_bool_exp]
+  hs: numeric_comparison_exp
+  pid: numeric_comparison_exp
+  pname: String_comparison_exp
+  tryouts: tryout_bool_exp
+  ycard: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "player"
+"""
+enum player_constraint {
+  """unique or primary key constraint"""
+  idx_17866_sqlite_autoindex_player_1
+}
+
+"""
+input type for inserting data into table "player"
+"""
+input player_insert_input {
+  hs: numeric
+  pid: numeric
+  pname: String
+  tryouts: tryout_arr_rel_insert_input
+  ycard: String
+}
+
+"""aggregate max on columns"""
+type player_max_fields {
+  hs: numeric
+  pid: numeric
+  pname: String
+  ycard: String
+}
+
+"""
+order by max() on columns of table "player"
+"""
+input player_max_order_by {
+  hs: order_by
+  pid: order_by
+  pname: order_by
+  ycard: order_by
+}
+
+"""aggregate min on columns"""
+type player_min_fields {
+  hs: numeric
+  pid: numeric
+  pname: String
+  ycard: String
+}
+
+"""
+order by min() on columns of table "player"
+"""
+input player_min_order_by {
+  hs: order_by
+  pid: order_by
+  pname: order_by
+  ycard: order_by
+}
+
+"""
+response of any mutation on the table "player"
+"""
+type player_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [player!]!
+}
+
+"""
+input type for inserting object relation for remote table "player"
+"""
+input player_obj_rel_insert_input {
+  data: player_insert_input!
+  on_conflict: player_on_conflict
+}
+
+"""
+on conflict condition type for table "player"
+"""
+input player_on_conflict {
+  constraint: player_constraint!
+  update_columns: [player_update_column!]!
+  where: player_bool_exp
+}
+
+"""
+ordering options when selecting data from "player"
+"""
+input player_order_by {
+  hs: order_by
+  pid: order_by
+  pname: order_by
+  tryouts_aggregate: tryout_aggregate_order_by
+  ycard: order_by
+}
+
+"""
+select columns of table "player"
+"""
+enum player_select_column {
+  """column name"""
+  hs
+
+  """column name"""
+  pid
+
+  """column name"""
+  pname
+
+  """column name"""
+  ycard
+}
+
+"""
+input type for updating data in table "player"
+"""
+input player_set_input {
+  hs: numeric
+  pid: numeric
+  pname: String
+  ycard: String
+}
+
+"""aggregate stddev on columns"""
+type player_stddev_fields {
+  hs: Float
+  pid: Float
+}
+
+"""
+order by stddev() on columns of table "player"
+"""
+input player_stddev_order_by {
+  hs: order_by
+  pid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type player_stddev_pop_fields {
+  hs: Float
+  pid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "player"
+"""
+input player_stddev_pop_order_by {
+  hs: order_by
+  pid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type player_stddev_samp_fields {
+  hs: Float
+  pid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "player"
+"""
+input player_stddev_samp_order_by {
+  hs: order_by
+  pid: order_by
+}
+
+"""aggregate sum on columns"""
+type player_sum_fields {
+  hs: numeric
+  pid: numeric
+}
+
+"""
+order by sum() on columns of table "player"
+"""
+input player_sum_order_by {
+  hs: order_by
+  pid: order_by
+}
+
+"""
+update columns of table "player"
+"""
+enum player_update_column {
+  """column name"""
+  hs
+
+  """column name"""
+  pid
+
+  """column name"""
+  pname
+
+  """column name"""
+  ycard
+}
+
+"""aggregate var_pop on columns"""
+type player_var_pop_fields {
+  hs: Float
+  pid: Float
+}
+
+"""
+order by var_pop() on columns of table "player"
+"""
+input player_var_pop_order_by {
+  hs: order_by
+  pid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type player_var_samp_fields {
+  hs: Float
+  pid: Float
+}
+
+"""
+order by var_samp() on columns of table "player"
+"""
+input player_var_samp_order_by {
+  hs: order_by
+  pid: order_by
+}
+
+"""aggregate variance on columns"""
+type player_variance_fields {
+  hs: Float
+  pid: Float
+}
+
+"""
+order by variance() on columns of table "player"
+"""
+input player_variance_order_by {
+  hs: order_by
+  pid: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "college"
+  """
+  college(
+    """distinct select on columns"""
+    distinct_on: [college_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [college_order_by!]
+
+    """filter the rows returned"""
+    where: college_bool_exp
+  ): [college!]!
+
+  """
+  fetch aggregated fields from the table: "college"
+  """
+  college_aggregate(
+    """distinct select on columns"""
+    distinct_on: [college_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [college_order_by!]
+
+    """filter the rows returned"""
+    where: college_bool_exp
+  ): college_aggregate!
+
+  """
+  fetch data from the table: "player"
+  """
+  player(
+    """distinct select on columns"""
+    distinct_on: [player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_order_by!]
+
+    """filter the rows returned"""
+    where: player_bool_exp
+  ): [player!]!
+
+  """
+  fetch aggregated fields from the table: "player"
+  """
+  player_aggregate(
+    """distinct select on columns"""
+    distinct_on: [player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_order_by!]
+
+    """filter the rows returned"""
+    where: player_bool_exp
+  ): player_aggregate!
+
+  """
+  fetch data from the table: "tryout"
+  """
+  tryout(
+    """distinct select on columns"""
+    distinct_on: [tryout_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tryout_order_by!]
+
+    """filter the rows returned"""
+    where: tryout_bool_exp
+  ): [tryout!]!
+
+  """
+  fetch aggregated fields from the table: "tryout"
+  """
+  tryout_aggregate(
+    """distinct select on columns"""
+    distinct_on: [tryout_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tryout_order_by!]
+
+    """filter the rows returned"""
+    where: tryout_bool_exp
+  ): tryout_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "college"
+  """
+  college(
+    """distinct select on columns"""
+    distinct_on: [college_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [college_order_by!]
+
+    """filter the rows returned"""
+    where: college_bool_exp
+  ): [college!]!
+
+  """
+  fetch aggregated fields from the table: "college"
+  """
+  college_aggregate(
+    """distinct select on columns"""
+    distinct_on: [college_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [college_order_by!]
+
+    """filter the rows returned"""
+    where: college_bool_exp
+  ): college_aggregate!
+
+  """
+  fetch data from the table: "player"
+  """
+  player(
+    """distinct select on columns"""
+    distinct_on: [player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_order_by!]
+
+    """filter the rows returned"""
+    where: player_bool_exp
+  ): [player!]!
+
+  """
+  fetch aggregated fields from the table: "player"
+  """
+  player_aggregate(
+    """distinct select on columns"""
+    distinct_on: [player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_order_by!]
+
+    """filter the rows returned"""
+    where: player_bool_exp
+  ): player_aggregate!
+
+  """
+  fetch data from the table: "tryout"
+  """
+  tryout(
+    """distinct select on columns"""
+    distinct_on: [tryout_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tryout_order_by!]
+
+    """filter the rows returned"""
+    where: tryout_bool_exp
+  ): [tryout!]!
+
+  """
+  fetch aggregated fields from the table: "tryout"
+  """
+  tryout_aggregate(
+    """distinct select on columns"""
+    distinct_on: [tryout_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tryout_order_by!]
+
+    """filter the rows returned"""
+    where: tryout_bool_exp
+  ): tryout_aggregate!
+}
+
+"""
+columns and relationships of "tryout"
+"""
+type tryout {
+  cname: String
+
+  """An object relationship"""
+  college: college
+  decision: String
+  pid: numeric
+
+  """An object relationship"""
+  player: player
+  ppos: String
+}
+
+"""
+aggregated selection of "tryout"
+"""
+type tryout_aggregate {
+  aggregate: tryout_aggregate_fields
+  nodes: [tryout!]!
+}
+
+"""
+aggregate fields of "tryout"
+"""
+type tryout_aggregate_fields {
+  avg: tryout_avg_fields
+  count(columns: [tryout_select_column!], distinct: Boolean): Int
+  max: tryout_max_fields
+  min: tryout_min_fields
+  stddev: tryout_stddev_fields
+  stddev_pop: tryout_stddev_pop_fields
+  stddev_samp: tryout_stddev_samp_fields
+  sum: tryout_sum_fields
+  var_pop: tryout_var_pop_fields
+  var_samp: tryout_var_samp_fields
+  variance: tryout_variance_fields
+}
+
+"""
+order by aggregate values of table "tryout"
+"""
+input tryout_aggregate_order_by {
+  avg: tryout_avg_order_by
+  count: order_by
+  max: tryout_max_order_by
+  min: tryout_min_order_by
+  stddev: tryout_stddev_order_by
+  stddev_pop: tryout_stddev_pop_order_by
+  stddev_samp: tryout_stddev_samp_order_by
+  sum: tryout_sum_order_by
+  var_pop: tryout_var_pop_order_by
+  var_samp: tryout_var_samp_order_by
+  variance: tryout_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "tryout"
+"""
+input tryout_arr_rel_insert_input {
+  data: [tryout_insert_input!]!
+  on_conflict: tryout_on_conflict
+}
+
+"""aggregate avg on columns"""
+type tryout_avg_fields {
+  pid: Float
+}
+
+"""
+order by avg() on columns of table "tryout"
+"""
+input tryout_avg_order_by {
+  pid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "tryout". All fields are combined with a logical 'AND'.
+"""
+input tryout_bool_exp {
+  _and: [tryout_bool_exp]
+  _not: tryout_bool_exp
+  _or: [tryout_bool_exp]
+  cname: String_comparison_exp
+  college: college_bool_exp
+  decision: String_comparison_exp
+  pid: numeric_comparison_exp
+  player: player_bool_exp
+  ppos: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "tryout"
+"""
+enum tryout_constraint {
+  """unique or primary key constraint"""
+  idx_17872_sqlite_autoindex_tryout_1
+}
+
+"""
+input type for inserting data into table "tryout"
+"""
+input tryout_insert_input {
+  cname: String
+  college: college_obj_rel_insert_input
+  decision: String
+  pid: numeric
+  player: player_obj_rel_insert_input
+  ppos: String
+}
+
+"""aggregate max on columns"""
+type tryout_max_fields {
+  cname: String
+  decision: String
+  pid: numeric
+  ppos: String
+}
+
+"""
+order by max() on columns of table "tryout"
+"""
+input tryout_max_order_by {
+  cname: order_by
+  decision: order_by
+  pid: order_by
+  ppos: order_by
+}
+
+"""aggregate min on columns"""
+type tryout_min_fields {
+  cname: String
+  decision: String
+  pid: numeric
+  ppos: String
+}
+
+"""
+order by min() on columns of table "tryout"
+"""
+input tryout_min_order_by {
+  cname: order_by
+  decision: order_by
+  pid: order_by
+  ppos: order_by
+}
+
+"""
+response of any mutation on the table "tryout"
+"""
+type tryout_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [tryout!]!
+}
+
+"""
+input type for inserting object relation for remote table "tryout"
+"""
+input tryout_obj_rel_insert_input {
+  data: tryout_insert_input!
+  on_conflict: tryout_on_conflict
+}
+
+"""
+on conflict condition type for table "tryout"
+"""
+input tryout_on_conflict {
+  constraint: tryout_constraint!
+  update_columns: [tryout_update_column!]!
+  where: tryout_bool_exp
+}
+
+"""
+ordering options when selecting data from "tryout"
+"""
+input tryout_order_by {
+  cname: order_by
+  college: college_order_by
+  decision: order_by
+  pid: order_by
+  player: player_order_by
+  ppos: order_by
+}
+
+"""
+select columns of table "tryout"
+"""
+enum tryout_select_column {
+  """column name"""
+  cname
+
+  """column name"""
+  decision
+
+  """column name"""
+  pid
+
+  """column name"""
+  ppos
+}
+
+"""
+input type for updating data in table "tryout"
+"""
+input tryout_set_input {
+  cname: String
+  decision: String
+  pid: numeric
+  ppos: String
+}
+
+"""aggregate stddev on columns"""
+type tryout_stddev_fields {
+  pid: Float
+}
+
+"""
+order by stddev() on columns of table "tryout"
+"""
+input tryout_stddev_order_by {
+  pid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type tryout_stddev_pop_fields {
+  pid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "tryout"
+"""
+input tryout_stddev_pop_order_by {
+  pid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type tryout_stddev_samp_fields {
+  pid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "tryout"
+"""
+input tryout_stddev_samp_order_by {
+  pid: order_by
+}
+
+"""aggregate sum on columns"""
+type tryout_sum_fields {
+  pid: numeric
+}
+
+"""
+order by sum() on columns of table "tryout"
+"""
+input tryout_sum_order_by {
+  pid: order_by
+}
+
+"""
+update columns of table "tryout"
+"""
+enum tryout_update_column {
+  """column name"""
+  cname
+
+  """column name"""
+  decision
+
+  """column name"""
+  pid
+
+  """column name"""
+  ppos
+}
+
+"""aggregate var_pop on columns"""
+type tryout_var_pop_fields {
+  pid: Float
+}
+
+"""
+order by var_pop() on columns of table "tryout"
+"""
+input tryout_var_pop_order_by {
+  pid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type tryout_var_samp_fields {
+  pid: Float
+}
+
+"""
+order by var_samp() on columns of table "tryout"
+"""
+input tryout_var_samp_order_by {
+  pid: order_by
+}
+
+"""aggregate variance on columns"""
+type tryout_variance_fields {
+  pid: Float
+}
+
+"""
+order by variance() on columns of table "tryout"
+"""
+input tryout_variance_order_by {
+  pid: order_by
+}

@@ -1,0 +1,1126 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "singer"
+  """
+  delete_singer(
+    """filter the rows which have to be deleted"""
+    where: singer_bool_exp!
+  ): singer_mutation_response
+
+  """
+  delete data from the table: "song"
+  """
+  delete_song(
+    """filter the rows which have to be deleted"""
+    where: song_bool_exp!
+  ): song_mutation_response
+
+  """
+  insert data into the table: "singer"
+  """
+  insert_singer(
+    """the rows to be inserted"""
+    objects: [singer_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: singer_on_conflict
+  ): singer_mutation_response
+
+  """
+  insert data into the table: "song"
+  """
+  insert_song(
+    """the rows to be inserted"""
+    objects: [song_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: song_on_conflict
+  ): song_mutation_response
+
+  """
+  update data of the table: "singer"
+  """
+  update_singer(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: singer_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: singer_set_input
+
+    """filter the rows which have to be updated"""
+    where: singer_bool_exp!
+  ): singer_mutation_response
+
+  """
+  update data of the table: "song"
+  """
+  update_song(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: song_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: song_set_input
+
+    """filter the rows which have to be updated"""
+    where: song_bool_exp!
+  ): song_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "singer"
+  """
+  singer(
+    """distinct select on columns"""
+    distinct_on: [singer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [singer_order_by!]
+
+    """filter the rows returned"""
+    where: singer_bool_exp
+  ): [singer!]!
+
+  """
+  fetch aggregated fields from the table: "singer"
+  """
+  singer_aggregate(
+    """distinct select on columns"""
+    distinct_on: [singer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [singer_order_by!]
+
+    """filter the rows returned"""
+    where: singer_bool_exp
+  ): singer_aggregate!
+
+  """
+  fetch data from the table: "song"
+  """
+  song(
+    """distinct select on columns"""
+    distinct_on: [song_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [song_order_by!]
+
+    """filter the rows returned"""
+    where: song_bool_exp
+  ): [song!]!
+
+  """
+  fetch aggregated fields from the table: "song"
+  """
+  song_aggregate(
+    """distinct select on columns"""
+    distinct_on: [song_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [song_order_by!]
+
+    """filter the rows returned"""
+    where: song_bool_exp
+  ): song_aggregate!
+}
+
+"""
+columns and relationships of "singer"
+"""
+type singer {
+  birth_year: Float
+  citizenship: String
+  name: String
+  net_worth_millions: Float
+  singer_id: Int
+
+  """An array relationship"""
+  songs(
+    """distinct select on columns"""
+    distinct_on: [song_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [song_order_by!]
+
+    """filter the rows returned"""
+    where: song_bool_exp
+  ): [song!]!
+
+  """An aggregated array relationship"""
+  songs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [song_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [song_order_by!]
+
+    """filter the rows returned"""
+    where: song_bool_exp
+  ): song_aggregate!
+}
+
+"""
+aggregated selection of "singer"
+"""
+type singer_aggregate {
+  aggregate: singer_aggregate_fields
+  nodes: [singer!]!
+}
+
+"""
+aggregate fields of "singer"
+"""
+type singer_aggregate_fields {
+  avg: singer_avg_fields
+  count(columns: [singer_select_column!], distinct: Boolean): Int
+  max: singer_max_fields
+  min: singer_min_fields
+  stddev: singer_stddev_fields
+  stddev_pop: singer_stddev_pop_fields
+  stddev_samp: singer_stddev_samp_fields
+  sum: singer_sum_fields
+  var_pop: singer_var_pop_fields
+  var_samp: singer_var_samp_fields
+  variance: singer_variance_fields
+}
+
+"""
+order by aggregate values of table "singer"
+"""
+input singer_aggregate_order_by {
+  avg: singer_avg_order_by
+  count: order_by
+  max: singer_max_order_by
+  min: singer_min_order_by
+  stddev: singer_stddev_order_by
+  stddev_pop: singer_stddev_pop_order_by
+  stddev_samp: singer_stddev_samp_order_by
+  sum: singer_sum_order_by
+  var_pop: singer_var_pop_order_by
+  var_samp: singer_var_samp_order_by
+  variance: singer_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "singer"
+"""
+input singer_arr_rel_insert_input {
+  data: [singer_insert_input!]!
+  on_conflict: singer_on_conflict
+}
+
+"""aggregate avg on columns"""
+type singer_avg_fields {
+  birth_year: Float
+  net_worth_millions: Float
+  singer_id: Float
+}
+
+"""
+order by avg() on columns of table "singer"
+"""
+input singer_avg_order_by {
+  birth_year: order_by
+  net_worth_millions: order_by
+  singer_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "singer". All fields are combined with a logical 'AND'.
+"""
+input singer_bool_exp {
+  _and: [singer_bool_exp]
+  _not: singer_bool_exp
+  _or: [singer_bool_exp]
+  birth_year: Float_comparison_exp
+  citizenship: String_comparison_exp
+  name: String_comparison_exp
+  net_worth_millions: Float_comparison_exp
+  singer_id: Int_comparison_exp
+  songs: song_bool_exp
+}
+
+"""
+unique or primary key constraints on table "singer"
+"""
+enum singer_constraint {
+  """unique or primary key constraint"""
+  idx_25562_sqlite_autoindex_singer_1
+}
+
+"""
+input type for incrementing integer columne in table "singer"
+"""
+input singer_inc_input {
+  singer_id: Int
+}
+
+"""
+input type for inserting data into table "singer"
+"""
+input singer_insert_input {
+  birth_year: Float
+  citizenship: String
+  name: String
+  net_worth_millions: Float
+  singer_id: Int
+  songs: song_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type singer_max_fields {
+  birth_year: Float
+  citizenship: String
+  name: String
+  net_worth_millions: Float
+  singer_id: Int
+}
+
+"""
+order by max() on columns of table "singer"
+"""
+input singer_max_order_by {
+  birth_year: order_by
+  citizenship: order_by
+  name: order_by
+  net_worth_millions: order_by
+  singer_id: order_by
+}
+
+"""aggregate min on columns"""
+type singer_min_fields {
+  birth_year: Float
+  citizenship: String
+  name: String
+  net_worth_millions: Float
+  singer_id: Int
+}
+
+"""
+order by min() on columns of table "singer"
+"""
+input singer_min_order_by {
+  birth_year: order_by
+  citizenship: order_by
+  name: order_by
+  net_worth_millions: order_by
+  singer_id: order_by
+}
+
+"""
+response of any mutation on the table "singer"
+"""
+type singer_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [singer!]!
+}
+
+"""
+input type for inserting object relation for remote table "singer"
+"""
+input singer_obj_rel_insert_input {
+  data: singer_insert_input!
+  on_conflict: singer_on_conflict
+}
+
+"""
+on conflict condition type for table "singer"
+"""
+input singer_on_conflict {
+  constraint: singer_constraint!
+  update_columns: [singer_update_column!]!
+  where: singer_bool_exp
+}
+
+"""
+ordering options when selecting data from "singer"
+"""
+input singer_order_by {
+  birth_year: order_by
+  citizenship: order_by
+  name: order_by
+  net_worth_millions: order_by
+  singer_id: order_by
+  songs_aggregate: song_aggregate_order_by
+}
+
+"""
+select columns of table "singer"
+"""
+enum singer_select_column {
+  """column name"""
+  birth_year
+
+  """column name"""
+  citizenship
+
+  """column name"""
+  name
+
+  """column name"""
+  net_worth_millions
+
+  """column name"""
+  singer_id
+}
+
+"""
+input type for updating data in table "singer"
+"""
+input singer_set_input {
+  birth_year: Float
+  citizenship: String
+  name: String
+  net_worth_millions: Float
+  singer_id: Int
+}
+
+"""aggregate stddev on columns"""
+type singer_stddev_fields {
+  birth_year: Float
+  net_worth_millions: Float
+  singer_id: Float
+}
+
+"""
+order by stddev() on columns of table "singer"
+"""
+input singer_stddev_order_by {
+  birth_year: order_by
+  net_worth_millions: order_by
+  singer_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type singer_stddev_pop_fields {
+  birth_year: Float
+  net_worth_millions: Float
+  singer_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "singer"
+"""
+input singer_stddev_pop_order_by {
+  birth_year: order_by
+  net_worth_millions: order_by
+  singer_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type singer_stddev_samp_fields {
+  birth_year: Float
+  net_worth_millions: Float
+  singer_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "singer"
+"""
+input singer_stddev_samp_order_by {
+  birth_year: order_by
+  net_worth_millions: order_by
+  singer_id: order_by
+}
+
+"""aggregate sum on columns"""
+type singer_sum_fields {
+  birth_year: Float
+  net_worth_millions: Float
+  singer_id: Int
+}
+
+"""
+order by sum() on columns of table "singer"
+"""
+input singer_sum_order_by {
+  birth_year: order_by
+  net_worth_millions: order_by
+  singer_id: order_by
+}
+
+"""
+update columns of table "singer"
+"""
+enum singer_update_column {
+  """column name"""
+  birth_year
+
+  """column name"""
+  citizenship
+
+  """column name"""
+  name
+
+  """column name"""
+  net_worth_millions
+
+  """column name"""
+  singer_id
+}
+
+"""aggregate var_pop on columns"""
+type singer_var_pop_fields {
+  birth_year: Float
+  net_worth_millions: Float
+  singer_id: Float
+}
+
+"""
+order by var_pop() on columns of table "singer"
+"""
+input singer_var_pop_order_by {
+  birth_year: order_by
+  net_worth_millions: order_by
+  singer_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type singer_var_samp_fields {
+  birth_year: Float
+  net_worth_millions: Float
+  singer_id: Float
+}
+
+"""
+order by var_samp() on columns of table "singer"
+"""
+input singer_var_samp_order_by {
+  birth_year: order_by
+  net_worth_millions: order_by
+  singer_id: order_by
+}
+
+"""aggregate variance on columns"""
+type singer_variance_fields {
+  birth_year: Float
+  net_worth_millions: Float
+  singer_id: Float
+}
+
+"""
+order by variance() on columns of table "singer"
+"""
+input singer_variance_order_by {
+  birth_year: order_by
+  net_worth_millions: order_by
+  singer_id: order_by
+}
+
+"""
+columns and relationships of "song"
+"""
+type song {
+  highest_position: Float
+  sales: Float
+
+  """An object relationship"""
+  singer: singer
+  singer_id: Int
+  song_id: Int
+  title: String
+}
+
+"""
+aggregated selection of "song"
+"""
+type song_aggregate {
+  aggregate: song_aggregate_fields
+  nodes: [song!]!
+}
+
+"""
+aggregate fields of "song"
+"""
+type song_aggregate_fields {
+  avg: song_avg_fields
+  count(columns: [song_select_column!], distinct: Boolean): Int
+  max: song_max_fields
+  min: song_min_fields
+  stddev: song_stddev_fields
+  stddev_pop: song_stddev_pop_fields
+  stddev_samp: song_stddev_samp_fields
+  sum: song_sum_fields
+  var_pop: song_var_pop_fields
+  var_samp: song_var_samp_fields
+  variance: song_variance_fields
+}
+
+"""
+order by aggregate values of table "song"
+"""
+input song_aggregate_order_by {
+  avg: song_avg_order_by
+  count: order_by
+  max: song_max_order_by
+  min: song_min_order_by
+  stddev: song_stddev_order_by
+  stddev_pop: song_stddev_pop_order_by
+  stddev_samp: song_stddev_samp_order_by
+  sum: song_sum_order_by
+  var_pop: song_var_pop_order_by
+  var_samp: song_var_samp_order_by
+  variance: song_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "song"
+"""
+input song_arr_rel_insert_input {
+  data: [song_insert_input!]!
+  on_conflict: song_on_conflict
+}
+
+"""aggregate avg on columns"""
+type song_avg_fields {
+  highest_position: Float
+  sales: Float
+  singer_id: Float
+  song_id: Float
+}
+
+"""
+order by avg() on columns of table "song"
+"""
+input song_avg_order_by {
+  highest_position: order_by
+  sales: order_by
+  singer_id: order_by
+  song_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "song". All fields are combined with a logical 'AND'.
+"""
+input song_bool_exp {
+  _and: [song_bool_exp]
+  _not: song_bool_exp
+  _or: [song_bool_exp]
+  highest_position: Float_comparison_exp
+  sales: Float_comparison_exp
+  singer: singer_bool_exp
+  singer_id: Int_comparison_exp
+  song_id: Int_comparison_exp
+  title: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "song"
+"""
+enum song_constraint {
+  """unique or primary key constraint"""
+  idx_25568_sqlite_autoindex_song_1
+}
+
+"""
+input type for incrementing integer columne in table "song"
+"""
+input song_inc_input {
+  singer_id: Int
+  song_id: Int
+}
+
+"""
+input type for inserting data into table "song"
+"""
+input song_insert_input {
+  highest_position: Float
+  sales: Float
+  singer: singer_obj_rel_insert_input
+  singer_id: Int
+  song_id: Int
+  title: String
+}
+
+"""aggregate max on columns"""
+type song_max_fields {
+  highest_position: Float
+  sales: Float
+  singer_id: Int
+  song_id: Int
+  title: String
+}
+
+"""
+order by max() on columns of table "song"
+"""
+input song_max_order_by {
+  highest_position: order_by
+  sales: order_by
+  singer_id: order_by
+  song_id: order_by
+  title: order_by
+}
+
+"""aggregate min on columns"""
+type song_min_fields {
+  highest_position: Float
+  sales: Float
+  singer_id: Int
+  song_id: Int
+  title: String
+}
+
+"""
+order by min() on columns of table "song"
+"""
+input song_min_order_by {
+  highest_position: order_by
+  sales: order_by
+  singer_id: order_by
+  song_id: order_by
+  title: order_by
+}
+
+"""
+response of any mutation on the table "song"
+"""
+type song_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [song!]!
+}
+
+"""
+input type for inserting object relation for remote table "song"
+"""
+input song_obj_rel_insert_input {
+  data: song_insert_input!
+  on_conflict: song_on_conflict
+}
+
+"""
+on conflict condition type for table "song"
+"""
+input song_on_conflict {
+  constraint: song_constraint!
+  update_columns: [song_update_column!]!
+  where: song_bool_exp
+}
+
+"""
+ordering options when selecting data from "song"
+"""
+input song_order_by {
+  highest_position: order_by
+  sales: order_by
+  singer: singer_order_by
+  singer_id: order_by
+  song_id: order_by
+  title: order_by
+}
+
+"""
+select columns of table "song"
+"""
+enum song_select_column {
+  """column name"""
+  highest_position
+
+  """column name"""
+  sales
+
+  """column name"""
+  singer_id
+
+  """column name"""
+  song_id
+
+  """column name"""
+  title
+}
+
+"""
+input type for updating data in table "song"
+"""
+input song_set_input {
+  highest_position: Float
+  sales: Float
+  singer_id: Int
+  song_id: Int
+  title: String
+}
+
+"""aggregate stddev on columns"""
+type song_stddev_fields {
+  highest_position: Float
+  sales: Float
+  singer_id: Float
+  song_id: Float
+}
+
+"""
+order by stddev() on columns of table "song"
+"""
+input song_stddev_order_by {
+  highest_position: order_by
+  sales: order_by
+  singer_id: order_by
+  song_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type song_stddev_pop_fields {
+  highest_position: Float
+  sales: Float
+  singer_id: Float
+  song_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "song"
+"""
+input song_stddev_pop_order_by {
+  highest_position: order_by
+  sales: order_by
+  singer_id: order_by
+  song_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type song_stddev_samp_fields {
+  highest_position: Float
+  sales: Float
+  singer_id: Float
+  song_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "song"
+"""
+input song_stddev_samp_order_by {
+  highest_position: order_by
+  sales: order_by
+  singer_id: order_by
+  song_id: order_by
+}
+
+"""aggregate sum on columns"""
+type song_sum_fields {
+  highest_position: Float
+  sales: Float
+  singer_id: Int
+  song_id: Int
+}
+
+"""
+order by sum() on columns of table "song"
+"""
+input song_sum_order_by {
+  highest_position: order_by
+  sales: order_by
+  singer_id: order_by
+  song_id: order_by
+}
+
+"""
+update columns of table "song"
+"""
+enum song_update_column {
+  """column name"""
+  highest_position
+
+  """column name"""
+  sales
+
+  """column name"""
+  singer_id
+
+  """column name"""
+  song_id
+
+  """column name"""
+  title
+}
+
+"""aggregate var_pop on columns"""
+type song_var_pop_fields {
+  highest_position: Float
+  sales: Float
+  singer_id: Float
+  song_id: Float
+}
+
+"""
+order by var_pop() on columns of table "song"
+"""
+input song_var_pop_order_by {
+  highest_position: order_by
+  sales: order_by
+  singer_id: order_by
+  song_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type song_var_samp_fields {
+  highest_position: Float
+  sales: Float
+  singer_id: Float
+  song_id: Float
+}
+
+"""
+order by var_samp() on columns of table "song"
+"""
+input song_var_samp_order_by {
+  highest_position: order_by
+  sales: order_by
+  singer_id: order_by
+  song_id: order_by
+}
+
+"""aggregate variance on columns"""
+type song_variance_fields {
+  highest_position: Float
+  sales: Float
+  singer_id: Float
+  song_id: Float
+}
+
+"""
+order by variance() on columns of table "song"
+"""
+input song_variance_order_by {
+  highest_position: order_by
+  sales: order_by
+  singer_id: order_by
+  song_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "singer"
+  """
+  singer(
+    """distinct select on columns"""
+    distinct_on: [singer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [singer_order_by!]
+
+    """filter the rows returned"""
+    where: singer_bool_exp
+  ): [singer!]!
+
+  """
+  fetch aggregated fields from the table: "singer"
+  """
+  singer_aggregate(
+    """distinct select on columns"""
+    distinct_on: [singer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [singer_order_by!]
+
+    """filter the rows returned"""
+    where: singer_bool_exp
+  ): singer_aggregate!
+
+  """
+  fetch data from the table: "song"
+  """
+  song(
+    """distinct select on columns"""
+    distinct_on: [song_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [song_order_by!]
+
+    """filter the rows returned"""
+    where: song_bool_exp
+  ): [song!]!
+
+  """
+  fetch aggregated fields from the table: "song"
+  """
+  song_aggregate(
+    """distinct select on columns"""
+    distinct_on: [song_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [song_order_by!]
+
+    """filter the rows returned"""
+    where: song_bool_exp
+  ): song_aggregate!
+}

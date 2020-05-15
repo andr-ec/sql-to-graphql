@@ -1,0 +1,1616 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "market"
+"""
+type market {
+  district: String
+  market_id: Int
+  num_of_employees: Int
+  num_of_shops: Float
+
+  """An array relationship"""
+  phone_markets(
+    """distinct select on columns"""
+    distinct_on: [phone_market_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [phone_market_order_by!]
+
+    """filter the rows returned"""
+    where: phone_market_bool_exp
+  ): [phone_market!]!
+
+  """An aggregated array relationship"""
+  phone_markets_aggregate(
+    """distinct select on columns"""
+    distinct_on: [phone_market_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [phone_market_order_by!]
+
+    """filter the rows returned"""
+    where: phone_market_bool_exp
+  ): phone_market_aggregate!
+  ranking: Int
+}
+
+"""
+aggregated selection of "market"
+"""
+type market_aggregate {
+  aggregate: market_aggregate_fields
+  nodes: [market!]!
+}
+
+"""
+aggregate fields of "market"
+"""
+type market_aggregate_fields {
+  avg: market_avg_fields
+  count(columns: [market_select_column!], distinct: Boolean): Int
+  max: market_max_fields
+  min: market_min_fields
+  stddev: market_stddev_fields
+  stddev_pop: market_stddev_pop_fields
+  stddev_samp: market_stddev_samp_fields
+  sum: market_sum_fields
+  var_pop: market_var_pop_fields
+  var_samp: market_var_samp_fields
+  variance: market_variance_fields
+}
+
+"""
+order by aggregate values of table "market"
+"""
+input market_aggregate_order_by {
+  avg: market_avg_order_by
+  count: order_by
+  max: market_max_order_by
+  min: market_min_order_by
+  stddev: market_stddev_order_by
+  stddev_pop: market_stddev_pop_order_by
+  stddev_samp: market_stddev_samp_order_by
+  sum: market_sum_order_by
+  var_pop: market_var_pop_order_by
+  var_samp: market_var_samp_order_by
+  variance: market_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "market"
+"""
+input market_arr_rel_insert_input {
+  data: [market_insert_input!]!
+  on_conflict: market_on_conflict
+}
+
+"""aggregate avg on columns"""
+type market_avg_fields {
+  market_id: Float
+  num_of_employees: Float
+  num_of_shops: Float
+  ranking: Float
+}
+
+"""
+order by avg() on columns of table "market"
+"""
+input market_avg_order_by {
+  market_id: order_by
+  num_of_employees: order_by
+  num_of_shops: order_by
+  ranking: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "market". All fields are combined with a logical 'AND'.
+"""
+input market_bool_exp {
+  _and: [market_bool_exp]
+  _not: market_bool_exp
+  _or: [market_bool_exp]
+  district: String_comparison_exp
+  market_id: Int_comparison_exp
+  num_of_employees: Int_comparison_exp
+  num_of_shops: Float_comparison_exp
+  phone_markets: phone_market_bool_exp
+  ranking: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "market"
+"""
+enum market_constraint {
+  """unique or primary key constraint"""
+  idx_24696_sqlite_autoindex_market_1
+}
+
+"""
+input type for incrementing integer columne in table "market"
+"""
+input market_inc_input {
+  market_id: Int
+  num_of_employees: Int
+  ranking: Int
+}
+
+"""
+input type for inserting data into table "market"
+"""
+input market_insert_input {
+  district: String
+  market_id: Int
+  num_of_employees: Int
+  num_of_shops: Float
+  phone_markets: phone_market_arr_rel_insert_input
+  ranking: Int
+}
+
+"""aggregate max on columns"""
+type market_max_fields {
+  district: String
+  market_id: Int
+  num_of_employees: Int
+  num_of_shops: Float
+  ranking: Int
+}
+
+"""
+order by max() on columns of table "market"
+"""
+input market_max_order_by {
+  district: order_by
+  market_id: order_by
+  num_of_employees: order_by
+  num_of_shops: order_by
+  ranking: order_by
+}
+
+"""aggregate min on columns"""
+type market_min_fields {
+  district: String
+  market_id: Int
+  num_of_employees: Int
+  num_of_shops: Float
+  ranking: Int
+}
+
+"""
+order by min() on columns of table "market"
+"""
+input market_min_order_by {
+  district: order_by
+  market_id: order_by
+  num_of_employees: order_by
+  num_of_shops: order_by
+  ranking: order_by
+}
+
+"""
+response of any mutation on the table "market"
+"""
+type market_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [market!]!
+}
+
+"""
+input type for inserting object relation for remote table "market"
+"""
+input market_obj_rel_insert_input {
+  data: market_insert_input!
+  on_conflict: market_on_conflict
+}
+
+"""
+on conflict condition type for table "market"
+"""
+input market_on_conflict {
+  constraint: market_constraint!
+  update_columns: [market_update_column!]!
+  where: market_bool_exp
+}
+
+"""
+ordering options when selecting data from "market"
+"""
+input market_order_by {
+  district: order_by
+  market_id: order_by
+  num_of_employees: order_by
+  num_of_shops: order_by
+  phone_markets_aggregate: phone_market_aggregate_order_by
+  ranking: order_by
+}
+
+"""
+select columns of table "market"
+"""
+enum market_select_column {
+  """column name"""
+  district
+
+  """column name"""
+  market_id
+
+  """column name"""
+  num_of_employees
+
+  """column name"""
+  num_of_shops
+
+  """column name"""
+  ranking
+}
+
+"""
+input type for updating data in table "market"
+"""
+input market_set_input {
+  district: String
+  market_id: Int
+  num_of_employees: Int
+  num_of_shops: Float
+  ranking: Int
+}
+
+"""aggregate stddev on columns"""
+type market_stddev_fields {
+  market_id: Float
+  num_of_employees: Float
+  num_of_shops: Float
+  ranking: Float
+}
+
+"""
+order by stddev() on columns of table "market"
+"""
+input market_stddev_order_by {
+  market_id: order_by
+  num_of_employees: order_by
+  num_of_shops: order_by
+  ranking: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type market_stddev_pop_fields {
+  market_id: Float
+  num_of_employees: Float
+  num_of_shops: Float
+  ranking: Float
+}
+
+"""
+order by stddev_pop() on columns of table "market"
+"""
+input market_stddev_pop_order_by {
+  market_id: order_by
+  num_of_employees: order_by
+  num_of_shops: order_by
+  ranking: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type market_stddev_samp_fields {
+  market_id: Float
+  num_of_employees: Float
+  num_of_shops: Float
+  ranking: Float
+}
+
+"""
+order by stddev_samp() on columns of table "market"
+"""
+input market_stddev_samp_order_by {
+  market_id: order_by
+  num_of_employees: order_by
+  num_of_shops: order_by
+  ranking: order_by
+}
+
+"""aggregate sum on columns"""
+type market_sum_fields {
+  market_id: Int
+  num_of_employees: Int
+  num_of_shops: Float
+  ranking: Int
+}
+
+"""
+order by sum() on columns of table "market"
+"""
+input market_sum_order_by {
+  market_id: order_by
+  num_of_employees: order_by
+  num_of_shops: order_by
+  ranking: order_by
+}
+
+"""
+update columns of table "market"
+"""
+enum market_update_column {
+  """column name"""
+  district
+
+  """column name"""
+  market_id
+
+  """column name"""
+  num_of_employees
+
+  """column name"""
+  num_of_shops
+
+  """column name"""
+  ranking
+}
+
+"""aggregate var_pop on columns"""
+type market_var_pop_fields {
+  market_id: Float
+  num_of_employees: Float
+  num_of_shops: Float
+  ranking: Float
+}
+
+"""
+order by var_pop() on columns of table "market"
+"""
+input market_var_pop_order_by {
+  market_id: order_by
+  num_of_employees: order_by
+  num_of_shops: order_by
+  ranking: order_by
+}
+
+"""aggregate var_samp on columns"""
+type market_var_samp_fields {
+  market_id: Float
+  num_of_employees: Float
+  num_of_shops: Float
+  ranking: Float
+}
+
+"""
+order by var_samp() on columns of table "market"
+"""
+input market_var_samp_order_by {
+  market_id: order_by
+  num_of_employees: order_by
+  num_of_shops: order_by
+  ranking: order_by
+}
+
+"""aggregate variance on columns"""
+type market_variance_fields {
+  market_id: Float
+  num_of_employees: Float
+  num_of_shops: Float
+  ranking: Float
+}
+
+"""
+order by variance() on columns of table "market"
+"""
+input market_variance_order_by {
+  market_id: order_by
+  num_of_employees: order_by
+  num_of_shops: order_by
+  ranking: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "market"
+  """
+  delete_market(
+    """filter the rows which have to be deleted"""
+    where: market_bool_exp!
+  ): market_mutation_response
+
+  """
+  delete data from the table: "phone"
+  """
+  delete_phone(
+    """filter the rows which have to be deleted"""
+    where: phone_bool_exp!
+  ): phone_mutation_response
+
+  """
+  delete data from the table: "phone_market"
+  """
+  delete_phone_market(
+    """filter the rows which have to be deleted"""
+    where: phone_market_bool_exp!
+  ): phone_market_mutation_response
+
+  """
+  insert data into the table: "market"
+  """
+  insert_market(
+    """the rows to be inserted"""
+    objects: [market_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: market_on_conflict
+  ): market_mutation_response
+
+  """
+  insert data into the table: "phone"
+  """
+  insert_phone(
+    """the rows to be inserted"""
+    objects: [phone_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: phone_on_conflict
+  ): phone_mutation_response
+
+  """
+  insert data into the table: "phone_market"
+  """
+  insert_phone_market(
+    """the rows to be inserted"""
+    objects: [phone_market_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: phone_market_on_conflict
+  ): phone_market_mutation_response
+
+  """
+  update data of the table: "market"
+  """
+  update_market(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: market_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: market_set_input
+
+    """filter the rows which have to be updated"""
+    where: market_bool_exp!
+  ): market_mutation_response
+
+  """
+  update data of the table: "phone"
+  """
+  update_phone(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: phone_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: phone_set_input
+
+    """filter the rows which have to be updated"""
+    where: phone_bool_exp!
+  ): phone_mutation_response
+
+  """
+  update data of the table: "phone_market"
+  """
+  update_phone_market(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: phone_market_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: phone_market_set_input
+
+    """filter the rows which have to be updated"""
+    where: phone_market_bool_exp!
+  ): phone_market_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "phone"
+"""
+type phone {
+  carrier: String
+  memory_in_g: Int
+  name: String
+  phone_id: Int
+
+  """An array relationship"""
+  phone_markets(
+    """distinct select on columns"""
+    distinct_on: [phone_market_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [phone_market_order_by!]
+
+    """filter the rows returned"""
+    where: phone_market_bool_exp
+  ): [phone_market!]!
+
+  """An aggregated array relationship"""
+  phone_markets_aggregate(
+    """distinct select on columns"""
+    distinct_on: [phone_market_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [phone_market_order_by!]
+
+    """filter the rows returned"""
+    where: phone_market_bool_exp
+  ): phone_market_aggregate!
+  price: Float
+}
+
+"""
+aggregated selection of "phone"
+"""
+type phone_aggregate {
+  aggregate: phone_aggregate_fields
+  nodes: [phone!]!
+}
+
+"""
+aggregate fields of "phone"
+"""
+type phone_aggregate_fields {
+  avg: phone_avg_fields
+  count(columns: [phone_select_column!], distinct: Boolean): Int
+  max: phone_max_fields
+  min: phone_min_fields
+  stddev: phone_stddev_fields
+  stddev_pop: phone_stddev_pop_fields
+  stddev_samp: phone_stddev_samp_fields
+  sum: phone_sum_fields
+  var_pop: phone_var_pop_fields
+  var_samp: phone_var_samp_fields
+  variance: phone_variance_fields
+}
+
+"""
+order by aggregate values of table "phone"
+"""
+input phone_aggregate_order_by {
+  avg: phone_avg_order_by
+  count: order_by
+  max: phone_max_order_by
+  min: phone_min_order_by
+  stddev: phone_stddev_order_by
+  stddev_pop: phone_stddev_pop_order_by
+  stddev_samp: phone_stddev_samp_order_by
+  sum: phone_sum_order_by
+  var_pop: phone_var_pop_order_by
+  var_samp: phone_var_samp_order_by
+  variance: phone_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "phone"
+"""
+input phone_arr_rel_insert_input {
+  data: [phone_insert_input!]!
+  on_conflict: phone_on_conflict
+}
+
+"""aggregate avg on columns"""
+type phone_avg_fields {
+  memory_in_g: Float
+  phone_id: Float
+  price: Float
+}
+
+"""
+order by avg() on columns of table "phone"
+"""
+input phone_avg_order_by {
+  memory_in_g: order_by
+  phone_id: order_by
+  price: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "phone". All fields are combined with a logical 'AND'.
+"""
+input phone_bool_exp {
+  _and: [phone_bool_exp]
+  _not: phone_bool_exp
+  _or: [phone_bool_exp]
+  carrier: String_comparison_exp
+  memory_in_g: Int_comparison_exp
+  name: String_comparison_exp
+  phone_id: Int_comparison_exp
+  phone_markets: phone_market_bool_exp
+  price: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "phone"
+"""
+enum phone_constraint {
+  """unique or primary key constraint"""
+  idx_24690_sqlite_autoindex_phone_1
+}
+
+"""
+input type for incrementing integer columne in table "phone"
+"""
+input phone_inc_input {
+  memory_in_g: Int
+  phone_id: Int
+}
+
+"""
+input type for inserting data into table "phone"
+"""
+input phone_insert_input {
+  carrier: String
+  memory_in_g: Int
+  name: String
+  phone_id: Int
+  phone_markets: phone_market_arr_rel_insert_input
+  price: Float
+}
+
+"""
+columns and relationships of "phone_market"
+"""
+type phone_market {
+  """An object relationship"""
+  market: market
+  market_id: Int
+  num_of_stock: Int
+
+  """An object relationship"""
+  phone: phone
+  phone_id: Int
+}
+
+"""
+aggregated selection of "phone_market"
+"""
+type phone_market_aggregate {
+  aggregate: phone_market_aggregate_fields
+  nodes: [phone_market!]!
+}
+
+"""
+aggregate fields of "phone_market"
+"""
+type phone_market_aggregate_fields {
+  avg: phone_market_avg_fields
+  count(columns: [phone_market_select_column!], distinct: Boolean): Int
+  max: phone_market_max_fields
+  min: phone_market_min_fields
+  stddev: phone_market_stddev_fields
+  stddev_pop: phone_market_stddev_pop_fields
+  stddev_samp: phone_market_stddev_samp_fields
+  sum: phone_market_sum_fields
+  var_pop: phone_market_var_pop_fields
+  var_samp: phone_market_var_samp_fields
+  variance: phone_market_variance_fields
+}
+
+"""
+order by aggregate values of table "phone_market"
+"""
+input phone_market_aggregate_order_by {
+  avg: phone_market_avg_order_by
+  count: order_by
+  max: phone_market_max_order_by
+  min: phone_market_min_order_by
+  stddev: phone_market_stddev_order_by
+  stddev_pop: phone_market_stddev_pop_order_by
+  stddev_samp: phone_market_stddev_samp_order_by
+  sum: phone_market_sum_order_by
+  var_pop: phone_market_var_pop_order_by
+  var_samp: phone_market_var_samp_order_by
+  variance: phone_market_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "phone_market"
+"""
+input phone_market_arr_rel_insert_input {
+  data: [phone_market_insert_input!]!
+  on_conflict: phone_market_on_conflict
+}
+
+"""aggregate avg on columns"""
+type phone_market_avg_fields {
+  market_id: Float
+  num_of_stock: Float
+  phone_id: Float
+}
+
+"""
+order by avg() on columns of table "phone_market"
+"""
+input phone_market_avg_order_by {
+  market_id: order_by
+  num_of_stock: order_by
+  phone_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "phone_market". All fields are combined with a logical 'AND'.
+"""
+input phone_market_bool_exp {
+  _and: [phone_market_bool_exp]
+  _not: phone_market_bool_exp
+  _or: [phone_market_bool_exp]
+  market: market_bool_exp
+  market_id: Int_comparison_exp
+  num_of_stock: Int_comparison_exp
+  phone: phone_bool_exp
+  phone_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "phone_market"
+"""
+enum phone_market_constraint {
+  """unique or primary key constraint"""
+  idx_24702_sqlite_autoindex_phone_market_1
+}
+
+"""
+input type for incrementing integer columne in table "phone_market"
+"""
+input phone_market_inc_input {
+  market_id: Int
+  num_of_stock: Int
+  phone_id: Int
+}
+
+"""
+input type for inserting data into table "phone_market"
+"""
+input phone_market_insert_input {
+  market: market_obj_rel_insert_input
+  market_id: Int
+  num_of_stock: Int
+  phone: phone_obj_rel_insert_input
+  phone_id: Int
+}
+
+"""aggregate max on columns"""
+type phone_market_max_fields {
+  market_id: Int
+  num_of_stock: Int
+  phone_id: Int
+}
+
+"""
+order by max() on columns of table "phone_market"
+"""
+input phone_market_max_order_by {
+  market_id: order_by
+  num_of_stock: order_by
+  phone_id: order_by
+}
+
+"""aggregate min on columns"""
+type phone_market_min_fields {
+  market_id: Int
+  num_of_stock: Int
+  phone_id: Int
+}
+
+"""
+order by min() on columns of table "phone_market"
+"""
+input phone_market_min_order_by {
+  market_id: order_by
+  num_of_stock: order_by
+  phone_id: order_by
+}
+
+"""
+response of any mutation on the table "phone_market"
+"""
+type phone_market_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [phone_market!]!
+}
+
+"""
+input type for inserting object relation for remote table "phone_market"
+"""
+input phone_market_obj_rel_insert_input {
+  data: phone_market_insert_input!
+  on_conflict: phone_market_on_conflict
+}
+
+"""
+on conflict condition type for table "phone_market"
+"""
+input phone_market_on_conflict {
+  constraint: phone_market_constraint!
+  update_columns: [phone_market_update_column!]!
+  where: phone_market_bool_exp
+}
+
+"""
+ordering options when selecting data from "phone_market"
+"""
+input phone_market_order_by {
+  market: market_order_by
+  market_id: order_by
+  num_of_stock: order_by
+  phone: phone_order_by
+  phone_id: order_by
+}
+
+"""
+select columns of table "phone_market"
+"""
+enum phone_market_select_column {
+  """column name"""
+  market_id
+
+  """column name"""
+  num_of_stock
+
+  """column name"""
+  phone_id
+}
+
+"""
+input type for updating data in table "phone_market"
+"""
+input phone_market_set_input {
+  market_id: Int
+  num_of_stock: Int
+  phone_id: Int
+}
+
+"""aggregate stddev on columns"""
+type phone_market_stddev_fields {
+  market_id: Float
+  num_of_stock: Float
+  phone_id: Float
+}
+
+"""
+order by stddev() on columns of table "phone_market"
+"""
+input phone_market_stddev_order_by {
+  market_id: order_by
+  num_of_stock: order_by
+  phone_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type phone_market_stddev_pop_fields {
+  market_id: Float
+  num_of_stock: Float
+  phone_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "phone_market"
+"""
+input phone_market_stddev_pop_order_by {
+  market_id: order_by
+  num_of_stock: order_by
+  phone_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type phone_market_stddev_samp_fields {
+  market_id: Float
+  num_of_stock: Float
+  phone_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "phone_market"
+"""
+input phone_market_stddev_samp_order_by {
+  market_id: order_by
+  num_of_stock: order_by
+  phone_id: order_by
+}
+
+"""aggregate sum on columns"""
+type phone_market_sum_fields {
+  market_id: Int
+  num_of_stock: Int
+  phone_id: Int
+}
+
+"""
+order by sum() on columns of table "phone_market"
+"""
+input phone_market_sum_order_by {
+  market_id: order_by
+  num_of_stock: order_by
+  phone_id: order_by
+}
+
+"""
+update columns of table "phone_market"
+"""
+enum phone_market_update_column {
+  """column name"""
+  market_id
+
+  """column name"""
+  num_of_stock
+
+  """column name"""
+  phone_id
+}
+
+"""aggregate var_pop on columns"""
+type phone_market_var_pop_fields {
+  market_id: Float
+  num_of_stock: Float
+  phone_id: Float
+}
+
+"""
+order by var_pop() on columns of table "phone_market"
+"""
+input phone_market_var_pop_order_by {
+  market_id: order_by
+  num_of_stock: order_by
+  phone_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type phone_market_var_samp_fields {
+  market_id: Float
+  num_of_stock: Float
+  phone_id: Float
+}
+
+"""
+order by var_samp() on columns of table "phone_market"
+"""
+input phone_market_var_samp_order_by {
+  market_id: order_by
+  num_of_stock: order_by
+  phone_id: order_by
+}
+
+"""aggregate variance on columns"""
+type phone_market_variance_fields {
+  market_id: Float
+  num_of_stock: Float
+  phone_id: Float
+}
+
+"""
+order by variance() on columns of table "phone_market"
+"""
+input phone_market_variance_order_by {
+  market_id: order_by
+  num_of_stock: order_by
+  phone_id: order_by
+}
+
+"""aggregate max on columns"""
+type phone_max_fields {
+  carrier: String
+  memory_in_g: Int
+  name: String
+  phone_id: Int
+  price: Float
+}
+
+"""
+order by max() on columns of table "phone"
+"""
+input phone_max_order_by {
+  carrier: order_by
+  memory_in_g: order_by
+  name: order_by
+  phone_id: order_by
+  price: order_by
+}
+
+"""aggregate min on columns"""
+type phone_min_fields {
+  carrier: String
+  memory_in_g: Int
+  name: String
+  phone_id: Int
+  price: Float
+}
+
+"""
+order by min() on columns of table "phone"
+"""
+input phone_min_order_by {
+  carrier: order_by
+  memory_in_g: order_by
+  name: order_by
+  phone_id: order_by
+  price: order_by
+}
+
+"""
+response of any mutation on the table "phone"
+"""
+type phone_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [phone!]!
+}
+
+"""
+input type for inserting object relation for remote table "phone"
+"""
+input phone_obj_rel_insert_input {
+  data: phone_insert_input!
+  on_conflict: phone_on_conflict
+}
+
+"""
+on conflict condition type for table "phone"
+"""
+input phone_on_conflict {
+  constraint: phone_constraint!
+  update_columns: [phone_update_column!]!
+  where: phone_bool_exp
+}
+
+"""
+ordering options when selecting data from "phone"
+"""
+input phone_order_by {
+  carrier: order_by
+  memory_in_g: order_by
+  name: order_by
+  phone_id: order_by
+  phone_markets_aggregate: phone_market_aggregate_order_by
+  price: order_by
+}
+
+"""
+select columns of table "phone"
+"""
+enum phone_select_column {
+  """column name"""
+  carrier
+
+  """column name"""
+  memory_in_g
+
+  """column name"""
+  name
+
+  """column name"""
+  phone_id
+
+  """column name"""
+  price
+}
+
+"""
+input type for updating data in table "phone"
+"""
+input phone_set_input {
+  carrier: String
+  memory_in_g: Int
+  name: String
+  phone_id: Int
+  price: Float
+}
+
+"""aggregate stddev on columns"""
+type phone_stddev_fields {
+  memory_in_g: Float
+  phone_id: Float
+  price: Float
+}
+
+"""
+order by stddev() on columns of table "phone"
+"""
+input phone_stddev_order_by {
+  memory_in_g: order_by
+  phone_id: order_by
+  price: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type phone_stddev_pop_fields {
+  memory_in_g: Float
+  phone_id: Float
+  price: Float
+}
+
+"""
+order by stddev_pop() on columns of table "phone"
+"""
+input phone_stddev_pop_order_by {
+  memory_in_g: order_by
+  phone_id: order_by
+  price: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type phone_stddev_samp_fields {
+  memory_in_g: Float
+  phone_id: Float
+  price: Float
+}
+
+"""
+order by stddev_samp() on columns of table "phone"
+"""
+input phone_stddev_samp_order_by {
+  memory_in_g: order_by
+  phone_id: order_by
+  price: order_by
+}
+
+"""aggregate sum on columns"""
+type phone_sum_fields {
+  memory_in_g: Int
+  phone_id: Int
+  price: Float
+}
+
+"""
+order by sum() on columns of table "phone"
+"""
+input phone_sum_order_by {
+  memory_in_g: order_by
+  phone_id: order_by
+  price: order_by
+}
+
+"""
+update columns of table "phone"
+"""
+enum phone_update_column {
+  """column name"""
+  carrier
+
+  """column name"""
+  memory_in_g
+
+  """column name"""
+  name
+
+  """column name"""
+  phone_id
+
+  """column name"""
+  price
+}
+
+"""aggregate var_pop on columns"""
+type phone_var_pop_fields {
+  memory_in_g: Float
+  phone_id: Float
+  price: Float
+}
+
+"""
+order by var_pop() on columns of table "phone"
+"""
+input phone_var_pop_order_by {
+  memory_in_g: order_by
+  phone_id: order_by
+  price: order_by
+}
+
+"""aggregate var_samp on columns"""
+type phone_var_samp_fields {
+  memory_in_g: Float
+  phone_id: Float
+  price: Float
+}
+
+"""
+order by var_samp() on columns of table "phone"
+"""
+input phone_var_samp_order_by {
+  memory_in_g: order_by
+  phone_id: order_by
+  price: order_by
+}
+
+"""aggregate variance on columns"""
+type phone_variance_fields {
+  memory_in_g: Float
+  phone_id: Float
+  price: Float
+}
+
+"""
+order by variance() on columns of table "phone"
+"""
+input phone_variance_order_by {
+  memory_in_g: order_by
+  phone_id: order_by
+  price: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "market"
+  """
+  market(
+    """distinct select on columns"""
+    distinct_on: [market_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [market_order_by!]
+
+    """filter the rows returned"""
+    where: market_bool_exp
+  ): [market!]!
+
+  """
+  fetch aggregated fields from the table: "market"
+  """
+  market_aggregate(
+    """distinct select on columns"""
+    distinct_on: [market_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [market_order_by!]
+
+    """filter the rows returned"""
+    where: market_bool_exp
+  ): market_aggregate!
+
+  """
+  fetch data from the table: "phone"
+  """
+  phone(
+    """distinct select on columns"""
+    distinct_on: [phone_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [phone_order_by!]
+
+    """filter the rows returned"""
+    where: phone_bool_exp
+  ): [phone!]!
+
+  """
+  fetch aggregated fields from the table: "phone"
+  """
+  phone_aggregate(
+    """distinct select on columns"""
+    distinct_on: [phone_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [phone_order_by!]
+
+    """filter the rows returned"""
+    where: phone_bool_exp
+  ): phone_aggregate!
+
+  """
+  fetch data from the table: "phone_market"
+  """
+  phone_market(
+    """distinct select on columns"""
+    distinct_on: [phone_market_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [phone_market_order_by!]
+
+    """filter the rows returned"""
+    where: phone_market_bool_exp
+  ): [phone_market!]!
+
+  """
+  fetch aggregated fields from the table: "phone_market"
+  """
+  phone_market_aggregate(
+    """distinct select on columns"""
+    distinct_on: [phone_market_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [phone_market_order_by!]
+
+    """filter the rows returned"""
+    where: phone_market_bool_exp
+  ): phone_market_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "market"
+  """
+  market(
+    """distinct select on columns"""
+    distinct_on: [market_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [market_order_by!]
+
+    """filter the rows returned"""
+    where: market_bool_exp
+  ): [market!]!
+
+  """
+  fetch aggregated fields from the table: "market"
+  """
+  market_aggregate(
+    """distinct select on columns"""
+    distinct_on: [market_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [market_order_by!]
+
+    """filter the rows returned"""
+    where: market_bool_exp
+  ): market_aggregate!
+
+  """
+  fetch data from the table: "phone"
+  """
+  phone(
+    """distinct select on columns"""
+    distinct_on: [phone_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [phone_order_by!]
+
+    """filter the rows returned"""
+    where: phone_bool_exp
+  ): [phone!]!
+
+  """
+  fetch aggregated fields from the table: "phone"
+  """
+  phone_aggregate(
+    """distinct select on columns"""
+    distinct_on: [phone_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [phone_order_by!]
+
+    """filter the rows returned"""
+    where: phone_bool_exp
+  ): phone_aggregate!
+
+  """
+  fetch data from the table: "phone_market"
+  """
+  phone_market(
+    """distinct select on columns"""
+    distinct_on: [phone_market_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [phone_market_order_by!]
+
+    """filter the rows returned"""
+    where: phone_market_bool_exp
+  ): [phone_market!]!
+
+  """
+  fetch aggregated fields from the table: "phone_market"
+  """
+  phone_market_aggregate(
+    """distinct select on columns"""
+    distinct_on: [phone_market_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [phone_market_order_by!]
+
+    """filter the rows returned"""
+    where: phone_market_bool_exp
+  ): phone_market_aggregate!
+}

@@ -1,0 +1,2113 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "member"
+"""
+type member {
+  in_office: String
+  member_id: Int
+  member_name: String
+
+  """An object relationship"""
+  party: party
+
+  """An array relationship"""
+  party_events(
+    """distinct select on columns"""
+    distinct_on: [party_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_events_order_by!]
+
+    """filter the rows returned"""
+    where: party_events_bool_exp
+  ): [party_events!]!
+
+  """An aggregated array relationship"""
+  party_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_events_order_by!]
+
+    """filter the rows returned"""
+    where: party_events_bool_exp
+  ): party_events_aggregate!
+  party_id: Int
+}
+
+"""
+aggregated selection of "member"
+"""
+type member_aggregate {
+  aggregate: member_aggregate_fields
+  nodes: [member!]!
+}
+
+"""
+aggregate fields of "member"
+"""
+type member_aggregate_fields {
+  avg: member_avg_fields
+  count(columns: [member_select_column!], distinct: Boolean): Int
+  max: member_max_fields
+  min: member_min_fields
+  stddev: member_stddev_fields
+  stddev_pop: member_stddev_pop_fields
+  stddev_samp: member_stddev_samp_fields
+  sum: member_sum_fields
+  var_pop: member_var_pop_fields
+  var_samp: member_var_samp_fields
+  variance: member_variance_fields
+}
+
+"""
+order by aggregate values of table "member"
+"""
+input member_aggregate_order_by {
+  avg: member_avg_order_by
+  count: order_by
+  max: member_max_order_by
+  min: member_min_order_by
+  stddev: member_stddev_order_by
+  stddev_pop: member_stddev_pop_order_by
+  stddev_samp: member_stddev_samp_order_by
+  sum: member_sum_order_by
+  var_pop: member_var_pop_order_by
+  var_samp: member_var_samp_order_by
+  variance: member_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "member"
+"""
+input member_arr_rel_insert_input {
+  data: [member_insert_input!]!
+  on_conflict: member_on_conflict
+}
+
+"""aggregate avg on columns"""
+type member_avg_fields {
+  member_id: Float
+  party_id: Float
+}
+
+"""
+order by avg() on columns of table "member"
+"""
+input member_avg_order_by {
+  member_id: order_by
+  party_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "member". All fields are combined with a logical 'AND'.
+"""
+input member_bool_exp {
+  _and: [member_bool_exp]
+  _not: member_bool_exp
+  _or: [member_bool_exp]
+  in_office: String_comparison_exp
+  member_id: Int_comparison_exp
+  member_name: String_comparison_exp
+  party: party_bool_exp
+  party_events: party_events_bool_exp
+  party_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "member"
+"""
+enum member_constraint {
+  """unique or primary key constraint"""
+  idx_19466_sqlite_autoindex_member_1
+}
+
+"""
+input type for incrementing integer columne in table "member"
+"""
+input member_inc_input {
+  member_id: Int
+  party_id: Int
+}
+
+"""
+input type for inserting data into table "member"
+"""
+input member_insert_input {
+  in_office: String
+  member_id: Int
+  member_name: String
+  party: party_obj_rel_insert_input
+  party_events: party_events_arr_rel_insert_input
+  party_id: Int
+}
+
+"""aggregate max on columns"""
+type member_max_fields {
+  in_office: String
+  member_id: Int
+  member_name: String
+  party_id: Int
+}
+
+"""
+order by max() on columns of table "member"
+"""
+input member_max_order_by {
+  in_office: order_by
+  member_id: order_by
+  member_name: order_by
+  party_id: order_by
+}
+
+"""aggregate min on columns"""
+type member_min_fields {
+  in_office: String
+  member_id: Int
+  member_name: String
+  party_id: Int
+}
+
+"""
+order by min() on columns of table "member"
+"""
+input member_min_order_by {
+  in_office: order_by
+  member_id: order_by
+  member_name: order_by
+  party_id: order_by
+}
+
+"""
+response of any mutation on the table "member"
+"""
+type member_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [member!]!
+}
+
+"""
+input type for inserting object relation for remote table "member"
+"""
+input member_obj_rel_insert_input {
+  data: member_insert_input!
+  on_conflict: member_on_conflict
+}
+
+"""
+on conflict condition type for table "member"
+"""
+input member_on_conflict {
+  constraint: member_constraint!
+  update_columns: [member_update_column!]!
+  where: member_bool_exp
+}
+
+"""
+ordering options when selecting data from "member"
+"""
+input member_order_by {
+  in_office: order_by
+  member_id: order_by
+  member_name: order_by
+  party: party_order_by
+  party_events_aggregate: party_events_aggregate_order_by
+  party_id: order_by
+}
+
+"""
+select columns of table "member"
+"""
+enum member_select_column {
+  """column name"""
+  in_office
+
+  """column name"""
+  member_id
+
+  """column name"""
+  member_name
+
+  """column name"""
+  party_id
+}
+
+"""
+input type for updating data in table "member"
+"""
+input member_set_input {
+  in_office: String
+  member_id: Int
+  member_name: String
+  party_id: Int
+}
+
+"""aggregate stddev on columns"""
+type member_stddev_fields {
+  member_id: Float
+  party_id: Float
+}
+
+"""
+order by stddev() on columns of table "member"
+"""
+input member_stddev_order_by {
+  member_id: order_by
+  party_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type member_stddev_pop_fields {
+  member_id: Float
+  party_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "member"
+"""
+input member_stddev_pop_order_by {
+  member_id: order_by
+  party_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type member_stddev_samp_fields {
+  member_id: Float
+  party_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "member"
+"""
+input member_stddev_samp_order_by {
+  member_id: order_by
+  party_id: order_by
+}
+
+"""aggregate sum on columns"""
+type member_sum_fields {
+  member_id: Int
+  party_id: Int
+}
+
+"""
+order by sum() on columns of table "member"
+"""
+input member_sum_order_by {
+  member_id: order_by
+  party_id: order_by
+}
+
+"""
+update columns of table "member"
+"""
+enum member_update_column {
+  """column name"""
+  in_office
+
+  """column name"""
+  member_id
+
+  """column name"""
+  member_name
+
+  """column name"""
+  party_id
+}
+
+"""aggregate var_pop on columns"""
+type member_var_pop_fields {
+  member_id: Float
+  party_id: Float
+}
+
+"""
+order by var_pop() on columns of table "member"
+"""
+input member_var_pop_order_by {
+  member_id: order_by
+  party_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type member_var_samp_fields {
+  member_id: Float
+  party_id: Float
+}
+
+"""
+order by var_samp() on columns of table "member"
+"""
+input member_var_samp_order_by {
+  member_id: order_by
+  party_id: order_by
+}
+
+"""aggregate variance on columns"""
+type member_variance_fields {
+  member_id: Float
+  party_id: Float
+}
+
+"""
+order by variance() on columns of table "member"
+"""
+input member_variance_order_by {
+  member_id: order_by
+  party_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "member"
+  """
+  delete_member(
+    """filter the rows which have to be deleted"""
+    where: member_bool_exp!
+  ): member_mutation_response
+
+  """
+  delete data from the table: "party"
+  """
+  delete_party(
+    """filter the rows which have to be deleted"""
+    where: party_bool_exp!
+  ): party_mutation_response
+
+  """
+  delete data from the table: "party_events"
+  """
+  delete_party_events(
+    """filter the rows which have to be deleted"""
+    where: party_events_bool_exp!
+  ): party_events_mutation_response
+
+  """
+  delete data from the table: "region"
+  """
+  delete_region(
+    """filter the rows which have to be deleted"""
+    where: region_bool_exp!
+  ): region_mutation_response
+
+  """
+  insert data into the table: "member"
+  """
+  insert_member(
+    """the rows to be inserted"""
+    objects: [member_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: member_on_conflict
+  ): member_mutation_response
+
+  """
+  insert data into the table: "party"
+  """
+  insert_party(
+    """the rows to be inserted"""
+    objects: [party_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: party_on_conflict
+  ): party_mutation_response
+
+  """
+  insert data into the table: "party_events"
+  """
+  insert_party_events(
+    """the rows to be inserted"""
+    objects: [party_events_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: party_events_on_conflict
+  ): party_events_mutation_response
+
+  """
+  insert data into the table: "region"
+  """
+  insert_region(
+    """the rows to be inserted"""
+    objects: [region_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: region_on_conflict
+  ): region_mutation_response
+
+  """
+  update data of the table: "member"
+  """
+  update_member(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: member_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: member_set_input
+
+    """filter the rows which have to be updated"""
+    where: member_bool_exp!
+  ): member_mutation_response
+
+  """
+  update data of the table: "party"
+  """
+  update_party(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: party_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: party_set_input
+
+    """filter the rows which have to be updated"""
+    where: party_bool_exp!
+  ): party_mutation_response
+
+  """
+  update data of the table: "party_events"
+  """
+  update_party_events(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: party_events_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: party_events_set_input
+
+    """filter the rows which have to be updated"""
+    where: party_events_bool_exp!
+  ): party_events_mutation_response
+
+  """
+  update data of the table: "region"
+  """
+  update_region(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: region_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: region_set_input
+
+    """filter the rows which have to be updated"""
+    where: region_bool_exp!
+  ): region_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "party"
+"""
+type party {
+  left_office: String
+
+  """An array relationship"""
+  members(
+    """distinct select on columns"""
+    distinct_on: [member_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_order_by!]
+
+    """filter the rows returned"""
+    where: member_bool_exp
+  ): [member!]!
+
+  """An aggregated array relationship"""
+  members_aggregate(
+    """distinct select on columns"""
+    distinct_on: [member_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_order_by!]
+
+    """filter the rows returned"""
+    where: member_bool_exp
+  ): member_aggregate!
+  minister: String
+
+  """An array relationship"""
+  party_events(
+    """distinct select on columns"""
+    distinct_on: [party_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_events_order_by!]
+
+    """filter the rows returned"""
+    where: party_events_bool_exp
+  ): [party_events!]!
+
+  """An aggregated array relationship"""
+  party_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_events_order_by!]
+
+    """filter the rows returned"""
+    where: party_events_bool_exp
+  ): party_events_aggregate!
+  party_id: Int
+  party_name: String
+
+  """An object relationship"""
+  region: region
+  region_id: Int
+  took_office: String
+}
+
+"""
+aggregated selection of "party"
+"""
+type party_aggregate {
+  aggregate: party_aggregate_fields
+  nodes: [party!]!
+}
+
+"""
+aggregate fields of "party"
+"""
+type party_aggregate_fields {
+  avg: party_avg_fields
+  count(columns: [party_select_column!], distinct: Boolean): Int
+  max: party_max_fields
+  min: party_min_fields
+  stddev: party_stddev_fields
+  stddev_pop: party_stddev_pop_fields
+  stddev_samp: party_stddev_samp_fields
+  sum: party_sum_fields
+  var_pop: party_var_pop_fields
+  var_samp: party_var_samp_fields
+  variance: party_variance_fields
+}
+
+"""
+order by aggregate values of table "party"
+"""
+input party_aggregate_order_by {
+  avg: party_avg_order_by
+  count: order_by
+  max: party_max_order_by
+  min: party_min_order_by
+  stddev: party_stddev_order_by
+  stddev_pop: party_stddev_pop_order_by
+  stddev_samp: party_stddev_samp_order_by
+  sum: party_sum_order_by
+  var_pop: party_var_pop_order_by
+  var_samp: party_var_samp_order_by
+  variance: party_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "party"
+"""
+input party_arr_rel_insert_input {
+  data: [party_insert_input!]!
+  on_conflict: party_on_conflict
+}
+
+"""aggregate avg on columns"""
+type party_avg_fields {
+  party_id: Float
+  region_id: Float
+}
+
+"""
+order by avg() on columns of table "party"
+"""
+input party_avg_order_by {
+  party_id: order_by
+  region_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "party". All fields are combined with a logical 'AND'.
+"""
+input party_bool_exp {
+  _and: [party_bool_exp]
+  _not: party_bool_exp
+  _or: [party_bool_exp]
+  left_office: String_comparison_exp
+  members: member_bool_exp
+  minister: String_comparison_exp
+  party_events: party_events_bool_exp
+  party_id: Int_comparison_exp
+  party_name: String_comparison_exp
+  region: region_bool_exp
+  region_id: Int_comparison_exp
+  took_office: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "party"
+"""
+enum party_constraint {
+  """unique or primary key constraint"""
+  idx_19460_sqlite_autoindex_party_1
+}
+
+"""
+columns and relationships of "party_events"
+"""
+type party_events {
+  event_id: Int
+  event_name: String
+
+  """An object relationship"""
+  member: member
+  member_in_charge_id: Int
+
+  """An object relationship"""
+  party: party
+  party_id: Int
+}
+
+"""
+aggregated selection of "party_events"
+"""
+type party_events_aggregate {
+  aggregate: party_events_aggregate_fields
+  nodes: [party_events!]!
+}
+
+"""
+aggregate fields of "party_events"
+"""
+type party_events_aggregate_fields {
+  avg: party_events_avg_fields
+  count(columns: [party_events_select_column!], distinct: Boolean): Int
+  max: party_events_max_fields
+  min: party_events_min_fields
+  stddev: party_events_stddev_fields
+  stddev_pop: party_events_stddev_pop_fields
+  stddev_samp: party_events_stddev_samp_fields
+  sum: party_events_sum_fields
+  var_pop: party_events_var_pop_fields
+  var_samp: party_events_var_samp_fields
+  variance: party_events_variance_fields
+}
+
+"""
+order by aggregate values of table "party_events"
+"""
+input party_events_aggregate_order_by {
+  avg: party_events_avg_order_by
+  count: order_by
+  max: party_events_max_order_by
+  min: party_events_min_order_by
+  stddev: party_events_stddev_order_by
+  stddev_pop: party_events_stddev_pop_order_by
+  stddev_samp: party_events_stddev_samp_order_by
+  sum: party_events_sum_order_by
+  var_pop: party_events_var_pop_order_by
+  var_samp: party_events_var_samp_order_by
+  variance: party_events_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "party_events"
+"""
+input party_events_arr_rel_insert_input {
+  data: [party_events_insert_input!]!
+  on_conflict: party_events_on_conflict
+}
+
+"""aggregate avg on columns"""
+type party_events_avg_fields {
+  event_id: Float
+  member_in_charge_id: Float
+  party_id: Float
+}
+
+"""
+order by avg() on columns of table "party_events"
+"""
+input party_events_avg_order_by {
+  event_id: order_by
+  member_in_charge_id: order_by
+  party_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "party_events". All fields are combined with a logical 'AND'.
+"""
+input party_events_bool_exp {
+  _and: [party_events_bool_exp]
+  _not: party_events_bool_exp
+  _or: [party_events_bool_exp]
+  event_id: Int_comparison_exp
+  event_name: String_comparison_exp
+  member: member_bool_exp
+  member_in_charge_id: Int_comparison_exp
+  party: party_bool_exp
+  party_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "party_events"
+"""
+enum party_events_constraint {
+  """unique or primary key constraint"""
+  idx_19472_sqlite_autoindex_party_events_1
+}
+
+"""
+input type for incrementing integer columne in table "party_events"
+"""
+input party_events_inc_input {
+  event_id: Int
+  member_in_charge_id: Int
+  party_id: Int
+}
+
+"""
+input type for inserting data into table "party_events"
+"""
+input party_events_insert_input {
+  event_id: Int
+  event_name: String
+  member: member_obj_rel_insert_input
+  member_in_charge_id: Int
+  party: party_obj_rel_insert_input
+  party_id: Int
+}
+
+"""aggregate max on columns"""
+type party_events_max_fields {
+  event_id: Int
+  event_name: String
+  member_in_charge_id: Int
+  party_id: Int
+}
+
+"""
+order by max() on columns of table "party_events"
+"""
+input party_events_max_order_by {
+  event_id: order_by
+  event_name: order_by
+  member_in_charge_id: order_by
+  party_id: order_by
+}
+
+"""aggregate min on columns"""
+type party_events_min_fields {
+  event_id: Int
+  event_name: String
+  member_in_charge_id: Int
+  party_id: Int
+}
+
+"""
+order by min() on columns of table "party_events"
+"""
+input party_events_min_order_by {
+  event_id: order_by
+  event_name: order_by
+  member_in_charge_id: order_by
+  party_id: order_by
+}
+
+"""
+response of any mutation on the table "party_events"
+"""
+type party_events_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [party_events!]!
+}
+
+"""
+input type for inserting object relation for remote table "party_events"
+"""
+input party_events_obj_rel_insert_input {
+  data: party_events_insert_input!
+  on_conflict: party_events_on_conflict
+}
+
+"""
+on conflict condition type for table "party_events"
+"""
+input party_events_on_conflict {
+  constraint: party_events_constraint!
+  update_columns: [party_events_update_column!]!
+  where: party_events_bool_exp
+}
+
+"""
+ordering options when selecting data from "party_events"
+"""
+input party_events_order_by {
+  event_id: order_by
+  event_name: order_by
+  member: member_order_by
+  member_in_charge_id: order_by
+  party: party_order_by
+  party_id: order_by
+}
+
+"""
+select columns of table "party_events"
+"""
+enum party_events_select_column {
+  """column name"""
+  event_id
+
+  """column name"""
+  event_name
+
+  """column name"""
+  member_in_charge_id
+
+  """column name"""
+  party_id
+}
+
+"""
+input type for updating data in table "party_events"
+"""
+input party_events_set_input {
+  event_id: Int
+  event_name: String
+  member_in_charge_id: Int
+  party_id: Int
+}
+
+"""aggregate stddev on columns"""
+type party_events_stddev_fields {
+  event_id: Float
+  member_in_charge_id: Float
+  party_id: Float
+}
+
+"""
+order by stddev() on columns of table "party_events"
+"""
+input party_events_stddev_order_by {
+  event_id: order_by
+  member_in_charge_id: order_by
+  party_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type party_events_stddev_pop_fields {
+  event_id: Float
+  member_in_charge_id: Float
+  party_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "party_events"
+"""
+input party_events_stddev_pop_order_by {
+  event_id: order_by
+  member_in_charge_id: order_by
+  party_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type party_events_stddev_samp_fields {
+  event_id: Float
+  member_in_charge_id: Float
+  party_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "party_events"
+"""
+input party_events_stddev_samp_order_by {
+  event_id: order_by
+  member_in_charge_id: order_by
+  party_id: order_by
+}
+
+"""aggregate sum on columns"""
+type party_events_sum_fields {
+  event_id: Int
+  member_in_charge_id: Int
+  party_id: Int
+}
+
+"""
+order by sum() on columns of table "party_events"
+"""
+input party_events_sum_order_by {
+  event_id: order_by
+  member_in_charge_id: order_by
+  party_id: order_by
+}
+
+"""
+update columns of table "party_events"
+"""
+enum party_events_update_column {
+  """column name"""
+  event_id
+
+  """column name"""
+  event_name
+
+  """column name"""
+  member_in_charge_id
+
+  """column name"""
+  party_id
+}
+
+"""aggregate var_pop on columns"""
+type party_events_var_pop_fields {
+  event_id: Float
+  member_in_charge_id: Float
+  party_id: Float
+}
+
+"""
+order by var_pop() on columns of table "party_events"
+"""
+input party_events_var_pop_order_by {
+  event_id: order_by
+  member_in_charge_id: order_by
+  party_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type party_events_var_samp_fields {
+  event_id: Float
+  member_in_charge_id: Float
+  party_id: Float
+}
+
+"""
+order by var_samp() on columns of table "party_events"
+"""
+input party_events_var_samp_order_by {
+  event_id: order_by
+  member_in_charge_id: order_by
+  party_id: order_by
+}
+
+"""aggregate variance on columns"""
+type party_events_variance_fields {
+  event_id: Float
+  member_in_charge_id: Float
+  party_id: Float
+}
+
+"""
+order by variance() on columns of table "party_events"
+"""
+input party_events_variance_order_by {
+  event_id: order_by
+  member_in_charge_id: order_by
+  party_id: order_by
+}
+
+"""
+input type for incrementing integer columne in table "party"
+"""
+input party_inc_input {
+  party_id: Int
+  region_id: Int
+}
+
+"""
+input type for inserting data into table "party"
+"""
+input party_insert_input {
+  left_office: String
+  members: member_arr_rel_insert_input
+  minister: String
+  party_events: party_events_arr_rel_insert_input
+  party_id: Int
+  party_name: String
+  region: region_obj_rel_insert_input
+  region_id: Int
+  took_office: String
+}
+
+"""aggregate max on columns"""
+type party_max_fields {
+  left_office: String
+  minister: String
+  party_id: Int
+  party_name: String
+  region_id: Int
+  took_office: String
+}
+
+"""
+order by max() on columns of table "party"
+"""
+input party_max_order_by {
+  left_office: order_by
+  minister: order_by
+  party_id: order_by
+  party_name: order_by
+  region_id: order_by
+  took_office: order_by
+}
+
+"""aggregate min on columns"""
+type party_min_fields {
+  left_office: String
+  minister: String
+  party_id: Int
+  party_name: String
+  region_id: Int
+  took_office: String
+}
+
+"""
+order by min() on columns of table "party"
+"""
+input party_min_order_by {
+  left_office: order_by
+  minister: order_by
+  party_id: order_by
+  party_name: order_by
+  region_id: order_by
+  took_office: order_by
+}
+
+"""
+response of any mutation on the table "party"
+"""
+type party_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [party!]!
+}
+
+"""
+input type for inserting object relation for remote table "party"
+"""
+input party_obj_rel_insert_input {
+  data: party_insert_input!
+  on_conflict: party_on_conflict
+}
+
+"""
+on conflict condition type for table "party"
+"""
+input party_on_conflict {
+  constraint: party_constraint!
+  update_columns: [party_update_column!]!
+  where: party_bool_exp
+}
+
+"""
+ordering options when selecting data from "party"
+"""
+input party_order_by {
+  left_office: order_by
+  members_aggregate: member_aggregate_order_by
+  minister: order_by
+  party_events_aggregate: party_events_aggregate_order_by
+  party_id: order_by
+  party_name: order_by
+  region: region_order_by
+  region_id: order_by
+  took_office: order_by
+}
+
+"""
+select columns of table "party"
+"""
+enum party_select_column {
+  """column name"""
+  left_office
+
+  """column name"""
+  minister
+
+  """column name"""
+  party_id
+
+  """column name"""
+  party_name
+
+  """column name"""
+  region_id
+
+  """column name"""
+  took_office
+}
+
+"""
+input type for updating data in table "party"
+"""
+input party_set_input {
+  left_office: String
+  minister: String
+  party_id: Int
+  party_name: String
+  region_id: Int
+  took_office: String
+}
+
+"""aggregate stddev on columns"""
+type party_stddev_fields {
+  party_id: Float
+  region_id: Float
+}
+
+"""
+order by stddev() on columns of table "party"
+"""
+input party_stddev_order_by {
+  party_id: order_by
+  region_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type party_stddev_pop_fields {
+  party_id: Float
+  region_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "party"
+"""
+input party_stddev_pop_order_by {
+  party_id: order_by
+  region_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type party_stddev_samp_fields {
+  party_id: Float
+  region_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "party"
+"""
+input party_stddev_samp_order_by {
+  party_id: order_by
+  region_id: order_by
+}
+
+"""aggregate sum on columns"""
+type party_sum_fields {
+  party_id: Int
+  region_id: Int
+}
+
+"""
+order by sum() on columns of table "party"
+"""
+input party_sum_order_by {
+  party_id: order_by
+  region_id: order_by
+}
+
+"""
+update columns of table "party"
+"""
+enum party_update_column {
+  """column name"""
+  left_office
+
+  """column name"""
+  minister
+
+  """column name"""
+  party_id
+
+  """column name"""
+  party_name
+
+  """column name"""
+  region_id
+
+  """column name"""
+  took_office
+}
+
+"""aggregate var_pop on columns"""
+type party_var_pop_fields {
+  party_id: Float
+  region_id: Float
+}
+
+"""
+order by var_pop() on columns of table "party"
+"""
+input party_var_pop_order_by {
+  party_id: order_by
+  region_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type party_var_samp_fields {
+  party_id: Float
+  region_id: Float
+}
+
+"""
+order by var_samp() on columns of table "party"
+"""
+input party_var_samp_order_by {
+  party_id: order_by
+  region_id: order_by
+}
+
+"""aggregate variance on columns"""
+type party_variance_fields {
+  party_id: Float
+  region_id: Float
+}
+
+"""
+order by variance() on columns of table "party"
+"""
+input party_variance_order_by {
+  party_id: order_by
+  region_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "member"
+  """
+  member(
+    """distinct select on columns"""
+    distinct_on: [member_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_order_by!]
+
+    """filter the rows returned"""
+    where: member_bool_exp
+  ): [member!]!
+
+  """
+  fetch aggregated fields from the table: "member"
+  """
+  member_aggregate(
+    """distinct select on columns"""
+    distinct_on: [member_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_order_by!]
+
+    """filter the rows returned"""
+    where: member_bool_exp
+  ): member_aggregate!
+
+  """
+  fetch data from the table: "party"
+  """
+  party(
+    """distinct select on columns"""
+    distinct_on: [party_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_order_by!]
+
+    """filter the rows returned"""
+    where: party_bool_exp
+  ): [party!]!
+
+  """
+  fetch aggregated fields from the table: "party"
+  """
+  party_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_order_by!]
+
+    """filter the rows returned"""
+    where: party_bool_exp
+  ): party_aggregate!
+
+  """
+  fetch data from the table: "party_events"
+  """
+  party_events(
+    """distinct select on columns"""
+    distinct_on: [party_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_events_order_by!]
+
+    """filter the rows returned"""
+    where: party_events_bool_exp
+  ): [party_events!]!
+
+  """
+  fetch aggregated fields from the table: "party_events"
+  """
+  party_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_events_order_by!]
+
+    """filter the rows returned"""
+    where: party_events_bool_exp
+  ): party_events_aggregate!
+
+  """
+  fetch data from the table: "region"
+  """
+  region(
+    """distinct select on columns"""
+    distinct_on: [region_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [region_order_by!]
+
+    """filter the rows returned"""
+    where: region_bool_exp
+  ): [region!]!
+
+  """
+  fetch aggregated fields from the table: "region"
+  """
+  region_aggregate(
+    """distinct select on columns"""
+    distinct_on: [region_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [region_order_by!]
+
+    """filter the rows returned"""
+    where: region_bool_exp
+  ): region_aggregate!
+}
+
+"""
+columns and relationships of "region"
+"""
+type region {
+  catalogue: String
+  date: String
+  format: String
+  label: String
+
+  """An array relationship"""
+  parties(
+    """distinct select on columns"""
+    distinct_on: [party_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_order_by!]
+
+    """filter the rows returned"""
+    where: party_bool_exp
+  ): [party!]!
+
+  """An aggregated array relationship"""
+  parties_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_order_by!]
+
+    """filter the rows returned"""
+    where: party_bool_exp
+  ): party_aggregate!
+  region_id: Int
+  region_name: String
+}
+
+"""
+aggregated selection of "region"
+"""
+type region_aggregate {
+  aggregate: region_aggregate_fields
+  nodes: [region!]!
+}
+
+"""
+aggregate fields of "region"
+"""
+type region_aggregate_fields {
+  avg: region_avg_fields
+  count(columns: [region_select_column!], distinct: Boolean): Int
+  max: region_max_fields
+  min: region_min_fields
+  stddev: region_stddev_fields
+  stddev_pop: region_stddev_pop_fields
+  stddev_samp: region_stddev_samp_fields
+  sum: region_sum_fields
+  var_pop: region_var_pop_fields
+  var_samp: region_var_samp_fields
+  variance: region_variance_fields
+}
+
+"""
+order by aggregate values of table "region"
+"""
+input region_aggregate_order_by {
+  avg: region_avg_order_by
+  count: order_by
+  max: region_max_order_by
+  min: region_min_order_by
+  stddev: region_stddev_order_by
+  stddev_pop: region_stddev_pop_order_by
+  stddev_samp: region_stddev_samp_order_by
+  sum: region_sum_order_by
+  var_pop: region_var_pop_order_by
+  var_samp: region_var_samp_order_by
+  variance: region_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "region"
+"""
+input region_arr_rel_insert_input {
+  data: [region_insert_input!]!
+  on_conflict: region_on_conflict
+}
+
+"""aggregate avg on columns"""
+type region_avg_fields {
+  region_id: Float
+}
+
+"""
+order by avg() on columns of table "region"
+"""
+input region_avg_order_by {
+  region_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "region". All fields are combined with a logical 'AND'.
+"""
+input region_bool_exp {
+  _and: [region_bool_exp]
+  _not: region_bool_exp
+  _or: [region_bool_exp]
+  catalogue: String_comparison_exp
+  date: String_comparison_exp
+  format: String_comparison_exp
+  label: String_comparison_exp
+  parties: party_bool_exp
+  region_id: Int_comparison_exp
+  region_name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "region"
+"""
+enum region_constraint {
+  """unique or primary key constraint"""
+  idx_19454_sqlite_autoindex_region_1
+}
+
+"""
+input type for incrementing integer columne in table "region"
+"""
+input region_inc_input {
+  region_id: Int
+}
+
+"""
+input type for inserting data into table "region"
+"""
+input region_insert_input {
+  catalogue: String
+  date: String
+  format: String
+  label: String
+  parties: party_arr_rel_insert_input
+  region_id: Int
+  region_name: String
+}
+
+"""aggregate max on columns"""
+type region_max_fields {
+  catalogue: String
+  date: String
+  format: String
+  label: String
+  region_id: Int
+  region_name: String
+}
+
+"""
+order by max() on columns of table "region"
+"""
+input region_max_order_by {
+  catalogue: order_by
+  date: order_by
+  format: order_by
+  label: order_by
+  region_id: order_by
+  region_name: order_by
+}
+
+"""aggregate min on columns"""
+type region_min_fields {
+  catalogue: String
+  date: String
+  format: String
+  label: String
+  region_id: Int
+  region_name: String
+}
+
+"""
+order by min() on columns of table "region"
+"""
+input region_min_order_by {
+  catalogue: order_by
+  date: order_by
+  format: order_by
+  label: order_by
+  region_id: order_by
+  region_name: order_by
+}
+
+"""
+response of any mutation on the table "region"
+"""
+type region_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [region!]!
+}
+
+"""
+input type for inserting object relation for remote table "region"
+"""
+input region_obj_rel_insert_input {
+  data: region_insert_input!
+  on_conflict: region_on_conflict
+}
+
+"""
+on conflict condition type for table "region"
+"""
+input region_on_conflict {
+  constraint: region_constraint!
+  update_columns: [region_update_column!]!
+  where: region_bool_exp
+}
+
+"""
+ordering options when selecting data from "region"
+"""
+input region_order_by {
+  catalogue: order_by
+  date: order_by
+  format: order_by
+  label: order_by
+  parties_aggregate: party_aggregate_order_by
+  region_id: order_by
+  region_name: order_by
+}
+
+"""
+select columns of table "region"
+"""
+enum region_select_column {
+  """column name"""
+  catalogue
+
+  """column name"""
+  date
+
+  """column name"""
+  format
+
+  """column name"""
+  label
+
+  """column name"""
+  region_id
+
+  """column name"""
+  region_name
+}
+
+"""
+input type for updating data in table "region"
+"""
+input region_set_input {
+  catalogue: String
+  date: String
+  format: String
+  label: String
+  region_id: Int
+  region_name: String
+}
+
+"""aggregate stddev on columns"""
+type region_stddev_fields {
+  region_id: Float
+}
+
+"""
+order by stddev() on columns of table "region"
+"""
+input region_stddev_order_by {
+  region_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type region_stddev_pop_fields {
+  region_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "region"
+"""
+input region_stddev_pop_order_by {
+  region_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type region_stddev_samp_fields {
+  region_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "region"
+"""
+input region_stddev_samp_order_by {
+  region_id: order_by
+}
+
+"""aggregate sum on columns"""
+type region_sum_fields {
+  region_id: Int
+}
+
+"""
+order by sum() on columns of table "region"
+"""
+input region_sum_order_by {
+  region_id: order_by
+}
+
+"""
+update columns of table "region"
+"""
+enum region_update_column {
+  """column name"""
+  catalogue
+
+  """column name"""
+  date
+
+  """column name"""
+  format
+
+  """column name"""
+  label
+
+  """column name"""
+  region_id
+
+  """column name"""
+  region_name
+}
+
+"""aggregate var_pop on columns"""
+type region_var_pop_fields {
+  region_id: Float
+}
+
+"""
+order by var_pop() on columns of table "region"
+"""
+input region_var_pop_order_by {
+  region_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type region_var_samp_fields {
+  region_id: Float
+}
+
+"""
+order by var_samp() on columns of table "region"
+"""
+input region_var_samp_order_by {
+  region_id: order_by
+}
+
+"""aggregate variance on columns"""
+type region_variance_fields {
+  region_id: Float
+}
+
+"""
+order by variance() on columns of table "region"
+"""
+input region_variance_order_by {
+  region_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "member"
+  """
+  member(
+    """distinct select on columns"""
+    distinct_on: [member_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_order_by!]
+
+    """filter the rows returned"""
+    where: member_bool_exp
+  ): [member!]!
+
+  """
+  fetch aggregated fields from the table: "member"
+  """
+  member_aggregate(
+    """distinct select on columns"""
+    distinct_on: [member_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_order_by!]
+
+    """filter the rows returned"""
+    where: member_bool_exp
+  ): member_aggregate!
+
+  """
+  fetch data from the table: "party"
+  """
+  party(
+    """distinct select on columns"""
+    distinct_on: [party_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_order_by!]
+
+    """filter the rows returned"""
+    where: party_bool_exp
+  ): [party!]!
+
+  """
+  fetch aggregated fields from the table: "party"
+  """
+  party_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_order_by!]
+
+    """filter the rows returned"""
+    where: party_bool_exp
+  ): party_aggregate!
+
+  """
+  fetch data from the table: "party_events"
+  """
+  party_events(
+    """distinct select on columns"""
+    distinct_on: [party_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_events_order_by!]
+
+    """filter the rows returned"""
+    where: party_events_bool_exp
+  ): [party_events!]!
+
+  """
+  fetch aggregated fields from the table: "party_events"
+  """
+  party_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_events_order_by!]
+
+    """filter the rows returned"""
+    where: party_events_bool_exp
+  ): party_events_aggregate!
+
+  """
+  fetch data from the table: "region"
+  """
+  region(
+    """distinct select on columns"""
+    distinct_on: [region_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [region_order_by!]
+
+    """filter the rows returned"""
+    where: region_bool_exp
+  ): [region!]!
+
+  """
+  fetch aggregated fields from the table: "region"
+  """
+  region_aggregate(
+    """distinct select on columns"""
+    distinct_on: [region_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [region_order_by!]
+
+    """filter the rows returned"""
+    where: region_bool_exp
+  ): region_aggregate!
+}

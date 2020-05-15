@@ -1,0 +1,2249 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "accounts"
+"""
+type accounts {
+  account_id: bigint!
+  account_name: String
+
+  """An object relationship"""
+  customer: customers
+  customer_id: bigint
+
+  """An array relationship"""
+  financial_transactions(
+    """distinct select on columns"""
+    distinct_on: [financial_transactions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [financial_transactions_order_by!]
+
+    """filter the rows returned"""
+    where: financial_transactions_bool_exp
+  ): [financial_transactions!]!
+
+  """An aggregated array relationship"""
+  financial_transactions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [financial_transactions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [financial_transactions_order_by!]
+
+    """filter the rows returned"""
+    where: financial_transactions_bool_exp
+  ): financial_transactions_aggregate!
+  other_account_details: String
+}
+
+"""
+aggregated selection of "accounts"
+"""
+type accounts_aggregate {
+  aggregate: accounts_aggregate_fields
+  nodes: [accounts!]!
+}
+
+"""
+aggregate fields of "accounts"
+"""
+type accounts_aggregate_fields {
+  avg: accounts_avg_fields
+  count(columns: [accounts_select_column!], distinct: Boolean): Int
+  max: accounts_max_fields
+  min: accounts_min_fields
+  stddev: accounts_stddev_fields
+  stddev_pop: accounts_stddev_pop_fields
+  stddev_samp: accounts_stddev_samp_fields
+  sum: accounts_sum_fields
+  var_pop: accounts_var_pop_fields
+  var_samp: accounts_var_samp_fields
+  variance: accounts_variance_fields
+}
+
+"""
+order by aggregate values of table "accounts"
+"""
+input accounts_aggregate_order_by {
+  avg: accounts_avg_order_by
+  count: order_by
+  max: accounts_max_order_by
+  min: accounts_min_order_by
+  stddev: accounts_stddev_order_by
+  stddev_pop: accounts_stddev_pop_order_by
+  stddev_samp: accounts_stddev_samp_order_by
+  sum: accounts_sum_order_by
+  var_pop: accounts_var_pop_order_by
+  var_samp: accounts_var_samp_order_by
+  variance: accounts_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "accounts"
+"""
+input accounts_arr_rel_insert_input {
+  data: [accounts_insert_input!]!
+  on_conflict: accounts_on_conflict
+}
+
+"""aggregate avg on columns"""
+type accounts_avg_fields {
+  account_id: Float
+  customer_id: Float
+}
+
+"""
+order by avg() on columns of table "accounts"
+"""
+input accounts_avg_order_by {
+  account_id: order_by
+  customer_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "accounts". All fields are combined with a logical 'AND'.
+"""
+input accounts_bool_exp {
+  _and: [accounts_bool_exp]
+  _not: accounts_bool_exp
+  _or: [accounts_bool_exp]
+  account_id: bigint_comparison_exp
+  account_name: String_comparison_exp
+  customer: customers_bool_exp
+  customer_id: bigint_comparison_exp
+  financial_transactions: financial_transactions_bool_exp
+  other_account_details: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "accounts"
+"""
+enum accounts_constraint {
+  """unique or primary key constraint"""
+  idx_20947_accounts_pkey
+}
+
+"""
+input type for incrementing integer columne in table "accounts"
+"""
+input accounts_inc_input {
+  account_id: bigint
+  customer_id: bigint
+}
+
+"""
+input type for inserting data into table "accounts"
+"""
+input accounts_insert_input {
+  account_id: bigint
+  account_name: String
+  customer: customers_obj_rel_insert_input
+  customer_id: bigint
+  financial_transactions: financial_transactions_arr_rel_insert_input
+  other_account_details: String
+}
+
+"""aggregate max on columns"""
+type accounts_max_fields {
+  account_id: bigint
+  account_name: String
+  customer_id: bigint
+  other_account_details: String
+}
+
+"""
+order by max() on columns of table "accounts"
+"""
+input accounts_max_order_by {
+  account_id: order_by
+  account_name: order_by
+  customer_id: order_by
+  other_account_details: order_by
+}
+
+"""aggregate min on columns"""
+type accounts_min_fields {
+  account_id: bigint
+  account_name: String
+  customer_id: bigint
+  other_account_details: String
+}
+
+"""
+order by min() on columns of table "accounts"
+"""
+input accounts_min_order_by {
+  account_id: order_by
+  account_name: order_by
+  customer_id: order_by
+  other_account_details: order_by
+}
+
+"""
+response of any mutation on the table "accounts"
+"""
+type accounts_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [accounts!]!
+}
+
+"""
+input type for inserting object relation for remote table "accounts"
+"""
+input accounts_obj_rel_insert_input {
+  data: accounts_insert_input!
+  on_conflict: accounts_on_conflict
+}
+
+"""
+on conflict condition type for table "accounts"
+"""
+input accounts_on_conflict {
+  constraint: accounts_constraint!
+  update_columns: [accounts_update_column!]!
+  where: accounts_bool_exp
+}
+
+"""
+ordering options when selecting data from "accounts"
+"""
+input accounts_order_by {
+  account_id: order_by
+  account_name: order_by
+  customer: customers_order_by
+  customer_id: order_by
+  financial_transactions_aggregate: financial_transactions_aggregate_order_by
+  other_account_details: order_by
+}
+
+"""
+select columns of table "accounts"
+"""
+enum accounts_select_column {
+  """column name"""
+  account_id
+
+  """column name"""
+  account_name
+
+  """column name"""
+  customer_id
+
+  """column name"""
+  other_account_details
+}
+
+"""
+input type for updating data in table "accounts"
+"""
+input accounts_set_input {
+  account_id: bigint
+  account_name: String
+  customer_id: bigint
+  other_account_details: String
+}
+
+"""aggregate stddev on columns"""
+type accounts_stddev_fields {
+  account_id: Float
+  customer_id: Float
+}
+
+"""
+order by stddev() on columns of table "accounts"
+"""
+input accounts_stddev_order_by {
+  account_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type accounts_stddev_pop_fields {
+  account_id: Float
+  customer_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "accounts"
+"""
+input accounts_stddev_pop_order_by {
+  account_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type accounts_stddev_samp_fields {
+  account_id: Float
+  customer_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "accounts"
+"""
+input accounts_stddev_samp_order_by {
+  account_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate sum on columns"""
+type accounts_sum_fields {
+  account_id: bigint
+  customer_id: bigint
+}
+
+"""
+order by sum() on columns of table "accounts"
+"""
+input accounts_sum_order_by {
+  account_id: order_by
+  customer_id: order_by
+}
+
+"""
+update columns of table "accounts"
+"""
+enum accounts_update_column {
+  """column name"""
+  account_id
+
+  """column name"""
+  account_name
+
+  """column name"""
+  customer_id
+
+  """column name"""
+  other_account_details
+}
+
+"""aggregate var_pop on columns"""
+type accounts_var_pop_fields {
+  account_id: Float
+  customer_id: Float
+}
+
+"""
+order by var_pop() on columns of table "accounts"
+"""
+input accounts_var_pop_order_by {
+  account_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type accounts_var_samp_fields {
+  account_id: Float
+  customer_id: Float
+}
+
+"""
+order by var_samp() on columns of table "accounts"
+"""
+input accounts_var_samp_order_by {
+  account_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate variance on columns"""
+type accounts_variance_fields {
+  account_id: Float
+  customer_id: Float
+}
+
+"""
+order by variance() on columns of table "accounts"
+"""
+input accounts_variance_order_by {
+  account_id: order_by
+  customer_id: order_by
+}
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "customers"
+"""
+type customers {
+  """An array relationship"""
+  accounts(
+    """distinct select on columns"""
+    distinct_on: [accounts_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [accounts_order_by!]
+
+    """filter the rows returned"""
+    where: accounts_bool_exp
+  ): [accounts!]!
+
+  """An aggregated array relationship"""
+  accounts_aggregate(
+    """distinct select on columns"""
+    distinct_on: [accounts_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [accounts_order_by!]
+
+    """filter the rows returned"""
+    where: accounts_bool_exp
+  ): accounts_aggregate!
+  customer_address: String
+  customer_email: String
+  customer_first_name: String
+  customer_id: bigint!
+  customer_last_name: String
+  customer_phone: String
+
+  """An array relationship"""
+  customers_cards(
+    """distinct select on columns"""
+    distinct_on: [customers_cards_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_cards_order_by!]
+
+    """filter the rows returned"""
+    where: customers_cards_bool_exp
+  ): [customers_cards!]!
+
+  """An aggregated array relationship"""
+  customers_cards_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customers_cards_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_cards_order_by!]
+
+    """filter the rows returned"""
+    where: customers_cards_bool_exp
+  ): customers_cards_aggregate!
+  other_customer_details: String
+}
+
+"""
+aggregated selection of "customers"
+"""
+type customers_aggregate {
+  aggregate: customers_aggregate_fields
+  nodes: [customers!]!
+}
+
+"""
+aggregate fields of "customers"
+"""
+type customers_aggregate_fields {
+  avg: customers_avg_fields
+  count(columns: [customers_select_column!], distinct: Boolean): Int
+  max: customers_max_fields
+  min: customers_min_fields
+  stddev: customers_stddev_fields
+  stddev_pop: customers_stddev_pop_fields
+  stddev_samp: customers_stddev_samp_fields
+  sum: customers_sum_fields
+  var_pop: customers_var_pop_fields
+  var_samp: customers_var_samp_fields
+  variance: customers_variance_fields
+}
+
+"""
+order by aggregate values of table "customers"
+"""
+input customers_aggregate_order_by {
+  avg: customers_avg_order_by
+  count: order_by
+  max: customers_max_order_by
+  min: customers_min_order_by
+  stddev: customers_stddev_order_by
+  stddev_pop: customers_stddev_pop_order_by
+  stddev_samp: customers_stddev_samp_order_by
+  sum: customers_sum_order_by
+  var_pop: customers_var_pop_order_by
+  var_samp: customers_var_samp_order_by
+  variance: customers_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "customers"
+"""
+input customers_arr_rel_insert_input {
+  data: [customers_insert_input!]!
+  on_conflict: customers_on_conflict
+}
+
+"""aggregate avg on columns"""
+type customers_avg_fields {
+  customer_id: Float
+}
+
+"""
+order by avg() on columns of table "customers"
+"""
+input customers_avg_order_by {
+  customer_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "customers". All fields are combined with a logical 'AND'.
+"""
+input customers_bool_exp {
+  _and: [customers_bool_exp]
+  _not: customers_bool_exp
+  _or: [customers_bool_exp]
+  accounts: accounts_bool_exp
+  customer_address: String_comparison_exp
+  customer_email: String_comparison_exp
+  customer_first_name: String_comparison_exp
+  customer_id: bigint_comparison_exp
+  customer_last_name: String_comparison_exp
+  customer_phone: String_comparison_exp
+  customers_cards: customers_cards_bool_exp
+  other_customer_details: String_comparison_exp
+}
+
+"""
+columns and relationships of "customers_cards"
+"""
+type customers_cards {
+  card_id: bigint!
+  card_number: String
+  card_type_code: String
+
+  """An object relationship"""
+  customer: customers
+  customer_id: bigint
+  date_valid_from: timestamptz
+  date_valid_to: timestamptz
+
+  """An array relationship"""
+  financial_transactions(
+    """distinct select on columns"""
+    distinct_on: [financial_transactions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [financial_transactions_order_by!]
+
+    """filter the rows returned"""
+    where: financial_transactions_bool_exp
+  ): [financial_transactions!]!
+
+  """An aggregated array relationship"""
+  financial_transactions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [financial_transactions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [financial_transactions_order_by!]
+
+    """filter the rows returned"""
+    where: financial_transactions_bool_exp
+  ): financial_transactions_aggregate!
+  other_card_details: String
+}
+
+"""
+aggregated selection of "customers_cards"
+"""
+type customers_cards_aggregate {
+  aggregate: customers_cards_aggregate_fields
+  nodes: [customers_cards!]!
+}
+
+"""
+aggregate fields of "customers_cards"
+"""
+type customers_cards_aggregate_fields {
+  avg: customers_cards_avg_fields
+  count(columns: [customers_cards_select_column!], distinct: Boolean): Int
+  max: customers_cards_max_fields
+  min: customers_cards_min_fields
+  stddev: customers_cards_stddev_fields
+  stddev_pop: customers_cards_stddev_pop_fields
+  stddev_samp: customers_cards_stddev_samp_fields
+  sum: customers_cards_sum_fields
+  var_pop: customers_cards_var_pop_fields
+  var_samp: customers_cards_var_samp_fields
+  variance: customers_cards_variance_fields
+}
+
+"""
+order by aggregate values of table "customers_cards"
+"""
+input customers_cards_aggregate_order_by {
+  avg: customers_cards_avg_order_by
+  count: order_by
+  max: customers_cards_max_order_by
+  min: customers_cards_min_order_by
+  stddev: customers_cards_stddev_order_by
+  stddev_pop: customers_cards_stddev_pop_order_by
+  stddev_samp: customers_cards_stddev_samp_order_by
+  sum: customers_cards_sum_order_by
+  var_pop: customers_cards_var_pop_order_by
+  var_samp: customers_cards_var_samp_order_by
+  variance: customers_cards_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "customers_cards"
+"""
+input customers_cards_arr_rel_insert_input {
+  data: [customers_cards_insert_input!]!
+  on_conflict: customers_cards_on_conflict
+}
+
+"""aggregate avg on columns"""
+type customers_cards_avg_fields {
+  card_id: Float
+  customer_id: Float
+}
+
+"""
+order by avg() on columns of table "customers_cards"
+"""
+input customers_cards_avg_order_by {
+  card_id: order_by
+  customer_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "customers_cards". All fields are combined with a logical 'AND'.
+"""
+input customers_cards_bool_exp {
+  _and: [customers_cards_bool_exp]
+  _not: customers_cards_bool_exp
+  _or: [customers_cards_bool_exp]
+  card_id: bigint_comparison_exp
+  card_number: String_comparison_exp
+  card_type_code: String_comparison_exp
+  customer: customers_bool_exp
+  customer_id: bigint_comparison_exp
+  date_valid_from: timestamptz_comparison_exp
+  date_valid_to: timestamptz_comparison_exp
+  financial_transactions: financial_transactions_bool_exp
+  other_card_details: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "customers_cards"
+"""
+enum customers_cards_constraint {
+  """unique or primary key constraint"""
+  idx_20959_customers_cards_pkey
+}
+
+"""
+input type for incrementing integer columne in table "customers_cards"
+"""
+input customers_cards_inc_input {
+  card_id: bigint
+  customer_id: bigint
+}
+
+"""
+input type for inserting data into table "customers_cards"
+"""
+input customers_cards_insert_input {
+  card_id: bigint
+  card_number: String
+  card_type_code: String
+  customer: customers_obj_rel_insert_input
+  customer_id: bigint
+  date_valid_from: timestamptz
+  date_valid_to: timestamptz
+  financial_transactions: financial_transactions_arr_rel_insert_input
+  other_card_details: String
+}
+
+"""aggregate max on columns"""
+type customers_cards_max_fields {
+  card_id: bigint
+  card_number: String
+  card_type_code: String
+  customer_id: bigint
+  date_valid_from: timestamptz
+  date_valid_to: timestamptz
+  other_card_details: String
+}
+
+"""
+order by max() on columns of table "customers_cards"
+"""
+input customers_cards_max_order_by {
+  card_id: order_by
+  card_number: order_by
+  card_type_code: order_by
+  customer_id: order_by
+  date_valid_from: order_by
+  date_valid_to: order_by
+  other_card_details: order_by
+}
+
+"""aggregate min on columns"""
+type customers_cards_min_fields {
+  card_id: bigint
+  card_number: String
+  card_type_code: String
+  customer_id: bigint
+  date_valid_from: timestamptz
+  date_valid_to: timestamptz
+  other_card_details: String
+}
+
+"""
+order by min() on columns of table "customers_cards"
+"""
+input customers_cards_min_order_by {
+  card_id: order_by
+  card_number: order_by
+  card_type_code: order_by
+  customer_id: order_by
+  date_valid_from: order_by
+  date_valid_to: order_by
+  other_card_details: order_by
+}
+
+"""
+response of any mutation on the table "customers_cards"
+"""
+type customers_cards_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [customers_cards!]!
+}
+
+"""
+input type for inserting object relation for remote table "customers_cards"
+"""
+input customers_cards_obj_rel_insert_input {
+  data: customers_cards_insert_input!
+  on_conflict: customers_cards_on_conflict
+}
+
+"""
+on conflict condition type for table "customers_cards"
+"""
+input customers_cards_on_conflict {
+  constraint: customers_cards_constraint!
+  update_columns: [customers_cards_update_column!]!
+  where: customers_cards_bool_exp
+}
+
+"""
+ordering options when selecting data from "customers_cards"
+"""
+input customers_cards_order_by {
+  card_id: order_by
+  card_number: order_by
+  card_type_code: order_by
+  customer: customers_order_by
+  customer_id: order_by
+  date_valid_from: order_by
+  date_valid_to: order_by
+  financial_transactions_aggregate: financial_transactions_aggregate_order_by
+  other_card_details: order_by
+}
+
+"""
+select columns of table "customers_cards"
+"""
+enum customers_cards_select_column {
+  """column name"""
+  card_id
+
+  """column name"""
+  card_number
+
+  """column name"""
+  card_type_code
+
+  """column name"""
+  customer_id
+
+  """column name"""
+  date_valid_from
+
+  """column name"""
+  date_valid_to
+
+  """column name"""
+  other_card_details
+}
+
+"""
+input type for updating data in table "customers_cards"
+"""
+input customers_cards_set_input {
+  card_id: bigint
+  card_number: String
+  card_type_code: String
+  customer_id: bigint
+  date_valid_from: timestamptz
+  date_valid_to: timestamptz
+  other_card_details: String
+}
+
+"""aggregate stddev on columns"""
+type customers_cards_stddev_fields {
+  card_id: Float
+  customer_id: Float
+}
+
+"""
+order by stddev() on columns of table "customers_cards"
+"""
+input customers_cards_stddev_order_by {
+  card_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type customers_cards_stddev_pop_fields {
+  card_id: Float
+  customer_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "customers_cards"
+"""
+input customers_cards_stddev_pop_order_by {
+  card_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type customers_cards_stddev_samp_fields {
+  card_id: Float
+  customer_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "customers_cards"
+"""
+input customers_cards_stddev_samp_order_by {
+  card_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate sum on columns"""
+type customers_cards_sum_fields {
+  card_id: bigint
+  customer_id: bigint
+}
+
+"""
+order by sum() on columns of table "customers_cards"
+"""
+input customers_cards_sum_order_by {
+  card_id: order_by
+  customer_id: order_by
+}
+
+"""
+update columns of table "customers_cards"
+"""
+enum customers_cards_update_column {
+  """column name"""
+  card_id
+
+  """column name"""
+  card_number
+
+  """column name"""
+  card_type_code
+
+  """column name"""
+  customer_id
+
+  """column name"""
+  date_valid_from
+
+  """column name"""
+  date_valid_to
+
+  """column name"""
+  other_card_details
+}
+
+"""aggregate var_pop on columns"""
+type customers_cards_var_pop_fields {
+  card_id: Float
+  customer_id: Float
+}
+
+"""
+order by var_pop() on columns of table "customers_cards"
+"""
+input customers_cards_var_pop_order_by {
+  card_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type customers_cards_var_samp_fields {
+  card_id: Float
+  customer_id: Float
+}
+
+"""
+order by var_samp() on columns of table "customers_cards"
+"""
+input customers_cards_var_samp_order_by {
+  card_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate variance on columns"""
+type customers_cards_variance_fields {
+  card_id: Float
+  customer_id: Float
+}
+
+"""
+order by variance() on columns of table "customers_cards"
+"""
+input customers_cards_variance_order_by {
+  card_id: order_by
+  customer_id: order_by
+}
+
+"""
+unique or primary key constraints on table "customers"
+"""
+enum customers_constraint {
+  """unique or primary key constraint"""
+  idx_20953_customers_pkey
+}
+
+"""
+input type for incrementing integer columne in table "customers"
+"""
+input customers_inc_input {
+  customer_id: bigint
+}
+
+"""
+input type for inserting data into table "customers"
+"""
+input customers_insert_input {
+  accounts: accounts_arr_rel_insert_input
+  customer_address: String
+  customer_email: String
+  customer_first_name: String
+  customer_id: bigint
+  customer_last_name: String
+  customer_phone: String
+  customers_cards: customers_cards_arr_rel_insert_input
+  other_customer_details: String
+}
+
+"""aggregate max on columns"""
+type customers_max_fields {
+  customer_address: String
+  customer_email: String
+  customer_first_name: String
+  customer_id: bigint
+  customer_last_name: String
+  customer_phone: String
+  other_customer_details: String
+}
+
+"""
+order by max() on columns of table "customers"
+"""
+input customers_max_order_by {
+  customer_address: order_by
+  customer_email: order_by
+  customer_first_name: order_by
+  customer_id: order_by
+  customer_last_name: order_by
+  customer_phone: order_by
+  other_customer_details: order_by
+}
+
+"""aggregate min on columns"""
+type customers_min_fields {
+  customer_address: String
+  customer_email: String
+  customer_first_name: String
+  customer_id: bigint
+  customer_last_name: String
+  customer_phone: String
+  other_customer_details: String
+}
+
+"""
+order by min() on columns of table "customers"
+"""
+input customers_min_order_by {
+  customer_address: order_by
+  customer_email: order_by
+  customer_first_name: order_by
+  customer_id: order_by
+  customer_last_name: order_by
+  customer_phone: order_by
+  other_customer_details: order_by
+}
+
+"""
+response of any mutation on the table "customers"
+"""
+type customers_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [customers!]!
+}
+
+"""
+input type for inserting object relation for remote table "customers"
+"""
+input customers_obj_rel_insert_input {
+  data: customers_insert_input!
+  on_conflict: customers_on_conflict
+}
+
+"""
+on conflict condition type for table "customers"
+"""
+input customers_on_conflict {
+  constraint: customers_constraint!
+  update_columns: [customers_update_column!]!
+  where: customers_bool_exp
+}
+
+"""
+ordering options when selecting data from "customers"
+"""
+input customers_order_by {
+  accounts_aggregate: accounts_aggregate_order_by
+  customer_address: order_by
+  customer_email: order_by
+  customer_first_name: order_by
+  customer_id: order_by
+  customer_last_name: order_by
+  customer_phone: order_by
+  customers_cards_aggregate: customers_cards_aggregate_order_by
+  other_customer_details: order_by
+}
+
+"""
+select columns of table "customers"
+"""
+enum customers_select_column {
+  """column name"""
+  customer_address
+
+  """column name"""
+  customer_email
+
+  """column name"""
+  customer_first_name
+
+  """column name"""
+  customer_id
+
+  """column name"""
+  customer_last_name
+
+  """column name"""
+  customer_phone
+
+  """column name"""
+  other_customer_details
+}
+
+"""
+input type for updating data in table "customers"
+"""
+input customers_set_input {
+  customer_address: String
+  customer_email: String
+  customer_first_name: String
+  customer_id: bigint
+  customer_last_name: String
+  customer_phone: String
+  other_customer_details: String
+}
+
+"""aggregate stddev on columns"""
+type customers_stddev_fields {
+  customer_id: Float
+}
+
+"""
+order by stddev() on columns of table "customers"
+"""
+input customers_stddev_order_by {
+  customer_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type customers_stddev_pop_fields {
+  customer_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "customers"
+"""
+input customers_stddev_pop_order_by {
+  customer_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type customers_stddev_samp_fields {
+  customer_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "customers"
+"""
+input customers_stddev_samp_order_by {
+  customer_id: order_by
+}
+
+"""aggregate sum on columns"""
+type customers_sum_fields {
+  customer_id: bigint
+}
+
+"""
+order by sum() on columns of table "customers"
+"""
+input customers_sum_order_by {
+  customer_id: order_by
+}
+
+"""
+update columns of table "customers"
+"""
+enum customers_update_column {
+  """column name"""
+  customer_address
+
+  """column name"""
+  customer_email
+
+  """column name"""
+  customer_first_name
+
+  """column name"""
+  customer_id
+
+  """column name"""
+  customer_last_name
+
+  """column name"""
+  customer_phone
+
+  """column name"""
+  other_customer_details
+}
+
+"""aggregate var_pop on columns"""
+type customers_var_pop_fields {
+  customer_id: Float
+}
+
+"""
+order by var_pop() on columns of table "customers"
+"""
+input customers_var_pop_order_by {
+  customer_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type customers_var_samp_fields {
+  customer_id: Float
+}
+
+"""
+order by var_samp() on columns of table "customers"
+"""
+input customers_var_samp_order_by {
+  customer_id: order_by
+}
+
+"""aggregate variance on columns"""
+type customers_variance_fields {
+  customer_id: Float
+}
+
+"""
+order by variance() on columns of table "customers"
+"""
+input customers_variance_order_by {
+  customer_id: order_by
+}
+
+"""
+columns and relationships of "financial_transactions"
+"""
+type financial_transactions {
+  """An object relationship"""
+  account: accounts
+  account_id: bigint
+  card_id: bigint
+
+  """An object relationship"""
+  customers_card: customers_cards
+  other_transaction_details: String
+  previous_transaction_id: bigint
+  transaction_amount: float8
+  transaction_comment: String
+  transaction_date: timestamptz
+  transaction_id: bigint
+  transaction_type: String
+}
+
+"""
+aggregated selection of "financial_transactions"
+"""
+type financial_transactions_aggregate {
+  aggregate: financial_transactions_aggregate_fields
+  nodes: [financial_transactions!]!
+}
+
+"""
+aggregate fields of "financial_transactions"
+"""
+type financial_transactions_aggregate_fields {
+  avg: financial_transactions_avg_fields
+  count(columns: [financial_transactions_select_column!], distinct: Boolean): Int
+  max: financial_transactions_max_fields
+  min: financial_transactions_min_fields
+  stddev: financial_transactions_stddev_fields
+  stddev_pop: financial_transactions_stddev_pop_fields
+  stddev_samp: financial_transactions_stddev_samp_fields
+  sum: financial_transactions_sum_fields
+  var_pop: financial_transactions_var_pop_fields
+  var_samp: financial_transactions_var_samp_fields
+  variance: financial_transactions_variance_fields
+}
+
+"""
+order by aggregate values of table "financial_transactions"
+"""
+input financial_transactions_aggregate_order_by {
+  avg: financial_transactions_avg_order_by
+  count: order_by
+  max: financial_transactions_max_order_by
+  min: financial_transactions_min_order_by
+  stddev: financial_transactions_stddev_order_by
+  stddev_pop: financial_transactions_stddev_pop_order_by
+  stddev_samp: financial_transactions_stddev_samp_order_by
+  sum: financial_transactions_sum_order_by
+  var_pop: financial_transactions_var_pop_order_by
+  var_samp: financial_transactions_var_samp_order_by
+  variance: financial_transactions_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "financial_transactions"
+"""
+input financial_transactions_arr_rel_insert_input {
+  data: [financial_transactions_insert_input!]!
+}
+
+"""aggregate avg on columns"""
+type financial_transactions_avg_fields {
+  account_id: Float
+  card_id: Float
+  previous_transaction_id: Float
+  transaction_amount: Float
+  transaction_id: Float
+}
+
+"""
+order by avg() on columns of table "financial_transactions"
+"""
+input financial_transactions_avg_order_by {
+  account_id: order_by
+  card_id: order_by
+  previous_transaction_id: order_by
+  transaction_amount: order_by
+  transaction_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "financial_transactions". All fields are combined with a logical 'AND'.
+"""
+input financial_transactions_bool_exp {
+  _and: [financial_transactions_bool_exp]
+  _not: financial_transactions_bool_exp
+  _or: [financial_transactions_bool_exp]
+  account: accounts_bool_exp
+  account_id: bigint_comparison_exp
+  card_id: bigint_comparison_exp
+  customers_card: customers_cards_bool_exp
+  other_transaction_details: String_comparison_exp
+  previous_transaction_id: bigint_comparison_exp
+  transaction_amount: float8_comparison_exp
+  transaction_comment: String_comparison_exp
+  transaction_date: timestamptz_comparison_exp
+  transaction_id: bigint_comparison_exp
+  transaction_type: String_comparison_exp
+}
+
+"""
+input type for incrementing integer columne in table "financial_transactions"
+"""
+input financial_transactions_inc_input {
+  account_id: bigint
+  card_id: bigint
+  previous_transaction_id: bigint
+  transaction_id: bigint
+}
+
+"""
+input type for inserting data into table "financial_transactions"
+"""
+input financial_transactions_insert_input {
+  account: accounts_obj_rel_insert_input
+  account_id: bigint
+  card_id: bigint
+  customers_card: customers_cards_obj_rel_insert_input
+  other_transaction_details: String
+  previous_transaction_id: bigint
+  transaction_amount: float8
+  transaction_comment: String
+  transaction_date: timestamptz
+  transaction_id: bigint
+  transaction_type: String
+}
+
+"""aggregate max on columns"""
+type financial_transactions_max_fields {
+  account_id: bigint
+  card_id: bigint
+  other_transaction_details: String
+  previous_transaction_id: bigint
+  transaction_amount: float8
+  transaction_comment: String
+  transaction_date: timestamptz
+  transaction_id: bigint
+  transaction_type: String
+}
+
+"""
+order by max() on columns of table "financial_transactions"
+"""
+input financial_transactions_max_order_by {
+  account_id: order_by
+  card_id: order_by
+  other_transaction_details: order_by
+  previous_transaction_id: order_by
+  transaction_amount: order_by
+  transaction_comment: order_by
+  transaction_date: order_by
+  transaction_id: order_by
+  transaction_type: order_by
+}
+
+"""aggregate min on columns"""
+type financial_transactions_min_fields {
+  account_id: bigint
+  card_id: bigint
+  other_transaction_details: String
+  previous_transaction_id: bigint
+  transaction_amount: float8
+  transaction_comment: String
+  transaction_date: timestamptz
+  transaction_id: bigint
+  transaction_type: String
+}
+
+"""
+order by min() on columns of table "financial_transactions"
+"""
+input financial_transactions_min_order_by {
+  account_id: order_by
+  card_id: order_by
+  other_transaction_details: order_by
+  previous_transaction_id: order_by
+  transaction_amount: order_by
+  transaction_comment: order_by
+  transaction_date: order_by
+  transaction_id: order_by
+  transaction_type: order_by
+}
+
+"""
+response of any mutation on the table "financial_transactions"
+"""
+type financial_transactions_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [financial_transactions!]!
+}
+
+"""
+input type for inserting object relation for remote table "financial_transactions"
+"""
+input financial_transactions_obj_rel_insert_input {
+  data: financial_transactions_insert_input!
+}
+
+"""
+ordering options when selecting data from "financial_transactions"
+"""
+input financial_transactions_order_by {
+  account: accounts_order_by
+  account_id: order_by
+  card_id: order_by
+  customers_card: customers_cards_order_by
+  other_transaction_details: order_by
+  previous_transaction_id: order_by
+  transaction_amount: order_by
+  transaction_comment: order_by
+  transaction_date: order_by
+  transaction_id: order_by
+  transaction_type: order_by
+}
+
+"""
+select columns of table "financial_transactions"
+"""
+enum financial_transactions_select_column {
+  """column name"""
+  account_id
+
+  """column name"""
+  card_id
+
+  """column name"""
+  other_transaction_details
+
+  """column name"""
+  previous_transaction_id
+
+  """column name"""
+  transaction_amount
+
+  """column name"""
+  transaction_comment
+
+  """column name"""
+  transaction_date
+
+  """column name"""
+  transaction_id
+
+  """column name"""
+  transaction_type
+}
+
+"""
+input type for updating data in table "financial_transactions"
+"""
+input financial_transactions_set_input {
+  account_id: bigint
+  card_id: bigint
+  other_transaction_details: String
+  previous_transaction_id: bigint
+  transaction_amount: float8
+  transaction_comment: String
+  transaction_date: timestamptz
+  transaction_id: bigint
+  transaction_type: String
+}
+
+"""aggregate stddev on columns"""
+type financial_transactions_stddev_fields {
+  account_id: Float
+  card_id: Float
+  previous_transaction_id: Float
+  transaction_amount: Float
+  transaction_id: Float
+}
+
+"""
+order by stddev() on columns of table "financial_transactions"
+"""
+input financial_transactions_stddev_order_by {
+  account_id: order_by
+  card_id: order_by
+  previous_transaction_id: order_by
+  transaction_amount: order_by
+  transaction_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type financial_transactions_stddev_pop_fields {
+  account_id: Float
+  card_id: Float
+  previous_transaction_id: Float
+  transaction_amount: Float
+  transaction_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "financial_transactions"
+"""
+input financial_transactions_stddev_pop_order_by {
+  account_id: order_by
+  card_id: order_by
+  previous_transaction_id: order_by
+  transaction_amount: order_by
+  transaction_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type financial_transactions_stddev_samp_fields {
+  account_id: Float
+  card_id: Float
+  previous_transaction_id: Float
+  transaction_amount: Float
+  transaction_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "financial_transactions"
+"""
+input financial_transactions_stddev_samp_order_by {
+  account_id: order_by
+  card_id: order_by
+  previous_transaction_id: order_by
+  transaction_amount: order_by
+  transaction_id: order_by
+}
+
+"""aggregate sum on columns"""
+type financial_transactions_sum_fields {
+  account_id: bigint
+  card_id: bigint
+  previous_transaction_id: bigint
+  transaction_amount: float8
+  transaction_id: bigint
+}
+
+"""
+order by sum() on columns of table "financial_transactions"
+"""
+input financial_transactions_sum_order_by {
+  account_id: order_by
+  card_id: order_by
+  previous_transaction_id: order_by
+  transaction_amount: order_by
+  transaction_id: order_by
+}
+
+"""aggregate var_pop on columns"""
+type financial_transactions_var_pop_fields {
+  account_id: Float
+  card_id: Float
+  previous_transaction_id: Float
+  transaction_amount: Float
+  transaction_id: Float
+}
+
+"""
+order by var_pop() on columns of table "financial_transactions"
+"""
+input financial_transactions_var_pop_order_by {
+  account_id: order_by
+  card_id: order_by
+  previous_transaction_id: order_by
+  transaction_amount: order_by
+  transaction_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type financial_transactions_var_samp_fields {
+  account_id: Float
+  card_id: Float
+  previous_transaction_id: Float
+  transaction_amount: Float
+  transaction_id: Float
+}
+
+"""
+order by var_samp() on columns of table "financial_transactions"
+"""
+input financial_transactions_var_samp_order_by {
+  account_id: order_by
+  card_id: order_by
+  previous_transaction_id: order_by
+  transaction_amount: order_by
+  transaction_id: order_by
+}
+
+"""aggregate variance on columns"""
+type financial_transactions_variance_fields {
+  account_id: Float
+  card_id: Float
+  previous_transaction_id: Float
+  transaction_amount: Float
+  transaction_id: Float
+}
+
+"""
+order by variance() on columns of table "financial_transactions"
+"""
+input financial_transactions_variance_order_by {
+  account_id: order_by
+  card_id: order_by
+  previous_transaction_id: order_by
+  transaction_amount: order_by
+  transaction_id: order_by
+}
+
+scalar float8
+
+"""
+expression to compare columns of type float8. All fields are combined with logical 'AND'.
+"""
+input float8_comparison_exp {
+  _eq: float8
+  _gt: float8
+  _gte: float8
+  _in: [float8!]
+  _is_null: Boolean
+  _lt: float8
+  _lte: float8
+  _neq: float8
+  _nin: [float8!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "accounts"
+  """
+  delete_accounts(
+    """filter the rows which have to be deleted"""
+    where: accounts_bool_exp!
+  ): accounts_mutation_response
+
+  """
+  delete data from the table: "customers"
+  """
+  delete_customers(
+    """filter the rows which have to be deleted"""
+    where: customers_bool_exp!
+  ): customers_mutation_response
+
+  """
+  delete data from the table: "customers_cards"
+  """
+  delete_customers_cards(
+    """filter the rows which have to be deleted"""
+    where: customers_cards_bool_exp!
+  ): customers_cards_mutation_response
+
+  """
+  delete data from the table: "financial_transactions"
+  """
+  delete_financial_transactions(
+    """filter the rows which have to be deleted"""
+    where: financial_transactions_bool_exp!
+  ): financial_transactions_mutation_response
+
+  """
+  insert data into the table: "accounts"
+  """
+  insert_accounts(
+    """the rows to be inserted"""
+    objects: [accounts_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: accounts_on_conflict
+  ): accounts_mutation_response
+
+  """
+  insert data into the table: "customers"
+  """
+  insert_customers(
+    """the rows to be inserted"""
+    objects: [customers_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: customers_on_conflict
+  ): customers_mutation_response
+
+  """
+  insert data into the table: "customers_cards"
+  """
+  insert_customers_cards(
+    """the rows to be inserted"""
+    objects: [customers_cards_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: customers_cards_on_conflict
+  ): customers_cards_mutation_response
+
+  """
+  insert data into the table: "financial_transactions"
+  """
+  insert_financial_transactions(
+    """the rows to be inserted"""
+    objects: [financial_transactions_insert_input!]!
+  ): financial_transactions_mutation_response
+
+  """
+  update data of the table: "accounts"
+  """
+  update_accounts(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: accounts_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: accounts_set_input
+
+    """filter the rows which have to be updated"""
+    where: accounts_bool_exp!
+  ): accounts_mutation_response
+
+  """
+  update data of the table: "customers"
+  """
+  update_customers(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customers_set_input
+
+    """filter the rows which have to be updated"""
+    where: customers_bool_exp!
+  ): customers_mutation_response
+
+  """
+  update data of the table: "customers_cards"
+  """
+  update_customers_cards(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customers_cards_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customers_cards_set_input
+
+    """filter the rows which have to be updated"""
+    where: customers_cards_bool_exp!
+  ): customers_cards_mutation_response
+
+  """
+  update data of the table: "financial_transactions"
+  """
+  update_financial_transactions(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: financial_transactions_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: financial_transactions_set_input
+
+    """filter the rows which have to be updated"""
+    where: financial_transactions_bool_exp!
+  ): financial_transactions_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "accounts"
+  """
+  accounts(
+    """distinct select on columns"""
+    distinct_on: [accounts_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [accounts_order_by!]
+
+    """filter the rows returned"""
+    where: accounts_bool_exp
+  ): [accounts!]!
+
+  """
+  fetch aggregated fields from the table: "accounts"
+  """
+  accounts_aggregate(
+    """distinct select on columns"""
+    distinct_on: [accounts_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [accounts_order_by!]
+
+    """filter the rows returned"""
+    where: accounts_bool_exp
+  ): accounts_aggregate!
+
+  """fetch data from the table: "accounts" using primary key columns"""
+  accounts_by_pk(account_id: bigint!): accounts
+
+  """
+  fetch data from the table: "customers"
+  """
+  customers(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): [customers!]!
+
+  """
+  fetch aggregated fields from the table: "customers"
+  """
+  customers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): customers_aggregate!
+
+  """fetch data from the table: "customers" using primary key columns"""
+  customers_by_pk(customer_id: bigint!): customers
+
+  """
+  fetch data from the table: "customers_cards"
+  """
+  customers_cards(
+    """distinct select on columns"""
+    distinct_on: [customers_cards_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_cards_order_by!]
+
+    """filter the rows returned"""
+    where: customers_cards_bool_exp
+  ): [customers_cards!]!
+
+  """
+  fetch aggregated fields from the table: "customers_cards"
+  """
+  customers_cards_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customers_cards_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_cards_order_by!]
+
+    """filter the rows returned"""
+    where: customers_cards_bool_exp
+  ): customers_cards_aggregate!
+
+  """fetch data from the table: "customers_cards" using primary key columns"""
+  customers_cards_by_pk(card_id: bigint!): customers_cards
+
+  """
+  fetch data from the table: "financial_transactions"
+  """
+  financial_transactions(
+    """distinct select on columns"""
+    distinct_on: [financial_transactions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [financial_transactions_order_by!]
+
+    """filter the rows returned"""
+    where: financial_transactions_bool_exp
+  ): [financial_transactions!]!
+
+  """
+  fetch aggregated fields from the table: "financial_transactions"
+  """
+  financial_transactions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [financial_transactions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [financial_transactions_order_by!]
+
+    """filter the rows returned"""
+    where: financial_transactions_bool_exp
+  ): financial_transactions_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "accounts"
+  """
+  accounts(
+    """distinct select on columns"""
+    distinct_on: [accounts_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [accounts_order_by!]
+
+    """filter the rows returned"""
+    where: accounts_bool_exp
+  ): [accounts!]!
+
+  """
+  fetch aggregated fields from the table: "accounts"
+  """
+  accounts_aggregate(
+    """distinct select on columns"""
+    distinct_on: [accounts_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [accounts_order_by!]
+
+    """filter the rows returned"""
+    where: accounts_bool_exp
+  ): accounts_aggregate!
+
+  """fetch data from the table: "accounts" using primary key columns"""
+  accounts_by_pk(account_id: bigint!): accounts
+
+  """
+  fetch data from the table: "customers"
+  """
+  customers(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): [customers!]!
+
+  """
+  fetch aggregated fields from the table: "customers"
+  """
+  customers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): customers_aggregate!
+
+  """fetch data from the table: "customers" using primary key columns"""
+  customers_by_pk(customer_id: bigint!): customers
+
+  """
+  fetch data from the table: "customers_cards"
+  """
+  customers_cards(
+    """distinct select on columns"""
+    distinct_on: [customers_cards_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_cards_order_by!]
+
+    """filter the rows returned"""
+    where: customers_cards_bool_exp
+  ): [customers_cards!]!
+
+  """
+  fetch aggregated fields from the table: "customers_cards"
+  """
+  customers_cards_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customers_cards_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_cards_order_by!]
+
+    """filter the rows returned"""
+    where: customers_cards_bool_exp
+  ): customers_cards_aggregate!
+
+  """fetch data from the table: "customers_cards" using primary key columns"""
+  customers_cards_by_pk(card_id: bigint!): customers_cards
+
+  """
+  fetch data from the table: "financial_transactions"
+  """
+  financial_transactions(
+    """distinct select on columns"""
+    distinct_on: [financial_transactions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [financial_transactions_order_by!]
+
+    """filter the rows returned"""
+    where: financial_transactions_bool_exp
+  ): [financial_transactions!]!
+
+  """
+  fetch aggregated fields from the table: "financial_transactions"
+  """
+  financial_transactions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [financial_transactions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [financial_transactions_order_by!]
+
+    """filter the rows returned"""
+    where: financial_transactions_bool_exp
+  ): financial_transactions_aggregate!
+}
+
+scalar timestamptz
+
+"""
+expression to compare columns of type timestamptz. All fields are combined with logical 'AND'.
+"""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}

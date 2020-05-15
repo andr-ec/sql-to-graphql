@@ -1,0 +1,1550 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "device"
+"""
+type device {
+  applications: String
+  carrier: String
+  device: String
+  device_id: Int
+  package_version: String
+  software_platform: String
+
+  """An array relationship"""
+  stocks(
+    """distinct select on columns"""
+    distinct_on: [stock_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stock_order_by!]
+
+    """filter the rows returned"""
+    where: stock_bool_exp
+  ): [stock!]!
+
+  """An aggregated array relationship"""
+  stocks_aggregate(
+    """distinct select on columns"""
+    distinct_on: [stock_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stock_order_by!]
+
+    """filter the rows returned"""
+    where: stock_bool_exp
+  ): stock_aggregate!
+}
+
+"""
+aggregated selection of "device"
+"""
+type device_aggregate {
+  aggregate: device_aggregate_fields
+  nodes: [device!]!
+}
+
+"""
+aggregate fields of "device"
+"""
+type device_aggregate_fields {
+  avg: device_avg_fields
+  count(columns: [device_select_column!], distinct: Boolean): Int
+  max: device_max_fields
+  min: device_min_fields
+  stddev: device_stddev_fields
+  stddev_pop: device_stddev_pop_fields
+  stddev_samp: device_stddev_samp_fields
+  sum: device_sum_fields
+  var_pop: device_var_pop_fields
+  var_samp: device_var_samp_fields
+  variance: device_variance_fields
+}
+
+"""
+order by aggregate values of table "device"
+"""
+input device_aggregate_order_by {
+  avg: device_avg_order_by
+  count: order_by
+  max: device_max_order_by
+  min: device_min_order_by
+  stddev: device_stddev_order_by
+  stddev_pop: device_stddev_pop_order_by
+  stddev_samp: device_stddev_samp_order_by
+  sum: device_sum_order_by
+  var_pop: device_var_pop_order_by
+  var_samp: device_var_samp_order_by
+  variance: device_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "device"
+"""
+input device_arr_rel_insert_input {
+  data: [device_insert_input!]!
+  on_conflict: device_on_conflict
+}
+
+"""aggregate avg on columns"""
+type device_avg_fields {
+  device_id: Float
+}
+
+"""
+order by avg() on columns of table "device"
+"""
+input device_avg_order_by {
+  device_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "device". All fields are combined with a logical 'AND'.
+"""
+input device_bool_exp {
+  _and: [device_bool_exp]
+  _not: device_bool_exp
+  _or: [device_bool_exp]
+  applications: String_comparison_exp
+  carrier: String_comparison_exp
+  device: String_comparison_exp
+  device_id: Int_comparison_exp
+  package_version: String_comparison_exp
+  software_platform: String_comparison_exp
+  stocks: stock_bool_exp
+}
+
+"""
+unique or primary key constraints on table "device"
+"""
+enum device_constraint {
+  """unique or primary key constraint"""
+  idx_24342_sqlite_autoindex_device_1
+}
+
+"""
+input type for incrementing integer columne in table "device"
+"""
+input device_inc_input {
+  device_id: Int
+}
+
+"""
+input type for inserting data into table "device"
+"""
+input device_insert_input {
+  applications: String
+  carrier: String
+  device: String
+  device_id: Int
+  package_version: String
+  software_platform: String
+  stocks: stock_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type device_max_fields {
+  applications: String
+  carrier: String
+  device: String
+  device_id: Int
+  package_version: String
+  software_platform: String
+}
+
+"""
+order by max() on columns of table "device"
+"""
+input device_max_order_by {
+  applications: order_by
+  carrier: order_by
+  device: order_by
+  device_id: order_by
+  package_version: order_by
+  software_platform: order_by
+}
+
+"""aggregate min on columns"""
+type device_min_fields {
+  applications: String
+  carrier: String
+  device: String
+  device_id: Int
+  package_version: String
+  software_platform: String
+}
+
+"""
+order by min() on columns of table "device"
+"""
+input device_min_order_by {
+  applications: order_by
+  carrier: order_by
+  device: order_by
+  device_id: order_by
+  package_version: order_by
+  software_platform: order_by
+}
+
+"""
+response of any mutation on the table "device"
+"""
+type device_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [device!]!
+}
+
+"""
+input type for inserting object relation for remote table "device"
+"""
+input device_obj_rel_insert_input {
+  data: device_insert_input!
+  on_conflict: device_on_conflict
+}
+
+"""
+on conflict condition type for table "device"
+"""
+input device_on_conflict {
+  constraint: device_constraint!
+  update_columns: [device_update_column!]!
+  where: device_bool_exp
+}
+
+"""
+ordering options when selecting data from "device"
+"""
+input device_order_by {
+  applications: order_by
+  carrier: order_by
+  device: order_by
+  device_id: order_by
+  package_version: order_by
+  software_platform: order_by
+  stocks_aggregate: stock_aggregate_order_by
+}
+
+"""
+select columns of table "device"
+"""
+enum device_select_column {
+  """column name"""
+  applications
+
+  """column name"""
+  carrier
+
+  """column name"""
+  device
+
+  """column name"""
+  device_id
+
+  """column name"""
+  package_version
+
+  """column name"""
+  software_platform
+}
+
+"""
+input type for updating data in table "device"
+"""
+input device_set_input {
+  applications: String
+  carrier: String
+  device: String
+  device_id: Int
+  package_version: String
+  software_platform: String
+}
+
+"""aggregate stddev on columns"""
+type device_stddev_fields {
+  device_id: Float
+}
+
+"""
+order by stddev() on columns of table "device"
+"""
+input device_stddev_order_by {
+  device_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type device_stddev_pop_fields {
+  device_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "device"
+"""
+input device_stddev_pop_order_by {
+  device_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type device_stddev_samp_fields {
+  device_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "device"
+"""
+input device_stddev_samp_order_by {
+  device_id: order_by
+}
+
+"""aggregate sum on columns"""
+type device_sum_fields {
+  device_id: Int
+}
+
+"""
+order by sum() on columns of table "device"
+"""
+input device_sum_order_by {
+  device_id: order_by
+}
+
+"""
+update columns of table "device"
+"""
+enum device_update_column {
+  """column name"""
+  applications
+
+  """column name"""
+  carrier
+
+  """column name"""
+  device
+
+  """column name"""
+  device_id
+
+  """column name"""
+  package_version
+
+  """column name"""
+  software_platform
+}
+
+"""aggregate var_pop on columns"""
+type device_var_pop_fields {
+  device_id: Float
+}
+
+"""
+order by var_pop() on columns of table "device"
+"""
+input device_var_pop_order_by {
+  device_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type device_var_samp_fields {
+  device_id: Float
+}
+
+"""
+order by var_samp() on columns of table "device"
+"""
+input device_var_samp_order_by {
+  device_id: order_by
+}
+
+"""aggregate variance on columns"""
+type device_variance_fields {
+  device_id: Float
+}
+
+"""
+order by variance() on columns of table "device"
+"""
+input device_variance_order_by {
+  device_id: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "device"
+  """
+  delete_device(
+    """filter the rows which have to be deleted"""
+    where: device_bool_exp!
+  ): device_mutation_response
+
+  """
+  delete data from the table: "shop"
+  """
+  delete_shop(
+    """filter the rows which have to be deleted"""
+    where: shop_bool_exp!
+  ): shop_mutation_response
+
+  """
+  delete data from the table: "stock"
+  """
+  delete_stock(
+    """filter the rows which have to be deleted"""
+    where: stock_bool_exp!
+  ): stock_mutation_response
+
+  """
+  insert data into the table: "device"
+  """
+  insert_device(
+    """the rows to be inserted"""
+    objects: [device_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: device_on_conflict
+  ): device_mutation_response
+
+  """
+  insert data into the table: "shop"
+  """
+  insert_shop(
+    """the rows to be inserted"""
+    objects: [shop_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: shop_on_conflict
+  ): shop_mutation_response
+
+  """
+  insert data into the table: "stock"
+  """
+  insert_stock(
+    """the rows to be inserted"""
+    objects: [stock_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: stock_on_conflict
+  ): stock_mutation_response
+
+  """
+  update data of the table: "device"
+  """
+  update_device(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: device_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: device_set_input
+
+    """filter the rows which have to be updated"""
+    where: device_bool_exp!
+  ): device_mutation_response
+
+  """
+  update data of the table: "shop"
+  """
+  update_shop(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: shop_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: shop_set_input
+
+    """filter the rows which have to be updated"""
+    where: shop_bool_exp!
+  ): shop_mutation_response
+
+  """
+  update data of the table: "stock"
+  """
+  update_stock(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: stock_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: stock_set_input
+
+    """filter the rows which have to be updated"""
+    where: stock_bool_exp!
+  ): stock_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "device"
+  """
+  device(
+    """distinct select on columns"""
+    distinct_on: [device_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [device_order_by!]
+
+    """filter the rows returned"""
+    where: device_bool_exp
+  ): [device!]!
+
+  """
+  fetch aggregated fields from the table: "device"
+  """
+  device_aggregate(
+    """distinct select on columns"""
+    distinct_on: [device_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [device_order_by!]
+
+    """filter the rows returned"""
+    where: device_bool_exp
+  ): device_aggregate!
+
+  """
+  fetch data from the table: "shop"
+  """
+  shop(
+    """distinct select on columns"""
+    distinct_on: [shop_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [shop_order_by!]
+
+    """filter the rows returned"""
+    where: shop_bool_exp
+  ): [shop!]!
+
+  """
+  fetch aggregated fields from the table: "shop"
+  """
+  shop_aggregate(
+    """distinct select on columns"""
+    distinct_on: [shop_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [shop_order_by!]
+
+    """filter the rows returned"""
+    where: shop_bool_exp
+  ): shop_aggregate!
+
+  """
+  fetch data from the table: "stock"
+  """
+  stock(
+    """distinct select on columns"""
+    distinct_on: [stock_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stock_order_by!]
+
+    """filter the rows returned"""
+    where: stock_bool_exp
+  ): [stock!]!
+
+  """
+  fetch aggregated fields from the table: "stock"
+  """
+  stock_aggregate(
+    """distinct select on columns"""
+    distinct_on: [stock_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stock_order_by!]
+
+    """filter the rows returned"""
+    where: stock_bool_exp
+  ): stock_aggregate!
+}
+
+"""
+columns and relationships of "shop"
+"""
+type shop {
+  location: String
+  open_date: String
+  open_year: Int
+  shop_id: Int
+  shop_name: String
+
+  """An array relationship"""
+  stocks(
+    """distinct select on columns"""
+    distinct_on: [stock_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stock_order_by!]
+
+    """filter the rows returned"""
+    where: stock_bool_exp
+  ): [stock!]!
+
+  """An aggregated array relationship"""
+  stocks_aggregate(
+    """distinct select on columns"""
+    distinct_on: [stock_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stock_order_by!]
+
+    """filter the rows returned"""
+    where: stock_bool_exp
+  ): stock_aggregate!
+}
+
+"""
+aggregated selection of "shop"
+"""
+type shop_aggregate {
+  aggregate: shop_aggregate_fields
+  nodes: [shop!]!
+}
+
+"""
+aggregate fields of "shop"
+"""
+type shop_aggregate_fields {
+  avg: shop_avg_fields
+  count(columns: [shop_select_column!], distinct: Boolean): Int
+  max: shop_max_fields
+  min: shop_min_fields
+  stddev: shop_stddev_fields
+  stddev_pop: shop_stddev_pop_fields
+  stddev_samp: shop_stddev_samp_fields
+  sum: shop_sum_fields
+  var_pop: shop_var_pop_fields
+  var_samp: shop_var_samp_fields
+  variance: shop_variance_fields
+}
+
+"""
+order by aggregate values of table "shop"
+"""
+input shop_aggregate_order_by {
+  avg: shop_avg_order_by
+  count: order_by
+  max: shop_max_order_by
+  min: shop_min_order_by
+  stddev: shop_stddev_order_by
+  stddev_pop: shop_stddev_pop_order_by
+  stddev_samp: shop_stddev_samp_order_by
+  sum: shop_sum_order_by
+  var_pop: shop_var_pop_order_by
+  var_samp: shop_var_samp_order_by
+  variance: shop_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "shop"
+"""
+input shop_arr_rel_insert_input {
+  data: [shop_insert_input!]!
+  on_conflict: shop_on_conflict
+}
+
+"""aggregate avg on columns"""
+type shop_avg_fields {
+  open_year: Float
+  shop_id: Float
+}
+
+"""
+order by avg() on columns of table "shop"
+"""
+input shop_avg_order_by {
+  open_year: order_by
+  shop_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "shop". All fields are combined with a logical 'AND'.
+"""
+input shop_bool_exp {
+  _and: [shop_bool_exp]
+  _not: shop_bool_exp
+  _or: [shop_bool_exp]
+  location: String_comparison_exp
+  open_date: String_comparison_exp
+  open_year: Int_comparison_exp
+  shop_id: Int_comparison_exp
+  shop_name: String_comparison_exp
+  stocks: stock_bool_exp
+}
+
+"""
+unique or primary key constraints on table "shop"
+"""
+enum shop_constraint {
+  """unique or primary key constraint"""
+  idx_24348_sqlite_autoindex_shop_1
+}
+
+"""
+input type for incrementing integer columne in table "shop"
+"""
+input shop_inc_input {
+  open_year: Int
+  shop_id: Int
+}
+
+"""
+input type for inserting data into table "shop"
+"""
+input shop_insert_input {
+  location: String
+  open_date: String
+  open_year: Int
+  shop_id: Int
+  shop_name: String
+  stocks: stock_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type shop_max_fields {
+  location: String
+  open_date: String
+  open_year: Int
+  shop_id: Int
+  shop_name: String
+}
+
+"""
+order by max() on columns of table "shop"
+"""
+input shop_max_order_by {
+  location: order_by
+  open_date: order_by
+  open_year: order_by
+  shop_id: order_by
+  shop_name: order_by
+}
+
+"""aggregate min on columns"""
+type shop_min_fields {
+  location: String
+  open_date: String
+  open_year: Int
+  shop_id: Int
+  shop_name: String
+}
+
+"""
+order by min() on columns of table "shop"
+"""
+input shop_min_order_by {
+  location: order_by
+  open_date: order_by
+  open_year: order_by
+  shop_id: order_by
+  shop_name: order_by
+}
+
+"""
+response of any mutation on the table "shop"
+"""
+type shop_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [shop!]!
+}
+
+"""
+input type for inserting object relation for remote table "shop"
+"""
+input shop_obj_rel_insert_input {
+  data: shop_insert_input!
+  on_conflict: shop_on_conflict
+}
+
+"""
+on conflict condition type for table "shop"
+"""
+input shop_on_conflict {
+  constraint: shop_constraint!
+  update_columns: [shop_update_column!]!
+  where: shop_bool_exp
+}
+
+"""
+ordering options when selecting data from "shop"
+"""
+input shop_order_by {
+  location: order_by
+  open_date: order_by
+  open_year: order_by
+  shop_id: order_by
+  shop_name: order_by
+  stocks_aggregate: stock_aggregate_order_by
+}
+
+"""
+select columns of table "shop"
+"""
+enum shop_select_column {
+  """column name"""
+  location
+
+  """column name"""
+  open_date
+
+  """column name"""
+  open_year
+
+  """column name"""
+  shop_id
+
+  """column name"""
+  shop_name
+}
+
+"""
+input type for updating data in table "shop"
+"""
+input shop_set_input {
+  location: String
+  open_date: String
+  open_year: Int
+  shop_id: Int
+  shop_name: String
+}
+
+"""aggregate stddev on columns"""
+type shop_stddev_fields {
+  open_year: Float
+  shop_id: Float
+}
+
+"""
+order by stddev() on columns of table "shop"
+"""
+input shop_stddev_order_by {
+  open_year: order_by
+  shop_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type shop_stddev_pop_fields {
+  open_year: Float
+  shop_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "shop"
+"""
+input shop_stddev_pop_order_by {
+  open_year: order_by
+  shop_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type shop_stddev_samp_fields {
+  open_year: Float
+  shop_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "shop"
+"""
+input shop_stddev_samp_order_by {
+  open_year: order_by
+  shop_id: order_by
+}
+
+"""aggregate sum on columns"""
+type shop_sum_fields {
+  open_year: Int
+  shop_id: Int
+}
+
+"""
+order by sum() on columns of table "shop"
+"""
+input shop_sum_order_by {
+  open_year: order_by
+  shop_id: order_by
+}
+
+"""
+update columns of table "shop"
+"""
+enum shop_update_column {
+  """column name"""
+  location
+
+  """column name"""
+  open_date
+
+  """column name"""
+  open_year
+
+  """column name"""
+  shop_id
+
+  """column name"""
+  shop_name
+}
+
+"""aggregate var_pop on columns"""
+type shop_var_pop_fields {
+  open_year: Float
+  shop_id: Float
+}
+
+"""
+order by var_pop() on columns of table "shop"
+"""
+input shop_var_pop_order_by {
+  open_year: order_by
+  shop_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type shop_var_samp_fields {
+  open_year: Float
+  shop_id: Float
+}
+
+"""
+order by var_samp() on columns of table "shop"
+"""
+input shop_var_samp_order_by {
+  open_year: order_by
+  shop_id: order_by
+}
+
+"""aggregate variance on columns"""
+type shop_variance_fields {
+  open_year: Float
+  shop_id: Float
+}
+
+"""
+order by variance() on columns of table "shop"
+"""
+input shop_variance_order_by {
+  open_year: order_by
+  shop_id: order_by
+}
+
+"""
+columns and relationships of "stock"
+"""
+type stock {
+  """An object relationship"""
+  device: device
+  device_id: Int
+  quantity: Int
+
+  """An object relationship"""
+  shop: shop
+  shop_id: Int
+}
+
+"""
+aggregated selection of "stock"
+"""
+type stock_aggregate {
+  aggregate: stock_aggregate_fields
+  nodes: [stock!]!
+}
+
+"""
+aggregate fields of "stock"
+"""
+type stock_aggregate_fields {
+  avg: stock_avg_fields
+  count(columns: [stock_select_column!], distinct: Boolean): Int
+  max: stock_max_fields
+  min: stock_min_fields
+  stddev: stock_stddev_fields
+  stddev_pop: stock_stddev_pop_fields
+  stddev_samp: stock_stddev_samp_fields
+  sum: stock_sum_fields
+  var_pop: stock_var_pop_fields
+  var_samp: stock_var_samp_fields
+  variance: stock_variance_fields
+}
+
+"""
+order by aggregate values of table "stock"
+"""
+input stock_aggregate_order_by {
+  avg: stock_avg_order_by
+  count: order_by
+  max: stock_max_order_by
+  min: stock_min_order_by
+  stddev: stock_stddev_order_by
+  stddev_pop: stock_stddev_pop_order_by
+  stddev_samp: stock_stddev_samp_order_by
+  sum: stock_sum_order_by
+  var_pop: stock_var_pop_order_by
+  var_samp: stock_var_samp_order_by
+  variance: stock_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "stock"
+"""
+input stock_arr_rel_insert_input {
+  data: [stock_insert_input!]!
+  on_conflict: stock_on_conflict
+}
+
+"""aggregate avg on columns"""
+type stock_avg_fields {
+  device_id: Float
+  quantity: Float
+  shop_id: Float
+}
+
+"""
+order by avg() on columns of table "stock"
+"""
+input stock_avg_order_by {
+  device_id: order_by
+  quantity: order_by
+  shop_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "stock". All fields are combined with a logical 'AND'.
+"""
+input stock_bool_exp {
+  _and: [stock_bool_exp]
+  _not: stock_bool_exp
+  _or: [stock_bool_exp]
+  device: device_bool_exp
+  device_id: Int_comparison_exp
+  quantity: Int_comparison_exp
+  shop: shop_bool_exp
+  shop_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "stock"
+"""
+enum stock_constraint {
+  """unique or primary key constraint"""
+  idx_24354_sqlite_autoindex_stock_1
+}
+
+"""
+input type for incrementing integer columne in table "stock"
+"""
+input stock_inc_input {
+  device_id: Int
+  quantity: Int
+  shop_id: Int
+}
+
+"""
+input type for inserting data into table "stock"
+"""
+input stock_insert_input {
+  device: device_obj_rel_insert_input
+  device_id: Int
+  quantity: Int
+  shop: shop_obj_rel_insert_input
+  shop_id: Int
+}
+
+"""aggregate max on columns"""
+type stock_max_fields {
+  device_id: Int
+  quantity: Int
+  shop_id: Int
+}
+
+"""
+order by max() on columns of table "stock"
+"""
+input stock_max_order_by {
+  device_id: order_by
+  quantity: order_by
+  shop_id: order_by
+}
+
+"""aggregate min on columns"""
+type stock_min_fields {
+  device_id: Int
+  quantity: Int
+  shop_id: Int
+}
+
+"""
+order by min() on columns of table "stock"
+"""
+input stock_min_order_by {
+  device_id: order_by
+  quantity: order_by
+  shop_id: order_by
+}
+
+"""
+response of any mutation on the table "stock"
+"""
+type stock_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [stock!]!
+}
+
+"""
+input type for inserting object relation for remote table "stock"
+"""
+input stock_obj_rel_insert_input {
+  data: stock_insert_input!
+  on_conflict: stock_on_conflict
+}
+
+"""
+on conflict condition type for table "stock"
+"""
+input stock_on_conflict {
+  constraint: stock_constraint!
+  update_columns: [stock_update_column!]!
+  where: stock_bool_exp
+}
+
+"""
+ordering options when selecting data from "stock"
+"""
+input stock_order_by {
+  device: device_order_by
+  device_id: order_by
+  quantity: order_by
+  shop: shop_order_by
+  shop_id: order_by
+}
+
+"""
+select columns of table "stock"
+"""
+enum stock_select_column {
+  """column name"""
+  device_id
+
+  """column name"""
+  quantity
+
+  """column name"""
+  shop_id
+}
+
+"""
+input type for updating data in table "stock"
+"""
+input stock_set_input {
+  device_id: Int
+  quantity: Int
+  shop_id: Int
+}
+
+"""aggregate stddev on columns"""
+type stock_stddev_fields {
+  device_id: Float
+  quantity: Float
+  shop_id: Float
+}
+
+"""
+order by stddev() on columns of table "stock"
+"""
+input stock_stddev_order_by {
+  device_id: order_by
+  quantity: order_by
+  shop_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type stock_stddev_pop_fields {
+  device_id: Float
+  quantity: Float
+  shop_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "stock"
+"""
+input stock_stddev_pop_order_by {
+  device_id: order_by
+  quantity: order_by
+  shop_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type stock_stddev_samp_fields {
+  device_id: Float
+  quantity: Float
+  shop_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "stock"
+"""
+input stock_stddev_samp_order_by {
+  device_id: order_by
+  quantity: order_by
+  shop_id: order_by
+}
+
+"""aggregate sum on columns"""
+type stock_sum_fields {
+  device_id: Int
+  quantity: Int
+  shop_id: Int
+}
+
+"""
+order by sum() on columns of table "stock"
+"""
+input stock_sum_order_by {
+  device_id: order_by
+  quantity: order_by
+  shop_id: order_by
+}
+
+"""
+update columns of table "stock"
+"""
+enum stock_update_column {
+  """column name"""
+  device_id
+
+  """column name"""
+  quantity
+
+  """column name"""
+  shop_id
+}
+
+"""aggregate var_pop on columns"""
+type stock_var_pop_fields {
+  device_id: Float
+  quantity: Float
+  shop_id: Float
+}
+
+"""
+order by var_pop() on columns of table "stock"
+"""
+input stock_var_pop_order_by {
+  device_id: order_by
+  quantity: order_by
+  shop_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type stock_var_samp_fields {
+  device_id: Float
+  quantity: Float
+  shop_id: Float
+}
+
+"""
+order by var_samp() on columns of table "stock"
+"""
+input stock_var_samp_order_by {
+  device_id: order_by
+  quantity: order_by
+  shop_id: order_by
+}
+
+"""aggregate variance on columns"""
+type stock_variance_fields {
+  device_id: Float
+  quantity: Float
+  shop_id: Float
+}
+
+"""
+order by variance() on columns of table "stock"
+"""
+input stock_variance_order_by {
+  device_id: order_by
+  quantity: order_by
+  shop_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "device"
+  """
+  device(
+    """distinct select on columns"""
+    distinct_on: [device_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [device_order_by!]
+
+    """filter the rows returned"""
+    where: device_bool_exp
+  ): [device!]!
+
+  """
+  fetch aggregated fields from the table: "device"
+  """
+  device_aggregate(
+    """distinct select on columns"""
+    distinct_on: [device_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [device_order_by!]
+
+    """filter the rows returned"""
+    where: device_bool_exp
+  ): device_aggregate!
+
+  """
+  fetch data from the table: "shop"
+  """
+  shop(
+    """distinct select on columns"""
+    distinct_on: [shop_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [shop_order_by!]
+
+    """filter the rows returned"""
+    where: shop_bool_exp
+  ): [shop!]!
+
+  """
+  fetch aggregated fields from the table: "shop"
+  """
+  shop_aggregate(
+    """distinct select on columns"""
+    distinct_on: [shop_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [shop_order_by!]
+
+    """filter the rows returned"""
+    where: shop_bool_exp
+  ): shop_aggregate!
+
+  """
+  fetch data from the table: "stock"
+  """
+  stock(
+    """distinct select on columns"""
+    distinct_on: [stock_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stock_order_by!]
+
+    """filter the rows returned"""
+    where: stock_bool_exp
+  ): [stock!]!
+
+  """
+  fetch aggregated fields from the table: "stock"
+  """
+  stock_aggregate(
+    """distinct select on columns"""
+    distinct_on: [stock_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stock_order_by!]
+
+    """filter the rows returned"""
+    where: stock_bool_exp
+  ): stock_aggregate!
+}

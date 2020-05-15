@@ -1,0 +1,1078 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "book"
+"""
+type book {
+  book_id: Int
+  issues: Float
+
+  """An array relationship"""
+  publications(
+    """distinct select on columns"""
+    distinct_on: [publication_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [publication_order_by!]
+
+    """filter the rows returned"""
+    where: publication_bool_exp
+  ): [publication!]!
+
+  """An aggregated array relationship"""
+  publications_aggregate(
+    """distinct select on columns"""
+    distinct_on: [publication_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [publication_order_by!]
+
+    """filter the rows returned"""
+    where: publication_bool_exp
+  ): publication_aggregate!
+  title: String
+  writer: String
+}
+
+"""
+aggregated selection of "book"
+"""
+type book_aggregate {
+  aggregate: book_aggregate_fields
+  nodes: [book!]!
+}
+
+"""
+aggregate fields of "book"
+"""
+type book_aggregate_fields {
+  avg: book_avg_fields
+  count(columns: [book_select_column!], distinct: Boolean): Int
+  max: book_max_fields
+  min: book_min_fields
+  stddev: book_stddev_fields
+  stddev_pop: book_stddev_pop_fields
+  stddev_samp: book_stddev_samp_fields
+  sum: book_sum_fields
+  var_pop: book_var_pop_fields
+  var_samp: book_var_samp_fields
+  variance: book_variance_fields
+}
+
+"""
+order by aggregate values of table "book"
+"""
+input book_aggregate_order_by {
+  avg: book_avg_order_by
+  count: order_by
+  max: book_max_order_by
+  min: book_min_order_by
+  stddev: book_stddev_order_by
+  stddev_pop: book_stddev_pop_order_by
+  stddev_samp: book_stddev_samp_order_by
+  sum: book_sum_order_by
+  var_pop: book_var_pop_order_by
+  var_samp: book_var_samp_order_by
+  variance: book_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "book"
+"""
+input book_arr_rel_insert_input {
+  data: [book_insert_input!]!
+  on_conflict: book_on_conflict
+}
+
+"""aggregate avg on columns"""
+type book_avg_fields {
+  book_id: Float
+  issues: Float
+}
+
+"""
+order by avg() on columns of table "book"
+"""
+input book_avg_order_by {
+  book_id: order_by
+  issues: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "book". All fields are combined with a logical 'AND'.
+"""
+input book_bool_exp {
+  _and: [book_bool_exp]
+  _not: book_bool_exp
+  _or: [book_bool_exp]
+  book_id: Int_comparison_exp
+  issues: Float_comparison_exp
+  publications: publication_bool_exp
+  title: String_comparison_exp
+  writer: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "book"
+"""
+enum book_constraint {
+  """unique or primary key constraint"""
+  idx_24205_sqlite_autoindex_book_1
+}
+
+"""
+input type for incrementing integer columne in table "book"
+"""
+input book_inc_input {
+  book_id: Int
+}
+
+"""
+input type for inserting data into table "book"
+"""
+input book_insert_input {
+  book_id: Int
+  issues: Float
+  publications: publication_arr_rel_insert_input
+  title: String
+  writer: String
+}
+
+"""aggregate max on columns"""
+type book_max_fields {
+  book_id: Int
+  issues: Float
+  title: String
+  writer: String
+}
+
+"""
+order by max() on columns of table "book"
+"""
+input book_max_order_by {
+  book_id: order_by
+  issues: order_by
+  title: order_by
+  writer: order_by
+}
+
+"""aggregate min on columns"""
+type book_min_fields {
+  book_id: Int
+  issues: Float
+  title: String
+  writer: String
+}
+
+"""
+order by min() on columns of table "book"
+"""
+input book_min_order_by {
+  book_id: order_by
+  issues: order_by
+  title: order_by
+  writer: order_by
+}
+
+"""
+response of any mutation on the table "book"
+"""
+type book_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [book!]!
+}
+
+"""
+input type for inserting object relation for remote table "book"
+"""
+input book_obj_rel_insert_input {
+  data: book_insert_input!
+  on_conflict: book_on_conflict
+}
+
+"""
+on conflict condition type for table "book"
+"""
+input book_on_conflict {
+  constraint: book_constraint!
+  update_columns: [book_update_column!]!
+  where: book_bool_exp
+}
+
+"""
+ordering options when selecting data from "book"
+"""
+input book_order_by {
+  book_id: order_by
+  issues: order_by
+  publications_aggregate: publication_aggregate_order_by
+  title: order_by
+  writer: order_by
+}
+
+"""
+select columns of table "book"
+"""
+enum book_select_column {
+  """column name"""
+  book_id
+
+  """column name"""
+  issues
+
+  """column name"""
+  title
+
+  """column name"""
+  writer
+}
+
+"""
+input type for updating data in table "book"
+"""
+input book_set_input {
+  book_id: Int
+  issues: Float
+  title: String
+  writer: String
+}
+
+"""aggregate stddev on columns"""
+type book_stddev_fields {
+  book_id: Float
+  issues: Float
+}
+
+"""
+order by stddev() on columns of table "book"
+"""
+input book_stddev_order_by {
+  book_id: order_by
+  issues: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type book_stddev_pop_fields {
+  book_id: Float
+  issues: Float
+}
+
+"""
+order by stddev_pop() on columns of table "book"
+"""
+input book_stddev_pop_order_by {
+  book_id: order_by
+  issues: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type book_stddev_samp_fields {
+  book_id: Float
+  issues: Float
+}
+
+"""
+order by stddev_samp() on columns of table "book"
+"""
+input book_stddev_samp_order_by {
+  book_id: order_by
+  issues: order_by
+}
+
+"""aggregate sum on columns"""
+type book_sum_fields {
+  book_id: Int
+  issues: Float
+}
+
+"""
+order by sum() on columns of table "book"
+"""
+input book_sum_order_by {
+  book_id: order_by
+  issues: order_by
+}
+
+"""
+update columns of table "book"
+"""
+enum book_update_column {
+  """column name"""
+  book_id
+
+  """column name"""
+  issues
+
+  """column name"""
+  title
+
+  """column name"""
+  writer
+}
+
+"""aggregate var_pop on columns"""
+type book_var_pop_fields {
+  book_id: Float
+  issues: Float
+}
+
+"""
+order by var_pop() on columns of table "book"
+"""
+input book_var_pop_order_by {
+  book_id: order_by
+  issues: order_by
+}
+
+"""aggregate var_samp on columns"""
+type book_var_samp_fields {
+  book_id: Float
+  issues: Float
+}
+
+"""
+order by var_samp() on columns of table "book"
+"""
+input book_var_samp_order_by {
+  book_id: order_by
+  issues: order_by
+}
+
+"""aggregate variance on columns"""
+type book_variance_fields {
+  book_id: Float
+  issues: Float
+}
+
+"""
+order by variance() on columns of table "book"
+"""
+input book_variance_order_by {
+  book_id: order_by
+  issues: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "book"
+  """
+  delete_book(
+    """filter the rows which have to be deleted"""
+    where: book_bool_exp!
+  ): book_mutation_response
+
+  """
+  delete data from the table: "publication"
+  """
+  delete_publication(
+    """filter the rows which have to be deleted"""
+    where: publication_bool_exp!
+  ): publication_mutation_response
+
+  """
+  insert data into the table: "book"
+  """
+  insert_book(
+    """the rows to be inserted"""
+    objects: [book_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: book_on_conflict
+  ): book_mutation_response
+
+  """
+  insert data into the table: "publication"
+  """
+  insert_publication(
+    """the rows to be inserted"""
+    objects: [publication_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: publication_on_conflict
+  ): publication_mutation_response
+
+  """
+  update data of the table: "book"
+  """
+  update_book(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: book_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: book_set_input
+
+    """filter the rows which have to be updated"""
+    where: book_bool_exp!
+  ): book_mutation_response
+
+  """
+  update data of the table: "publication"
+  """
+  update_publication(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: publication_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: publication_set_input
+
+    """filter the rows which have to be updated"""
+    where: publication_bool_exp!
+  ): publication_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "publication"
+"""
+type publication {
+  """An object relationship"""
+  book: book
+  book_id: Int
+  price: Float
+  publication_date: String
+  publication_id: Int
+  publisher: String
+}
+
+"""
+aggregated selection of "publication"
+"""
+type publication_aggregate {
+  aggregate: publication_aggregate_fields
+  nodes: [publication!]!
+}
+
+"""
+aggregate fields of "publication"
+"""
+type publication_aggregate_fields {
+  avg: publication_avg_fields
+  count(columns: [publication_select_column!], distinct: Boolean): Int
+  max: publication_max_fields
+  min: publication_min_fields
+  stddev: publication_stddev_fields
+  stddev_pop: publication_stddev_pop_fields
+  stddev_samp: publication_stddev_samp_fields
+  sum: publication_sum_fields
+  var_pop: publication_var_pop_fields
+  var_samp: publication_var_samp_fields
+  variance: publication_variance_fields
+}
+
+"""
+order by aggregate values of table "publication"
+"""
+input publication_aggregate_order_by {
+  avg: publication_avg_order_by
+  count: order_by
+  max: publication_max_order_by
+  min: publication_min_order_by
+  stddev: publication_stddev_order_by
+  stddev_pop: publication_stddev_pop_order_by
+  stddev_samp: publication_stddev_samp_order_by
+  sum: publication_sum_order_by
+  var_pop: publication_var_pop_order_by
+  var_samp: publication_var_samp_order_by
+  variance: publication_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "publication"
+"""
+input publication_arr_rel_insert_input {
+  data: [publication_insert_input!]!
+  on_conflict: publication_on_conflict
+}
+
+"""aggregate avg on columns"""
+type publication_avg_fields {
+  book_id: Float
+  price: Float
+  publication_id: Float
+}
+
+"""
+order by avg() on columns of table "publication"
+"""
+input publication_avg_order_by {
+  book_id: order_by
+  price: order_by
+  publication_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "publication". All fields are combined with a logical 'AND'.
+"""
+input publication_bool_exp {
+  _and: [publication_bool_exp]
+  _not: publication_bool_exp
+  _or: [publication_bool_exp]
+  book: book_bool_exp
+  book_id: Int_comparison_exp
+  price: Float_comparison_exp
+  publication_date: String_comparison_exp
+  publication_id: Int_comparison_exp
+  publisher: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "publication"
+"""
+enum publication_constraint {
+  """unique or primary key constraint"""
+  idx_24199_sqlite_autoindex_publication_1
+}
+
+"""
+input type for incrementing integer columne in table "publication"
+"""
+input publication_inc_input {
+  book_id: Int
+  publication_id: Int
+}
+
+"""
+input type for inserting data into table "publication"
+"""
+input publication_insert_input {
+  book: book_obj_rel_insert_input
+  book_id: Int
+  price: Float
+  publication_date: String
+  publication_id: Int
+  publisher: String
+}
+
+"""aggregate max on columns"""
+type publication_max_fields {
+  book_id: Int
+  price: Float
+  publication_date: String
+  publication_id: Int
+  publisher: String
+}
+
+"""
+order by max() on columns of table "publication"
+"""
+input publication_max_order_by {
+  book_id: order_by
+  price: order_by
+  publication_date: order_by
+  publication_id: order_by
+  publisher: order_by
+}
+
+"""aggregate min on columns"""
+type publication_min_fields {
+  book_id: Int
+  price: Float
+  publication_date: String
+  publication_id: Int
+  publisher: String
+}
+
+"""
+order by min() on columns of table "publication"
+"""
+input publication_min_order_by {
+  book_id: order_by
+  price: order_by
+  publication_date: order_by
+  publication_id: order_by
+  publisher: order_by
+}
+
+"""
+response of any mutation on the table "publication"
+"""
+type publication_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [publication!]!
+}
+
+"""
+input type for inserting object relation for remote table "publication"
+"""
+input publication_obj_rel_insert_input {
+  data: publication_insert_input!
+  on_conflict: publication_on_conflict
+}
+
+"""
+on conflict condition type for table "publication"
+"""
+input publication_on_conflict {
+  constraint: publication_constraint!
+  update_columns: [publication_update_column!]!
+  where: publication_bool_exp
+}
+
+"""
+ordering options when selecting data from "publication"
+"""
+input publication_order_by {
+  book: book_order_by
+  book_id: order_by
+  price: order_by
+  publication_date: order_by
+  publication_id: order_by
+  publisher: order_by
+}
+
+"""
+select columns of table "publication"
+"""
+enum publication_select_column {
+  """column name"""
+  book_id
+
+  """column name"""
+  price
+
+  """column name"""
+  publication_date
+
+  """column name"""
+  publication_id
+
+  """column name"""
+  publisher
+}
+
+"""
+input type for updating data in table "publication"
+"""
+input publication_set_input {
+  book_id: Int
+  price: Float
+  publication_date: String
+  publication_id: Int
+  publisher: String
+}
+
+"""aggregate stddev on columns"""
+type publication_stddev_fields {
+  book_id: Float
+  price: Float
+  publication_id: Float
+}
+
+"""
+order by stddev() on columns of table "publication"
+"""
+input publication_stddev_order_by {
+  book_id: order_by
+  price: order_by
+  publication_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type publication_stddev_pop_fields {
+  book_id: Float
+  price: Float
+  publication_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "publication"
+"""
+input publication_stddev_pop_order_by {
+  book_id: order_by
+  price: order_by
+  publication_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type publication_stddev_samp_fields {
+  book_id: Float
+  price: Float
+  publication_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "publication"
+"""
+input publication_stddev_samp_order_by {
+  book_id: order_by
+  price: order_by
+  publication_id: order_by
+}
+
+"""aggregate sum on columns"""
+type publication_sum_fields {
+  book_id: Int
+  price: Float
+  publication_id: Int
+}
+
+"""
+order by sum() on columns of table "publication"
+"""
+input publication_sum_order_by {
+  book_id: order_by
+  price: order_by
+  publication_id: order_by
+}
+
+"""
+update columns of table "publication"
+"""
+enum publication_update_column {
+  """column name"""
+  book_id
+
+  """column name"""
+  price
+
+  """column name"""
+  publication_date
+
+  """column name"""
+  publication_id
+
+  """column name"""
+  publisher
+}
+
+"""aggregate var_pop on columns"""
+type publication_var_pop_fields {
+  book_id: Float
+  price: Float
+  publication_id: Float
+}
+
+"""
+order by var_pop() on columns of table "publication"
+"""
+input publication_var_pop_order_by {
+  book_id: order_by
+  price: order_by
+  publication_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type publication_var_samp_fields {
+  book_id: Float
+  price: Float
+  publication_id: Float
+}
+
+"""
+order by var_samp() on columns of table "publication"
+"""
+input publication_var_samp_order_by {
+  book_id: order_by
+  price: order_by
+  publication_id: order_by
+}
+
+"""aggregate variance on columns"""
+type publication_variance_fields {
+  book_id: Float
+  price: Float
+  publication_id: Float
+}
+
+"""
+order by variance() on columns of table "publication"
+"""
+input publication_variance_order_by {
+  book_id: order_by
+  price: order_by
+  publication_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "book"
+  """
+  book(
+    """distinct select on columns"""
+    distinct_on: [book_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [book_order_by!]
+
+    """filter the rows returned"""
+    where: book_bool_exp
+  ): [book!]!
+
+  """
+  fetch aggregated fields from the table: "book"
+  """
+  book_aggregate(
+    """distinct select on columns"""
+    distinct_on: [book_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [book_order_by!]
+
+    """filter the rows returned"""
+    where: book_bool_exp
+  ): book_aggregate!
+
+  """
+  fetch data from the table: "publication"
+  """
+  publication(
+    """distinct select on columns"""
+    distinct_on: [publication_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [publication_order_by!]
+
+    """filter the rows returned"""
+    where: publication_bool_exp
+  ): [publication!]!
+
+  """
+  fetch aggregated fields from the table: "publication"
+  """
+  publication_aggregate(
+    """distinct select on columns"""
+    distinct_on: [publication_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [publication_order_by!]
+
+    """filter the rows returned"""
+    where: publication_bool_exp
+  ): publication_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "book"
+  """
+  book(
+    """distinct select on columns"""
+    distinct_on: [book_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [book_order_by!]
+
+    """filter the rows returned"""
+    where: book_bool_exp
+  ): [book!]!
+
+  """
+  fetch aggregated fields from the table: "book"
+  """
+  book_aggregate(
+    """distinct select on columns"""
+    distinct_on: [book_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [book_order_by!]
+
+    """filter the rows returned"""
+    where: book_bool_exp
+  ): book_aggregate!
+
+  """
+  fetch data from the table: "publication"
+  """
+  publication(
+    """distinct select on columns"""
+    distinct_on: [publication_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [publication_order_by!]
+
+    """filter the rows returned"""
+    where: publication_bool_exp
+  ): [publication!]!
+
+  """
+  fetch aggregated fields from the table: "publication"
+  """
+  publication_aggregate(
+    """distinct select on columns"""
+    distinct_on: [publication_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [publication_order_by!]
+
+    """filter the rows returned"""
+    where: publication_bool_exp
+  ): publication_aggregate!
+}

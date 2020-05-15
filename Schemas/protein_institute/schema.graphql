@@ -1,0 +1,1685 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "building"
+"""
+type building {
+  building_id: String!
+  floors: Int
+  height_feet: Int
+
+  """An array relationship"""
+  institutions(
+    """distinct select on columns"""
+    distinct_on: [institution_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [institution_order_by!]
+
+    """filter the rows returned"""
+    where: institution_bool_exp
+  ): [institution!]!
+
+  """An aggregated array relationship"""
+  institutions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [institution_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [institution_order_by!]
+
+    """filter the rows returned"""
+    where: institution_bool_exp
+  ): institution_aggregate!
+  name: String
+  street_address: String
+  years_as_tallest: String
+}
+
+"""
+aggregated selection of "building"
+"""
+type building_aggregate {
+  aggregate: building_aggregate_fields
+  nodes: [building!]!
+}
+
+"""
+aggregate fields of "building"
+"""
+type building_aggregate_fields {
+  avg: building_avg_fields
+  count(columns: [building_select_column!], distinct: Boolean): Int
+  max: building_max_fields
+  min: building_min_fields
+  stddev: building_stddev_fields
+  stddev_pop: building_stddev_pop_fields
+  stddev_samp: building_stddev_samp_fields
+  sum: building_sum_fields
+  var_pop: building_var_pop_fields
+  var_samp: building_var_samp_fields
+  variance: building_variance_fields
+}
+
+"""
+order by aggregate values of table "building"
+"""
+input building_aggregate_order_by {
+  avg: building_avg_order_by
+  count: order_by
+  max: building_max_order_by
+  min: building_min_order_by
+  stddev: building_stddev_order_by
+  stddev_pop: building_stddev_pop_order_by
+  stddev_samp: building_stddev_samp_order_by
+  sum: building_sum_order_by
+  var_pop: building_var_pop_order_by
+  var_samp: building_var_samp_order_by
+  variance: building_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "building"
+"""
+input building_arr_rel_insert_input {
+  data: [building_insert_input!]!
+  on_conflict: building_on_conflict
+}
+
+"""aggregate avg on columns"""
+type building_avg_fields {
+  floors: Float
+  height_feet: Float
+}
+
+"""
+order by avg() on columns of table "building"
+"""
+input building_avg_order_by {
+  floors: order_by
+  height_feet: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "building". All fields are combined with a logical 'AND'.
+"""
+input building_bool_exp {
+  _and: [building_bool_exp]
+  _not: building_bool_exp
+  _or: [building_bool_exp]
+  building_id: String_comparison_exp
+  floors: Int_comparison_exp
+  height_feet: Int_comparison_exp
+  institutions: institution_bool_exp
+  name: String_comparison_exp
+  street_address: String_comparison_exp
+  years_as_tallest: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "building"
+"""
+enum building_constraint {
+  """unique or primary key constraint"""
+  idx_24597_sqlite_autoindex_building_1
+}
+
+"""
+input type for incrementing integer columne in table "building"
+"""
+input building_inc_input {
+  floors: Int
+  height_feet: Int
+}
+
+"""
+input type for inserting data into table "building"
+"""
+input building_insert_input {
+  building_id: String
+  floors: Int
+  height_feet: Int
+  institutions: institution_arr_rel_insert_input
+  name: String
+  street_address: String
+  years_as_tallest: String
+}
+
+"""aggregate max on columns"""
+type building_max_fields {
+  building_id: String
+  floors: Int
+  height_feet: Int
+  name: String
+  street_address: String
+  years_as_tallest: String
+}
+
+"""
+order by max() on columns of table "building"
+"""
+input building_max_order_by {
+  building_id: order_by
+  floors: order_by
+  height_feet: order_by
+  name: order_by
+  street_address: order_by
+  years_as_tallest: order_by
+}
+
+"""aggregate min on columns"""
+type building_min_fields {
+  building_id: String
+  floors: Int
+  height_feet: Int
+  name: String
+  street_address: String
+  years_as_tallest: String
+}
+
+"""
+order by min() on columns of table "building"
+"""
+input building_min_order_by {
+  building_id: order_by
+  floors: order_by
+  height_feet: order_by
+  name: order_by
+  street_address: order_by
+  years_as_tallest: order_by
+}
+
+"""
+response of any mutation on the table "building"
+"""
+type building_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [building!]!
+}
+
+"""
+input type for inserting object relation for remote table "building"
+"""
+input building_obj_rel_insert_input {
+  data: building_insert_input!
+  on_conflict: building_on_conflict
+}
+
+"""
+on conflict condition type for table "building"
+"""
+input building_on_conflict {
+  constraint: building_constraint!
+  update_columns: [building_update_column!]!
+  where: building_bool_exp
+}
+
+"""
+ordering options when selecting data from "building"
+"""
+input building_order_by {
+  building_id: order_by
+  floors: order_by
+  height_feet: order_by
+  institutions_aggregate: institution_aggregate_order_by
+  name: order_by
+  street_address: order_by
+  years_as_tallest: order_by
+}
+
+"""
+select columns of table "building"
+"""
+enum building_select_column {
+  """column name"""
+  building_id
+
+  """column name"""
+  floors
+
+  """column name"""
+  height_feet
+
+  """column name"""
+  name
+
+  """column name"""
+  street_address
+
+  """column name"""
+  years_as_tallest
+}
+
+"""
+input type for updating data in table "building"
+"""
+input building_set_input {
+  building_id: String
+  floors: Int
+  height_feet: Int
+  name: String
+  street_address: String
+  years_as_tallest: String
+}
+
+"""aggregate stddev on columns"""
+type building_stddev_fields {
+  floors: Float
+  height_feet: Float
+}
+
+"""
+order by stddev() on columns of table "building"
+"""
+input building_stddev_order_by {
+  floors: order_by
+  height_feet: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type building_stddev_pop_fields {
+  floors: Float
+  height_feet: Float
+}
+
+"""
+order by stddev_pop() on columns of table "building"
+"""
+input building_stddev_pop_order_by {
+  floors: order_by
+  height_feet: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type building_stddev_samp_fields {
+  floors: Float
+  height_feet: Float
+}
+
+"""
+order by stddev_samp() on columns of table "building"
+"""
+input building_stddev_samp_order_by {
+  floors: order_by
+  height_feet: order_by
+}
+
+"""aggregate sum on columns"""
+type building_sum_fields {
+  floors: Int
+  height_feet: Int
+}
+
+"""
+order by sum() on columns of table "building"
+"""
+input building_sum_order_by {
+  floors: order_by
+  height_feet: order_by
+}
+
+"""
+update columns of table "building"
+"""
+enum building_update_column {
+  """column name"""
+  building_id
+
+  """column name"""
+  floors
+
+  """column name"""
+  height_feet
+
+  """column name"""
+  name
+
+  """column name"""
+  street_address
+
+  """column name"""
+  years_as_tallest
+}
+
+"""aggregate var_pop on columns"""
+type building_var_pop_fields {
+  floors: Float
+  height_feet: Float
+}
+
+"""
+order by var_pop() on columns of table "building"
+"""
+input building_var_pop_order_by {
+  floors: order_by
+  height_feet: order_by
+}
+
+"""aggregate var_samp on columns"""
+type building_var_samp_fields {
+  floors: Float
+  height_feet: Float
+}
+
+"""
+order by var_samp() on columns of table "building"
+"""
+input building_var_samp_order_by {
+  floors: order_by
+  height_feet: order_by
+}
+
+"""aggregate variance on columns"""
+type building_variance_fields {
+  floors: Float
+  height_feet: Float
+}
+
+"""
+order by variance() on columns of table "building"
+"""
+input building_variance_order_by {
+  floors: order_by
+  height_feet: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+columns and relationships of "institution"
+"""
+type institution {
+  """An object relationship"""
+  building: building
+  building_id: String
+  enrollment: Int
+  founded: Float
+  institution: String
+  institution_id: String
+  location: String
+  primary_conference: String
+
+  """An array relationship"""
+  proteins(
+    """distinct select on columns"""
+    distinct_on: [protein_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [protein_order_by!]
+
+    """filter the rows returned"""
+    where: protein_bool_exp
+  ): [protein!]!
+
+  """An aggregated array relationship"""
+  proteins_aggregate(
+    """distinct select on columns"""
+    distinct_on: [protein_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [protein_order_by!]
+
+    """filter the rows returned"""
+    where: protein_bool_exp
+  ): protein_aggregate!
+  team: String
+  type: String
+}
+
+"""
+aggregated selection of "institution"
+"""
+type institution_aggregate {
+  aggregate: institution_aggregate_fields
+  nodes: [institution!]!
+}
+
+"""
+aggregate fields of "institution"
+"""
+type institution_aggregate_fields {
+  avg: institution_avg_fields
+  count(columns: [institution_select_column!], distinct: Boolean): Int
+  max: institution_max_fields
+  min: institution_min_fields
+  stddev: institution_stddev_fields
+  stddev_pop: institution_stddev_pop_fields
+  stddev_samp: institution_stddev_samp_fields
+  sum: institution_sum_fields
+  var_pop: institution_var_pop_fields
+  var_samp: institution_var_samp_fields
+  variance: institution_variance_fields
+}
+
+"""
+order by aggregate values of table "institution"
+"""
+input institution_aggregate_order_by {
+  avg: institution_avg_order_by
+  count: order_by
+  max: institution_max_order_by
+  min: institution_min_order_by
+  stddev: institution_stddev_order_by
+  stddev_pop: institution_stddev_pop_order_by
+  stddev_samp: institution_stddev_samp_order_by
+  sum: institution_sum_order_by
+  var_pop: institution_var_pop_order_by
+  var_samp: institution_var_samp_order_by
+  variance: institution_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "institution"
+"""
+input institution_arr_rel_insert_input {
+  data: [institution_insert_input!]!
+  on_conflict: institution_on_conflict
+}
+
+"""aggregate avg on columns"""
+type institution_avg_fields {
+  enrollment: Float
+  founded: Float
+}
+
+"""
+order by avg() on columns of table "institution"
+"""
+input institution_avg_order_by {
+  enrollment: order_by
+  founded: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "institution". All fields are combined with a logical 'AND'.
+"""
+input institution_bool_exp {
+  _and: [institution_bool_exp]
+  _not: institution_bool_exp
+  _or: [institution_bool_exp]
+  building: building_bool_exp
+  building_id: String_comparison_exp
+  enrollment: Int_comparison_exp
+  founded: Float_comparison_exp
+  institution: String_comparison_exp
+  institution_id: String_comparison_exp
+  location: String_comparison_exp
+  primary_conference: String_comparison_exp
+  proteins: protein_bool_exp
+  team: String_comparison_exp
+  type: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "institution"
+"""
+enum institution_constraint {
+  """unique or primary key constraint"""
+  idx_24603_sqlite_autoindex_institution_1
+}
+
+"""
+input type for incrementing integer columne in table "institution"
+"""
+input institution_inc_input {
+  enrollment: Int
+}
+
+"""
+input type for inserting data into table "institution"
+"""
+input institution_insert_input {
+  building: building_obj_rel_insert_input
+  building_id: String
+  enrollment: Int
+  founded: Float
+  institution: String
+  institution_id: String
+  location: String
+  primary_conference: String
+  proteins: protein_arr_rel_insert_input
+  team: String
+  type: String
+}
+
+"""aggregate max on columns"""
+type institution_max_fields {
+  building_id: String
+  enrollment: Int
+  founded: Float
+  institution: String
+  institution_id: String
+  location: String
+  primary_conference: String
+  team: String
+  type: String
+}
+
+"""
+order by max() on columns of table "institution"
+"""
+input institution_max_order_by {
+  building_id: order_by
+  enrollment: order_by
+  founded: order_by
+  institution: order_by
+  institution_id: order_by
+  location: order_by
+  primary_conference: order_by
+  team: order_by
+  type: order_by
+}
+
+"""aggregate min on columns"""
+type institution_min_fields {
+  building_id: String
+  enrollment: Int
+  founded: Float
+  institution: String
+  institution_id: String
+  location: String
+  primary_conference: String
+  team: String
+  type: String
+}
+
+"""
+order by min() on columns of table "institution"
+"""
+input institution_min_order_by {
+  building_id: order_by
+  enrollment: order_by
+  founded: order_by
+  institution: order_by
+  institution_id: order_by
+  location: order_by
+  primary_conference: order_by
+  team: order_by
+  type: order_by
+}
+
+"""
+response of any mutation on the table "institution"
+"""
+type institution_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [institution!]!
+}
+
+"""
+input type for inserting object relation for remote table "institution"
+"""
+input institution_obj_rel_insert_input {
+  data: institution_insert_input!
+  on_conflict: institution_on_conflict
+}
+
+"""
+on conflict condition type for table "institution"
+"""
+input institution_on_conflict {
+  constraint: institution_constraint!
+  update_columns: [institution_update_column!]!
+  where: institution_bool_exp
+}
+
+"""
+ordering options when selecting data from "institution"
+"""
+input institution_order_by {
+  building: building_order_by
+  building_id: order_by
+  enrollment: order_by
+  founded: order_by
+  institution: order_by
+  institution_id: order_by
+  location: order_by
+  primary_conference: order_by
+  proteins_aggregate: protein_aggregate_order_by
+  team: order_by
+  type: order_by
+}
+
+"""
+select columns of table "institution"
+"""
+enum institution_select_column {
+  """column name"""
+  building_id
+
+  """column name"""
+  enrollment
+
+  """column name"""
+  founded
+
+  """column name"""
+  institution
+
+  """column name"""
+  institution_id
+
+  """column name"""
+  location
+
+  """column name"""
+  primary_conference
+
+  """column name"""
+  team
+
+  """column name"""
+  type
+}
+
+"""
+input type for updating data in table "institution"
+"""
+input institution_set_input {
+  building_id: String
+  enrollment: Int
+  founded: Float
+  institution: String
+  institution_id: String
+  location: String
+  primary_conference: String
+  team: String
+  type: String
+}
+
+"""aggregate stddev on columns"""
+type institution_stddev_fields {
+  enrollment: Float
+  founded: Float
+}
+
+"""
+order by stddev() on columns of table "institution"
+"""
+input institution_stddev_order_by {
+  enrollment: order_by
+  founded: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type institution_stddev_pop_fields {
+  enrollment: Float
+  founded: Float
+}
+
+"""
+order by stddev_pop() on columns of table "institution"
+"""
+input institution_stddev_pop_order_by {
+  enrollment: order_by
+  founded: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type institution_stddev_samp_fields {
+  enrollment: Float
+  founded: Float
+}
+
+"""
+order by stddev_samp() on columns of table "institution"
+"""
+input institution_stddev_samp_order_by {
+  enrollment: order_by
+  founded: order_by
+}
+
+"""aggregate sum on columns"""
+type institution_sum_fields {
+  enrollment: Int
+  founded: Float
+}
+
+"""
+order by sum() on columns of table "institution"
+"""
+input institution_sum_order_by {
+  enrollment: order_by
+  founded: order_by
+}
+
+"""
+update columns of table "institution"
+"""
+enum institution_update_column {
+  """column name"""
+  building_id
+
+  """column name"""
+  enrollment
+
+  """column name"""
+  founded
+
+  """column name"""
+  institution
+
+  """column name"""
+  institution_id
+
+  """column name"""
+  location
+
+  """column name"""
+  primary_conference
+
+  """column name"""
+  team
+
+  """column name"""
+  type
+}
+
+"""aggregate var_pop on columns"""
+type institution_var_pop_fields {
+  enrollment: Float
+  founded: Float
+}
+
+"""
+order by var_pop() on columns of table "institution"
+"""
+input institution_var_pop_order_by {
+  enrollment: order_by
+  founded: order_by
+}
+
+"""aggregate var_samp on columns"""
+type institution_var_samp_fields {
+  enrollment: Float
+  founded: Float
+}
+
+"""
+order by var_samp() on columns of table "institution"
+"""
+input institution_var_samp_order_by {
+  enrollment: order_by
+  founded: order_by
+}
+
+"""aggregate variance on columns"""
+type institution_variance_fields {
+  enrollment: Float
+  founded: Float
+}
+
+"""
+order by variance() on columns of table "institution"
+"""
+input institution_variance_order_by {
+  enrollment: order_by
+  founded: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "building"
+  """
+  delete_building(
+    """filter the rows which have to be deleted"""
+    where: building_bool_exp!
+  ): building_mutation_response
+
+  """
+  delete data from the table: "institution"
+  """
+  delete_institution(
+    """filter the rows which have to be deleted"""
+    where: institution_bool_exp!
+  ): institution_mutation_response
+
+  """
+  delete data from the table: "protein"
+  """
+  delete_protein(
+    """filter the rows which have to be deleted"""
+    where: protein_bool_exp!
+  ): protein_mutation_response
+
+  """
+  insert data into the table: "building"
+  """
+  insert_building(
+    """the rows to be inserted"""
+    objects: [building_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: building_on_conflict
+  ): building_mutation_response
+
+  """
+  insert data into the table: "institution"
+  """
+  insert_institution(
+    """the rows to be inserted"""
+    objects: [institution_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: institution_on_conflict
+  ): institution_mutation_response
+
+  """
+  insert data into the table: "protein"
+  """
+  insert_protein(
+    """the rows to be inserted"""
+    objects: [protein_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: protein_on_conflict
+  ): protein_mutation_response
+
+  """
+  update data of the table: "building"
+  """
+  update_building(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: building_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: building_set_input
+
+    """filter the rows which have to be updated"""
+    where: building_bool_exp!
+  ): building_mutation_response
+
+  """
+  update data of the table: "institution"
+  """
+  update_institution(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: institution_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: institution_set_input
+
+    """filter the rows which have to be updated"""
+    where: institution_bool_exp!
+  ): institution_mutation_response
+
+  """
+  update data of the table: "protein"
+  """
+  update_protein(
+    """sets the columns of the filtered rows to the given values"""
+    _set: protein_set_input
+
+    """filter the rows which have to be updated"""
+    where: protein_bool_exp!
+  ): protein_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "protein"
+"""
+type protein {
+  accession_number: String
+  common_name: String!
+  divergence_from_human_lineage: Float
+
+  """An object relationship"""
+  institution: institution
+  institution_id: String
+  protein_name: String
+  sequence_identity_to_human_protein: String
+  sequence_length: Float
+}
+
+"""
+aggregated selection of "protein"
+"""
+type protein_aggregate {
+  aggregate: protein_aggregate_fields
+  nodes: [protein!]!
+}
+
+"""
+aggregate fields of "protein"
+"""
+type protein_aggregate_fields {
+  avg: protein_avg_fields
+  count(columns: [protein_select_column!], distinct: Boolean): Int
+  max: protein_max_fields
+  min: protein_min_fields
+  stddev: protein_stddev_fields
+  stddev_pop: protein_stddev_pop_fields
+  stddev_samp: protein_stddev_samp_fields
+  sum: protein_sum_fields
+  var_pop: protein_var_pop_fields
+  var_samp: protein_var_samp_fields
+  variance: protein_variance_fields
+}
+
+"""
+order by aggregate values of table "protein"
+"""
+input protein_aggregate_order_by {
+  avg: protein_avg_order_by
+  count: order_by
+  max: protein_max_order_by
+  min: protein_min_order_by
+  stddev: protein_stddev_order_by
+  stddev_pop: protein_stddev_pop_order_by
+  stddev_samp: protein_stddev_samp_order_by
+  sum: protein_sum_order_by
+  var_pop: protein_var_pop_order_by
+  var_samp: protein_var_samp_order_by
+  variance: protein_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "protein"
+"""
+input protein_arr_rel_insert_input {
+  data: [protein_insert_input!]!
+  on_conflict: protein_on_conflict
+}
+
+"""aggregate avg on columns"""
+type protein_avg_fields {
+  divergence_from_human_lineage: Float
+  sequence_length: Float
+}
+
+"""
+order by avg() on columns of table "protein"
+"""
+input protein_avg_order_by {
+  divergence_from_human_lineage: order_by
+  sequence_length: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "protein". All fields are combined with a logical 'AND'.
+"""
+input protein_bool_exp {
+  _and: [protein_bool_exp]
+  _not: protein_bool_exp
+  _or: [protein_bool_exp]
+  accession_number: String_comparison_exp
+  common_name: String_comparison_exp
+  divergence_from_human_lineage: Float_comparison_exp
+  institution: institution_bool_exp
+  institution_id: String_comparison_exp
+  protein_name: String_comparison_exp
+  sequence_identity_to_human_protein: String_comparison_exp
+  sequence_length: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "protein"
+"""
+enum protein_constraint {
+  """unique or primary key constraint"""
+  idx_24609_sqlite_autoindex_protein_1
+}
+
+"""
+input type for inserting data into table "protein"
+"""
+input protein_insert_input {
+  accession_number: String
+  common_name: String
+  divergence_from_human_lineage: Float
+  institution: institution_obj_rel_insert_input
+  institution_id: String
+  protein_name: String
+  sequence_identity_to_human_protein: String
+  sequence_length: Float
+}
+
+"""aggregate max on columns"""
+type protein_max_fields {
+  accession_number: String
+  common_name: String
+  divergence_from_human_lineage: Float
+  institution_id: String
+  protein_name: String
+  sequence_identity_to_human_protein: String
+  sequence_length: Float
+}
+
+"""
+order by max() on columns of table "protein"
+"""
+input protein_max_order_by {
+  accession_number: order_by
+  common_name: order_by
+  divergence_from_human_lineage: order_by
+  institution_id: order_by
+  protein_name: order_by
+  sequence_identity_to_human_protein: order_by
+  sequence_length: order_by
+}
+
+"""aggregate min on columns"""
+type protein_min_fields {
+  accession_number: String
+  common_name: String
+  divergence_from_human_lineage: Float
+  institution_id: String
+  protein_name: String
+  sequence_identity_to_human_protein: String
+  sequence_length: Float
+}
+
+"""
+order by min() on columns of table "protein"
+"""
+input protein_min_order_by {
+  accession_number: order_by
+  common_name: order_by
+  divergence_from_human_lineage: order_by
+  institution_id: order_by
+  protein_name: order_by
+  sequence_identity_to_human_protein: order_by
+  sequence_length: order_by
+}
+
+"""
+response of any mutation on the table "protein"
+"""
+type protein_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [protein!]!
+}
+
+"""
+input type for inserting object relation for remote table "protein"
+"""
+input protein_obj_rel_insert_input {
+  data: protein_insert_input!
+  on_conflict: protein_on_conflict
+}
+
+"""
+on conflict condition type for table "protein"
+"""
+input protein_on_conflict {
+  constraint: protein_constraint!
+  update_columns: [protein_update_column!]!
+  where: protein_bool_exp
+}
+
+"""
+ordering options when selecting data from "protein"
+"""
+input protein_order_by {
+  accession_number: order_by
+  common_name: order_by
+  divergence_from_human_lineage: order_by
+  institution: institution_order_by
+  institution_id: order_by
+  protein_name: order_by
+  sequence_identity_to_human_protein: order_by
+  sequence_length: order_by
+}
+
+"""
+select columns of table "protein"
+"""
+enum protein_select_column {
+  """column name"""
+  accession_number
+
+  """column name"""
+  common_name
+
+  """column name"""
+  divergence_from_human_lineage
+
+  """column name"""
+  institution_id
+
+  """column name"""
+  protein_name
+
+  """column name"""
+  sequence_identity_to_human_protein
+
+  """column name"""
+  sequence_length
+}
+
+"""
+input type for updating data in table "protein"
+"""
+input protein_set_input {
+  accession_number: String
+  common_name: String
+  divergence_from_human_lineage: Float
+  institution_id: String
+  protein_name: String
+  sequence_identity_to_human_protein: String
+  sequence_length: Float
+}
+
+"""aggregate stddev on columns"""
+type protein_stddev_fields {
+  divergence_from_human_lineage: Float
+  sequence_length: Float
+}
+
+"""
+order by stddev() on columns of table "protein"
+"""
+input protein_stddev_order_by {
+  divergence_from_human_lineage: order_by
+  sequence_length: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type protein_stddev_pop_fields {
+  divergence_from_human_lineage: Float
+  sequence_length: Float
+}
+
+"""
+order by stddev_pop() on columns of table "protein"
+"""
+input protein_stddev_pop_order_by {
+  divergence_from_human_lineage: order_by
+  sequence_length: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type protein_stddev_samp_fields {
+  divergence_from_human_lineage: Float
+  sequence_length: Float
+}
+
+"""
+order by stddev_samp() on columns of table "protein"
+"""
+input protein_stddev_samp_order_by {
+  divergence_from_human_lineage: order_by
+  sequence_length: order_by
+}
+
+"""aggregate sum on columns"""
+type protein_sum_fields {
+  divergence_from_human_lineage: Float
+  sequence_length: Float
+}
+
+"""
+order by sum() on columns of table "protein"
+"""
+input protein_sum_order_by {
+  divergence_from_human_lineage: order_by
+  sequence_length: order_by
+}
+
+"""
+update columns of table "protein"
+"""
+enum protein_update_column {
+  """column name"""
+  accession_number
+
+  """column name"""
+  common_name
+
+  """column name"""
+  divergence_from_human_lineage
+
+  """column name"""
+  institution_id
+
+  """column name"""
+  protein_name
+
+  """column name"""
+  sequence_identity_to_human_protein
+
+  """column name"""
+  sequence_length
+}
+
+"""aggregate var_pop on columns"""
+type protein_var_pop_fields {
+  divergence_from_human_lineage: Float
+  sequence_length: Float
+}
+
+"""
+order by var_pop() on columns of table "protein"
+"""
+input protein_var_pop_order_by {
+  divergence_from_human_lineage: order_by
+  sequence_length: order_by
+}
+
+"""aggregate var_samp on columns"""
+type protein_var_samp_fields {
+  divergence_from_human_lineage: Float
+  sequence_length: Float
+}
+
+"""
+order by var_samp() on columns of table "protein"
+"""
+input protein_var_samp_order_by {
+  divergence_from_human_lineage: order_by
+  sequence_length: order_by
+}
+
+"""aggregate variance on columns"""
+type protein_variance_fields {
+  divergence_from_human_lineage: Float
+  sequence_length: Float
+}
+
+"""
+order by variance() on columns of table "protein"
+"""
+input protein_variance_order_by {
+  divergence_from_human_lineage: order_by
+  sequence_length: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "building"
+  """
+  building(
+    """distinct select on columns"""
+    distinct_on: [building_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [building_order_by!]
+
+    """filter the rows returned"""
+    where: building_bool_exp
+  ): [building!]!
+
+  """
+  fetch aggregated fields from the table: "building"
+  """
+  building_aggregate(
+    """distinct select on columns"""
+    distinct_on: [building_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [building_order_by!]
+
+    """filter the rows returned"""
+    where: building_bool_exp
+  ): building_aggregate!
+
+  """fetch data from the table: "building" using primary key columns"""
+  building_by_pk(building_id: String!): building
+
+  """
+  fetch data from the table: "institution"
+  """
+  institution(
+    """distinct select on columns"""
+    distinct_on: [institution_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [institution_order_by!]
+
+    """filter the rows returned"""
+    where: institution_bool_exp
+  ): [institution!]!
+
+  """
+  fetch aggregated fields from the table: "institution"
+  """
+  institution_aggregate(
+    """distinct select on columns"""
+    distinct_on: [institution_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [institution_order_by!]
+
+    """filter the rows returned"""
+    where: institution_bool_exp
+  ): institution_aggregate!
+
+  """
+  fetch data from the table: "protein"
+  """
+  protein(
+    """distinct select on columns"""
+    distinct_on: [protein_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [protein_order_by!]
+
+    """filter the rows returned"""
+    where: protein_bool_exp
+  ): [protein!]!
+
+  """
+  fetch aggregated fields from the table: "protein"
+  """
+  protein_aggregate(
+    """distinct select on columns"""
+    distinct_on: [protein_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [protein_order_by!]
+
+    """filter the rows returned"""
+    where: protein_bool_exp
+  ): protein_aggregate!
+
+  """fetch data from the table: "protein" using primary key columns"""
+  protein_by_pk(common_name: String!): protein
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "building"
+  """
+  building(
+    """distinct select on columns"""
+    distinct_on: [building_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [building_order_by!]
+
+    """filter the rows returned"""
+    where: building_bool_exp
+  ): [building!]!
+
+  """
+  fetch aggregated fields from the table: "building"
+  """
+  building_aggregate(
+    """distinct select on columns"""
+    distinct_on: [building_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [building_order_by!]
+
+    """filter the rows returned"""
+    where: building_bool_exp
+  ): building_aggregate!
+
+  """fetch data from the table: "building" using primary key columns"""
+  building_by_pk(building_id: String!): building
+
+  """
+  fetch data from the table: "institution"
+  """
+  institution(
+    """distinct select on columns"""
+    distinct_on: [institution_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [institution_order_by!]
+
+    """filter the rows returned"""
+    where: institution_bool_exp
+  ): [institution!]!
+
+  """
+  fetch aggregated fields from the table: "institution"
+  """
+  institution_aggregate(
+    """distinct select on columns"""
+    distinct_on: [institution_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [institution_order_by!]
+
+    """filter the rows returned"""
+    where: institution_bool_exp
+  ): institution_aggregate!
+
+  """
+  fetch data from the table: "protein"
+  """
+  protein(
+    """distinct select on columns"""
+    distinct_on: [protein_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [protein_order_by!]
+
+    """filter the rows returned"""
+    where: protein_bool_exp
+  ): [protein!]!
+
+  """
+  fetch aggregated fields from the table: "protein"
+  """
+  protein_aggregate(
+    """distinct select on columns"""
+    distinct_on: [protein_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [protein_order_by!]
+
+    """filter the rows returned"""
+    where: protein_bool_exp
+  ): protein_aggregate!
+
+  """fetch data from the table: "protein" using primary key columns"""
+  protein_by_pk(common_name: String!): protein
+}

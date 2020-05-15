@@ -1,0 +1,1609 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Boolean. All fields are combined with logical 'AND'.
+"""
+input Boolean_comparison_exp {
+  _eq: Boolean
+  _gt: Boolean
+  _gte: Boolean
+  _in: [Boolean!]
+  _is_null: Boolean
+  _lt: Boolean
+  _lte: Boolean
+  _neq: Boolean
+  _nin: [Boolean!]
+}
+
+"""
+columns and relationships of "debate"
+"""
+type debate {
+  date: String
+  debate_id: Int
+
+  """An array relationship"""
+  debate_people(
+    """distinct select on columns"""
+    distinct_on: [debate_people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [debate_people_order_by!]
+
+    """filter the rows returned"""
+    where: debate_people_bool_exp
+  ): [debate_people!]!
+
+  """An aggregated array relationship"""
+  debate_people_aggregate(
+    """distinct select on columns"""
+    distinct_on: [debate_people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [debate_people_order_by!]
+
+    """filter the rows returned"""
+    where: debate_people_bool_exp
+  ): debate_people_aggregate!
+  num_of_audience: Int
+  venue: String
+}
+
+"""
+aggregated selection of "debate"
+"""
+type debate_aggregate {
+  aggregate: debate_aggregate_fields
+  nodes: [debate!]!
+}
+
+"""
+aggregate fields of "debate"
+"""
+type debate_aggregate_fields {
+  avg: debate_avg_fields
+  count(columns: [debate_select_column!], distinct: Boolean): Int
+  max: debate_max_fields
+  min: debate_min_fields
+  stddev: debate_stddev_fields
+  stddev_pop: debate_stddev_pop_fields
+  stddev_samp: debate_stddev_samp_fields
+  sum: debate_sum_fields
+  var_pop: debate_var_pop_fields
+  var_samp: debate_var_samp_fields
+  variance: debate_variance_fields
+}
+
+"""
+order by aggregate values of table "debate"
+"""
+input debate_aggregate_order_by {
+  avg: debate_avg_order_by
+  count: order_by
+  max: debate_max_order_by
+  min: debate_min_order_by
+  stddev: debate_stddev_order_by
+  stddev_pop: debate_stddev_pop_order_by
+  stddev_samp: debate_stddev_samp_order_by
+  sum: debate_sum_order_by
+  var_pop: debate_var_pop_order_by
+  var_samp: debate_var_samp_order_by
+  variance: debate_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "debate"
+"""
+input debate_arr_rel_insert_input {
+  data: [debate_insert_input!]!
+  on_conflict: debate_on_conflict
+}
+
+"""aggregate avg on columns"""
+type debate_avg_fields {
+  debate_id: Float
+  num_of_audience: Float
+}
+
+"""
+order by avg() on columns of table "debate"
+"""
+input debate_avg_order_by {
+  debate_id: order_by
+  num_of_audience: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "debate". All fields are combined with a logical 'AND'.
+"""
+input debate_bool_exp {
+  _and: [debate_bool_exp]
+  _not: debate_bool_exp
+  _or: [debate_bool_exp]
+  date: String_comparison_exp
+  debate_id: Int_comparison_exp
+  debate_people: debate_people_bool_exp
+  num_of_audience: Int_comparison_exp
+  venue: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "debate"
+"""
+enum debate_constraint {
+  """unique or primary key constraint"""
+  idx_21134_sqlite_autoindex_debate_1
+}
+
+"""
+input type for incrementing integer columne in table "debate"
+"""
+input debate_inc_input {
+  debate_id: Int
+  num_of_audience: Int
+}
+
+"""
+input type for inserting data into table "debate"
+"""
+input debate_insert_input {
+  date: String
+  debate_id: Int
+  debate_people: debate_people_arr_rel_insert_input
+  num_of_audience: Int
+  venue: String
+}
+
+"""aggregate max on columns"""
+type debate_max_fields {
+  date: String
+  debate_id: Int
+  num_of_audience: Int
+  venue: String
+}
+
+"""
+order by max() on columns of table "debate"
+"""
+input debate_max_order_by {
+  date: order_by
+  debate_id: order_by
+  num_of_audience: order_by
+  venue: order_by
+}
+
+"""aggregate min on columns"""
+type debate_min_fields {
+  date: String
+  debate_id: Int
+  num_of_audience: Int
+  venue: String
+}
+
+"""
+order by min() on columns of table "debate"
+"""
+input debate_min_order_by {
+  date: order_by
+  debate_id: order_by
+  num_of_audience: order_by
+  venue: order_by
+}
+
+"""
+response of any mutation on the table "debate"
+"""
+type debate_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [debate!]!
+}
+
+"""
+input type for inserting object relation for remote table "debate"
+"""
+input debate_obj_rel_insert_input {
+  data: debate_insert_input!
+  on_conflict: debate_on_conflict
+}
+
+"""
+on conflict condition type for table "debate"
+"""
+input debate_on_conflict {
+  constraint: debate_constraint!
+  update_columns: [debate_update_column!]!
+  where: debate_bool_exp
+}
+
+"""
+ordering options when selecting data from "debate"
+"""
+input debate_order_by {
+  date: order_by
+  debate_id: order_by
+  debate_people_aggregate: debate_people_aggregate_order_by
+  num_of_audience: order_by
+  venue: order_by
+}
+
+"""
+columns and relationships of "debate_people"
+"""
+type debate_people {
+  affirmative: Int
+
+  """An object relationship"""
+  debate: debate
+  debate_id: Int
+  if_affirmative_win: Boolean
+  negative: Int
+
+  """An object relationship"""
+  personByAffirmative: people
+
+  """An object relationship"""
+  personByNegative: people
+}
+
+"""
+aggregated selection of "debate_people"
+"""
+type debate_people_aggregate {
+  aggregate: debate_people_aggregate_fields
+  nodes: [debate_people!]!
+}
+
+"""
+aggregate fields of "debate_people"
+"""
+type debate_people_aggregate_fields {
+  avg: debate_people_avg_fields
+  count(columns: [debate_people_select_column!], distinct: Boolean): Int
+  max: debate_people_max_fields
+  min: debate_people_min_fields
+  stddev: debate_people_stddev_fields
+  stddev_pop: debate_people_stddev_pop_fields
+  stddev_samp: debate_people_stddev_samp_fields
+  sum: debate_people_sum_fields
+  var_pop: debate_people_var_pop_fields
+  var_samp: debate_people_var_samp_fields
+  variance: debate_people_variance_fields
+}
+
+"""
+order by aggregate values of table "debate_people"
+"""
+input debate_people_aggregate_order_by {
+  avg: debate_people_avg_order_by
+  count: order_by
+  max: debate_people_max_order_by
+  min: debate_people_min_order_by
+  stddev: debate_people_stddev_order_by
+  stddev_pop: debate_people_stddev_pop_order_by
+  stddev_samp: debate_people_stddev_samp_order_by
+  sum: debate_people_sum_order_by
+  var_pop: debate_people_var_pop_order_by
+  var_samp: debate_people_var_samp_order_by
+  variance: debate_people_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "debate_people"
+"""
+input debate_people_arr_rel_insert_input {
+  data: [debate_people_insert_input!]!
+  on_conflict: debate_people_on_conflict
+}
+
+"""aggregate avg on columns"""
+type debate_people_avg_fields {
+  affirmative: Float
+  debate_id: Float
+  negative: Float
+}
+
+"""
+order by avg() on columns of table "debate_people"
+"""
+input debate_people_avg_order_by {
+  affirmative: order_by
+  debate_id: order_by
+  negative: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "debate_people". All fields are combined with a logical 'AND'.
+"""
+input debate_people_bool_exp {
+  _and: [debate_people_bool_exp]
+  _not: debate_people_bool_exp
+  _or: [debate_people_bool_exp]
+  affirmative: Int_comparison_exp
+  debate: debate_bool_exp
+  debate_id: Int_comparison_exp
+  if_affirmative_win: Boolean_comparison_exp
+  negative: Int_comparison_exp
+  personByAffirmative: people_bool_exp
+  personByNegative: people_bool_exp
+}
+
+"""
+unique or primary key constraints on table "debate_people"
+"""
+enum debate_people_constraint {
+  """unique or primary key constraint"""
+  idx_21140_sqlite_autoindex_debate_people_1
+}
+
+"""
+input type for incrementing integer columne in table "debate_people"
+"""
+input debate_people_inc_input {
+  affirmative: Int
+  debate_id: Int
+  negative: Int
+}
+
+"""
+input type for inserting data into table "debate_people"
+"""
+input debate_people_insert_input {
+  affirmative: Int
+  debate: debate_obj_rel_insert_input
+  debate_id: Int
+  if_affirmative_win: Boolean
+  negative: Int
+  personByAffirmative: people_obj_rel_insert_input
+  personByNegative: people_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type debate_people_max_fields {
+  affirmative: Int
+  debate_id: Int
+  negative: Int
+}
+
+"""
+order by max() on columns of table "debate_people"
+"""
+input debate_people_max_order_by {
+  affirmative: order_by
+  debate_id: order_by
+  negative: order_by
+}
+
+"""aggregate min on columns"""
+type debate_people_min_fields {
+  affirmative: Int
+  debate_id: Int
+  negative: Int
+}
+
+"""
+order by min() on columns of table "debate_people"
+"""
+input debate_people_min_order_by {
+  affirmative: order_by
+  debate_id: order_by
+  negative: order_by
+}
+
+"""
+response of any mutation on the table "debate_people"
+"""
+type debate_people_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [debate_people!]!
+}
+
+"""
+input type for inserting object relation for remote table "debate_people"
+"""
+input debate_people_obj_rel_insert_input {
+  data: debate_people_insert_input!
+  on_conflict: debate_people_on_conflict
+}
+
+"""
+on conflict condition type for table "debate_people"
+"""
+input debate_people_on_conflict {
+  constraint: debate_people_constraint!
+  update_columns: [debate_people_update_column!]!
+  where: debate_people_bool_exp
+}
+
+"""
+ordering options when selecting data from "debate_people"
+"""
+input debate_people_order_by {
+  affirmative: order_by
+  debate: debate_order_by
+  debate_id: order_by
+  if_affirmative_win: order_by
+  negative: order_by
+  personByAffirmative: people_order_by
+  personByNegative: people_order_by
+}
+
+"""
+select columns of table "debate_people"
+"""
+enum debate_people_select_column {
+  """column name"""
+  affirmative
+
+  """column name"""
+  debate_id
+
+  """column name"""
+  if_affirmative_win
+
+  """column name"""
+  negative
+}
+
+"""
+input type for updating data in table "debate_people"
+"""
+input debate_people_set_input {
+  affirmative: Int
+  debate_id: Int
+  if_affirmative_win: Boolean
+  negative: Int
+}
+
+"""aggregate stddev on columns"""
+type debate_people_stddev_fields {
+  affirmative: Float
+  debate_id: Float
+  negative: Float
+}
+
+"""
+order by stddev() on columns of table "debate_people"
+"""
+input debate_people_stddev_order_by {
+  affirmative: order_by
+  debate_id: order_by
+  negative: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type debate_people_stddev_pop_fields {
+  affirmative: Float
+  debate_id: Float
+  negative: Float
+}
+
+"""
+order by stddev_pop() on columns of table "debate_people"
+"""
+input debate_people_stddev_pop_order_by {
+  affirmative: order_by
+  debate_id: order_by
+  negative: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type debate_people_stddev_samp_fields {
+  affirmative: Float
+  debate_id: Float
+  negative: Float
+}
+
+"""
+order by stddev_samp() on columns of table "debate_people"
+"""
+input debate_people_stddev_samp_order_by {
+  affirmative: order_by
+  debate_id: order_by
+  negative: order_by
+}
+
+"""aggregate sum on columns"""
+type debate_people_sum_fields {
+  affirmative: Int
+  debate_id: Int
+  negative: Int
+}
+
+"""
+order by sum() on columns of table "debate_people"
+"""
+input debate_people_sum_order_by {
+  affirmative: order_by
+  debate_id: order_by
+  negative: order_by
+}
+
+"""
+update columns of table "debate_people"
+"""
+enum debate_people_update_column {
+  """column name"""
+  affirmative
+
+  """column name"""
+  debate_id
+
+  """column name"""
+  if_affirmative_win
+
+  """column name"""
+  negative
+}
+
+"""aggregate var_pop on columns"""
+type debate_people_var_pop_fields {
+  affirmative: Float
+  debate_id: Float
+  negative: Float
+}
+
+"""
+order by var_pop() on columns of table "debate_people"
+"""
+input debate_people_var_pop_order_by {
+  affirmative: order_by
+  debate_id: order_by
+  negative: order_by
+}
+
+"""aggregate var_samp on columns"""
+type debate_people_var_samp_fields {
+  affirmative: Float
+  debate_id: Float
+  negative: Float
+}
+
+"""
+order by var_samp() on columns of table "debate_people"
+"""
+input debate_people_var_samp_order_by {
+  affirmative: order_by
+  debate_id: order_by
+  negative: order_by
+}
+
+"""aggregate variance on columns"""
+type debate_people_variance_fields {
+  affirmative: Float
+  debate_id: Float
+  negative: Float
+}
+
+"""
+order by variance() on columns of table "debate_people"
+"""
+input debate_people_variance_order_by {
+  affirmative: order_by
+  debate_id: order_by
+  negative: order_by
+}
+
+"""
+select columns of table "debate"
+"""
+enum debate_select_column {
+  """column name"""
+  date
+
+  """column name"""
+  debate_id
+
+  """column name"""
+  num_of_audience
+
+  """column name"""
+  venue
+}
+
+"""
+input type for updating data in table "debate"
+"""
+input debate_set_input {
+  date: String
+  debate_id: Int
+  num_of_audience: Int
+  venue: String
+}
+
+"""aggregate stddev on columns"""
+type debate_stddev_fields {
+  debate_id: Float
+  num_of_audience: Float
+}
+
+"""
+order by stddev() on columns of table "debate"
+"""
+input debate_stddev_order_by {
+  debate_id: order_by
+  num_of_audience: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type debate_stddev_pop_fields {
+  debate_id: Float
+  num_of_audience: Float
+}
+
+"""
+order by stddev_pop() on columns of table "debate"
+"""
+input debate_stddev_pop_order_by {
+  debate_id: order_by
+  num_of_audience: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type debate_stddev_samp_fields {
+  debate_id: Float
+  num_of_audience: Float
+}
+
+"""
+order by stddev_samp() on columns of table "debate"
+"""
+input debate_stddev_samp_order_by {
+  debate_id: order_by
+  num_of_audience: order_by
+}
+
+"""aggregate sum on columns"""
+type debate_sum_fields {
+  debate_id: Int
+  num_of_audience: Int
+}
+
+"""
+order by sum() on columns of table "debate"
+"""
+input debate_sum_order_by {
+  debate_id: order_by
+  num_of_audience: order_by
+}
+
+"""
+update columns of table "debate"
+"""
+enum debate_update_column {
+  """column name"""
+  date
+
+  """column name"""
+  debate_id
+
+  """column name"""
+  num_of_audience
+
+  """column name"""
+  venue
+}
+
+"""aggregate var_pop on columns"""
+type debate_var_pop_fields {
+  debate_id: Float
+  num_of_audience: Float
+}
+
+"""
+order by var_pop() on columns of table "debate"
+"""
+input debate_var_pop_order_by {
+  debate_id: order_by
+  num_of_audience: order_by
+}
+
+"""aggregate var_samp on columns"""
+type debate_var_samp_fields {
+  debate_id: Float
+  num_of_audience: Float
+}
+
+"""
+order by var_samp() on columns of table "debate"
+"""
+input debate_var_samp_order_by {
+  debate_id: order_by
+  num_of_audience: order_by
+}
+
+"""aggregate variance on columns"""
+type debate_variance_fields {
+  debate_id: Float
+  num_of_audience: Float
+}
+
+"""
+order by variance() on columns of table "debate"
+"""
+input debate_variance_order_by {
+  debate_id: order_by
+  num_of_audience: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "debate"
+  """
+  delete_debate(
+    """filter the rows which have to be deleted"""
+    where: debate_bool_exp!
+  ): debate_mutation_response
+
+  """
+  delete data from the table: "debate_people"
+  """
+  delete_debate_people(
+    """filter the rows which have to be deleted"""
+    where: debate_people_bool_exp!
+  ): debate_people_mutation_response
+
+  """
+  delete data from the table: "people"
+  """
+  delete_people(
+    """filter the rows which have to be deleted"""
+    where: people_bool_exp!
+  ): people_mutation_response
+
+  """
+  insert data into the table: "debate"
+  """
+  insert_debate(
+    """the rows to be inserted"""
+    objects: [debate_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: debate_on_conflict
+  ): debate_mutation_response
+
+  """
+  insert data into the table: "debate_people"
+  """
+  insert_debate_people(
+    """the rows to be inserted"""
+    objects: [debate_people_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: debate_people_on_conflict
+  ): debate_people_mutation_response
+
+  """
+  insert data into the table: "people"
+  """
+  insert_people(
+    """the rows to be inserted"""
+    objects: [people_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: people_on_conflict
+  ): people_mutation_response
+
+  """
+  update data of the table: "debate"
+  """
+  update_debate(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: debate_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: debate_set_input
+
+    """filter the rows which have to be updated"""
+    where: debate_bool_exp!
+  ): debate_mutation_response
+
+  """
+  update data of the table: "debate_people"
+  """
+  update_debate_people(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: debate_people_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: debate_people_set_input
+
+    """filter the rows which have to be updated"""
+    where: debate_people_bool_exp!
+  ): debate_people_mutation_response
+
+  """
+  update data of the table: "people"
+  """
+  update_people(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: people_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: people_set_input
+
+    """filter the rows which have to be updated"""
+    where: people_bool_exp!
+  ): people_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "people"
+"""
+type people {
+  age: Int
+
+  """An array relationship"""
+  debatePeopleByAffirmative(
+    """distinct select on columns"""
+    distinct_on: [debate_people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [debate_people_order_by!]
+
+    """filter the rows returned"""
+    where: debate_people_bool_exp
+  ): [debate_people!]!
+
+  """An aggregated array relationship"""
+  debatePeopleByAffirmative_aggregate(
+    """distinct select on columns"""
+    distinct_on: [debate_people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [debate_people_order_by!]
+
+    """filter the rows returned"""
+    where: debate_people_bool_exp
+  ): debate_people_aggregate!
+
+  """An array relationship"""
+  debatePeopleByNegative(
+    """distinct select on columns"""
+    distinct_on: [debate_people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [debate_people_order_by!]
+
+    """filter the rows returned"""
+    where: debate_people_bool_exp
+  ): [debate_people!]!
+
+  """An aggregated array relationship"""
+  debatePeopleByNegative_aggregate(
+    """distinct select on columns"""
+    distinct_on: [debate_people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [debate_people_order_by!]
+
+    """filter the rows returned"""
+    where: debate_people_bool_exp
+  ): debate_people_aggregate!
+  district: String
+  name: String
+  party: String
+  people_id: Int
+}
+
+"""
+aggregated selection of "people"
+"""
+type people_aggregate {
+  aggregate: people_aggregate_fields
+  nodes: [people!]!
+}
+
+"""
+aggregate fields of "people"
+"""
+type people_aggregate_fields {
+  avg: people_avg_fields
+  count(columns: [people_select_column!], distinct: Boolean): Int
+  max: people_max_fields
+  min: people_min_fields
+  stddev: people_stddev_fields
+  stddev_pop: people_stddev_pop_fields
+  stddev_samp: people_stddev_samp_fields
+  sum: people_sum_fields
+  var_pop: people_var_pop_fields
+  var_samp: people_var_samp_fields
+  variance: people_variance_fields
+}
+
+"""
+order by aggregate values of table "people"
+"""
+input people_aggregate_order_by {
+  avg: people_avg_order_by
+  count: order_by
+  max: people_max_order_by
+  min: people_min_order_by
+  stddev: people_stddev_order_by
+  stddev_pop: people_stddev_pop_order_by
+  stddev_samp: people_stddev_samp_order_by
+  sum: people_sum_order_by
+  var_pop: people_var_pop_order_by
+  var_samp: people_var_samp_order_by
+  variance: people_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "people"
+"""
+input people_arr_rel_insert_input {
+  data: [people_insert_input!]!
+  on_conflict: people_on_conflict
+}
+
+"""aggregate avg on columns"""
+type people_avg_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by avg() on columns of table "people"
+"""
+input people_avg_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "people". All fields are combined with a logical 'AND'.
+"""
+input people_bool_exp {
+  _and: [people_bool_exp]
+  _not: people_bool_exp
+  _or: [people_bool_exp]
+  age: Int_comparison_exp
+  debatePeopleByAffirmative: debate_people_bool_exp
+  debatePeopleByNegative: debate_people_bool_exp
+  district: String_comparison_exp
+  name: String_comparison_exp
+  party: String_comparison_exp
+  people_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "people"
+"""
+enum people_constraint {
+  """unique or primary key constraint"""
+  idx_21128_sqlite_autoindex_people_1
+}
+
+"""
+input type for incrementing integer columne in table "people"
+"""
+input people_inc_input {
+  age: Int
+  people_id: Int
+}
+
+"""
+input type for inserting data into table "people"
+"""
+input people_insert_input {
+  age: Int
+  debatePeopleByAffirmative: debate_people_arr_rel_insert_input
+  debatePeopleByNegative: debate_people_arr_rel_insert_input
+  district: String
+  name: String
+  party: String
+  people_id: Int
+}
+
+"""aggregate max on columns"""
+type people_max_fields {
+  age: Int
+  district: String
+  name: String
+  party: String
+  people_id: Int
+}
+
+"""
+order by max() on columns of table "people"
+"""
+input people_max_order_by {
+  age: order_by
+  district: order_by
+  name: order_by
+  party: order_by
+  people_id: order_by
+}
+
+"""aggregate min on columns"""
+type people_min_fields {
+  age: Int
+  district: String
+  name: String
+  party: String
+  people_id: Int
+}
+
+"""
+order by min() on columns of table "people"
+"""
+input people_min_order_by {
+  age: order_by
+  district: order_by
+  name: order_by
+  party: order_by
+  people_id: order_by
+}
+
+"""
+response of any mutation on the table "people"
+"""
+type people_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [people!]!
+}
+
+"""
+input type for inserting object relation for remote table "people"
+"""
+input people_obj_rel_insert_input {
+  data: people_insert_input!
+  on_conflict: people_on_conflict
+}
+
+"""
+on conflict condition type for table "people"
+"""
+input people_on_conflict {
+  constraint: people_constraint!
+  update_columns: [people_update_column!]!
+  where: people_bool_exp
+}
+
+"""
+ordering options when selecting data from "people"
+"""
+input people_order_by {
+  age: order_by
+  debatePeopleByAffirmative_aggregate: debate_people_aggregate_order_by
+  debatePeopleByNegative_aggregate: debate_people_aggregate_order_by
+  district: order_by
+  name: order_by
+  party: order_by
+  people_id: order_by
+}
+
+"""
+select columns of table "people"
+"""
+enum people_select_column {
+  """column name"""
+  age
+
+  """column name"""
+  district
+
+  """column name"""
+  name
+
+  """column name"""
+  party
+
+  """column name"""
+  people_id
+}
+
+"""
+input type for updating data in table "people"
+"""
+input people_set_input {
+  age: Int
+  district: String
+  name: String
+  party: String
+  people_id: Int
+}
+
+"""aggregate stddev on columns"""
+type people_stddev_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by stddev() on columns of table "people"
+"""
+input people_stddev_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type people_stddev_pop_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "people"
+"""
+input people_stddev_pop_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type people_stddev_samp_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "people"
+"""
+input people_stddev_samp_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""aggregate sum on columns"""
+type people_sum_fields {
+  age: Int
+  people_id: Int
+}
+
+"""
+order by sum() on columns of table "people"
+"""
+input people_sum_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""
+update columns of table "people"
+"""
+enum people_update_column {
+  """column name"""
+  age
+
+  """column name"""
+  district
+
+  """column name"""
+  name
+
+  """column name"""
+  party
+
+  """column name"""
+  people_id
+}
+
+"""aggregate var_pop on columns"""
+type people_var_pop_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by var_pop() on columns of table "people"
+"""
+input people_var_pop_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type people_var_samp_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by var_samp() on columns of table "people"
+"""
+input people_var_samp_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""aggregate variance on columns"""
+type people_variance_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by variance() on columns of table "people"
+"""
+input people_variance_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "debate"
+  """
+  debate(
+    """distinct select on columns"""
+    distinct_on: [debate_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [debate_order_by!]
+
+    """filter the rows returned"""
+    where: debate_bool_exp
+  ): [debate!]!
+
+  """
+  fetch aggregated fields from the table: "debate"
+  """
+  debate_aggregate(
+    """distinct select on columns"""
+    distinct_on: [debate_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [debate_order_by!]
+
+    """filter the rows returned"""
+    where: debate_bool_exp
+  ): debate_aggregate!
+
+  """
+  fetch data from the table: "debate_people"
+  """
+  debate_people(
+    """distinct select on columns"""
+    distinct_on: [debate_people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [debate_people_order_by!]
+
+    """filter the rows returned"""
+    where: debate_people_bool_exp
+  ): [debate_people!]!
+
+  """
+  fetch aggregated fields from the table: "debate_people"
+  """
+  debate_people_aggregate(
+    """distinct select on columns"""
+    distinct_on: [debate_people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [debate_people_order_by!]
+
+    """filter the rows returned"""
+    where: debate_people_bool_exp
+  ): debate_people_aggregate!
+
+  """
+  fetch data from the table: "people"
+  """
+  people(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): [people!]!
+
+  """
+  fetch aggregated fields from the table: "people"
+  """
+  people_aggregate(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): people_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "debate"
+  """
+  debate(
+    """distinct select on columns"""
+    distinct_on: [debate_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [debate_order_by!]
+
+    """filter the rows returned"""
+    where: debate_bool_exp
+  ): [debate!]!
+
+  """
+  fetch aggregated fields from the table: "debate"
+  """
+  debate_aggregate(
+    """distinct select on columns"""
+    distinct_on: [debate_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [debate_order_by!]
+
+    """filter the rows returned"""
+    where: debate_bool_exp
+  ): debate_aggregate!
+
+  """
+  fetch data from the table: "debate_people"
+  """
+  debate_people(
+    """distinct select on columns"""
+    distinct_on: [debate_people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [debate_people_order_by!]
+
+    """filter the rows returned"""
+    where: debate_people_bool_exp
+  ): [debate_people!]!
+
+  """
+  fetch aggregated fields from the table: "debate_people"
+  """
+  debate_people_aggregate(
+    """distinct select on columns"""
+    distinct_on: [debate_people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [debate_people_order_by!]
+
+    """filter the rows returned"""
+    where: debate_people_bool_exp
+  ): debate_people_aggregate!
+
+  """
+  fetch data from the table: "people"
+  """
+  people(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): [people!]!
+
+  """
+  fetch aggregated fields from the table: "people"
+  """
+  people_aggregate(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): people_aggregate!
+}

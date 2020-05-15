@@ -1,0 +1,3669 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "claim_headers"
+"""
+type claim_headers {
+  amount_claimed: numeric
+  amount_piad: numeric
+  claim_header_id: bigint!
+  claim_status_code: String
+  claim_type_code: String
+
+  """An array relationship"""
+  claims_documents(
+    """distinct select on columns"""
+    distinct_on: [claims_documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_documents_order_by!]
+
+    """filter the rows returned"""
+    where: claims_documents_bool_exp
+  ): [claims_documents!]!
+
+  """An aggregated array relationship"""
+  claims_documents_aggregate(
+    """distinct select on columns"""
+    distinct_on: [claims_documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_documents_order_by!]
+
+    """filter the rows returned"""
+    where: claims_documents_bool_exp
+  ): claims_documents_aggregate!
+
+  """An array relationship"""
+  claims_processings(
+    """distinct select on columns"""
+    distinct_on: [claims_processing_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_processing_order_by!]
+
+    """filter the rows returned"""
+    where: claims_processing_bool_exp
+  ): [claims_processing!]!
+
+  """An aggregated array relationship"""
+  claims_processings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [claims_processing_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_processing_order_by!]
+
+    """filter the rows returned"""
+    where: claims_processing_bool_exp
+  ): claims_processing_aggregate!
+  date_of_claim: timestamptz
+  date_of_settlement: timestamptz
+
+  """An object relationship"""
+  policy: policies
+  policy_id: bigint
+}
+
+"""
+aggregated selection of "claim_headers"
+"""
+type claim_headers_aggregate {
+  aggregate: claim_headers_aggregate_fields
+  nodes: [claim_headers!]!
+}
+
+"""
+aggregate fields of "claim_headers"
+"""
+type claim_headers_aggregate_fields {
+  avg: claim_headers_avg_fields
+  count(columns: [claim_headers_select_column!], distinct: Boolean): Int
+  max: claim_headers_max_fields
+  min: claim_headers_min_fields
+  stddev: claim_headers_stddev_fields
+  stddev_pop: claim_headers_stddev_pop_fields
+  stddev_samp: claim_headers_stddev_samp_fields
+  sum: claim_headers_sum_fields
+  var_pop: claim_headers_var_pop_fields
+  var_samp: claim_headers_var_samp_fields
+  variance: claim_headers_variance_fields
+}
+
+"""
+order by aggregate values of table "claim_headers"
+"""
+input claim_headers_aggregate_order_by {
+  avg: claim_headers_avg_order_by
+  count: order_by
+  max: claim_headers_max_order_by
+  min: claim_headers_min_order_by
+  stddev: claim_headers_stddev_order_by
+  stddev_pop: claim_headers_stddev_pop_order_by
+  stddev_samp: claim_headers_stddev_samp_order_by
+  sum: claim_headers_sum_order_by
+  var_pop: claim_headers_var_pop_order_by
+  var_samp: claim_headers_var_samp_order_by
+  variance: claim_headers_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "claim_headers"
+"""
+input claim_headers_arr_rel_insert_input {
+  data: [claim_headers_insert_input!]!
+  on_conflict: claim_headers_on_conflict
+}
+
+"""aggregate avg on columns"""
+type claim_headers_avg_fields {
+  amount_claimed: Float
+  amount_piad: Float
+  claim_header_id: Float
+  policy_id: Float
+}
+
+"""
+order by avg() on columns of table "claim_headers"
+"""
+input claim_headers_avg_order_by {
+  amount_claimed: order_by
+  amount_piad: order_by
+  claim_header_id: order_by
+  policy_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "claim_headers". All fields are combined with a logical 'AND'.
+"""
+input claim_headers_bool_exp {
+  _and: [claim_headers_bool_exp]
+  _not: claim_headers_bool_exp
+  _or: [claim_headers_bool_exp]
+  amount_claimed: numeric_comparison_exp
+  amount_piad: numeric_comparison_exp
+  claim_header_id: bigint_comparison_exp
+  claim_status_code: String_comparison_exp
+  claim_type_code: String_comparison_exp
+  claims_documents: claims_documents_bool_exp
+  claims_processings: claims_processing_bool_exp
+  date_of_claim: timestamptz_comparison_exp
+  date_of_settlement: timestamptz_comparison_exp
+  policy: policies_bool_exp
+  policy_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "claim_headers"
+"""
+enum claim_headers_constraint {
+  """unique or primary key constraint"""
+  idx_23057_claim_headers_pkey
+}
+
+"""
+input type for incrementing integer columne in table "claim_headers"
+"""
+input claim_headers_inc_input {
+  claim_header_id: bigint
+  policy_id: bigint
+}
+
+"""
+input type for inserting data into table "claim_headers"
+"""
+input claim_headers_insert_input {
+  amount_claimed: numeric
+  amount_piad: numeric
+  claim_header_id: bigint
+  claim_status_code: String
+  claim_type_code: String
+  claims_documents: claims_documents_arr_rel_insert_input
+  claims_processings: claims_processing_arr_rel_insert_input
+  date_of_claim: timestamptz
+  date_of_settlement: timestamptz
+  policy: policies_obj_rel_insert_input
+  policy_id: bigint
+}
+
+"""aggregate max on columns"""
+type claim_headers_max_fields {
+  amount_claimed: numeric
+  amount_piad: numeric
+  claim_header_id: bigint
+  claim_status_code: String
+  claim_type_code: String
+  date_of_claim: timestamptz
+  date_of_settlement: timestamptz
+  policy_id: bigint
+}
+
+"""
+order by max() on columns of table "claim_headers"
+"""
+input claim_headers_max_order_by {
+  amount_claimed: order_by
+  amount_piad: order_by
+  claim_header_id: order_by
+  claim_status_code: order_by
+  claim_type_code: order_by
+  date_of_claim: order_by
+  date_of_settlement: order_by
+  policy_id: order_by
+}
+
+"""aggregate min on columns"""
+type claim_headers_min_fields {
+  amount_claimed: numeric
+  amount_piad: numeric
+  claim_header_id: bigint
+  claim_status_code: String
+  claim_type_code: String
+  date_of_claim: timestamptz
+  date_of_settlement: timestamptz
+  policy_id: bigint
+}
+
+"""
+order by min() on columns of table "claim_headers"
+"""
+input claim_headers_min_order_by {
+  amount_claimed: order_by
+  amount_piad: order_by
+  claim_header_id: order_by
+  claim_status_code: order_by
+  claim_type_code: order_by
+  date_of_claim: order_by
+  date_of_settlement: order_by
+  policy_id: order_by
+}
+
+"""
+response of any mutation on the table "claim_headers"
+"""
+type claim_headers_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [claim_headers!]!
+}
+
+"""
+input type for inserting object relation for remote table "claim_headers"
+"""
+input claim_headers_obj_rel_insert_input {
+  data: claim_headers_insert_input!
+  on_conflict: claim_headers_on_conflict
+}
+
+"""
+on conflict condition type for table "claim_headers"
+"""
+input claim_headers_on_conflict {
+  constraint: claim_headers_constraint!
+  update_columns: [claim_headers_update_column!]!
+  where: claim_headers_bool_exp
+}
+
+"""
+ordering options when selecting data from "claim_headers"
+"""
+input claim_headers_order_by {
+  amount_claimed: order_by
+  amount_piad: order_by
+  claim_header_id: order_by
+  claim_status_code: order_by
+  claim_type_code: order_by
+  claims_documents_aggregate: claims_documents_aggregate_order_by
+  claims_processings_aggregate: claims_processing_aggregate_order_by
+  date_of_claim: order_by
+  date_of_settlement: order_by
+  policy: policies_order_by
+  policy_id: order_by
+}
+
+"""
+select columns of table "claim_headers"
+"""
+enum claim_headers_select_column {
+  """column name"""
+  amount_claimed
+
+  """column name"""
+  amount_piad
+
+  """column name"""
+  claim_header_id
+
+  """column name"""
+  claim_status_code
+
+  """column name"""
+  claim_type_code
+
+  """column name"""
+  date_of_claim
+
+  """column name"""
+  date_of_settlement
+
+  """column name"""
+  policy_id
+}
+
+"""
+input type for updating data in table "claim_headers"
+"""
+input claim_headers_set_input {
+  amount_claimed: numeric
+  amount_piad: numeric
+  claim_header_id: bigint
+  claim_status_code: String
+  claim_type_code: String
+  date_of_claim: timestamptz
+  date_of_settlement: timestamptz
+  policy_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type claim_headers_stddev_fields {
+  amount_claimed: Float
+  amount_piad: Float
+  claim_header_id: Float
+  policy_id: Float
+}
+
+"""
+order by stddev() on columns of table "claim_headers"
+"""
+input claim_headers_stddev_order_by {
+  amount_claimed: order_by
+  amount_piad: order_by
+  claim_header_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type claim_headers_stddev_pop_fields {
+  amount_claimed: Float
+  amount_piad: Float
+  claim_header_id: Float
+  policy_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "claim_headers"
+"""
+input claim_headers_stddev_pop_order_by {
+  amount_claimed: order_by
+  amount_piad: order_by
+  claim_header_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type claim_headers_stddev_samp_fields {
+  amount_claimed: Float
+  amount_piad: Float
+  claim_header_id: Float
+  policy_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "claim_headers"
+"""
+input claim_headers_stddev_samp_order_by {
+  amount_claimed: order_by
+  amount_piad: order_by
+  claim_header_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate sum on columns"""
+type claim_headers_sum_fields {
+  amount_claimed: numeric
+  amount_piad: numeric
+  claim_header_id: bigint
+  policy_id: bigint
+}
+
+"""
+order by sum() on columns of table "claim_headers"
+"""
+input claim_headers_sum_order_by {
+  amount_claimed: order_by
+  amount_piad: order_by
+  claim_header_id: order_by
+  policy_id: order_by
+}
+
+"""
+update columns of table "claim_headers"
+"""
+enum claim_headers_update_column {
+  """column name"""
+  amount_claimed
+
+  """column name"""
+  amount_piad
+
+  """column name"""
+  claim_header_id
+
+  """column name"""
+  claim_status_code
+
+  """column name"""
+  claim_type_code
+
+  """column name"""
+  date_of_claim
+
+  """column name"""
+  date_of_settlement
+
+  """column name"""
+  policy_id
+}
+
+"""aggregate var_pop on columns"""
+type claim_headers_var_pop_fields {
+  amount_claimed: Float
+  amount_piad: Float
+  claim_header_id: Float
+  policy_id: Float
+}
+
+"""
+order by var_pop() on columns of table "claim_headers"
+"""
+input claim_headers_var_pop_order_by {
+  amount_claimed: order_by
+  amount_piad: order_by
+  claim_header_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type claim_headers_var_samp_fields {
+  amount_claimed: Float
+  amount_piad: Float
+  claim_header_id: Float
+  policy_id: Float
+}
+
+"""
+order by var_samp() on columns of table "claim_headers"
+"""
+input claim_headers_var_samp_order_by {
+  amount_claimed: order_by
+  amount_piad: order_by
+  claim_header_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate variance on columns"""
+type claim_headers_variance_fields {
+  amount_claimed: Float
+  amount_piad: Float
+  claim_header_id: Float
+  policy_id: Float
+}
+
+"""
+order by variance() on columns of table "claim_headers"
+"""
+input claim_headers_variance_order_by {
+  amount_claimed: order_by
+  amount_piad: order_by
+  claim_header_id: order_by
+  policy_id: order_by
+}
+
+"""
+columns and relationships of "claims_documents"
+"""
+type claims_documents {
+  """An object relationship"""
+  claim_header: claim_headers
+  claim_id: bigint
+  created_by_staff_id: bigint
+  created_date: bigint
+  document_type_code: String
+
+  """An object relationship"""
+  staff: staff
+}
+
+"""
+aggregated selection of "claims_documents"
+"""
+type claims_documents_aggregate {
+  aggregate: claims_documents_aggregate_fields
+  nodes: [claims_documents!]!
+}
+
+"""
+aggregate fields of "claims_documents"
+"""
+type claims_documents_aggregate_fields {
+  avg: claims_documents_avg_fields
+  count(columns: [claims_documents_select_column!], distinct: Boolean): Int
+  max: claims_documents_max_fields
+  min: claims_documents_min_fields
+  stddev: claims_documents_stddev_fields
+  stddev_pop: claims_documents_stddev_pop_fields
+  stddev_samp: claims_documents_stddev_samp_fields
+  sum: claims_documents_sum_fields
+  var_pop: claims_documents_var_pop_fields
+  var_samp: claims_documents_var_samp_fields
+  variance: claims_documents_variance_fields
+}
+
+"""
+order by aggregate values of table "claims_documents"
+"""
+input claims_documents_aggregate_order_by {
+  avg: claims_documents_avg_order_by
+  count: order_by
+  max: claims_documents_max_order_by
+  min: claims_documents_min_order_by
+  stddev: claims_documents_stddev_order_by
+  stddev_pop: claims_documents_stddev_pop_order_by
+  stddev_samp: claims_documents_stddev_samp_order_by
+  sum: claims_documents_sum_order_by
+  var_pop: claims_documents_var_pop_order_by
+  var_samp: claims_documents_var_samp_order_by
+  variance: claims_documents_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "claims_documents"
+"""
+input claims_documents_arr_rel_insert_input {
+  data: [claims_documents_insert_input!]!
+  on_conflict: claims_documents_on_conflict
+}
+
+"""aggregate avg on columns"""
+type claims_documents_avg_fields {
+  claim_id: Float
+  created_by_staff_id: Float
+  created_date: Float
+}
+
+"""
+order by avg() on columns of table "claims_documents"
+"""
+input claims_documents_avg_order_by {
+  claim_id: order_by
+  created_by_staff_id: order_by
+  created_date: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "claims_documents". All fields are combined with a logical 'AND'.
+"""
+input claims_documents_bool_exp {
+  _and: [claims_documents_bool_exp]
+  _not: claims_documents_bool_exp
+  _or: [claims_documents_bool_exp]
+  claim_header: claim_headers_bool_exp
+  claim_id: bigint_comparison_exp
+  created_by_staff_id: bigint_comparison_exp
+  created_date: bigint_comparison_exp
+  document_type_code: String_comparison_exp
+  staff: staff_bool_exp
+}
+
+"""
+unique or primary key constraints on table "claims_documents"
+"""
+enum claims_documents_constraint {
+  """unique or primary key constraint"""
+  idx_23063_sqlite_autoindex_claims_documents_1
+}
+
+"""
+input type for incrementing integer columne in table "claims_documents"
+"""
+input claims_documents_inc_input {
+  claim_id: bigint
+  created_by_staff_id: bigint
+  created_date: bigint
+}
+
+"""
+input type for inserting data into table "claims_documents"
+"""
+input claims_documents_insert_input {
+  claim_header: claim_headers_obj_rel_insert_input
+  claim_id: bigint
+  created_by_staff_id: bigint
+  created_date: bigint
+  document_type_code: String
+  staff: staff_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type claims_documents_max_fields {
+  claim_id: bigint
+  created_by_staff_id: bigint
+  created_date: bigint
+  document_type_code: String
+}
+
+"""
+order by max() on columns of table "claims_documents"
+"""
+input claims_documents_max_order_by {
+  claim_id: order_by
+  created_by_staff_id: order_by
+  created_date: order_by
+  document_type_code: order_by
+}
+
+"""aggregate min on columns"""
+type claims_documents_min_fields {
+  claim_id: bigint
+  created_by_staff_id: bigint
+  created_date: bigint
+  document_type_code: String
+}
+
+"""
+order by min() on columns of table "claims_documents"
+"""
+input claims_documents_min_order_by {
+  claim_id: order_by
+  created_by_staff_id: order_by
+  created_date: order_by
+  document_type_code: order_by
+}
+
+"""
+response of any mutation on the table "claims_documents"
+"""
+type claims_documents_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [claims_documents!]!
+}
+
+"""
+input type for inserting object relation for remote table "claims_documents"
+"""
+input claims_documents_obj_rel_insert_input {
+  data: claims_documents_insert_input!
+  on_conflict: claims_documents_on_conflict
+}
+
+"""
+on conflict condition type for table "claims_documents"
+"""
+input claims_documents_on_conflict {
+  constraint: claims_documents_constraint!
+  update_columns: [claims_documents_update_column!]!
+  where: claims_documents_bool_exp
+}
+
+"""
+ordering options when selecting data from "claims_documents"
+"""
+input claims_documents_order_by {
+  claim_header: claim_headers_order_by
+  claim_id: order_by
+  created_by_staff_id: order_by
+  created_date: order_by
+  document_type_code: order_by
+  staff: staff_order_by
+}
+
+"""
+select columns of table "claims_documents"
+"""
+enum claims_documents_select_column {
+  """column name"""
+  claim_id
+
+  """column name"""
+  created_by_staff_id
+
+  """column name"""
+  created_date
+
+  """column name"""
+  document_type_code
+}
+
+"""
+input type for updating data in table "claims_documents"
+"""
+input claims_documents_set_input {
+  claim_id: bigint
+  created_by_staff_id: bigint
+  created_date: bigint
+  document_type_code: String
+}
+
+"""aggregate stddev on columns"""
+type claims_documents_stddev_fields {
+  claim_id: Float
+  created_by_staff_id: Float
+  created_date: Float
+}
+
+"""
+order by stddev() on columns of table "claims_documents"
+"""
+input claims_documents_stddev_order_by {
+  claim_id: order_by
+  created_by_staff_id: order_by
+  created_date: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type claims_documents_stddev_pop_fields {
+  claim_id: Float
+  created_by_staff_id: Float
+  created_date: Float
+}
+
+"""
+order by stddev_pop() on columns of table "claims_documents"
+"""
+input claims_documents_stddev_pop_order_by {
+  claim_id: order_by
+  created_by_staff_id: order_by
+  created_date: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type claims_documents_stddev_samp_fields {
+  claim_id: Float
+  created_by_staff_id: Float
+  created_date: Float
+}
+
+"""
+order by stddev_samp() on columns of table "claims_documents"
+"""
+input claims_documents_stddev_samp_order_by {
+  claim_id: order_by
+  created_by_staff_id: order_by
+  created_date: order_by
+}
+
+"""aggregate sum on columns"""
+type claims_documents_sum_fields {
+  claim_id: bigint
+  created_by_staff_id: bigint
+  created_date: bigint
+}
+
+"""
+order by sum() on columns of table "claims_documents"
+"""
+input claims_documents_sum_order_by {
+  claim_id: order_by
+  created_by_staff_id: order_by
+  created_date: order_by
+}
+
+"""
+update columns of table "claims_documents"
+"""
+enum claims_documents_update_column {
+  """column name"""
+  claim_id
+
+  """column name"""
+  created_by_staff_id
+
+  """column name"""
+  created_date
+
+  """column name"""
+  document_type_code
+}
+
+"""aggregate var_pop on columns"""
+type claims_documents_var_pop_fields {
+  claim_id: Float
+  created_by_staff_id: Float
+  created_date: Float
+}
+
+"""
+order by var_pop() on columns of table "claims_documents"
+"""
+input claims_documents_var_pop_order_by {
+  claim_id: order_by
+  created_by_staff_id: order_by
+  created_date: order_by
+}
+
+"""aggregate var_samp on columns"""
+type claims_documents_var_samp_fields {
+  claim_id: Float
+  created_by_staff_id: Float
+  created_date: Float
+}
+
+"""
+order by var_samp() on columns of table "claims_documents"
+"""
+input claims_documents_var_samp_order_by {
+  claim_id: order_by
+  created_by_staff_id: order_by
+  created_date: order_by
+}
+
+"""aggregate variance on columns"""
+type claims_documents_variance_fields {
+  claim_id: Float
+  created_by_staff_id: Float
+  created_date: Float
+}
+
+"""
+order by variance() on columns of table "claims_documents"
+"""
+input claims_documents_variance_order_by {
+  claim_id: order_by
+  created_by_staff_id: order_by
+  created_date: order_by
+}
+
+"""
+columns and relationships of "claims_processing"
+"""
+type claims_processing {
+  """An object relationship"""
+  claim_header: claim_headers
+  claim_id: bigint
+  claim_outcome_code: String
+  claim_processing_id: bigint!
+  claim_stage_id: bigint
+
+  """An object relationship"""
+  claims_processing_stage: claims_processing_stages
+
+  """An object relationship"""
+  staff: staff
+  staff_id: bigint
+}
+
+"""
+aggregated selection of "claims_processing"
+"""
+type claims_processing_aggregate {
+  aggregate: claims_processing_aggregate_fields
+  nodes: [claims_processing!]!
+}
+
+"""
+aggregate fields of "claims_processing"
+"""
+type claims_processing_aggregate_fields {
+  avg: claims_processing_avg_fields
+  count(columns: [claims_processing_select_column!], distinct: Boolean): Int
+  max: claims_processing_max_fields
+  min: claims_processing_min_fields
+  stddev: claims_processing_stddev_fields
+  stddev_pop: claims_processing_stddev_pop_fields
+  stddev_samp: claims_processing_stddev_samp_fields
+  sum: claims_processing_sum_fields
+  var_pop: claims_processing_var_pop_fields
+  var_samp: claims_processing_var_samp_fields
+  variance: claims_processing_variance_fields
+}
+
+"""
+order by aggregate values of table "claims_processing"
+"""
+input claims_processing_aggregate_order_by {
+  avg: claims_processing_avg_order_by
+  count: order_by
+  max: claims_processing_max_order_by
+  min: claims_processing_min_order_by
+  stddev: claims_processing_stddev_order_by
+  stddev_pop: claims_processing_stddev_pop_order_by
+  stddev_samp: claims_processing_stddev_samp_order_by
+  sum: claims_processing_sum_order_by
+  var_pop: claims_processing_var_pop_order_by
+  var_samp: claims_processing_var_samp_order_by
+  variance: claims_processing_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "claims_processing"
+"""
+input claims_processing_arr_rel_insert_input {
+  data: [claims_processing_insert_input!]!
+  on_conflict: claims_processing_on_conflict
+}
+
+"""aggregate avg on columns"""
+type claims_processing_avg_fields {
+  claim_id: Float
+  claim_processing_id: Float
+  claim_stage_id: Float
+  staff_id: Float
+}
+
+"""
+order by avg() on columns of table "claims_processing"
+"""
+input claims_processing_avg_order_by {
+  claim_id: order_by
+  claim_processing_id: order_by
+  claim_stage_id: order_by
+  staff_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "claims_processing". All fields are combined with a logical 'AND'.
+"""
+input claims_processing_bool_exp {
+  _and: [claims_processing_bool_exp]
+  _not: claims_processing_bool_exp
+  _or: [claims_processing_bool_exp]
+  claim_header: claim_headers_bool_exp
+  claim_id: bigint_comparison_exp
+  claim_outcome_code: String_comparison_exp
+  claim_processing_id: bigint_comparison_exp
+  claim_stage_id: bigint_comparison_exp
+  claims_processing_stage: claims_processing_stages_bool_exp
+  staff: staff_bool_exp
+  staff_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "claims_processing"
+"""
+enum claims_processing_constraint {
+  """unique or primary key constraint"""
+  idx_23075_claims_processing_pkey
+}
+
+"""
+input type for incrementing integer columne in table "claims_processing"
+"""
+input claims_processing_inc_input {
+  claim_id: bigint
+  claim_processing_id: bigint
+  claim_stage_id: bigint
+  staff_id: bigint
+}
+
+"""
+input type for inserting data into table "claims_processing"
+"""
+input claims_processing_insert_input {
+  claim_header: claim_headers_obj_rel_insert_input
+  claim_id: bigint
+  claim_outcome_code: String
+  claim_processing_id: bigint
+  claim_stage_id: bigint
+  claims_processing_stage: claims_processing_stages_obj_rel_insert_input
+  staff: staff_obj_rel_insert_input
+  staff_id: bigint
+}
+
+"""aggregate max on columns"""
+type claims_processing_max_fields {
+  claim_id: bigint
+  claim_outcome_code: String
+  claim_processing_id: bigint
+  claim_stage_id: bigint
+  staff_id: bigint
+}
+
+"""
+order by max() on columns of table "claims_processing"
+"""
+input claims_processing_max_order_by {
+  claim_id: order_by
+  claim_outcome_code: order_by
+  claim_processing_id: order_by
+  claim_stage_id: order_by
+  staff_id: order_by
+}
+
+"""aggregate min on columns"""
+type claims_processing_min_fields {
+  claim_id: bigint
+  claim_outcome_code: String
+  claim_processing_id: bigint
+  claim_stage_id: bigint
+  staff_id: bigint
+}
+
+"""
+order by min() on columns of table "claims_processing"
+"""
+input claims_processing_min_order_by {
+  claim_id: order_by
+  claim_outcome_code: order_by
+  claim_processing_id: order_by
+  claim_stage_id: order_by
+  staff_id: order_by
+}
+
+"""
+response of any mutation on the table "claims_processing"
+"""
+type claims_processing_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [claims_processing!]!
+}
+
+"""
+input type for inserting object relation for remote table "claims_processing"
+"""
+input claims_processing_obj_rel_insert_input {
+  data: claims_processing_insert_input!
+  on_conflict: claims_processing_on_conflict
+}
+
+"""
+on conflict condition type for table "claims_processing"
+"""
+input claims_processing_on_conflict {
+  constraint: claims_processing_constraint!
+  update_columns: [claims_processing_update_column!]!
+  where: claims_processing_bool_exp
+}
+
+"""
+ordering options when selecting data from "claims_processing"
+"""
+input claims_processing_order_by {
+  claim_header: claim_headers_order_by
+  claim_id: order_by
+  claim_outcome_code: order_by
+  claim_processing_id: order_by
+  claim_stage_id: order_by
+  claims_processing_stage: claims_processing_stages_order_by
+  staff: staff_order_by
+  staff_id: order_by
+}
+
+"""
+select columns of table "claims_processing"
+"""
+enum claims_processing_select_column {
+  """column name"""
+  claim_id
+
+  """column name"""
+  claim_outcome_code
+
+  """column name"""
+  claim_processing_id
+
+  """column name"""
+  claim_stage_id
+
+  """column name"""
+  staff_id
+}
+
+"""
+input type for updating data in table "claims_processing"
+"""
+input claims_processing_set_input {
+  claim_id: bigint
+  claim_outcome_code: String
+  claim_processing_id: bigint
+  claim_stage_id: bigint
+  staff_id: bigint
+}
+
+"""
+columns and relationships of "claims_processing_stages"
+"""
+type claims_processing_stages {
+  claim_stage_id: bigint!
+  claim_status_description: String
+  claim_status_name: String
+
+  """An array relationship"""
+  claims_processings(
+    """distinct select on columns"""
+    distinct_on: [claims_processing_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_processing_order_by!]
+
+    """filter the rows returned"""
+    where: claims_processing_bool_exp
+  ): [claims_processing!]!
+
+  """An aggregated array relationship"""
+  claims_processings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [claims_processing_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_processing_order_by!]
+
+    """filter the rows returned"""
+    where: claims_processing_bool_exp
+  ): claims_processing_aggregate!
+  next_claim_stage_id: bigint
+}
+
+"""
+aggregated selection of "claims_processing_stages"
+"""
+type claims_processing_stages_aggregate {
+  aggregate: claims_processing_stages_aggregate_fields
+  nodes: [claims_processing_stages!]!
+}
+
+"""
+aggregate fields of "claims_processing_stages"
+"""
+type claims_processing_stages_aggregate_fields {
+  avg: claims_processing_stages_avg_fields
+  count(columns: [claims_processing_stages_select_column!], distinct: Boolean): Int
+  max: claims_processing_stages_max_fields
+  min: claims_processing_stages_min_fields
+  stddev: claims_processing_stages_stddev_fields
+  stddev_pop: claims_processing_stages_stddev_pop_fields
+  stddev_samp: claims_processing_stages_stddev_samp_fields
+  sum: claims_processing_stages_sum_fields
+  var_pop: claims_processing_stages_var_pop_fields
+  var_samp: claims_processing_stages_var_samp_fields
+  variance: claims_processing_stages_variance_fields
+}
+
+"""
+order by aggregate values of table "claims_processing_stages"
+"""
+input claims_processing_stages_aggregate_order_by {
+  avg: claims_processing_stages_avg_order_by
+  count: order_by
+  max: claims_processing_stages_max_order_by
+  min: claims_processing_stages_min_order_by
+  stddev: claims_processing_stages_stddev_order_by
+  stddev_pop: claims_processing_stages_stddev_pop_order_by
+  stddev_samp: claims_processing_stages_stddev_samp_order_by
+  sum: claims_processing_stages_sum_order_by
+  var_pop: claims_processing_stages_var_pop_order_by
+  var_samp: claims_processing_stages_var_samp_order_by
+  variance: claims_processing_stages_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "claims_processing_stages"
+"""
+input claims_processing_stages_arr_rel_insert_input {
+  data: [claims_processing_stages_insert_input!]!
+  on_conflict: claims_processing_stages_on_conflict
+}
+
+"""aggregate avg on columns"""
+type claims_processing_stages_avg_fields {
+  claim_stage_id: Float
+  next_claim_stage_id: Float
+}
+
+"""
+order by avg() on columns of table "claims_processing_stages"
+"""
+input claims_processing_stages_avg_order_by {
+  claim_stage_id: order_by
+  next_claim_stage_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "claims_processing_stages". All fields are combined with a logical 'AND'.
+"""
+input claims_processing_stages_bool_exp {
+  _and: [claims_processing_stages_bool_exp]
+  _not: claims_processing_stages_bool_exp
+  _or: [claims_processing_stages_bool_exp]
+  claim_stage_id: bigint_comparison_exp
+  claim_status_description: String_comparison_exp
+  claim_status_name: String_comparison_exp
+  claims_processings: claims_processing_bool_exp
+  next_claim_stage_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "claims_processing_stages"
+"""
+enum claims_processing_stages_constraint {
+  """unique or primary key constraint"""
+  idx_23069_claims_processing_stages_pkey
+}
+
+"""
+input type for incrementing integer columne in table "claims_processing_stages"
+"""
+input claims_processing_stages_inc_input {
+  claim_stage_id: bigint
+  next_claim_stage_id: bigint
+}
+
+"""
+input type for inserting data into table "claims_processing_stages"
+"""
+input claims_processing_stages_insert_input {
+  claim_stage_id: bigint
+  claim_status_description: String
+  claim_status_name: String
+  claims_processings: claims_processing_arr_rel_insert_input
+  next_claim_stage_id: bigint
+}
+
+"""aggregate max on columns"""
+type claims_processing_stages_max_fields {
+  claim_stage_id: bigint
+  claim_status_description: String
+  claim_status_name: String
+  next_claim_stage_id: bigint
+}
+
+"""
+order by max() on columns of table "claims_processing_stages"
+"""
+input claims_processing_stages_max_order_by {
+  claim_stage_id: order_by
+  claim_status_description: order_by
+  claim_status_name: order_by
+  next_claim_stage_id: order_by
+}
+
+"""aggregate min on columns"""
+type claims_processing_stages_min_fields {
+  claim_stage_id: bigint
+  claim_status_description: String
+  claim_status_name: String
+  next_claim_stage_id: bigint
+}
+
+"""
+order by min() on columns of table "claims_processing_stages"
+"""
+input claims_processing_stages_min_order_by {
+  claim_stage_id: order_by
+  claim_status_description: order_by
+  claim_status_name: order_by
+  next_claim_stage_id: order_by
+}
+
+"""
+response of any mutation on the table "claims_processing_stages"
+"""
+type claims_processing_stages_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [claims_processing_stages!]!
+}
+
+"""
+input type for inserting object relation for remote table "claims_processing_stages"
+"""
+input claims_processing_stages_obj_rel_insert_input {
+  data: claims_processing_stages_insert_input!
+  on_conflict: claims_processing_stages_on_conflict
+}
+
+"""
+on conflict condition type for table "claims_processing_stages"
+"""
+input claims_processing_stages_on_conflict {
+  constraint: claims_processing_stages_constraint!
+  update_columns: [claims_processing_stages_update_column!]!
+  where: claims_processing_stages_bool_exp
+}
+
+"""
+ordering options when selecting data from "claims_processing_stages"
+"""
+input claims_processing_stages_order_by {
+  claim_stage_id: order_by
+  claim_status_description: order_by
+  claim_status_name: order_by
+  claims_processings_aggregate: claims_processing_aggregate_order_by
+  next_claim_stage_id: order_by
+}
+
+"""
+select columns of table "claims_processing_stages"
+"""
+enum claims_processing_stages_select_column {
+  """column name"""
+  claim_stage_id
+
+  """column name"""
+  claim_status_description
+
+  """column name"""
+  claim_status_name
+
+  """column name"""
+  next_claim_stage_id
+}
+
+"""
+input type for updating data in table "claims_processing_stages"
+"""
+input claims_processing_stages_set_input {
+  claim_stage_id: bigint
+  claim_status_description: String
+  claim_status_name: String
+  next_claim_stage_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type claims_processing_stages_stddev_fields {
+  claim_stage_id: Float
+  next_claim_stage_id: Float
+}
+
+"""
+order by stddev() on columns of table "claims_processing_stages"
+"""
+input claims_processing_stages_stddev_order_by {
+  claim_stage_id: order_by
+  next_claim_stage_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type claims_processing_stages_stddev_pop_fields {
+  claim_stage_id: Float
+  next_claim_stage_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "claims_processing_stages"
+"""
+input claims_processing_stages_stddev_pop_order_by {
+  claim_stage_id: order_by
+  next_claim_stage_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type claims_processing_stages_stddev_samp_fields {
+  claim_stage_id: Float
+  next_claim_stage_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "claims_processing_stages"
+"""
+input claims_processing_stages_stddev_samp_order_by {
+  claim_stage_id: order_by
+  next_claim_stage_id: order_by
+}
+
+"""aggregate sum on columns"""
+type claims_processing_stages_sum_fields {
+  claim_stage_id: bigint
+  next_claim_stage_id: bigint
+}
+
+"""
+order by sum() on columns of table "claims_processing_stages"
+"""
+input claims_processing_stages_sum_order_by {
+  claim_stage_id: order_by
+  next_claim_stage_id: order_by
+}
+
+"""
+update columns of table "claims_processing_stages"
+"""
+enum claims_processing_stages_update_column {
+  """column name"""
+  claim_stage_id
+
+  """column name"""
+  claim_status_description
+
+  """column name"""
+  claim_status_name
+
+  """column name"""
+  next_claim_stage_id
+}
+
+"""aggregate var_pop on columns"""
+type claims_processing_stages_var_pop_fields {
+  claim_stage_id: Float
+  next_claim_stage_id: Float
+}
+
+"""
+order by var_pop() on columns of table "claims_processing_stages"
+"""
+input claims_processing_stages_var_pop_order_by {
+  claim_stage_id: order_by
+  next_claim_stage_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type claims_processing_stages_var_samp_fields {
+  claim_stage_id: Float
+  next_claim_stage_id: Float
+}
+
+"""
+order by var_samp() on columns of table "claims_processing_stages"
+"""
+input claims_processing_stages_var_samp_order_by {
+  claim_stage_id: order_by
+  next_claim_stage_id: order_by
+}
+
+"""aggregate variance on columns"""
+type claims_processing_stages_variance_fields {
+  claim_stage_id: Float
+  next_claim_stage_id: Float
+}
+
+"""
+order by variance() on columns of table "claims_processing_stages"
+"""
+input claims_processing_stages_variance_order_by {
+  claim_stage_id: order_by
+  next_claim_stage_id: order_by
+}
+
+"""aggregate stddev on columns"""
+type claims_processing_stddev_fields {
+  claim_id: Float
+  claim_processing_id: Float
+  claim_stage_id: Float
+  staff_id: Float
+}
+
+"""
+order by stddev() on columns of table "claims_processing"
+"""
+input claims_processing_stddev_order_by {
+  claim_id: order_by
+  claim_processing_id: order_by
+  claim_stage_id: order_by
+  staff_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type claims_processing_stddev_pop_fields {
+  claim_id: Float
+  claim_processing_id: Float
+  claim_stage_id: Float
+  staff_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "claims_processing"
+"""
+input claims_processing_stddev_pop_order_by {
+  claim_id: order_by
+  claim_processing_id: order_by
+  claim_stage_id: order_by
+  staff_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type claims_processing_stddev_samp_fields {
+  claim_id: Float
+  claim_processing_id: Float
+  claim_stage_id: Float
+  staff_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "claims_processing"
+"""
+input claims_processing_stddev_samp_order_by {
+  claim_id: order_by
+  claim_processing_id: order_by
+  claim_stage_id: order_by
+  staff_id: order_by
+}
+
+"""aggregate sum on columns"""
+type claims_processing_sum_fields {
+  claim_id: bigint
+  claim_processing_id: bigint
+  claim_stage_id: bigint
+  staff_id: bigint
+}
+
+"""
+order by sum() on columns of table "claims_processing"
+"""
+input claims_processing_sum_order_by {
+  claim_id: order_by
+  claim_processing_id: order_by
+  claim_stage_id: order_by
+  staff_id: order_by
+}
+
+"""
+update columns of table "claims_processing"
+"""
+enum claims_processing_update_column {
+  """column name"""
+  claim_id
+
+  """column name"""
+  claim_outcome_code
+
+  """column name"""
+  claim_processing_id
+
+  """column name"""
+  claim_stage_id
+
+  """column name"""
+  staff_id
+}
+
+"""aggregate var_pop on columns"""
+type claims_processing_var_pop_fields {
+  claim_id: Float
+  claim_processing_id: Float
+  claim_stage_id: Float
+  staff_id: Float
+}
+
+"""
+order by var_pop() on columns of table "claims_processing"
+"""
+input claims_processing_var_pop_order_by {
+  claim_id: order_by
+  claim_processing_id: order_by
+  claim_stage_id: order_by
+  staff_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type claims_processing_var_samp_fields {
+  claim_id: Float
+  claim_processing_id: Float
+  claim_stage_id: Float
+  staff_id: Float
+}
+
+"""
+order by var_samp() on columns of table "claims_processing"
+"""
+input claims_processing_var_samp_order_by {
+  claim_id: order_by
+  claim_processing_id: order_by
+  claim_stage_id: order_by
+  staff_id: order_by
+}
+
+"""aggregate variance on columns"""
+type claims_processing_variance_fields {
+  claim_id: Float
+  claim_processing_id: Float
+  claim_stage_id: Float
+  staff_id: Float
+}
+
+"""
+order by variance() on columns of table "claims_processing"
+"""
+input claims_processing_variance_order_by {
+  claim_id: order_by
+  claim_processing_id: order_by
+  claim_stage_id: order_by
+  staff_id: order_by
+}
+
+"""
+columns and relationships of "customers"
+"""
+type customers {
+  customer_details: String
+  customer_id: bigint!
+
+  """An array relationship"""
+  policies(
+    """distinct select on columns"""
+    distinct_on: [policies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [policies_order_by!]
+
+    """filter the rows returned"""
+    where: policies_bool_exp
+  ): [policies!]!
+
+  """An aggregated array relationship"""
+  policies_aggregate(
+    """distinct select on columns"""
+    distinct_on: [policies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [policies_order_by!]
+
+    """filter the rows returned"""
+    where: policies_bool_exp
+  ): policies_aggregate!
+}
+
+"""
+aggregated selection of "customers"
+"""
+type customers_aggregate {
+  aggregate: customers_aggregate_fields
+  nodes: [customers!]!
+}
+
+"""
+aggregate fields of "customers"
+"""
+type customers_aggregate_fields {
+  avg: customers_avg_fields
+  count(columns: [customers_select_column!], distinct: Boolean): Int
+  max: customers_max_fields
+  min: customers_min_fields
+  stddev: customers_stddev_fields
+  stddev_pop: customers_stddev_pop_fields
+  stddev_samp: customers_stddev_samp_fields
+  sum: customers_sum_fields
+  var_pop: customers_var_pop_fields
+  var_samp: customers_var_samp_fields
+  variance: customers_variance_fields
+}
+
+"""
+order by aggregate values of table "customers"
+"""
+input customers_aggregate_order_by {
+  avg: customers_avg_order_by
+  count: order_by
+  max: customers_max_order_by
+  min: customers_min_order_by
+  stddev: customers_stddev_order_by
+  stddev_pop: customers_stddev_pop_order_by
+  stddev_samp: customers_stddev_samp_order_by
+  sum: customers_sum_order_by
+  var_pop: customers_var_pop_order_by
+  var_samp: customers_var_samp_order_by
+  variance: customers_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "customers"
+"""
+input customers_arr_rel_insert_input {
+  data: [customers_insert_input!]!
+  on_conflict: customers_on_conflict
+}
+
+"""aggregate avg on columns"""
+type customers_avg_fields {
+  customer_id: Float
+}
+
+"""
+order by avg() on columns of table "customers"
+"""
+input customers_avg_order_by {
+  customer_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "customers". All fields are combined with a logical 'AND'.
+"""
+input customers_bool_exp {
+  _and: [customers_bool_exp]
+  _not: customers_bool_exp
+  _or: [customers_bool_exp]
+  customer_details: String_comparison_exp
+  customer_id: bigint_comparison_exp
+  policies: policies_bool_exp
+}
+
+"""
+unique or primary key constraints on table "customers"
+"""
+enum customers_constraint {
+  """unique or primary key constraint"""
+  idx_23039_customers_pkey
+}
+
+"""
+input type for incrementing integer columne in table "customers"
+"""
+input customers_inc_input {
+  customer_id: bigint
+}
+
+"""
+input type for inserting data into table "customers"
+"""
+input customers_insert_input {
+  customer_details: String
+  customer_id: bigint
+  policies: policies_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type customers_max_fields {
+  customer_details: String
+  customer_id: bigint
+}
+
+"""
+order by max() on columns of table "customers"
+"""
+input customers_max_order_by {
+  customer_details: order_by
+  customer_id: order_by
+}
+
+"""aggregate min on columns"""
+type customers_min_fields {
+  customer_details: String
+  customer_id: bigint
+}
+
+"""
+order by min() on columns of table "customers"
+"""
+input customers_min_order_by {
+  customer_details: order_by
+  customer_id: order_by
+}
+
+"""
+response of any mutation on the table "customers"
+"""
+type customers_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [customers!]!
+}
+
+"""
+input type for inserting object relation for remote table "customers"
+"""
+input customers_obj_rel_insert_input {
+  data: customers_insert_input!
+  on_conflict: customers_on_conflict
+}
+
+"""
+on conflict condition type for table "customers"
+"""
+input customers_on_conflict {
+  constraint: customers_constraint!
+  update_columns: [customers_update_column!]!
+  where: customers_bool_exp
+}
+
+"""
+ordering options when selecting data from "customers"
+"""
+input customers_order_by {
+  customer_details: order_by
+  customer_id: order_by
+  policies_aggregate: policies_aggregate_order_by
+}
+
+"""
+select columns of table "customers"
+"""
+enum customers_select_column {
+  """column name"""
+  customer_details
+
+  """column name"""
+  customer_id
+}
+
+"""
+input type for updating data in table "customers"
+"""
+input customers_set_input {
+  customer_details: String
+  customer_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type customers_stddev_fields {
+  customer_id: Float
+}
+
+"""
+order by stddev() on columns of table "customers"
+"""
+input customers_stddev_order_by {
+  customer_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type customers_stddev_pop_fields {
+  customer_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "customers"
+"""
+input customers_stddev_pop_order_by {
+  customer_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type customers_stddev_samp_fields {
+  customer_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "customers"
+"""
+input customers_stddev_samp_order_by {
+  customer_id: order_by
+}
+
+"""aggregate sum on columns"""
+type customers_sum_fields {
+  customer_id: bigint
+}
+
+"""
+order by sum() on columns of table "customers"
+"""
+input customers_sum_order_by {
+  customer_id: order_by
+}
+
+"""
+update columns of table "customers"
+"""
+enum customers_update_column {
+  """column name"""
+  customer_details
+
+  """column name"""
+  customer_id
+}
+
+"""aggregate var_pop on columns"""
+type customers_var_pop_fields {
+  customer_id: Float
+}
+
+"""
+order by var_pop() on columns of table "customers"
+"""
+input customers_var_pop_order_by {
+  customer_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type customers_var_samp_fields {
+  customer_id: Float
+}
+
+"""
+order by var_samp() on columns of table "customers"
+"""
+input customers_var_samp_order_by {
+  customer_id: order_by
+}
+
+"""aggregate variance on columns"""
+type customers_variance_fields {
+  customer_id: Float
+}
+
+"""
+order by variance() on columns of table "customers"
+"""
+input customers_variance_order_by {
+  customer_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "claim_headers"
+  """
+  delete_claim_headers(
+    """filter the rows which have to be deleted"""
+    where: claim_headers_bool_exp!
+  ): claim_headers_mutation_response
+
+  """
+  delete data from the table: "claims_documents"
+  """
+  delete_claims_documents(
+    """filter the rows which have to be deleted"""
+    where: claims_documents_bool_exp!
+  ): claims_documents_mutation_response
+
+  """
+  delete data from the table: "claims_processing"
+  """
+  delete_claims_processing(
+    """filter the rows which have to be deleted"""
+    where: claims_processing_bool_exp!
+  ): claims_processing_mutation_response
+
+  """
+  delete data from the table: "claims_processing_stages"
+  """
+  delete_claims_processing_stages(
+    """filter the rows which have to be deleted"""
+    where: claims_processing_stages_bool_exp!
+  ): claims_processing_stages_mutation_response
+
+  """
+  delete data from the table: "customers"
+  """
+  delete_customers(
+    """filter the rows which have to be deleted"""
+    where: customers_bool_exp!
+  ): customers_mutation_response
+
+  """
+  delete data from the table: "policies"
+  """
+  delete_policies(
+    """filter the rows which have to be deleted"""
+    where: policies_bool_exp!
+  ): policies_mutation_response
+
+  """
+  delete data from the table: "staff"
+  """
+  delete_staff(
+    """filter the rows which have to be deleted"""
+    where: staff_bool_exp!
+  ): staff_mutation_response
+
+  """
+  insert data into the table: "claim_headers"
+  """
+  insert_claim_headers(
+    """the rows to be inserted"""
+    objects: [claim_headers_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: claim_headers_on_conflict
+  ): claim_headers_mutation_response
+
+  """
+  insert data into the table: "claims_documents"
+  """
+  insert_claims_documents(
+    """the rows to be inserted"""
+    objects: [claims_documents_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: claims_documents_on_conflict
+  ): claims_documents_mutation_response
+
+  """
+  insert data into the table: "claims_processing"
+  """
+  insert_claims_processing(
+    """the rows to be inserted"""
+    objects: [claims_processing_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: claims_processing_on_conflict
+  ): claims_processing_mutation_response
+
+  """
+  insert data into the table: "claims_processing_stages"
+  """
+  insert_claims_processing_stages(
+    """the rows to be inserted"""
+    objects: [claims_processing_stages_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: claims_processing_stages_on_conflict
+  ): claims_processing_stages_mutation_response
+
+  """
+  insert data into the table: "customers"
+  """
+  insert_customers(
+    """the rows to be inserted"""
+    objects: [customers_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: customers_on_conflict
+  ): customers_mutation_response
+
+  """
+  insert data into the table: "policies"
+  """
+  insert_policies(
+    """the rows to be inserted"""
+    objects: [policies_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: policies_on_conflict
+  ): policies_mutation_response
+
+  """
+  insert data into the table: "staff"
+  """
+  insert_staff(
+    """the rows to be inserted"""
+    objects: [staff_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: staff_on_conflict
+  ): staff_mutation_response
+
+  """
+  update data of the table: "claim_headers"
+  """
+  update_claim_headers(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: claim_headers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: claim_headers_set_input
+
+    """filter the rows which have to be updated"""
+    where: claim_headers_bool_exp!
+  ): claim_headers_mutation_response
+
+  """
+  update data of the table: "claims_documents"
+  """
+  update_claims_documents(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: claims_documents_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: claims_documents_set_input
+
+    """filter the rows which have to be updated"""
+    where: claims_documents_bool_exp!
+  ): claims_documents_mutation_response
+
+  """
+  update data of the table: "claims_processing"
+  """
+  update_claims_processing(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: claims_processing_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: claims_processing_set_input
+
+    """filter the rows which have to be updated"""
+    where: claims_processing_bool_exp!
+  ): claims_processing_mutation_response
+
+  """
+  update data of the table: "claims_processing_stages"
+  """
+  update_claims_processing_stages(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: claims_processing_stages_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: claims_processing_stages_set_input
+
+    """filter the rows which have to be updated"""
+    where: claims_processing_stages_bool_exp!
+  ): claims_processing_stages_mutation_response
+
+  """
+  update data of the table: "customers"
+  """
+  update_customers(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customers_set_input
+
+    """filter the rows which have to be updated"""
+    where: customers_bool_exp!
+  ): customers_mutation_response
+
+  """
+  update data of the table: "policies"
+  """
+  update_policies(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: policies_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: policies_set_input
+
+    """filter the rows which have to be updated"""
+    where: policies_bool_exp!
+  ): policies_mutation_response
+
+  """
+  update data of the table: "staff"
+  """
+  update_staff(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: staff_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: staff_set_input
+
+    """filter the rows which have to be updated"""
+    where: staff_bool_exp!
+  ): staff_mutation_response
+}
+
+scalar numeric
+
+"""
+expression to compare columns of type numeric. All fields are combined with logical 'AND'.
+"""
+input numeric_comparison_exp {
+  _eq: numeric
+  _gt: numeric
+  _gte: numeric
+  _in: [numeric!]
+  _is_null: Boolean
+  _lt: numeric
+  _lte: numeric
+  _neq: numeric
+  _nin: [numeric!]
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "policies"
+"""
+type policies {
+  """An array relationship"""
+  claim_headers(
+    """distinct select on columns"""
+    distinct_on: [claim_headers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claim_headers_order_by!]
+
+    """filter the rows returned"""
+    where: claim_headers_bool_exp
+  ): [claim_headers!]!
+
+  """An aggregated array relationship"""
+  claim_headers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [claim_headers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claim_headers_order_by!]
+
+    """filter the rows returned"""
+    where: claim_headers_bool_exp
+  ): claim_headers_aggregate!
+
+  """An object relationship"""
+  customer: customers
+  customer_id: bigint
+  end_date: timestamptz
+  policy_id: bigint!
+  policy_type_code: String
+  start_date: timestamptz
+}
+
+"""
+aggregated selection of "policies"
+"""
+type policies_aggregate {
+  aggregate: policies_aggregate_fields
+  nodes: [policies!]!
+}
+
+"""
+aggregate fields of "policies"
+"""
+type policies_aggregate_fields {
+  avg: policies_avg_fields
+  count(columns: [policies_select_column!], distinct: Boolean): Int
+  max: policies_max_fields
+  min: policies_min_fields
+  stddev: policies_stddev_fields
+  stddev_pop: policies_stddev_pop_fields
+  stddev_samp: policies_stddev_samp_fields
+  sum: policies_sum_fields
+  var_pop: policies_var_pop_fields
+  var_samp: policies_var_samp_fields
+  variance: policies_variance_fields
+}
+
+"""
+order by aggregate values of table "policies"
+"""
+input policies_aggregate_order_by {
+  avg: policies_avg_order_by
+  count: order_by
+  max: policies_max_order_by
+  min: policies_min_order_by
+  stddev: policies_stddev_order_by
+  stddev_pop: policies_stddev_pop_order_by
+  stddev_samp: policies_stddev_samp_order_by
+  sum: policies_sum_order_by
+  var_pop: policies_var_pop_order_by
+  var_samp: policies_var_samp_order_by
+  variance: policies_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "policies"
+"""
+input policies_arr_rel_insert_input {
+  data: [policies_insert_input!]!
+  on_conflict: policies_on_conflict
+}
+
+"""aggregate avg on columns"""
+type policies_avg_fields {
+  customer_id: Float
+  policy_id: Float
+}
+
+"""
+order by avg() on columns of table "policies"
+"""
+input policies_avg_order_by {
+  customer_id: order_by
+  policy_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "policies". All fields are combined with a logical 'AND'.
+"""
+input policies_bool_exp {
+  _and: [policies_bool_exp]
+  _not: policies_bool_exp
+  _or: [policies_bool_exp]
+  claim_headers: claim_headers_bool_exp
+  customer: customers_bool_exp
+  customer_id: bigint_comparison_exp
+  end_date: timestamptz_comparison_exp
+  policy_id: bigint_comparison_exp
+  policy_type_code: String_comparison_exp
+  start_date: timestamptz_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "policies"
+"""
+enum policies_constraint {
+  """unique or primary key constraint"""
+  idx_23051_policies_pkey
+}
+
+"""
+input type for incrementing integer columne in table "policies"
+"""
+input policies_inc_input {
+  customer_id: bigint
+  policy_id: bigint
+}
+
+"""
+input type for inserting data into table "policies"
+"""
+input policies_insert_input {
+  claim_headers: claim_headers_arr_rel_insert_input
+  customer: customers_obj_rel_insert_input
+  customer_id: bigint
+  end_date: timestamptz
+  policy_id: bigint
+  policy_type_code: String
+  start_date: timestamptz
+}
+
+"""aggregate max on columns"""
+type policies_max_fields {
+  customer_id: bigint
+  end_date: timestamptz
+  policy_id: bigint
+  policy_type_code: String
+  start_date: timestamptz
+}
+
+"""
+order by max() on columns of table "policies"
+"""
+input policies_max_order_by {
+  customer_id: order_by
+  end_date: order_by
+  policy_id: order_by
+  policy_type_code: order_by
+  start_date: order_by
+}
+
+"""aggregate min on columns"""
+type policies_min_fields {
+  customer_id: bigint
+  end_date: timestamptz
+  policy_id: bigint
+  policy_type_code: String
+  start_date: timestamptz
+}
+
+"""
+order by min() on columns of table "policies"
+"""
+input policies_min_order_by {
+  customer_id: order_by
+  end_date: order_by
+  policy_id: order_by
+  policy_type_code: order_by
+  start_date: order_by
+}
+
+"""
+response of any mutation on the table "policies"
+"""
+type policies_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [policies!]!
+}
+
+"""
+input type for inserting object relation for remote table "policies"
+"""
+input policies_obj_rel_insert_input {
+  data: policies_insert_input!
+  on_conflict: policies_on_conflict
+}
+
+"""
+on conflict condition type for table "policies"
+"""
+input policies_on_conflict {
+  constraint: policies_constraint!
+  update_columns: [policies_update_column!]!
+  where: policies_bool_exp
+}
+
+"""
+ordering options when selecting data from "policies"
+"""
+input policies_order_by {
+  claim_headers_aggregate: claim_headers_aggregate_order_by
+  customer: customers_order_by
+  customer_id: order_by
+  end_date: order_by
+  policy_id: order_by
+  policy_type_code: order_by
+  start_date: order_by
+}
+
+"""
+select columns of table "policies"
+"""
+enum policies_select_column {
+  """column name"""
+  customer_id
+
+  """column name"""
+  end_date
+
+  """column name"""
+  policy_id
+
+  """column name"""
+  policy_type_code
+
+  """column name"""
+  start_date
+}
+
+"""
+input type for updating data in table "policies"
+"""
+input policies_set_input {
+  customer_id: bigint
+  end_date: timestamptz
+  policy_id: bigint
+  policy_type_code: String
+  start_date: timestamptz
+}
+
+"""aggregate stddev on columns"""
+type policies_stddev_fields {
+  customer_id: Float
+  policy_id: Float
+}
+
+"""
+order by stddev() on columns of table "policies"
+"""
+input policies_stddev_order_by {
+  customer_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type policies_stddev_pop_fields {
+  customer_id: Float
+  policy_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "policies"
+"""
+input policies_stddev_pop_order_by {
+  customer_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type policies_stddev_samp_fields {
+  customer_id: Float
+  policy_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "policies"
+"""
+input policies_stddev_samp_order_by {
+  customer_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate sum on columns"""
+type policies_sum_fields {
+  customer_id: bigint
+  policy_id: bigint
+}
+
+"""
+order by sum() on columns of table "policies"
+"""
+input policies_sum_order_by {
+  customer_id: order_by
+  policy_id: order_by
+}
+
+"""
+update columns of table "policies"
+"""
+enum policies_update_column {
+  """column name"""
+  customer_id
+
+  """column name"""
+  end_date
+
+  """column name"""
+  policy_id
+
+  """column name"""
+  policy_type_code
+
+  """column name"""
+  start_date
+}
+
+"""aggregate var_pop on columns"""
+type policies_var_pop_fields {
+  customer_id: Float
+  policy_id: Float
+}
+
+"""
+order by var_pop() on columns of table "policies"
+"""
+input policies_var_pop_order_by {
+  customer_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type policies_var_samp_fields {
+  customer_id: Float
+  policy_id: Float
+}
+
+"""
+order by var_samp() on columns of table "policies"
+"""
+input policies_var_samp_order_by {
+  customer_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate variance on columns"""
+type policies_variance_fields {
+  customer_id: Float
+  policy_id: Float
+}
+
+"""
+order by variance() on columns of table "policies"
+"""
+input policies_variance_order_by {
+  customer_id: order_by
+  policy_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "claim_headers"
+  """
+  claim_headers(
+    """distinct select on columns"""
+    distinct_on: [claim_headers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claim_headers_order_by!]
+
+    """filter the rows returned"""
+    where: claim_headers_bool_exp
+  ): [claim_headers!]!
+
+  """
+  fetch aggregated fields from the table: "claim_headers"
+  """
+  claim_headers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [claim_headers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claim_headers_order_by!]
+
+    """filter the rows returned"""
+    where: claim_headers_bool_exp
+  ): claim_headers_aggregate!
+
+  """fetch data from the table: "claim_headers" using primary key columns"""
+  claim_headers_by_pk(claim_header_id: bigint!): claim_headers
+
+  """
+  fetch data from the table: "claims_documents"
+  """
+  claims_documents(
+    """distinct select on columns"""
+    distinct_on: [claims_documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_documents_order_by!]
+
+    """filter the rows returned"""
+    where: claims_documents_bool_exp
+  ): [claims_documents!]!
+
+  """
+  fetch aggregated fields from the table: "claims_documents"
+  """
+  claims_documents_aggregate(
+    """distinct select on columns"""
+    distinct_on: [claims_documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_documents_order_by!]
+
+    """filter the rows returned"""
+    where: claims_documents_bool_exp
+  ): claims_documents_aggregate!
+
+  """
+  fetch data from the table: "claims_processing"
+  """
+  claims_processing(
+    """distinct select on columns"""
+    distinct_on: [claims_processing_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_processing_order_by!]
+
+    """filter the rows returned"""
+    where: claims_processing_bool_exp
+  ): [claims_processing!]!
+
+  """
+  fetch aggregated fields from the table: "claims_processing"
+  """
+  claims_processing_aggregate(
+    """distinct select on columns"""
+    distinct_on: [claims_processing_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_processing_order_by!]
+
+    """filter the rows returned"""
+    where: claims_processing_bool_exp
+  ): claims_processing_aggregate!
+
+  """
+  fetch data from the table: "claims_processing" using primary key columns
+  """
+  claims_processing_by_pk(claim_processing_id: bigint!): claims_processing
+
+  """
+  fetch data from the table: "claims_processing_stages"
+  """
+  claims_processing_stages(
+    """distinct select on columns"""
+    distinct_on: [claims_processing_stages_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_processing_stages_order_by!]
+
+    """filter the rows returned"""
+    where: claims_processing_stages_bool_exp
+  ): [claims_processing_stages!]!
+
+  """
+  fetch aggregated fields from the table: "claims_processing_stages"
+  """
+  claims_processing_stages_aggregate(
+    """distinct select on columns"""
+    distinct_on: [claims_processing_stages_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_processing_stages_order_by!]
+
+    """filter the rows returned"""
+    where: claims_processing_stages_bool_exp
+  ): claims_processing_stages_aggregate!
+
+  """
+  fetch data from the table: "claims_processing_stages" using primary key columns
+  """
+  claims_processing_stages_by_pk(claim_stage_id: bigint!): claims_processing_stages
+
+  """
+  fetch data from the table: "customers"
+  """
+  customers(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): [customers!]!
+
+  """
+  fetch aggregated fields from the table: "customers"
+  """
+  customers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): customers_aggregate!
+
+  """fetch data from the table: "customers" using primary key columns"""
+  customers_by_pk(customer_id: bigint!): customers
+
+  """
+  fetch data from the table: "policies"
+  """
+  policies(
+    """distinct select on columns"""
+    distinct_on: [policies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [policies_order_by!]
+
+    """filter the rows returned"""
+    where: policies_bool_exp
+  ): [policies!]!
+
+  """
+  fetch aggregated fields from the table: "policies"
+  """
+  policies_aggregate(
+    """distinct select on columns"""
+    distinct_on: [policies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [policies_order_by!]
+
+    """filter the rows returned"""
+    where: policies_bool_exp
+  ): policies_aggregate!
+
+  """fetch data from the table: "policies" using primary key columns"""
+  policies_by_pk(policy_id: bigint!): policies
+
+  """
+  fetch data from the table: "staff"
+  """
+  staff(
+    """distinct select on columns"""
+    distinct_on: [staff_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [staff_order_by!]
+
+    """filter the rows returned"""
+    where: staff_bool_exp
+  ): [staff!]!
+
+  """
+  fetch aggregated fields from the table: "staff"
+  """
+  staff_aggregate(
+    """distinct select on columns"""
+    distinct_on: [staff_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [staff_order_by!]
+
+    """filter the rows returned"""
+    where: staff_bool_exp
+  ): staff_aggregate!
+
+  """fetch data from the table: "staff" using primary key columns"""
+  staff_by_pk(staff_id: bigint!): staff
+}
+
+"""
+columns and relationships of "staff"
+"""
+type staff {
+  """An array relationship"""
+  claims_documents(
+    """distinct select on columns"""
+    distinct_on: [claims_documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_documents_order_by!]
+
+    """filter the rows returned"""
+    where: claims_documents_bool_exp
+  ): [claims_documents!]!
+
+  """An aggregated array relationship"""
+  claims_documents_aggregate(
+    """distinct select on columns"""
+    distinct_on: [claims_documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_documents_order_by!]
+
+    """filter the rows returned"""
+    where: claims_documents_bool_exp
+  ): claims_documents_aggregate!
+
+  """An array relationship"""
+  claims_processings(
+    """distinct select on columns"""
+    distinct_on: [claims_processing_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_processing_order_by!]
+
+    """filter the rows returned"""
+    where: claims_processing_bool_exp
+  ): [claims_processing!]!
+
+  """An aggregated array relationship"""
+  claims_processings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [claims_processing_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_processing_order_by!]
+
+    """filter the rows returned"""
+    where: claims_processing_bool_exp
+  ): claims_processing_aggregate!
+  staff_details: String
+  staff_id: bigint!
+}
+
+"""
+aggregated selection of "staff"
+"""
+type staff_aggregate {
+  aggregate: staff_aggregate_fields
+  nodes: [staff!]!
+}
+
+"""
+aggregate fields of "staff"
+"""
+type staff_aggregate_fields {
+  avg: staff_avg_fields
+  count(columns: [staff_select_column!], distinct: Boolean): Int
+  max: staff_max_fields
+  min: staff_min_fields
+  stddev: staff_stddev_fields
+  stddev_pop: staff_stddev_pop_fields
+  stddev_samp: staff_stddev_samp_fields
+  sum: staff_sum_fields
+  var_pop: staff_var_pop_fields
+  var_samp: staff_var_samp_fields
+  variance: staff_variance_fields
+}
+
+"""
+order by aggregate values of table "staff"
+"""
+input staff_aggregate_order_by {
+  avg: staff_avg_order_by
+  count: order_by
+  max: staff_max_order_by
+  min: staff_min_order_by
+  stddev: staff_stddev_order_by
+  stddev_pop: staff_stddev_pop_order_by
+  stddev_samp: staff_stddev_samp_order_by
+  sum: staff_sum_order_by
+  var_pop: staff_var_pop_order_by
+  var_samp: staff_var_samp_order_by
+  variance: staff_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "staff"
+"""
+input staff_arr_rel_insert_input {
+  data: [staff_insert_input!]!
+  on_conflict: staff_on_conflict
+}
+
+"""aggregate avg on columns"""
+type staff_avg_fields {
+  staff_id: Float
+}
+
+"""
+order by avg() on columns of table "staff"
+"""
+input staff_avg_order_by {
+  staff_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "staff". All fields are combined with a logical 'AND'.
+"""
+input staff_bool_exp {
+  _and: [staff_bool_exp]
+  _not: staff_bool_exp
+  _or: [staff_bool_exp]
+  claims_documents: claims_documents_bool_exp
+  claims_processings: claims_processing_bool_exp
+  staff_details: String_comparison_exp
+  staff_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "staff"
+"""
+enum staff_constraint {
+  """unique or primary key constraint"""
+  idx_23045_staff_pkey
+}
+
+"""
+input type for incrementing integer columne in table "staff"
+"""
+input staff_inc_input {
+  staff_id: bigint
+}
+
+"""
+input type for inserting data into table "staff"
+"""
+input staff_insert_input {
+  claims_documents: claims_documents_arr_rel_insert_input
+  claims_processings: claims_processing_arr_rel_insert_input
+  staff_details: String
+  staff_id: bigint
+}
+
+"""aggregate max on columns"""
+type staff_max_fields {
+  staff_details: String
+  staff_id: bigint
+}
+
+"""
+order by max() on columns of table "staff"
+"""
+input staff_max_order_by {
+  staff_details: order_by
+  staff_id: order_by
+}
+
+"""aggregate min on columns"""
+type staff_min_fields {
+  staff_details: String
+  staff_id: bigint
+}
+
+"""
+order by min() on columns of table "staff"
+"""
+input staff_min_order_by {
+  staff_details: order_by
+  staff_id: order_by
+}
+
+"""
+response of any mutation on the table "staff"
+"""
+type staff_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [staff!]!
+}
+
+"""
+input type for inserting object relation for remote table "staff"
+"""
+input staff_obj_rel_insert_input {
+  data: staff_insert_input!
+  on_conflict: staff_on_conflict
+}
+
+"""
+on conflict condition type for table "staff"
+"""
+input staff_on_conflict {
+  constraint: staff_constraint!
+  update_columns: [staff_update_column!]!
+  where: staff_bool_exp
+}
+
+"""
+ordering options when selecting data from "staff"
+"""
+input staff_order_by {
+  claims_documents_aggregate: claims_documents_aggregate_order_by
+  claims_processings_aggregate: claims_processing_aggregate_order_by
+  staff_details: order_by
+  staff_id: order_by
+}
+
+"""
+select columns of table "staff"
+"""
+enum staff_select_column {
+  """column name"""
+  staff_details
+
+  """column name"""
+  staff_id
+}
+
+"""
+input type for updating data in table "staff"
+"""
+input staff_set_input {
+  staff_details: String
+  staff_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type staff_stddev_fields {
+  staff_id: Float
+}
+
+"""
+order by stddev() on columns of table "staff"
+"""
+input staff_stddev_order_by {
+  staff_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type staff_stddev_pop_fields {
+  staff_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "staff"
+"""
+input staff_stddev_pop_order_by {
+  staff_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type staff_stddev_samp_fields {
+  staff_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "staff"
+"""
+input staff_stddev_samp_order_by {
+  staff_id: order_by
+}
+
+"""aggregate sum on columns"""
+type staff_sum_fields {
+  staff_id: bigint
+}
+
+"""
+order by sum() on columns of table "staff"
+"""
+input staff_sum_order_by {
+  staff_id: order_by
+}
+
+"""
+update columns of table "staff"
+"""
+enum staff_update_column {
+  """column name"""
+  staff_details
+
+  """column name"""
+  staff_id
+}
+
+"""aggregate var_pop on columns"""
+type staff_var_pop_fields {
+  staff_id: Float
+}
+
+"""
+order by var_pop() on columns of table "staff"
+"""
+input staff_var_pop_order_by {
+  staff_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type staff_var_samp_fields {
+  staff_id: Float
+}
+
+"""
+order by var_samp() on columns of table "staff"
+"""
+input staff_var_samp_order_by {
+  staff_id: order_by
+}
+
+"""aggregate variance on columns"""
+type staff_variance_fields {
+  staff_id: Float
+}
+
+"""
+order by variance() on columns of table "staff"
+"""
+input staff_variance_order_by {
+  staff_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "claim_headers"
+  """
+  claim_headers(
+    """distinct select on columns"""
+    distinct_on: [claim_headers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claim_headers_order_by!]
+
+    """filter the rows returned"""
+    where: claim_headers_bool_exp
+  ): [claim_headers!]!
+
+  """
+  fetch aggregated fields from the table: "claim_headers"
+  """
+  claim_headers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [claim_headers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claim_headers_order_by!]
+
+    """filter the rows returned"""
+    where: claim_headers_bool_exp
+  ): claim_headers_aggregate!
+
+  """fetch data from the table: "claim_headers" using primary key columns"""
+  claim_headers_by_pk(claim_header_id: bigint!): claim_headers
+
+  """
+  fetch data from the table: "claims_documents"
+  """
+  claims_documents(
+    """distinct select on columns"""
+    distinct_on: [claims_documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_documents_order_by!]
+
+    """filter the rows returned"""
+    where: claims_documents_bool_exp
+  ): [claims_documents!]!
+
+  """
+  fetch aggregated fields from the table: "claims_documents"
+  """
+  claims_documents_aggregate(
+    """distinct select on columns"""
+    distinct_on: [claims_documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_documents_order_by!]
+
+    """filter the rows returned"""
+    where: claims_documents_bool_exp
+  ): claims_documents_aggregate!
+
+  """
+  fetch data from the table: "claims_processing"
+  """
+  claims_processing(
+    """distinct select on columns"""
+    distinct_on: [claims_processing_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_processing_order_by!]
+
+    """filter the rows returned"""
+    where: claims_processing_bool_exp
+  ): [claims_processing!]!
+
+  """
+  fetch aggregated fields from the table: "claims_processing"
+  """
+  claims_processing_aggregate(
+    """distinct select on columns"""
+    distinct_on: [claims_processing_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_processing_order_by!]
+
+    """filter the rows returned"""
+    where: claims_processing_bool_exp
+  ): claims_processing_aggregate!
+
+  """
+  fetch data from the table: "claims_processing" using primary key columns
+  """
+  claims_processing_by_pk(claim_processing_id: bigint!): claims_processing
+
+  """
+  fetch data from the table: "claims_processing_stages"
+  """
+  claims_processing_stages(
+    """distinct select on columns"""
+    distinct_on: [claims_processing_stages_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_processing_stages_order_by!]
+
+    """filter the rows returned"""
+    where: claims_processing_stages_bool_exp
+  ): [claims_processing_stages!]!
+
+  """
+  fetch aggregated fields from the table: "claims_processing_stages"
+  """
+  claims_processing_stages_aggregate(
+    """distinct select on columns"""
+    distinct_on: [claims_processing_stages_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_processing_stages_order_by!]
+
+    """filter the rows returned"""
+    where: claims_processing_stages_bool_exp
+  ): claims_processing_stages_aggregate!
+
+  """
+  fetch data from the table: "claims_processing_stages" using primary key columns
+  """
+  claims_processing_stages_by_pk(claim_stage_id: bigint!): claims_processing_stages
+
+  """
+  fetch data from the table: "customers"
+  """
+  customers(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): [customers!]!
+
+  """
+  fetch aggregated fields from the table: "customers"
+  """
+  customers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): customers_aggregate!
+
+  """fetch data from the table: "customers" using primary key columns"""
+  customers_by_pk(customer_id: bigint!): customers
+
+  """
+  fetch data from the table: "policies"
+  """
+  policies(
+    """distinct select on columns"""
+    distinct_on: [policies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [policies_order_by!]
+
+    """filter the rows returned"""
+    where: policies_bool_exp
+  ): [policies!]!
+
+  """
+  fetch aggregated fields from the table: "policies"
+  """
+  policies_aggregate(
+    """distinct select on columns"""
+    distinct_on: [policies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [policies_order_by!]
+
+    """filter the rows returned"""
+    where: policies_bool_exp
+  ): policies_aggregate!
+
+  """fetch data from the table: "policies" using primary key columns"""
+  policies_by_pk(policy_id: bigint!): policies
+
+  """
+  fetch data from the table: "staff"
+  """
+  staff(
+    """distinct select on columns"""
+    distinct_on: [staff_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [staff_order_by!]
+
+    """filter the rows returned"""
+    where: staff_bool_exp
+  ): [staff!]!
+
+  """
+  fetch aggregated fields from the table: "staff"
+  """
+  staff_aggregate(
+    """distinct select on columns"""
+    distinct_on: [staff_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [staff_order_by!]
+
+    """filter the rows returned"""
+    where: staff_bool_exp
+  ): staff_aggregate!
+
+  """fetch data from the table: "staff" using primary key columns"""
+  staff_by_pk(staff_id: bigint!): staff
+}
+
+scalar timestamptz
+
+"""
+expression to compare columns of type timestamptz. All fields are combined with logical 'AND'.
+"""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}

@@ -8,8 +8,8 @@
 import Foundation
 
 // MARK: - BaseSchema
-struct BaseSchema: Codable {
-    let schema: Schema
+public struct BaseSchema: Codable {
+    public let schema: Schema
 
     enum CodingKeys: String, CodingKey {
         case schema = "__schema"
@@ -17,17 +17,17 @@ struct BaseSchema: Codable {
 }
 
 // MARK: - Schema
-struct Schema: Codable {
-    let queryType, mutationType, subscriptionType: MutationTypeClass
-    let types: [TypeElement]
-    let directives: [Directive]
+public struct Schema: Codable {
+    public let queryType, mutationType, subscriptionType: MutationTypeClass
+    public let types: [TypeElement]
+    public let directives: [Directive]
 }
 
 // MARK: - Directive
-struct Directive: Codable {
-    let name, directiveDescription: String
-    let locations: [String]
-    let args: [Arg]
+public struct Directive: Codable {
+    public let name, directiveDescription: String
+    public let locations: [String]
+    public let args: [Arg]
 
     enum CodingKeys: String, CodingKey {
         case name
@@ -37,11 +37,11 @@ struct Directive: Codable {
 }
 
 // MARK: - Arg
-struct Arg: Codable {
-    let name: String
-    let argDescription: String?
-    let type: OfTypeClass
-    let defaultValue: String?
+public struct Arg: Codable {
+    public let name: String
+    public let argDescription: String?
+    public let type: OfTypeClass
+    public let defaultValue: String?
 
     enum CodingKeys: String, CodingKey {
         case name
@@ -51,10 +51,10 @@ struct Arg: Codable {
 }
 
 // MARK: - OfTypeClass
-class OfTypeClass: Codable {
-    let kind: Kind
-    let name: String?
-    let ofType: OfTypeClass?
+public class OfTypeClass: Codable {
+    public let kind: Kind
+    public let name: String?
+    public let ofType: OfTypeClass?
 
     init(kind: Kind, name: String?, ofType: OfTypeClass?) {
         self.kind = kind
@@ -63,7 +63,7 @@ class OfTypeClass: Codable {
     }
 }
 
-enum Kind: String, Codable {
+public enum Kind: String, Codable {
     case inputObject = "INPUT_OBJECT"
     case kindENUM = "ENUM"
     case list = "LIST"
@@ -73,20 +73,20 @@ enum Kind: String, Codable {
 }
 
 // MARK: - MutationTypeClass
-struct MutationTypeClass: Codable {
-    let name: String
+public struct MutationTypeClass: Codable {
+    public let name: String
 }
 
 // MARK: - TypeElement
-struct TypeElement: Codable {
-    let kind: Kind
-    let name: String
-    let typeDescription: String?
-    let fields: [Field]?
-    let inputFields: [Arg]?
-//    let interfaces: [JSONAny]?
-    let enumValues: [EnumValue]?
-//    let possibleTypes: JSONNull?
+public struct TypeElement: Codable {
+    public let kind: Kind
+    public let name: String
+    public let typeDescription: String?
+    public let fields: [Field]?
+    public let inputFields: [Arg]?
+//    public let interfaces: [JSONAny]?
+    public let enumValues: [EnumValue]?
+//    public let possibleTypes: JSONNull?
 
     enum CodingKeys: String, CodingKey {
         case kind, name
@@ -96,16 +96,16 @@ struct TypeElement: Codable {
         
     }
     /// gets all of the fields that are not relations
-    var allSingleFieldNames: [String] {
+    public var allSingleFieldNames: [String] {
         (fields ?? []).filter{ $0.type.kind == .scalar}.map{ $0.name}
     }
 }
 
 // MARK: - EnumValue
-struct EnumValue: Codable {
-    let name, enumValueDescription: String
-    let isDeprecated: Bool
-//    let deprecationReason: JSONNull?
+public struct EnumValue: Codable {
+    public let name, enumValueDescription: String
+    public let isDeprecated: Bool
+//    public let deprecationReason: JSONNull?
 
     enum CodingKeys: String, CodingKey {
         case name
@@ -115,13 +115,13 @@ struct EnumValue: Codable {
 }
 
 // MARK: - Field
-struct Field: Codable {
-    let name: String
-    let fieldDescription: String?
-    let args: [Arg]
-    let type: OfTypeClass
-    let isDeprecated: Bool
-//    let deprecationReason: JSONNull?
+public struct Field: Codable {
+    public let name: String
+    public let fieldDescription: String?
+    public let args: [Arg]
+    public let type: OfTypeClass
+    public let isDeprecated: Bool
+//    public let deprecationReason: JSONNull?
 
     enum CodingKeys: String, CodingKey {
         case name
@@ -129,18 +129,18 @@ struct Field: Codable {
         case args, type, isDeprecated//, deprecationReason
     }
     
-    func nameMatchesFieldType(_ name: String?) -> Bool {
+    public func nameMatchesFieldType(_ name: String?) -> Bool {
         guard let name = name, let objectTypeName = self.objectTypeName else {
             return false
         }
         return objectTypeName.lowercased() == name.lowercased()
     }
     
-    func fieldMatchesField(_ field:Field) -> Bool {
+    public func fieldMatchesField(_ field:Field) -> Bool {
         return nameMatchesFieldType(field.objectTypeName)
     }
     
-    var objectTypeName: String? {
+    public var objectTypeName: String? {
         if self.type.kind == .object, let name = self.type.name {
             return name
         } else if self.type.ofType?.kind == .some(.object), let name = self.type.ofType?.name {

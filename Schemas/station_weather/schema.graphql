@@ -1,0 +1,2124 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "route"
+  """
+  delete_route(
+    """filter the rows which have to be deleted"""
+    where: route_bool_exp!
+  ): route_mutation_response
+
+  """
+  delete data from the table: "station"
+  """
+  delete_station(
+    """filter the rows which have to be deleted"""
+    where: station_bool_exp!
+  ): station_mutation_response
+
+  """
+  delete data from the table: "train"
+  """
+  delete_train(
+    """filter the rows which have to be deleted"""
+    where: train_bool_exp!
+  ): train_mutation_response
+
+  """
+  delete data from the table: "weekly_weather"
+  """
+  delete_weekly_weather(
+    """filter the rows which have to be deleted"""
+    where: weekly_weather_bool_exp!
+  ): weekly_weather_mutation_response
+
+  """
+  insert data into the table: "route"
+  """
+  insert_route(
+    """the rows to be inserted"""
+    objects: [route_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: route_on_conflict
+  ): route_mutation_response
+
+  """
+  insert data into the table: "station"
+  """
+  insert_station(
+    """the rows to be inserted"""
+    objects: [station_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: station_on_conflict
+  ): station_mutation_response
+
+  """
+  insert data into the table: "train"
+  """
+  insert_train(
+    """the rows to be inserted"""
+    objects: [train_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: train_on_conflict
+  ): train_mutation_response
+
+  """
+  insert data into the table: "weekly_weather"
+  """
+  insert_weekly_weather(
+    """the rows to be inserted"""
+    objects: [weekly_weather_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: weekly_weather_on_conflict
+  ): weekly_weather_mutation_response
+
+  """
+  update data of the table: "route"
+  """
+  update_route(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: route_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: route_set_input
+
+    """filter the rows which have to be updated"""
+    where: route_bool_exp!
+  ): route_mutation_response
+
+  """
+  update data of the table: "station"
+  """
+  update_station(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: station_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: station_set_input
+
+    """filter the rows which have to be updated"""
+    where: station_bool_exp!
+  ): station_mutation_response
+
+  """
+  update data of the table: "train"
+  """
+  update_train(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: train_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: train_set_input
+
+    """filter the rows which have to be updated"""
+    where: train_bool_exp!
+  ): train_mutation_response
+
+  """
+  update data of the table: "weekly_weather"
+  """
+  update_weekly_weather(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: weekly_weather_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: weekly_weather_set_input
+
+    """filter the rows which have to be updated"""
+    where: weekly_weather_bool_exp!
+  ): weekly_weather_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "route"
+  """
+  route(
+    """distinct select on columns"""
+    distinct_on: [route_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [route_order_by!]
+
+    """filter the rows returned"""
+    where: route_bool_exp
+  ): [route!]!
+
+  """
+  fetch aggregated fields from the table: "route"
+  """
+  route_aggregate(
+    """distinct select on columns"""
+    distinct_on: [route_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [route_order_by!]
+
+    """filter the rows returned"""
+    where: route_bool_exp
+  ): route_aggregate!
+
+  """fetch data from the table: "route" using primary key columns"""
+  route_by_pk(station_id: Int!, train_id: Int!): route
+
+  """
+  fetch data from the table: "station"
+  """
+  station(
+    """distinct select on columns"""
+    distinct_on: [station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_order_by!]
+
+    """filter the rows returned"""
+    where: station_bool_exp
+  ): [station!]!
+
+  """
+  fetch aggregated fields from the table: "station"
+  """
+  station_aggregate(
+    """distinct select on columns"""
+    distinct_on: [station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_order_by!]
+
+    """filter the rows returned"""
+    where: station_bool_exp
+  ): station_aggregate!
+
+  """fetch data from the table: "station" using primary key columns"""
+  station_by_pk(id: Int!): station
+
+  """
+  fetch data from the table: "train"
+  """
+  train(
+    """distinct select on columns"""
+    distinct_on: [train_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_order_by!]
+
+    """filter the rows returned"""
+    where: train_bool_exp
+  ): [train!]!
+
+  """
+  fetch aggregated fields from the table: "train"
+  """
+  train_aggregate(
+    """distinct select on columns"""
+    distinct_on: [train_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_order_by!]
+
+    """filter the rows returned"""
+    where: train_bool_exp
+  ): train_aggregate!
+
+  """fetch data from the table: "train" using primary key columns"""
+  train_by_pk(id: Int!): train
+
+  """
+  fetch data from the table: "weekly_weather"
+  """
+  weekly_weather(
+    """distinct select on columns"""
+    distinct_on: [weekly_weather_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [weekly_weather_order_by!]
+
+    """filter the rows returned"""
+    where: weekly_weather_bool_exp
+  ): [weekly_weather!]!
+
+  """
+  fetch aggregated fields from the table: "weekly_weather"
+  """
+  weekly_weather_aggregate(
+    """distinct select on columns"""
+    distinct_on: [weekly_weather_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [weekly_weather_order_by!]
+
+    """filter the rows returned"""
+    where: weekly_weather_bool_exp
+  ): weekly_weather_aggregate!
+
+  """fetch data from the table: "weekly_weather" using primary key columns"""
+  weekly_weather_by_pk(day_of_week: String!, station_id: Int!): weekly_weather
+}
+
+"""
+columns and relationships of "route"
+"""
+type route {
+  """An object relationship"""
+  station: station!
+  station_id: Int!
+
+  """An object relationship"""
+  train: train!
+  train_id: Int!
+}
+
+"""
+aggregated selection of "route"
+"""
+type route_aggregate {
+  aggregate: route_aggregate_fields
+  nodes: [route!]!
+}
+
+"""
+aggregate fields of "route"
+"""
+type route_aggregate_fields {
+  avg: route_avg_fields
+  count(columns: [route_select_column!], distinct: Boolean): Int
+  max: route_max_fields
+  min: route_min_fields
+  stddev: route_stddev_fields
+  stddev_pop: route_stddev_pop_fields
+  stddev_samp: route_stddev_samp_fields
+  sum: route_sum_fields
+  var_pop: route_var_pop_fields
+  var_samp: route_var_samp_fields
+  variance: route_variance_fields
+}
+
+"""
+order by aggregate values of table "route"
+"""
+input route_aggregate_order_by {
+  avg: route_avg_order_by
+  count: order_by
+  max: route_max_order_by
+  min: route_min_order_by
+  stddev: route_stddev_order_by
+  stddev_pop: route_stddev_pop_order_by
+  stddev_samp: route_stddev_samp_order_by
+  sum: route_sum_order_by
+  var_pop: route_var_pop_order_by
+  var_samp: route_var_samp_order_by
+  variance: route_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "route"
+"""
+input route_arr_rel_insert_input {
+  data: [route_insert_input!]!
+  on_conflict: route_on_conflict
+}
+
+"""aggregate avg on columns"""
+type route_avg_fields {
+  station_id: Float
+  train_id: Float
+}
+
+"""
+order by avg() on columns of table "route"
+"""
+input route_avg_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "route". All fields are combined with a logical 'AND'.
+"""
+input route_bool_exp {
+  _and: [route_bool_exp]
+  _not: route_bool_exp
+  _or: [route_bool_exp]
+  station: station_bool_exp
+  station_id: Int_comparison_exp
+  train: train_bool_exp
+  train_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "route"
+"""
+enum route_constraint {
+  """unique or primary key constraint"""
+  idx_17488_sqlite_autoindex_route_1
+}
+
+"""
+input type for incrementing integer columne in table "route"
+"""
+input route_inc_input {
+  station_id: Int
+  train_id: Int
+}
+
+"""
+input type for inserting data into table "route"
+"""
+input route_insert_input {
+  station: station_obj_rel_insert_input
+  station_id: Int
+  train: train_obj_rel_insert_input
+  train_id: Int
+}
+
+"""aggregate max on columns"""
+type route_max_fields {
+  station_id: Int
+  train_id: Int
+}
+
+"""
+order by max() on columns of table "route"
+"""
+input route_max_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""aggregate min on columns"""
+type route_min_fields {
+  station_id: Int
+  train_id: Int
+}
+
+"""
+order by min() on columns of table "route"
+"""
+input route_min_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""
+response of any mutation on the table "route"
+"""
+type route_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [route!]!
+}
+
+"""
+input type for inserting object relation for remote table "route"
+"""
+input route_obj_rel_insert_input {
+  data: route_insert_input!
+  on_conflict: route_on_conflict
+}
+
+"""
+on conflict condition type for table "route"
+"""
+input route_on_conflict {
+  constraint: route_constraint!
+  update_columns: [route_update_column!]!
+  where: route_bool_exp
+}
+
+"""
+ordering options when selecting data from "route"
+"""
+input route_order_by {
+  station: station_order_by
+  station_id: order_by
+  train: train_order_by
+  train_id: order_by
+}
+
+"""
+select columns of table "route"
+"""
+enum route_select_column {
+  """column name"""
+  station_id
+
+  """column name"""
+  train_id
+}
+
+"""
+input type for updating data in table "route"
+"""
+input route_set_input {
+  station_id: Int
+  train_id: Int
+}
+
+"""aggregate stddev on columns"""
+type route_stddev_fields {
+  station_id: Float
+  train_id: Float
+}
+
+"""
+order by stddev() on columns of table "route"
+"""
+input route_stddev_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type route_stddev_pop_fields {
+  station_id: Float
+  train_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "route"
+"""
+input route_stddev_pop_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type route_stddev_samp_fields {
+  station_id: Float
+  train_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "route"
+"""
+input route_stddev_samp_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""aggregate sum on columns"""
+type route_sum_fields {
+  station_id: Int
+  train_id: Int
+}
+
+"""
+order by sum() on columns of table "route"
+"""
+input route_sum_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""
+update columns of table "route"
+"""
+enum route_update_column {
+  """column name"""
+  station_id
+
+  """column name"""
+  train_id
+}
+
+"""aggregate var_pop on columns"""
+type route_var_pop_fields {
+  station_id: Float
+  train_id: Float
+}
+
+"""
+order by var_pop() on columns of table "route"
+"""
+input route_var_pop_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type route_var_samp_fields {
+  station_id: Float
+  train_id: Float
+}
+
+"""
+order by var_samp() on columns of table "route"
+"""
+input route_var_samp_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""aggregate variance on columns"""
+type route_variance_fields {
+  station_id: Float
+  train_id: Float
+}
+
+"""
+order by variance() on columns of table "route"
+"""
+input route_variance_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""
+columns and relationships of "station"
+"""
+type station {
+  id: Int!
+  local_authority: String
+  network_name: String
+
+  """An array relationship"""
+  routes(
+    """distinct select on columns"""
+    distinct_on: [route_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [route_order_by!]
+
+    """filter the rows returned"""
+    where: route_bool_exp
+  ): [route!]!
+
+  """An aggregated array relationship"""
+  routes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [route_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [route_order_by!]
+
+    """filter the rows returned"""
+    where: route_bool_exp
+  ): route_aggregate!
+  services: String
+
+  """An array relationship"""
+  weekly_weathers(
+    """distinct select on columns"""
+    distinct_on: [weekly_weather_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [weekly_weather_order_by!]
+
+    """filter the rows returned"""
+    where: weekly_weather_bool_exp
+  ): [weekly_weather!]!
+
+  """An aggregated array relationship"""
+  weekly_weathers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [weekly_weather_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [weekly_weather_order_by!]
+
+    """filter the rows returned"""
+    where: weekly_weather_bool_exp
+  ): weekly_weather_aggregate!
+}
+
+"""
+aggregated selection of "station"
+"""
+type station_aggregate {
+  aggregate: station_aggregate_fields
+  nodes: [station!]!
+}
+
+"""
+aggregate fields of "station"
+"""
+type station_aggregate_fields {
+  avg: station_avg_fields
+  count(columns: [station_select_column!], distinct: Boolean): Int
+  max: station_max_fields
+  min: station_min_fields
+  stddev: station_stddev_fields
+  stddev_pop: station_stddev_pop_fields
+  stddev_samp: station_stddev_samp_fields
+  sum: station_sum_fields
+  var_pop: station_var_pop_fields
+  var_samp: station_var_samp_fields
+  variance: station_variance_fields
+}
+
+"""
+order by aggregate values of table "station"
+"""
+input station_aggregate_order_by {
+  avg: station_avg_order_by
+  count: order_by
+  max: station_max_order_by
+  min: station_min_order_by
+  stddev: station_stddev_order_by
+  stddev_pop: station_stddev_pop_order_by
+  stddev_samp: station_stddev_samp_order_by
+  sum: station_sum_order_by
+  var_pop: station_var_pop_order_by
+  var_samp: station_var_samp_order_by
+  variance: station_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "station"
+"""
+input station_arr_rel_insert_input {
+  data: [station_insert_input!]!
+  on_conflict: station_on_conflict
+}
+
+"""aggregate avg on columns"""
+type station_avg_fields {
+  id: Float
+}
+
+"""
+order by avg() on columns of table "station"
+"""
+input station_avg_order_by {
+  id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "station". All fields are combined with a logical 'AND'.
+"""
+input station_bool_exp {
+  _and: [station_bool_exp]
+  _not: station_bool_exp
+  _or: [station_bool_exp]
+  id: Int_comparison_exp
+  local_authority: String_comparison_exp
+  network_name: String_comparison_exp
+  routes: route_bool_exp
+  services: String_comparison_exp
+  weekly_weathers: weekly_weather_bool_exp
+}
+
+"""
+unique or primary key constraints on table "station"
+"""
+enum station_constraint {
+  """unique or primary key constraint"""
+  idx_17482_sqlite_autoindex_station_1
+}
+
+"""
+input type for incrementing integer columne in table "station"
+"""
+input station_inc_input {
+  id: Int
+}
+
+"""
+input type for inserting data into table "station"
+"""
+input station_insert_input {
+  id: Int
+  local_authority: String
+  network_name: String
+  routes: route_arr_rel_insert_input
+  services: String
+  weekly_weathers: weekly_weather_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type station_max_fields {
+  id: Int
+  local_authority: String
+  network_name: String
+  services: String
+}
+
+"""
+order by max() on columns of table "station"
+"""
+input station_max_order_by {
+  id: order_by
+  local_authority: order_by
+  network_name: order_by
+  services: order_by
+}
+
+"""aggregate min on columns"""
+type station_min_fields {
+  id: Int
+  local_authority: String
+  network_name: String
+  services: String
+}
+
+"""
+order by min() on columns of table "station"
+"""
+input station_min_order_by {
+  id: order_by
+  local_authority: order_by
+  network_name: order_by
+  services: order_by
+}
+
+"""
+response of any mutation on the table "station"
+"""
+type station_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [station!]!
+}
+
+"""
+input type for inserting object relation for remote table "station"
+"""
+input station_obj_rel_insert_input {
+  data: station_insert_input!
+  on_conflict: station_on_conflict
+}
+
+"""
+on conflict condition type for table "station"
+"""
+input station_on_conflict {
+  constraint: station_constraint!
+  update_columns: [station_update_column!]!
+  where: station_bool_exp
+}
+
+"""
+ordering options when selecting data from "station"
+"""
+input station_order_by {
+  id: order_by
+  local_authority: order_by
+  network_name: order_by
+  routes_aggregate: route_aggregate_order_by
+  services: order_by
+  weekly_weathers_aggregate: weekly_weather_aggregate_order_by
+}
+
+"""
+select columns of table "station"
+"""
+enum station_select_column {
+  """column name"""
+  id
+
+  """column name"""
+  local_authority
+
+  """column name"""
+  network_name
+
+  """column name"""
+  services
+}
+
+"""
+input type for updating data in table "station"
+"""
+input station_set_input {
+  id: Int
+  local_authority: String
+  network_name: String
+  services: String
+}
+
+"""aggregate stddev on columns"""
+type station_stddev_fields {
+  id: Float
+}
+
+"""
+order by stddev() on columns of table "station"
+"""
+input station_stddev_order_by {
+  id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type station_stddev_pop_fields {
+  id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "station"
+"""
+input station_stddev_pop_order_by {
+  id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type station_stddev_samp_fields {
+  id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "station"
+"""
+input station_stddev_samp_order_by {
+  id: order_by
+}
+
+"""aggregate sum on columns"""
+type station_sum_fields {
+  id: Int
+}
+
+"""
+order by sum() on columns of table "station"
+"""
+input station_sum_order_by {
+  id: order_by
+}
+
+"""
+update columns of table "station"
+"""
+enum station_update_column {
+  """column name"""
+  id
+
+  """column name"""
+  local_authority
+
+  """column name"""
+  network_name
+
+  """column name"""
+  services
+}
+
+"""aggregate var_pop on columns"""
+type station_var_pop_fields {
+  id: Float
+}
+
+"""
+order by var_pop() on columns of table "station"
+"""
+input station_var_pop_order_by {
+  id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type station_var_samp_fields {
+  id: Float
+}
+
+"""
+order by var_samp() on columns of table "station"
+"""
+input station_var_samp_order_by {
+  id: order_by
+}
+
+"""aggregate variance on columns"""
+type station_variance_fields {
+  id: Float
+}
+
+"""
+order by variance() on columns of table "station"
+"""
+input station_variance_order_by {
+  id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "route"
+  """
+  route(
+    """distinct select on columns"""
+    distinct_on: [route_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [route_order_by!]
+
+    """filter the rows returned"""
+    where: route_bool_exp
+  ): [route!]!
+
+  """
+  fetch aggregated fields from the table: "route"
+  """
+  route_aggregate(
+    """distinct select on columns"""
+    distinct_on: [route_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [route_order_by!]
+
+    """filter the rows returned"""
+    where: route_bool_exp
+  ): route_aggregate!
+
+  """fetch data from the table: "route" using primary key columns"""
+  route_by_pk(station_id: Int!, train_id: Int!): route
+
+  """
+  fetch data from the table: "station"
+  """
+  station(
+    """distinct select on columns"""
+    distinct_on: [station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_order_by!]
+
+    """filter the rows returned"""
+    where: station_bool_exp
+  ): [station!]!
+
+  """
+  fetch aggregated fields from the table: "station"
+  """
+  station_aggregate(
+    """distinct select on columns"""
+    distinct_on: [station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_order_by!]
+
+    """filter the rows returned"""
+    where: station_bool_exp
+  ): station_aggregate!
+
+  """fetch data from the table: "station" using primary key columns"""
+  station_by_pk(id: Int!): station
+
+  """
+  fetch data from the table: "train"
+  """
+  train(
+    """distinct select on columns"""
+    distinct_on: [train_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_order_by!]
+
+    """filter the rows returned"""
+    where: train_bool_exp
+  ): [train!]!
+
+  """
+  fetch aggregated fields from the table: "train"
+  """
+  train_aggregate(
+    """distinct select on columns"""
+    distinct_on: [train_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_order_by!]
+
+    """filter the rows returned"""
+    where: train_bool_exp
+  ): train_aggregate!
+
+  """fetch data from the table: "train" using primary key columns"""
+  train_by_pk(id: Int!): train
+
+  """
+  fetch data from the table: "weekly_weather"
+  """
+  weekly_weather(
+    """distinct select on columns"""
+    distinct_on: [weekly_weather_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [weekly_weather_order_by!]
+
+    """filter the rows returned"""
+    where: weekly_weather_bool_exp
+  ): [weekly_weather!]!
+
+  """
+  fetch aggregated fields from the table: "weekly_weather"
+  """
+  weekly_weather_aggregate(
+    """distinct select on columns"""
+    distinct_on: [weekly_weather_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [weekly_weather_order_by!]
+
+    """filter the rows returned"""
+    where: weekly_weather_bool_exp
+  ): weekly_weather_aggregate!
+
+  """fetch data from the table: "weekly_weather" using primary key columns"""
+  weekly_weather_by_pk(day_of_week: String!, station_id: Int!): weekly_weather
+}
+
+"""
+columns and relationships of "train"
+"""
+type train {
+  destination: String
+  id: Int!
+  interval: String
+  name: String
+  origin: String
+
+  """An array relationship"""
+  routes(
+    """distinct select on columns"""
+    distinct_on: [route_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [route_order_by!]
+
+    """filter the rows returned"""
+    where: route_bool_exp
+  ): [route!]!
+
+  """An aggregated array relationship"""
+  routes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [route_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [route_order_by!]
+
+    """filter the rows returned"""
+    where: route_bool_exp
+  ): route_aggregate!
+  time: String
+  train_number: Int
+}
+
+"""
+aggregated selection of "train"
+"""
+type train_aggregate {
+  aggregate: train_aggregate_fields
+  nodes: [train!]!
+}
+
+"""
+aggregate fields of "train"
+"""
+type train_aggregate_fields {
+  avg: train_avg_fields
+  count(columns: [train_select_column!], distinct: Boolean): Int
+  max: train_max_fields
+  min: train_min_fields
+  stddev: train_stddev_fields
+  stddev_pop: train_stddev_pop_fields
+  stddev_samp: train_stddev_samp_fields
+  sum: train_sum_fields
+  var_pop: train_var_pop_fields
+  var_samp: train_var_samp_fields
+  variance: train_variance_fields
+}
+
+"""
+order by aggregate values of table "train"
+"""
+input train_aggregate_order_by {
+  avg: train_avg_order_by
+  count: order_by
+  max: train_max_order_by
+  min: train_min_order_by
+  stddev: train_stddev_order_by
+  stddev_pop: train_stddev_pop_order_by
+  stddev_samp: train_stddev_samp_order_by
+  sum: train_sum_order_by
+  var_pop: train_var_pop_order_by
+  var_samp: train_var_samp_order_by
+  variance: train_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "train"
+"""
+input train_arr_rel_insert_input {
+  data: [train_insert_input!]!
+  on_conflict: train_on_conflict
+}
+
+"""aggregate avg on columns"""
+type train_avg_fields {
+  id: Float
+  train_number: Float
+}
+
+"""
+order by avg() on columns of table "train"
+"""
+input train_avg_order_by {
+  id: order_by
+  train_number: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "train". All fields are combined with a logical 'AND'.
+"""
+input train_bool_exp {
+  _and: [train_bool_exp]
+  _not: train_bool_exp
+  _or: [train_bool_exp]
+  destination: String_comparison_exp
+  id: Int_comparison_exp
+  interval: String_comparison_exp
+  name: String_comparison_exp
+  origin: String_comparison_exp
+  routes: route_bool_exp
+  time: String_comparison_exp
+  train_number: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "train"
+"""
+enum train_constraint {
+  """unique or primary key constraint"""
+  idx_17476_sqlite_autoindex_train_1
+}
+
+"""
+input type for incrementing integer columne in table "train"
+"""
+input train_inc_input {
+  id: Int
+  train_number: Int
+}
+
+"""
+input type for inserting data into table "train"
+"""
+input train_insert_input {
+  destination: String
+  id: Int
+  interval: String
+  name: String
+  origin: String
+  routes: route_arr_rel_insert_input
+  time: String
+  train_number: Int
+}
+
+"""aggregate max on columns"""
+type train_max_fields {
+  destination: String
+  id: Int
+  interval: String
+  name: String
+  origin: String
+  time: String
+  train_number: Int
+}
+
+"""
+order by max() on columns of table "train"
+"""
+input train_max_order_by {
+  destination: order_by
+  id: order_by
+  interval: order_by
+  name: order_by
+  origin: order_by
+  time: order_by
+  train_number: order_by
+}
+
+"""aggregate min on columns"""
+type train_min_fields {
+  destination: String
+  id: Int
+  interval: String
+  name: String
+  origin: String
+  time: String
+  train_number: Int
+}
+
+"""
+order by min() on columns of table "train"
+"""
+input train_min_order_by {
+  destination: order_by
+  id: order_by
+  interval: order_by
+  name: order_by
+  origin: order_by
+  time: order_by
+  train_number: order_by
+}
+
+"""
+response of any mutation on the table "train"
+"""
+type train_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [train!]!
+}
+
+"""
+input type for inserting object relation for remote table "train"
+"""
+input train_obj_rel_insert_input {
+  data: train_insert_input!
+  on_conflict: train_on_conflict
+}
+
+"""
+on conflict condition type for table "train"
+"""
+input train_on_conflict {
+  constraint: train_constraint!
+  update_columns: [train_update_column!]!
+  where: train_bool_exp
+}
+
+"""
+ordering options when selecting data from "train"
+"""
+input train_order_by {
+  destination: order_by
+  id: order_by
+  interval: order_by
+  name: order_by
+  origin: order_by
+  routes_aggregate: route_aggregate_order_by
+  time: order_by
+  train_number: order_by
+}
+
+"""
+select columns of table "train"
+"""
+enum train_select_column {
+  """column name"""
+  destination
+
+  """column name"""
+  id
+
+  """column name"""
+  interval
+
+  """column name"""
+  name
+
+  """column name"""
+  origin
+
+  """column name"""
+  time
+
+  """column name"""
+  train_number
+}
+
+"""
+input type for updating data in table "train"
+"""
+input train_set_input {
+  destination: String
+  id: Int
+  interval: String
+  name: String
+  origin: String
+  time: String
+  train_number: Int
+}
+
+"""aggregate stddev on columns"""
+type train_stddev_fields {
+  id: Float
+  train_number: Float
+}
+
+"""
+order by stddev() on columns of table "train"
+"""
+input train_stddev_order_by {
+  id: order_by
+  train_number: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type train_stddev_pop_fields {
+  id: Float
+  train_number: Float
+}
+
+"""
+order by stddev_pop() on columns of table "train"
+"""
+input train_stddev_pop_order_by {
+  id: order_by
+  train_number: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type train_stddev_samp_fields {
+  id: Float
+  train_number: Float
+}
+
+"""
+order by stddev_samp() on columns of table "train"
+"""
+input train_stddev_samp_order_by {
+  id: order_by
+  train_number: order_by
+}
+
+"""aggregate sum on columns"""
+type train_sum_fields {
+  id: Int
+  train_number: Int
+}
+
+"""
+order by sum() on columns of table "train"
+"""
+input train_sum_order_by {
+  id: order_by
+  train_number: order_by
+}
+
+"""
+update columns of table "train"
+"""
+enum train_update_column {
+  """column name"""
+  destination
+
+  """column name"""
+  id
+
+  """column name"""
+  interval
+
+  """column name"""
+  name
+
+  """column name"""
+  origin
+
+  """column name"""
+  time
+
+  """column name"""
+  train_number
+}
+
+"""aggregate var_pop on columns"""
+type train_var_pop_fields {
+  id: Float
+  train_number: Float
+}
+
+"""
+order by var_pop() on columns of table "train"
+"""
+input train_var_pop_order_by {
+  id: order_by
+  train_number: order_by
+}
+
+"""aggregate var_samp on columns"""
+type train_var_samp_fields {
+  id: Float
+  train_number: Float
+}
+
+"""
+order by var_samp() on columns of table "train"
+"""
+input train_var_samp_order_by {
+  id: order_by
+  train_number: order_by
+}
+
+"""aggregate variance on columns"""
+type train_variance_fields {
+  id: Float
+  train_number: Float
+}
+
+"""
+order by variance() on columns of table "train"
+"""
+input train_variance_order_by {
+  id: order_by
+  train_number: order_by
+}
+
+"""
+columns and relationships of "weekly_weather"
+"""
+type weekly_weather {
+  day_of_week: String!
+  high_temperature: Int
+  low_temperature: Int
+  precipitation: Float
+
+  """An object relationship"""
+  station: station!
+  station_id: Int!
+  wind_speed_mph: Int
+}
+
+"""
+aggregated selection of "weekly_weather"
+"""
+type weekly_weather_aggregate {
+  aggregate: weekly_weather_aggregate_fields
+  nodes: [weekly_weather!]!
+}
+
+"""
+aggregate fields of "weekly_weather"
+"""
+type weekly_weather_aggregate_fields {
+  avg: weekly_weather_avg_fields
+  count(columns: [weekly_weather_select_column!], distinct: Boolean): Int
+  max: weekly_weather_max_fields
+  min: weekly_weather_min_fields
+  stddev: weekly_weather_stddev_fields
+  stddev_pop: weekly_weather_stddev_pop_fields
+  stddev_samp: weekly_weather_stddev_samp_fields
+  sum: weekly_weather_sum_fields
+  var_pop: weekly_weather_var_pop_fields
+  var_samp: weekly_weather_var_samp_fields
+  variance: weekly_weather_variance_fields
+}
+
+"""
+order by aggregate values of table "weekly_weather"
+"""
+input weekly_weather_aggregate_order_by {
+  avg: weekly_weather_avg_order_by
+  count: order_by
+  max: weekly_weather_max_order_by
+  min: weekly_weather_min_order_by
+  stddev: weekly_weather_stddev_order_by
+  stddev_pop: weekly_weather_stddev_pop_order_by
+  stddev_samp: weekly_weather_stddev_samp_order_by
+  sum: weekly_weather_sum_order_by
+  var_pop: weekly_weather_var_pop_order_by
+  var_samp: weekly_weather_var_samp_order_by
+  variance: weekly_weather_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "weekly_weather"
+"""
+input weekly_weather_arr_rel_insert_input {
+  data: [weekly_weather_insert_input!]!
+  on_conflict: weekly_weather_on_conflict
+}
+
+"""aggregate avg on columns"""
+type weekly_weather_avg_fields {
+  high_temperature: Float
+  low_temperature: Float
+  precipitation: Float
+  station_id: Float
+  wind_speed_mph: Float
+}
+
+"""
+order by avg() on columns of table "weekly_weather"
+"""
+input weekly_weather_avg_order_by {
+  high_temperature: order_by
+  low_temperature: order_by
+  precipitation: order_by
+  station_id: order_by
+  wind_speed_mph: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "weekly_weather". All fields are combined with a logical 'AND'.
+"""
+input weekly_weather_bool_exp {
+  _and: [weekly_weather_bool_exp]
+  _not: weekly_weather_bool_exp
+  _or: [weekly_weather_bool_exp]
+  day_of_week: String_comparison_exp
+  high_temperature: Int_comparison_exp
+  low_temperature: Int_comparison_exp
+  precipitation: Float_comparison_exp
+  station: station_bool_exp
+  station_id: Int_comparison_exp
+  wind_speed_mph: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "weekly_weather"
+"""
+enum weekly_weather_constraint {
+  """unique or primary key constraint"""
+  idx_17491_sqlite_autoindex_weekly_weather_1
+}
+
+"""
+input type for incrementing integer columne in table "weekly_weather"
+"""
+input weekly_weather_inc_input {
+  high_temperature: Int
+  low_temperature: Int
+  station_id: Int
+  wind_speed_mph: Int
+}
+
+"""
+input type for inserting data into table "weekly_weather"
+"""
+input weekly_weather_insert_input {
+  day_of_week: String
+  high_temperature: Int
+  low_temperature: Int
+  precipitation: Float
+  station: station_obj_rel_insert_input
+  station_id: Int
+  wind_speed_mph: Int
+}
+
+"""aggregate max on columns"""
+type weekly_weather_max_fields {
+  day_of_week: String
+  high_temperature: Int
+  low_temperature: Int
+  precipitation: Float
+  station_id: Int
+  wind_speed_mph: Int
+}
+
+"""
+order by max() on columns of table "weekly_weather"
+"""
+input weekly_weather_max_order_by {
+  day_of_week: order_by
+  high_temperature: order_by
+  low_temperature: order_by
+  precipitation: order_by
+  station_id: order_by
+  wind_speed_mph: order_by
+}
+
+"""aggregate min on columns"""
+type weekly_weather_min_fields {
+  day_of_week: String
+  high_temperature: Int
+  low_temperature: Int
+  precipitation: Float
+  station_id: Int
+  wind_speed_mph: Int
+}
+
+"""
+order by min() on columns of table "weekly_weather"
+"""
+input weekly_weather_min_order_by {
+  day_of_week: order_by
+  high_temperature: order_by
+  low_temperature: order_by
+  precipitation: order_by
+  station_id: order_by
+  wind_speed_mph: order_by
+}
+
+"""
+response of any mutation on the table "weekly_weather"
+"""
+type weekly_weather_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [weekly_weather!]!
+}
+
+"""
+input type for inserting object relation for remote table "weekly_weather"
+"""
+input weekly_weather_obj_rel_insert_input {
+  data: weekly_weather_insert_input!
+  on_conflict: weekly_weather_on_conflict
+}
+
+"""
+on conflict condition type for table "weekly_weather"
+"""
+input weekly_weather_on_conflict {
+  constraint: weekly_weather_constraint!
+  update_columns: [weekly_weather_update_column!]!
+  where: weekly_weather_bool_exp
+}
+
+"""
+ordering options when selecting data from "weekly_weather"
+"""
+input weekly_weather_order_by {
+  day_of_week: order_by
+  high_temperature: order_by
+  low_temperature: order_by
+  precipitation: order_by
+  station: station_order_by
+  station_id: order_by
+  wind_speed_mph: order_by
+}
+
+"""
+select columns of table "weekly_weather"
+"""
+enum weekly_weather_select_column {
+  """column name"""
+  day_of_week
+
+  """column name"""
+  high_temperature
+
+  """column name"""
+  low_temperature
+
+  """column name"""
+  precipitation
+
+  """column name"""
+  station_id
+
+  """column name"""
+  wind_speed_mph
+}
+
+"""
+input type for updating data in table "weekly_weather"
+"""
+input weekly_weather_set_input {
+  day_of_week: String
+  high_temperature: Int
+  low_temperature: Int
+  precipitation: Float
+  station_id: Int
+  wind_speed_mph: Int
+}
+
+"""aggregate stddev on columns"""
+type weekly_weather_stddev_fields {
+  high_temperature: Float
+  low_temperature: Float
+  precipitation: Float
+  station_id: Float
+  wind_speed_mph: Float
+}
+
+"""
+order by stddev() on columns of table "weekly_weather"
+"""
+input weekly_weather_stddev_order_by {
+  high_temperature: order_by
+  low_temperature: order_by
+  precipitation: order_by
+  station_id: order_by
+  wind_speed_mph: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type weekly_weather_stddev_pop_fields {
+  high_temperature: Float
+  low_temperature: Float
+  precipitation: Float
+  station_id: Float
+  wind_speed_mph: Float
+}
+
+"""
+order by stddev_pop() on columns of table "weekly_weather"
+"""
+input weekly_weather_stddev_pop_order_by {
+  high_temperature: order_by
+  low_temperature: order_by
+  precipitation: order_by
+  station_id: order_by
+  wind_speed_mph: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type weekly_weather_stddev_samp_fields {
+  high_temperature: Float
+  low_temperature: Float
+  precipitation: Float
+  station_id: Float
+  wind_speed_mph: Float
+}
+
+"""
+order by stddev_samp() on columns of table "weekly_weather"
+"""
+input weekly_weather_stddev_samp_order_by {
+  high_temperature: order_by
+  low_temperature: order_by
+  precipitation: order_by
+  station_id: order_by
+  wind_speed_mph: order_by
+}
+
+"""aggregate sum on columns"""
+type weekly_weather_sum_fields {
+  high_temperature: Int
+  low_temperature: Int
+  precipitation: Float
+  station_id: Int
+  wind_speed_mph: Int
+}
+
+"""
+order by sum() on columns of table "weekly_weather"
+"""
+input weekly_weather_sum_order_by {
+  high_temperature: order_by
+  low_temperature: order_by
+  precipitation: order_by
+  station_id: order_by
+  wind_speed_mph: order_by
+}
+
+"""
+update columns of table "weekly_weather"
+"""
+enum weekly_weather_update_column {
+  """column name"""
+  day_of_week
+
+  """column name"""
+  high_temperature
+
+  """column name"""
+  low_temperature
+
+  """column name"""
+  precipitation
+
+  """column name"""
+  station_id
+
+  """column name"""
+  wind_speed_mph
+}
+
+"""aggregate var_pop on columns"""
+type weekly_weather_var_pop_fields {
+  high_temperature: Float
+  low_temperature: Float
+  precipitation: Float
+  station_id: Float
+  wind_speed_mph: Float
+}
+
+"""
+order by var_pop() on columns of table "weekly_weather"
+"""
+input weekly_weather_var_pop_order_by {
+  high_temperature: order_by
+  low_temperature: order_by
+  precipitation: order_by
+  station_id: order_by
+  wind_speed_mph: order_by
+}
+
+"""aggregate var_samp on columns"""
+type weekly_weather_var_samp_fields {
+  high_temperature: Float
+  low_temperature: Float
+  precipitation: Float
+  station_id: Float
+  wind_speed_mph: Float
+}
+
+"""
+order by var_samp() on columns of table "weekly_weather"
+"""
+input weekly_weather_var_samp_order_by {
+  high_temperature: order_by
+  low_temperature: order_by
+  precipitation: order_by
+  station_id: order_by
+  wind_speed_mph: order_by
+}
+
+"""aggregate variance on columns"""
+type weekly_weather_variance_fields {
+  high_temperature: Float
+  low_temperature: Float
+  precipitation: Float
+  station_id: Float
+  wind_speed_mph: Float
+}
+
+"""
+order by variance() on columns of table "weekly_weather"
+"""
+input weekly_weather_variance_order_by {
+  high_temperature: order_by
+  low_temperature: order_by
+  precipitation: order_by
+  station_id: order_by
+  wind_speed_mph: order_by
+}

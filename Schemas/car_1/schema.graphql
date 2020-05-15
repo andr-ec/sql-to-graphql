@@ -1,0 +1,3068 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "car_makers"
+"""
+type car_makers {
+  country: bigint
+
+  """An object relationship"""
+  countryByCountry: countries
+  fullname: String
+  id: bigint!
+  maker: String
+
+  """An array relationship"""
+  model_lists(
+    """distinct select on columns"""
+    distinct_on: [model_list_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [model_list_order_by!]
+
+    """filter the rows returned"""
+    where: model_list_bool_exp
+  ): [model_list!]!
+
+  """An aggregated array relationship"""
+  model_lists_aggregate(
+    """distinct select on columns"""
+    distinct_on: [model_list_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [model_list_order_by!]
+
+    """filter the rows returned"""
+    where: model_list_bool_exp
+  ): model_list_aggregate!
+}
+
+"""
+aggregated selection of "car_makers"
+"""
+type car_makers_aggregate {
+  aggregate: car_makers_aggregate_fields
+  nodes: [car_makers!]!
+}
+
+"""
+aggregate fields of "car_makers"
+"""
+type car_makers_aggregate_fields {
+  avg: car_makers_avg_fields
+  count(columns: [car_makers_select_column!], distinct: Boolean): Int
+  max: car_makers_max_fields
+  min: car_makers_min_fields
+  stddev: car_makers_stddev_fields
+  stddev_pop: car_makers_stddev_pop_fields
+  stddev_samp: car_makers_stddev_samp_fields
+  sum: car_makers_sum_fields
+  var_pop: car_makers_var_pop_fields
+  var_samp: car_makers_var_samp_fields
+  variance: car_makers_variance_fields
+}
+
+"""
+order by aggregate values of table "car_makers"
+"""
+input car_makers_aggregate_order_by {
+  avg: car_makers_avg_order_by
+  count: order_by
+  max: car_makers_max_order_by
+  min: car_makers_min_order_by
+  stddev: car_makers_stddev_order_by
+  stddev_pop: car_makers_stddev_pop_order_by
+  stddev_samp: car_makers_stddev_samp_order_by
+  sum: car_makers_sum_order_by
+  var_pop: car_makers_var_pop_order_by
+  var_samp: car_makers_var_samp_order_by
+  variance: car_makers_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "car_makers"
+"""
+input car_makers_arr_rel_insert_input {
+  data: [car_makers_insert_input!]!
+  on_conflict: car_makers_on_conflict
+}
+
+"""aggregate avg on columns"""
+type car_makers_avg_fields {
+  country: Float
+  id: Float
+}
+
+"""
+order by avg() on columns of table "car_makers"
+"""
+input car_makers_avg_order_by {
+  country: order_by
+  id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "car_makers". All fields are combined with a logical 'AND'.
+"""
+input car_makers_bool_exp {
+  _and: [car_makers_bool_exp]
+  _not: car_makers_bool_exp
+  _or: [car_makers_bool_exp]
+  country: bigint_comparison_exp
+  countryByCountry: countries_bool_exp
+  fullname: String_comparison_exp
+  id: bigint_comparison_exp
+  maker: String_comparison_exp
+  model_lists: model_list_bool_exp
+}
+
+"""
+unique or primary key constraints on table "car_makers"
+"""
+enum car_makers_constraint {
+  """unique or primary key constraint"""
+  idx_20885_car_makers_pkey
+}
+
+"""
+input type for incrementing integer columne in table "car_makers"
+"""
+input car_makers_inc_input {
+  country: bigint
+  id: bigint
+}
+
+"""
+input type for inserting data into table "car_makers"
+"""
+input car_makers_insert_input {
+  country: bigint
+  countryByCountry: countries_obj_rel_insert_input
+  fullname: String
+  id: bigint
+  maker: String
+  model_lists: model_list_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type car_makers_max_fields {
+  country: bigint
+  fullname: String
+  id: bigint
+  maker: String
+}
+
+"""
+order by max() on columns of table "car_makers"
+"""
+input car_makers_max_order_by {
+  country: order_by
+  fullname: order_by
+  id: order_by
+  maker: order_by
+}
+
+"""aggregate min on columns"""
+type car_makers_min_fields {
+  country: bigint
+  fullname: String
+  id: bigint
+  maker: String
+}
+
+"""
+order by min() on columns of table "car_makers"
+"""
+input car_makers_min_order_by {
+  country: order_by
+  fullname: order_by
+  id: order_by
+  maker: order_by
+}
+
+"""
+response of any mutation on the table "car_makers"
+"""
+type car_makers_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [car_makers!]!
+}
+
+"""
+input type for inserting object relation for remote table "car_makers"
+"""
+input car_makers_obj_rel_insert_input {
+  data: car_makers_insert_input!
+  on_conflict: car_makers_on_conflict
+}
+
+"""
+on conflict condition type for table "car_makers"
+"""
+input car_makers_on_conflict {
+  constraint: car_makers_constraint!
+  update_columns: [car_makers_update_column!]!
+  where: car_makers_bool_exp
+}
+
+"""
+ordering options when selecting data from "car_makers"
+"""
+input car_makers_order_by {
+  country: order_by
+  countryByCountry: countries_order_by
+  fullname: order_by
+  id: order_by
+  maker: order_by
+  model_lists_aggregate: model_list_aggregate_order_by
+}
+
+"""
+select columns of table "car_makers"
+"""
+enum car_makers_select_column {
+  """column name"""
+  country
+
+  """column name"""
+  fullname
+
+  """column name"""
+  id
+
+  """column name"""
+  maker
+}
+
+"""
+input type for updating data in table "car_makers"
+"""
+input car_makers_set_input {
+  country: bigint
+  fullname: String
+  id: bigint
+  maker: String
+}
+
+"""aggregate stddev on columns"""
+type car_makers_stddev_fields {
+  country: Float
+  id: Float
+}
+
+"""
+order by stddev() on columns of table "car_makers"
+"""
+input car_makers_stddev_order_by {
+  country: order_by
+  id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type car_makers_stddev_pop_fields {
+  country: Float
+  id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "car_makers"
+"""
+input car_makers_stddev_pop_order_by {
+  country: order_by
+  id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type car_makers_stddev_samp_fields {
+  country: Float
+  id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "car_makers"
+"""
+input car_makers_stddev_samp_order_by {
+  country: order_by
+  id: order_by
+}
+
+"""aggregate sum on columns"""
+type car_makers_sum_fields {
+  country: bigint
+  id: bigint
+}
+
+"""
+order by sum() on columns of table "car_makers"
+"""
+input car_makers_sum_order_by {
+  country: order_by
+  id: order_by
+}
+
+"""
+update columns of table "car_makers"
+"""
+enum car_makers_update_column {
+  """column name"""
+  country
+
+  """column name"""
+  fullname
+
+  """column name"""
+  id
+
+  """column name"""
+  maker
+}
+
+"""aggregate var_pop on columns"""
+type car_makers_var_pop_fields {
+  country: Float
+  id: Float
+}
+
+"""
+order by var_pop() on columns of table "car_makers"
+"""
+input car_makers_var_pop_order_by {
+  country: order_by
+  id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type car_makers_var_samp_fields {
+  country: Float
+  id: Float
+}
+
+"""
+order by var_samp() on columns of table "car_makers"
+"""
+input car_makers_var_samp_order_by {
+  country: order_by
+  id: order_by
+}
+
+"""aggregate variance on columns"""
+type car_makers_variance_fields {
+  country: Float
+  id: Float
+}
+
+"""
+order by variance() on columns of table "car_makers"
+"""
+input car_makers_variance_order_by {
+  country: order_by
+  id: order_by
+}
+
+"""
+columns and relationships of "car_names"
+"""
+type car_names {
+  """An array relationship"""
+  cars_data(
+    """distinct select on columns"""
+    distinct_on: [cars_data_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cars_data_order_by!]
+
+    """filter the rows returned"""
+    where: cars_data_bool_exp
+  ): [cars_data!]!
+
+  """An aggregated array relationship"""
+  cars_data_aggregate(
+    """distinct select on columns"""
+    distinct_on: [cars_data_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cars_data_order_by!]
+
+    """filter the rows returned"""
+    where: cars_data_bool_exp
+  ): cars_data_aggregate!
+  make: String
+  makeid: bigint!
+  model: String
+
+  """An object relationship"""
+  model_list: model_list
+}
+
+"""
+aggregated selection of "car_names"
+"""
+type car_names_aggregate {
+  aggregate: car_names_aggregate_fields
+  nodes: [car_names!]!
+}
+
+"""
+aggregate fields of "car_names"
+"""
+type car_names_aggregate_fields {
+  avg: car_names_avg_fields
+  count(columns: [car_names_select_column!], distinct: Boolean): Int
+  max: car_names_max_fields
+  min: car_names_min_fields
+  stddev: car_names_stddev_fields
+  stddev_pop: car_names_stddev_pop_fields
+  stddev_samp: car_names_stddev_samp_fields
+  sum: car_names_sum_fields
+  var_pop: car_names_var_pop_fields
+  var_samp: car_names_var_samp_fields
+  variance: car_names_variance_fields
+}
+
+"""
+order by aggregate values of table "car_names"
+"""
+input car_names_aggregate_order_by {
+  avg: car_names_avg_order_by
+  count: order_by
+  max: car_names_max_order_by
+  min: car_names_min_order_by
+  stddev: car_names_stddev_order_by
+  stddev_pop: car_names_stddev_pop_order_by
+  stddev_samp: car_names_stddev_samp_order_by
+  sum: car_names_sum_order_by
+  var_pop: car_names_var_pop_order_by
+  var_samp: car_names_var_samp_order_by
+  variance: car_names_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "car_names"
+"""
+input car_names_arr_rel_insert_input {
+  data: [car_names_insert_input!]!
+  on_conflict: car_names_on_conflict
+}
+
+"""aggregate avg on columns"""
+type car_names_avg_fields {
+  makeid: Float
+}
+
+"""
+order by avg() on columns of table "car_names"
+"""
+input car_names_avg_order_by {
+  makeid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "car_names". All fields are combined with a logical 'AND'.
+"""
+input car_names_bool_exp {
+  _and: [car_names_bool_exp]
+  _not: car_names_bool_exp
+  _or: [car_names_bool_exp]
+  cars_data: cars_data_bool_exp
+  make: String_comparison_exp
+  makeid: bigint_comparison_exp
+  model: String_comparison_exp
+  model_list: model_list_bool_exp
+}
+
+"""
+unique or primary key constraints on table "car_names"
+"""
+enum car_names_constraint {
+  """unique or primary key constraint"""
+  idx_20897_car_names_pkey
+}
+
+"""
+input type for incrementing integer columne in table "car_names"
+"""
+input car_names_inc_input {
+  makeid: bigint
+}
+
+"""
+input type for inserting data into table "car_names"
+"""
+input car_names_insert_input {
+  cars_data: cars_data_arr_rel_insert_input
+  make: String
+  makeid: bigint
+  model: String
+  model_list: model_list_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type car_names_max_fields {
+  make: String
+  makeid: bigint
+  model: String
+}
+
+"""
+order by max() on columns of table "car_names"
+"""
+input car_names_max_order_by {
+  make: order_by
+  makeid: order_by
+  model: order_by
+}
+
+"""aggregate min on columns"""
+type car_names_min_fields {
+  make: String
+  makeid: bigint
+  model: String
+}
+
+"""
+order by min() on columns of table "car_names"
+"""
+input car_names_min_order_by {
+  make: order_by
+  makeid: order_by
+  model: order_by
+}
+
+"""
+response of any mutation on the table "car_names"
+"""
+type car_names_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [car_names!]!
+}
+
+"""
+input type for inserting object relation for remote table "car_names"
+"""
+input car_names_obj_rel_insert_input {
+  data: car_names_insert_input!
+  on_conflict: car_names_on_conflict
+}
+
+"""
+on conflict condition type for table "car_names"
+"""
+input car_names_on_conflict {
+  constraint: car_names_constraint!
+  update_columns: [car_names_update_column!]!
+  where: car_names_bool_exp
+}
+
+"""
+ordering options when selecting data from "car_names"
+"""
+input car_names_order_by {
+  cars_data_aggregate: cars_data_aggregate_order_by
+  make: order_by
+  makeid: order_by
+  model: order_by
+  model_list: model_list_order_by
+}
+
+"""
+select columns of table "car_names"
+"""
+enum car_names_select_column {
+  """column name"""
+  make
+
+  """column name"""
+  makeid
+
+  """column name"""
+  model
+}
+
+"""
+input type for updating data in table "car_names"
+"""
+input car_names_set_input {
+  make: String
+  makeid: bigint
+  model: String
+}
+
+"""aggregate stddev on columns"""
+type car_names_stddev_fields {
+  makeid: Float
+}
+
+"""
+order by stddev() on columns of table "car_names"
+"""
+input car_names_stddev_order_by {
+  makeid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type car_names_stddev_pop_fields {
+  makeid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "car_names"
+"""
+input car_names_stddev_pop_order_by {
+  makeid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type car_names_stddev_samp_fields {
+  makeid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "car_names"
+"""
+input car_names_stddev_samp_order_by {
+  makeid: order_by
+}
+
+"""aggregate sum on columns"""
+type car_names_sum_fields {
+  makeid: bigint
+}
+
+"""
+order by sum() on columns of table "car_names"
+"""
+input car_names_sum_order_by {
+  makeid: order_by
+}
+
+"""
+update columns of table "car_names"
+"""
+enum car_names_update_column {
+  """column name"""
+  make
+
+  """column name"""
+  makeid
+
+  """column name"""
+  model
+}
+
+"""aggregate var_pop on columns"""
+type car_names_var_pop_fields {
+  makeid: Float
+}
+
+"""
+order by var_pop() on columns of table "car_names"
+"""
+input car_names_var_pop_order_by {
+  makeid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type car_names_var_samp_fields {
+  makeid: Float
+}
+
+"""
+order by var_samp() on columns of table "car_names"
+"""
+input car_names_var_samp_order_by {
+  makeid: order_by
+}
+
+"""aggregate variance on columns"""
+type car_names_variance_fields {
+  makeid: Float
+}
+
+"""
+order by variance() on columns of table "car_names"
+"""
+input car_names_variance_order_by {
+  makeid: order_by
+}
+
+"""
+columns and relationships of "cars_data"
+"""
+type cars_data {
+  accelerate: Float
+
+  """An object relationship"""
+  car_name: car_names!
+  cylinders: bigint
+  edispl: Float
+  horsepower: String
+  id: bigint!
+  mpg: Float
+  weight: bigint
+  year: bigint
+}
+
+"""
+aggregated selection of "cars_data"
+"""
+type cars_data_aggregate {
+  aggregate: cars_data_aggregate_fields
+  nodes: [cars_data!]!
+}
+
+"""
+aggregate fields of "cars_data"
+"""
+type cars_data_aggregate_fields {
+  avg: cars_data_avg_fields
+  count(columns: [cars_data_select_column!], distinct: Boolean): Int
+  max: cars_data_max_fields
+  min: cars_data_min_fields
+  stddev: cars_data_stddev_fields
+  stddev_pop: cars_data_stddev_pop_fields
+  stddev_samp: cars_data_stddev_samp_fields
+  sum: cars_data_sum_fields
+  var_pop: cars_data_var_pop_fields
+  var_samp: cars_data_var_samp_fields
+  variance: cars_data_variance_fields
+}
+
+"""
+order by aggregate values of table "cars_data"
+"""
+input cars_data_aggregate_order_by {
+  avg: cars_data_avg_order_by
+  count: order_by
+  max: cars_data_max_order_by
+  min: cars_data_min_order_by
+  stddev: cars_data_stddev_order_by
+  stddev_pop: cars_data_stddev_pop_order_by
+  stddev_samp: cars_data_stddev_samp_order_by
+  sum: cars_data_sum_order_by
+  var_pop: cars_data_var_pop_order_by
+  var_samp: cars_data_var_samp_order_by
+  variance: cars_data_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "cars_data"
+"""
+input cars_data_arr_rel_insert_input {
+  data: [cars_data_insert_input!]!
+  on_conflict: cars_data_on_conflict
+}
+
+"""aggregate avg on columns"""
+type cars_data_avg_fields {
+  accelerate: Float
+  cylinders: Float
+  edispl: Float
+  id: Float
+  mpg: Float
+  weight: Float
+  year: Float
+}
+
+"""
+order by avg() on columns of table "cars_data"
+"""
+input cars_data_avg_order_by {
+  accelerate: order_by
+  cylinders: order_by
+  edispl: order_by
+  id: order_by
+  mpg: order_by
+  weight: order_by
+  year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "cars_data". All fields are combined with a logical 'AND'.
+"""
+input cars_data_bool_exp {
+  _and: [cars_data_bool_exp]
+  _not: cars_data_bool_exp
+  _or: [cars_data_bool_exp]
+  accelerate: Float_comparison_exp
+  car_name: car_names_bool_exp
+  cylinders: bigint_comparison_exp
+  edispl: Float_comparison_exp
+  horsepower: String_comparison_exp
+  id: bigint_comparison_exp
+  mpg: Float_comparison_exp
+  weight: bigint_comparison_exp
+  year: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "cars_data"
+"""
+enum cars_data_constraint {
+  """unique or primary key constraint"""
+  idx_20903_cars_data_pkey
+}
+
+"""
+input type for incrementing integer columne in table "cars_data"
+"""
+input cars_data_inc_input {
+  cylinders: bigint
+  id: bigint
+  weight: bigint
+  year: bigint
+}
+
+"""
+input type for inserting data into table "cars_data"
+"""
+input cars_data_insert_input {
+  accelerate: Float
+  car_name: car_names_obj_rel_insert_input
+  cylinders: bigint
+  edispl: Float
+  horsepower: String
+  id: bigint
+  mpg: Float
+  weight: bigint
+  year: bigint
+}
+
+"""aggregate max on columns"""
+type cars_data_max_fields {
+  accelerate: Float
+  cylinders: bigint
+  edispl: Float
+  horsepower: String
+  id: bigint
+  mpg: Float
+  weight: bigint
+  year: bigint
+}
+
+"""
+order by max() on columns of table "cars_data"
+"""
+input cars_data_max_order_by {
+  accelerate: order_by
+  cylinders: order_by
+  edispl: order_by
+  horsepower: order_by
+  id: order_by
+  mpg: order_by
+  weight: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type cars_data_min_fields {
+  accelerate: Float
+  cylinders: bigint
+  edispl: Float
+  horsepower: String
+  id: bigint
+  mpg: Float
+  weight: bigint
+  year: bigint
+}
+
+"""
+order by min() on columns of table "cars_data"
+"""
+input cars_data_min_order_by {
+  accelerate: order_by
+  cylinders: order_by
+  edispl: order_by
+  horsepower: order_by
+  id: order_by
+  mpg: order_by
+  weight: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "cars_data"
+"""
+type cars_data_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [cars_data!]!
+}
+
+"""
+input type for inserting object relation for remote table "cars_data"
+"""
+input cars_data_obj_rel_insert_input {
+  data: cars_data_insert_input!
+  on_conflict: cars_data_on_conflict
+}
+
+"""
+on conflict condition type for table "cars_data"
+"""
+input cars_data_on_conflict {
+  constraint: cars_data_constraint!
+  update_columns: [cars_data_update_column!]!
+  where: cars_data_bool_exp
+}
+
+"""
+ordering options when selecting data from "cars_data"
+"""
+input cars_data_order_by {
+  accelerate: order_by
+  car_name: car_names_order_by
+  cylinders: order_by
+  edispl: order_by
+  horsepower: order_by
+  id: order_by
+  mpg: order_by
+  weight: order_by
+  year: order_by
+}
+
+"""
+select columns of table "cars_data"
+"""
+enum cars_data_select_column {
+  """column name"""
+  accelerate
+
+  """column name"""
+  cylinders
+
+  """column name"""
+  edispl
+
+  """column name"""
+  horsepower
+
+  """column name"""
+  id
+
+  """column name"""
+  mpg
+
+  """column name"""
+  weight
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "cars_data"
+"""
+input cars_data_set_input {
+  accelerate: Float
+  cylinders: bigint
+  edispl: Float
+  horsepower: String
+  id: bigint
+  mpg: Float
+  weight: bigint
+  year: bigint
+}
+
+"""aggregate stddev on columns"""
+type cars_data_stddev_fields {
+  accelerate: Float
+  cylinders: Float
+  edispl: Float
+  id: Float
+  mpg: Float
+  weight: Float
+  year: Float
+}
+
+"""
+order by stddev() on columns of table "cars_data"
+"""
+input cars_data_stddev_order_by {
+  accelerate: order_by
+  cylinders: order_by
+  edispl: order_by
+  id: order_by
+  mpg: order_by
+  weight: order_by
+  year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type cars_data_stddev_pop_fields {
+  accelerate: Float
+  cylinders: Float
+  edispl: Float
+  id: Float
+  mpg: Float
+  weight: Float
+  year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "cars_data"
+"""
+input cars_data_stddev_pop_order_by {
+  accelerate: order_by
+  cylinders: order_by
+  edispl: order_by
+  id: order_by
+  mpg: order_by
+  weight: order_by
+  year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type cars_data_stddev_samp_fields {
+  accelerate: Float
+  cylinders: Float
+  edispl: Float
+  id: Float
+  mpg: Float
+  weight: Float
+  year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "cars_data"
+"""
+input cars_data_stddev_samp_order_by {
+  accelerate: order_by
+  cylinders: order_by
+  edispl: order_by
+  id: order_by
+  mpg: order_by
+  weight: order_by
+  year: order_by
+}
+
+"""aggregate sum on columns"""
+type cars_data_sum_fields {
+  accelerate: Float
+  cylinders: bigint
+  edispl: Float
+  id: bigint
+  mpg: Float
+  weight: bigint
+  year: bigint
+}
+
+"""
+order by sum() on columns of table "cars_data"
+"""
+input cars_data_sum_order_by {
+  accelerate: order_by
+  cylinders: order_by
+  edispl: order_by
+  id: order_by
+  mpg: order_by
+  weight: order_by
+  year: order_by
+}
+
+"""
+update columns of table "cars_data"
+"""
+enum cars_data_update_column {
+  """column name"""
+  accelerate
+
+  """column name"""
+  cylinders
+
+  """column name"""
+  edispl
+
+  """column name"""
+  horsepower
+
+  """column name"""
+  id
+
+  """column name"""
+  mpg
+
+  """column name"""
+  weight
+
+  """column name"""
+  year
+}
+
+"""aggregate var_pop on columns"""
+type cars_data_var_pop_fields {
+  accelerate: Float
+  cylinders: Float
+  edispl: Float
+  id: Float
+  mpg: Float
+  weight: Float
+  year: Float
+}
+
+"""
+order by var_pop() on columns of table "cars_data"
+"""
+input cars_data_var_pop_order_by {
+  accelerate: order_by
+  cylinders: order_by
+  edispl: order_by
+  id: order_by
+  mpg: order_by
+  weight: order_by
+  year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type cars_data_var_samp_fields {
+  accelerate: Float
+  cylinders: Float
+  edispl: Float
+  id: Float
+  mpg: Float
+  weight: Float
+  year: Float
+}
+
+"""
+order by var_samp() on columns of table "cars_data"
+"""
+input cars_data_var_samp_order_by {
+  accelerate: order_by
+  cylinders: order_by
+  edispl: order_by
+  id: order_by
+  mpg: order_by
+  weight: order_by
+  year: order_by
+}
+
+"""aggregate variance on columns"""
+type cars_data_variance_fields {
+  accelerate: Float
+  cylinders: Float
+  edispl: Float
+  id: Float
+  mpg: Float
+  weight: Float
+  year: Float
+}
+
+"""
+order by variance() on columns of table "cars_data"
+"""
+input cars_data_variance_order_by {
+  accelerate: order_by
+  cylinders: order_by
+  edispl: order_by
+  id: order_by
+  mpg: order_by
+  weight: order_by
+  year: order_by
+}
+
+"""
+columns and relationships of "continents"
+"""
+type continents {
+  contid: bigint!
+  continent: String
+
+  """An array relationship"""
+  countries(
+    """distinct select on columns"""
+    distinct_on: [countries_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [countries_order_by!]
+
+    """filter the rows returned"""
+    where: countries_bool_exp
+  ): [countries!]!
+
+  """An aggregated array relationship"""
+  countries_aggregate(
+    """distinct select on columns"""
+    distinct_on: [countries_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [countries_order_by!]
+
+    """filter the rows returned"""
+    where: countries_bool_exp
+  ): countries_aggregate!
+}
+
+"""
+aggregated selection of "continents"
+"""
+type continents_aggregate {
+  aggregate: continents_aggregate_fields
+  nodes: [continents!]!
+}
+
+"""
+aggregate fields of "continents"
+"""
+type continents_aggregate_fields {
+  avg: continents_avg_fields
+  count(columns: [continents_select_column!], distinct: Boolean): Int
+  max: continents_max_fields
+  min: continents_min_fields
+  stddev: continents_stddev_fields
+  stddev_pop: continents_stddev_pop_fields
+  stddev_samp: continents_stddev_samp_fields
+  sum: continents_sum_fields
+  var_pop: continents_var_pop_fields
+  var_samp: continents_var_samp_fields
+  variance: continents_variance_fields
+}
+
+"""
+order by aggregate values of table "continents"
+"""
+input continents_aggregate_order_by {
+  avg: continents_avg_order_by
+  count: order_by
+  max: continents_max_order_by
+  min: continents_min_order_by
+  stddev: continents_stddev_order_by
+  stddev_pop: continents_stddev_pop_order_by
+  stddev_samp: continents_stddev_samp_order_by
+  sum: continents_sum_order_by
+  var_pop: continents_var_pop_order_by
+  var_samp: continents_var_samp_order_by
+  variance: continents_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "continents"
+"""
+input continents_arr_rel_insert_input {
+  data: [continents_insert_input!]!
+  on_conflict: continents_on_conflict
+}
+
+"""aggregate avg on columns"""
+type continents_avg_fields {
+  contid: Float
+}
+
+"""
+order by avg() on columns of table "continents"
+"""
+input continents_avg_order_by {
+  contid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "continents". All fields are combined with a logical 'AND'.
+"""
+input continents_bool_exp {
+  _and: [continents_bool_exp]
+  _not: continents_bool_exp
+  _or: [continents_bool_exp]
+  contid: bigint_comparison_exp
+  continent: String_comparison_exp
+  countries: countries_bool_exp
+}
+
+"""
+unique or primary key constraints on table "continents"
+"""
+enum continents_constraint {
+  """unique or primary key constraint"""
+  idx_20873_continents_pkey
+}
+
+"""
+input type for incrementing integer columne in table "continents"
+"""
+input continents_inc_input {
+  contid: bigint
+}
+
+"""
+input type for inserting data into table "continents"
+"""
+input continents_insert_input {
+  contid: bigint
+  continent: String
+  countries: countries_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type continents_max_fields {
+  contid: bigint
+  continent: String
+}
+
+"""
+order by max() on columns of table "continents"
+"""
+input continents_max_order_by {
+  contid: order_by
+  continent: order_by
+}
+
+"""aggregate min on columns"""
+type continents_min_fields {
+  contid: bigint
+  continent: String
+}
+
+"""
+order by min() on columns of table "continents"
+"""
+input continents_min_order_by {
+  contid: order_by
+  continent: order_by
+}
+
+"""
+response of any mutation on the table "continents"
+"""
+type continents_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [continents!]!
+}
+
+"""
+input type for inserting object relation for remote table "continents"
+"""
+input continents_obj_rel_insert_input {
+  data: continents_insert_input!
+  on_conflict: continents_on_conflict
+}
+
+"""
+on conflict condition type for table "continents"
+"""
+input continents_on_conflict {
+  constraint: continents_constraint!
+  update_columns: [continents_update_column!]!
+  where: continents_bool_exp
+}
+
+"""
+ordering options when selecting data from "continents"
+"""
+input continents_order_by {
+  contid: order_by
+  continent: order_by
+  countries_aggregate: countries_aggregate_order_by
+}
+
+"""
+select columns of table "continents"
+"""
+enum continents_select_column {
+  """column name"""
+  contid
+
+  """column name"""
+  continent
+}
+
+"""
+input type for updating data in table "continents"
+"""
+input continents_set_input {
+  contid: bigint
+  continent: String
+}
+
+"""aggregate stddev on columns"""
+type continents_stddev_fields {
+  contid: Float
+}
+
+"""
+order by stddev() on columns of table "continents"
+"""
+input continents_stddev_order_by {
+  contid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type continents_stddev_pop_fields {
+  contid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "continents"
+"""
+input continents_stddev_pop_order_by {
+  contid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type continents_stddev_samp_fields {
+  contid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "continents"
+"""
+input continents_stddev_samp_order_by {
+  contid: order_by
+}
+
+"""aggregate sum on columns"""
+type continents_sum_fields {
+  contid: bigint
+}
+
+"""
+order by sum() on columns of table "continents"
+"""
+input continents_sum_order_by {
+  contid: order_by
+}
+
+"""
+update columns of table "continents"
+"""
+enum continents_update_column {
+  """column name"""
+  contid
+
+  """column name"""
+  continent
+}
+
+"""aggregate var_pop on columns"""
+type continents_var_pop_fields {
+  contid: Float
+}
+
+"""
+order by var_pop() on columns of table "continents"
+"""
+input continents_var_pop_order_by {
+  contid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type continents_var_samp_fields {
+  contid: Float
+}
+
+"""
+order by var_samp() on columns of table "continents"
+"""
+input continents_var_samp_order_by {
+  contid: order_by
+}
+
+"""aggregate variance on columns"""
+type continents_variance_fields {
+  contid: Float
+}
+
+"""
+order by variance() on columns of table "continents"
+"""
+input continents_variance_order_by {
+  contid: order_by
+}
+
+"""
+columns and relationships of "countries"
+"""
+type countries {
+  """An array relationship"""
+  car_makers(
+    """distinct select on columns"""
+    distinct_on: [car_makers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [car_makers_order_by!]
+
+    """filter the rows returned"""
+    where: car_makers_bool_exp
+  ): [car_makers!]!
+
+  """An aggregated array relationship"""
+  car_makers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [car_makers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [car_makers_order_by!]
+
+    """filter the rows returned"""
+    where: car_makers_bool_exp
+  ): car_makers_aggregate!
+  continent: bigint
+
+  """An object relationship"""
+  continentByContinent: continents
+  countryid: bigint!
+  countryname: String
+}
+
+"""
+aggregated selection of "countries"
+"""
+type countries_aggregate {
+  aggregate: countries_aggregate_fields
+  nodes: [countries!]!
+}
+
+"""
+aggregate fields of "countries"
+"""
+type countries_aggregate_fields {
+  avg: countries_avg_fields
+  count(columns: [countries_select_column!], distinct: Boolean): Int
+  max: countries_max_fields
+  min: countries_min_fields
+  stddev: countries_stddev_fields
+  stddev_pop: countries_stddev_pop_fields
+  stddev_samp: countries_stddev_samp_fields
+  sum: countries_sum_fields
+  var_pop: countries_var_pop_fields
+  var_samp: countries_var_samp_fields
+  variance: countries_variance_fields
+}
+
+"""
+order by aggregate values of table "countries"
+"""
+input countries_aggregate_order_by {
+  avg: countries_avg_order_by
+  count: order_by
+  max: countries_max_order_by
+  min: countries_min_order_by
+  stddev: countries_stddev_order_by
+  stddev_pop: countries_stddev_pop_order_by
+  stddev_samp: countries_stddev_samp_order_by
+  sum: countries_sum_order_by
+  var_pop: countries_var_pop_order_by
+  var_samp: countries_var_samp_order_by
+  variance: countries_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "countries"
+"""
+input countries_arr_rel_insert_input {
+  data: [countries_insert_input!]!
+  on_conflict: countries_on_conflict
+}
+
+"""aggregate avg on columns"""
+type countries_avg_fields {
+  continent: Float
+  countryid: Float
+}
+
+"""
+order by avg() on columns of table "countries"
+"""
+input countries_avg_order_by {
+  continent: order_by
+  countryid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "countries". All fields are combined with a logical 'AND'.
+"""
+input countries_bool_exp {
+  _and: [countries_bool_exp]
+  _not: countries_bool_exp
+  _or: [countries_bool_exp]
+  car_makers: car_makers_bool_exp
+  continent: bigint_comparison_exp
+  continentByContinent: continents_bool_exp
+  countryid: bigint_comparison_exp
+  countryname: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "countries"
+"""
+enum countries_constraint {
+  """unique or primary key constraint"""
+  idx_20879_countries_pkey
+}
+
+"""
+input type for incrementing integer columne in table "countries"
+"""
+input countries_inc_input {
+  continent: bigint
+  countryid: bigint
+}
+
+"""
+input type for inserting data into table "countries"
+"""
+input countries_insert_input {
+  car_makers: car_makers_arr_rel_insert_input
+  continent: bigint
+  continentByContinent: continents_obj_rel_insert_input
+  countryid: bigint
+  countryname: String
+}
+
+"""aggregate max on columns"""
+type countries_max_fields {
+  continent: bigint
+  countryid: bigint
+  countryname: String
+}
+
+"""
+order by max() on columns of table "countries"
+"""
+input countries_max_order_by {
+  continent: order_by
+  countryid: order_by
+  countryname: order_by
+}
+
+"""aggregate min on columns"""
+type countries_min_fields {
+  continent: bigint
+  countryid: bigint
+  countryname: String
+}
+
+"""
+order by min() on columns of table "countries"
+"""
+input countries_min_order_by {
+  continent: order_by
+  countryid: order_by
+  countryname: order_by
+}
+
+"""
+response of any mutation on the table "countries"
+"""
+type countries_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [countries!]!
+}
+
+"""
+input type for inserting object relation for remote table "countries"
+"""
+input countries_obj_rel_insert_input {
+  data: countries_insert_input!
+  on_conflict: countries_on_conflict
+}
+
+"""
+on conflict condition type for table "countries"
+"""
+input countries_on_conflict {
+  constraint: countries_constraint!
+  update_columns: [countries_update_column!]!
+  where: countries_bool_exp
+}
+
+"""
+ordering options when selecting data from "countries"
+"""
+input countries_order_by {
+  car_makers_aggregate: car_makers_aggregate_order_by
+  continent: order_by
+  continentByContinent: continents_order_by
+  countryid: order_by
+  countryname: order_by
+}
+
+"""
+select columns of table "countries"
+"""
+enum countries_select_column {
+  """column name"""
+  continent
+
+  """column name"""
+  countryid
+
+  """column name"""
+  countryname
+}
+
+"""
+input type for updating data in table "countries"
+"""
+input countries_set_input {
+  continent: bigint
+  countryid: bigint
+  countryname: String
+}
+
+"""aggregate stddev on columns"""
+type countries_stddev_fields {
+  continent: Float
+  countryid: Float
+}
+
+"""
+order by stddev() on columns of table "countries"
+"""
+input countries_stddev_order_by {
+  continent: order_by
+  countryid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type countries_stddev_pop_fields {
+  continent: Float
+  countryid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "countries"
+"""
+input countries_stddev_pop_order_by {
+  continent: order_by
+  countryid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type countries_stddev_samp_fields {
+  continent: Float
+  countryid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "countries"
+"""
+input countries_stddev_samp_order_by {
+  continent: order_by
+  countryid: order_by
+}
+
+"""aggregate sum on columns"""
+type countries_sum_fields {
+  continent: bigint
+  countryid: bigint
+}
+
+"""
+order by sum() on columns of table "countries"
+"""
+input countries_sum_order_by {
+  continent: order_by
+  countryid: order_by
+}
+
+"""
+update columns of table "countries"
+"""
+enum countries_update_column {
+  """column name"""
+  continent
+
+  """column name"""
+  countryid
+
+  """column name"""
+  countryname
+}
+
+"""aggregate var_pop on columns"""
+type countries_var_pop_fields {
+  continent: Float
+  countryid: Float
+}
+
+"""
+order by var_pop() on columns of table "countries"
+"""
+input countries_var_pop_order_by {
+  continent: order_by
+  countryid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type countries_var_samp_fields {
+  continent: Float
+  countryid: Float
+}
+
+"""
+order by var_samp() on columns of table "countries"
+"""
+input countries_var_samp_order_by {
+  continent: order_by
+  countryid: order_by
+}
+
+"""aggregate variance on columns"""
+type countries_variance_fields {
+  continent: Float
+  countryid: Float
+}
+
+"""
+order by variance() on columns of table "countries"
+"""
+input countries_variance_order_by {
+  continent: order_by
+  countryid: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+columns and relationships of "model_list"
+"""
+type model_list {
+  """An object relationship"""
+  car_maker: car_makers
+
+  """An array relationship"""
+  car_names(
+    """distinct select on columns"""
+    distinct_on: [car_names_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [car_names_order_by!]
+
+    """filter the rows returned"""
+    where: car_names_bool_exp
+  ): [car_names!]!
+
+  """An aggregated array relationship"""
+  car_names_aggregate(
+    """distinct select on columns"""
+    distinct_on: [car_names_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [car_names_order_by!]
+
+    """filter the rows returned"""
+    where: car_names_bool_exp
+  ): car_names_aggregate!
+  maker: bigint
+  model: String
+  modelid: bigint!
+}
+
+"""
+aggregated selection of "model_list"
+"""
+type model_list_aggregate {
+  aggregate: model_list_aggregate_fields
+  nodes: [model_list!]!
+}
+
+"""
+aggregate fields of "model_list"
+"""
+type model_list_aggregate_fields {
+  avg: model_list_avg_fields
+  count(columns: [model_list_select_column!], distinct: Boolean): Int
+  max: model_list_max_fields
+  min: model_list_min_fields
+  stddev: model_list_stddev_fields
+  stddev_pop: model_list_stddev_pop_fields
+  stddev_samp: model_list_stddev_samp_fields
+  sum: model_list_sum_fields
+  var_pop: model_list_var_pop_fields
+  var_samp: model_list_var_samp_fields
+  variance: model_list_variance_fields
+}
+
+"""
+order by aggregate values of table "model_list"
+"""
+input model_list_aggregate_order_by {
+  avg: model_list_avg_order_by
+  count: order_by
+  max: model_list_max_order_by
+  min: model_list_min_order_by
+  stddev: model_list_stddev_order_by
+  stddev_pop: model_list_stddev_pop_order_by
+  stddev_samp: model_list_stddev_samp_order_by
+  sum: model_list_sum_order_by
+  var_pop: model_list_var_pop_order_by
+  var_samp: model_list_var_samp_order_by
+  variance: model_list_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "model_list"
+"""
+input model_list_arr_rel_insert_input {
+  data: [model_list_insert_input!]!
+  on_conflict: model_list_on_conflict
+}
+
+"""aggregate avg on columns"""
+type model_list_avg_fields {
+  maker: Float
+  modelid: Float
+}
+
+"""
+order by avg() on columns of table "model_list"
+"""
+input model_list_avg_order_by {
+  maker: order_by
+  modelid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "model_list". All fields are combined with a logical 'AND'.
+"""
+input model_list_bool_exp {
+  _and: [model_list_bool_exp]
+  _not: model_list_bool_exp
+  _or: [model_list_bool_exp]
+  car_maker: car_makers_bool_exp
+  car_names: car_names_bool_exp
+  maker: bigint_comparison_exp
+  model: String_comparison_exp
+  modelid: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "model_list"
+"""
+enum model_list_constraint {
+  """unique or primary key constraint"""
+  idx_20891_model_list_pkey
+
+  """unique or primary key constraint"""
+  idx_20891_sqlite_autoindex_model_list_1
+}
+
+"""
+input type for incrementing integer columne in table "model_list"
+"""
+input model_list_inc_input {
+  maker: bigint
+  modelid: bigint
+}
+
+"""
+input type for inserting data into table "model_list"
+"""
+input model_list_insert_input {
+  car_maker: car_makers_obj_rel_insert_input
+  car_names: car_names_arr_rel_insert_input
+  maker: bigint
+  model: String
+  modelid: bigint
+}
+
+"""aggregate max on columns"""
+type model_list_max_fields {
+  maker: bigint
+  model: String
+  modelid: bigint
+}
+
+"""
+order by max() on columns of table "model_list"
+"""
+input model_list_max_order_by {
+  maker: order_by
+  model: order_by
+  modelid: order_by
+}
+
+"""aggregate min on columns"""
+type model_list_min_fields {
+  maker: bigint
+  model: String
+  modelid: bigint
+}
+
+"""
+order by min() on columns of table "model_list"
+"""
+input model_list_min_order_by {
+  maker: order_by
+  model: order_by
+  modelid: order_by
+}
+
+"""
+response of any mutation on the table "model_list"
+"""
+type model_list_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [model_list!]!
+}
+
+"""
+input type for inserting object relation for remote table "model_list"
+"""
+input model_list_obj_rel_insert_input {
+  data: model_list_insert_input!
+  on_conflict: model_list_on_conflict
+}
+
+"""
+on conflict condition type for table "model_list"
+"""
+input model_list_on_conflict {
+  constraint: model_list_constraint!
+  update_columns: [model_list_update_column!]!
+  where: model_list_bool_exp
+}
+
+"""
+ordering options when selecting data from "model_list"
+"""
+input model_list_order_by {
+  car_maker: car_makers_order_by
+  car_names_aggregate: car_names_aggregate_order_by
+  maker: order_by
+  model: order_by
+  modelid: order_by
+}
+
+"""
+select columns of table "model_list"
+"""
+enum model_list_select_column {
+  """column name"""
+  maker
+
+  """column name"""
+  model
+
+  """column name"""
+  modelid
+}
+
+"""
+input type for updating data in table "model_list"
+"""
+input model_list_set_input {
+  maker: bigint
+  model: String
+  modelid: bigint
+}
+
+"""aggregate stddev on columns"""
+type model_list_stddev_fields {
+  maker: Float
+  modelid: Float
+}
+
+"""
+order by stddev() on columns of table "model_list"
+"""
+input model_list_stddev_order_by {
+  maker: order_by
+  modelid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type model_list_stddev_pop_fields {
+  maker: Float
+  modelid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "model_list"
+"""
+input model_list_stddev_pop_order_by {
+  maker: order_by
+  modelid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type model_list_stddev_samp_fields {
+  maker: Float
+  modelid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "model_list"
+"""
+input model_list_stddev_samp_order_by {
+  maker: order_by
+  modelid: order_by
+}
+
+"""aggregate sum on columns"""
+type model_list_sum_fields {
+  maker: bigint
+  modelid: bigint
+}
+
+"""
+order by sum() on columns of table "model_list"
+"""
+input model_list_sum_order_by {
+  maker: order_by
+  modelid: order_by
+}
+
+"""
+update columns of table "model_list"
+"""
+enum model_list_update_column {
+  """column name"""
+  maker
+
+  """column name"""
+  model
+
+  """column name"""
+  modelid
+}
+
+"""aggregate var_pop on columns"""
+type model_list_var_pop_fields {
+  maker: Float
+  modelid: Float
+}
+
+"""
+order by var_pop() on columns of table "model_list"
+"""
+input model_list_var_pop_order_by {
+  maker: order_by
+  modelid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type model_list_var_samp_fields {
+  maker: Float
+  modelid: Float
+}
+
+"""
+order by var_samp() on columns of table "model_list"
+"""
+input model_list_var_samp_order_by {
+  maker: order_by
+  modelid: order_by
+}
+
+"""aggregate variance on columns"""
+type model_list_variance_fields {
+  maker: Float
+  modelid: Float
+}
+
+"""
+order by variance() on columns of table "model_list"
+"""
+input model_list_variance_order_by {
+  maker: order_by
+  modelid: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "car_makers"
+  """
+  delete_car_makers(
+    """filter the rows which have to be deleted"""
+    where: car_makers_bool_exp!
+  ): car_makers_mutation_response
+
+  """
+  delete data from the table: "car_names"
+  """
+  delete_car_names(
+    """filter the rows which have to be deleted"""
+    where: car_names_bool_exp!
+  ): car_names_mutation_response
+
+  """
+  delete data from the table: "cars_data"
+  """
+  delete_cars_data(
+    """filter the rows which have to be deleted"""
+    where: cars_data_bool_exp!
+  ): cars_data_mutation_response
+
+  """
+  delete data from the table: "continents"
+  """
+  delete_continents(
+    """filter the rows which have to be deleted"""
+    where: continents_bool_exp!
+  ): continents_mutation_response
+
+  """
+  delete data from the table: "countries"
+  """
+  delete_countries(
+    """filter the rows which have to be deleted"""
+    where: countries_bool_exp!
+  ): countries_mutation_response
+
+  """
+  delete data from the table: "model_list"
+  """
+  delete_model_list(
+    """filter the rows which have to be deleted"""
+    where: model_list_bool_exp!
+  ): model_list_mutation_response
+
+  """
+  insert data into the table: "car_makers"
+  """
+  insert_car_makers(
+    """the rows to be inserted"""
+    objects: [car_makers_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: car_makers_on_conflict
+  ): car_makers_mutation_response
+
+  """
+  insert data into the table: "car_names"
+  """
+  insert_car_names(
+    """the rows to be inserted"""
+    objects: [car_names_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: car_names_on_conflict
+  ): car_names_mutation_response
+
+  """
+  insert data into the table: "cars_data"
+  """
+  insert_cars_data(
+    """the rows to be inserted"""
+    objects: [cars_data_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: cars_data_on_conflict
+  ): cars_data_mutation_response
+
+  """
+  insert data into the table: "continents"
+  """
+  insert_continents(
+    """the rows to be inserted"""
+    objects: [continents_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: continents_on_conflict
+  ): continents_mutation_response
+
+  """
+  insert data into the table: "countries"
+  """
+  insert_countries(
+    """the rows to be inserted"""
+    objects: [countries_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: countries_on_conflict
+  ): countries_mutation_response
+
+  """
+  insert data into the table: "model_list"
+  """
+  insert_model_list(
+    """the rows to be inserted"""
+    objects: [model_list_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: model_list_on_conflict
+  ): model_list_mutation_response
+
+  """
+  update data of the table: "car_makers"
+  """
+  update_car_makers(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: car_makers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: car_makers_set_input
+
+    """filter the rows which have to be updated"""
+    where: car_makers_bool_exp!
+  ): car_makers_mutation_response
+
+  """
+  update data of the table: "car_names"
+  """
+  update_car_names(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: car_names_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: car_names_set_input
+
+    """filter the rows which have to be updated"""
+    where: car_names_bool_exp!
+  ): car_names_mutation_response
+
+  """
+  update data of the table: "cars_data"
+  """
+  update_cars_data(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: cars_data_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: cars_data_set_input
+
+    """filter the rows which have to be updated"""
+    where: cars_data_bool_exp!
+  ): cars_data_mutation_response
+
+  """
+  update data of the table: "continents"
+  """
+  update_continents(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: continents_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: continents_set_input
+
+    """filter the rows which have to be updated"""
+    where: continents_bool_exp!
+  ): continents_mutation_response
+
+  """
+  update data of the table: "countries"
+  """
+  update_countries(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: countries_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: countries_set_input
+
+    """filter the rows which have to be updated"""
+    where: countries_bool_exp!
+  ): countries_mutation_response
+
+  """
+  update data of the table: "model_list"
+  """
+  update_model_list(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: model_list_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: model_list_set_input
+
+    """filter the rows which have to be updated"""
+    where: model_list_bool_exp!
+  ): model_list_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "car_makers"
+  """
+  car_makers(
+    """distinct select on columns"""
+    distinct_on: [car_makers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [car_makers_order_by!]
+
+    """filter the rows returned"""
+    where: car_makers_bool_exp
+  ): [car_makers!]!
+
+  """
+  fetch aggregated fields from the table: "car_makers"
+  """
+  car_makers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [car_makers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [car_makers_order_by!]
+
+    """filter the rows returned"""
+    where: car_makers_bool_exp
+  ): car_makers_aggregate!
+
+  """fetch data from the table: "car_makers" using primary key columns"""
+  car_makers_by_pk(id: bigint!): car_makers
+
+  """
+  fetch data from the table: "car_names"
+  """
+  car_names(
+    """distinct select on columns"""
+    distinct_on: [car_names_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [car_names_order_by!]
+
+    """filter the rows returned"""
+    where: car_names_bool_exp
+  ): [car_names!]!
+
+  """
+  fetch aggregated fields from the table: "car_names"
+  """
+  car_names_aggregate(
+    """distinct select on columns"""
+    distinct_on: [car_names_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [car_names_order_by!]
+
+    """filter the rows returned"""
+    where: car_names_bool_exp
+  ): car_names_aggregate!
+
+  """fetch data from the table: "car_names" using primary key columns"""
+  car_names_by_pk(makeid: bigint!): car_names
+
+  """
+  fetch data from the table: "cars_data"
+  """
+  cars_data(
+    """distinct select on columns"""
+    distinct_on: [cars_data_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cars_data_order_by!]
+
+    """filter the rows returned"""
+    where: cars_data_bool_exp
+  ): [cars_data!]!
+
+  """
+  fetch aggregated fields from the table: "cars_data"
+  """
+  cars_data_aggregate(
+    """distinct select on columns"""
+    distinct_on: [cars_data_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cars_data_order_by!]
+
+    """filter the rows returned"""
+    where: cars_data_bool_exp
+  ): cars_data_aggregate!
+
+  """fetch data from the table: "cars_data" using primary key columns"""
+  cars_data_by_pk(id: bigint!): cars_data
+
+  """
+  fetch data from the table: "continents"
+  """
+  continents(
+    """distinct select on columns"""
+    distinct_on: [continents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [continents_order_by!]
+
+    """filter the rows returned"""
+    where: continents_bool_exp
+  ): [continents!]!
+
+  """
+  fetch aggregated fields from the table: "continents"
+  """
+  continents_aggregate(
+    """distinct select on columns"""
+    distinct_on: [continents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [continents_order_by!]
+
+    """filter the rows returned"""
+    where: continents_bool_exp
+  ): continents_aggregate!
+
+  """fetch data from the table: "continents" using primary key columns"""
+  continents_by_pk(contid: bigint!): continents
+
+  """
+  fetch data from the table: "countries"
+  """
+  countries(
+    """distinct select on columns"""
+    distinct_on: [countries_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [countries_order_by!]
+
+    """filter the rows returned"""
+    where: countries_bool_exp
+  ): [countries!]!
+
+  """
+  fetch aggregated fields from the table: "countries"
+  """
+  countries_aggregate(
+    """distinct select on columns"""
+    distinct_on: [countries_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [countries_order_by!]
+
+    """filter the rows returned"""
+    where: countries_bool_exp
+  ): countries_aggregate!
+
+  """fetch data from the table: "countries" using primary key columns"""
+  countries_by_pk(countryid: bigint!): countries
+
+  """
+  fetch data from the table: "model_list"
+  """
+  model_list(
+    """distinct select on columns"""
+    distinct_on: [model_list_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [model_list_order_by!]
+
+    """filter the rows returned"""
+    where: model_list_bool_exp
+  ): [model_list!]!
+
+  """
+  fetch aggregated fields from the table: "model_list"
+  """
+  model_list_aggregate(
+    """distinct select on columns"""
+    distinct_on: [model_list_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [model_list_order_by!]
+
+    """filter the rows returned"""
+    where: model_list_bool_exp
+  ): model_list_aggregate!
+
+  """fetch data from the table: "model_list" using primary key columns"""
+  model_list_by_pk(modelid: bigint!): model_list
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "car_makers"
+  """
+  car_makers(
+    """distinct select on columns"""
+    distinct_on: [car_makers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [car_makers_order_by!]
+
+    """filter the rows returned"""
+    where: car_makers_bool_exp
+  ): [car_makers!]!
+
+  """
+  fetch aggregated fields from the table: "car_makers"
+  """
+  car_makers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [car_makers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [car_makers_order_by!]
+
+    """filter the rows returned"""
+    where: car_makers_bool_exp
+  ): car_makers_aggregate!
+
+  """fetch data from the table: "car_makers" using primary key columns"""
+  car_makers_by_pk(id: bigint!): car_makers
+
+  """
+  fetch data from the table: "car_names"
+  """
+  car_names(
+    """distinct select on columns"""
+    distinct_on: [car_names_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [car_names_order_by!]
+
+    """filter the rows returned"""
+    where: car_names_bool_exp
+  ): [car_names!]!
+
+  """
+  fetch aggregated fields from the table: "car_names"
+  """
+  car_names_aggregate(
+    """distinct select on columns"""
+    distinct_on: [car_names_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [car_names_order_by!]
+
+    """filter the rows returned"""
+    where: car_names_bool_exp
+  ): car_names_aggregate!
+
+  """fetch data from the table: "car_names" using primary key columns"""
+  car_names_by_pk(makeid: bigint!): car_names
+
+  """
+  fetch data from the table: "cars_data"
+  """
+  cars_data(
+    """distinct select on columns"""
+    distinct_on: [cars_data_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cars_data_order_by!]
+
+    """filter the rows returned"""
+    where: cars_data_bool_exp
+  ): [cars_data!]!
+
+  """
+  fetch aggregated fields from the table: "cars_data"
+  """
+  cars_data_aggregate(
+    """distinct select on columns"""
+    distinct_on: [cars_data_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cars_data_order_by!]
+
+    """filter the rows returned"""
+    where: cars_data_bool_exp
+  ): cars_data_aggregate!
+
+  """fetch data from the table: "cars_data" using primary key columns"""
+  cars_data_by_pk(id: bigint!): cars_data
+
+  """
+  fetch data from the table: "continents"
+  """
+  continents(
+    """distinct select on columns"""
+    distinct_on: [continents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [continents_order_by!]
+
+    """filter the rows returned"""
+    where: continents_bool_exp
+  ): [continents!]!
+
+  """
+  fetch aggregated fields from the table: "continents"
+  """
+  continents_aggregate(
+    """distinct select on columns"""
+    distinct_on: [continents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [continents_order_by!]
+
+    """filter the rows returned"""
+    where: continents_bool_exp
+  ): continents_aggregate!
+
+  """fetch data from the table: "continents" using primary key columns"""
+  continents_by_pk(contid: bigint!): continents
+
+  """
+  fetch data from the table: "countries"
+  """
+  countries(
+    """distinct select on columns"""
+    distinct_on: [countries_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [countries_order_by!]
+
+    """filter the rows returned"""
+    where: countries_bool_exp
+  ): [countries!]!
+
+  """
+  fetch aggregated fields from the table: "countries"
+  """
+  countries_aggregate(
+    """distinct select on columns"""
+    distinct_on: [countries_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [countries_order_by!]
+
+    """filter the rows returned"""
+    where: countries_bool_exp
+  ): countries_aggregate!
+
+  """fetch data from the table: "countries" using primary key columns"""
+  countries_by_pk(countryid: bigint!): countries
+
+  """
+  fetch data from the table: "model_list"
+  """
+  model_list(
+    """distinct select on columns"""
+    distinct_on: [model_list_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [model_list_order_by!]
+
+    """filter the rows returned"""
+    where: model_list_bool_exp
+  ): [model_list!]!
+
+  """
+  fetch aggregated fields from the table: "model_list"
+  """
+  model_list_aggregate(
+    """distinct select on columns"""
+    distinct_on: [model_list_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [model_list_order_by!]
+
+    """filter the rows returned"""
+    where: model_list_bool_exp
+  ): model_list_aggregate!
+
+  """fetch data from the table: "model_list" using primary key columns"""
+  model_list_by_pk(modelid: bigint!): model_list
+}

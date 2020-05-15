@@ -1,0 +1,1679 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "cinema"
+"""
+type cinema {
+  capacity: Int
+  cinema_id: Int
+  location: String
+  name: String
+  openning_year: Int
+
+  """An array relationship"""
+  schedules(
+    """distinct select on columns"""
+    distinct_on: [schedule_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [schedule_order_by!]
+
+    """filter the rows returned"""
+    where: schedule_bool_exp
+  ): [schedule!]!
+
+  """An aggregated array relationship"""
+  schedules_aggregate(
+    """distinct select on columns"""
+    distinct_on: [schedule_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [schedule_order_by!]
+
+    """filter the rows returned"""
+    where: schedule_bool_exp
+  ): schedule_aggregate!
+}
+
+"""
+aggregated selection of "cinema"
+"""
+type cinema_aggregate {
+  aggregate: cinema_aggregate_fields
+  nodes: [cinema!]!
+}
+
+"""
+aggregate fields of "cinema"
+"""
+type cinema_aggregate_fields {
+  avg: cinema_avg_fields
+  count(columns: [cinema_select_column!], distinct: Boolean): Int
+  max: cinema_max_fields
+  min: cinema_min_fields
+  stddev: cinema_stddev_fields
+  stddev_pop: cinema_stddev_pop_fields
+  stddev_samp: cinema_stddev_samp_fields
+  sum: cinema_sum_fields
+  var_pop: cinema_var_pop_fields
+  var_samp: cinema_var_samp_fields
+  variance: cinema_variance_fields
+}
+
+"""
+order by aggregate values of table "cinema"
+"""
+input cinema_aggregate_order_by {
+  avg: cinema_avg_order_by
+  count: order_by
+  max: cinema_max_order_by
+  min: cinema_min_order_by
+  stddev: cinema_stddev_order_by
+  stddev_pop: cinema_stddev_pop_order_by
+  stddev_samp: cinema_stddev_samp_order_by
+  sum: cinema_sum_order_by
+  var_pop: cinema_var_pop_order_by
+  var_samp: cinema_var_samp_order_by
+  variance: cinema_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "cinema"
+"""
+input cinema_arr_rel_insert_input {
+  data: [cinema_insert_input!]!
+  on_conflict: cinema_on_conflict
+}
+
+"""aggregate avg on columns"""
+type cinema_avg_fields {
+  capacity: Float
+  cinema_id: Float
+  openning_year: Float
+}
+
+"""
+order by avg() on columns of table "cinema"
+"""
+input cinema_avg_order_by {
+  capacity: order_by
+  cinema_id: order_by
+  openning_year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "cinema". All fields are combined with a logical 'AND'.
+"""
+input cinema_bool_exp {
+  _and: [cinema_bool_exp]
+  _not: cinema_bool_exp
+  _or: [cinema_bool_exp]
+  capacity: Int_comparison_exp
+  cinema_id: Int_comparison_exp
+  location: String_comparison_exp
+  name: String_comparison_exp
+  openning_year: Int_comparison_exp
+  schedules: schedule_bool_exp
+}
+
+"""
+unique or primary key constraints on table "cinema"
+"""
+enum cinema_constraint {
+  """unique or primary key constraint"""
+  idx_18859_sqlite_autoindex_cinema_1
+}
+
+"""
+input type for incrementing integer columne in table "cinema"
+"""
+input cinema_inc_input {
+  capacity: Int
+  cinema_id: Int
+  openning_year: Int
+}
+
+"""
+input type for inserting data into table "cinema"
+"""
+input cinema_insert_input {
+  capacity: Int
+  cinema_id: Int
+  location: String
+  name: String
+  openning_year: Int
+  schedules: schedule_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type cinema_max_fields {
+  capacity: Int
+  cinema_id: Int
+  location: String
+  name: String
+  openning_year: Int
+}
+
+"""
+order by max() on columns of table "cinema"
+"""
+input cinema_max_order_by {
+  capacity: order_by
+  cinema_id: order_by
+  location: order_by
+  name: order_by
+  openning_year: order_by
+}
+
+"""aggregate min on columns"""
+type cinema_min_fields {
+  capacity: Int
+  cinema_id: Int
+  location: String
+  name: String
+  openning_year: Int
+}
+
+"""
+order by min() on columns of table "cinema"
+"""
+input cinema_min_order_by {
+  capacity: order_by
+  cinema_id: order_by
+  location: order_by
+  name: order_by
+  openning_year: order_by
+}
+
+"""
+response of any mutation on the table "cinema"
+"""
+type cinema_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [cinema!]!
+}
+
+"""
+input type for inserting object relation for remote table "cinema"
+"""
+input cinema_obj_rel_insert_input {
+  data: cinema_insert_input!
+  on_conflict: cinema_on_conflict
+}
+
+"""
+on conflict condition type for table "cinema"
+"""
+input cinema_on_conflict {
+  constraint: cinema_constraint!
+  update_columns: [cinema_update_column!]!
+  where: cinema_bool_exp
+}
+
+"""
+ordering options when selecting data from "cinema"
+"""
+input cinema_order_by {
+  capacity: order_by
+  cinema_id: order_by
+  location: order_by
+  name: order_by
+  openning_year: order_by
+  schedules_aggregate: schedule_aggregate_order_by
+}
+
+"""
+select columns of table "cinema"
+"""
+enum cinema_select_column {
+  """column name"""
+  capacity
+
+  """column name"""
+  cinema_id
+
+  """column name"""
+  location
+
+  """column name"""
+  name
+
+  """column name"""
+  openning_year
+}
+
+"""
+input type for updating data in table "cinema"
+"""
+input cinema_set_input {
+  capacity: Int
+  cinema_id: Int
+  location: String
+  name: String
+  openning_year: Int
+}
+
+"""aggregate stddev on columns"""
+type cinema_stddev_fields {
+  capacity: Float
+  cinema_id: Float
+  openning_year: Float
+}
+
+"""
+order by stddev() on columns of table "cinema"
+"""
+input cinema_stddev_order_by {
+  capacity: order_by
+  cinema_id: order_by
+  openning_year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type cinema_stddev_pop_fields {
+  capacity: Float
+  cinema_id: Float
+  openning_year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "cinema"
+"""
+input cinema_stddev_pop_order_by {
+  capacity: order_by
+  cinema_id: order_by
+  openning_year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type cinema_stddev_samp_fields {
+  capacity: Float
+  cinema_id: Float
+  openning_year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "cinema"
+"""
+input cinema_stddev_samp_order_by {
+  capacity: order_by
+  cinema_id: order_by
+  openning_year: order_by
+}
+
+"""aggregate sum on columns"""
+type cinema_sum_fields {
+  capacity: Int
+  cinema_id: Int
+  openning_year: Int
+}
+
+"""
+order by sum() on columns of table "cinema"
+"""
+input cinema_sum_order_by {
+  capacity: order_by
+  cinema_id: order_by
+  openning_year: order_by
+}
+
+"""
+update columns of table "cinema"
+"""
+enum cinema_update_column {
+  """column name"""
+  capacity
+
+  """column name"""
+  cinema_id
+
+  """column name"""
+  location
+
+  """column name"""
+  name
+
+  """column name"""
+  openning_year
+}
+
+"""aggregate var_pop on columns"""
+type cinema_var_pop_fields {
+  capacity: Float
+  cinema_id: Float
+  openning_year: Float
+}
+
+"""
+order by var_pop() on columns of table "cinema"
+"""
+input cinema_var_pop_order_by {
+  capacity: order_by
+  cinema_id: order_by
+  openning_year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type cinema_var_samp_fields {
+  capacity: Float
+  cinema_id: Float
+  openning_year: Float
+}
+
+"""
+order by var_samp() on columns of table "cinema"
+"""
+input cinema_var_samp_order_by {
+  capacity: order_by
+  cinema_id: order_by
+  openning_year: order_by
+}
+
+"""aggregate variance on columns"""
+type cinema_variance_fields {
+  capacity: Float
+  cinema_id: Float
+  openning_year: Float
+}
+
+"""
+order by variance() on columns of table "cinema"
+"""
+input cinema_variance_order_by {
+  capacity: order_by
+  cinema_id: order_by
+  openning_year: order_by
+}
+
+"""
+columns and relationships of "film"
+"""
+type film {
+  directed_by: String
+  film_id: Int
+  number_in_season: Int
+  original_air_date: String
+  production_code: String
+  rank_in_series: Int
+
+  """An array relationship"""
+  schedules(
+    """distinct select on columns"""
+    distinct_on: [schedule_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [schedule_order_by!]
+
+    """filter the rows returned"""
+    where: schedule_bool_exp
+  ): [schedule!]!
+
+  """An aggregated array relationship"""
+  schedules_aggregate(
+    """distinct select on columns"""
+    distinct_on: [schedule_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [schedule_order_by!]
+
+    """filter the rows returned"""
+    where: schedule_bool_exp
+  ): schedule_aggregate!
+  title: String
+}
+
+"""
+aggregated selection of "film"
+"""
+type film_aggregate {
+  aggregate: film_aggregate_fields
+  nodes: [film!]!
+}
+
+"""
+aggregate fields of "film"
+"""
+type film_aggregate_fields {
+  avg: film_avg_fields
+  count(columns: [film_select_column!], distinct: Boolean): Int
+  max: film_max_fields
+  min: film_min_fields
+  stddev: film_stddev_fields
+  stddev_pop: film_stddev_pop_fields
+  stddev_samp: film_stddev_samp_fields
+  sum: film_sum_fields
+  var_pop: film_var_pop_fields
+  var_samp: film_var_samp_fields
+  variance: film_variance_fields
+}
+
+"""
+order by aggregate values of table "film"
+"""
+input film_aggregate_order_by {
+  avg: film_avg_order_by
+  count: order_by
+  max: film_max_order_by
+  min: film_min_order_by
+  stddev: film_stddev_order_by
+  stddev_pop: film_stddev_pop_order_by
+  stddev_samp: film_stddev_samp_order_by
+  sum: film_sum_order_by
+  var_pop: film_var_pop_order_by
+  var_samp: film_var_samp_order_by
+  variance: film_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "film"
+"""
+input film_arr_rel_insert_input {
+  data: [film_insert_input!]!
+  on_conflict: film_on_conflict
+}
+
+"""aggregate avg on columns"""
+type film_avg_fields {
+  film_id: Float
+  number_in_season: Float
+  rank_in_series: Float
+}
+
+"""
+order by avg() on columns of table "film"
+"""
+input film_avg_order_by {
+  film_id: order_by
+  number_in_season: order_by
+  rank_in_series: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "film". All fields are combined with a logical 'AND'.
+"""
+input film_bool_exp {
+  _and: [film_bool_exp]
+  _not: film_bool_exp
+  _or: [film_bool_exp]
+  directed_by: String_comparison_exp
+  film_id: Int_comparison_exp
+  number_in_season: Int_comparison_exp
+  original_air_date: String_comparison_exp
+  production_code: String_comparison_exp
+  rank_in_series: Int_comparison_exp
+  schedules: schedule_bool_exp
+  title: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "film"
+"""
+enum film_constraint {
+  """unique or primary key constraint"""
+  idx_18853_sqlite_autoindex_film_1
+}
+
+"""
+input type for incrementing integer columne in table "film"
+"""
+input film_inc_input {
+  film_id: Int
+  number_in_season: Int
+  rank_in_series: Int
+}
+
+"""
+input type for inserting data into table "film"
+"""
+input film_insert_input {
+  directed_by: String
+  film_id: Int
+  number_in_season: Int
+  original_air_date: String
+  production_code: String
+  rank_in_series: Int
+  schedules: schedule_arr_rel_insert_input
+  title: String
+}
+
+"""aggregate max on columns"""
+type film_max_fields {
+  directed_by: String
+  film_id: Int
+  number_in_season: Int
+  original_air_date: String
+  production_code: String
+  rank_in_series: Int
+  title: String
+}
+
+"""
+order by max() on columns of table "film"
+"""
+input film_max_order_by {
+  directed_by: order_by
+  film_id: order_by
+  number_in_season: order_by
+  original_air_date: order_by
+  production_code: order_by
+  rank_in_series: order_by
+  title: order_by
+}
+
+"""aggregate min on columns"""
+type film_min_fields {
+  directed_by: String
+  film_id: Int
+  number_in_season: Int
+  original_air_date: String
+  production_code: String
+  rank_in_series: Int
+  title: String
+}
+
+"""
+order by min() on columns of table "film"
+"""
+input film_min_order_by {
+  directed_by: order_by
+  film_id: order_by
+  number_in_season: order_by
+  original_air_date: order_by
+  production_code: order_by
+  rank_in_series: order_by
+  title: order_by
+}
+
+"""
+response of any mutation on the table "film"
+"""
+type film_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [film!]!
+}
+
+"""
+input type for inserting object relation for remote table "film"
+"""
+input film_obj_rel_insert_input {
+  data: film_insert_input!
+  on_conflict: film_on_conflict
+}
+
+"""
+on conflict condition type for table "film"
+"""
+input film_on_conflict {
+  constraint: film_constraint!
+  update_columns: [film_update_column!]!
+  where: film_bool_exp
+}
+
+"""
+ordering options when selecting data from "film"
+"""
+input film_order_by {
+  directed_by: order_by
+  film_id: order_by
+  number_in_season: order_by
+  original_air_date: order_by
+  production_code: order_by
+  rank_in_series: order_by
+  schedules_aggregate: schedule_aggregate_order_by
+  title: order_by
+}
+
+"""
+select columns of table "film"
+"""
+enum film_select_column {
+  """column name"""
+  directed_by
+
+  """column name"""
+  film_id
+
+  """column name"""
+  number_in_season
+
+  """column name"""
+  original_air_date
+
+  """column name"""
+  production_code
+
+  """column name"""
+  rank_in_series
+
+  """column name"""
+  title
+}
+
+"""
+input type for updating data in table "film"
+"""
+input film_set_input {
+  directed_by: String
+  film_id: Int
+  number_in_season: Int
+  original_air_date: String
+  production_code: String
+  rank_in_series: Int
+  title: String
+}
+
+"""aggregate stddev on columns"""
+type film_stddev_fields {
+  film_id: Float
+  number_in_season: Float
+  rank_in_series: Float
+}
+
+"""
+order by stddev() on columns of table "film"
+"""
+input film_stddev_order_by {
+  film_id: order_by
+  number_in_season: order_by
+  rank_in_series: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type film_stddev_pop_fields {
+  film_id: Float
+  number_in_season: Float
+  rank_in_series: Float
+}
+
+"""
+order by stddev_pop() on columns of table "film"
+"""
+input film_stddev_pop_order_by {
+  film_id: order_by
+  number_in_season: order_by
+  rank_in_series: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type film_stddev_samp_fields {
+  film_id: Float
+  number_in_season: Float
+  rank_in_series: Float
+}
+
+"""
+order by stddev_samp() on columns of table "film"
+"""
+input film_stddev_samp_order_by {
+  film_id: order_by
+  number_in_season: order_by
+  rank_in_series: order_by
+}
+
+"""aggregate sum on columns"""
+type film_sum_fields {
+  film_id: Int
+  number_in_season: Int
+  rank_in_series: Int
+}
+
+"""
+order by sum() on columns of table "film"
+"""
+input film_sum_order_by {
+  film_id: order_by
+  number_in_season: order_by
+  rank_in_series: order_by
+}
+
+"""
+update columns of table "film"
+"""
+enum film_update_column {
+  """column name"""
+  directed_by
+
+  """column name"""
+  film_id
+
+  """column name"""
+  number_in_season
+
+  """column name"""
+  original_air_date
+
+  """column name"""
+  production_code
+
+  """column name"""
+  rank_in_series
+
+  """column name"""
+  title
+}
+
+"""aggregate var_pop on columns"""
+type film_var_pop_fields {
+  film_id: Float
+  number_in_season: Float
+  rank_in_series: Float
+}
+
+"""
+order by var_pop() on columns of table "film"
+"""
+input film_var_pop_order_by {
+  film_id: order_by
+  number_in_season: order_by
+  rank_in_series: order_by
+}
+
+"""aggregate var_samp on columns"""
+type film_var_samp_fields {
+  film_id: Float
+  number_in_season: Float
+  rank_in_series: Float
+}
+
+"""
+order by var_samp() on columns of table "film"
+"""
+input film_var_samp_order_by {
+  film_id: order_by
+  number_in_season: order_by
+  rank_in_series: order_by
+}
+
+"""aggregate variance on columns"""
+type film_variance_fields {
+  film_id: Float
+  number_in_season: Float
+  rank_in_series: Float
+}
+
+"""
+order by variance() on columns of table "film"
+"""
+input film_variance_order_by {
+  film_id: order_by
+  number_in_season: order_by
+  rank_in_series: order_by
+}
+
+scalar float8
+
+"""
+expression to compare columns of type float8. All fields are combined with logical 'AND'.
+"""
+input float8_comparison_exp {
+  _eq: float8
+  _gt: float8
+  _gte: float8
+  _in: [float8!]
+  _is_null: Boolean
+  _lt: float8
+  _lte: float8
+  _neq: float8
+  _nin: [float8!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "cinema"
+  """
+  delete_cinema(
+    """filter the rows which have to be deleted"""
+    where: cinema_bool_exp!
+  ): cinema_mutation_response
+
+  """
+  delete data from the table: "film"
+  """
+  delete_film(
+    """filter the rows which have to be deleted"""
+    where: film_bool_exp!
+  ): film_mutation_response
+
+  """
+  delete data from the table: "schedule"
+  """
+  delete_schedule(
+    """filter the rows which have to be deleted"""
+    where: schedule_bool_exp!
+  ): schedule_mutation_response
+
+  """
+  insert data into the table: "cinema"
+  """
+  insert_cinema(
+    """the rows to be inserted"""
+    objects: [cinema_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: cinema_on_conflict
+  ): cinema_mutation_response
+
+  """
+  insert data into the table: "film"
+  """
+  insert_film(
+    """the rows to be inserted"""
+    objects: [film_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: film_on_conflict
+  ): film_mutation_response
+
+  """
+  insert data into the table: "schedule"
+  """
+  insert_schedule(
+    """the rows to be inserted"""
+    objects: [schedule_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: schedule_on_conflict
+  ): schedule_mutation_response
+
+  """
+  update data of the table: "cinema"
+  """
+  update_cinema(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: cinema_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: cinema_set_input
+
+    """filter the rows which have to be updated"""
+    where: cinema_bool_exp!
+  ): cinema_mutation_response
+
+  """
+  update data of the table: "film"
+  """
+  update_film(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: film_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: film_set_input
+
+    """filter the rows which have to be updated"""
+    where: film_bool_exp!
+  ): film_mutation_response
+
+  """
+  update data of the table: "schedule"
+  """
+  update_schedule(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: schedule_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: schedule_set_input
+
+    """filter the rows which have to be updated"""
+    where: schedule_bool_exp!
+  ): schedule_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "cinema"
+  """
+  cinema(
+    """distinct select on columns"""
+    distinct_on: [cinema_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cinema_order_by!]
+
+    """filter the rows returned"""
+    where: cinema_bool_exp
+  ): [cinema!]!
+
+  """
+  fetch aggregated fields from the table: "cinema"
+  """
+  cinema_aggregate(
+    """distinct select on columns"""
+    distinct_on: [cinema_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cinema_order_by!]
+
+    """filter the rows returned"""
+    where: cinema_bool_exp
+  ): cinema_aggregate!
+
+  """
+  fetch data from the table: "film"
+  """
+  film(
+    """distinct select on columns"""
+    distinct_on: [film_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_order_by!]
+
+    """filter the rows returned"""
+    where: film_bool_exp
+  ): [film!]!
+
+  """
+  fetch aggregated fields from the table: "film"
+  """
+  film_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_order_by!]
+
+    """filter the rows returned"""
+    where: film_bool_exp
+  ): film_aggregate!
+
+  """
+  fetch data from the table: "schedule"
+  """
+  schedule(
+    """distinct select on columns"""
+    distinct_on: [schedule_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [schedule_order_by!]
+
+    """filter the rows returned"""
+    where: schedule_bool_exp
+  ): [schedule!]!
+
+  """
+  fetch aggregated fields from the table: "schedule"
+  """
+  schedule_aggregate(
+    """distinct select on columns"""
+    distinct_on: [schedule_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [schedule_order_by!]
+
+    """filter the rows returned"""
+    where: schedule_bool_exp
+  ): schedule_aggregate!
+}
+
+"""
+columns and relationships of "schedule"
+"""
+type schedule {
+  """An object relationship"""
+  cinema: cinema
+  cinema_id: Int
+  date: String
+
+  """An object relationship"""
+  film: film
+  film_id: Int
+  price: float8
+  show_times_per_day: Int
+}
+
+"""
+aggregated selection of "schedule"
+"""
+type schedule_aggregate {
+  aggregate: schedule_aggregate_fields
+  nodes: [schedule!]!
+}
+
+"""
+aggregate fields of "schedule"
+"""
+type schedule_aggregate_fields {
+  avg: schedule_avg_fields
+  count(columns: [schedule_select_column!], distinct: Boolean): Int
+  max: schedule_max_fields
+  min: schedule_min_fields
+  stddev: schedule_stddev_fields
+  stddev_pop: schedule_stddev_pop_fields
+  stddev_samp: schedule_stddev_samp_fields
+  sum: schedule_sum_fields
+  var_pop: schedule_var_pop_fields
+  var_samp: schedule_var_samp_fields
+  variance: schedule_variance_fields
+}
+
+"""
+order by aggregate values of table "schedule"
+"""
+input schedule_aggregate_order_by {
+  avg: schedule_avg_order_by
+  count: order_by
+  max: schedule_max_order_by
+  min: schedule_min_order_by
+  stddev: schedule_stddev_order_by
+  stddev_pop: schedule_stddev_pop_order_by
+  stddev_samp: schedule_stddev_samp_order_by
+  sum: schedule_sum_order_by
+  var_pop: schedule_var_pop_order_by
+  var_samp: schedule_var_samp_order_by
+  variance: schedule_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "schedule"
+"""
+input schedule_arr_rel_insert_input {
+  data: [schedule_insert_input!]!
+  on_conflict: schedule_on_conflict
+}
+
+"""aggregate avg on columns"""
+type schedule_avg_fields {
+  cinema_id: Float
+  film_id: Float
+  price: Float
+  show_times_per_day: Float
+}
+
+"""
+order by avg() on columns of table "schedule"
+"""
+input schedule_avg_order_by {
+  cinema_id: order_by
+  film_id: order_by
+  price: order_by
+  show_times_per_day: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "schedule". All fields are combined with a logical 'AND'.
+"""
+input schedule_bool_exp {
+  _and: [schedule_bool_exp]
+  _not: schedule_bool_exp
+  _or: [schedule_bool_exp]
+  cinema: cinema_bool_exp
+  cinema_id: Int_comparison_exp
+  date: String_comparison_exp
+  film: film_bool_exp
+  film_id: Int_comparison_exp
+  price: float8_comparison_exp
+  show_times_per_day: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "schedule"
+"""
+enum schedule_constraint {
+  """unique or primary key constraint"""
+  idx_18865_sqlite_autoindex_schedule_1
+}
+
+"""
+input type for incrementing integer columne in table "schedule"
+"""
+input schedule_inc_input {
+  cinema_id: Int
+  film_id: Int
+  show_times_per_day: Int
+}
+
+"""
+input type for inserting data into table "schedule"
+"""
+input schedule_insert_input {
+  cinema: cinema_obj_rel_insert_input
+  cinema_id: Int
+  date: String
+  film: film_obj_rel_insert_input
+  film_id: Int
+  price: float8
+  show_times_per_day: Int
+}
+
+"""aggregate max on columns"""
+type schedule_max_fields {
+  cinema_id: Int
+  date: String
+  film_id: Int
+  price: float8
+  show_times_per_day: Int
+}
+
+"""
+order by max() on columns of table "schedule"
+"""
+input schedule_max_order_by {
+  cinema_id: order_by
+  date: order_by
+  film_id: order_by
+  price: order_by
+  show_times_per_day: order_by
+}
+
+"""aggregate min on columns"""
+type schedule_min_fields {
+  cinema_id: Int
+  date: String
+  film_id: Int
+  price: float8
+  show_times_per_day: Int
+}
+
+"""
+order by min() on columns of table "schedule"
+"""
+input schedule_min_order_by {
+  cinema_id: order_by
+  date: order_by
+  film_id: order_by
+  price: order_by
+  show_times_per_day: order_by
+}
+
+"""
+response of any mutation on the table "schedule"
+"""
+type schedule_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [schedule!]!
+}
+
+"""
+input type for inserting object relation for remote table "schedule"
+"""
+input schedule_obj_rel_insert_input {
+  data: schedule_insert_input!
+  on_conflict: schedule_on_conflict
+}
+
+"""
+on conflict condition type for table "schedule"
+"""
+input schedule_on_conflict {
+  constraint: schedule_constraint!
+  update_columns: [schedule_update_column!]!
+  where: schedule_bool_exp
+}
+
+"""
+ordering options when selecting data from "schedule"
+"""
+input schedule_order_by {
+  cinema: cinema_order_by
+  cinema_id: order_by
+  date: order_by
+  film: film_order_by
+  film_id: order_by
+  price: order_by
+  show_times_per_day: order_by
+}
+
+"""
+select columns of table "schedule"
+"""
+enum schedule_select_column {
+  """column name"""
+  cinema_id
+
+  """column name"""
+  date
+
+  """column name"""
+  film_id
+
+  """column name"""
+  price
+
+  """column name"""
+  show_times_per_day
+}
+
+"""
+input type for updating data in table "schedule"
+"""
+input schedule_set_input {
+  cinema_id: Int
+  date: String
+  film_id: Int
+  price: float8
+  show_times_per_day: Int
+}
+
+"""aggregate stddev on columns"""
+type schedule_stddev_fields {
+  cinema_id: Float
+  film_id: Float
+  price: Float
+  show_times_per_day: Float
+}
+
+"""
+order by stddev() on columns of table "schedule"
+"""
+input schedule_stddev_order_by {
+  cinema_id: order_by
+  film_id: order_by
+  price: order_by
+  show_times_per_day: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type schedule_stddev_pop_fields {
+  cinema_id: Float
+  film_id: Float
+  price: Float
+  show_times_per_day: Float
+}
+
+"""
+order by stddev_pop() on columns of table "schedule"
+"""
+input schedule_stddev_pop_order_by {
+  cinema_id: order_by
+  film_id: order_by
+  price: order_by
+  show_times_per_day: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type schedule_stddev_samp_fields {
+  cinema_id: Float
+  film_id: Float
+  price: Float
+  show_times_per_day: Float
+}
+
+"""
+order by stddev_samp() on columns of table "schedule"
+"""
+input schedule_stddev_samp_order_by {
+  cinema_id: order_by
+  film_id: order_by
+  price: order_by
+  show_times_per_day: order_by
+}
+
+"""aggregate sum on columns"""
+type schedule_sum_fields {
+  cinema_id: Int
+  film_id: Int
+  price: float8
+  show_times_per_day: Int
+}
+
+"""
+order by sum() on columns of table "schedule"
+"""
+input schedule_sum_order_by {
+  cinema_id: order_by
+  film_id: order_by
+  price: order_by
+  show_times_per_day: order_by
+}
+
+"""
+update columns of table "schedule"
+"""
+enum schedule_update_column {
+  """column name"""
+  cinema_id
+
+  """column name"""
+  date
+
+  """column name"""
+  film_id
+
+  """column name"""
+  price
+
+  """column name"""
+  show_times_per_day
+}
+
+"""aggregate var_pop on columns"""
+type schedule_var_pop_fields {
+  cinema_id: Float
+  film_id: Float
+  price: Float
+  show_times_per_day: Float
+}
+
+"""
+order by var_pop() on columns of table "schedule"
+"""
+input schedule_var_pop_order_by {
+  cinema_id: order_by
+  film_id: order_by
+  price: order_by
+  show_times_per_day: order_by
+}
+
+"""aggregate var_samp on columns"""
+type schedule_var_samp_fields {
+  cinema_id: Float
+  film_id: Float
+  price: Float
+  show_times_per_day: Float
+}
+
+"""
+order by var_samp() on columns of table "schedule"
+"""
+input schedule_var_samp_order_by {
+  cinema_id: order_by
+  film_id: order_by
+  price: order_by
+  show_times_per_day: order_by
+}
+
+"""aggregate variance on columns"""
+type schedule_variance_fields {
+  cinema_id: Float
+  film_id: Float
+  price: Float
+  show_times_per_day: Float
+}
+
+"""
+order by variance() on columns of table "schedule"
+"""
+input schedule_variance_order_by {
+  cinema_id: order_by
+  film_id: order_by
+  price: order_by
+  show_times_per_day: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "cinema"
+  """
+  cinema(
+    """distinct select on columns"""
+    distinct_on: [cinema_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cinema_order_by!]
+
+    """filter the rows returned"""
+    where: cinema_bool_exp
+  ): [cinema!]!
+
+  """
+  fetch aggregated fields from the table: "cinema"
+  """
+  cinema_aggregate(
+    """distinct select on columns"""
+    distinct_on: [cinema_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cinema_order_by!]
+
+    """filter the rows returned"""
+    where: cinema_bool_exp
+  ): cinema_aggregate!
+
+  """
+  fetch data from the table: "film"
+  """
+  film(
+    """distinct select on columns"""
+    distinct_on: [film_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_order_by!]
+
+    """filter the rows returned"""
+    where: film_bool_exp
+  ): [film!]!
+
+  """
+  fetch aggregated fields from the table: "film"
+  """
+  film_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_order_by!]
+
+    """filter the rows returned"""
+    where: film_bool_exp
+  ): film_aggregate!
+
+  """
+  fetch data from the table: "schedule"
+  """
+  schedule(
+    """distinct select on columns"""
+    distinct_on: [schedule_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [schedule_order_by!]
+
+    """filter the rows returned"""
+    where: schedule_bool_exp
+  ): [schedule!]!
+
+  """
+  fetch aggregated fields from the table: "schedule"
+  """
+  schedule_aggregate(
+    """distinct select on columns"""
+    distinct_on: [schedule_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [schedule_order_by!]
+
+    """filter the rows returned"""
+    where: schedule_bool_exp
+  ): schedule_aggregate!
+}

@@ -1,0 +1,2047 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Boolean. All fields are combined with logical 'AND'.
+"""
+input Boolean_comparison_exp {
+  _eq: Boolean
+  _gt: Boolean
+  _gte: Boolean
+  _in: [Boolean!]
+  _is_null: Boolean
+  _lt: Boolean
+  _lte: Boolean
+  _neq: Boolean
+  _nin: [Boolean!]
+}
+
+"""
+columns and relationships of "employee"
+"""
+type employee {
+  age: Int
+  city: String
+  employee_id: Int
+
+  """An array relationship"""
+  evaluations(
+    """distinct select on columns"""
+    distinct_on: [evaluation_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [evaluation_order_by!]
+
+    """filter the rows returned"""
+    where: evaluation_bool_exp
+  ): [evaluation!]!
+
+  """An aggregated array relationship"""
+  evaluations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [evaluation_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [evaluation_order_by!]
+
+    """filter the rows returned"""
+    where: evaluation_bool_exp
+  ): evaluation_aggregate!
+
+  """An array relationship"""
+  hirings(
+    """distinct select on columns"""
+    distinct_on: [hiring_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hiring_order_by!]
+
+    """filter the rows returned"""
+    where: hiring_bool_exp
+  ): [hiring!]!
+
+  """An aggregated array relationship"""
+  hirings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [hiring_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hiring_order_by!]
+
+    """filter the rows returned"""
+    where: hiring_bool_exp
+  ): hiring_aggregate!
+  name: String
+}
+
+"""
+aggregated selection of "employee"
+"""
+type employee_aggregate {
+  aggregate: employee_aggregate_fields
+  nodes: [employee!]!
+}
+
+"""
+aggregate fields of "employee"
+"""
+type employee_aggregate_fields {
+  avg: employee_avg_fields
+  count(columns: [employee_select_column!], distinct: Boolean): Int
+  max: employee_max_fields
+  min: employee_min_fields
+  stddev: employee_stddev_fields
+  stddev_pop: employee_stddev_pop_fields
+  stddev_samp: employee_stddev_samp_fields
+  sum: employee_sum_fields
+  var_pop: employee_var_pop_fields
+  var_samp: employee_var_samp_fields
+  variance: employee_variance_fields
+}
+
+"""
+order by aggregate values of table "employee"
+"""
+input employee_aggregate_order_by {
+  avg: employee_avg_order_by
+  count: order_by
+  max: employee_max_order_by
+  min: employee_min_order_by
+  stddev: employee_stddev_order_by
+  stddev_pop: employee_stddev_pop_order_by
+  stddev_samp: employee_stddev_samp_order_by
+  sum: employee_sum_order_by
+  var_pop: employee_var_pop_order_by
+  var_samp: employee_var_samp_order_by
+  variance: employee_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "employee"
+"""
+input employee_arr_rel_insert_input {
+  data: [employee_insert_input!]!
+  on_conflict: employee_on_conflict
+}
+
+"""aggregate avg on columns"""
+type employee_avg_fields {
+  age: Float
+  employee_id: Float
+}
+
+"""
+order by avg() on columns of table "employee"
+"""
+input employee_avg_order_by {
+  age: order_by
+  employee_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "employee". All fields are combined with a logical 'AND'.
+"""
+input employee_bool_exp {
+  _and: [employee_bool_exp]
+  _not: employee_bool_exp
+  _or: [employee_bool_exp]
+  age: Int_comparison_exp
+  city: String_comparison_exp
+  employee_id: Int_comparison_exp
+  evaluations: evaluation_bool_exp
+  hirings: hiring_bool_exp
+  name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "employee"
+"""
+enum employee_constraint {
+  """unique or primary key constraint"""
+  idx_25087_sqlite_autoindex_employee_1
+}
+
+"""
+input type for incrementing integer columne in table "employee"
+"""
+input employee_inc_input {
+  age: Int
+  employee_id: Int
+}
+
+"""
+input type for inserting data into table "employee"
+"""
+input employee_insert_input {
+  age: Int
+  city: String
+  employee_id: Int
+  evaluations: evaluation_arr_rel_insert_input
+  hirings: hiring_arr_rel_insert_input
+  name: String
+}
+
+"""aggregate max on columns"""
+type employee_max_fields {
+  age: Int
+  city: String
+  employee_id: Int
+  name: String
+}
+
+"""
+order by max() on columns of table "employee"
+"""
+input employee_max_order_by {
+  age: order_by
+  city: order_by
+  employee_id: order_by
+  name: order_by
+}
+
+"""aggregate min on columns"""
+type employee_min_fields {
+  age: Int
+  city: String
+  employee_id: Int
+  name: String
+}
+
+"""
+order by min() on columns of table "employee"
+"""
+input employee_min_order_by {
+  age: order_by
+  city: order_by
+  employee_id: order_by
+  name: order_by
+}
+
+"""
+response of any mutation on the table "employee"
+"""
+type employee_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [employee!]!
+}
+
+"""
+input type for inserting object relation for remote table "employee"
+"""
+input employee_obj_rel_insert_input {
+  data: employee_insert_input!
+  on_conflict: employee_on_conflict
+}
+
+"""
+on conflict condition type for table "employee"
+"""
+input employee_on_conflict {
+  constraint: employee_constraint!
+  update_columns: [employee_update_column!]!
+  where: employee_bool_exp
+}
+
+"""
+ordering options when selecting data from "employee"
+"""
+input employee_order_by {
+  age: order_by
+  city: order_by
+  employee_id: order_by
+  evaluations_aggregate: evaluation_aggregate_order_by
+  hirings_aggregate: hiring_aggregate_order_by
+  name: order_by
+}
+
+"""
+select columns of table "employee"
+"""
+enum employee_select_column {
+  """column name"""
+  age
+
+  """column name"""
+  city
+
+  """column name"""
+  employee_id
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "employee"
+"""
+input employee_set_input {
+  age: Int
+  city: String
+  employee_id: Int
+  name: String
+}
+
+"""aggregate stddev on columns"""
+type employee_stddev_fields {
+  age: Float
+  employee_id: Float
+}
+
+"""
+order by stddev() on columns of table "employee"
+"""
+input employee_stddev_order_by {
+  age: order_by
+  employee_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type employee_stddev_pop_fields {
+  age: Float
+  employee_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "employee"
+"""
+input employee_stddev_pop_order_by {
+  age: order_by
+  employee_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type employee_stddev_samp_fields {
+  age: Float
+  employee_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "employee"
+"""
+input employee_stddev_samp_order_by {
+  age: order_by
+  employee_id: order_by
+}
+
+"""aggregate sum on columns"""
+type employee_sum_fields {
+  age: Int
+  employee_id: Int
+}
+
+"""
+order by sum() on columns of table "employee"
+"""
+input employee_sum_order_by {
+  age: order_by
+  employee_id: order_by
+}
+
+"""
+update columns of table "employee"
+"""
+enum employee_update_column {
+  """column name"""
+  age
+
+  """column name"""
+  city
+
+  """column name"""
+  employee_id
+
+  """column name"""
+  name
+}
+
+"""aggregate var_pop on columns"""
+type employee_var_pop_fields {
+  age: Float
+  employee_id: Float
+}
+
+"""
+order by var_pop() on columns of table "employee"
+"""
+input employee_var_pop_order_by {
+  age: order_by
+  employee_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type employee_var_samp_fields {
+  age: Float
+  employee_id: Float
+}
+
+"""
+order by var_samp() on columns of table "employee"
+"""
+input employee_var_samp_order_by {
+  age: order_by
+  employee_id: order_by
+}
+
+"""aggregate variance on columns"""
+type employee_variance_fields {
+  age: Float
+  employee_id: Float
+}
+
+"""
+order by variance() on columns of table "employee"
+"""
+input employee_variance_order_by {
+  age: order_by
+  employee_id: order_by
+}
+
+"""
+columns and relationships of "evaluation"
+"""
+type evaluation {
+  bonus: Float
+
+  """An object relationship"""
+  employee: employee
+  employee_id: Int
+  year_awarded: String
+}
+
+"""
+aggregated selection of "evaluation"
+"""
+type evaluation_aggregate {
+  aggregate: evaluation_aggregate_fields
+  nodes: [evaluation!]!
+}
+
+"""
+aggregate fields of "evaluation"
+"""
+type evaluation_aggregate_fields {
+  avg: evaluation_avg_fields
+  count(columns: [evaluation_select_column!], distinct: Boolean): Int
+  max: evaluation_max_fields
+  min: evaluation_min_fields
+  stddev: evaluation_stddev_fields
+  stddev_pop: evaluation_stddev_pop_fields
+  stddev_samp: evaluation_stddev_samp_fields
+  sum: evaluation_sum_fields
+  var_pop: evaluation_var_pop_fields
+  var_samp: evaluation_var_samp_fields
+  variance: evaluation_variance_fields
+}
+
+"""
+order by aggregate values of table "evaluation"
+"""
+input evaluation_aggregate_order_by {
+  avg: evaluation_avg_order_by
+  count: order_by
+  max: evaluation_max_order_by
+  min: evaluation_min_order_by
+  stddev: evaluation_stddev_order_by
+  stddev_pop: evaluation_stddev_pop_order_by
+  stddev_samp: evaluation_stddev_samp_order_by
+  sum: evaluation_sum_order_by
+  var_pop: evaluation_var_pop_order_by
+  var_samp: evaluation_var_samp_order_by
+  variance: evaluation_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "evaluation"
+"""
+input evaluation_arr_rel_insert_input {
+  data: [evaluation_insert_input!]!
+  on_conflict: evaluation_on_conflict
+}
+
+"""aggregate avg on columns"""
+type evaluation_avg_fields {
+  bonus: Float
+  employee_id: Float
+}
+
+"""
+order by avg() on columns of table "evaluation"
+"""
+input evaluation_avg_order_by {
+  bonus: order_by
+  employee_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "evaluation". All fields are combined with a logical 'AND'.
+"""
+input evaluation_bool_exp {
+  _and: [evaluation_bool_exp]
+  _not: evaluation_bool_exp
+  _or: [evaluation_bool_exp]
+  bonus: Float_comparison_exp
+  employee: employee_bool_exp
+  employee_id: Int_comparison_exp
+  year_awarded: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "evaluation"
+"""
+enum evaluation_constraint {
+  """unique or primary key constraint"""
+  idx_25105_sqlite_autoindex_evaluation_1
+}
+
+"""
+input type for incrementing integer columne in table "evaluation"
+"""
+input evaluation_inc_input {
+  employee_id: Int
+}
+
+"""
+input type for inserting data into table "evaluation"
+"""
+input evaluation_insert_input {
+  bonus: Float
+  employee: employee_obj_rel_insert_input
+  employee_id: Int
+  year_awarded: String
+}
+
+"""aggregate max on columns"""
+type evaluation_max_fields {
+  bonus: Float
+  employee_id: Int
+  year_awarded: String
+}
+
+"""
+order by max() on columns of table "evaluation"
+"""
+input evaluation_max_order_by {
+  bonus: order_by
+  employee_id: order_by
+  year_awarded: order_by
+}
+
+"""aggregate min on columns"""
+type evaluation_min_fields {
+  bonus: Float
+  employee_id: Int
+  year_awarded: String
+}
+
+"""
+order by min() on columns of table "evaluation"
+"""
+input evaluation_min_order_by {
+  bonus: order_by
+  employee_id: order_by
+  year_awarded: order_by
+}
+
+"""
+response of any mutation on the table "evaluation"
+"""
+type evaluation_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [evaluation!]!
+}
+
+"""
+input type for inserting object relation for remote table "evaluation"
+"""
+input evaluation_obj_rel_insert_input {
+  data: evaluation_insert_input!
+  on_conflict: evaluation_on_conflict
+}
+
+"""
+on conflict condition type for table "evaluation"
+"""
+input evaluation_on_conflict {
+  constraint: evaluation_constraint!
+  update_columns: [evaluation_update_column!]!
+  where: evaluation_bool_exp
+}
+
+"""
+ordering options when selecting data from "evaluation"
+"""
+input evaluation_order_by {
+  bonus: order_by
+  employee: employee_order_by
+  employee_id: order_by
+  year_awarded: order_by
+}
+
+"""
+select columns of table "evaluation"
+"""
+enum evaluation_select_column {
+  """column name"""
+  bonus
+
+  """column name"""
+  employee_id
+
+  """column name"""
+  year_awarded
+}
+
+"""
+input type for updating data in table "evaluation"
+"""
+input evaluation_set_input {
+  bonus: Float
+  employee_id: Int
+  year_awarded: String
+}
+
+"""aggregate stddev on columns"""
+type evaluation_stddev_fields {
+  bonus: Float
+  employee_id: Float
+}
+
+"""
+order by stddev() on columns of table "evaluation"
+"""
+input evaluation_stddev_order_by {
+  bonus: order_by
+  employee_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type evaluation_stddev_pop_fields {
+  bonus: Float
+  employee_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "evaluation"
+"""
+input evaluation_stddev_pop_order_by {
+  bonus: order_by
+  employee_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type evaluation_stddev_samp_fields {
+  bonus: Float
+  employee_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "evaluation"
+"""
+input evaluation_stddev_samp_order_by {
+  bonus: order_by
+  employee_id: order_by
+}
+
+"""aggregate sum on columns"""
+type evaluation_sum_fields {
+  bonus: Float
+  employee_id: Int
+}
+
+"""
+order by sum() on columns of table "evaluation"
+"""
+input evaluation_sum_order_by {
+  bonus: order_by
+  employee_id: order_by
+}
+
+"""
+update columns of table "evaluation"
+"""
+enum evaluation_update_column {
+  """column name"""
+  bonus
+
+  """column name"""
+  employee_id
+
+  """column name"""
+  year_awarded
+}
+
+"""aggregate var_pop on columns"""
+type evaluation_var_pop_fields {
+  bonus: Float
+  employee_id: Float
+}
+
+"""
+order by var_pop() on columns of table "evaluation"
+"""
+input evaluation_var_pop_order_by {
+  bonus: order_by
+  employee_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type evaluation_var_samp_fields {
+  bonus: Float
+  employee_id: Float
+}
+
+"""
+order by var_samp() on columns of table "evaluation"
+"""
+input evaluation_var_samp_order_by {
+  bonus: order_by
+  employee_id: order_by
+}
+
+"""aggregate variance on columns"""
+type evaluation_variance_fields {
+  bonus: Float
+  employee_id: Float
+}
+
+"""
+order by variance() on columns of table "evaluation"
+"""
+input evaluation_variance_order_by {
+  bonus: order_by
+  employee_id: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+columns and relationships of "hiring"
+"""
+type hiring {
+  """An object relationship"""
+  employee: employee
+  employee_id: Int
+  is_full_time: Boolean
+
+  """An object relationship"""
+  shop: shop
+  shop_id: Int
+  start_from: String
+}
+
+"""
+aggregated selection of "hiring"
+"""
+type hiring_aggregate {
+  aggregate: hiring_aggregate_fields
+  nodes: [hiring!]!
+}
+
+"""
+aggregate fields of "hiring"
+"""
+type hiring_aggregate_fields {
+  avg: hiring_avg_fields
+  count(columns: [hiring_select_column!], distinct: Boolean): Int
+  max: hiring_max_fields
+  min: hiring_min_fields
+  stddev: hiring_stddev_fields
+  stddev_pop: hiring_stddev_pop_fields
+  stddev_samp: hiring_stddev_samp_fields
+  sum: hiring_sum_fields
+  var_pop: hiring_var_pop_fields
+  var_samp: hiring_var_samp_fields
+  variance: hiring_variance_fields
+}
+
+"""
+order by aggregate values of table "hiring"
+"""
+input hiring_aggregate_order_by {
+  avg: hiring_avg_order_by
+  count: order_by
+  max: hiring_max_order_by
+  min: hiring_min_order_by
+  stddev: hiring_stddev_order_by
+  stddev_pop: hiring_stddev_pop_order_by
+  stddev_samp: hiring_stddev_samp_order_by
+  sum: hiring_sum_order_by
+  var_pop: hiring_var_pop_order_by
+  var_samp: hiring_var_samp_order_by
+  variance: hiring_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "hiring"
+"""
+input hiring_arr_rel_insert_input {
+  data: [hiring_insert_input!]!
+  on_conflict: hiring_on_conflict
+}
+
+"""aggregate avg on columns"""
+type hiring_avg_fields {
+  employee_id: Float
+  shop_id: Float
+}
+
+"""
+order by avg() on columns of table "hiring"
+"""
+input hiring_avg_order_by {
+  employee_id: order_by
+  shop_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "hiring". All fields are combined with a logical 'AND'.
+"""
+input hiring_bool_exp {
+  _and: [hiring_bool_exp]
+  _not: hiring_bool_exp
+  _or: [hiring_bool_exp]
+  employee: employee_bool_exp
+  employee_id: Int_comparison_exp
+  is_full_time: Boolean_comparison_exp
+  shop: shop_bool_exp
+  shop_id: Int_comparison_exp
+  start_from: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "hiring"
+"""
+enum hiring_constraint {
+  """unique or primary key constraint"""
+  idx_25099_sqlite_autoindex_hiring_1
+}
+
+"""
+input type for incrementing integer columne in table "hiring"
+"""
+input hiring_inc_input {
+  employee_id: Int
+  shop_id: Int
+}
+
+"""
+input type for inserting data into table "hiring"
+"""
+input hiring_insert_input {
+  employee: employee_obj_rel_insert_input
+  employee_id: Int
+  is_full_time: Boolean
+  shop: shop_obj_rel_insert_input
+  shop_id: Int
+  start_from: String
+}
+
+"""aggregate max on columns"""
+type hiring_max_fields {
+  employee_id: Int
+  shop_id: Int
+  start_from: String
+}
+
+"""
+order by max() on columns of table "hiring"
+"""
+input hiring_max_order_by {
+  employee_id: order_by
+  shop_id: order_by
+  start_from: order_by
+}
+
+"""aggregate min on columns"""
+type hiring_min_fields {
+  employee_id: Int
+  shop_id: Int
+  start_from: String
+}
+
+"""
+order by min() on columns of table "hiring"
+"""
+input hiring_min_order_by {
+  employee_id: order_by
+  shop_id: order_by
+  start_from: order_by
+}
+
+"""
+response of any mutation on the table "hiring"
+"""
+type hiring_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [hiring!]!
+}
+
+"""
+input type for inserting object relation for remote table "hiring"
+"""
+input hiring_obj_rel_insert_input {
+  data: hiring_insert_input!
+  on_conflict: hiring_on_conflict
+}
+
+"""
+on conflict condition type for table "hiring"
+"""
+input hiring_on_conflict {
+  constraint: hiring_constraint!
+  update_columns: [hiring_update_column!]!
+  where: hiring_bool_exp
+}
+
+"""
+ordering options when selecting data from "hiring"
+"""
+input hiring_order_by {
+  employee: employee_order_by
+  employee_id: order_by
+  is_full_time: order_by
+  shop: shop_order_by
+  shop_id: order_by
+  start_from: order_by
+}
+
+"""
+select columns of table "hiring"
+"""
+enum hiring_select_column {
+  """column name"""
+  employee_id
+
+  """column name"""
+  is_full_time
+
+  """column name"""
+  shop_id
+
+  """column name"""
+  start_from
+}
+
+"""
+input type for updating data in table "hiring"
+"""
+input hiring_set_input {
+  employee_id: Int
+  is_full_time: Boolean
+  shop_id: Int
+  start_from: String
+}
+
+"""aggregate stddev on columns"""
+type hiring_stddev_fields {
+  employee_id: Float
+  shop_id: Float
+}
+
+"""
+order by stddev() on columns of table "hiring"
+"""
+input hiring_stddev_order_by {
+  employee_id: order_by
+  shop_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type hiring_stddev_pop_fields {
+  employee_id: Float
+  shop_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "hiring"
+"""
+input hiring_stddev_pop_order_by {
+  employee_id: order_by
+  shop_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type hiring_stddev_samp_fields {
+  employee_id: Float
+  shop_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "hiring"
+"""
+input hiring_stddev_samp_order_by {
+  employee_id: order_by
+  shop_id: order_by
+}
+
+"""aggregate sum on columns"""
+type hiring_sum_fields {
+  employee_id: Int
+  shop_id: Int
+}
+
+"""
+order by sum() on columns of table "hiring"
+"""
+input hiring_sum_order_by {
+  employee_id: order_by
+  shop_id: order_by
+}
+
+"""
+update columns of table "hiring"
+"""
+enum hiring_update_column {
+  """column name"""
+  employee_id
+
+  """column name"""
+  is_full_time
+
+  """column name"""
+  shop_id
+
+  """column name"""
+  start_from
+}
+
+"""aggregate var_pop on columns"""
+type hiring_var_pop_fields {
+  employee_id: Float
+  shop_id: Float
+}
+
+"""
+order by var_pop() on columns of table "hiring"
+"""
+input hiring_var_pop_order_by {
+  employee_id: order_by
+  shop_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type hiring_var_samp_fields {
+  employee_id: Float
+  shop_id: Float
+}
+
+"""
+order by var_samp() on columns of table "hiring"
+"""
+input hiring_var_samp_order_by {
+  employee_id: order_by
+  shop_id: order_by
+}
+
+"""aggregate variance on columns"""
+type hiring_variance_fields {
+  employee_id: Float
+  shop_id: Float
+}
+
+"""
+order by variance() on columns of table "hiring"
+"""
+input hiring_variance_order_by {
+  employee_id: order_by
+  shop_id: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "employee"
+  """
+  delete_employee(
+    """filter the rows which have to be deleted"""
+    where: employee_bool_exp!
+  ): employee_mutation_response
+
+  """
+  delete data from the table: "evaluation"
+  """
+  delete_evaluation(
+    """filter the rows which have to be deleted"""
+    where: evaluation_bool_exp!
+  ): evaluation_mutation_response
+
+  """
+  delete data from the table: "hiring"
+  """
+  delete_hiring(
+    """filter the rows which have to be deleted"""
+    where: hiring_bool_exp!
+  ): hiring_mutation_response
+
+  """
+  delete data from the table: "shop"
+  """
+  delete_shop(
+    """filter the rows which have to be deleted"""
+    where: shop_bool_exp!
+  ): shop_mutation_response
+
+  """
+  insert data into the table: "employee"
+  """
+  insert_employee(
+    """the rows to be inserted"""
+    objects: [employee_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: employee_on_conflict
+  ): employee_mutation_response
+
+  """
+  insert data into the table: "evaluation"
+  """
+  insert_evaluation(
+    """the rows to be inserted"""
+    objects: [evaluation_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: evaluation_on_conflict
+  ): evaluation_mutation_response
+
+  """
+  insert data into the table: "hiring"
+  """
+  insert_hiring(
+    """the rows to be inserted"""
+    objects: [hiring_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: hiring_on_conflict
+  ): hiring_mutation_response
+
+  """
+  insert data into the table: "shop"
+  """
+  insert_shop(
+    """the rows to be inserted"""
+    objects: [shop_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: shop_on_conflict
+  ): shop_mutation_response
+
+  """
+  update data of the table: "employee"
+  """
+  update_employee(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: employee_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: employee_set_input
+
+    """filter the rows which have to be updated"""
+    where: employee_bool_exp!
+  ): employee_mutation_response
+
+  """
+  update data of the table: "evaluation"
+  """
+  update_evaluation(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: evaluation_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: evaluation_set_input
+
+    """filter the rows which have to be updated"""
+    where: evaluation_bool_exp!
+  ): evaluation_mutation_response
+
+  """
+  update data of the table: "hiring"
+  """
+  update_hiring(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: hiring_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: hiring_set_input
+
+    """filter the rows which have to be updated"""
+    where: hiring_bool_exp!
+  ): hiring_mutation_response
+
+  """
+  update data of the table: "shop"
+  """
+  update_shop(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: shop_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: shop_set_input
+
+    """filter the rows which have to be updated"""
+    where: shop_bool_exp!
+  ): shop_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "employee"
+  """
+  employee(
+    """distinct select on columns"""
+    distinct_on: [employee_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employee_order_by!]
+
+    """filter the rows returned"""
+    where: employee_bool_exp
+  ): [employee!]!
+
+  """
+  fetch aggregated fields from the table: "employee"
+  """
+  employee_aggregate(
+    """distinct select on columns"""
+    distinct_on: [employee_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employee_order_by!]
+
+    """filter the rows returned"""
+    where: employee_bool_exp
+  ): employee_aggregate!
+
+  """
+  fetch data from the table: "evaluation"
+  """
+  evaluation(
+    """distinct select on columns"""
+    distinct_on: [evaluation_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [evaluation_order_by!]
+
+    """filter the rows returned"""
+    where: evaluation_bool_exp
+  ): [evaluation!]!
+
+  """
+  fetch aggregated fields from the table: "evaluation"
+  """
+  evaluation_aggregate(
+    """distinct select on columns"""
+    distinct_on: [evaluation_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [evaluation_order_by!]
+
+    """filter the rows returned"""
+    where: evaluation_bool_exp
+  ): evaluation_aggregate!
+
+  """
+  fetch data from the table: "hiring"
+  """
+  hiring(
+    """distinct select on columns"""
+    distinct_on: [hiring_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hiring_order_by!]
+
+    """filter the rows returned"""
+    where: hiring_bool_exp
+  ): [hiring!]!
+
+  """
+  fetch aggregated fields from the table: "hiring"
+  """
+  hiring_aggregate(
+    """distinct select on columns"""
+    distinct_on: [hiring_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hiring_order_by!]
+
+    """filter the rows returned"""
+    where: hiring_bool_exp
+  ): hiring_aggregate!
+
+  """
+  fetch data from the table: "shop"
+  """
+  shop(
+    """distinct select on columns"""
+    distinct_on: [shop_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [shop_order_by!]
+
+    """filter the rows returned"""
+    where: shop_bool_exp
+  ): [shop!]!
+
+  """
+  fetch aggregated fields from the table: "shop"
+  """
+  shop_aggregate(
+    """distinct select on columns"""
+    distinct_on: [shop_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [shop_order_by!]
+
+    """filter the rows returned"""
+    where: shop_bool_exp
+  ): shop_aggregate!
+}
+
+"""
+columns and relationships of "shop"
+"""
+type shop {
+  district: String
+
+  """An array relationship"""
+  hirings(
+    """distinct select on columns"""
+    distinct_on: [hiring_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hiring_order_by!]
+
+    """filter the rows returned"""
+    where: hiring_bool_exp
+  ): [hiring!]!
+
+  """An aggregated array relationship"""
+  hirings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [hiring_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hiring_order_by!]
+
+    """filter the rows returned"""
+    where: hiring_bool_exp
+  ): hiring_aggregate!
+  location: String
+  manager_name: String
+  name: String
+  number_products: Int
+  shop_id: Int
+}
+
+"""
+aggregated selection of "shop"
+"""
+type shop_aggregate {
+  aggregate: shop_aggregate_fields
+  nodes: [shop!]!
+}
+
+"""
+aggregate fields of "shop"
+"""
+type shop_aggregate_fields {
+  avg: shop_avg_fields
+  count(columns: [shop_select_column!], distinct: Boolean): Int
+  max: shop_max_fields
+  min: shop_min_fields
+  stddev: shop_stddev_fields
+  stddev_pop: shop_stddev_pop_fields
+  stddev_samp: shop_stddev_samp_fields
+  sum: shop_sum_fields
+  var_pop: shop_var_pop_fields
+  var_samp: shop_var_samp_fields
+  variance: shop_variance_fields
+}
+
+"""
+order by aggregate values of table "shop"
+"""
+input shop_aggregate_order_by {
+  avg: shop_avg_order_by
+  count: order_by
+  max: shop_max_order_by
+  min: shop_min_order_by
+  stddev: shop_stddev_order_by
+  stddev_pop: shop_stddev_pop_order_by
+  stddev_samp: shop_stddev_samp_order_by
+  sum: shop_sum_order_by
+  var_pop: shop_var_pop_order_by
+  var_samp: shop_var_samp_order_by
+  variance: shop_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "shop"
+"""
+input shop_arr_rel_insert_input {
+  data: [shop_insert_input!]!
+  on_conflict: shop_on_conflict
+}
+
+"""aggregate avg on columns"""
+type shop_avg_fields {
+  number_products: Float
+  shop_id: Float
+}
+
+"""
+order by avg() on columns of table "shop"
+"""
+input shop_avg_order_by {
+  number_products: order_by
+  shop_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "shop". All fields are combined with a logical 'AND'.
+"""
+input shop_bool_exp {
+  _and: [shop_bool_exp]
+  _not: shop_bool_exp
+  _or: [shop_bool_exp]
+  district: String_comparison_exp
+  hirings: hiring_bool_exp
+  location: String_comparison_exp
+  manager_name: String_comparison_exp
+  name: String_comparison_exp
+  number_products: Int_comparison_exp
+  shop_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "shop"
+"""
+enum shop_constraint {
+  """unique or primary key constraint"""
+  idx_25093_sqlite_autoindex_shop_1
+}
+
+"""
+input type for incrementing integer columne in table "shop"
+"""
+input shop_inc_input {
+  number_products: Int
+  shop_id: Int
+}
+
+"""
+input type for inserting data into table "shop"
+"""
+input shop_insert_input {
+  district: String
+  hirings: hiring_arr_rel_insert_input
+  location: String
+  manager_name: String
+  name: String
+  number_products: Int
+  shop_id: Int
+}
+
+"""aggregate max on columns"""
+type shop_max_fields {
+  district: String
+  location: String
+  manager_name: String
+  name: String
+  number_products: Int
+  shop_id: Int
+}
+
+"""
+order by max() on columns of table "shop"
+"""
+input shop_max_order_by {
+  district: order_by
+  location: order_by
+  manager_name: order_by
+  name: order_by
+  number_products: order_by
+  shop_id: order_by
+}
+
+"""aggregate min on columns"""
+type shop_min_fields {
+  district: String
+  location: String
+  manager_name: String
+  name: String
+  number_products: Int
+  shop_id: Int
+}
+
+"""
+order by min() on columns of table "shop"
+"""
+input shop_min_order_by {
+  district: order_by
+  location: order_by
+  manager_name: order_by
+  name: order_by
+  number_products: order_by
+  shop_id: order_by
+}
+
+"""
+response of any mutation on the table "shop"
+"""
+type shop_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [shop!]!
+}
+
+"""
+input type for inserting object relation for remote table "shop"
+"""
+input shop_obj_rel_insert_input {
+  data: shop_insert_input!
+  on_conflict: shop_on_conflict
+}
+
+"""
+on conflict condition type for table "shop"
+"""
+input shop_on_conflict {
+  constraint: shop_constraint!
+  update_columns: [shop_update_column!]!
+  where: shop_bool_exp
+}
+
+"""
+ordering options when selecting data from "shop"
+"""
+input shop_order_by {
+  district: order_by
+  hirings_aggregate: hiring_aggregate_order_by
+  location: order_by
+  manager_name: order_by
+  name: order_by
+  number_products: order_by
+  shop_id: order_by
+}
+
+"""
+select columns of table "shop"
+"""
+enum shop_select_column {
+  """column name"""
+  district
+
+  """column name"""
+  location
+
+  """column name"""
+  manager_name
+
+  """column name"""
+  name
+
+  """column name"""
+  number_products
+
+  """column name"""
+  shop_id
+}
+
+"""
+input type for updating data in table "shop"
+"""
+input shop_set_input {
+  district: String
+  location: String
+  manager_name: String
+  name: String
+  number_products: Int
+  shop_id: Int
+}
+
+"""aggregate stddev on columns"""
+type shop_stddev_fields {
+  number_products: Float
+  shop_id: Float
+}
+
+"""
+order by stddev() on columns of table "shop"
+"""
+input shop_stddev_order_by {
+  number_products: order_by
+  shop_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type shop_stddev_pop_fields {
+  number_products: Float
+  shop_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "shop"
+"""
+input shop_stddev_pop_order_by {
+  number_products: order_by
+  shop_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type shop_stddev_samp_fields {
+  number_products: Float
+  shop_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "shop"
+"""
+input shop_stddev_samp_order_by {
+  number_products: order_by
+  shop_id: order_by
+}
+
+"""aggregate sum on columns"""
+type shop_sum_fields {
+  number_products: Int
+  shop_id: Int
+}
+
+"""
+order by sum() on columns of table "shop"
+"""
+input shop_sum_order_by {
+  number_products: order_by
+  shop_id: order_by
+}
+
+"""
+update columns of table "shop"
+"""
+enum shop_update_column {
+  """column name"""
+  district
+
+  """column name"""
+  location
+
+  """column name"""
+  manager_name
+
+  """column name"""
+  name
+
+  """column name"""
+  number_products
+
+  """column name"""
+  shop_id
+}
+
+"""aggregate var_pop on columns"""
+type shop_var_pop_fields {
+  number_products: Float
+  shop_id: Float
+}
+
+"""
+order by var_pop() on columns of table "shop"
+"""
+input shop_var_pop_order_by {
+  number_products: order_by
+  shop_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type shop_var_samp_fields {
+  number_products: Float
+  shop_id: Float
+}
+
+"""
+order by var_samp() on columns of table "shop"
+"""
+input shop_var_samp_order_by {
+  number_products: order_by
+  shop_id: order_by
+}
+
+"""aggregate variance on columns"""
+type shop_variance_fields {
+  number_products: Float
+  shop_id: Float
+}
+
+"""
+order by variance() on columns of table "shop"
+"""
+input shop_variance_order_by {
+  number_products: order_by
+  shop_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "employee"
+  """
+  employee(
+    """distinct select on columns"""
+    distinct_on: [employee_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employee_order_by!]
+
+    """filter the rows returned"""
+    where: employee_bool_exp
+  ): [employee!]!
+
+  """
+  fetch aggregated fields from the table: "employee"
+  """
+  employee_aggregate(
+    """distinct select on columns"""
+    distinct_on: [employee_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employee_order_by!]
+
+    """filter the rows returned"""
+    where: employee_bool_exp
+  ): employee_aggregate!
+
+  """
+  fetch data from the table: "evaluation"
+  """
+  evaluation(
+    """distinct select on columns"""
+    distinct_on: [evaluation_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [evaluation_order_by!]
+
+    """filter the rows returned"""
+    where: evaluation_bool_exp
+  ): [evaluation!]!
+
+  """
+  fetch aggregated fields from the table: "evaluation"
+  """
+  evaluation_aggregate(
+    """distinct select on columns"""
+    distinct_on: [evaluation_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [evaluation_order_by!]
+
+    """filter the rows returned"""
+    where: evaluation_bool_exp
+  ): evaluation_aggregate!
+
+  """
+  fetch data from the table: "hiring"
+  """
+  hiring(
+    """distinct select on columns"""
+    distinct_on: [hiring_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hiring_order_by!]
+
+    """filter the rows returned"""
+    where: hiring_bool_exp
+  ): [hiring!]!
+
+  """
+  fetch aggregated fields from the table: "hiring"
+  """
+  hiring_aggregate(
+    """distinct select on columns"""
+    distinct_on: [hiring_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hiring_order_by!]
+
+    """filter the rows returned"""
+    where: hiring_bool_exp
+  ): hiring_aggregate!
+
+  """
+  fetch data from the table: "shop"
+  """
+  shop(
+    """distinct select on columns"""
+    distinct_on: [shop_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [shop_order_by!]
+
+    """filter the rows returned"""
+    where: shop_bool_exp
+  ): [shop!]!
+
+  """
+  fetch aggregated fields from the table: "shop"
+  """
+  shop_aggregate(
+    """distinct select on columns"""
+    distinct_on: [shop_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [shop_order_by!]
+
+    """filter the rows returned"""
+    where: shop_bool_exp
+  ): shop_aggregate!
+}

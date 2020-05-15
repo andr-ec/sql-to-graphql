@@ -1,0 +1,1629 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "church"
+"""
+type church {
+  church_id: Int
+  continuation_of: String
+  name: String
+  open_date: Int
+  organized_by: String
+
+  """An array relationship"""
+  weddings(
+    """distinct select on columns"""
+    distinct_on: [wedding_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [wedding_order_by!]
+
+    """filter the rows returned"""
+    where: wedding_bool_exp
+  ): [wedding!]!
+
+  """An aggregated array relationship"""
+  weddings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [wedding_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [wedding_order_by!]
+
+    """filter the rows returned"""
+    where: wedding_bool_exp
+  ): wedding_aggregate!
+}
+
+"""
+aggregated selection of "church"
+"""
+type church_aggregate {
+  aggregate: church_aggregate_fields
+  nodes: [church!]!
+}
+
+"""
+aggregate fields of "church"
+"""
+type church_aggregate_fields {
+  avg: church_avg_fields
+  count(columns: [church_select_column!], distinct: Boolean): Int
+  max: church_max_fields
+  min: church_min_fields
+  stddev: church_stddev_fields
+  stddev_pop: church_stddev_pop_fields
+  stddev_samp: church_stddev_samp_fields
+  sum: church_sum_fields
+  var_pop: church_var_pop_fields
+  var_samp: church_var_samp_fields
+  variance: church_variance_fields
+}
+
+"""
+order by aggregate values of table "church"
+"""
+input church_aggregate_order_by {
+  avg: church_avg_order_by
+  count: order_by
+  max: church_max_order_by
+  min: church_min_order_by
+  stddev: church_stddev_order_by
+  stddev_pop: church_stddev_pop_order_by
+  stddev_samp: church_stddev_samp_order_by
+  sum: church_sum_order_by
+  var_pop: church_var_pop_order_by
+  var_samp: church_var_samp_order_by
+  variance: church_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "church"
+"""
+input church_arr_rel_insert_input {
+  data: [church_insert_input!]!
+  on_conflict: church_on_conflict
+}
+
+"""aggregate avg on columns"""
+type church_avg_fields {
+  church_id: Float
+  open_date: Float
+}
+
+"""
+order by avg() on columns of table "church"
+"""
+input church_avg_order_by {
+  church_id: order_by
+  open_date: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "church". All fields are combined with a logical 'AND'.
+"""
+input church_bool_exp {
+  _and: [church_bool_exp]
+  _not: church_bool_exp
+  _or: [church_bool_exp]
+  church_id: Int_comparison_exp
+  continuation_of: String_comparison_exp
+  name: String_comparison_exp
+  open_date: Int_comparison_exp
+  organized_by: String_comparison_exp
+  weddings: wedding_bool_exp
+}
+
+"""
+unique or primary key constraints on table "church"
+"""
+enum church_constraint {
+  """unique or primary key constraint"""
+  idx_20235_sqlite_autoindex_church_1
+}
+
+"""
+input type for incrementing integer columne in table "church"
+"""
+input church_inc_input {
+  church_id: Int
+  open_date: Int
+}
+
+"""
+input type for inserting data into table "church"
+"""
+input church_insert_input {
+  church_id: Int
+  continuation_of: String
+  name: String
+  open_date: Int
+  organized_by: String
+  weddings: wedding_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type church_max_fields {
+  church_id: Int
+  continuation_of: String
+  name: String
+  open_date: Int
+  organized_by: String
+}
+
+"""
+order by max() on columns of table "church"
+"""
+input church_max_order_by {
+  church_id: order_by
+  continuation_of: order_by
+  name: order_by
+  open_date: order_by
+  organized_by: order_by
+}
+
+"""aggregate min on columns"""
+type church_min_fields {
+  church_id: Int
+  continuation_of: String
+  name: String
+  open_date: Int
+  organized_by: String
+}
+
+"""
+order by min() on columns of table "church"
+"""
+input church_min_order_by {
+  church_id: order_by
+  continuation_of: order_by
+  name: order_by
+  open_date: order_by
+  organized_by: order_by
+}
+
+"""
+response of any mutation on the table "church"
+"""
+type church_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [church!]!
+}
+
+"""
+input type for inserting object relation for remote table "church"
+"""
+input church_obj_rel_insert_input {
+  data: church_insert_input!
+  on_conflict: church_on_conflict
+}
+
+"""
+on conflict condition type for table "church"
+"""
+input church_on_conflict {
+  constraint: church_constraint!
+  update_columns: [church_update_column!]!
+  where: church_bool_exp
+}
+
+"""
+ordering options when selecting data from "church"
+"""
+input church_order_by {
+  church_id: order_by
+  continuation_of: order_by
+  name: order_by
+  open_date: order_by
+  organized_by: order_by
+  weddings_aggregate: wedding_aggregate_order_by
+}
+
+"""
+select columns of table "church"
+"""
+enum church_select_column {
+  """column name"""
+  church_id
+
+  """column name"""
+  continuation_of
+
+  """column name"""
+  name
+
+  """column name"""
+  open_date
+
+  """column name"""
+  organized_by
+}
+
+"""
+input type for updating data in table "church"
+"""
+input church_set_input {
+  church_id: Int
+  continuation_of: String
+  name: String
+  open_date: Int
+  organized_by: String
+}
+
+"""aggregate stddev on columns"""
+type church_stddev_fields {
+  church_id: Float
+  open_date: Float
+}
+
+"""
+order by stddev() on columns of table "church"
+"""
+input church_stddev_order_by {
+  church_id: order_by
+  open_date: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type church_stddev_pop_fields {
+  church_id: Float
+  open_date: Float
+}
+
+"""
+order by stddev_pop() on columns of table "church"
+"""
+input church_stddev_pop_order_by {
+  church_id: order_by
+  open_date: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type church_stddev_samp_fields {
+  church_id: Float
+  open_date: Float
+}
+
+"""
+order by stddev_samp() on columns of table "church"
+"""
+input church_stddev_samp_order_by {
+  church_id: order_by
+  open_date: order_by
+}
+
+"""aggregate sum on columns"""
+type church_sum_fields {
+  church_id: Int
+  open_date: Int
+}
+
+"""
+order by sum() on columns of table "church"
+"""
+input church_sum_order_by {
+  church_id: order_by
+  open_date: order_by
+}
+
+"""
+update columns of table "church"
+"""
+enum church_update_column {
+  """column name"""
+  church_id
+
+  """column name"""
+  continuation_of
+
+  """column name"""
+  name
+
+  """column name"""
+  open_date
+
+  """column name"""
+  organized_by
+}
+
+"""aggregate var_pop on columns"""
+type church_var_pop_fields {
+  church_id: Float
+  open_date: Float
+}
+
+"""
+order by var_pop() on columns of table "church"
+"""
+input church_var_pop_order_by {
+  church_id: order_by
+  open_date: order_by
+}
+
+"""aggregate var_samp on columns"""
+type church_var_samp_fields {
+  church_id: Float
+  open_date: Float
+}
+
+"""
+order by var_samp() on columns of table "church"
+"""
+input church_var_samp_order_by {
+  church_id: order_by
+  open_date: order_by
+}
+
+"""aggregate variance on columns"""
+type church_variance_fields {
+  church_id: Float
+  open_date: Float
+}
+
+"""
+order by variance() on columns of table "church"
+"""
+input church_variance_order_by {
+  church_id: order_by
+  open_date: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "church"
+  """
+  delete_church(
+    """filter the rows which have to be deleted"""
+    where: church_bool_exp!
+  ): church_mutation_response
+
+  """
+  delete data from the table: "people"
+  """
+  delete_people(
+    """filter the rows which have to be deleted"""
+    where: people_bool_exp!
+  ): people_mutation_response
+
+  """
+  delete data from the table: "wedding"
+  """
+  delete_wedding(
+    """filter the rows which have to be deleted"""
+    where: wedding_bool_exp!
+  ): wedding_mutation_response
+
+  """
+  insert data into the table: "church"
+  """
+  insert_church(
+    """the rows to be inserted"""
+    objects: [church_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: church_on_conflict
+  ): church_mutation_response
+
+  """
+  insert data into the table: "people"
+  """
+  insert_people(
+    """the rows to be inserted"""
+    objects: [people_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: people_on_conflict
+  ): people_mutation_response
+
+  """
+  insert data into the table: "wedding"
+  """
+  insert_wedding(
+    """the rows to be inserted"""
+    objects: [wedding_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: wedding_on_conflict
+  ): wedding_mutation_response
+
+  """
+  update data of the table: "church"
+  """
+  update_church(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: church_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: church_set_input
+
+    """filter the rows which have to be updated"""
+    where: church_bool_exp!
+  ): church_mutation_response
+
+  """
+  update data of the table: "people"
+  """
+  update_people(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: people_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: people_set_input
+
+    """filter the rows which have to be updated"""
+    where: people_bool_exp!
+  ): people_mutation_response
+
+  """
+  update data of the table: "wedding"
+  """
+  update_wedding(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: wedding_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: wedding_set_input
+
+    """filter the rows which have to be updated"""
+    where: wedding_bool_exp!
+  ): wedding_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "people"
+"""
+type people {
+  age: Int
+  country: String
+  is_male: String
+  name: String
+  people_id: Int
+
+  """An array relationship"""
+  weddingsByFemaleId(
+    """distinct select on columns"""
+    distinct_on: [wedding_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [wedding_order_by!]
+
+    """filter the rows returned"""
+    where: wedding_bool_exp
+  ): [wedding!]!
+
+  """An aggregated array relationship"""
+  weddingsByFemaleId_aggregate(
+    """distinct select on columns"""
+    distinct_on: [wedding_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [wedding_order_by!]
+
+    """filter the rows returned"""
+    where: wedding_bool_exp
+  ): wedding_aggregate!
+
+  """An array relationship"""
+  weddingsByMaleId(
+    """distinct select on columns"""
+    distinct_on: [wedding_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [wedding_order_by!]
+
+    """filter the rows returned"""
+    where: wedding_bool_exp
+  ): [wedding!]!
+
+  """An aggregated array relationship"""
+  weddingsByMaleId_aggregate(
+    """distinct select on columns"""
+    distinct_on: [wedding_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [wedding_order_by!]
+
+    """filter the rows returned"""
+    where: wedding_bool_exp
+  ): wedding_aggregate!
+}
+
+"""
+aggregated selection of "people"
+"""
+type people_aggregate {
+  aggregate: people_aggregate_fields
+  nodes: [people!]!
+}
+
+"""
+aggregate fields of "people"
+"""
+type people_aggregate_fields {
+  avg: people_avg_fields
+  count(columns: [people_select_column!], distinct: Boolean): Int
+  max: people_max_fields
+  min: people_min_fields
+  stddev: people_stddev_fields
+  stddev_pop: people_stddev_pop_fields
+  stddev_samp: people_stddev_samp_fields
+  sum: people_sum_fields
+  var_pop: people_var_pop_fields
+  var_samp: people_var_samp_fields
+  variance: people_variance_fields
+}
+
+"""
+order by aggregate values of table "people"
+"""
+input people_aggregate_order_by {
+  avg: people_avg_order_by
+  count: order_by
+  max: people_max_order_by
+  min: people_min_order_by
+  stddev: people_stddev_order_by
+  stddev_pop: people_stddev_pop_order_by
+  stddev_samp: people_stddev_samp_order_by
+  sum: people_sum_order_by
+  var_pop: people_var_pop_order_by
+  var_samp: people_var_samp_order_by
+  variance: people_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "people"
+"""
+input people_arr_rel_insert_input {
+  data: [people_insert_input!]!
+  on_conflict: people_on_conflict
+}
+
+"""aggregate avg on columns"""
+type people_avg_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by avg() on columns of table "people"
+"""
+input people_avg_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "people". All fields are combined with a logical 'AND'.
+"""
+input people_bool_exp {
+  _and: [people_bool_exp]
+  _not: people_bool_exp
+  _or: [people_bool_exp]
+  age: Int_comparison_exp
+  country: String_comparison_exp
+  is_male: String_comparison_exp
+  name: String_comparison_exp
+  people_id: Int_comparison_exp
+  weddingsByFemaleId: wedding_bool_exp
+  weddingsByMaleId: wedding_bool_exp
+}
+
+"""
+unique or primary key constraints on table "people"
+"""
+enum people_constraint {
+  """unique or primary key constraint"""
+  idx_20229_sqlite_autoindex_people_1
+}
+
+"""
+input type for incrementing integer columne in table "people"
+"""
+input people_inc_input {
+  age: Int
+  people_id: Int
+}
+
+"""
+input type for inserting data into table "people"
+"""
+input people_insert_input {
+  age: Int
+  country: String
+  is_male: String
+  name: String
+  people_id: Int
+  weddingsByFemaleId: wedding_arr_rel_insert_input
+  weddingsByMaleId: wedding_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type people_max_fields {
+  age: Int
+  country: String
+  is_male: String
+  name: String
+  people_id: Int
+}
+
+"""
+order by max() on columns of table "people"
+"""
+input people_max_order_by {
+  age: order_by
+  country: order_by
+  is_male: order_by
+  name: order_by
+  people_id: order_by
+}
+
+"""aggregate min on columns"""
+type people_min_fields {
+  age: Int
+  country: String
+  is_male: String
+  name: String
+  people_id: Int
+}
+
+"""
+order by min() on columns of table "people"
+"""
+input people_min_order_by {
+  age: order_by
+  country: order_by
+  is_male: order_by
+  name: order_by
+  people_id: order_by
+}
+
+"""
+response of any mutation on the table "people"
+"""
+type people_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [people!]!
+}
+
+"""
+input type for inserting object relation for remote table "people"
+"""
+input people_obj_rel_insert_input {
+  data: people_insert_input!
+  on_conflict: people_on_conflict
+}
+
+"""
+on conflict condition type for table "people"
+"""
+input people_on_conflict {
+  constraint: people_constraint!
+  update_columns: [people_update_column!]!
+  where: people_bool_exp
+}
+
+"""
+ordering options when selecting data from "people"
+"""
+input people_order_by {
+  age: order_by
+  country: order_by
+  is_male: order_by
+  name: order_by
+  people_id: order_by
+  weddingsByFemaleId_aggregate: wedding_aggregate_order_by
+  weddingsByMaleId_aggregate: wedding_aggregate_order_by
+}
+
+"""
+select columns of table "people"
+"""
+enum people_select_column {
+  """column name"""
+  age
+
+  """column name"""
+  country
+
+  """column name"""
+  is_male
+
+  """column name"""
+  name
+
+  """column name"""
+  people_id
+}
+
+"""
+input type for updating data in table "people"
+"""
+input people_set_input {
+  age: Int
+  country: String
+  is_male: String
+  name: String
+  people_id: Int
+}
+
+"""aggregate stddev on columns"""
+type people_stddev_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by stddev() on columns of table "people"
+"""
+input people_stddev_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type people_stddev_pop_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "people"
+"""
+input people_stddev_pop_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type people_stddev_samp_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "people"
+"""
+input people_stddev_samp_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""aggregate sum on columns"""
+type people_sum_fields {
+  age: Int
+  people_id: Int
+}
+
+"""
+order by sum() on columns of table "people"
+"""
+input people_sum_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""
+update columns of table "people"
+"""
+enum people_update_column {
+  """column name"""
+  age
+
+  """column name"""
+  country
+
+  """column name"""
+  is_male
+
+  """column name"""
+  name
+
+  """column name"""
+  people_id
+}
+
+"""aggregate var_pop on columns"""
+type people_var_pop_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by var_pop() on columns of table "people"
+"""
+input people_var_pop_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type people_var_samp_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by var_samp() on columns of table "people"
+"""
+input people_var_samp_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""aggregate variance on columns"""
+type people_variance_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by variance() on columns of table "people"
+"""
+input people_variance_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "church"
+  """
+  church(
+    """distinct select on columns"""
+    distinct_on: [church_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [church_order_by!]
+
+    """filter the rows returned"""
+    where: church_bool_exp
+  ): [church!]!
+
+  """
+  fetch aggregated fields from the table: "church"
+  """
+  church_aggregate(
+    """distinct select on columns"""
+    distinct_on: [church_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [church_order_by!]
+
+    """filter the rows returned"""
+    where: church_bool_exp
+  ): church_aggregate!
+
+  """
+  fetch data from the table: "people"
+  """
+  people(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): [people!]!
+
+  """
+  fetch aggregated fields from the table: "people"
+  """
+  people_aggregate(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): people_aggregate!
+
+  """
+  fetch data from the table: "wedding"
+  """
+  wedding(
+    """distinct select on columns"""
+    distinct_on: [wedding_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [wedding_order_by!]
+
+    """filter the rows returned"""
+    where: wedding_bool_exp
+  ): [wedding!]!
+
+  """
+  fetch aggregated fields from the table: "wedding"
+  """
+  wedding_aggregate(
+    """distinct select on columns"""
+    distinct_on: [wedding_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [wedding_order_by!]
+
+    """filter the rows returned"""
+    where: wedding_bool_exp
+  ): wedding_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "church"
+  """
+  church(
+    """distinct select on columns"""
+    distinct_on: [church_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [church_order_by!]
+
+    """filter the rows returned"""
+    where: church_bool_exp
+  ): [church!]!
+
+  """
+  fetch aggregated fields from the table: "church"
+  """
+  church_aggregate(
+    """distinct select on columns"""
+    distinct_on: [church_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [church_order_by!]
+
+    """filter the rows returned"""
+    where: church_bool_exp
+  ): church_aggregate!
+
+  """
+  fetch data from the table: "people"
+  """
+  people(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): [people!]!
+
+  """
+  fetch aggregated fields from the table: "people"
+  """
+  people_aggregate(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): people_aggregate!
+
+  """
+  fetch data from the table: "wedding"
+  """
+  wedding(
+    """distinct select on columns"""
+    distinct_on: [wedding_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [wedding_order_by!]
+
+    """filter the rows returned"""
+    where: wedding_bool_exp
+  ): [wedding!]!
+
+  """
+  fetch aggregated fields from the table: "wedding"
+  """
+  wedding_aggregate(
+    """distinct select on columns"""
+    distinct_on: [wedding_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [wedding_order_by!]
+
+    """filter the rows returned"""
+    where: wedding_bool_exp
+  ): wedding_aggregate!
+}
+
+"""
+columns and relationships of "wedding"
+"""
+type wedding {
+  """An object relationship"""
+  church: church
+  church_id: Int
+  female_id: Int
+  male_id: Int
+
+  """An object relationship"""
+  personByFemaleId: people
+
+  """An object relationship"""
+  personByMaleId: people
+  year: Int
+}
+
+"""
+aggregated selection of "wedding"
+"""
+type wedding_aggregate {
+  aggregate: wedding_aggregate_fields
+  nodes: [wedding!]!
+}
+
+"""
+aggregate fields of "wedding"
+"""
+type wedding_aggregate_fields {
+  avg: wedding_avg_fields
+  count(columns: [wedding_select_column!], distinct: Boolean): Int
+  max: wedding_max_fields
+  min: wedding_min_fields
+  stddev: wedding_stddev_fields
+  stddev_pop: wedding_stddev_pop_fields
+  stddev_samp: wedding_stddev_samp_fields
+  sum: wedding_sum_fields
+  var_pop: wedding_var_pop_fields
+  var_samp: wedding_var_samp_fields
+  variance: wedding_variance_fields
+}
+
+"""
+order by aggregate values of table "wedding"
+"""
+input wedding_aggregate_order_by {
+  avg: wedding_avg_order_by
+  count: order_by
+  max: wedding_max_order_by
+  min: wedding_min_order_by
+  stddev: wedding_stddev_order_by
+  stddev_pop: wedding_stddev_pop_order_by
+  stddev_samp: wedding_stddev_samp_order_by
+  sum: wedding_sum_order_by
+  var_pop: wedding_var_pop_order_by
+  var_samp: wedding_var_samp_order_by
+  variance: wedding_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "wedding"
+"""
+input wedding_arr_rel_insert_input {
+  data: [wedding_insert_input!]!
+  on_conflict: wedding_on_conflict
+}
+
+"""aggregate avg on columns"""
+type wedding_avg_fields {
+  church_id: Float
+  female_id: Float
+  male_id: Float
+  year: Float
+}
+
+"""
+order by avg() on columns of table "wedding"
+"""
+input wedding_avg_order_by {
+  church_id: order_by
+  female_id: order_by
+  male_id: order_by
+  year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "wedding". All fields are combined with a logical 'AND'.
+"""
+input wedding_bool_exp {
+  _and: [wedding_bool_exp]
+  _not: wedding_bool_exp
+  _or: [wedding_bool_exp]
+  church: church_bool_exp
+  church_id: Int_comparison_exp
+  female_id: Int_comparison_exp
+  male_id: Int_comparison_exp
+  personByFemaleId: people_bool_exp
+  personByMaleId: people_bool_exp
+  year: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "wedding"
+"""
+enum wedding_constraint {
+  """unique or primary key constraint"""
+  idx_20241_sqlite_autoindex_wedding_1
+}
+
+"""
+input type for incrementing integer columne in table "wedding"
+"""
+input wedding_inc_input {
+  church_id: Int
+  female_id: Int
+  male_id: Int
+  year: Int
+}
+
+"""
+input type for inserting data into table "wedding"
+"""
+input wedding_insert_input {
+  church: church_obj_rel_insert_input
+  church_id: Int
+  female_id: Int
+  male_id: Int
+  personByFemaleId: people_obj_rel_insert_input
+  personByMaleId: people_obj_rel_insert_input
+  year: Int
+}
+
+"""aggregate max on columns"""
+type wedding_max_fields {
+  church_id: Int
+  female_id: Int
+  male_id: Int
+  year: Int
+}
+
+"""
+order by max() on columns of table "wedding"
+"""
+input wedding_max_order_by {
+  church_id: order_by
+  female_id: order_by
+  male_id: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type wedding_min_fields {
+  church_id: Int
+  female_id: Int
+  male_id: Int
+  year: Int
+}
+
+"""
+order by min() on columns of table "wedding"
+"""
+input wedding_min_order_by {
+  church_id: order_by
+  female_id: order_by
+  male_id: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "wedding"
+"""
+type wedding_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [wedding!]!
+}
+
+"""
+input type for inserting object relation for remote table "wedding"
+"""
+input wedding_obj_rel_insert_input {
+  data: wedding_insert_input!
+  on_conflict: wedding_on_conflict
+}
+
+"""
+on conflict condition type for table "wedding"
+"""
+input wedding_on_conflict {
+  constraint: wedding_constraint!
+  update_columns: [wedding_update_column!]!
+  where: wedding_bool_exp
+}
+
+"""
+ordering options when selecting data from "wedding"
+"""
+input wedding_order_by {
+  church: church_order_by
+  church_id: order_by
+  female_id: order_by
+  male_id: order_by
+  personByFemaleId: people_order_by
+  personByMaleId: people_order_by
+  year: order_by
+}
+
+"""
+select columns of table "wedding"
+"""
+enum wedding_select_column {
+  """column name"""
+  church_id
+
+  """column name"""
+  female_id
+
+  """column name"""
+  male_id
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "wedding"
+"""
+input wedding_set_input {
+  church_id: Int
+  female_id: Int
+  male_id: Int
+  year: Int
+}
+
+"""aggregate stddev on columns"""
+type wedding_stddev_fields {
+  church_id: Float
+  female_id: Float
+  male_id: Float
+  year: Float
+}
+
+"""
+order by stddev() on columns of table "wedding"
+"""
+input wedding_stddev_order_by {
+  church_id: order_by
+  female_id: order_by
+  male_id: order_by
+  year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type wedding_stddev_pop_fields {
+  church_id: Float
+  female_id: Float
+  male_id: Float
+  year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "wedding"
+"""
+input wedding_stddev_pop_order_by {
+  church_id: order_by
+  female_id: order_by
+  male_id: order_by
+  year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type wedding_stddev_samp_fields {
+  church_id: Float
+  female_id: Float
+  male_id: Float
+  year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "wedding"
+"""
+input wedding_stddev_samp_order_by {
+  church_id: order_by
+  female_id: order_by
+  male_id: order_by
+  year: order_by
+}
+
+"""aggregate sum on columns"""
+type wedding_sum_fields {
+  church_id: Int
+  female_id: Int
+  male_id: Int
+  year: Int
+}
+
+"""
+order by sum() on columns of table "wedding"
+"""
+input wedding_sum_order_by {
+  church_id: order_by
+  female_id: order_by
+  male_id: order_by
+  year: order_by
+}
+
+"""
+update columns of table "wedding"
+"""
+enum wedding_update_column {
+  """column name"""
+  church_id
+
+  """column name"""
+  female_id
+
+  """column name"""
+  male_id
+
+  """column name"""
+  year
+}
+
+"""aggregate var_pop on columns"""
+type wedding_var_pop_fields {
+  church_id: Float
+  female_id: Float
+  male_id: Float
+  year: Float
+}
+
+"""
+order by var_pop() on columns of table "wedding"
+"""
+input wedding_var_pop_order_by {
+  church_id: order_by
+  female_id: order_by
+  male_id: order_by
+  year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type wedding_var_samp_fields {
+  church_id: Float
+  female_id: Float
+  male_id: Float
+  year: Float
+}
+
+"""
+order by var_samp() on columns of table "wedding"
+"""
+input wedding_var_samp_order_by {
+  church_id: order_by
+  female_id: order_by
+  male_id: order_by
+  year: order_by
+}
+
+"""aggregate variance on columns"""
+type wedding_variance_fields {
+  church_id: Float
+  female_id: Float
+  male_id: Float
+  year: Float
+}
+
+"""
+order by variance() on columns of table "wedding"
+"""
+input wedding_variance_order_by {
+  church_id: order_by
+  female_id: order_by
+  male_id: order_by
+  year: order_by
+}

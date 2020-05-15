@@ -1,0 +1,2319 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "city"
+"""
+type city {
+  area_km_2: Float
+  census_ranking: String
+  city_id: Int
+
+  """An array relationship"""
+  farm_competitions(
+    """distinct select on columns"""
+    distinct_on: [farm_competition_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [farm_competition_order_by!]
+
+    """filter the rows returned"""
+    where: farm_competition_bool_exp
+  ): [farm_competition!]!
+
+  """An aggregated array relationship"""
+  farm_competitions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [farm_competition_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [farm_competition_order_by!]
+
+    """filter the rows returned"""
+    where: farm_competition_bool_exp
+  ): farm_competition_aggregate!
+  official_name: String
+  population: Float
+  status: String
+}
+
+"""
+aggregated selection of "city"
+"""
+type city_aggregate {
+  aggregate: city_aggregate_fields
+  nodes: [city!]!
+}
+
+"""
+aggregate fields of "city"
+"""
+type city_aggregate_fields {
+  avg: city_avg_fields
+  count(columns: [city_select_column!], distinct: Boolean): Int
+  max: city_max_fields
+  min: city_min_fields
+  stddev: city_stddev_fields
+  stddev_pop: city_stddev_pop_fields
+  stddev_samp: city_stddev_samp_fields
+  sum: city_sum_fields
+  var_pop: city_var_pop_fields
+  var_samp: city_var_samp_fields
+  variance: city_variance_fields
+}
+
+"""
+order by aggregate values of table "city"
+"""
+input city_aggregate_order_by {
+  avg: city_avg_order_by
+  count: order_by
+  max: city_max_order_by
+  min: city_min_order_by
+  stddev: city_stddev_order_by
+  stddev_pop: city_stddev_pop_order_by
+  stddev_samp: city_stddev_samp_order_by
+  sum: city_sum_order_by
+  var_pop: city_var_pop_order_by
+  var_samp: city_var_samp_order_by
+  variance: city_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "city"
+"""
+input city_arr_rel_insert_input {
+  data: [city_insert_input!]!
+  on_conflict: city_on_conflict
+}
+
+"""aggregate avg on columns"""
+type city_avg_fields {
+  area_km_2: Float
+  city_id: Float
+  population: Float
+}
+
+"""
+order by avg() on columns of table "city"
+"""
+input city_avg_order_by {
+  area_km_2: order_by
+  city_id: order_by
+  population: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "city". All fields are combined with a logical 'AND'.
+"""
+input city_bool_exp {
+  _and: [city_bool_exp]
+  _not: city_bool_exp
+  _or: [city_bool_exp]
+  area_km_2: Float_comparison_exp
+  census_ranking: String_comparison_exp
+  city_id: Int_comparison_exp
+  farm_competitions: farm_competition_bool_exp
+  official_name: String_comparison_exp
+  population: Float_comparison_exp
+  status: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "city"
+"""
+enum city_constraint {
+  """unique or primary key constraint"""
+  idx_17104_sqlite_autoindex_city_1
+}
+
+"""
+input type for incrementing integer columne in table "city"
+"""
+input city_inc_input {
+  city_id: Int
+}
+
+"""
+input type for inserting data into table "city"
+"""
+input city_insert_input {
+  area_km_2: Float
+  census_ranking: String
+  city_id: Int
+  farm_competitions: farm_competition_arr_rel_insert_input
+  official_name: String
+  population: Float
+  status: String
+}
+
+"""aggregate max on columns"""
+type city_max_fields {
+  area_km_2: Float
+  census_ranking: String
+  city_id: Int
+  official_name: String
+  population: Float
+  status: String
+}
+
+"""
+order by max() on columns of table "city"
+"""
+input city_max_order_by {
+  area_km_2: order_by
+  census_ranking: order_by
+  city_id: order_by
+  official_name: order_by
+  population: order_by
+  status: order_by
+}
+
+"""aggregate min on columns"""
+type city_min_fields {
+  area_km_2: Float
+  census_ranking: String
+  city_id: Int
+  official_name: String
+  population: Float
+  status: String
+}
+
+"""
+order by min() on columns of table "city"
+"""
+input city_min_order_by {
+  area_km_2: order_by
+  census_ranking: order_by
+  city_id: order_by
+  official_name: order_by
+  population: order_by
+  status: order_by
+}
+
+"""
+response of any mutation on the table "city"
+"""
+type city_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [city!]!
+}
+
+"""
+input type for inserting object relation for remote table "city"
+"""
+input city_obj_rel_insert_input {
+  data: city_insert_input!
+  on_conflict: city_on_conflict
+}
+
+"""
+on conflict condition type for table "city"
+"""
+input city_on_conflict {
+  constraint: city_constraint!
+  update_columns: [city_update_column!]!
+  where: city_bool_exp
+}
+
+"""
+ordering options when selecting data from "city"
+"""
+input city_order_by {
+  area_km_2: order_by
+  census_ranking: order_by
+  city_id: order_by
+  farm_competitions_aggregate: farm_competition_aggregate_order_by
+  official_name: order_by
+  population: order_by
+  status: order_by
+}
+
+"""
+select columns of table "city"
+"""
+enum city_select_column {
+  """column name"""
+  area_km_2
+
+  """column name"""
+  census_ranking
+
+  """column name"""
+  city_id
+
+  """column name"""
+  official_name
+
+  """column name"""
+  population
+
+  """column name"""
+  status
+}
+
+"""
+input type for updating data in table "city"
+"""
+input city_set_input {
+  area_km_2: Float
+  census_ranking: String
+  city_id: Int
+  official_name: String
+  population: Float
+  status: String
+}
+
+"""aggregate stddev on columns"""
+type city_stddev_fields {
+  area_km_2: Float
+  city_id: Float
+  population: Float
+}
+
+"""
+order by stddev() on columns of table "city"
+"""
+input city_stddev_order_by {
+  area_km_2: order_by
+  city_id: order_by
+  population: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type city_stddev_pop_fields {
+  area_km_2: Float
+  city_id: Float
+  population: Float
+}
+
+"""
+order by stddev_pop() on columns of table "city"
+"""
+input city_stddev_pop_order_by {
+  area_km_2: order_by
+  city_id: order_by
+  population: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type city_stddev_samp_fields {
+  area_km_2: Float
+  city_id: Float
+  population: Float
+}
+
+"""
+order by stddev_samp() on columns of table "city"
+"""
+input city_stddev_samp_order_by {
+  area_km_2: order_by
+  city_id: order_by
+  population: order_by
+}
+
+"""aggregate sum on columns"""
+type city_sum_fields {
+  area_km_2: Float
+  city_id: Int
+  population: Float
+}
+
+"""
+order by sum() on columns of table "city"
+"""
+input city_sum_order_by {
+  area_km_2: order_by
+  city_id: order_by
+  population: order_by
+}
+
+"""
+update columns of table "city"
+"""
+enum city_update_column {
+  """column name"""
+  area_km_2
+
+  """column name"""
+  census_ranking
+
+  """column name"""
+  city_id
+
+  """column name"""
+  official_name
+
+  """column name"""
+  population
+
+  """column name"""
+  status
+}
+
+"""aggregate var_pop on columns"""
+type city_var_pop_fields {
+  area_km_2: Float
+  city_id: Float
+  population: Float
+}
+
+"""
+order by var_pop() on columns of table "city"
+"""
+input city_var_pop_order_by {
+  area_km_2: order_by
+  city_id: order_by
+  population: order_by
+}
+
+"""aggregate var_samp on columns"""
+type city_var_samp_fields {
+  area_km_2: Float
+  city_id: Float
+  population: Float
+}
+
+"""
+order by var_samp() on columns of table "city"
+"""
+input city_var_samp_order_by {
+  area_km_2: order_by
+  city_id: order_by
+  population: order_by
+}
+
+"""aggregate variance on columns"""
+type city_variance_fields {
+  area_km_2: Float
+  city_id: Float
+  population: Float
+}
+
+"""
+order by variance() on columns of table "city"
+"""
+input city_variance_order_by {
+  area_km_2: order_by
+  city_id: order_by
+  population: order_by
+}
+
+"""
+columns and relationships of "competition_record"
+"""
+type competition_record {
+  competition_id: Int
+
+  """An object relationship"""
+  farm: farm
+
+  """An object relationship"""
+  farm_competition: farm_competition
+  farm_id: Int
+  rank: Int
+}
+
+"""
+aggregated selection of "competition_record"
+"""
+type competition_record_aggregate {
+  aggregate: competition_record_aggregate_fields
+  nodes: [competition_record!]!
+}
+
+"""
+aggregate fields of "competition_record"
+"""
+type competition_record_aggregate_fields {
+  avg: competition_record_avg_fields
+  count(columns: [competition_record_select_column!], distinct: Boolean): Int
+  max: competition_record_max_fields
+  min: competition_record_min_fields
+  stddev: competition_record_stddev_fields
+  stddev_pop: competition_record_stddev_pop_fields
+  stddev_samp: competition_record_stddev_samp_fields
+  sum: competition_record_sum_fields
+  var_pop: competition_record_var_pop_fields
+  var_samp: competition_record_var_samp_fields
+  variance: competition_record_variance_fields
+}
+
+"""
+order by aggregate values of table "competition_record"
+"""
+input competition_record_aggregate_order_by {
+  avg: competition_record_avg_order_by
+  count: order_by
+  max: competition_record_max_order_by
+  min: competition_record_min_order_by
+  stddev: competition_record_stddev_order_by
+  stddev_pop: competition_record_stddev_pop_order_by
+  stddev_samp: competition_record_stddev_samp_order_by
+  sum: competition_record_sum_order_by
+  var_pop: competition_record_var_pop_order_by
+  var_samp: competition_record_var_samp_order_by
+  variance: competition_record_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "competition_record"
+"""
+input competition_record_arr_rel_insert_input {
+  data: [competition_record_insert_input!]!
+  on_conflict: competition_record_on_conflict
+}
+
+"""aggregate avg on columns"""
+type competition_record_avg_fields {
+  competition_id: Float
+  farm_id: Float
+  rank: Float
+}
+
+"""
+order by avg() on columns of table "competition_record"
+"""
+input competition_record_avg_order_by {
+  competition_id: order_by
+  farm_id: order_by
+  rank: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "competition_record". All fields are combined with a logical 'AND'.
+"""
+input competition_record_bool_exp {
+  _and: [competition_record_bool_exp]
+  _not: competition_record_bool_exp
+  _or: [competition_record_bool_exp]
+  competition_id: Int_comparison_exp
+  farm: farm_bool_exp
+  farm_competition: farm_competition_bool_exp
+  farm_id: Int_comparison_exp
+  rank: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "competition_record"
+"""
+enum competition_record_constraint {
+  """unique or primary key constraint"""
+  idx_17119_sqlite_autoindex_competition_record_1
+}
+
+"""
+input type for incrementing integer columne in table "competition_record"
+"""
+input competition_record_inc_input {
+  competition_id: Int
+  farm_id: Int
+  rank: Int
+}
+
+"""
+input type for inserting data into table "competition_record"
+"""
+input competition_record_insert_input {
+  competition_id: Int
+  farm: farm_obj_rel_insert_input
+  farm_competition: farm_competition_obj_rel_insert_input
+  farm_id: Int
+  rank: Int
+}
+
+"""aggregate max on columns"""
+type competition_record_max_fields {
+  competition_id: Int
+  farm_id: Int
+  rank: Int
+}
+
+"""
+order by max() on columns of table "competition_record"
+"""
+input competition_record_max_order_by {
+  competition_id: order_by
+  farm_id: order_by
+  rank: order_by
+}
+
+"""aggregate min on columns"""
+type competition_record_min_fields {
+  competition_id: Int
+  farm_id: Int
+  rank: Int
+}
+
+"""
+order by min() on columns of table "competition_record"
+"""
+input competition_record_min_order_by {
+  competition_id: order_by
+  farm_id: order_by
+  rank: order_by
+}
+
+"""
+response of any mutation on the table "competition_record"
+"""
+type competition_record_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [competition_record!]!
+}
+
+"""
+input type for inserting object relation for remote table "competition_record"
+"""
+input competition_record_obj_rel_insert_input {
+  data: competition_record_insert_input!
+  on_conflict: competition_record_on_conflict
+}
+
+"""
+on conflict condition type for table "competition_record"
+"""
+input competition_record_on_conflict {
+  constraint: competition_record_constraint!
+  update_columns: [competition_record_update_column!]!
+  where: competition_record_bool_exp
+}
+
+"""
+ordering options when selecting data from "competition_record"
+"""
+input competition_record_order_by {
+  competition_id: order_by
+  farm: farm_order_by
+  farm_competition: farm_competition_order_by
+  farm_id: order_by
+  rank: order_by
+}
+
+"""
+select columns of table "competition_record"
+"""
+enum competition_record_select_column {
+  """column name"""
+  competition_id
+
+  """column name"""
+  farm_id
+
+  """column name"""
+  rank
+}
+
+"""
+input type for updating data in table "competition_record"
+"""
+input competition_record_set_input {
+  competition_id: Int
+  farm_id: Int
+  rank: Int
+}
+
+"""aggregate stddev on columns"""
+type competition_record_stddev_fields {
+  competition_id: Float
+  farm_id: Float
+  rank: Float
+}
+
+"""
+order by stddev() on columns of table "competition_record"
+"""
+input competition_record_stddev_order_by {
+  competition_id: order_by
+  farm_id: order_by
+  rank: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type competition_record_stddev_pop_fields {
+  competition_id: Float
+  farm_id: Float
+  rank: Float
+}
+
+"""
+order by stddev_pop() on columns of table "competition_record"
+"""
+input competition_record_stddev_pop_order_by {
+  competition_id: order_by
+  farm_id: order_by
+  rank: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type competition_record_stddev_samp_fields {
+  competition_id: Float
+  farm_id: Float
+  rank: Float
+}
+
+"""
+order by stddev_samp() on columns of table "competition_record"
+"""
+input competition_record_stddev_samp_order_by {
+  competition_id: order_by
+  farm_id: order_by
+  rank: order_by
+}
+
+"""aggregate sum on columns"""
+type competition_record_sum_fields {
+  competition_id: Int
+  farm_id: Int
+  rank: Int
+}
+
+"""
+order by sum() on columns of table "competition_record"
+"""
+input competition_record_sum_order_by {
+  competition_id: order_by
+  farm_id: order_by
+  rank: order_by
+}
+
+"""
+update columns of table "competition_record"
+"""
+enum competition_record_update_column {
+  """column name"""
+  competition_id
+
+  """column name"""
+  farm_id
+
+  """column name"""
+  rank
+}
+
+"""aggregate var_pop on columns"""
+type competition_record_var_pop_fields {
+  competition_id: Float
+  farm_id: Float
+  rank: Float
+}
+
+"""
+order by var_pop() on columns of table "competition_record"
+"""
+input competition_record_var_pop_order_by {
+  competition_id: order_by
+  farm_id: order_by
+  rank: order_by
+}
+
+"""aggregate var_samp on columns"""
+type competition_record_var_samp_fields {
+  competition_id: Float
+  farm_id: Float
+  rank: Float
+}
+
+"""
+order by var_samp() on columns of table "competition_record"
+"""
+input competition_record_var_samp_order_by {
+  competition_id: order_by
+  farm_id: order_by
+  rank: order_by
+}
+
+"""aggregate variance on columns"""
+type competition_record_variance_fields {
+  competition_id: Float
+  farm_id: Float
+  rank: Float
+}
+
+"""
+order by variance() on columns of table "competition_record"
+"""
+input competition_record_variance_order_by {
+  competition_id: order_by
+  farm_id: order_by
+  rank: order_by
+}
+
+"""
+columns and relationships of "farm"
+"""
+type farm {
+  bulls: Float
+
+  """An array relationship"""
+  competition_records(
+    """distinct select on columns"""
+    distinct_on: [competition_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [competition_record_order_by!]
+
+    """filter the rows returned"""
+    where: competition_record_bool_exp
+  ): [competition_record!]!
+
+  """An aggregated array relationship"""
+  competition_records_aggregate(
+    """distinct select on columns"""
+    distinct_on: [competition_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [competition_record_order_by!]
+
+    """filter the rows returned"""
+    where: competition_record_bool_exp
+  ): competition_record_aggregate!
+  cows: Float
+  farm_id: Int
+  oxen: Float
+  pigs: Float
+  sheep_and_goats: Float
+  total_cattle: Float
+  total_horses: Float
+  working_horses: Float
+  year: Int
+}
+
+"""
+aggregated selection of "farm"
+"""
+type farm_aggregate {
+  aggregate: farm_aggregate_fields
+  nodes: [farm!]!
+}
+
+"""
+aggregate fields of "farm"
+"""
+type farm_aggregate_fields {
+  avg: farm_avg_fields
+  count(columns: [farm_select_column!], distinct: Boolean): Int
+  max: farm_max_fields
+  min: farm_min_fields
+  stddev: farm_stddev_fields
+  stddev_pop: farm_stddev_pop_fields
+  stddev_samp: farm_stddev_samp_fields
+  sum: farm_sum_fields
+  var_pop: farm_var_pop_fields
+  var_samp: farm_var_samp_fields
+  variance: farm_variance_fields
+}
+
+"""
+order by aggregate values of table "farm"
+"""
+input farm_aggregate_order_by {
+  avg: farm_avg_order_by
+  count: order_by
+  max: farm_max_order_by
+  min: farm_min_order_by
+  stddev: farm_stddev_order_by
+  stddev_pop: farm_stddev_pop_order_by
+  stddev_samp: farm_stddev_samp_order_by
+  sum: farm_sum_order_by
+  var_pop: farm_var_pop_order_by
+  var_samp: farm_var_samp_order_by
+  variance: farm_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "farm"
+"""
+input farm_arr_rel_insert_input {
+  data: [farm_insert_input!]!
+  on_conflict: farm_on_conflict
+}
+
+"""aggregate avg on columns"""
+type farm_avg_fields {
+  bulls: Float
+  cows: Float
+  farm_id: Float
+  oxen: Float
+  pigs: Float
+  sheep_and_goats: Float
+  total_cattle: Float
+  total_horses: Float
+  working_horses: Float
+  year: Float
+}
+
+"""
+order by avg() on columns of table "farm"
+"""
+input farm_avg_order_by {
+  bulls: order_by
+  cows: order_by
+  farm_id: order_by
+  oxen: order_by
+  pigs: order_by
+  sheep_and_goats: order_by
+  total_cattle: order_by
+  total_horses: order_by
+  working_horses: order_by
+  year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "farm". All fields are combined with a logical 'AND'.
+"""
+input farm_bool_exp {
+  _and: [farm_bool_exp]
+  _not: farm_bool_exp
+  _or: [farm_bool_exp]
+  bulls: Float_comparison_exp
+  competition_records: competition_record_bool_exp
+  cows: Float_comparison_exp
+  farm_id: Int_comparison_exp
+  oxen: Float_comparison_exp
+  pigs: Float_comparison_exp
+  sheep_and_goats: Float_comparison_exp
+  total_cattle: Float_comparison_exp
+  total_horses: Float_comparison_exp
+  working_horses: Float_comparison_exp
+  year: Int_comparison_exp
+}
+
+"""
+columns and relationships of "farm_competition"
+"""
+type farm_competition {
+  """An object relationship"""
+  city: city
+  competition_id: Int
+
+  """An array relationship"""
+  competition_records(
+    """distinct select on columns"""
+    distinct_on: [competition_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [competition_record_order_by!]
+
+    """filter the rows returned"""
+    where: competition_record_bool_exp
+  ): [competition_record!]!
+
+  """An aggregated array relationship"""
+  competition_records_aggregate(
+    """distinct select on columns"""
+    distinct_on: [competition_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [competition_record_order_by!]
+
+    """filter the rows returned"""
+    where: competition_record_bool_exp
+  ): competition_record_aggregate!
+  host_city_id: Int
+  hosts: String
+  theme: String
+  year: Int
+}
+
+"""
+aggregated selection of "farm_competition"
+"""
+type farm_competition_aggregate {
+  aggregate: farm_competition_aggregate_fields
+  nodes: [farm_competition!]!
+}
+
+"""
+aggregate fields of "farm_competition"
+"""
+type farm_competition_aggregate_fields {
+  avg: farm_competition_avg_fields
+  count(columns: [farm_competition_select_column!], distinct: Boolean): Int
+  max: farm_competition_max_fields
+  min: farm_competition_min_fields
+  stddev: farm_competition_stddev_fields
+  stddev_pop: farm_competition_stddev_pop_fields
+  stddev_samp: farm_competition_stddev_samp_fields
+  sum: farm_competition_sum_fields
+  var_pop: farm_competition_var_pop_fields
+  var_samp: farm_competition_var_samp_fields
+  variance: farm_competition_variance_fields
+}
+
+"""
+order by aggregate values of table "farm_competition"
+"""
+input farm_competition_aggregate_order_by {
+  avg: farm_competition_avg_order_by
+  count: order_by
+  max: farm_competition_max_order_by
+  min: farm_competition_min_order_by
+  stddev: farm_competition_stddev_order_by
+  stddev_pop: farm_competition_stddev_pop_order_by
+  stddev_samp: farm_competition_stddev_samp_order_by
+  sum: farm_competition_sum_order_by
+  var_pop: farm_competition_var_pop_order_by
+  var_samp: farm_competition_var_samp_order_by
+  variance: farm_competition_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "farm_competition"
+"""
+input farm_competition_arr_rel_insert_input {
+  data: [farm_competition_insert_input!]!
+  on_conflict: farm_competition_on_conflict
+}
+
+"""aggregate avg on columns"""
+type farm_competition_avg_fields {
+  competition_id: Float
+  host_city_id: Float
+  year: Float
+}
+
+"""
+order by avg() on columns of table "farm_competition"
+"""
+input farm_competition_avg_order_by {
+  competition_id: order_by
+  host_city_id: order_by
+  year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "farm_competition". All fields are combined with a logical 'AND'.
+"""
+input farm_competition_bool_exp {
+  _and: [farm_competition_bool_exp]
+  _not: farm_competition_bool_exp
+  _or: [farm_competition_bool_exp]
+  city: city_bool_exp
+  competition_id: Int_comparison_exp
+  competition_records: competition_record_bool_exp
+  host_city_id: Int_comparison_exp
+  hosts: String_comparison_exp
+  theme: String_comparison_exp
+  year: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "farm_competition"
+"""
+enum farm_competition_constraint {
+  """unique or primary key constraint"""
+  idx_17113_sqlite_autoindex_farm_competition_1
+}
+
+"""
+input type for incrementing integer columne in table "farm_competition"
+"""
+input farm_competition_inc_input {
+  competition_id: Int
+  host_city_id: Int
+  year: Int
+}
+
+"""
+input type for inserting data into table "farm_competition"
+"""
+input farm_competition_insert_input {
+  city: city_obj_rel_insert_input
+  competition_id: Int
+  competition_records: competition_record_arr_rel_insert_input
+  host_city_id: Int
+  hosts: String
+  theme: String
+  year: Int
+}
+
+"""aggregate max on columns"""
+type farm_competition_max_fields {
+  competition_id: Int
+  host_city_id: Int
+  hosts: String
+  theme: String
+  year: Int
+}
+
+"""
+order by max() on columns of table "farm_competition"
+"""
+input farm_competition_max_order_by {
+  competition_id: order_by
+  host_city_id: order_by
+  hosts: order_by
+  theme: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type farm_competition_min_fields {
+  competition_id: Int
+  host_city_id: Int
+  hosts: String
+  theme: String
+  year: Int
+}
+
+"""
+order by min() on columns of table "farm_competition"
+"""
+input farm_competition_min_order_by {
+  competition_id: order_by
+  host_city_id: order_by
+  hosts: order_by
+  theme: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "farm_competition"
+"""
+type farm_competition_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [farm_competition!]!
+}
+
+"""
+input type for inserting object relation for remote table "farm_competition"
+"""
+input farm_competition_obj_rel_insert_input {
+  data: farm_competition_insert_input!
+  on_conflict: farm_competition_on_conflict
+}
+
+"""
+on conflict condition type for table "farm_competition"
+"""
+input farm_competition_on_conflict {
+  constraint: farm_competition_constraint!
+  update_columns: [farm_competition_update_column!]!
+  where: farm_competition_bool_exp
+}
+
+"""
+ordering options when selecting data from "farm_competition"
+"""
+input farm_competition_order_by {
+  city: city_order_by
+  competition_id: order_by
+  competition_records_aggregate: competition_record_aggregate_order_by
+  host_city_id: order_by
+  hosts: order_by
+  theme: order_by
+  year: order_by
+}
+
+"""
+select columns of table "farm_competition"
+"""
+enum farm_competition_select_column {
+  """column name"""
+  competition_id
+
+  """column name"""
+  host_city_id
+
+  """column name"""
+  hosts
+
+  """column name"""
+  theme
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "farm_competition"
+"""
+input farm_competition_set_input {
+  competition_id: Int
+  host_city_id: Int
+  hosts: String
+  theme: String
+  year: Int
+}
+
+"""aggregate stddev on columns"""
+type farm_competition_stddev_fields {
+  competition_id: Float
+  host_city_id: Float
+  year: Float
+}
+
+"""
+order by stddev() on columns of table "farm_competition"
+"""
+input farm_competition_stddev_order_by {
+  competition_id: order_by
+  host_city_id: order_by
+  year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type farm_competition_stddev_pop_fields {
+  competition_id: Float
+  host_city_id: Float
+  year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "farm_competition"
+"""
+input farm_competition_stddev_pop_order_by {
+  competition_id: order_by
+  host_city_id: order_by
+  year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type farm_competition_stddev_samp_fields {
+  competition_id: Float
+  host_city_id: Float
+  year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "farm_competition"
+"""
+input farm_competition_stddev_samp_order_by {
+  competition_id: order_by
+  host_city_id: order_by
+  year: order_by
+}
+
+"""aggregate sum on columns"""
+type farm_competition_sum_fields {
+  competition_id: Int
+  host_city_id: Int
+  year: Int
+}
+
+"""
+order by sum() on columns of table "farm_competition"
+"""
+input farm_competition_sum_order_by {
+  competition_id: order_by
+  host_city_id: order_by
+  year: order_by
+}
+
+"""
+update columns of table "farm_competition"
+"""
+enum farm_competition_update_column {
+  """column name"""
+  competition_id
+
+  """column name"""
+  host_city_id
+
+  """column name"""
+  hosts
+
+  """column name"""
+  theme
+
+  """column name"""
+  year
+}
+
+"""aggregate var_pop on columns"""
+type farm_competition_var_pop_fields {
+  competition_id: Float
+  host_city_id: Float
+  year: Float
+}
+
+"""
+order by var_pop() on columns of table "farm_competition"
+"""
+input farm_competition_var_pop_order_by {
+  competition_id: order_by
+  host_city_id: order_by
+  year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type farm_competition_var_samp_fields {
+  competition_id: Float
+  host_city_id: Float
+  year: Float
+}
+
+"""
+order by var_samp() on columns of table "farm_competition"
+"""
+input farm_competition_var_samp_order_by {
+  competition_id: order_by
+  host_city_id: order_by
+  year: order_by
+}
+
+"""aggregate variance on columns"""
+type farm_competition_variance_fields {
+  competition_id: Float
+  host_city_id: Float
+  year: Float
+}
+
+"""
+order by variance() on columns of table "farm_competition"
+"""
+input farm_competition_variance_order_by {
+  competition_id: order_by
+  host_city_id: order_by
+  year: order_by
+}
+
+"""
+unique or primary key constraints on table "farm"
+"""
+enum farm_constraint {
+  """unique or primary key constraint"""
+  idx_17110_sqlite_autoindex_farm_1
+}
+
+"""
+input type for incrementing integer columne in table "farm"
+"""
+input farm_inc_input {
+  farm_id: Int
+  year: Int
+}
+
+"""
+input type for inserting data into table "farm"
+"""
+input farm_insert_input {
+  bulls: Float
+  competition_records: competition_record_arr_rel_insert_input
+  cows: Float
+  farm_id: Int
+  oxen: Float
+  pigs: Float
+  sheep_and_goats: Float
+  total_cattle: Float
+  total_horses: Float
+  working_horses: Float
+  year: Int
+}
+
+"""aggregate max on columns"""
+type farm_max_fields {
+  bulls: Float
+  cows: Float
+  farm_id: Int
+  oxen: Float
+  pigs: Float
+  sheep_and_goats: Float
+  total_cattle: Float
+  total_horses: Float
+  working_horses: Float
+  year: Int
+}
+
+"""
+order by max() on columns of table "farm"
+"""
+input farm_max_order_by {
+  bulls: order_by
+  cows: order_by
+  farm_id: order_by
+  oxen: order_by
+  pigs: order_by
+  sheep_and_goats: order_by
+  total_cattle: order_by
+  total_horses: order_by
+  working_horses: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type farm_min_fields {
+  bulls: Float
+  cows: Float
+  farm_id: Int
+  oxen: Float
+  pigs: Float
+  sheep_and_goats: Float
+  total_cattle: Float
+  total_horses: Float
+  working_horses: Float
+  year: Int
+}
+
+"""
+order by min() on columns of table "farm"
+"""
+input farm_min_order_by {
+  bulls: order_by
+  cows: order_by
+  farm_id: order_by
+  oxen: order_by
+  pigs: order_by
+  sheep_and_goats: order_by
+  total_cattle: order_by
+  total_horses: order_by
+  working_horses: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "farm"
+"""
+type farm_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [farm!]!
+}
+
+"""
+input type for inserting object relation for remote table "farm"
+"""
+input farm_obj_rel_insert_input {
+  data: farm_insert_input!
+  on_conflict: farm_on_conflict
+}
+
+"""
+on conflict condition type for table "farm"
+"""
+input farm_on_conflict {
+  constraint: farm_constraint!
+  update_columns: [farm_update_column!]!
+  where: farm_bool_exp
+}
+
+"""
+ordering options when selecting data from "farm"
+"""
+input farm_order_by {
+  bulls: order_by
+  competition_records_aggregate: competition_record_aggregate_order_by
+  cows: order_by
+  farm_id: order_by
+  oxen: order_by
+  pigs: order_by
+  sheep_and_goats: order_by
+  total_cattle: order_by
+  total_horses: order_by
+  working_horses: order_by
+  year: order_by
+}
+
+"""
+select columns of table "farm"
+"""
+enum farm_select_column {
+  """column name"""
+  bulls
+
+  """column name"""
+  cows
+
+  """column name"""
+  farm_id
+
+  """column name"""
+  oxen
+
+  """column name"""
+  pigs
+
+  """column name"""
+  sheep_and_goats
+
+  """column name"""
+  total_cattle
+
+  """column name"""
+  total_horses
+
+  """column name"""
+  working_horses
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "farm"
+"""
+input farm_set_input {
+  bulls: Float
+  cows: Float
+  farm_id: Int
+  oxen: Float
+  pigs: Float
+  sheep_and_goats: Float
+  total_cattle: Float
+  total_horses: Float
+  working_horses: Float
+  year: Int
+}
+
+"""aggregate stddev on columns"""
+type farm_stddev_fields {
+  bulls: Float
+  cows: Float
+  farm_id: Float
+  oxen: Float
+  pigs: Float
+  sheep_and_goats: Float
+  total_cattle: Float
+  total_horses: Float
+  working_horses: Float
+  year: Float
+}
+
+"""
+order by stddev() on columns of table "farm"
+"""
+input farm_stddev_order_by {
+  bulls: order_by
+  cows: order_by
+  farm_id: order_by
+  oxen: order_by
+  pigs: order_by
+  sheep_and_goats: order_by
+  total_cattle: order_by
+  total_horses: order_by
+  working_horses: order_by
+  year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type farm_stddev_pop_fields {
+  bulls: Float
+  cows: Float
+  farm_id: Float
+  oxen: Float
+  pigs: Float
+  sheep_and_goats: Float
+  total_cattle: Float
+  total_horses: Float
+  working_horses: Float
+  year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "farm"
+"""
+input farm_stddev_pop_order_by {
+  bulls: order_by
+  cows: order_by
+  farm_id: order_by
+  oxen: order_by
+  pigs: order_by
+  sheep_and_goats: order_by
+  total_cattle: order_by
+  total_horses: order_by
+  working_horses: order_by
+  year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type farm_stddev_samp_fields {
+  bulls: Float
+  cows: Float
+  farm_id: Float
+  oxen: Float
+  pigs: Float
+  sheep_and_goats: Float
+  total_cattle: Float
+  total_horses: Float
+  working_horses: Float
+  year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "farm"
+"""
+input farm_stddev_samp_order_by {
+  bulls: order_by
+  cows: order_by
+  farm_id: order_by
+  oxen: order_by
+  pigs: order_by
+  sheep_and_goats: order_by
+  total_cattle: order_by
+  total_horses: order_by
+  working_horses: order_by
+  year: order_by
+}
+
+"""aggregate sum on columns"""
+type farm_sum_fields {
+  bulls: Float
+  cows: Float
+  farm_id: Int
+  oxen: Float
+  pigs: Float
+  sheep_and_goats: Float
+  total_cattle: Float
+  total_horses: Float
+  working_horses: Float
+  year: Int
+}
+
+"""
+order by sum() on columns of table "farm"
+"""
+input farm_sum_order_by {
+  bulls: order_by
+  cows: order_by
+  farm_id: order_by
+  oxen: order_by
+  pigs: order_by
+  sheep_and_goats: order_by
+  total_cattle: order_by
+  total_horses: order_by
+  working_horses: order_by
+  year: order_by
+}
+
+"""
+update columns of table "farm"
+"""
+enum farm_update_column {
+  """column name"""
+  bulls
+
+  """column name"""
+  cows
+
+  """column name"""
+  farm_id
+
+  """column name"""
+  oxen
+
+  """column name"""
+  pigs
+
+  """column name"""
+  sheep_and_goats
+
+  """column name"""
+  total_cattle
+
+  """column name"""
+  total_horses
+
+  """column name"""
+  working_horses
+
+  """column name"""
+  year
+}
+
+"""aggregate var_pop on columns"""
+type farm_var_pop_fields {
+  bulls: Float
+  cows: Float
+  farm_id: Float
+  oxen: Float
+  pigs: Float
+  sheep_and_goats: Float
+  total_cattle: Float
+  total_horses: Float
+  working_horses: Float
+  year: Float
+}
+
+"""
+order by var_pop() on columns of table "farm"
+"""
+input farm_var_pop_order_by {
+  bulls: order_by
+  cows: order_by
+  farm_id: order_by
+  oxen: order_by
+  pigs: order_by
+  sheep_and_goats: order_by
+  total_cattle: order_by
+  total_horses: order_by
+  working_horses: order_by
+  year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type farm_var_samp_fields {
+  bulls: Float
+  cows: Float
+  farm_id: Float
+  oxen: Float
+  pigs: Float
+  sheep_and_goats: Float
+  total_cattle: Float
+  total_horses: Float
+  working_horses: Float
+  year: Float
+}
+
+"""
+order by var_samp() on columns of table "farm"
+"""
+input farm_var_samp_order_by {
+  bulls: order_by
+  cows: order_by
+  farm_id: order_by
+  oxen: order_by
+  pigs: order_by
+  sheep_and_goats: order_by
+  total_cattle: order_by
+  total_horses: order_by
+  working_horses: order_by
+  year: order_by
+}
+
+"""aggregate variance on columns"""
+type farm_variance_fields {
+  bulls: Float
+  cows: Float
+  farm_id: Float
+  oxen: Float
+  pigs: Float
+  sheep_and_goats: Float
+  total_cattle: Float
+  total_horses: Float
+  working_horses: Float
+  year: Float
+}
+
+"""
+order by variance() on columns of table "farm"
+"""
+input farm_variance_order_by {
+  bulls: order_by
+  cows: order_by
+  farm_id: order_by
+  oxen: order_by
+  pigs: order_by
+  sheep_and_goats: order_by
+  total_cattle: order_by
+  total_horses: order_by
+  working_horses: order_by
+  year: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "city"
+  """
+  delete_city(
+    """filter the rows which have to be deleted"""
+    where: city_bool_exp!
+  ): city_mutation_response
+
+  """
+  delete data from the table: "competition_record"
+  """
+  delete_competition_record(
+    """filter the rows which have to be deleted"""
+    where: competition_record_bool_exp!
+  ): competition_record_mutation_response
+
+  """
+  delete data from the table: "farm"
+  """
+  delete_farm(
+    """filter the rows which have to be deleted"""
+    where: farm_bool_exp!
+  ): farm_mutation_response
+
+  """
+  delete data from the table: "farm_competition"
+  """
+  delete_farm_competition(
+    """filter the rows which have to be deleted"""
+    where: farm_competition_bool_exp!
+  ): farm_competition_mutation_response
+
+  """
+  insert data into the table: "city"
+  """
+  insert_city(
+    """the rows to be inserted"""
+    objects: [city_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: city_on_conflict
+  ): city_mutation_response
+
+  """
+  insert data into the table: "competition_record"
+  """
+  insert_competition_record(
+    """the rows to be inserted"""
+    objects: [competition_record_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: competition_record_on_conflict
+  ): competition_record_mutation_response
+
+  """
+  insert data into the table: "farm"
+  """
+  insert_farm(
+    """the rows to be inserted"""
+    objects: [farm_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: farm_on_conflict
+  ): farm_mutation_response
+
+  """
+  insert data into the table: "farm_competition"
+  """
+  insert_farm_competition(
+    """the rows to be inserted"""
+    objects: [farm_competition_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: farm_competition_on_conflict
+  ): farm_competition_mutation_response
+
+  """
+  update data of the table: "city"
+  """
+  update_city(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: city_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: city_set_input
+
+    """filter the rows which have to be updated"""
+    where: city_bool_exp!
+  ): city_mutation_response
+
+  """
+  update data of the table: "competition_record"
+  """
+  update_competition_record(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: competition_record_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: competition_record_set_input
+
+    """filter the rows which have to be updated"""
+    where: competition_record_bool_exp!
+  ): competition_record_mutation_response
+
+  """
+  update data of the table: "farm"
+  """
+  update_farm(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: farm_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: farm_set_input
+
+    """filter the rows which have to be updated"""
+    where: farm_bool_exp!
+  ): farm_mutation_response
+
+  """
+  update data of the table: "farm_competition"
+  """
+  update_farm_competition(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: farm_competition_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: farm_competition_set_input
+
+    """filter the rows which have to be updated"""
+    where: farm_competition_bool_exp!
+  ): farm_competition_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "city"
+  """
+  city(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): [city!]!
+
+  """
+  fetch aggregated fields from the table: "city"
+  """
+  city_aggregate(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): city_aggregate!
+
+  """
+  fetch data from the table: "competition_record"
+  """
+  competition_record(
+    """distinct select on columns"""
+    distinct_on: [competition_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [competition_record_order_by!]
+
+    """filter the rows returned"""
+    where: competition_record_bool_exp
+  ): [competition_record!]!
+
+  """
+  fetch aggregated fields from the table: "competition_record"
+  """
+  competition_record_aggregate(
+    """distinct select on columns"""
+    distinct_on: [competition_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [competition_record_order_by!]
+
+    """filter the rows returned"""
+    where: competition_record_bool_exp
+  ): competition_record_aggregate!
+
+  """
+  fetch data from the table: "farm"
+  """
+  farm(
+    """distinct select on columns"""
+    distinct_on: [farm_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [farm_order_by!]
+
+    """filter the rows returned"""
+    where: farm_bool_exp
+  ): [farm!]!
+
+  """
+  fetch aggregated fields from the table: "farm"
+  """
+  farm_aggregate(
+    """distinct select on columns"""
+    distinct_on: [farm_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [farm_order_by!]
+
+    """filter the rows returned"""
+    where: farm_bool_exp
+  ): farm_aggregate!
+
+  """
+  fetch data from the table: "farm_competition"
+  """
+  farm_competition(
+    """distinct select on columns"""
+    distinct_on: [farm_competition_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [farm_competition_order_by!]
+
+    """filter the rows returned"""
+    where: farm_competition_bool_exp
+  ): [farm_competition!]!
+
+  """
+  fetch aggregated fields from the table: "farm_competition"
+  """
+  farm_competition_aggregate(
+    """distinct select on columns"""
+    distinct_on: [farm_competition_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [farm_competition_order_by!]
+
+    """filter the rows returned"""
+    where: farm_competition_bool_exp
+  ): farm_competition_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "city"
+  """
+  city(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): [city!]!
+
+  """
+  fetch aggregated fields from the table: "city"
+  """
+  city_aggregate(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): city_aggregate!
+
+  """
+  fetch data from the table: "competition_record"
+  """
+  competition_record(
+    """distinct select on columns"""
+    distinct_on: [competition_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [competition_record_order_by!]
+
+    """filter the rows returned"""
+    where: competition_record_bool_exp
+  ): [competition_record!]!
+
+  """
+  fetch aggregated fields from the table: "competition_record"
+  """
+  competition_record_aggregate(
+    """distinct select on columns"""
+    distinct_on: [competition_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [competition_record_order_by!]
+
+    """filter the rows returned"""
+    where: competition_record_bool_exp
+  ): competition_record_aggregate!
+
+  """
+  fetch data from the table: "farm"
+  """
+  farm(
+    """distinct select on columns"""
+    distinct_on: [farm_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [farm_order_by!]
+
+    """filter the rows returned"""
+    where: farm_bool_exp
+  ): [farm!]!
+
+  """
+  fetch aggregated fields from the table: "farm"
+  """
+  farm_aggregate(
+    """distinct select on columns"""
+    distinct_on: [farm_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [farm_order_by!]
+
+    """filter the rows returned"""
+    where: farm_bool_exp
+  ): farm_aggregate!
+
+  """
+  fetch data from the table: "farm_competition"
+  """
+  farm_competition(
+    """distinct select on columns"""
+    distinct_on: [farm_competition_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [farm_competition_order_by!]
+
+    """filter the rows returned"""
+    where: farm_competition_bool_exp
+  ): [farm_competition!]!
+
+  """
+  fetch aggregated fields from the table: "farm_competition"
+  """
+  farm_competition_aggregate(
+    """distinct select on columns"""
+    distinct_on: [farm_competition_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [farm_competition_order_by!]
+
+    """filter the rows returned"""
+    where: farm_competition_bool_exp
+  ): farm_competition_aggregate!
+}

@@ -11,6 +11,12 @@ import Utilities
 import ApolloCodegenLib
 
 
+struct SimplifiedSchema: Codable {
+    let arguments: [Utilities.Arg]
+    let types: [Utilities.TypeElement]
+}
+
+
 let parentFolderOfScriptFile = FileFinder.findParentFolder()
 let sourceRootURL = parentFolderOfScriptFile
     .deletingLastPathComponent() // Sources
@@ -20,6 +26,9 @@ let cliFolderURL = sourceRootURL
     .appendingPathComponent("Codegen")
     .appendingPathComponent("ApolloCLI")
 
+let decoder = JSONDecoder()
+let encoder = JSONEncoder()
+encoder.outputFormatting = .prettyPrinted
 
 struct DownloadGraphQLSchemas: ParsableCommand {
     
@@ -78,7 +87,7 @@ struct DownloadGraphQLSchemas: ParsableCommand {
         }
         
         let stopped = stopHasura(hash: hash, dockerPath: self.dockerPath)
-        print("✋ \(stopped)")
+        print("✅ \(stopped)")
         return
     }
     
@@ -103,7 +112,7 @@ struct DownloadGraphQLSchemas: ParsableCommand {
             }
             
             let stopped = stopHasura(hash: hash, dockerPath: self.dockerPath)
-            print("✋ \(stopped)")
+            print("✅ \(stopped)")
         }
         return (successful,failed)
     }
@@ -120,15 +129,47 @@ struct DownloadGraphQLSchemas: ParsableCommand {
                 .default
                 .apollo_createFolderIfNeeded(at: output)
             
-            let options = ApolloSchemaOptions(endpointURL: endpoint,
+            let jsonOptions = ApolloSchemaOptions(schemaFileType: .json, endpointURL: endpoint,
                                               outputFolderURL: output)
             
-            let result = try ApolloSchemaDownloader.run(with: cliFolderURL,
-                                                        options: options)
-            return Result.success(result)
+            let sdlOptions = ApolloSchemaOptions(schemaFileType: .schemaDefinitionLanguage, endpointURL: endpoint,
+                                                  outputFolderURL: output)
+            
+            let jsonResult = try ApolloSchemaDownloader.run(with: cliFolderURL,
+                                                        options: jsonOptions)
+            let sdlResult = try ApolloSchemaDownloader.run(with: cliFolderURL,
+                                                           options: sdlOptions)
+            
+            try self.saveSimplifiedSchema(to: output)
+            // save simplified json schema.
+            return Result.success(jsonResult + sdlResult)
         } catch {
             return Result.failure(error)
         }
+    }
+    
+    func saveSimplifiedSchema(to path: URL) throws {
+        let fullJsonPath = path.appendingPathComponent("schema.json", isDirectory: false)
+        let data = try Data(contentsOf: fullJsonPath)
+        let schema = try decoder.decode(BaseSchema.self, from: data)
+        let queryTypes = schema.schema.types.first!.fields!
+            .filter{ !$0.name.contains("_by_pk")} // only want array types.
+        
+        let nameToType = Dictionary(uniqueKeysWithValues: schema.schema.types.dropFirst().map{ ($0.name, $0)})
+        
+        let queryTypesWithFields = queryTypes.compactMap{nameToType[$0.name] }
+        assert(queryTypes.count == queryTypesWithFields.count)
+        
+        let arguments = queryTypes.first!.args
+        
+        let simpleSchema = SimplifiedSchema(arguments: arguments, types: queryTypesWithFields)
+        let simplifiedSchemaPath = path.appendingPathComponent("simpleSchema.json", isDirectory: false)
+        
+        // save array of types
+
+        let dataSchema = try encoder.encode(simpleSchema)
+        
+        try dataSchema.write(to: simplifiedSchemaPath)
     }
 }
 

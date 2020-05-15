@@ -1,0 +1,4681 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "country"
+"""
+type country {
+  id: bigint!
+
+  """An array relationship"""
+  leagues(
+    """distinct select on columns"""
+    distinct_on: [league_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [league_order_by!]
+
+    """filter the rows returned"""
+    where: league_bool_exp
+  ): [league!]!
+
+  """An aggregated array relationship"""
+  leagues_aggregate(
+    """distinct select on columns"""
+    distinct_on: [league_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [league_order_by!]
+
+    """filter the rows returned"""
+    where: league_bool_exp
+  ): league_aggregate!
+  name: String
+}
+
+"""
+aggregated selection of "country"
+"""
+type country_aggregate {
+  aggregate: country_aggregate_fields
+  nodes: [country!]!
+}
+
+"""
+aggregate fields of "country"
+"""
+type country_aggregate_fields {
+  avg: country_avg_fields
+  count(columns: [country_select_column!], distinct: Boolean): Int
+  max: country_max_fields
+  min: country_min_fields
+  stddev: country_stddev_fields
+  stddev_pop: country_stddev_pop_fields
+  stddev_samp: country_stddev_samp_fields
+  sum: country_sum_fields
+  var_pop: country_var_pop_fields
+  var_samp: country_var_samp_fields
+  variance: country_variance_fields
+}
+
+"""
+order by aggregate values of table "country"
+"""
+input country_aggregate_order_by {
+  avg: country_avg_order_by
+  count: order_by
+  max: country_max_order_by
+  min: country_min_order_by
+  stddev: country_stddev_order_by
+  stddev_pop: country_stddev_pop_order_by
+  stddev_samp: country_stddev_samp_order_by
+  sum: country_sum_order_by
+  var_pop: country_var_pop_order_by
+  var_samp: country_var_samp_order_by
+  variance: country_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "country"
+"""
+input country_arr_rel_insert_input {
+  data: [country_insert_input!]!
+  on_conflict: country_on_conflict
+}
+
+"""aggregate avg on columns"""
+type country_avg_fields {
+  id: Float
+}
+
+"""
+order by avg() on columns of table "country"
+"""
+input country_avg_order_by {
+  id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "country". All fields are combined with a logical 'AND'.
+"""
+input country_bool_exp {
+  _and: [country_bool_exp]
+  _not: country_bool_exp
+  _or: [country_bool_exp]
+  id: bigint_comparison_exp
+  leagues: league_bool_exp
+  name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "country"
+"""
+enum country_constraint {
+  """unique or primary key constraint"""
+  idx_22523_country_pkey
+
+  """unique or primary key constraint"""
+  idx_22523_sqlite_autoindex_country_1
+}
+
+"""
+input type for incrementing integer columne in table "country"
+"""
+input country_inc_input {
+  id: bigint
+}
+
+"""
+input type for inserting data into table "country"
+"""
+input country_insert_input {
+  id: bigint
+  leagues: league_arr_rel_insert_input
+  name: String
+}
+
+"""aggregate max on columns"""
+type country_max_fields {
+  id: bigint
+  name: String
+}
+
+"""
+order by max() on columns of table "country"
+"""
+input country_max_order_by {
+  id: order_by
+  name: order_by
+}
+
+"""aggregate min on columns"""
+type country_min_fields {
+  id: bigint
+  name: String
+}
+
+"""
+order by min() on columns of table "country"
+"""
+input country_min_order_by {
+  id: order_by
+  name: order_by
+}
+
+"""
+response of any mutation on the table "country"
+"""
+type country_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [country!]!
+}
+
+"""
+input type for inserting object relation for remote table "country"
+"""
+input country_obj_rel_insert_input {
+  data: country_insert_input!
+  on_conflict: country_on_conflict
+}
+
+"""
+on conflict condition type for table "country"
+"""
+input country_on_conflict {
+  constraint: country_constraint!
+  update_columns: [country_update_column!]!
+  where: country_bool_exp
+}
+
+"""
+ordering options when selecting data from "country"
+"""
+input country_order_by {
+  id: order_by
+  leagues_aggregate: league_aggregate_order_by
+  name: order_by
+}
+
+"""
+select columns of table "country"
+"""
+enum country_select_column {
+  """column name"""
+  id
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "country"
+"""
+input country_set_input {
+  id: bigint
+  name: String
+}
+
+"""aggregate stddev on columns"""
+type country_stddev_fields {
+  id: Float
+}
+
+"""
+order by stddev() on columns of table "country"
+"""
+input country_stddev_order_by {
+  id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type country_stddev_pop_fields {
+  id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "country"
+"""
+input country_stddev_pop_order_by {
+  id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type country_stddev_samp_fields {
+  id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "country"
+"""
+input country_stddev_samp_order_by {
+  id: order_by
+}
+
+"""aggregate sum on columns"""
+type country_sum_fields {
+  id: bigint
+}
+
+"""
+order by sum() on columns of table "country"
+"""
+input country_sum_order_by {
+  id: order_by
+}
+
+"""
+update columns of table "country"
+"""
+enum country_update_column {
+  """column name"""
+  id
+
+  """column name"""
+  name
+}
+
+"""aggregate var_pop on columns"""
+type country_var_pop_fields {
+  id: Float
+}
+
+"""
+order by var_pop() on columns of table "country"
+"""
+input country_var_pop_order_by {
+  id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type country_var_samp_fields {
+  id: Float
+}
+
+"""
+order by var_samp() on columns of table "country"
+"""
+input country_var_samp_order_by {
+  id: order_by
+}
+
+"""aggregate variance on columns"""
+type country_variance_fields {
+  id: Float
+}
+
+"""
+order by variance() on columns of table "country"
+"""
+input country_variance_order_by {
+  id: order_by
+}
+
+"""
+columns and relationships of "league"
+"""
+type league {
+  """An object relationship"""
+  country: country
+  country_id: bigint
+  id: bigint!
+  name: String
+}
+
+"""
+aggregated selection of "league"
+"""
+type league_aggregate {
+  aggregate: league_aggregate_fields
+  nodes: [league!]!
+}
+
+"""
+aggregate fields of "league"
+"""
+type league_aggregate_fields {
+  avg: league_avg_fields
+  count(columns: [league_select_column!], distinct: Boolean): Int
+  max: league_max_fields
+  min: league_min_fields
+  stddev: league_stddev_fields
+  stddev_pop: league_stddev_pop_fields
+  stddev_samp: league_stddev_samp_fields
+  sum: league_sum_fields
+  var_pop: league_var_pop_fields
+  var_samp: league_var_samp_fields
+  variance: league_variance_fields
+}
+
+"""
+order by aggregate values of table "league"
+"""
+input league_aggregate_order_by {
+  avg: league_avg_order_by
+  count: order_by
+  max: league_max_order_by
+  min: league_min_order_by
+  stddev: league_stddev_order_by
+  stddev_pop: league_stddev_pop_order_by
+  stddev_samp: league_stddev_samp_order_by
+  sum: league_sum_order_by
+  var_pop: league_var_pop_order_by
+  var_samp: league_var_samp_order_by
+  variance: league_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "league"
+"""
+input league_arr_rel_insert_input {
+  data: [league_insert_input!]!
+  on_conflict: league_on_conflict
+}
+
+"""aggregate avg on columns"""
+type league_avg_fields {
+  country_id: Float
+  id: Float
+}
+
+"""
+order by avg() on columns of table "league"
+"""
+input league_avg_order_by {
+  country_id: order_by
+  id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "league". All fields are combined with a logical 'AND'.
+"""
+input league_bool_exp {
+  _and: [league_bool_exp]
+  _not: league_bool_exp
+  _or: [league_bool_exp]
+  country: country_bool_exp
+  country_id: bigint_comparison_exp
+  id: bigint_comparison_exp
+  name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "league"
+"""
+enum league_constraint {
+  """unique or primary key constraint"""
+  idx_22514_league_pkey
+
+  """unique or primary key constraint"""
+  idx_22514_sqlite_autoindex_league_1
+}
+
+"""
+input type for incrementing integer columne in table "league"
+"""
+input league_inc_input {
+  country_id: bigint
+  id: bigint
+}
+
+"""
+input type for inserting data into table "league"
+"""
+input league_insert_input {
+  country: country_obj_rel_insert_input
+  country_id: bigint
+  id: bigint
+  name: String
+}
+
+"""aggregate max on columns"""
+type league_max_fields {
+  country_id: bigint
+  id: bigint
+  name: String
+}
+
+"""
+order by max() on columns of table "league"
+"""
+input league_max_order_by {
+  country_id: order_by
+  id: order_by
+  name: order_by
+}
+
+"""aggregate min on columns"""
+type league_min_fields {
+  country_id: bigint
+  id: bigint
+  name: String
+}
+
+"""
+order by min() on columns of table "league"
+"""
+input league_min_order_by {
+  country_id: order_by
+  id: order_by
+  name: order_by
+}
+
+"""
+response of any mutation on the table "league"
+"""
+type league_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [league!]!
+}
+
+"""
+input type for inserting object relation for remote table "league"
+"""
+input league_obj_rel_insert_input {
+  data: league_insert_input!
+  on_conflict: league_on_conflict
+}
+
+"""
+on conflict condition type for table "league"
+"""
+input league_on_conflict {
+  constraint: league_constraint!
+  update_columns: [league_update_column!]!
+  where: league_bool_exp
+}
+
+"""
+ordering options when selecting data from "league"
+"""
+input league_order_by {
+  country: country_order_by
+  country_id: order_by
+  id: order_by
+  name: order_by
+}
+
+"""
+select columns of table "league"
+"""
+enum league_select_column {
+  """column name"""
+  country_id
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "league"
+"""
+input league_set_input {
+  country_id: bigint
+  id: bigint
+  name: String
+}
+
+"""aggregate stddev on columns"""
+type league_stddev_fields {
+  country_id: Float
+  id: Float
+}
+
+"""
+order by stddev() on columns of table "league"
+"""
+input league_stddev_order_by {
+  country_id: order_by
+  id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type league_stddev_pop_fields {
+  country_id: Float
+  id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "league"
+"""
+input league_stddev_pop_order_by {
+  country_id: order_by
+  id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type league_stddev_samp_fields {
+  country_id: Float
+  id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "league"
+"""
+input league_stddev_samp_order_by {
+  country_id: order_by
+  id: order_by
+}
+
+"""aggregate sum on columns"""
+type league_sum_fields {
+  country_id: bigint
+  id: bigint
+}
+
+"""
+order by sum() on columns of table "league"
+"""
+input league_sum_order_by {
+  country_id: order_by
+  id: order_by
+}
+
+"""
+update columns of table "league"
+"""
+enum league_update_column {
+  """column name"""
+  country_id
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+}
+
+"""aggregate var_pop on columns"""
+type league_var_pop_fields {
+  country_id: Float
+  id: Float
+}
+
+"""
+order by var_pop() on columns of table "league"
+"""
+input league_var_pop_order_by {
+  country_id: order_by
+  id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type league_var_samp_fields {
+  country_id: Float
+  id: Float
+}
+
+"""
+order by var_samp() on columns of table "league"
+"""
+input league_var_samp_order_by {
+  country_id: order_by
+  id: order_by
+}
+
+"""aggregate variance on columns"""
+type league_variance_fields {
+  country_id: Float
+  id: Float
+}
+
+"""
+order by variance() on columns of table "league"
+"""
+input league_variance_order_by {
+  country_id: order_by
+  id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "country"
+  """
+  delete_country(
+    """filter the rows which have to be deleted"""
+    where: country_bool_exp!
+  ): country_mutation_response
+
+  """
+  delete data from the table: "league"
+  """
+  delete_league(
+    """filter the rows which have to be deleted"""
+    where: league_bool_exp!
+  ): league_mutation_response
+
+  """
+  delete data from the table: "player"
+  """
+  delete_player(
+    """filter the rows which have to be deleted"""
+    where: player_bool_exp!
+  ): player_mutation_response
+
+  """
+  delete data from the table: "player_attributes"
+  """
+  delete_player_attributes(
+    """filter the rows which have to be deleted"""
+    where: player_attributes_bool_exp!
+  ): player_attributes_mutation_response
+
+  """
+  delete data from the table: "team"
+  """
+  delete_team(
+    """filter the rows which have to be deleted"""
+    where: team_bool_exp!
+  ): team_mutation_response
+
+  """
+  delete data from the table: "team_attributes"
+  """
+  delete_team_attributes(
+    """filter the rows which have to be deleted"""
+    where: team_attributes_bool_exp!
+  ): team_attributes_mutation_response
+
+  """
+  insert data into the table: "country"
+  """
+  insert_country(
+    """the rows to be inserted"""
+    objects: [country_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: country_on_conflict
+  ): country_mutation_response
+
+  """
+  insert data into the table: "league"
+  """
+  insert_league(
+    """the rows to be inserted"""
+    objects: [league_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: league_on_conflict
+  ): league_mutation_response
+
+  """
+  insert data into the table: "player"
+  """
+  insert_player(
+    """the rows to be inserted"""
+    objects: [player_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: player_on_conflict
+  ): player_mutation_response
+
+  """
+  insert data into the table: "player_attributes"
+  """
+  insert_player_attributes(
+    """the rows to be inserted"""
+    objects: [player_attributes_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: player_attributes_on_conflict
+  ): player_attributes_mutation_response
+
+  """
+  insert data into the table: "team"
+  """
+  insert_team(
+    """the rows to be inserted"""
+    objects: [team_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: team_on_conflict
+  ): team_mutation_response
+
+  """
+  insert data into the table: "team_attributes"
+  """
+  insert_team_attributes(
+    """the rows to be inserted"""
+    objects: [team_attributes_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: team_attributes_on_conflict
+  ): team_attributes_mutation_response
+
+  """
+  update data of the table: "country"
+  """
+  update_country(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: country_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: country_set_input
+
+    """filter the rows which have to be updated"""
+    where: country_bool_exp!
+  ): country_mutation_response
+
+  """
+  update data of the table: "league"
+  """
+  update_league(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: league_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: league_set_input
+
+    """filter the rows which have to be updated"""
+    where: league_bool_exp!
+  ): league_mutation_response
+
+  """
+  update data of the table: "player"
+  """
+  update_player(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: player_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: player_set_input
+
+    """filter the rows which have to be updated"""
+    where: player_bool_exp!
+  ): player_mutation_response
+
+  """
+  update data of the table: "player_attributes"
+  """
+  update_player_attributes(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: player_attributes_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: player_attributes_set_input
+
+    """filter the rows which have to be updated"""
+    where: player_attributes_bool_exp!
+  ): player_attributes_mutation_response
+
+  """
+  update data of the table: "team"
+  """
+  update_team(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: team_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: team_set_input
+
+    """filter the rows which have to be updated"""
+    where: team_bool_exp!
+  ): team_mutation_response
+
+  """
+  update data of the table: "team_attributes"
+  """
+  update_team_attributes(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: team_attributes_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: team_attributes_set_input
+
+    """filter the rows which have to be updated"""
+    where: team_attributes_bool_exp!
+  ): team_attributes_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "player"
+"""
+type player {
+  birthday: String
+  height: bigint
+  id: bigint!
+  player_api_id: bigint
+
+  """An array relationship"""
+  player_attributes(
+    """distinct select on columns"""
+    distinct_on: [player_attributes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_attributes_order_by!]
+
+    """filter the rows returned"""
+    where: player_attributes_bool_exp
+  ): [player_attributes!]!
+
+  """An aggregated array relationship"""
+  player_attributes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [player_attributes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_attributes_order_by!]
+
+    """filter the rows returned"""
+    where: player_attributes_bool_exp
+  ): player_attributes_aggregate!
+  player_fifa_api_id: bigint
+  player_name: String
+  weight: bigint
+}
+
+"""
+aggregated selection of "player"
+"""
+type player_aggregate {
+  aggregate: player_aggregate_fields
+  nodes: [player!]!
+}
+
+"""
+aggregate fields of "player"
+"""
+type player_aggregate_fields {
+  avg: player_avg_fields
+  count(columns: [player_select_column!], distinct: Boolean): Int
+  max: player_max_fields
+  min: player_min_fields
+  stddev: player_stddev_fields
+  stddev_pop: player_stddev_pop_fields
+  stddev_samp: player_stddev_samp_fields
+  sum: player_sum_fields
+  var_pop: player_var_pop_fields
+  var_samp: player_var_samp_fields
+  variance: player_variance_fields
+}
+
+"""
+order by aggregate values of table "player"
+"""
+input player_aggregate_order_by {
+  avg: player_avg_order_by
+  count: order_by
+  max: player_max_order_by
+  min: player_min_order_by
+  stddev: player_stddev_order_by
+  stddev_pop: player_stddev_pop_order_by
+  stddev_samp: player_stddev_samp_order_by
+  sum: player_sum_order_by
+  var_pop: player_var_pop_order_by
+  var_samp: player_var_samp_order_by
+  variance: player_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "player"
+"""
+input player_arr_rel_insert_input {
+  data: [player_insert_input!]!
+  on_conflict: player_on_conflict
+}
+
+"""
+columns and relationships of "player_attributes"
+"""
+type player_attributes {
+  acceleration: bigint
+  aggression: bigint
+  agility: bigint
+  attacking_work_rate: String
+  balance: bigint
+  ball_control: bigint
+  crossing: bigint
+  curve: bigint
+  date: String
+  defensive_work_rate: String
+  dribbling: bigint
+  finishing: bigint
+  free_kick_accuracy: bigint
+  gk_diving: bigint
+  gk_handling: bigint
+  gk_kicking: bigint
+  gk_positioning: bigint
+  gk_reflexes: bigint
+  heading_accuracy: bigint
+  id: bigint!
+  interceptions: bigint
+  jumping: bigint
+  long_passing: bigint
+  long_shots: bigint
+  marking: bigint
+  overall_rating: bigint
+  penalties: bigint
+
+  """An object relationship"""
+  player: player
+  player_api_id: bigint
+  player_fifa_api_id: bigint
+  positioning: bigint
+  potential: bigint
+  preferred_foot: String
+  reactions: bigint
+  short_passing: bigint
+  shot_power: bigint
+  sliding_tackle: bigint
+  sprint_speed: bigint
+  stamina: bigint
+  standing_tackle: bigint
+  strength: bigint
+  vision: bigint
+  volleys: bigint
+}
+
+"""
+aggregated selection of "player_attributes"
+"""
+type player_attributes_aggregate {
+  aggregate: player_attributes_aggregate_fields
+  nodes: [player_attributes!]!
+}
+
+"""
+aggregate fields of "player_attributes"
+"""
+type player_attributes_aggregate_fields {
+  avg: player_attributes_avg_fields
+  count(columns: [player_attributes_select_column!], distinct: Boolean): Int
+  max: player_attributes_max_fields
+  min: player_attributes_min_fields
+  stddev: player_attributes_stddev_fields
+  stddev_pop: player_attributes_stddev_pop_fields
+  stddev_samp: player_attributes_stddev_samp_fields
+  sum: player_attributes_sum_fields
+  var_pop: player_attributes_var_pop_fields
+  var_samp: player_attributes_var_samp_fields
+  variance: player_attributes_variance_fields
+}
+
+"""
+order by aggregate values of table "player_attributes"
+"""
+input player_attributes_aggregate_order_by {
+  avg: player_attributes_avg_order_by
+  count: order_by
+  max: player_attributes_max_order_by
+  min: player_attributes_min_order_by
+  stddev: player_attributes_stddev_order_by
+  stddev_pop: player_attributes_stddev_pop_order_by
+  stddev_samp: player_attributes_stddev_samp_order_by
+  sum: player_attributes_sum_order_by
+  var_pop: player_attributes_var_pop_order_by
+  var_samp: player_attributes_var_samp_order_by
+  variance: player_attributes_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "player_attributes"
+"""
+input player_attributes_arr_rel_insert_input {
+  data: [player_attributes_insert_input!]!
+  on_conflict: player_attributes_on_conflict
+}
+
+"""aggregate avg on columns"""
+type player_attributes_avg_fields {
+  acceleration: Float
+  aggression: Float
+  agility: Float
+  balance: Float
+  ball_control: Float
+  crossing: Float
+  curve: Float
+  dribbling: Float
+  finishing: Float
+  free_kick_accuracy: Float
+  gk_diving: Float
+  gk_handling: Float
+  gk_kicking: Float
+  gk_positioning: Float
+  gk_reflexes: Float
+  heading_accuracy: Float
+  id: Float
+  interceptions: Float
+  jumping: Float
+  long_passing: Float
+  long_shots: Float
+  marking: Float
+  overall_rating: Float
+  penalties: Float
+  player_api_id: Float
+  player_fifa_api_id: Float
+  positioning: Float
+  potential: Float
+  reactions: Float
+  short_passing: Float
+  shot_power: Float
+  sliding_tackle: Float
+  sprint_speed: Float
+  stamina: Float
+  standing_tackle: Float
+  strength: Float
+  vision: Float
+  volleys: Float
+}
+
+"""
+order by avg() on columns of table "player_attributes"
+"""
+input player_attributes_avg_order_by {
+  acceleration: order_by
+  aggression: order_by
+  agility: order_by
+  balance: order_by
+  ball_control: order_by
+  crossing: order_by
+  curve: order_by
+  dribbling: order_by
+  finishing: order_by
+  free_kick_accuracy: order_by
+  gk_diving: order_by
+  gk_handling: order_by
+  gk_kicking: order_by
+  gk_positioning: order_by
+  gk_reflexes: order_by
+  heading_accuracy: order_by
+  id: order_by
+  interceptions: order_by
+  jumping: order_by
+  long_passing: order_by
+  long_shots: order_by
+  marking: order_by
+  overall_rating: order_by
+  penalties: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  positioning: order_by
+  potential: order_by
+  reactions: order_by
+  short_passing: order_by
+  shot_power: order_by
+  sliding_tackle: order_by
+  sprint_speed: order_by
+  stamina: order_by
+  standing_tackle: order_by
+  strength: order_by
+  vision: order_by
+  volleys: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "player_attributes". All fields are combined with a logical 'AND'.
+"""
+input player_attributes_bool_exp {
+  _and: [player_attributes_bool_exp]
+  _not: player_attributes_bool_exp
+  _or: [player_attributes_bool_exp]
+  acceleration: bigint_comparison_exp
+  aggression: bigint_comparison_exp
+  agility: bigint_comparison_exp
+  attacking_work_rate: String_comparison_exp
+  balance: bigint_comparison_exp
+  ball_control: bigint_comparison_exp
+  crossing: bigint_comparison_exp
+  curve: bigint_comparison_exp
+  date: String_comparison_exp
+  defensive_work_rate: String_comparison_exp
+  dribbling: bigint_comparison_exp
+  finishing: bigint_comparison_exp
+  free_kick_accuracy: bigint_comparison_exp
+  gk_diving: bigint_comparison_exp
+  gk_handling: bigint_comparison_exp
+  gk_kicking: bigint_comparison_exp
+  gk_positioning: bigint_comparison_exp
+  gk_reflexes: bigint_comparison_exp
+  heading_accuracy: bigint_comparison_exp
+  id: bigint_comparison_exp
+  interceptions: bigint_comparison_exp
+  jumping: bigint_comparison_exp
+  long_passing: bigint_comparison_exp
+  long_shots: bigint_comparison_exp
+  marking: bigint_comparison_exp
+  overall_rating: bigint_comparison_exp
+  penalties: bigint_comparison_exp
+  player: player_bool_exp
+  player_api_id: bigint_comparison_exp
+  player_fifa_api_id: bigint_comparison_exp
+  positioning: bigint_comparison_exp
+  potential: bigint_comparison_exp
+  preferred_foot: String_comparison_exp
+  reactions: bigint_comparison_exp
+  short_passing: bigint_comparison_exp
+  shot_power: bigint_comparison_exp
+  sliding_tackle: bigint_comparison_exp
+  sprint_speed: bigint_comparison_exp
+  stamina: bigint_comparison_exp
+  standing_tackle: bigint_comparison_exp
+  strength: bigint_comparison_exp
+  vision: bigint_comparison_exp
+  volleys: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "player_attributes"
+"""
+enum player_attributes_constraint {
+  """unique or primary key constraint"""
+  idx_22496_player_attributes_pkey
+}
+
+"""
+input type for incrementing integer columne in table "player_attributes"
+"""
+input player_attributes_inc_input {
+  acceleration: bigint
+  aggression: bigint
+  agility: bigint
+  balance: bigint
+  ball_control: bigint
+  crossing: bigint
+  curve: bigint
+  dribbling: bigint
+  finishing: bigint
+  free_kick_accuracy: bigint
+  gk_diving: bigint
+  gk_handling: bigint
+  gk_kicking: bigint
+  gk_positioning: bigint
+  gk_reflexes: bigint
+  heading_accuracy: bigint
+  id: bigint
+  interceptions: bigint
+  jumping: bigint
+  long_passing: bigint
+  long_shots: bigint
+  marking: bigint
+  overall_rating: bigint
+  penalties: bigint
+  player_api_id: bigint
+  player_fifa_api_id: bigint
+  positioning: bigint
+  potential: bigint
+  reactions: bigint
+  short_passing: bigint
+  shot_power: bigint
+  sliding_tackle: bigint
+  sprint_speed: bigint
+  stamina: bigint
+  standing_tackle: bigint
+  strength: bigint
+  vision: bigint
+  volleys: bigint
+}
+
+"""
+input type for inserting data into table "player_attributes"
+"""
+input player_attributes_insert_input {
+  acceleration: bigint
+  aggression: bigint
+  agility: bigint
+  attacking_work_rate: String
+  balance: bigint
+  ball_control: bigint
+  crossing: bigint
+  curve: bigint
+  date: String
+  defensive_work_rate: String
+  dribbling: bigint
+  finishing: bigint
+  free_kick_accuracy: bigint
+  gk_diving: bigint
+  gk_handling: bigint
+  gk_kicking: bigint
+  gk_positioning: bigint
+  gk_reflexes: bigint
+  heading_accuracy: bigint
+  id: bigint
+  interceptions: bigint
+  jumping: bigint
+  long_passing: bigint
+  long_shots: bigint
+  marking: bigint
+  overall_rating: bigint
+  penalties: bigint
+  player: player_obj_rel_insert_input
+  player_api_id: bigint
+  player_fifa_api_id: bigint
+  positioning: bigint
+  potential: bigint
+  preferred_foot: String
+  reactions: bigint
+  short_passing: bigint
+  shot_power: bigint
+  sliding_tackle: bigint
+  sprint_speed: bigint
+  stamina: bigint
+  standing_tackle: bigint
+  strength: bigint
+  vision: bigint
+  volleys: bigint
+}
+
+"""aggregate max on columns"""
+type player_attributes_max_fields {
+  acceleration: bigint
+  aggression: bigint
+  agility: bigint
+  attacking_work_rate: String
+  balance: bigint
+  ball_control: bigint
+  crossing: bigint
+  curve: bigint
+  date: String
+  defensive_work_rate: String
+  dribbling: bigint
+  finishing: bigint
+  free_kick_accuracy: bigint
+  gk_diving: bigint
+  gk_handling: bigint
+  gk_kicking: bigint
+  gk_positioning: bigint
+  gk_reflexes: bigint
+  heading_accuracy: bigint
+  id: bigint
+  interceptions: bigint
+  jumping: bigint
+  long_passing: bigint
+  long_shots: bigint
+  marking: bigint
+  overall_rating: bigint
+  penalties: bigint
+  player_api_id: bigint
+  player_fifa_api_id: bigint
+  positioning: bigint
+  potential: bigint
+  preferred_foot: String
+  reactions: bigint
+  short_passing: bigint
+  shot_power: bigint
+  sliding_tackle: bigint
+  sprint_speed: bigint
+  stamina: bigint
+  standing_tackle: bigint
+  strength: bigint
+  vision: bigint
+  volleys: bigint
+}
+
+"""
+order by max() on columns of table "player_attributes"
+"""
+input player_attributes_max_order_by {
+  acceleration: order_by
+  aggression: order_by
+  agility: order_by
+  attacking_work_rate: order_by
+  balance: order_by
+  ball_control: order_by
+  crossing: order_by
+  curve: order_by
+  date: order_by
+  defensive_work_rate: order_by
+  dribbling: order_by
+  finishing: order_by
+  free_kick_accuracy: order_by
+  gk_diving: order_by
+  gk_handling: order_by
+  gk_kicking: order_by
+  gk_positioning: order_by
+  gk_reflexes: order_by
+  heading_accuracy: order_by
+  id: order_by
+  interceptions: order_by
+  jumping: order_by
+  long_passing: order_by
+  long_shots: order_by
+  marking: order_by
+  overall_rating: order_by
+  penalties: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  positioning: order_by
+  potential: order_by
+  preferred_foot: order_by
+  reactions: order_by
+  short_passing: order_by
+  shot_power: order_by
+  sliding_tackle: order_by
+  sprint_speed: order_by
+  stamina: order_by
+  standing_tackle: order_by
+  strength: order_by
+  vision: order_by
+  volleys: order_by
+}
+
+"""aggregate min on columns"""
+type player_attributes_min_fields {
+  acceleration: bigint
+  aggression: bigint
+  agility: bigint
+  attacking_work_rate: String
+  balance: bigint
+  ball_control: bigint
+  crossing: bigint
+  curve: bigint
+  date: String
+  defensive_work_rate: String
+  dribbling: bigint
+  finishing: bigint
+  free_kick_accuracy: bigint
+  gk_diving: bigint
+  gk_handling: bigint
+  gk_kicking: bigint
+  gk_positioning: bigint
+  gk_reflexes: bigint
+  heading_accuracy: bigint
+  id: bigint
+  interceptions: bigint
+  jumping: bigint
+  long_passing: bigint
+  long_shots: bigint
+  marking: bigint
+  overall_rating: bigint
+  penalties: bigint
+  player_api_id: bigint
+  player_fifa_api_id: bigint
+  positioning: bigint
+  potential: bigint
+  preferred_foot: String
+  reactions: bigint
+  short_passing: bigint
+  shot_power: bigint
+  sliding_tackle: bigint
+  sprint_speed: bigint
+  stamina: bigint
+  standing_tackle: bigint
+  strength: bigint
+  vision: bigint
+  volleys: bigint
+}
+
+"""
+order by min() on columns of table "player_attributes"
+"""
+input player_attributes_min_order_by {
+  acceleration: order_by
+  aggression: order_by
+  agility: order_by
+  attacking_work_rate: order_by
+  balance: order_by
+  ball_control: order_by
+  crossing: order_by
+  curve: order_by
+  date: order_by
+  defensive_work_rate: order_by
+  dribbling: order_by
+  finishing: order_by
+  free_kick_accuracy: order_by
+  gk_diving: order_by
+  gk_handling: order_by
+  gk_kicking: order_by
+  gk_positioning: order_by
+  gk_reflexes: order_by
+  heading_accuracy: order_by
+  id: order_by
+  interceptions: order_by
+  jumping: order_by
+  long_passing: order_by
+  long_shots: order_by
+  marking: order_by
+  overall_rating: order_by
+  penalties: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  positioning: order_by
+  potential: order_by
+  preferred_foot: order_by
+  reactions: order_by
+  short_passing: order_by
+  shot_power: order_by
+  sliding_tackle: order_by
+  sprint_speed: order_by
+  stamina: order_by
+  standing_tackle: order_by
+  strength: order_by
+  vision: order_by
+  volleys: order_by
+}
+
+"""
+response of any mutation on the table "player_attributes"
+"""
+type player_attributes_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [player_attributes!]!
+}
+
+"""
+input type for inserting object relation for remote table "player_attributes"
+"""
+input player_attributes_obj_rel_insert_input {
+  data: player_attributes_insert_input!
+  on_conflict: player_attributes_on_conflict
+}
+
+"""
+on conflict condition type for table "player_attributes"
+"""
+input player_attributes_on_conflict {
+  constraint: player_attributes_constraint!
+  update_columns: [player_attributes_update_column!]!
+  where: player_attributes_bool_exp
+}
+
+"""
+ordering options when selecting data from "player_attributes"
+"""
+input player_attributes_order_by {
+  acceleration: order_by
+  aggression: order_by
+  agility: order_by
+  attacking_work_rate: order_by
+  balance: order_by
+  ball_control: order_by
+  crossing: order_by
+  curve: order_by
+  date: order_by
+  defensive_work_rate: order_by
+  dribbling: order_by
+  finishing: order_by
+  free_kick_accuracy: order_by
+  gk_diving: order_by
+  gk_handling: order_by
+  gk_kicking: order_by
+  gk_positioning: order_by
+  gk_reflexes: order_by
+  heading_accuracy: order_by
+  id: order_by
+  interceptions: order_by
+  jumping: order_by
+  long_passing: order_by
+  long_shots: order_by
+  marking: order_by
+  overall_rating: order_by
+  penalties: order_by
+  player: player_order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  positioning: order_by
+  potential: order_by
+  preferred_foot: order_by
+  reactions: order_by
+  short_passing: order_by
+  shot_power: order_by
+  sliding_tackle: order_by
+  sprint_speed: order_by
+  stamina: order_by
+  standing_tackle: order_by
+  strength: order_by
+  vision: order_by
+  volleys: order_by
+}
+
+"""
+select columns of table "player_attributes"
+"""
+enum player_attributes_select_column {
+  """column name"""
+  acceleration
+
+  """column name"""
+  aggression
+
+  """column name"""
+  agility
+
+  """column name"""
+  attacking_work_rate
+
+  """column name"""
+  balance
+
+  """column name"""
+  ball_control
+
+  """column name"""
+  crossing
+
+  """column name"""
+  curve
+
+  """column name"""
+  date
+
+  """column name"""
+  defensive_work_rate
+
+  """column name"""
+  dribbling
+
+  """column name"""
+  finishing
+
+  """column name"""
+  free_kick_accuracy
+
+  """column name"""
+  gk_diving
+
+  """column name"""
+  gk_handling
+
+  """column name"""
+  gk_kicking
+
+  """column name"""
+  gk_positioning
+
+  """column name"""
+  gk_reflexes
+
+  """column name"""
+  heading_accuracy
+
+  """column name"""
+  id
+
+  """column name"""
+  interceptions
+
+  """column name"""
+  jumping
+
+  """column name"""
+  long_passing
+
+  """column name"""
+  long_shots
+
+  """column name"""
+  marking
+
+  """column name"""
+  overall_rating
+
+  """column name"""
+  penalties
+
+  """column name"""
+  player_api_id
+
+  """column name"""
+  player_fifa_api_id
+
+  """column name"""
+  positioning
+
+  """column name"""
+  potential
+
+  """column name"""
+  preferred_foot
+
+  """column name"""
+  reactions
+
+  """column name"""
+  short_passing
+
+  """column name"""
+  shot_power
+
+  """column name"""
+  sliding_tackle
+
+  """column name"""
+  sprint_speed
+
+  """column name"""
+  stamina
+
+  """column name"""
+  standing_tackle
+
+  """column name"""
+  strength
+
+  """column name"""
+  vision
+
+  """column name"""
+  volleys
+}
+
+"""
+input type for updating data in table "player_attributes"
+"""
+input player_attributes_set_input {
+  acceleration: bigint
+  aggression: bigint
+  agility: bigint
+  attacking_work_rate: String
+  balance: bigint
+  ball_control: bigint
+  crossing: bigint
+  curve: bigint
+  date: String
+  defensive_work_rate: String
+  dribbling: bigint
+  finishing: bigint
+  free_kick_accuracy: bigint
+  gk_diving: bigint
+  gk_handling: bigint
+  gk_kicking: bigint
+  gk_positioning: bigint
+  gk_reflexes: bigint
+  heading_accuracy: bigint
+  id: bigint
+  interceptions: bigint
+  jumping: bigint
+  long_passing: bigint
+  long_shots: bigint
+  marking: bigint
+  overall_rating: bigint
+  penalties: bigint
+  player_api_id: bigint
+  player_fifa_api_id: bigint
+  positioning: bigint
+  potential: bigint
+  preferred_foot: String
+  reactions: bigint
+  short_passing: bigint
+  shot_power: bigint
+  sliding_tackle: bigint
+  sprint_speed: bigint
+  stamina: bigint
+  standing_tackle: bigint
+  strength: bigint
+  vision: bigint
+  volleys: bigint
+}
+
+"""aggregate stddev on columns"""
+type player_attributes_stddev_fields {
+  acceleration: Float
+  aggression: Float
+  agility: Float
+  balance: Float
+  ball_control: Float
+  crossing: Float
+  curve: Float
+  dribbling: Float
+  finishing: Float
+  free_kick_accuracy: Float
+  gk_diving: Float
+  gk_handling: Float
+  gk_kicking: Float
+  gk_positioning: Float
+  gk_reflexes: Float
+  heading_accuracy: Float
+  id: Float
+  interceptions: Float
+  jumping: Float
+  long_passing: Float
+  long_shots: Float
+  marking: Float
+  overall_rating: Float
+  penalties: Float
+  player_api_id: Float
+  player_fifa_api_id: Float
+  positioning: Float
+  potential: Float
+  reactions: Float
+  short_passing: Float
+  shot_power: Float
+  sliding_tackle: Float
+  sprint_speed: Float
+  stamina: Float
+  standing_tackle: Float
+  strength: Float
+  vision: Float
+  volleys: Float
+}
+
+"""
+order by stddev() on columns of table "player_attributes"
+"""
+input player_attributes_stddev_order_by {
+  acceleration: order_by
+  aggression: order_by
+  agility: order_by
+  balance: order_by
+  ball_control: order_by
+  crossing: order_by
+  curve: order_by
+  dribbling: order_by
+  finishing: order_by
+  free_kick_accuracy: order_by
+  gk_diving: order_by
+  gk_handling: order_by
+  gk_kicking: order_by
+  gk_positioning: order_by
+  gk_reflexes: order_by
+  heading_accuracy: order_by
+  id: order_by
+  interceptions: order_by
+  jumping: order_by
+  long_passing: order_by
+  long_shots: order_by
+  marking: order_by
+  overall_rating: order_by
+  penalties: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  positioning: order_by
+  potential: order_by
+  reactions: order_by
+  short_passing: order_by
+  shot_power: order_by
+  sliding_tackle: order_by
+  sprint_speed: order_by
+  stamina: order_by
+  standing_tackle: order_by
+  strength: order_by
+  vision: order_by
+  volleys: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type player_attributes_stddev_pop_fields {
+  acceleration: Float
+  aggression: Float
+  agility: Float
+  balance: Float
+  ball_control: Float
+  crossing: Float
+  curve: Float
+  dribbling: Float
+  finishing: Float
+  free_kick_accuracy: Float
+  gk_diving: Float
+  gk_handling: Float
+  gk_kicking: Float
+  gk_positioning: Float
+  gk_reflexes: Float
+  heading_accuracy: Float
+  id: Float
+  interceptions: Float
+  jumping: Float
+  long_passing: Float
+  long_shots: Float
+  marking: Float
+  overall_rating: Float
+  penalties: Float
+  player_api_id: Float
+  player_fifa_api_id: Float
+  positioning: Float
+  potential: Float
+  reactions: Float
+  short_passing: Float
+  shot_power: Float
+  sliding_tackle: Float
+  sprint_speed: Float
+  stamina: Float
+  standing_tackle: Float
+  strength: Float
+  vision: Float
+  volleys: Float
+}
+
+"""
+order by stddev_pop() on columns of table "player_attributes"
+"""
+input player_attributes_stddev_pop_order_by {
+  acceleration: order_by
+  aggression: order_by
+  agility: order_by
+  balance: order_by
+  ball_control: order_by
+  crossing: order_by
+  curve: order_by
+  dribbling: order_by
+  finishing: order_by
+  free_kick_accuracy: order_by
+  gk_diving: order_by
+  gk_handling: order_by
+  gk_kicking: order_by
+  gk_positioning: order_by
+  gk_reflexes: order_by
+  heading_accuracy: order_by
+  id: order_by
+  interceptions: order_by
+  jumping: order_by
+  long_passing: order_by
+  long_shots: order_by
+  marking: order_by
+  overall_rating: order_by
+  penalties: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  positioning: order_by
+  potential: order_by
+  reactions: order_by
+  short_passing: order_by
+  shot_power: order_by
+  sliding_tackle: order_by
+  sprint_speed: order_by
+  stamina: order_by
+  standing_tackle: order_by
+  strength: order_by
+  vision: order_by
+  volleys: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type player_attributes_stddev_samp_fields {
+  acceleration: Float
+  aggression: Float
+  agility: Float
+  balance: Float
+  ball_control: Float
+  crossing: Float
+  curve: Float
+  dribbling: Float
+  finishing: Float
+  free_kick_accuracy: Float
+  gk_diving: Float
+  gk_handling: Float
+  gk_kicking: Float
+  gk_positioning: Float
+  gk_reflexes: Float
+  heading_accuracy: Float
+  id: Float
+  interceptions: Float
+  jumping: Float
+  long_passing: Float
+  long_shots: Float
+  marking: Float
+  overall_rating: Float
+  penalties: Float
+  player_api_id: Float
+  player_fifa_api_id: Float
+  positioning: Float
+  potential: Float
+  reactions: Float
+  short_passing: Float
+  shot_power: Float
+  sliding_tackle: Float
+  sprint_speed: Float
+  stamina: Float
+  standing_tackle: Float
+  strength: Float
+  vision: Float
+  volleys: Float
+}
+
+"""
+order by stddev_samp() on columns of table "player_attributes"
+"""
+input player_attributes_stddev_samp_order_by {
+  acceleration: order_by
+  aggression: order_by
+  agility: order_by
+  balance: order_by
+  ball_control: order_by
+  crossing: order_by
+  curve: order_by
+  dribbling: order_by
+  finishing: order_by
+  free_kick_accuracy: order_by
+  gk_diving: order_by
+  gk_handling: order_by
+  gk_kicking: order_by
+  gk_positioning: order_by
+  gk_reflexes: order_by
+  heading_accuracy: order_by
+  id: order_by
+  interceptions: order_by
+  jumping: order_by
+  long_passing: order_by
+  long_shots: order_by
+  marking: order_by
+  overall_rating: order_by
+  penalties: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  positioning: order_by
+  potential: order_by
+  reactions: order_by
+  short_passing: order_by
+  shot_power: order_by
+  sliding_tackle: order_by
+  sprint_speed: order_by
+  stamina: order_by
+  standing_tackle: order_by
+  strength: order_by
+  vision: order_by
+  volleys: order_by
+}
+
+"""aggregate sum on columns"""
+type player_attributes_sum_fields {
+  acceleration: bigint
+  aggression: bigint
+  agility: bigint
+  balance: bigint
+  ball_control: bigint
+  crossing: bigint
+  curve: bigint
+  dribbling: bigint
+  finishing: bigint
+  free_kick_accuracy: bigint
+  gk_diving: bigint
+  gk_handling: bigint
+  gk_kicking: bigint
+  gk_positioning: bigint
+  gk_reflexes: bigint
+  heading_accuracy: bigint
+  id: bigint
+  interceptions: bigint
+  jumping: bigint
+  long_passing: bigint
+  long_shots: bigint
+  marking: bigint
+  overall_rating: bigint
+  penalties: bigint
+  player_api_id: bigint
+  player_fifa_api_id: bigint
+  positioning: bigint
+  potential: bigint
+  reactions: bigint
+  short_passing: bigint
+  shot_power: bigint
+  sliding_tackle: bigint
+  sprint_speed: bigint
+  stamina: bigint
+  standing_tackle: bigint
+  strength: bigint
+  vision: bigint
+  volleys: bigint
+}
+
+"""
+order by sum() on columns of table "player_attributes"
+"""
+input player_attributes_sum_order_by {
+  acceleration: order_by
+  aggression: order_by
+  agility: order_by
+  balance: order_by
+  ball_control: order_by
+  crossing: order_by
+  curve: order_by
+  dribbling: order_by
+  finishing: order_by
+  free_kick_accuracy: order_by
+  gk_diving: order_by
+  gk_handling: order_by
+  gk_kicking: order_by
+  gk_positioning: order_by
+  gk_reflexes: order_by
+  heading_accuracy: order_by
+  id: order_by
+  interceptions: order_by
+  jumping: order_by
+  long_passing: order_by
+  long_shots: order_by
+  marking: order_by
+  overall_rating: order_by
+  penalties: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  positioning: order_by
+  potential: order_by
+  reactions: order_by
+  short_passing: order_by
+  shot_power: order_by
+  sliding_tackle: order_by
+  sprint_speed: order_by
+  stamina: order_by
+  standing_tackle: order_by
+  strength: order_by
+  vision: order_by
+  volleys: order_by
+}
+
+"""
+update columns of table "player_attributes"
+"""
+enum player_attributes_update_column {
+  """column name"""
+  acceleration
+
+  """column name"""
+  aggression
+
+  """column name"""
+  agility
+
+  """column name"""
+  attacking_work_rate
+
+  """column name"""
+  balance
+
+  """column name"""
+  ball_control
+
+  """column name"""
+  crossing
+
+  """column name"""
+  curve
+
+  """column name"""
+  date
+
+  """column name"""
+  defensive_work_rate
+
+  """column name"""
+  dribbling
+
+  """column name"""
+  finishing
+
+  """column name"""
+  free_kick_accuracy
+
+  """column name"""
+  gk_diving
+
+  """column name"""
+  gk_handling
+
+  """column name"""
+  gk_kicking
+
+  """column name"""
+  gk_positioning
+
+  """column name"""
+  gk_reflexes
+
+  """column name"""
+  heading_accuracy
+
+  """column name"""
+  id
+
+  """column name"""
+  interceptions
+
+  """column name"""
+  jumping
+
+  """column name"""
+  long_passing
+
+  """column name"""
+  long_shots
+
+  """column name"""
+  marking
+
+  """column name"""
+  overall_rating
+
+  """column name"""
+  penalties
+
+  """column name"""
+  player_api_id
+
+  """column name"""
+  player_fifa_api_id
+
+  """column name"""
+  positioning
+
+  """column name"""
+  potential
+
+  """column name"""
+  preferred_foot
+
+  """column name"""
+  reactions
+
+  """column name"""
+  short_passing
+
+  """column name"""
+  shot_power
+
+  """column name"""
+  sliding_tackle
+
+  """column name"""
+  sprint_speed
+
+  """column name"""
+  stamina
+
+  """column name"""
+  standing_tackle
+
+  """column name"""
+  strength
+
+  """column name"""
+  vision
+
+  """column name"""
+  volleys
+}
+
+"""aggregate var_pop on columns"""
+type player_attributes_var_pop_fields {
+  acceleration: Float
+  aggression: Float
+  agility: Float
+  balance: Float
+  ball_control: Float
+  crossing: Float
+  curve: Float
+  dribbling: Float
+  finishing: Float
+  free_kick_accuracy: Float
+  gk_diving: Float
+  gk_handling: Float
+  gk_kicking: Float
+  gk_positioning: Float
+  gk_reflexes: Float
+  heading_accuracy: Float
+  id: Float
+  interceptions: Float
+  jumping: Float
+  long_passing: Float
+  long_shots: Float
+  marking: Float
+  overall_rating: Float
+  penalties: Float
+  player_api_id: Float
+  player_fifa_api_id: Float
+  positioning: Float
+  potential: Float
+  reactions: Float
+  short_passing: Float
+  shot_power: Float
+  sliding_tackle: Float
+  sprint_speed: Float
+  stamina: Float
+  standing_tackle: Float
+  strength: Float
+  vision: Float
+  volleys: Float
+}
+
+"""
+order by var_pop() on columns of table "player_attributes"
+"""
+input player_attributes_var_pop_order_by {
+  acceleration: order_by
+  aggression: order_by
+  agility: order_by
+  balance: order_by
+  ball_control: order_by
+  crossing: order_by
+  curve: order_by
+  dribbling: order_by
+  finishing: order_by
+  free_kick_accuracy: order_by
+  gk_diving: order_by
+  gk_handling: order_by
+  gk_kicking: order_by
+  gk_positioning: order_by
+  gk_reflexes: order_by
+  heading_accuracy: order_by
+  id: order_by
+  interceptions: order_by
+  jumping: order_by
+  long_passing: order_by
+  long_shots: order_by
+  marking: order_by
+  overall_rating: order_by
+  penalties: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  positioning: order_by
+  potential: order_by
+  reactions: order_by
+  short_passing: order_by
+  shot_power: order_by
+  sliding_tackle: order_by
+  sprint_speed: order_by
+  stamina: order_by
+  standing_tackle: order_by
+  strength: order_by
+  vision: order_by
+  volleys: order_by
+}
+
+"""aggregate var_samp on columns"""
+type player_attributes_var_samp_fields {
+  acceleration: Float
+  aggression: Float
+  agility: Float
+  balance: Float
+  ball_control: Float
+  crossing: Float
+  curve: Float
+  dribbling: Float
+  finishing: Float
+  free_kick_accuracy: Float
+  gk_diving: Float
+  gk_handling: Float
+  gk_kicking: Float
+  gk_positioning: Float
+  gk_reflexes: Float
+  heading_accuracy: Float
+  id: Float
+  interceptions: Float
+  jumping: Float
+  long_passing: Float
+  long_shots: Float
+  marking: Float
+  overall_rating: Float
+  penalties: Float
+  player_api_id: Float
+  player_fifa_api_id: Float
+  positioning: Float
+  potential: Float
+  reactions: Float
+  short_passing: Float
+  shot_power: Float
+  sliding_tackle: Float
+  sprint_speed: Float
+  stamina: Float
+  standing_tackle: Float
+  strength: Float
+  vision: Float
+  volleys: Float
+}
+
+"""
+order by var_samp() on columns of table "player_attributes"
+"""
+input player_attributes_var_samp_order_by {
+  acceleration: order_by
+  aggression: order_by
+  agility: order_by
+  balance: order_by
+  ball_control: order_by
+  crossing: order_by
+  curve: order_by
+  dribbling: order_by
+  finishing: order_by
+  free_kick_accuracy: order_by
+  gk_diving: order_by
+  gk_handling: order_by
+  gk_kicking: order_by
+  gk_positioning: order_by
+  gk_reflexes: order_by
+  heading_accuracy: order_by
+  id: order_by
+  interceptions: order_by
+  jumping: order_by
+  long_passing: order_by
+  long_shots: order_by
+  marking: order_by
+  overall_rating: order_by
+  penalties: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  positioning: order_by
+  potential: order_by
+  reactions: order_by
+  short_passing: order_by
+  shot_power: order_by
+  sliding_tackle: order_by
+  sprint_speed: order_by
+  stamina: order_by
+  standing_tackle: order_by
+  strength: order_by
+  vision: order_by
+  volleys: order_by
+}
+
+"""aggregate variance on columns"""
+type player_attributes_variance_fields {
+  acceleration: Float
+  aggression: Float
+  agility: Float
+  balance: Float
+  ball_control: Float
+  crossing: Float
+  curve: Float
+  dribbling: Float
+  finishing: Float
+  free_kick_accuracy: Float
+  gk_diving: Float
+  gk_handling: Float
+  gk_kicking: Float
+  gk_positioning: Float
+  gk_reflexes: Float
+  heading_accuracy: Float
+  id: Float
+  interceptions: Float
+  jumping: Float
+  long_passing: Float
+  long_shots: Float
+  marking: Float
+  overall_rating: Float
+  penalties: Float
+  player_api_id: Float
+  player_fifa_api_id: Float
+  positioning: Float
+  potential: Float
+  reactions: Float
+  short_passing: Float
+  shot_power: Float
+  sliding_tackle: Float
+  sprint_speed: Float
+  stamina: Float
+  standing_tackle: Float
+  strength: Float
+  vision: Float
+  volleys: Float
+}
+
+"""
+order by variance() on columns of table "player_attributes"
+"""
+input player_attributes_variance_order_by {
+  acceleration: order_by
+  aggression: order_by
+  agility: order_by
+  balance: order_by
+  ball_control: order_by
+  crossing: order_by
+  curve: order_by
+  dribbling: order_by
+  finishing: order_by
+  free_kick_accuracy: order_by
+  gk_diving: order_by
+  gk_handling: order_by
+  gk_kicking: order_by
+  gk_positioning: order_by
+  gk_reflexes: order_by
+  heading_accuracy: order_by
+  id: order_by
+  interceptions: order_by
+  jumping: order_by
+  long_passing: order_by
+  long_shots: order_by
+  marking: order_by
+  overall_rating: order_by
+  penalties: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  positioning: order_by
+  potential: order_by
+  reactions: order_by
+  short_passing: order_by
+  shot_power: order_by
+  sliding_tackle: order_by
+  sprint_speed: order_by
+  stamina: order_by
+  standing_tackle: order_by
+  strength: order_by
+  vision: order_by
+  volleys: order_by
+}
+
+"""aggregate avg on columns"""
+type player_avg_fields {
+  height: Float
+  id: Float
+  player_api_id: Float
+  player_fifa_api_id: Float
+  weight: Float
+}
+
+"""
+order by avg() on columns of table "player"
+"""
+input player_avg_order_by {
+  height: order_by
+  id: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  weight: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "player". All fields are combined with a logical 'AND'.
+"""
+input player_bool_exp {
+  _and: [player_bool_exp]
+  _not: player_bool_exp
+  _or: [player_bool_exp]
+  birthday: String_comparison_exp
+  height: bigint_comparison_exp
+  id: bigint_comparison_exp
+  player_api_id: bigint_comparison_exp
+  player_attributes: player_attributes_bool_exp
+  player_fifa_api_id: bigint_comparison_exp
+  player_name: String_comparison_exp
+  weight: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "player"
+"""
+enum player_constraint {
+  """unique or primary key constraint"""
+  idx_22505_player_pkey
+
+  """unique or primary key constraint"""
+  idx_22505_sqlite_autoindex_player_1
+
+  """unique or primary key constraint"""
+  idx_22505_sqlite_autoindex_player_2
+}
+
+"""
+input type for incrementing integer columne in table "player"
+"""
+input player_inc_input {
+  height: bigint
+  id: bigint
+  player_api_id: bigint
+  player_fifa_api_id: bigint
+  weight: bigint
+}
+
+"""
+input type for inserting data into table "player"
+"""
+input player_insert_input {
+  birthday: String
+  height: bigint
+  id: bigint
+  player_api_id: bigint
+  player_attributes: player_attributes_arr_rel_insert_input
+  player_fifa_api_id: bigint
+  player_name: String
+  weight: bigint
+}
+
+"""aggregate max on columns"""
+type player_max_fields {
+  birthday: String
+  height: bigint
+  id: bigint
+  player_api_id: bigint
+  player_fifa_api_id: bigint
+  player_name: String
+  weight: bigint
+}
+
+"""
+order by max() on columns of table "player"
+"""
+input player_max_order_by {
+  birthday: order_by
+  height: order_by
+  id: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  player_name: order_by
+  weight: order_by
+}
+
+"""aggregate min on columns"""
+type player_min_fields {
+  birthday: String
+  height: bigint
+  id: bigint
+  player_api_id: bigint
+  player_fifa_api_id: bigint
+  player_name: String
+  weight: bigint
+}
+
+"""
+order by min() on columns of table "player"
+"""
+input player_min_order_by {
+  birthday: order_by
+  height: order_by
+  id: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  player_name: order_by
+  weight: order_by
+}
+
+"""
+response of any mutation on the table "player"
+"""
+type player_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [player!]!
+}
+
+"""
+input type for inserting object relation for remote table "player"
+"""
+input player_obj_rel_insert_input {
+  data: player_insert_input!
+  on_conflict: player_on_conflict
+}
+
+"""
+on conflict condition type for table "player"
+"""
+input player_on_conflict {
+  constraint: player_constraint!
+  update_columns: [player_update_column!]!
+  where: player_bool_exp
+}
+
+"""
+ordering options when selecting data from "player"
+"""
+input player_order_by {
+  birthday: order_by
+  height: order_by
+  id: order_by
+  player_api_id: order_by
+  player_attributes_aggregate: player_attributes_aggregate_order_by
+  player_fifa_api_id: order_by
+  player_name: order_by
+  weight: order_by
+}
+
+"""
+select columns of table "player"
+"""
+enum player_select_column {
+  """column name"""
+  birthday
+
+  """column name"""
+  height
+
+  """column name"""
+  id
+
+  """column name"""
+  player_api_id
+
+  """column name"""
+  player_fifa_api_id
+
+  """column name"""
+  player_name
+
+  """column name"""
+  weight
+}
+
+"""
+input type for updating data in table "player"
+"""
+input player_set_input {
+  birthday: String
+  height: bigint
+  id: bigint
+  player_api_id: bigint
+  player_fifa_api_id: bigint
+  player_name: String
+  weight: bigint
+}
+
+"""aggregate stddev on columns"""
+type player_stddev_fields {
+  height: Float
+  id: Float
+  player_api_id: Float
+  player_fifa_api_id: Float
+  weight: Float
+}
+
+"""
+order by stddev() on columns of table "player"
+"""
+input player_stddev_order_by {
+  height: order_by
+  id: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  weight: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type player_stddev_pop_fields {
+  height: Float
+  id: Float
+  player_api_id: Float
+  player_fifa_api_id: Float
+  weight: Float
+}
+
+"""
+order by stddev_pop() on columns of table "player"
+"""
+input player_stddev_pop_order_by {
+  height: order_by
+  id: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  weight: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type player_stddev_samp_fields {
+  height: Float
+  id: Float
+  player_api_id: Float
+  player_fifa_api_id: Float
+  weight: Float
+}
+
+"""
+order by stddev_samp() on columns of table "player"
+"""
+input player_stddev_samp_order_by {
+  height: order_by
+  id: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  weight: order_by
+}
+
+"""aggregate sum on columns"""
+type player_sum_fields {
+  height: bigint
+  id: bigint
+  player_api_id: bigint
+  player_fifa_api_id: bigint
+  weight: bigint
+}
+
+"""
+order by sum() on columns of table "player"
+"""
+input player_sum_order_by {
+  height: order_by
+  id: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  weight: order_by
+}
+
+"""
+update columns of table "player"
+"""
+enum player_update_column {
+  """column name"""
+  birthday
+
+  """column name"""
+  height
+
+  """column name"""
+  id
+
+  """column name"""
+  player_api_id
+
+  """column name"""
+  player_fifa_api_id
+
+  """column name"""
+  player_name
+
+  """column name"""
+  weight
+}
+
+"""aggregate var_pop on columns"""
+type player_var_pop_fields {
+  height: Float
+  id: Float
+  player_api_id: Float
+  player_fifa_api_id: Float
+  weight: Float
+}
+
+"""
+order by var_pop() on columns of table "player"
+"""
+input player_var_pop_order_by {
+  height: order_by
+  id: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  weight: order_by
+}
+
+"""aggregate var_samp on columns"""
+type player_var_samp_fields {
+  height: Float
+  id: Float
+  player_api_id: Float
+  player_fifa_api_id: Float
+  weight: Float
+}
+
+"""
+order by var_samp() on columns of table "player"
+"""
+input player_var_samp_order_by {
+  height: order_by
+  id: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  weight: order_by
+}
+
+"""aggregate variance on columns"""
+type player_variance_fields {
+  height: Float
+  id: Float
+  player_api_id: Float
+  player_fifa_api_id: Float
+  weight: Float
+}
+
+"""
+order by variance() on columns of table "player"
+"""
+input player_variance_order_by {
+  height: order_by
+  id: order_by
+  player_api_id: order_by
+  player_fifa_api_id: order_by
+  weight: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "country"
+  """
+  country(
+    """distinct select on columns"""
+    distinct_on: [country_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [country_order_by!]
+
+    """filter the rows returned"""
+    where: country_bool_exp
+  ): [country!]!
+
+  """
+  fetch aggregated fields from the table: "country"
+  """
+  country_aggregate(
+    """distinct select on columns"""
+    distinct_on: [country_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [country_order_by!]
+
+    """filter the rows returned"""
+    where: country_bool_exp
+  ): country_aggregate!
+
+  """fetch data from the table: "country" using primary key columns"""
+  country_by_pk(id: bigint!): country
+
+  """
+  fetch data from the table: "league"
+  """
+  league(
+    """distinct select on columns"""
+    distinct_on: [league_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [league_order_by!]
+
+    """filter the rows returned"""
+    where: league_bool_exp
+  ): [league!]!
+
+  """
+  fetch aggregated fields from the table: "league"
+  """
+  league_aggregate(
+    """distinct select on columns"""
+    distinct_on: [league_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [league_order_by!]
+
+    """filter the rows returned"""
+    where: league_bool_exp
+  ): league_aggregate!
+
+  """fetch data from the table: "league" using primary key columns"""
+  league_by_pk(id: bigint!): league
+
+  """
+  fetch data from the table: "player"
+  """
+  player(
+    """distinct select on columns"""
+    distinct_on: [player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_order_by!]
+
+    """filter the rows returned"""
+    where: player_bool_exp
+  ): [player!]!
+
+  """
+  fetch aggregated fields from the table: "player"
+  """
+  player_aggregate(
+    """distinct select on columns"""
+    distinct_on: [player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_order_by!]
+
+    """filter the rows returned"""
+    where: player_bool_exp
+  ): player_aggregate!
+
+  """
+  fetch data from the table: "player_attributes"
+  """
+  player_attributes(
+    """distinct select on columns"""
+    distinct_on: [player_attributes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_attributes_order_by!]
+
+    """filter the rows returned"""
+    where: player_attributes_bool_exp
+  ): [player_attributes!]!
+
+  """
+  fetch aggregated fields from the table: "player_attributes"
+  """
+  player_attributes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [player_attributes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_attributes_order_by!]
+
+    """filter the rows returned"""
+    where: player_attributes_bool_exp
+  ): player_attributes_aggregate!
+
+  """
+  fetch data from the table: "player_attributes" using primary key columns
+  """
+  player_attributes_by_pk(id: bigint!): player_attributes
+
+  """fetch data from the table: "player" using primary key columns"""
+  player_by_pk(id: bigint!): player
+
+  """
+  fetch data from the table: "team"
+  """
+  team(
+    """distinct select on columns"""
+    distinct_on: [team_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [team_order_by!]
+
+    """filter the rows returned"""
+    where: team_bool_exp
+  ): [team!]!
+
+  """
+  fetch aggregated fields from the table: "team"
+  """
+  team_aggregate(
+    """distinct select on columns"""
+    distinct_on: [team_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [team_order_by!]
+
+    """filter the rows returned"""
+    where: team_bool_exp
+  ): team_aggregate!
+
+  """
+  fetch data from the table: "team_attributes"
+  """
+  team_attributes(
+    """distinct select on columns"""
+    distinct_on: [team_attributes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [team_attributes_order_by!]
+
+    """filter the rows returned"""
+    where: team_attributes_bool_exp
+  ): [team_attributes!]!
+
+  """
+  fetch aggregated fields from the table: "team_attributes"
+  """
+  team_attributes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [team_attributes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [team_attributes_order_by!]
+
+    """filter the rows returned"""
+    where: team_attributes_bool_exp
+  ): team_attributes_aggregate!
+
+  """fetch data from the table: "team_attributes" using primary key columns"""
+  team_attributes_by_pk(id: bigint!): team_attributes
+
+  """fetch data from the table: "team" using primary key columns"""
+  team_by_pk(id: bigint!): team
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "country"
+  """
+  country(
+    """distinct select on columns"""
+    distinct_on: [country_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [country_order_by!]
+
+    """filter the rows returned"""
+    where: country_bool_exp
+  ): [country!]!
+
+  """
+  fetch aggregated fields from the table: "country"
+  """
+  country_aggregate(
+    """distinct select on columns"""
+    distinct_on: [country_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [country_order_by!]
+
+    """filter the rows returned"""
+    where: country_bool_exp
+  ): country_aggregate!
+
+  """fetch data from the table: "country" using primary key columns"""
+  country_by_pk(id: bigint!): country
+
+  """
+  fetch data from the table: "league"
+  """
+  league(
+    """distinct select on columns"""
+    distinct_on: [league_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [league_order_by!]
+
+    """filter the rows returned"""
+    where: league_bool_exp
+  ): [league!]!
+
+  """
+  fetch aggregated fields from the table: "league"
+  """
+  league_aggregate(
+    """distinct select on columns"""
+    distinct_on: [league_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [league_order_by!]
+
+    """filter the rows returned"""
+    where: league_bool_exp
+  ): league_aggregate!
+
+  """fetch data from the table: "league" using primary key columns"""
+  league_by_pk(id: bigint!): league
+
+  """
+  fetch data from the table: "player"
+  """
+  player(
+    """distinct select on columns"""
+    distinct_on: [player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_order_by!]
+
+    """filter the rows returned"""
+    where: player_bool_exp
+  ): [player!]!
+
+  """
+  fetch aggregated fields from the table: "player"
+  """
+  player_aggregate(
+    """distinct select on columns"""
+    distinct_on: [player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_order_by!]
+
+    """filter the rows returned"""
+    where: player_bool_exp
+  ): player_aggregate!
+
+  """
+  fetch data from the table: "player_attributes"
+  """
+  player_attributes(
+    """distinct select on columns"""
+    distinct_on: [player_attributes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_attributes_order_by!]
+
+    """filter the rows returned"""
+    where: player_attributes_bool_exp
+  ): [player_attributes!]!
+
+  """
+  fetch aggregated fields from the table: "player_attributes"
+  """
+  player_attributes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [player_attributes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_attributes_order_by!]
+
+    """filter the rows returned"""
+    where: player_attributes_bool_exp
+  ): player_attributes_aggregate!
+
+  """
+  fetch data from the table: "player_attributes" using primary key columns
+  """
+  player_attributes_by_pk(id: bigint!): player_attributes
+
+  """fetch data from the table: "player" using primary key columns"""
+  player_by_pk(id: bigint!): player
+
+  """
+  fetch data from the table: "team"
+  """
+  team(
+    """distinct select on columns"""
+    distinct_on: [team_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [team_order_by!]
+
+    """filter the rows returned"""
+    where: team_bool_exp
+  ): [team!]!
+
+  """
+  fetch aggregated fields from the table: "team"
+  """
+  team_aggregate(
+    """distinct select on columns"""
+    distinct_on: [team_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [team_order_by!]
+
+    """filter the rows returned"""
+    where: team_bool_exp
+  ): team_aggregate!
+
+  """
+  fetch data from the table: "team_attributes"
+  """
+  team_attributes(
+    """distinct select on columns"""
+    distinct_on: [team_attributes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [team_attributes_order_by!]
+
+    """filter the rows returned"""
+    where: team_attributes_bool_exp
+  ): [team_attributes!]!
+
+  """
+  fetch aggregated fields from the table: "team_attributes"
+  """
+  team_attributes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [team_attributes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [team_attributes_order_by!]
+
+    """filter the rows returned"""
+    where: team_attributes_bool_exp
+  ): team_attributes_aggregate!
+
+  """fetch data from the table: "team_attributes" using primary key columns"""
+  team_attributes_by_pk(id: bigint!): team_attributes
+
+  """fetch data from the table: "team" using primary key columns"""
+  team_by_pk(id: bigint!): team
+}
+
+"""
+columns and relationships of "team"
+"""
+type team {
+  id: bigint!
+  team_api_id: bigint
+
+  """An array relationship"""
+  team_attributes(
+    """distinct select on columns"""
+    distinct_on: [team_attributes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [team_attributes_order_by!]
+
+    """filter the rows returned"""
+    where: team_attributes_bool_exp
+  ): [team_attributes!]!
+
+  """An aggregated array relationship"""
+  team_attributes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [team_attributes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [team_attributes_order_by!]
+
+    """filter the rows returned"""
+    where: team_attributes_bool_exp
+  ): team_attributes_aggregate!
+  team_fifa_api_id: bigint
+  team_long_name: String
+  team_short_name: String
+}
+
+"""
+aggregated selection of "team"
+"""
+type team_aggregate {
+  aggregate: team_aggregate_fields
+  nodes: [team!]!
+}
+
+"""
+aggregate fields of "team"
+"""
+type team_aggregate_fields {
+  avg: team_avg_fields
+  count(columns: [team_select_column!], distinct: Boolean): Int
+  max: team_max_fields
+  min: team_min_fields
+  stddev: team_stddev_fields
+  stddev_pop: team_stddev_pop_fields
+  stddev_samp: team_stddev_samp_fields
+  sum: team_sum_fields
+  var_pop: team_var_pop_fields
+  var_samp: team_var_samp_fields
+  variance: team_variance_fields
+}
+
+"""
+order by aggregate values of table "team"
+"""
+input team_aggregate_order_by {
+  avg: team_avg_order_by
+  count: order_by
+  max: team_max_order_by
+  min: team_min_order_by
+  stddev: team_stddev_order_by
+  stddev_pop: team_stddev_pop_order_by
+  stddev_samp: team_stddev_samp_order_by
+  sum: team_sum_order_by
+  var_pop: team_var_pop_order_by
+  var_samp: team_var_samp_order_by
+  variance: team_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "team"
+"""
+input team_arr_rel_insert_input {
+  data: [team_insert_input!]!
+  on_conflict: team_on_conflict
+}
+
+"""
+columns and relationships of "team_attributes"
+"""
+type team_attributes {
+  buildupplaydribbling: bigint
+  buildupplaydribblingclass: String
+  buildupplaypassing: bigint
+  buildupplaypassingclass: String
+  buildupplaypositioningclass: String
+  buildupplayspeed: bigint
+  buildupplayspeedclass: String
+  chancecreationcrossing: bigint
+  chancecreationcrossingclass: String
+  chancecreationpassing: bigint
+  chancecreationpassingclass: String
+  chancecreationpositioningclass: String
+  chancecreationshooting: bigint
+  chancecreationshootingclass: String
+  date: String
+  defenceaggression: bigint
+  defenceaggressionclass: String
+  defencedefenderlineclass: String
+  defencepressure: bigint
+  defencepressureclass: String
+  defenceteamwidth: bigint
+  defenceteamwidthclass: String
+  id: bigint!
+
+  """An object relationship"""
+  team: team
+  team_api_id: bigint
+  team_fifa_api_id: bigint
+}
+
+"""
+aggregated selection of "team_attributes"
+"""
+type team_attributes_aggregate {
+  aggregate: team_attributes_aggregate_fields
+  nodes: [team_attributes!]!
+}
+
+"""
+aggregate fields of "team_attributes"
+"""
+type team_attributes_aggregate_fields {
+  avg: team_attributes_avg_fields
+  count(columns: [team_attributes_select_column!], distinct: Boolean): Int
+  max: team_attributes_max_fields
+  min: team_attributes_min_fields
+  stddev: team_attributes_stddev_fields
+  stddev_pop: team_attributes_stddev_pop_fields
+  stddev_samp: team_attributes_stddev_samp_fields
+  sum: team_attributes_sum_fields
+  var_pop: team_attributes_var_pop_fields
+  var_samp: team_attributes_var_samp_fields
+  variance: team_attributes_variance_fields
+}
+
+"""
+order by aggregate values of table "team_attributes"
+"""
+input team_attributes_aggregate_order_by {
+  avg: team_attributes_avg_order_by
+  count: order_by
+  max: team_attributes_max_order_by
+  min: team_attributes_min_order_by
+  stddev: team_attributes_stddev_order_by
+  stddev_pop: team_attributes_stddev_pop_order_by
+  stddev_samp: team_attributes_stddev_samp_order_by
+  sum: team_attributes_sum_order_by
+  var_pop: team_attributes_var_pop_order_by
+  var_samp: team_attributes_var_samp_order_by
+  variance: team_attributes_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "team_attributes"
+"""
+input team_attributes_arr_rel_insert_input {
+  data: [team_attributes_insert_input!]!
+  on_conflict: team_attributes_on_conflict
+}
+
+"""aggregate avg on columns"""
+type team_attributes_avg_fields {
+  buildupplaydribbling: Float
+  buildupplaypassing: Float
+  buildupplayspeed: Float
+  chancecreationcrossing: Float
+  chancecreationpassing: Float
+  chancecreationshooting: Float
+  defenceaggression: Float
+  defencepressure: Float
+  defenceteamwidth: Float
+  id: Float
+  team_api_id: Float
+  team_fifa_api_id: Float
+}
+
+"""
+order by avg() on columns of table "team_attributes"
+"""
+input team_attributes_avg_order_by {
+  buildupplaydribbling: order_by
+  buildupplaypassing: order_by
+  buildupplayspeed: order_by
+  chancecreationcrossing: order_by
+  chancecreationpassing: order_by
+  chancecreationshooting: order_by
+  defenceaggression: order_by
+  defencepressure: order_by
+  defenceteamwidth: order_by
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "team_attributes". All fields are combined with a logical 'AND'.
+"""
+input team_attributes_bool_exp {
+  _and: [team_attributes_bool_exp]
+  _not: team_attributes_bool_exp
+  _or: [team_attributes_bool_exp]
+  buildupplaydribbling: bigint_comparison_exp
+  buildupplaydribblingclass: String_comparison_exp
+  buildupplaypassing: bigint_comparison_exp
+  buildupplaypassingclass: String_comparison_exp
+  buildupplaypositioningclass: String_comparison_exp
+  buildupplayspeed: bigint_comparison_exp
+  buildupplayspeedclass: String_comparison_exp
+  chancecreationcrossing: bigint_comparison_exp
+  chancecreationcrossingclass: String_comparison_exp
+  chancecreationpassing: bigint_comparison_exp
+  chancecreationpassingclass: String_comparison_exp
+  chancecreationpositioningclass: String_comparison_exp
+  chancecreationshooting: bigint_comparison_exp
+  chancecreationshootingclass: String_comparison_exp
+  date: String_comparison_exp
+  defenceaggression: bigint_comparison_exp
+  defenceaggressionclass: String_comparison_exp
+  defencedefenderlineclass: String_comparison_exp
+  defencepressure: bigint_comparison_exp
+  defencepressureclass: String_comparison_exp
+  defenceteamwidth: bigint_comparison_exp
+  defenceteamwidthclass: String_comparison_exp
+  id: bigint_comparison_exp
+  team: team_bool_exp
+  team_api_id: bigint_comparison_exp
+  team_fifa_api_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "team_attributes"
+"""
+enum team_attributes_constraint {
+  """unique or primary key constraint"""
+  idx_22541_team_attributes_pkey
+}
+
+"""
+input type for incrementing integer columne in table "team_attributes"
+"""
+input team_attributes_inc_input {
+  buildupplaydribbling: bigint
+  buildupplaypassing: bigint
+  buildupplayspeed: bigint
+  chancecreationcrossing: bigint
+  chancecreationpassing: bigint
+  chancecreationshooting: bigint
+  defenceaggression: bigint
+  defencepressure: bigint
+  defenceteamwidth: bigint
+  id: bigint
+  team_api_id: bigint
+  team_fifa_api_id: bigint
+}
+
+"""
+input type for inserting data into table "team_attributes"
+"""
+input team_attributes_insert_input {
+  buildupplaydribbling: bigint
+  buildupplaydribblingclass: String
+  buildupplaypassing: bigint
+  buildupplaypassingclass: String
+  buildupplaypositioningclass: String
+  buildupplayspeed: bigint
+  buildupplayspeedclass: String
+  chancecreationcrossing: bigint
+  chancecreationcrossingclass: String
+  chancecreationpassing: bigint
+  chancecreationpassingclass: String
+  chancecreationpositioningclass: String
+  chancecreationshooting: bigint
+  chancecreationshootingclass: String
+  date: String
+  defenceaggression: bigint
+  defenceaggressionclass: String
+  defencedefenderlineclass: String
+  defencepressure: bigint
+  defencepressureclass: String
+  defenceteamwidth: bigint
+  defenceteamwidthclass: String
+  id: bigint
+  team: team_obj_rel_insert_input
+  team_api_id: bigint
+  team_fifa_api_id: bigint
+}
+
+"""aggregate max on columns"""
+type team_attributes_max_fields {
+  buildupplaydribbling: bigint
+  buildupplaydribblingclass: String
+  buildupplaypassing: bigint
+  buildupplaypassingclass: String
+  buildupplaypositioningclass: String
+  buildupplayspeed: bigint
+  buildupplayspeedclass: String
+  chancecreationcrossing: bigint
+  chancecreationcrossingclass: String
+  chancecreationpassing: bigint
+  chancecreationpassingclass: String
+  chancecreationpositioningclass: String
+  chancecreationshooting: bigint
+  chancecreationshootingclass: String
+  date: String
+  defenceaggression: bigint
+  defenceaggressionclass: String
+  defencedefenderlineclass: String
+  defencepressure: bigint
+  defencepressureclass: String
+  defenceteamwidth: bigint
+  defenceteamwidthclass: String
+  id: bigint
+  team_api_id: bigint
+  team_fifa_api_id: bigint
+}
+
+"""
+order by max() on columns of table "team_attributes"
+"""
+input team_attributes_max_order_by {
+  buildupplaydribbling: order_by
+  buildupplaydribblingclass: order_by
+  buildupplaypassing: order_by
+  buildupplaypassingclass: order_by
+  buildupplaypositioningclass: order_by
+  buildupplayspeed: order_by
+  buildupplayspeedclass: order_by
+  chancecreationcrossing: order_by
+  chancecreationcrossingclass: order_by
+  chancecreationpassing: order_by
+  chancecreationpassingclass: order_by
+  chancecreationpositioningclass: order_by
+  chancecreationshooting: order_by
+  chancecreationshootingclass: order_by
+  date: order_by
+  defenceaggression: order_by
+  defenceaggressionclass: order_by
+  defencedefenderlineclass: order_by
+  defencepressure: order_by
+  defencepressureclass: order_by
+  defenceteamwidth: order_by
+  defenceteamwidthclass: order_by
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}
+
+"""aggregate min on columns"""
+type team_attributes_min_fields {
+  buildupplaydribbling: bigint
+  buildupplaydribblingclass: String
+  buildupplaypassing: bigint
+  buildupplaypassingclass: String
+  buildupplaypositioningclass: String
+  buildupplayspeed: bigint
+  buildupplayspeedclass: String
+  chancecreationcrossing: bigint
+  chancecreationcrossingclass: String
+  chancecreationpassing: bigint
+  chancecreationpassingclass: String
+  chancecreationpositioningclass: String
+  chancecreationshooting: bigint
+  chancecreationshootingclass: String
+  date: String
+  defenceaggression: bigint
+  defenceaggressionclass: String
+  defencedefenderlineclass: String
+  defencepressure: bigint
+  defencepressureclass: String
+  defenceteamwidth: bigint
+  defenceteamwidthclass: String
+  id: bigint
+  team_api_id: bigint
+  team_fifa_api_id: bigint
+}
+
+"""
+order by min() on columns of table "team_attributes"
+"""
+input team_attributes_min_order_by {
+  buildupplaydribbling: order_by
+  buildupplaydribblingclass: order_by
+  buildupplaypassing: order_by
+  buildupplaypassingclass: order_by
+  buildupplaypositioningclass: order_by
+  buildupplayspeed: order_by
+  buildupplayspeedclass: order_by
+  chancecreationcrossing: order_by
+  chancecreationcrossingclass: order_by
+  chancecreationpassing: order_by
+  chancecreationpassingclass: order_by
+  chancecreationpositioningclass: order_by
+  chancecreationshooting: order_by
+  chancecreationshootingclass: order_by
+  date: order_by
+  defenceaggression: order_by
+  defenceaggressionclass: order_by
+  defencedefenderlineclass: order_by
+  defencepressure: order_by
+  defencepressureclass: order_by
+  defenceteamwidth: order_by
+  defenceteamwidthclass: order_by
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}
+
+"""
+response of any mutation on the table "team_attributes"
+"""
+type team_attributes_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [team_attributes!]!
+}
+
+"""
+input type for inserting object relation for remote table "team_attributes"
+"""
+input team_attributes_obj_rel_insert_input {
+  data: team_attributes_insert_input!
+  on_conflict: team_attributes_on_conflict
+}
+
+"""
+on conflict condition type for table "team_attributes"
+"""
+input team_attributes_on_conflict {
+  constraint: team_attributes_constraint!
+  update_columns: [team_attributes_update_column!]!
+  where: team_attributes_bool_exp
+}
+
+"""
+ordering options when selecting data from "team_attributes"
+"""
+input team_attributes_order_by {
+  buildupplaydribbling: order_by
+  buildupplaydribblingclass: order_by
+  buildupplaypassing: order_by
+  buildupplaypassingclass: order_by
+  buildupplaypositioningclass: order_by
+  buildupplayspeed: order_by
+  buildupplayspeedclass: order_by
+  chancecreationcrossing: order_by
+  chancecreationcrossingclass: order_by
+  chancecreationpassing: order_by
+  chancecreationpassingclass: order_by
+  chancecreationpositioningclass: order_by
+  chancecreationshooting: order_by
+  chancecreationshootingclass: order_by
+  date: order_by
+  defenceaggression: order_by
+  defenceaggressionclass: order_by
+  defencedefenderlineclass: order_by
+  defencepressure: order_by
+  defencepressureclass: order_by
+  defenceteamwidth: order_by
+  defenceteamwidthclass: order_by
+  id: order_by
+  team: team_order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}
+
+"""
+select columns of table "team_attributes"
+"""
+enum team_attributes_select_column {
+  """column name"""
+  buildupplaydribbling
+
+  """column name"""
+  buildupplaydribblingclass
+
+  """column name"""
+  buildupplaypassing
+
+  """column name"""
+  buildupplaypassingclass
+
+  """column name"""
+  buildupplaypositioningclass
+
+  """column name"""
+  buildupplayspeed
+
+  """column name"""
+  buildupplayspeedclass
+
+  """column name"""
+  chancecreationcrossing
+
+  """column name"""
+  chancecreationcrossingclass
+
+  """column name"""
+  chancecreationpassing
+
+  """column name"""
+  chancecreationpassingclass
+
+  """column name"""
+  chancecreationpositioningclass
+
+  """column name"""
+  chancecreationshooting
+
+  """column name"""
+  chancecreationshootingclass
+
+  """column name"""
+  date
+
+  """column name"""
+  defenceaggression
+
+  """column name"""
+  defenceaggressionclass
+
+  """column name"""
+  defencedefenderlineclass
+
+  """column name"""
+  defencepressure
+
+  """column name"""
+  defencepressureclass
+
+  """column name"""
+  defenceteamwidth
+
+  """column name"""
+  defenceteamwidthclass
+
+  """column name"""
+  id
+
+  """column name"""
+  team_api_id
+
+  """column name"""
+  team_fifa_api_id
+}
+
+"""
+input type for updating data in table "team_attributes"
+"""
+input team_attributes_set_input {
+  buildupplaydribbling: bigint
+  buildupplaydribblingclass: String
+  buildupplaypassing: bigint
+  buildupplaypassingclass: String
+  buildupplaypositioningclass: String
+  buildupplayspeed: bigint
+  buildupplayspeedclass: String
+  chancecreationcrossing: bigint
+  chancecreationcrossingclass: String
+  chancecreationpassing: bigint
+  chancecreationpassingclass: String
+  chancecreationpositioningclass: String
+  chancecreationshooting: bigint
+  chancecreationshootingclass: String
+  date: String
+  defenceaggression: bigint
+  defenceaggressionclass: String
+  defencedefenderlineclass: String
+  defencepressure: bigint
+  defencepressureclass: String
+  defenceteamwidth: bigint
+  defenceteamwidthclass: String
+  id: bigint
+  team_api_id: bigint
+  team_fifa_api_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type team_attributes_stddev_fields {
+  buildupplaydribbling: Float
+  buildupplaypassing: Float
+  buildupplayspeed: Float
+  chancecreationcrossing: Float
+  chancecreationpassing: Float
+  chancecreationshooting: Float
+  defenceaggression: Float
+  defencepressure: Float
+  defenceteamwidth: Float
+  id: Float
+  team_api_id: Float
+  team_fifa_api_id: Float
+}
+
+"""
+order by stddev() on columns of table "team_attributes"
+"""
+input team_attributes_stddev_order_by {
+  buildupplaydribbling: order_by
+  buildupplaypassing: order_by
+  buildupplayspeed: order_by
+  chancecreationcrossing: order_by
+  chancecreationpassing: order_by
+  chancecreationshooting: order_by
+  defenceaggression: order_by
+  defencepressure: order_by
+  defenceteamwidth: order_by
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type team_attributes_stddev_pop_fields {
+  buildupplaydribbling: Float
+  buildupplaypassing: Float
+  buildupplayspeed: Float
+  chancecreationcrossing: Float
+  chancecreationpassing: Float
+  chancecreationshooting: Float
+  defenceaggression: Float
+  defencepressure: Float
+  defenceteamwidth: Float
+  id: Float
+  team_api_id: Float
+  team_fifa_api_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "team_attributes"
+"""
+input team_attributes_stddev_pop_order_by {
+  buildupplaydribbling: order_by
+  buildupplaypassing: order_by
+  buildupplayspeed: order_by
+  chancecreationcrossing: order_by
+  chancecreationpassing: order_by
+  chancecreationshooting: order_by
+  defenceaggression: order_by
+  defencepressure: order_by
+  defenceteamwidth: order_by
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type team_attributes_stddev_samp_fields {
+  buildupplaydribbling: Float
+  buildupplaypassing: Float
+  buildupplayspeed: Float
+  chancecreationcrossing: Float
+  chancecreationpassing: Float
+  chancecreationshooting: Float
+  defenceaggression: Float
+  defencepressure: Float
+  defenceteamwidth: Float
+  id: Float
+  team_api_id: Float
+  team_fifa_api_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "team_attributes"
+"""
+input team_attributes_stddev_samp_order_by {
+  buildupplaydribbling: order_by
+  buildupplaypassing: order_by
+  buildupplayspeed: order_by
+  chancecreationcrossing: order_by
+  chancecreationpassing: order_by
+  chancecreationshooting: order_by
+  defenceaggression: order_by
+  defencepressure: order_by
+  defenceteamwidth: order_by
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}
+
+"""aggregate sum on columns"""
+type team_attributes_sum_fields {
+  buildupplaydribbling: bigint
+  buildupplaypassing: bigint
+  buildupplayspeed: bigint
+  chancecreationcrossing: bigint
+  chancecreationpassing: bigint
+  chancecreationshooting: bigint
+  defenceaggression: bigint
+  defencepressure: bigint
+  defenceteamwidth: bigint
+  id: bigint
+  team_api_id: bigint
+  team_fifa_api_id: bigint
+}
+
+"""
+order by sum() on columns of table "team_attributes"
+"""
+input team_attributes_sum_order_by {
+  buildupplaydribbling: order_by
+  buildupplaypassing: order_by
+  buildupplayspeed: order_by
+  chancecreationcrossing: order_by
+  chancecreationpassing: order_by
+  chancecreationshooting: order_by
+  defenceaggression: order_by
+  defencepressure: order_by
+  defenceteamwidth: order_by
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}
+
+"""
+update columns of table "team_attributes"
+"""
+enum team_attributes_update_column {
+  """column name"""
+  buildupplaydribbling
+
+  """column name"""
+  buildupplaydribblingclass
+
+  """column name"""
+  buildupplaypassing
+
+  """column name"""
+  buildupplaypassingclass
+
+  """column name"""
+  buildupplaypositioningclass
+
+  """column name"""
+  buildupplayspeed
+
+  """column name"""
+  buildupplayspeedclass
+
+  """column name"""
+  chancecreationcrossing
+
+  """column name"""
+  chancecreationcrossingclass
+
+  """column name"""
+  chancecreationpassing
+
+  """column name"""
+  chancecreationpassingclass
+
+  """column name"""
+  chancecreationpositioningclass
+
+  """column name"""
+  chancecreationshooting
+
+  """column name"""
+  chancecreationshootingclass
+
+  """column name"""
+  date
+
+  """column name"""
+  defenceaggression
+
+  """column name"""
+  defenceaggressionclass
+
+  """column name"""
+  defencedefenderlineclass
+
+  """column name"""
+  defencepressure
+
+  """column name"""
+  defencepressureclass
+
+  """column name"""
+  defenceteamwidth
+
+  """column name"""
+  defenceteamwidthclass
+
+  """column name"""
+  id
+
+  """column name"""
+  team_api_id
+
+  """column name"""
+  team_fifa_api_id
+}
+
+"""aggregate var_pop on columns"""
+type team_attributes_var_pop_fields {
+  buildupplaydribbling: Float
+  buildupplaypassing: Float
+  buildupplayspeed: Float
+  chancecreationcrossing: Float
+  chancecreationpassing: Float
+  chancecreationshooting: Float
+  defenceaggression: Float
+  defencepressure: Float
+  defenceteamwidth: Float
+  id: Float
+  team_api_id: Float
+  team_fifa_api_id: Float
+}
+
+"""
+order by var_pop() on columns of table "team_attributes"
+"""
+input team_attributes_var_pop_order_by {
+  buildupplaydribbling: order_by
+  buildupplaypassing: order_by
+  buildupplayspeed: order_by
+  chancecreationcrossing: order_by
+  chancecreationpassing: order_by
+  chancecreationshooting: order_by
+  defenceaggression: order_by
+  defencepressure: order_by
+  defenceteamwidth: order_by
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type team_attributes_var_samp_fields {
+  buildupplaydribbling: Float
+  buildupplaypassing: Float
+  buildupplayspeed: Float
+  chancecreationcrossing: Float
+  chancecreationpassing: Float
+  chancecreationshooting: Float
+  defenceaggression: Float
+  defencepressure: Float
+  defenceteamwidth: Float
+  id: Float
+  team_api_id: Float
+  team_fifa_api_id: Float
+}
+
+"""
+order by var_samp() on columns of table "team_attributes"
+"""
+input team_attributes_var_samp_order_by {
+  buildupplaydribbling: order_by
+  buildupplaypassing: order_by
+  buildupplayspeed: order_by
+  chancecreationcrossing: order_by
+  chancecreationpassing: order_by
+  chancecreationshooting: order_by
+  defenceaggression: order_by
+  defencepressure: order_by
+  defenceteamwidth: order_by
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}
+
+"""aggregate variance on columns"""
+type team_attributes_variance_fields {
+  buildupplaydribbling: Float
+  buildupplaypassing: Float
+  buildupplayspeed: Float
+  chancecreationcrossing: Float
+  chancecreationpassing: Float
+  chancecreationshooting: Float
+  defenceaggression: Float
+  defencepressure: Float
+  defenceteamwidth: Float
+  id: Float
+  team_api_id: Float
+  team_fifa_api_id: Float
+}
+
+"""
+order by variance() on columns of table "team_attributes"
+"""
+input team_attributes_variance_order_by {
+  buildupplaydribbling: order_by
+  buildupplaypassing: order_by
+  buildupplayspeed: order_by
+  chancecreationcrossing: order_by
+  chancecreationpassing: order_by
+  chancecreationshooting: order_by
+  defenceaggression: order_by
+  defencepressure: order_by
+  defenceteamwidth: order_by
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}
+
+"""aggregate avg on columns"""
+type team_avg_fields {
+  id: Float
+  team_api_id: Float
+  team_fifa_api_id: Float
+}
+
+"""
+order by avg() on columns of table "team"
+"""
+input team_avg_order_by {
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "team". All fields are combined with a logical 'AND'.
+"""
+input team_bool_exp {
+  _and: [team_bool_exp]
+  _not: team_bool_exp
+  _or: [team_bool_exp]
+  id: bigint_comparison_exp
+  team_api_id: bigint_comparison_exp
+  team_attributes: team_attributes_bool_exp
+  team_fifa_api_id: bigint_comparison_exp
+  team_long_name: String_comparison_exp
+  team_short_name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "team"
+"""
+enum team_constraint {
+  """unique or primary key constraint"""
+  idx_22532_sqlite_autoindex_team_1
+
+  """unique or primary key constraint"""
+  idx_22532_team_pkey
+}
+
+"""
+input type for incrementing integer columne in table "team"
+"""
+input team_inc_input {
+  id: bigint
+  team_api_id: bigint
+  team_fifa_api_id: bigint
+}
+
+"""
+input type for inserting data into table "team"
+"""
+input team_insert_input {
+  id: bigint
+  team_api_id: bigint
+  team_attributes: team_attributes_arr_rel_insert_input
+  team_fifa_api_id: bigint
+  team_long_name: String
+  team_short_name: String
+}
+
+"""aggregate max on columns"""
+type team_max_fields {
+  id: bigint
+  team_api_id: bigint
+  team_fifa_api_id: bigint
+  team_long_name: String
+  team_short_name: String
+}
+
+"""
+order by max() on columns of table "team"
+"""
+input team_max_order_by {
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+  team_long_name: order_by
+  team_short_name: order_by
+}
+
+"""aggregate min on columns"""
+type team_min_fields {
+  id: bigint
+  team_api_id: bigint
+  team_fifa_api_id: bigint
+  team_long_name: String
+  team_short_name: String
+}
+
+"""
+order by min() on columns of table "team"
+"""
+input team_min_order_by {
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+  team_long_name: order_by
+  team_short_name: order_by
+}
+
+"""
+response of any mutation on the table "team"
+"""
+type team_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [team!]!
+}
+
+"""
+input type for inserting object relation for remote table "team"
+"""
+input team_obj_rel_insert_input {
+  data: team_insert_input!
+  on_conflict: team_on_conflict
+}
+
+"""
+on conflict condition type for table "team"
+"""
+input team_on_conflict {
+  constraint: team_constraint!
+  update_columns: [team_update_column!]!
+  where: team_bool_exp
+}
+
+"""
+ordering options when selecting data from "team"
+"""
+input team_order_by {
+  id: order_by
+  team_api_id: order_by
+  team_attributes_aggregate: team_attributes_aggregate_order_by
+  team_fifa_api_id: order_by
+  team_long_name: order_by
+  team_short_name: order_by
+}
+
+"""
+select columns of table "team"
+"""
+enum team_select_column {
+  """column name"""
+  id
+
+  """column name"""
+  team_api_id
+
+  """column name"""
+  team_fifa_api_id
+
+  """column name"""
+  team_long_name
+
+  """column name"""
+  team_short_name
+}
+
+"""
+input type for updating data in table "team"
+"""
+input team_set_input {
+  id: bigint
+  team_api_id: bigint
+  team_fifa_api_id: bigint
+  team_long_name: String
+  team_short_name: String
+}
+
+"""aggregate stddev on columns"""
+type team_stddev_fields {
+  id: Float
+  team_api_id: Float
+  team_fifa_api_id: Float
+}
+
+"""
+order by stddev() on columns of table "team"
+"""
+input team_stddev_order_by {
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type team_stddev_pop_fields {
+  id: Float
+  team_api_id: Float
+  team_fifa_api_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "team"
+"""
+input team_stddev_pop_order_by {
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type team_stddev_samp_fields {
+  id: Float
+  team_api_id: Float
+  team_fifa_api_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "team"
+"""
+input team_stddev_samp_order_by {
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}
+
+"""aggregate sum on columns"""
+type team_sum_fields {
+  id: bigint
+  team_api_id: bigint
+  team_fifa_api_id: bigint
+}
+
+"""
+order by sum() on columns of table "team"
+"""
+input team_sum_order_by {
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}
+
+"""
+update columns of table "team"
+"""
+enum team_update_column {
+  """column name"""
+  id
+
+  """column name"""
+  team_api_id
+
+  """column name"""
+  team_fifa_api_id
+
+  """column name"""
+  team_long_name
+
+  """column name"""
+  team_short_name
+}
+
+"""aggregate var_pop on columns"""
+type team_var_pop_fields {
+  id: Float
+  team_api_id: Float
+  team_fifa_api_id: Float
+}
+
+"""
+order by var_pop() on columns of table "team"
+"""
+input team_var_pop_order_by {
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type team_var_samp_fields {
+  id: Float
+  team_api_id: Float
+  team_fifa_api_id: Float
+}
+
+"""
+order by var_samp() on columns of table "team"
+"""
+input team_var_samp_order_by {
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}
+
+"""aggregate variance on columns"""
+type team_variance_fields {
+  id: Float
+  team_api_id: Float
+  team_fifa_api_id: Float
+}
+
+"""
+order by variance() on columns of table "team"
+"""
+input team_variance_order_by {
+  id: order_by
+  team_api_id: order_by
+  team_fifa_api_id: order_by
+}

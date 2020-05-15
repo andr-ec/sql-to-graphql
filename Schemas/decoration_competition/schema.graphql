@@ -1,0 +1,1520 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "college"
+"""
+type college {
+  college_id: Int
+  college_location: String
+  leader_name: String
+
+  """An array relationship"""
+  members(
+    """distinct select on columns"""
+    distinct_on: [member_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_order_by!]
+
+    """filter the rows returned"""
+    where: member_bool_exp
+  ): [member!]!
+
+  """An aggregated array relationship"""
+  members_aggregate(
+    """distinct select on columns"""
+    distinct_on: [member_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_order_by!]
+
+    """filter the rows returned"""
+    where: member_bool_exp
+  ): member_aggregate!
+  name: String
+}
+
+"""
+aggregated selection of "college"
+"""
+type college_aggregate {
+  aggregate: college_aggregate_fields
+  nodes: [college!]!
+}
+
+"""
+aggregate fields of "college"
+"""
+type college_aggregate_fields {
+  avg: college_avg_fields
+  count(columns: [college_select_column!], distinct: Boolean): Int
+  max: college_max_fields
+  min: college_min_fields
+  stddev: college_stddev_fields
+  stddev_pop: college_stddev_pop_fields
+  stddev_samp: college_stddev_samp_fields
+  sum: college_sum_fields
+  var_pop: college_var_pop_fields
+  var_samp: college_var_samp_fields
+  variance: college_variance_fields
+}
+
+"""
+order by aggregate values of table "college"
+"""
+input college_aggregate_order_by {
+  avg: college_avg_order_by
+  count: order_by
+  max: college_max_order_by
+  min: college_min_order_by
+  stddev: college_stddev_order_by
+  stddev_pop: college_stddev_pop_order_by
+  stddev_samp: college_stddev_samp_order_by
+  sum: college_sum_order_by
+  var_pop: college_var_pop_order_by
+  var_samp: college_var_samp_order_by
+  variance: college_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "college"
+"""
+input college_arr_rel_insert_input {
+  data: [college_insert_input!]!
+  on_conflict: college_on_conflict
+}
+
+"""aggregate avg on columns"""
+type college_avg_fields {
+  college_id: Float
+}
+
+"""
+order by avg() on columns of table "college"
+"""
+input college_avg_order_by {
+  college_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "college". All fields are combined with a logical 'AND'.
+"""
+input college_bool_exp {
+  _and: [college_bool_exp]
+  _not: college_bool_exp
+  _or: [college_bool_exp]
+  college_id: Int_comparison_exp
+  college_location: String_comparison_exp
+  leader_name: String_comparison_exp
+  members: member_bool_exp
+  name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "college"
+"""
+enum college_constraint {
+  """unique or primary key constraint"""
+  idx_22360_sqlite_autoindex_college_1
+}
+
+"""
+input type for incrementing integer columne in table "college"
+"""
+input college_inc_input {
+  college_id: Int
+}
+
+"""
+input type for inserting data into table "college"
+"""
+input college_insert_input {
+  college_id: Int
+  college_location: String
+  leader_name: String
+  members: member_arr_rel_insert_input
+  name: String
+}
+
+"""aggregate max on columns"""
+type college_max_fields {
+  college_id: Int
+  college_location: String
+  leader_name: String
+  name: String
+}
+
+"""
+order by max() on columns of table "college"
+"""
+input college_max_order_by {
+  college_id: order_by
+  college_location: order_by
+  leader_name: order_by
+  name: order_by
+}
+
+"""aggregate min on columns"""
+type college_min_fields {
+  college_id: Int
+  college_location: String
+  leader_name: String
+  name: String
+}
+
+"""
+order by min() on columns of table "college"
+"""
+input college_min_order_by {
+  college_id: order_by
+  college_location: order_by
+  leader_name: order_by
+  name: order_by
+}
+
+"""
+response of any mutation on the table "college"
+"""
+type college_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [college!]!
+}
+
+"""
+input type for inserting object relation for remote table "college"
+"""
+input college_obj_rel_insert_input {
+  data: college_insert_input!
+  on_conflict: college_on_conflict
+}
+
+"""
+on conflict condition type for table "college"
+"""
+input college_on_conflict {
+  constraint: college_constraint!
+  update_columns: [college_update_column!]!
+  where: college_bool_exp
+}
+
+"""
+ordering options when selecting data from "college"
+"""
+input college_order_by {
+  college_id: order_by
+  college_location: order_by
+  leader_name: order_by
+  members_aggregate: member_aggregate_order_by
+  name: order_by
+}
+
+"""
+select columns of table "college"
+"""
+enum college_select_column {
+  """column name"""
+  college_id
+
+  """column name"""
+  college_location
+
+  """column name"""
+  leader_name
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "college"
+"""
+input college_set_input {
+  college_id: Int
+  college_location: String
+  leader_name: String
+  name: String
+}
+
+"""aggregate stddev on columns"""
+type college_stddev_fields {
+  college_id: Float
+}
+
+"""
+order by stddev() on columns of table "college"
+"""
+input college_stddev_order_by {
+  college_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type college_stddev_pop_fields {
+  college_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "college"
+"""
+input college_stddev_pop_order_by {
+  college_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type college_stddev_samp_fields {
+  college_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "college"
+"""
+input college_stddev_samp_order_by {
+  college_id: order_by
+}
+
+"""aggregate sum on columns"""
+type college_sum_fields {
+  college_id: Int
+}
+
+"""
+order by sum() on columns of table "college"
+"""
+input college_sum_order_by {
+  college_id: order_by
+}
+
+"""
+update columns of table "college"
+"""
+enum college_update_column {
+  """column name"""
+  college_id
+
+  """column name"""
+  college_location
+
+  """column name"""
+  leader_name
+
+  """column name"""
+  name
+}
+
+"""aggregate var_pop on columns"""
+type college_var_pop_fields {
+  college_id: Float
+}
+
+"""
+order by var_pop() on columns of table "college"
+"""
+input college_var_pop_order_by {
+  college_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type college_var_samp_fields {
+  college_id: Float
+}
+
+"""
+order by var_samp() on columns of table "college"
+"""
+input college_var_samp_order_by {
+  college_id: order_by
+}
+
+"""aggregate variance on columns"""
+type college_variance_fields {
+  college_id: Float
+}
+
+"""
+order by variance() on columns of table "college"
+"""
+input college_variance_order_by {
+  college_id: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "member"
+"""
+type member {
+  """An object relationship"""
+  college: college
+  college_id: Int
+  country: String
+  member_id: Int
+  name: String
+
+  """An array relationship"""
+  rounds(
+    """distinct select on columns"""
+    distinct_on: [round_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [round_order_by!]
+
+    """filter the rows returned"""
+    where: round_bool_exp
+  ): [round!]!
+
+  """An aggregated array relationship"""
+  rounds_aggregate(
+    """distinct select on columns"""
+    distinct_on: [round_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [round_order_by!]
+
+    """filter the rows returned"""
+    where: round_bool_exp
+  ): round_aggregate!
+}
+
+"""
+aggregated selection of "member"
+"""
+type member_aggregate {
+  aggregate: member_aggregate_fields
+  nodes: [member!]!
+}
+
+"""
+aggregate fields of "member"
+"""
+type member_aggregate_fields {
+  avg: member_avg_fields
+  count(columns: [member_select_column!], distinct: Boolean): Int
+  max: member_max_fields
+  min: member_min_fields
+  stddev: member_stddev_fields
+  stddev_pop: member_stddev_pop_fields
+  stddev_samp: member_stddev_samp_fields
+  sum: member_sum_fields
+  var_pop: member_var_pop_fields
+  var_samp: member_var_samp_fields
+  variance: member_variance_fields
+}
+
+"""
+order by aggregate values of table "member"
+"""
+input member_aggregate_order_by {
+  avg: member_avg_order_by
+  count: order_by
+  max: member_max_order_by
+  min: member_min_order_by
+  stddev: member_stddev_order_by
+  stddev_pop: member_stddev_pop_order_by
+  stddev_samp: member_stddev_samp_order_by
+  sum: member_sum_order_by
+  var_pop: member_var_pop_order_by
+  var_samp: member_var_samp_order_by
+  variance: member_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "member"
+"""
+input member_arr_rel_insert_input {
+  data: [member_insert_input!]!
+  on_conflict: member_on_conflict
+}
+
+"""aggregate avg on columns"""
+type member_avg_fields {
+  college_id: Float
+  member_id: Float
+}
+
+"""
+order by avg() on columns of table "member"
+"""
+input member_avg_order_by {
+  college_id: order_by
+  member_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "member". All fields are combined with a logical 'AND'.
+"""
+input member_bool_exp {
+  _and: [member_bool_exp]
+  _not: member_bool_exp
+  _or: [member_bool_exp]
+  college: college_bool_exp
+  college_id: Int_comparison_exp
+  country: String_comparison_exp
+  member_id: Int_comparison_exp
+  name: String_comparison_exp
+  rounds: round_bool_exp
+}
+
+"""
+unique or primary key constraints on table "member"
+"""
+enum member_constraint {
+  """unique or primary key constraint"""
+  idx_22366_sqlite_autoindex_member_1
+}
+
+"""
+input type for incrementing integer columne in table "member"
+"""
+input member_inc_input {
+  college_id: Int
+  member_id: Int
+}
+
+"""
+input type for inserting data into table "member"
+"""
+input member_insert_input {
+  college: college_obj_rel_insert_input
+  college_id: Int
+  country: String
+  member_id: Int
+  name: String
+  rounds: round_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type member_max_fields {
+  college_id: Int
+  country: String
+  member_id: Int
+  name: String
+}
+
+"""
+order by max() on columns of table "member"
+"""
+input member_max_order_by {
+  college_id: order_by
+  country: order_by
+  member_id: order_by
+  name: order_by
+}
+
+"""aggregate min on columns"""
+type member_min_fields {
+  college_id: Int
+  country: String
+  member_id: Int
+  name: String
+}
+
+"""
+order by min() on columns of table "member"
+"""
+input member_min_order_by {
+  college_id: order_by
+  country: order_by
+  member_id: order_by
+  name: order_by
+}
+
+"""
+response of any mutation on the table "member"
+"""
+type member_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [member!]!
+}
+
+"""
+input type for inserting object relation for remote table "member"
+"""
+input member_obj_rel_insert_input {
+  data: member_insert_input!
+  on_conflict: member_on_conflict
+}
+
+"""
+on conflict condition type for table "member"
+"""
+input member_on_conflict {
+  constraint: member_constraint!
+  update_columns: [member_update_column!]!
+  where: member_bool_exp
+}
+
+"""
+ordering options when selecting data from "member"
+"""
+input member_order_by {
+  college: college_order_by
+  college_id: order_by
+  country: order_by
+  member_id: order_by
+  name: order_by
+  rounds_aggregate: round_aggregate_order_by
+}
+
+"""
+select columns of table "member"
+"""
+enum member_select_column {
+  """column name"""
+  college_id
+
+  """column name"""
+  country
+
+  """column name"""
+  member_id
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "member"
+"""
+input member_set_input {
+  college_id: Int
+  country: String
+  member_id: Int
+  name: String
+}
+
+"""aggregate stddev on columns"""
+type member_stddev_fields {
+  college_id: Float
+  member_id: Float
+}
+
+"""
+order by stddev() on columns of table "member"
+"""
+input member_stddev_order_by {
+  college_id: order_by
+  member_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type member_stddev_pop_fields {
+  college_id: Float
+  member_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "member"
+"""
+input member_stddev_pop_order_by {
+  college_id: order_by
+  member_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type member_stddev_samp_fields {
+  college_id: Float
+  member_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "member"
+"""
+input member_stddev_samp_order_by {
+  college_id: order_by
+  member_id: order_by
+}
+
+"""aggregate sum on columns"""
+type member_sum_fields {
+  college_id: Int
+  member_id: Int
+}
+
+"""
+order by sum() on columns of table "member"
+"""
+input member_sum_order_by {
+  college_id: order_by
+  member_id: order_by
+}
+
+"""
+update columns of table "member"
+"""
+enum member_update_column {
+  """column name"""
+  college_id
+
+  """column name"""
+  country
+
+  """column name"""
+  member_id
+
+  """column name"""
+  name
+}
+
+"""aggregate var_pop on columns"""
+type member_var_pop_fields {
+  college_id: Float
+  member_id: Float
+}
+
+"""
+order by var_pop() on columns of table "member"
+"""
+input member_var_pop_order_by {
+  college_id: order_by
+  member_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type member_var_samp_fields {
+  college_id: Float
+  member_id: Float
+}
+
+"""
+order by var_samp() on columns of table "member"
+"""
+input member_var_samp_order_by {
+  college_id: order_by
+  member_id: order_by
+}
+
+"""aggregate variance on columns"""
+type member_variance_fields {
+  college_id: Float
+  member_id: Float
+}
+
+"""
+order by variance() on columns of table "member"
+"""
+input member_variance_order_by {
+  college_id: order_by
+  member_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "college"
+  """
+  delete_college(
+    """filter the rows which have to be deleted"""
+    where: college_bool_exp!
+  ): college_mutation_response
+
+  """
+  delete data from the table: "member"
+  """
+  delete_member(
+    """filter the rows which have to be deleted"""
+    where: member_bool_exp!
+  ): member_mutation_response
+
+  """
+  delete data from the table: "round"
+  """
+  delete_round(
+    """filter the rows which have to be deleted"""
+    where: round_bool_exp!
+  ): round_mutation_response
+
+  """
+  insert data into the table: "college"
+  """
+  insert_college(
+    """the rows to be inserted"""
+    objects: [college_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: college_on_conflict
+  ): college_mutation_response
+
+  """
+  insert data into the table: "member"
+  """
+  insert_member(
+    """the rows to be inserted"""
+    objects: [member_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: member_on_conflict
+  ): member_mutation_response
+
+  """
+  insert data into the table: "round"
+  """
+  insert_round(
+    """the rows to be inserted"""
+    objects: [round_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: round_on_conflict
+  ): round_mutation_response
+
+  """
+  update data of the table: "college"
+  """
+  update_college(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: college_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: college_set_input
+
+    """filter the rows which have to be updated"""
+    where: college_bool_exp!
+  ): college_mutation_response
+
+  """
+  update data of the table: "member"
+  """
+  update_member(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: member_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: member_set_input
+
+    """filter the rows which have to be updated"""
+    where: member_bool_exp!
+  ): member_mutation_response
+
+  """
+  update data of the table: "round"
+  """
+  update_round(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: round_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: round_set_input
+
+    """filter the rows which have to be updated"""
+    where: round_bool_exp!
+  ): round_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "college"
+  """
+  college(
+    """distinct select on columns"""
+    distinct_on: [college_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [college_order_by!]
+
+    """filter the rows returned"""
+    where: college_bool_exp
+  ): [college!]!
+
+  """
+  fetch aggregated fields from the table: "college"
+  """
+  college_aggregate(
+    """distinct select on columns"""
+    distinct_on: [college_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [college_order_by!]
+
+    """filter the rows returned"""
+    where: college_bool_exp
+  ): college_aggregate!
+
+  """
+  fetch data from the table: "member"
+  """
+  member(
+    """distinct select on columns"""
+    distinct_on: [member_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_order_by!]
+
+    """filter the rows returned"""
+    where: member_bool_exp
+  ): [member!]!
+
+  """
+  fetch aggregated fields from the table: "member"
+  """
+  member_aggregate(
+    """distinct select on columns"""
+    distinct_on: [member_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_order_by!]
+
+    """filter the rows returned"""
+    where: member_bool_exp
+  ): member_aggregate!
+
+  """
+  fetch data from the table: "round"
+  """
+  round(
+    """distinct select on columns"""
+    distinct_on: [round_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [round_order_by!]
+
+    """filter the rows returned"""
+    where: round_bool_exp
+  ): [round!]!
+
+  """
+  fetch aggregated fields from the table: "round"
+  """
+  round_aggregate(
+    """distinct select on columns"""
+    distinct_on: [round_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [round_order_by!]
+
+    """filter the rows returned"""
+    where: round_bool_exp
+  ): round_aggregate!
+}
+
+"""
+columns and relationships of "round"
+"""
+type round {
+  decoration_theme: String
+
+  """An object relationship"""
+  member: member
+  member_id: Int
+  rank_in_round: Int
+  round_id: Int
+}
+
+"""
+aggregated selection of "round"
+"""
+type round_aggregate {
+  aggregate: round_aggregate_fields
+  nodes: [round!]!
+}
+
+"""
+aggregate fields of "round"
+"""
+type round_aggregate_fields {
+  avg: round_avg_fields
+  count(columns: [round_select_column!], distinct: Boolean): Int
+  max: round_max_fields
+  min: round_min_fields
+  stddev: round_stddev_fields
+  stddev_pop: round_stddev_pop_fields
+  stddev_samp: round_stddev_samp_fields
+  sum: round_sum_fields
+  var_pop: round_var_pop_fields
+  var_samp: round_var_samp_fields
+  variance: round_variance_fields
+}
+
+"""
+order by aggregate values of table "round"
+"""
+input round_aggregate_order_by {
+  avg: round_avg_order_by
+  count: order_by
+  max: round_max_order_by
+  min: round_min_order_by
+  stddev: round_stddev_order_by
+  stddev_pop: round_stddev_pop_order_by
+  stddev_samp: round_stddev_samp_order_by
+  sum: round_sum_order_by
+  var_pop: round_var_pop_order_by
+  var_samp: round_var_samp_order_by
+  variance: round_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "round"
+"""
+input round_arr_rel_insert_input {
+  data: [round_insert_input!]!
+  on_conflict: round_on_conflict
+}
+
+"""aggregate avg on columns"""
+type round_avg_fields {
+  member_id: Float
+  rank_in_round: Float
+  round_id: Float
+}
+
+"""
+order by avg() on columns of table "round"
+"""
+input round_avg_order_by {
+  member_id: order_by
+  rank_in_round: order_by
+  round_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "round". All fields are combined with a logical 'AND'.
+"""
+input round_bool_exp {
+  _and: [round_bool_exp]
+  _not: round_bool_exp
+  _or: [round_bool_exp]
+  decoration_theme: String_comparison_exp
+  member: member_bool_exp
+  member_id: Int_comparison_exp
+  rank_in_round: Int_comparison_exp
+  round_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "round"
+"""
+enum round_constraint {
+  """unique or primary key constraint"""
+  idx_22372_sqlite_autoindex_round_1
+}
+
+"""
+input type for incrementing integer columne in table "round"
+"""
+input round_inc_input {
+  member_id: Int
+  rank_in_round: Int
+  round_id: Int
+}
+
+"""
+input type for inserting data into table "round"
+"""
+input round_insert_input {
+  decoration_theme: String
+  member: member_obj_rel_insert_input
+  member_id: Int
+  rank_in_round: Int
+  round_id: Int
+}
+
+"""aggregate max on columns"""
+type round_max_fields {
+  decoration_theme: String
+  member_id: Int
+  rank_in_round: Int
+  round_id: Int
+}
+
+"""
+order by max() on columns of table "round"
+"""
+input round_max_order_by {
+  decoration_theme: order_by
+  member_id: order_by
+  rank_in_round: order_by
+  round_id: order_by
+}
+
+"""aggregate min on columns"""
+type round_min_fields {
+  decoration_theme: String
+  member_id: Int
+  rank_in_round: Int
+  round_id: Int
+}
+
+"""
+order by min() on columns of table "round"
+"""
+input round_min_order_by {
+  decoration_theme: order_by
+  member_id: order_by
+  rank_in_round: order_by
+  round_id: order_by
+}
+
+"""
+response of any mutation on the table "round"
+"""
+type round_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [round!]!
+}
+
+"""
+input type for inserting object relation for remote table "round"
+"""
+input round_obj_rel_insert_input {
+  data: round_insert_input!
+  on_conflict: round_on_conflict
+}
+
+"""
+on conflict condition type for table "round"
+"""
+input round_on_conflict {
+  constraint: round_constraint!
+  update_columns: [round_update_column!]!
+  where: round_bool_exp
+}
+
+"""
+ordering options when selecting data from "round"
+"""
+input round_order_by {
+  decoration_theme: order_by
+  member: member_order_by
+  member_id: order_by
+  rank_in_round: order_by
+  round_id: order_by
+}
+
+"""
+select columns of table "round"
+"""
+enum round_select_column {
+  """column name"""
+  decoration_theme
+
+  """column name"""
+  member_id
+
+  """column name"""
+  rank_in_round
+
+  """column name"""
+  round_id
+}
+
+"""
+input type for updating data in table "round"
+"""
+input round_set_input {
+  decoration_theme: String
+  member_id: Int
+  rank_in_round: Int
+  round_id: Int
+}
+
+"""aggregate stddev on columns"""
+type round_stddev_fields {
+  member_id: Float
+  rank_in_round: Float
+  round_id: Float
+}
+
+"""
+order by stddev() on columns of table "round"
+"""
+input round_stddev_order_by {
+  member_id: order_by
+  rank_in_round: order_by
+  round_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type round_stddev_pop_fields {
+  member_id: Float
+  rank_in_round: Float
+  round_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "round"
+"""
+input round_stddev_pop_order_by {
+  member_id: order_by
+  rank_in_round: order_by
+  round_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type round_stddev_samp_fields {
+  member_id: Float
+  rank_in_round: Float
+  round_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "round"
+"""
+input round_stddev_samp_order_by {
+  member_id: order_by
+  rank_in_round: order_by
+  round_id: order_by
+}
+
+"""aggregate sum on columns"""
+type round_sum_fields {
+  member_id: Int
+  rank_in_round: Int
+  round_id: Int
+}
+
+"""
+order by sum() on columns of table "round"
+"""
+input round_sum_order_by {
+  member_id: order_by
+  rank_in_round: order_by
+  round_id: order_by
+}
+
+"""
+update columns of table "round"
+"""
+enum round_update_column {
+  """column name"""
+  decoration_theme
+
+  """column name"""
+  member_id
+
+  """column name"""
+  rank_in_round
+
+  """column name"""
+  round_id
+}
+
+"""aggregate var_pop on columns"""
+type round_var_pop_fields {
+  member_id: Float
+  rank_in_round: Float
+  round_id: Float
+}
+
+"""
+order by var_pop() on columns of table "round"
+"""
+input round_var_pop_order_by {
+  member_id: order_by
+  rank_in_round: order_by
+  round_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type round_var_samp_fields {
+  member_id: Float
+  rank_in_round: Float
+  round_id: Float
+}
+
+"""
+order by var_samp() on columns of table "round"
+"""
+input round_var_samp_order_by {
+  member_id: order_by
+  rank_in_round: order_by
+  round_id: order_by
+}
+
+"""aggregate variance on columns"""
+type round_variance_fields {
+  member_id: Float
+  rank_in_round: Float
+  round_id: Float
+}
+
+"""
+order by variance() on columns of table "round"
+"""
+input round_variance_order_by {
+  member_id: order_by
+  rank_in_round: order_by
+  round_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "college"
+  """
+  college(
+    """distinct select on columns"""
+    distinct_on: [college_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [college_order_by!]
+
+    """filter the rows returned"""
+    where: college_bool_exp
+  ): [college!]!
+
+  """
+  fetch aggregated fields from the table: "college"
+  """
+  college_aggregate(
+    """distinct select on columns"""
+    distinct_on: [college_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [college_order_by!]
+
+    """filter the rows returned"""
+    where: college_bool_exp
+  ): college_aggregate!
+
+  """
+  fetch data from the table: "member"
+  """
+  member(
+    """distinct select on columns"""
+    distinct_on: [member_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_order_by!]
+
+    """filter the rows returned"""
+    where: member_bool_exp
+  ): [member!]!
+
+  """
+  fetch aggregated fields from the table: "member"
+  """
+  member_aggregate(
+    """distinct select on columns"""
+    distinct_on: [member_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_order_by!]
+
+    """filter the rows returned"""
+    where: member_bool_exp
+  ): member_aggregate!
+
+  """
+  fetch data from the table: "round"
+  """
+  round(
+    """distinct select on columns"""
+    distinct_on: [round_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [round_order_by!]
+
+    """filter the rows returned"""
+    where: round_bool_exp
+  ): [round!]!
+
+  """
+  fetch aggregated fields from the table: "round"
+  """
+  round_aggregate(
+    """distinct select on columns"""
+    distinct_on: [round_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [round_order_by!]
+
+    """filter the rows returned"""
+    where: round_bool_exp
+  ): round_aggregate!
+}

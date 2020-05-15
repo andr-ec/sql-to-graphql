@@ -1,0 +1,1585 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "museum"
+"""
+type museum {
+  museum_id: Int
+  name: String
+  num_of_staff: Int
+  open_year: String
+
+  """An array relationship"""
+  visits(
+    """distinct select on columns"""
+    distinct_on: [visit_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visit_order_by!]
+
+    """filter the rows returned"""
+    where: visit_bool_exp
+  ): [visit!]!
+
+  """An aggregated array relationship"""
+  visits_aggregate(
+    """distinct select on columns"""
+    distinct_on: [visit_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visit_order_by!]
+
+    """filter the rows returned"""
+    where: visit_bool_exp
+  ): visit_aggregate!
+}
+
+"""
+aggregated selection of "museum"
+"""
+type museum_aggregate {
+  aggregate: museum_aggregate_fields
+  nodes: [museum!]!
+}
+
+"""
+aggregate fields of "museum"
+"""
+type museum_aggregate_fields {
+  avg: museum_avg_fields
+  count(columns: [museum_select_column!], distinct: Boolean): Int
+  max: museum_max_fields
+  min: museum_min_fields
+  stddev: museum_stddev_fields
+  stddev_pop: museum_stddev_pop_fields
+  stddev_samp: museum_stddev_samp_fields
+  sum: museum_sum_fields
+  var_pop: museum_var_pop_fields
+  var_samp: museum_var_samp_fields
+  variance: museum_variance_fields
+}
+
+"""
+order by aggregate values of table "museum"
+"""
+input museum_aggregate_order_by {
+  avg: museum_avg_order_by
+  count: order_by
+  max: museum_max_order_by
+  min: museum_min_order_by
+  stddev: museum_stddev_order_by
+  stddev_pop: museum_stddev_pop_order_by
+  stddev_samp: museum_stddev_samp_order_by
+  sum: museum_sum_order_by
+  var_pop: museum_var_pop_order_by
+  var_samp: museum_var_samp_order_by
+  variance: museum_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "museum"
+"""
+input museum_arr_rel_insert_input {
+  data: [museum_insert_input!]!
+  on_conflict: museum_on_conflict
+}
+
+"""aggregate avg on columns"""
+type museum_avg_fields {
+  museum_id: Float
+  num_of_staff: Float
+}
+
+"""
+order by avg() on columns of table "museum"
+"""
+input museum_avg_order_by {
+  museum_id: order_by
+  num_of_staff: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "museum". All fields are combined with a logical 'AND'.
+"""
+input museum_bool_exp {
+  _and: [museum_bool_exp]
+  _not: museum_bool_exp
+  _or: [museum_bool_exp]
+  museum_id: Int_comparison_exp
+  name: String_comparison_exp
+  num_of_staff: Int_comparison_exp
+  open_year: String_comparison_exp
+  visits: visit_bool_exp
+}
+
+"""
+unique or primary key constraints on table "museum"
+"""
+enum museum_constraint {
+  """unique or primary key constraint"""
+  idx_17809_sqlite_autoindex_museum_1
+}
+
+"""
+input type for incrementing integer columne in table "museum"
+"""
+input museum_inc_input {
+  museum_id: Int
+  num_of_staff: Int
+}
+
+"""
+input type for inserting data into table "museum"
+"""
+input museum_insert_input {
+  museum_id: Int
+  name: String
+  num_of_staff: Int
+  open_year: String
+  visits: visit_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type museum_max_fields {
+  museum_id: Int
+  name: String
+  num_of_staff: Int
+  open_year: String
+}
+
+"""
+order by max() on columns of table "museum"
+"""
+input museum_max_order_by {
+  museum_id: order_by
+  name: order_by
+  num_of_staff: order_by
+  open_year: order_by
+}
+
+"""aggregate min on columns"""
+type museum_min_fields {
+  museum_id: Int
+  name: String
+  num_of_staff: Int
+  open_year: String
+}
+
+"""
+order by min() on columns of table "museum"
+"""
+input museum_min_order_by {
+  museum_id: order_by
+  name: order_by
+  num_of_staff: order_by
+  open_year: order_by
+}
+
+"""
+response of any mutation on the table "museum"
+"""
+type museum_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [museum!]!
+}
+
+"""
+input type for inserting object relation for remote table "museum"
+"""
+input museum_obj_rel_insert_input {
+  data: museum_insert_input!
+  on_conflict: museum_on_conflict
+}
+
+"""
+on conflict condition type for table "museum"
+"""
+input museum_on_conflict {
+  constraint: museum_constraint!
+  update_columns: [museum_update_column!]!
+  where: museum_bool_exp
+}
+
+"""
+ordering options when selecting data from "museum"
+"""
+input museum_order_by {
+  museum_id: order_by
+  name: order_by
+  num_of_staff: order_by
+  open_year: order_by
+  visits_aggregate: visit_aggregate_order_by
+}
+
+"""
+select columns of table "museum"
+"""
+enum museum_select_column {
+  """column name"""
+  museum_id
+
+  """column name"""
+  name
+
+  """column name"""
+  num_of_staff
+
+  """column name"""
+  open_year
+}
+
+"""
+input type for updating data in table "museum"
+"""
+input museum_set_input {
+  museum_id: Int
+  name: String
+  num_of_staff: Int
+  open_year: String
+}
+
+"""aggregate stddev on columns"""
+type museum_stddev_fields {
+  museum_id: Float
+  num_of_staff: Float
+}
+
+"""
+order by stddev() on columns of table "museum"
+"""
+input museum_stddev_order_by {
+  museum_id: order_by
+  num_of_staff: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type museum_stddev_pop_fields {
+  museum_id: Float
+  num_of_staff: Float
+}
+
+"""
+order by stddev_pop() on columns of table "museum"
+"""
+input museum_stddev_pop_order_by {
+  museum_id: order_by
+  num_of_staff: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type museum_stddev_samp_fields {
+  museum_id: Float
+  num_of_staff: Float
+}
+
+"""
+order by stddev_samp() on columns of table "museum"
+"""
+input museum_stddev_samp_order_by {
+  museum_id: order_by
+  num_of_staff: order_by
+}
+
+"""aggregate sum on columns"""
+type museum_sum_fields {
+  museum_id: Int
+  num_of_staff: Int
+}
+
+"""
+order by sum() on columns of table "museum"
+"""
+input museum_sum_order_by {
+  museum_id: order_by
+  num_of_staff: order_by
+}
+
+"""
+update columns of table "museum"
+"""
+enum museum_update_column {
+  """column name"""
+  museum_id
+
+  """column name"""
+  name
+
+  """column name"""
+  num_of_staff
+
+  """column name"""
+  open_year
+}
+
+"""aggregate var_pop on columns"""
+type museum_var_pop_fields {
+  museum_id: Float
+  num_of_staff: Float
+}
+
+"""
+order by var_pop() on columns of table "museum"
+"""
+input museum_var_pop_order_by {
+  museum_id: order_by
+  num_of_staff: order_by
+}
+
+"""aggregate var_samp on columns"""
+type museum_var_samp_fields {
+  museum_id: Float
+  num_of_staff: Float
+}
+
+"""
+order by var_samp() on columns of table "museum"
+"""
+input museum_var_samp_order_by {
+  museum_id: order_by
+  num_of_staff: order_by
+}
+
+"""aggregate variance on columns"""
+type museum_variance_fields {
+  museum_id: Float
+  num_of_staff: Float
+}
+
+"""
+order by variance() on columns of table "museum"
+"""
+input museum_variance_order_by {
+  museum_id: order_by
+  num_of_staff: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "museum"
+  """
+  delete_museum(
+    """filter the rows which have to be deleted"""
+    where: museum_bool_exp!
+  ): museum_mutation_response
+
+  """
+  delete data from the table: "visit"
+  """
+  delete_visit(
+    """filter the rows which have to be deleted"""
+    where: visit_bool_exp!
+  ): visit_mutation_response
+
+  """
+  delete data from the table: "visitor"
+  """
+  delete_visitor(
+    """filter the rows which have to be deleted"""
+    where: visitor_bool_exp!
+  ): visitor_mutation_response
+
+  """
+  insert data into the table: "museum"
+  """
+  insert_museum(
+    """the rows to be inserted"""
+    objects: [museum_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: museum_on_conflict
+  ): museum_mutation_response
+
+  """
+  insert data into the table: "visit"
+  """
+  insert_visit(
+    """the rows to be inserted"""
+    objects: [visit_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: visit_on_conflict
+  ): visit_mutation_response
+
+  """
+  insert data into the table: "visitor"
+  """
+  insert_visitor(
+    """the rows to be inserted"""
+    objects: [visitor_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: visitor_on_conflict
+  ): visitor_mutation_response
+
+  """
+  update data of the table: "museum"
+  """
+  update_museum(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: museum_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: museum_set_input
+
+    """filter the rows which have to be updated"""
+    where: museum_bool_exp!
+  ): museum_mutation_response
+
+  """
+  update data of the table: "visit"
+  """
+  update_visit(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: visit_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: visit_set_input
+
+    """filter the rows which have to be updated"""
+    where: visit_bool_exp!
+  ): visit_mutation_response
+
+  """
+  update data of the table: "visitor"
+  """
+  update_visitor(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: visitor_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: visitor_set_input
+
+    """filter the rows which have to be updated"""
+    where: visitor_bool_exp!
+  ): visitor_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "museum"
+  """
+  museum(
+    """distinct select on columns"""
+    distinct_on: [museum_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [museum_order_by!]
+
+    """filter the rows returned"""
+    where: museum_bool_exp
+  ): [museum!]!
+
+  """
+  fetch aggregated fields from the table: "museum"
+  """
+  museum_aggregate(
+    """distinct select on columns"""
+    distinct_on: [museum_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [museum_order_by!]
+
+    """filter the rows returned"""
+    where: museum_bool_exp
+  ): museum_aggregate!
+
+  """
+  fetch data from the table: "visit"
+  """
+  visit(
+    """distinct select on columns"""
+    distinct_on: [visit_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visit_order_by!]
+
+    """filter the rows returned"""
+    where: visit_bool_exp
+  ): [visit!]!
+
+  """
+  fetch aggregated fields from the table: "visit"
+  """
+  visit_aggregate(
+    """distinct select on columns"""
+    distinct_on: [visit_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visit_order_by!]
+
+    """filter the rows returned"""
+    where: visit_bool_exp
+  ): visit_aggregate!
+
+  """
+  fetch data from the table: "visitor"
+  """
+  visitor(
+    """distinct select on columns"""
+    distinct_on: [visitor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visitor_order_by!]
+
+    """filter the rows returned"""
+    where: visitor_bool_exp
+  ): [visitor!]!
+
+  """
+  fetch aggregated fields from the table: "visitor"
+  """
+  visitor_aggregate(
+    """distinct select on columns"""
+    distinct_on: [visitor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visitor_order_by!]
+
+    """filter the rows returned"""
+    where: visitor_bool_exp
+  ): visitor_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "museum"
+  """
+  museum(
+    """distinct select on columns"""
+    distinct_on: [museum_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [museum_order_by!]
+
+    """filter the rows returned"""
+    where: museum_bool_exp
+  ): [museum!]!
+
+  """
+  fetch aggregated fields from the table: "museum"
+  """
+  museum_aggregate(
+    """distinct select on columns"""
+    distinct_on: [museum_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [museum_order_by!]
+
+    """filter the rows returned"""
+    where: museum_bool_exp
+  ): museum_aggregate!
+
+  """
+  fetch data from the table: "visit"
+  """
+  visit(
+    """distinct select on columns"""
+    distinct_on: [visit_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visit_order_by!]
+
+    """filter the rows returned"""
+    where: visit_bool_exp
+  ): [visit!]!
+
+  """
+  fetch aggregated fields from the table: "visit"
+  """
+  visit_aggregate(
+    """distinct select on columns"""
+    distinct_on: [visit_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visit_order_by!]
+
+    """filter the rows returned"""
+    where: visit_bool_exp
+  ): visit_aggregate!
+
+  """
+  fetch data from the table: "visitor"
+  """
+  visitor(
+    """distinct select on columns"""
+    distinct_on: [visitor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visitor_order_by!]
+
+    """filter the rows returned"""
+    where: visitor_bool_exp
+  ): [visitor!]!
+
+  """
+  fetch aggregated fields from the table: "visitor"
+  """
+  visitor_aggregate(
+    """distinct select on columns"""
+    distinct_on: [visitor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visitor_order_by!]
+
+    """filter the rows returned"""
+    where: visitor_bool_exp
+  ): visitor_aggregate!
+}
+
+"""
+columns and relationships of "visit"
+"""
+type visit {
+  """An object relationship"""
+  museum: museum
+  museum_id: Int
+  num_of_ticket: Int
+  total_spent: Float
+
+  """An object relationship"""
+  visitor: visitor
+  visitor_id: Int
+}
+
+"""
+aggregated selection of "visit"
+"""
+type visit_aggregate {
+  aggregate: visit_aggregate_fields
+  nodes: [visit!]!
+}
+
+"""
+aggregate fields of "visit"
+"""
+type visit_aggregate_fields {
+  avg: visit_avg_fields
+  count(columns: [visit_select_column!], distinct: Boolean): Int
+  max: visit_max_fields
+  min: visit_min_fields
+  stddev: visit_stddev_fields
+  stddev_pop: visit_stddev_pop_fields
+  stddev_samp: visit_stddev_samp_fields
+  sum: visit_sum_fields
+  var_pop: visit_var_pop_fields
+  var_samp: visit_var_samp_fields
+  variance: visit_variance_fields
+}
+
+"""
+order by aggregate values of table "visit"
+"""
+input visit_aggregate_order_by {
+  avg: visit_avg_order_by
+  count: order_by
+  max: visit_max_order_by
+  min: visit_min_order_by
+  stddev: visit_stddev_order_by
+  stddev_pop: visit_stddev_pop_order_by
+  stddev_samp: visit_stddev_samp_order_by
+  sum: visit_sum_order_by
+  var_pop: visit_var_pop_order_by
+  var_samp: visit_var_samp_order_by
+  variance: visit_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "visit"
+"""
+input visit_arr_rel_insert_input {
+  data: [visit_insert_input!]!
+  on_conflict: visit_on_conflict
+}
+
+"""aggregate avg on columns"""
+type visit_avg_fields {
+  museum_id: Float
+  num_of_ticket: Float
+  total_spent: Float
+  visitor_id: Float
+}
+
+"""
+order by avg() on columns of table "visit"
+"""
+input visit_avg_order_by {
+  museum_id: order_by
+  num_of_ticket: order_by
+  total_spent: order_by
+  visitor_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "visit". All fields are combined with a logical 'AND'.
+"""
+input visit_bool_exp {
+  _and: [visit_bool_exp]
+  _not: visit_bool_exp
+  _or: [visit_bool_exp]
+  museum: museum_bool_exp
+  museum_id: Int_comparison_exp
+  num_of_ticket: Int_comparison_exp
+  total_spent: Float_comparison_exp
+  visitor: visitor_bool_exp
+  visitor_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "visit"
+"""
+enum visit_constraint {
+  """unique or primary key constraint"""
+  idx_17821_sqlite_autoindex_visit_1
+}
+
+"""
+input type for incrementing integer columne in table "visit"
+"""
+input visit_inc_input {
+  museum_id: Int
+  num_of_ticket: Int
+  visitor_id: Int
+}
+
+"""
+input type for inserting data into table "visit"
+"""
+input visit_insert_input {
+  museum: museum_obj_rel_insert_input
+  museum_id: Int
+  num_of_ticket: Int
+  total_spent: Float
+  visitor: visitor_obj_rel_insert_input
+  visitor_id: Int
+}
+
+"""aggregate max on columns"""
+type visit_max_fields {
+  museum_id: Int
+  num_of_ticket: Int
+  total_spent: Float
+  visitor_id: Int
+}
+
+"""
+order by max() on columns of table "visit"
+"""
+input visit_max_order_by {
+  museum_id: order_by
+  num_of_ticket: order_by
+  total_spent: order_by
+  visitor_id: order_by
+}
+
+"""aggregate min on columns"""
+type visit_min_fields {
+  museum_id: Int
+  num_of_ticket: Int
+  total_spent: Float
+  visitor_id: Int
+}
+
+"""
+order by min() on columns of table "visit"
+"""
+input visit_min_order_by {
+  museum_id: order_by
+  num_of_ticket: order_by
+  total_spent: order_by
+  visitor_id: order_by
+}
+
+"""
+response of any mutation on the table "visit"
+"""
+type visit_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [visit!]!
+}
+
+"""
+input type for inserting object relation for remote table "visit"
+"""
+input visit_obj_rel_insert_input {
+  data: visit_insert_input!
+  on_conflict: visit_on_conflict
+}
+
+"""
+on conflict condition type for table "visit"
+"""
+input visit_on_conflict {
+  constraint: visit_constraint!
+  update_columns: [visit_update_column!]!
+  where: visit_bool_exp
+}
+
+"""
+ordering options when selecting data from "visit"
+"""
+input visit_order_by {
+  museum: museum_order_by
+  museum_id: order_by
+  num_of_ticket: order_by
+  total_spent: order_by
+  visitor: visitor_order_by
+  visitor_id: order_by
+}
+
+"""
+select columns of table "visit"
+"""
+enum visit_select_column {
+  """column name"""
+  museum_id
+
+  """column name"""
+  num_of_ticket
+
+  """column name"""
+  total_spent
+
+  """column name"""
+  visitor_id
+}
+
+"""
+input type for updating data in table "visit"
+"""
+input visit_set_input {
+  museum_id: Int
+  num_of_ticket: Int
+  total_spent: Float
+  visitor_id: Int
+}
+
+"""aggregate stddev on columns"""
+type visit_stddev_fields {
+  museum_id: Float
+  num_of_ticket: Float
+  total_spent: Float
+  visitor_id: Float
+}
+
+"""
+order by stddev() on columns of table "visit"
+"""
+input visit_stddev_order_by {
+  museum_id: order_by
+  num_of_ticket: order_by
+  total_spent: order_by
+  visitor_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type visit_stddev_pop_fields {
+  museum_id: Float
+  num_of_ticket: Float
+  total_spent: Float
+  visitor_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "visit"
+"""
+input visit_stddev_pop_order_by {
+  museum_id: order_by
+  num_of_ticket: order_by
+  total_spent: order_by
+  visitor_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type visit_stddev_samp_fields {
+  museum_id: Float
+  num_of_ticket: Float
+  total_spent: Float
+  visitor_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "visit"
+"""
+input visit_stddev_samp_order_by {
+  museum_id: order_by
+  num_of_ticket: order_by
+  total_spent: order_by
+  visitor_id: order_by
+}
+
+"""aggregate sum on columns"""
+type visit_sum_fields {
+  museum_id: Int
+  num_of_ticket: Int
+  total_spent: Float
+  visitor_id: Int
+}
+
+"""
+order by sum() on columns of table "visit"
+"""
+input visit_sum_order_by {
+  museum_id: order_by
+  num_of_ticket: order_by
+  total_spent: order_by
+  visitor_id: order_by
+}
+
+"""
+update columns of table "visit"
+"""
+enum visit_update_column {
+  """column name"""
+  museum_id
+
+  """column name"""
+  num_of_ticket
+
+  """column name"""
+  total_spent
+
+  """column name"""
+  visitor_id
+}
+
+"""aggregate var_pop on columns"""
+type visit_var_pop_fields {
+  museum_id: Float
+  num_of_ticket: Float
+  total_spent: Float
+  visitor_id: Float
+}
+
+"""
+order by var_pop() on columns of table "visit"
+"""
+input visit_var_pop_order_by {
+  museum_id: order_by
+  num_of_ticket: order_by
+  total_spent: order_by
+  visitor_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type visit_var_samp_fields {
+  museum_id: Float
+  num_of_ticket: Float
+  total_spent: Float
+  visitor_id: Float
+}
+
+"""
+order by var_samp() on columns of table "visit"
+"""
+input visit_var_samp_order_by {
+  museum_id: order_by
+  num_of_ticket: order_by
+  total_spent: order_by
+  visitor_id: order_by
+}
+
+"""aggregate variance on columns"""
+type visit_variance_fields {
+  museum_id: Float
+  num_of_ticket: Float
+  total_spent: Float
+  visitor_id: Float
+}
+
+"""
+order by variance() on columns of table "visit"
+"""
+input visit_variance_order_by {
+  museum_id: order_by
+  num_of_ticket: order_by
+  total_spent: order_by
+  visitor_id: order_by
+}
+
+"""
+columns and relationships of "visitor"
+"""
+type visitor {
+  age: Int
+  id: Int
+  level_of_membership: Int
+  name: String
+
+  """An array relationship"""
+  visits(
+    """distinct select on columns"""
+    distinct_on: [visit_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visit_order_by!]
+
+    """filter the rows returned"""
+    where: visit_bool_exp
+  ): [visit!]!
+
+  """An aggregated array relationship"""
+  visits_aggregate(
+    """distinct select on columns"""
+    distinct_on: [visit_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visit_order_by!]
+
+    """filter the rows returned"""
+    where: visit_bool_exp
+  ): visit_aggregate!
+}
+
+"""
+aggregated selection of "visitor"
+"""
+type visitor_aggregate {
+  aggregate: visitor_aggregate_fields
+  nodes: [visitor!]!
+}
+
+"""
+aggregate fields of "visitor"
+"""
+type visitor_aggregate_fields {
+  avg: visitor_avg_fields
+  count(columns: [visitor_select_column!], distinct: Boolean): Int
+  max: visitor_max_fields
+  min: visitor_min_fields
+  stddev: visitor_stddev_fields
+  stddev_pop: visitor_stddev_pop_fields
+  stddev_samp: visitor_stddev_samp_fields
+  sum: visitor_sum_fields
+  var_pop: visitor_var_pop_fields
+  var_samp: visitor_var_samp_fields
+  variance: visitor_variance_fields
+}
+
+"""
+order by aggregate values of table "visitor"
+"""
+input visitor_aggregate_order_by {
+  avg: visitor_avg_order_by
+  count: order_by
+  max: visitor_max_order_by
+  min: visitor_min_order_by
+  stddev: visitor_stddev_order_by
+  stddev_pop: visitor_stddev_pop_order_by
+  stddev_samp: visitor_stddev_samp_order_by
+  sum: visitor_sum_order_by
+  var_pop: visitor_var_pop_order_by
+  var_samp: visitor_var_samp_order_by
+  variance: visitor_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "visitor"
+"""
+input visitor_arr_rel_insert_input {
+  data: [visitor_insert_input!]!
+  on_conflict: visitor_on_conflict
+}
+
+"""aggregate avg on columns"""
+type visitor_avg_fields {
+  age: Float
+  id: Float
+  level_of_membership: Float
+}
+
+"""
+order by avg() on columns of table "visitor"
+"""
+input visitor_avg_order_by {
+  age: order_by
+  id: order_by
+  level_of_membership: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "visitor". All fields are combined with a logical 'AND'.
+"""
+input visitor_bool_exp {
+  _and: [visitor_bool_exp]
+  _not: visitor_bool_exp
+  _or: [visitor_bool_exp]
+  age: Int_comparison_exp
+  id: Int_comparison_exp
+  level_of_membership: Int_comparison_exp
+  name: String_comparison_exp
+  visits: visit_bool_exp
+}
+
+"""
+unique or primary key constraints on table "visitor"
+"""
+enum visitor_constraint {
+  """unique or primary key constraint"""
+  idx_17815_sqlite_autoindex_visitor_1
+}
+
+"""
+input type for incrementing integer columne in table "visitor"
+"""
+input visitor_inc_input {
+  age: Int
+  id: Int
+  level_of_membership: Int
+}
+
+"""
+input type for inserting data into table "visitor"
+"""
+input visitor_insert_input {
+  age: Int
+  id: Int
+  level_of_membership: Int
+  name: String
+  visits: visit_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type visitor_max_fields {
+  age: Int
+  id: Int
+  level_of_membership: Int
+  name: String
+}
+
+"""
+order by max() on columns of table "visitor"
+"""
+input visitor_max_order_by {
+  age: order_by
+  id: order_by
+  level_of_membership: order_by
+  name: order_by
+}
+
+"""aggregate min on columns"""
+type visitor_min_fields {
+  age: Int
+  id: Int
+  level_of_membership: Int
+  name: String
+}
+
+"""
+order by min() on columns of table "visitor"
+"""
+input visitor_min_order_by {
+  age: order_by
+  id: order_by
+  level_of_membership: order_by
+  name: order_by
+}
+
+"""
+response of any mutation on the table "visitor"
+"""
+type visitor_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [visitor!]!
+}
+
+"""
+input type for inserting object relation for remote table "visitor"
+"""
+input visitor_obj_rel_insert_input {
+  data: visitor_insert_input!
+  on_conflict: visitor_on_conflict
+}
+
+"""
+on conflict condition type for table "visitor"
+"""
+input visitor_on_conflict {
+  constraint: visitor_constraint!
+  update_columns: [visitor_update_column!]!
+  where: visitor_bool_exp
+}
+
+"""
+ordering options when selecting data from "visitor"
+"""
+input visitor_order_by {
+  age: order_by
+  id: order_by
+  level_of_membership: order_by
+  name: order_by
+  visits_aggregate: visit_aggregate_order_by
+}
+
+"""
+select columns of table "visitor"
+"""
+enum visitor_select_column {
+  """column name"""
+  age
+
+  """column name"""
+  id
+
+  """column name"""
+  level_of_membership
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "visitor"
+"""
+input visitor_set_input {
+  age: Int
+  id: Int
+  level_of_membership: Int
+  name: String
+}
+
+"""aggregate stddev on columns"""
+type visitor_stddev_fields {
+  age: Float
+  id: Float
+  level_of_membership: Float
+}
+
+"""
+order by stddev() on columns of table "visitor"
+"""
+input visitor_stddev_order_by {
+  age: order_by
+  id: order_by
+  level_of_membership: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type visitor_stddev_pop_fields {
+  age: Float
+  id: Float
+  level_of_membership: Float
+}
+
+"""
+order by stddev_pop() on columns of table "visitor"
+"""
+input visitor_stddev_pop_order_by {
+  age: order_by
+  id: order_by
+  level_of_membership: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type visitor_stddev_samp_fields {
+  age: Float
+  id: Float
+  level_of_membership: Float
+}
+
+"""
+order by stddev_samp() on columns of table "visitor"
+"""
+input visitor_stddev_samp_order_by {
+  age: order_by
+  id: order_by
+  level_of_membership: order_by
+}
+
+"""aggregate sum on columns"""
+type visitor_sum_fields {
+  age: Int
+  id: Int
+  level_of_membership: Int
+}
+
+"""
+order by sum() on columns of table "visitor"
+"""
+input visitor_sum_order_by {
+  age: order_by
+  id: order_by
+  level_of_membership: order_by
+}
+
+"""
+update columns of table "visitor"
+"""
+enum visitor_update_column {
+  """column name"""
+  age
+
+  """column name"""
+  id
+
+  """column name"""
+  level_of_membership
+
+  """column name"""
+  name
+}
+
+"""aggregate var_pop on columns"""
+type visitor_var_pop_fields {
+  age: Float
+  id: Float
+  level_of_membership: Float
+}
+
+"""
+order by var_pop() on columns of table "visitor"
+"""
+input visitor_var_pop_order_by {
+  age: order_by
+  id: order_by
+  level_of_membership: order_by
+}
+
+"""aggregate var_samp on columns"""
+type visitor_var_samp_fields {
+  age: Float
+  id: Float
+  level_of_membership: Float
+}
+
+"""
+order by var_samp() on columns of table "visitor"
+"""
+input visitor_var_samp_order_by {
+  age: order_by
+  id: order_by
+  level_of_membership: order_by
+}
+
+"""aggregate variance on columns"""
+type visitor_variance_fields {
+  age: Float
+  id: Float
+  level_of_membership: Float
+}
+
+"""
+order by variance() on columns of table "visitor"
+"""
+input visitor_variance_order_by {
+  age: order_by
+  id: order_by
+  level_of_membership: order_by
+}

@@ -1,0 +1,1647 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "film"
+"""
+type film {
+  director: String
+  film_id: Int
+
+  """An array relationship"""
+  film_market_estimations(
+    """distinct select on columns"""
+    distinct_on: [film_market_estimation_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_market_estimation_order_by!]
+
+    """filter the rows returned"""
+    where: film_market_estimation_bool_exp
+  ): [film_market_estimation!]!
+
+  """An aggregated array relationship"""
+  film_market_estimations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_market_estimation_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_market_estimation_order_by!]
+
+    """filter the rows returned"""
+    where: film_market_estimation_bool_exp
+  ): film_market_estimation_aggregate!
+  gross_in_dollar: Int
+  studio: String
+  title: String
+}
+
+"""
+aggregated selection of "film"
+"""
+type film_aggregate {
+  aggregate: film_aggregate_fields
+  nodes: [film!]!
+}
+
+"""
+aggregate fields of "film"
+"""
+type film_aggregate_fields {
+  avg: film_avg_fields
+  count(columns: [film_select_column!], distinct: Boolean): Int
+  max: film_max_fields
+  min: film_min_fields
+  stddev: film_stddev_fields
+  stddev_pop: film_stddev_pop_fields
+  stddev_samp: film_stddev_samp_fields
+  sum: film_sum_fields
+  var_pop: film_var_pop_fields
+  var_samp: film_var_samp_fields
+  variance: film_variance_fields
+}
+
+"""
+order by aggregate values of table "film"
+"""
+input film_aggregate_order_by {
+  avg: film_avg_order_by
+  count: order_by
+  max: film_max_order_by
+  min: film_min_order_by
+  stddev: film_stddev_order_by
+  stddev_pop: film_stddev_pop_order_by
+  stddev_samp: film_stddev_samp_order_by
+  sum: film_sum_order_by
+  var_pop: film_var_pop_order_by
+  var_samp: film_var_samp_order_by
+  variance: film_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "film"
+"""
+input film_arr_rel_insert_input {
+  data: [film_insert_input!]!
+  on_conflict: film_on_conflict
+}
+
+"""aggregate avg on columns"""
+type film_avg_fields {
+  film_id: Float
+  gross_in_dollar: Float
+}
+
+"""
+order by avg() on columns of table "film"
+"""
+input film_avg_order_by {
+  film_id: order_by
+  gross_in_dollar: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "film". All fields are combined with a logical 'AND'.
+"""
+input film_bool_exp {
+  _and: [film_bool_exp]
+  _not: film_bool_exp
+  _or: [film_bool_exp]
+  director: String_comparison_exp
+  film_id: Int_comparison_exp
+  film_market_estimations: film_market_estimation_bool_exp
+  gross_in_dollar: Int_comparison_exp
+  studio: String_comparison_exp
+  title: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "film"
+"""
+enum film_constraint {
+  """unique or primary key constraint"""
+  idx_26398_sqlite_autoindex_film_1
+}
+
+"""
+input type for incrementing integer columne in table "film"
+"""
+input film_inc_input {
+  film_id: Int
+  gross_in_dollar: Int
+}
+
+"""
+input type for inserting data into table "film"
+"""
+input film_insert_input {
+  director: String
+  film_id: Int
+  film_market_estimations: film_market_estimation_arr_rel_insert_input
+  gross_in_dollar: Int
+  studio: String
+  title: String
+}
+
+"""
+columns and relationships of "film_market_estimation"
+"""
+type film_market_estimation {
+  estimation_id: Int
+
+  """An object relationship"""
+  film: film
+  film_id: Int
+  high_estimate: Float
+  low_estimate: Float
+
+  """An object relationship"""
+  market: market
+  market_id: Int
+  type: String
+  year: Int
+}
+
+"""
+aggregated selection of "film_market_estimation"
+"""
+type film_market_estimation_aggregate {
+  aggregate: film_market_estimation_aggregate_fields
+  nodes: [film_market_estimation!]!
+}
+
+"""
+aggregate fields of "film_market_estimation"
+"""
+type film_market_estimation_aggregate_fields {
+  avg: film_market_estimation_avg_fields
+  count(columns: [film_market_estimation_select_column!], distinct: Boolean): Int
+  max: film_market_estimation_max_fields
+  min: film_market_estimation_min_fields
+  stddev: film_market_estimation_stddev_fields
+  stddev_pop: film_market_estimation_stddev_pop_fields
+  stddev_samp: film_market_estimation_stddev_samp_fields
+  sum: film_market_estimation_sum_fields
+  var_pop: film_market_estimation_var_pop_fields
+  var_samp: film_market_estimation_var_samp_fields
+  variance: film_market_estimation_variance_fields
+}
+
+"""
+order by aggregate values of table "film_market_estimation"
+"""
+input film_market_estimation_aggregate_order_by {
+  avg: film_market_estimation_avg_order_by
+  count: order_by
+  max: film_market_estimation_max_order_by
+  min: film_market_estimation_min_order_by
+  stddev: film_market_estimation_stddev_order_by
+  stddev_pop: film_market_estimation_stddev_pop_order_by
+  stddev_samp: film_market_estimation_stddev_samp_order_by
+  sum: film_market_estimation_sum_order_by
+  var_pop: film_market_estimation_var_pop_order_by
+  var_samp: film_market_estimation_var_samp_order_by
+  variance: film_market_estimation_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "film_market_estimation"
+"""
+input film_market_estimation_arr_rel_insert_input {
+  data: [film_market_estimation_insert_input!]!
+  on_conflict: film_market_estimation_on_conflict
+}
+
+"""aggregate avg on columns"""
+type film_market_estimation_avg_fields {
+  estimation_id: Float
+  film_id: Float
+  high_estimate: Float
+  low_estimate: Float
+  market_id: Float
+  year: Float
+}
+
+"""
+order by avg() on columns of table "film_market_estimation"
+"""
+input film_market_estimation_avg_order_by {
+  estimation_id: order_by
+  film_id: order_by
+  high_estimate: order_by
+  low_estimate: order_by
+  market_id: order_by
+  year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "film_market_estimation". All fields are combined with a logical 'AND'.
+"""
+input film_market_estimation_bool_exp {
+  _and: [film_market_estimation_bool_exp]
+  _not: film_market_estimation_bool_exp
+  _or: [film_market_estimation_bool_exp]
+  estimation_id: Int_comparison_exp
+  film: film_bool_exp
+  film_id: Int_comparison_exp
+  high_estimate: Float_comparison_exp
+  low_estimate: Float_comparison_exp
+  market: market_bool_exp
+  market_id: Int_comparison_exp
+  type: String_comparison_exp
+  year: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "film_market_estimation"
+"""
+enum film_market_estimation_constraint {
+  """unique or primary key constraint"""
+  idx_26410_sqlite_autoindex_film_market_estimation_1
+}
+
+"""
+input type for incrementing integer columne in table "film_market_estimation"
+"""
+input film_market_estimation_inc_input {
+  estimation_id: Int
+  film_id: Int
+  market_id: Int
+  year: Int
+}
+
+"""
+input type for inserting data into table "film_market_estimation"
+"""
+input film_market_estimation_insert_input {
+  estimation_id: Int
+  film: film_obj_rel_insert_input
+  film_id: Int
+  high_estimate: Float
+  low_estimate: Float
+  market: market_obj_rel_insert_input
+  market_id: Int
+  type: String
+  year: Int
+}
+
+"""aggregate max on columns"""
+type film_market_estimation_max_fields {
+  estimation_id: Int
+  film_id: Int
+  high_estimate: Float
+  low_estimate: Float
+  market_id: Int
+  type: String
+  year: Int
+}
+
+"""
+order by max() on columns of table "film_market_estimation"
+"""
+input film_market_estimation_max_order_by {
+  estimation_id: order_by
+  film_id: order_by
+  high_estimate: order_by
+  low_estimate: order_by
+  market_id: order_by
+  type: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type film_market_estimation_min_fields {
+  estimation_id: Int
+  film_id: Int
+  high_estimate: Float
+  low_estimate: Float
+  market_id: Int
+  type: String
+  year: Int
+}
+
+"""
+order by min() on columns of table "film_market_estimation"
+"""
+input film_market_estimation_min_order_by {
+  estimation_id: order_by
+  film_id: order_by
+  high_estimate: order_by
+  low_estimate: order_by
+  market_id: order_by
+  type: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "film_market_estimation"
+"""
+type film_market_estimation_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [film_market_estimation!]!
+}
+
+"""
+input type for inserting object relation for remote table "film_market_estimation"
+"""
+input film_market_estimation_obj_rel_insert_input {
+  data: film_market_estimation_insert_input!
+  on_conflict: film_market_estimation_on_conflict
+}
+
+"""
+on conflict condition type for table "film_market_estimation"
+"""
+input film_market_estimation_on_conflict {
+  constraint: film_market_estimation_constraint!
+  update_columns: [film_market_estimation_update_column!]!
+  where: film_market_estimation_bool_exp
+}
+
+"""
+ordering options when selecting data from "film_market_estimation"
+"""
+input film_market_estimation_order_by {
+  estimation_id: order_by
+  film: film_order_by
+  film_id: order_by
+  high_estimate: order_by
+  low_estimate: order_by
+  market: market_order_by
+  market_id: order_by
+  type: order_by
+  year: order_by
+}
+
+"""
+select columns of table "film_market_estimation"
+"""
+enum film_market_estimation_select_column {
+  """column name"""
+  estimation_id
+
+  """column name"""
+  film_id
+
+  """column name"""
+  high_estimate
+
+  """column name"""
+  low_estimate
+
+  """column name"""
+  market_id
+
+  """column name"""
+  type
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "film_market_estimation"
+"""
+input film_market_estimation_set_input {
+  estimation_id: Int
+  film_id: Int
+  high_estimate: Float
+  low_estimate: Float
+  market_id: Int
+  type: String
+  year: Int
+}
+
+"""aggregate stddev on columns"""
+type film_market_estimation_stddev_fields {
+  estimation_id: Float
+  film_id: Float
+  high_estimate: Float
+  low_estimate: Float
+  market_id: Float
+  year: Float
+}
+
+"""
+order by stddev() on columns of table "film_market_estimation"
+"""
+input film_market_estimation_stddev_order_by {
+  estimation_id: order_by
+  film_id: order_by
+  high_estimate: order_by
+  low_estimate: order_by
+  market_id: order_by
+  year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type film_market_estimation_stddev_pop_fields {
+  estimation_id: Float
+  film_id: Float
+  high_estimate: Float
+  low_estimate: Float
+  market_id: Float
+  year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "film_market_estimation"
+"""
+input film_market_estimation_stddev_pop_order_by {
+  estimation_id: order_by
+  film_id: order_by
+  high_estimate: order_by
+  low_estimate: order_by
+  market_id: order_by
+  year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type film_market_estimation_stddev_samp_fields {
+  estimation_id: Float
+  film_id: Float
+  high_estimate: Float
+  low_estimate: Float
+  market_id: Float
+  year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "film_market_estimation"
+"""
+input film_market_estimation_stddev_samp_order_by {
+  estimation_id: order_by
+  film_id: order_by
+  high_estimate: order_by
+  low_estimate: order_by
+  market_id: order_by
+  year: order_by
+}
+
+"""aggregate sum on columns"""
+type film_market_estimation_sum_fields {
+  estimation_id: Int
+  film_id: Int
+  high_estimate: Float
+  low_estimate: Float
+  market_id: Int
+  year: Int
+}
+
+"""
+order by sum() on columns of table "film_market_estimation"
+"""
+input film_market_estimation_sum_order_by {
+  estimation_id: order_by
+  film_id: order_by
+  high_estimate: order_by
+  low_estimate: order_by
+  market_id: order_by
+  year: order_by
+}
+
+"""
+update columns of table "film_market_estimation"
+"""
+enum film_market_estimation_update_column {
+  """column name"""
+  estimation_id
+
+  """column name"""
+  film_id
+
+  """column name"""
+  high_estimate
+
+  """column name"""
+  low_estimate
+
+  """column name"""
+  market_id
+
+  """column name"""
+  type
+
+  """column name"""
+  year
+}
+
+"""aggregate var_pop on columns"""
+type film_market_estimation_var_pop_fields {
+  estimation_id: Float
+  film_id: Float
+  high_estimate: Float
+  low_estimate: Float
+  market_id: Float
+  year: Float
+}
+
+"""
+order by var_pop() on columns of table "film_market_estimation"
+"""
+input film_market_estimation_var_pop_order_by {
+  estimation_id: order_by
+  film_id: order_by
+  high_estimate: order_by
+  low_estimate: order_by
+  market_id: order_by
+  year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type film_market_estimation_var_samp_fields {
+  estimation_id: Float
+  film_id: Float
+  high_estimate: Float
+  low_estimate: Float
+  market_id: Float
+  year: Float
+}
+
+"""
+order by var_samp() on columns of table "film_market_estimation"
+"""
+input film_market_estimation_var_samp_order_by {
+  estimation_id: order_by
+  film_id: order_by
+  high_estimate: order_by
+  low_estimate: order_by
+  market_id: order_by
+  year: order_by
+}
+
+"""aggregate variance on columns"""
+type film_market_estimation_variance_fields {
+  estimation_id: Float
+  film_id: Float
+  high_estimate: Float
+  low_estimate: Float
+  market_id: Float
+  year: Float
+}
+
+"""
+order by variance() on columns of table "film_market_estimation"
+"""
+input film_market_estimation_variance_order_by {
+  estimation_id: order_by
+  film_id: order_by
+  high_estimate: order_by
+  low_estimate: order_by
+  market_id: order_by
+  year: order_by
+}
+
+"""aggregate max on columns"""
+type film_max_fields {
+  director: String
+  film_id: Int
+  gross_in_dollar: Int
+  studio: String
+  title: String
+}
+
+"""
+order by max() on columns of table "film"
+"""
+input film_max_order_by {
+  director: order_by
+  film_id: order_by
+  gross_in_dollar: order_by
+  studio: order_by
+  title: order_by
+}
+
+"""aggregate min on columns"""
+type film_min_fields {
+  director: String
+  film_id: Int
+  gross_in_dollar: Int
+  studio: String
+  title: String
+}
+
+"""
+order by min() on columns of table "film"
+"""
+input film_min_order_by {
+  director: order_by
+  film_id: order_by
+  gross_in_dollar: order_by
+  studio: order_by
+  title: order_by
+}
+
+"""
+response of any mutation on the table "film"
+"""
+type film_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [film!]!
+}
+
+"""
+input type for inserting object relation for remote table "film"
+"""
+input film_obj_rel_insert_input {
+  data: film_insert_input!
+  on_conflict: film_on_conflict
+}
+
+"""
+on conflict condition type for table "film"
+"""
+input film_on_conflict {
+  constraint: film_constraint!
+  update_columns: [film_update_column!]!
+  where: film_bool_exp
+}
+
+"""
+ordering options when selecting data from "film"
+"""
+input film_order_by {
+  director: order_by
+  film_id: order_by
+  film_market_estimations_aggregate: film_market_estimation_aggregate_order_by
+  gross_in_dollar: order_by
+  studio: order_by
+  title: order_by
+}
+
+"""
+select columns of table "film"
+"""
+enum film_select_column {
+  """column name"""
+  director
+
+  """column name"""
+  film_id
+
+  """column name"""
+  gross_in_dollar
+
+  """column name"""
+  studio
+
+  """column name"""
+  title
+}
+
+"""
+input type for updating data in table "film"
+"""
+input film_set_input {
+  director: String
+  film_id: Int
+  gross_in_dollar: Int
+  studio: String
+  title: String
+}
+
+"""aggregate stddev on columns"""
+type film_stddev_fields {
+  film_id: Float
+  gross_in_dollar: Float
+}
+
+"""
+order by stddev() on columns of table "film"
+"""
+input film_stddev_order_by {
+  film_id: order_by
+  gross_in_dollar: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type film_stddev_pop_fields {
+  film_id: Float
+  gross_in_dollar: Float
+}
+
+"""
+order by stddev_pop() on columns of table "film"
+"""
+input film_stddev_pop_order_by {
+  film_id: order_by
+  gross_in_dollar: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type film_stddev_samp_fields {
+  film_id: Float
+  gross_in_dollar: Float
+}
+
+"""
+order by stddev_samp() on columns of table "film"
+"""
+input film_stddev_samp_order_by {
+  film_id: order_by
+  gross_in_dollar: order_by
+}
+
+"""aggregate sum on columns"""
+type film_sum_fields {
+  film_id: Int
+  gross_in_dollar: Int
+}
+
+"""
+order by sum() on columns of table "film"
+"""
+input film_sum_order_by {
+  film_id: order_by
+  gross_in_dollar: order_by
+}
+
+"""
+update columns of table "film"
+"""
+enum film_update_column {
+  """column name"""
+  director
+
+  """column name"""
+  film_id
+
+  """column name"""
+  gross_in_dollar
+
+  """column name"""
+  studio
+
+  """column name"""
+  title
+}
+
+"""aggregate var_pop on columns"""
+type film_var_pop_fields {
+  film_id: Float
+  gross_in_dollar: Float
+}
+
+"""
+order by var_pop() on columns of table "film"
+"""
+input film_var_pop_order_by {
+  film_id: order_by
+  gross_in_dollar: order_by
+}
+
+"""aggregate var_samp on columns"""
+type film_var_samp_fields {
+  film_id: Float
+  gross_in_dollar: Float
+}
+
+"""
+order by var_samp() on columns of table "film"
+"""
+input film_var_samp_order_by {
+  film_id: order_by
+  gross_in_dollar: order_by
+}
+
+"""aggregate variance on columns"""
+type film_variance_fields {
+  film_id: Float
+  gross_in_dollar: Float
+}
+
+"""
+order by variance() on columns of table "film"
+"""
+input film_variance_order_by {
+  film_id: order_by
+  gross_in_dollar: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "market"
+"""
+type market {
+  country: String
+
+  """An array relationship"""
+  film_market_estimations(
+    """distinct select on columns"""
+    distinct_on: [film_market_estimation_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_market_estimation_order_by!]
+
+    """filter the rows returned"""
+    where: film_market_estimation_bool_exp
+  ): [film_market_estimation!]!
+
+  """An aggregated array relationship"""
+  film_market_estimations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_market_estimation_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_market_estimation_order_by!]
+
+    """filter the rows returned"""
+    where: film_market_estimation_bool_exp
+  ): film_market_estimation_aggregate!
+  market_id: Int
+  number_cities: Int
+}
+
+"""
+aggregated selection of "market"
+"""
+type market_aggregate {
+  aggregate: market_aggregate_fields
+  nodes: [market!]!
+}
+
+"""
+aggregate fields of "market"
+"""
+type market_aggregate_fields {
+  avg: market_avg_fields
+  count(columns: [market_select_column!], distinct: Boolean): Int
+  max: market_max_fields
+  min: market_min_fields
+  stddev: market_stddev_fields
+  stddev_pop: market_stddev_pop_fields
+  stddev_samp: market_stddev_samp_fields
+  sum: market_sum_fields
+  var_pop: market_var_pop_fields
+  var_samp: market_var_samp_fields
+  variance: market_variance_fields
+}
+
+"""
+order by aggregate values of table "market"
+"""
+input market_aggregate_order_by {
+  avg: market_avg_order_by
+  count: order_by
+  max: market_max_order_by
+  min: market_min_order_by
+  stddev: market_stddev_order_by
+  stddev_pop: market_stddev_pop_order_by
+  stddev_samp: market_stddev_samp_order_by
+  sum: market_sum_order_by
+  var_pop: market_var_pop_order_by
+  var_samp: market_var_samp_order_by
+  variance: market_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "market"
+"""
+input market_arr_rel_insert_input {
+  data: [market_insert_input!]!
+  on_conflict: market_on_conflict
+}
+
+"""aggregate avg on columns"""
+type market_avg_fields {
+  market_id: Float
+  number_cities: Float
+}
+
+"""
+order by avg() on columns of table "market"
+"""
+input market_avg_order_by {
+  market_id: order_by
+  number_cities: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "market". All fields are combined with a logical 'AND'.
+"""
+input market_bool_exp {
+  _and: [market_bool_exp]
+  _not: market_bool_exp
+  _or: [market_bool_exp]
+  country: String_comparison_exp
+  film_market_estimations: film_market_estimation_bool_exp
+  market_id: Int_comparison_exp
+  number_cities: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "market"
+"""
+enum market_constraint {
+  """unique or primary key constraint"""
+  idx_26404_sqlite_autoindex_market_1
+}
+
+"""
+input type for incrementing integer columne in table "market"
+"""
+input market_inc_input {
+  market_id: Int
+  number_cities: Int
+}
+
+"""
+input type for inserting data into table "market"
+"""
+input market_insert_input {
+  country: String
+  film_market_estimations: film_market_estimation_arr_rel_insert_input
+  market_id: Int
+  number_cities: Int
+}
+
+"""aggregate max on columns"""
+type market_max_fields {
+  country: String
+  market_id: Int
+  number_cities: Int
+}
+
+"""
+order by max() on columns of table "market"
+"""
+input market_max_order_by {
+  country: order_by
+  market_id: order_by
+  number_cities: order_by
+}
+
+"""aggregate min on columns"""
+type market_min_fields {
+  country: String
+  market_id: Int
+  number_cities: Int
+}
+
+"""
+order by min() on columns of table "market"
+"""
+input market_min_order_by {
+  country: order_by
+  market_id: order_by
+  number_cities: order_by
+}
+
+"""
+response of any mutation on the table "market"
+"""
+type market_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [market!]!
+}
+
+"""
+input type for inserting object relation for remote table "market"
+"""
+input market_obj_rel_insert_input {
+  data: market_insert_input!
+  on_conflict: market_on_conflict
+}
+
+"""
+on conflict condition type for table "market"
+"""
+input market_on_conflict {
+  constraint: market_constraint!
+  update_columns: [market_update_column!]!
+  where: market_bool_exp
+}
+
+"""
+ordering options when selecting data from "market"
+"""
+input market_order_by {
+  country: order_by
+  film_market_estimations_aggregate: film_market_estimation_aggregate_order_by
+  market_id: order_by
+  number_cities: order_by
+}
+
+"""
+select columns of table "market"
+"""
+enum market_select_column {
+  """column name"""
+  country
+
+  """column name"""
+  market_id
+
+  """column name"""
+  number_cities
+}
+
+"""
+input type for updating data in table "market"
+"""
+input market_set_input {
+  country: String
+  market_id: Int
+  number_cities: Int
+}
+
+"""aggregate stddev on columns"""
+type market_stddev_fields {
+  market_id: Float
+  number_cities: Float
+}
+
+"""
+order by stddev() on columns of table "market"
+"""
+input market_stddev_order_by {
+  market_id: order_by
+  number_cities: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type market_stddev_pop_fields {
+  market_id: Float
+  number_cities: Float
+}
+
+"""
+order by stddev_pop() on columns of table "market"
+"""
+input market_stddev_pop_order_by {
+  market_id: order_by
+  number_cities: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type market_stddev_samp_fields {
+  market_id: Float
+  number_cities: Float
+}
+
+"""
+order by stddev_samp() on columns of table "market"
+"""
+input market_stddev_samp_order_by {
+  market_id: order_by
+  number_cities: order_by
+}
+
+"""aggregate sum on columns"""
+type market_sum_fields {
+  market_id: Int
+  number_cities: Int
+}
+
+"""
+order by sum() on columns of table "market"
+"""
+input market_sum_order_by {
+  market_id: order_by
+  number_cities: order_by
+}
+
+"""
+update columns of table "market"
+"""
+enum market_update_column {
+  """column name"""
+  country
+
+  """column name"""
+  market_id
+
+  """column name"""
+  number_cities
+}
+
+"""aggregate var_pop on columns"""
+type market_var_pop_fields {
+  market_id: Float
+  number_cities: Float
+}
+
+"""
+order by var_pop() on columns of table "market"
+"""
+input market_var_pop_order_by {
+  market_id: order_by
+  number_cities: order_by
+}
+
+"""aggregate var_samp on columns"""
+type market_var_samp_fields {
+  market_id: Float
+  number_cities: Float
+}
+
+"""
+order by var_samp() on columns of table "market"
+"""
+input market_var_samp_order_by {
+  market_id: order_by
+  number_cities: order_by
+}
+
+"""aggregate variance on columns"""
+type market_variance_fields {
+  market_id: Float
+  number_cities: Float
+}
+
+"""
+order by variance() on columns of table "market"
+"""
+input market_variance_order_by {
+  market_id: order_by
+  number_cities: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "film"
+  """
+  delete_film(
+    """filter the rows which have to be deleted"""
+    where: film_bool_exp!
+  ): film_mutation_response
+
+  """
+  delete data from the table: "film_market_estimation"
+  """
+  delete_film_market_estimation(
+    """filter the rows which have to be deleted"""
+    where: film_market_estimation_bool_exp!
+  ): film_market_estimation_mutation_response
+
+  """
+  delete data from the table: "market"
+  """
+  delete_market(
+    """filter the rows which have to be deleted"""
+    where: market_bool_exp!
+  ): market_mutation_response
+
+  """
+  insert data into the table: "film"
+  """
+  insert_film(
+    """the rows to be inserted"""
+    objects: [film_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: film_on_conflict
+  ): film_mutation_response
+
+  """
+  insert data into the table: "film_market_estimation"
+  """
+  insert_film_market_estimation(
+    """the rows to be inserted"""
+    objects: [film_market_estimation_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: film_market_estimation_on_conflict
+  ): film_market_estimation_mutation_response
+
+  """
+  insert data into the table: "market"
+  """
+  insert_market(
+    """the rows to be inserted"""
+    objects: [market_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: market_on_conflict
+  ): market_mutation_response
+
+  """
+  update data of the table: "film"
+  """
+  update_film(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: film_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: film_set_input
+
+    """filter the rows which have to be updated"""
+    where: film_bool_exp!
+  ): film_mutation_response
+
+  """
+  update data of the table: "film_market_estimation"
+  """
+  update_film_market_estimation(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: film_market_estimation_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: film_market_estimation_set_input
+
+    """filter the rows which have to be updated"""
+    where: film_market_estimation_bool_exp!
+  ): film_market_estimation_mutation_response
+
+  """
+  update data of the table: "market"
+  """
+  update_market(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: market_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: market_set_input
+
+    """filter the rows which have to be updated"""
+    where: market_bool_exp!
+  ): market_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "film"
+  """
+  film(
+    """distinct select on columns"""
+    distinct_on: [film_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_order_by!]
+
+    """filter the rows returned"""
+    where: film_bool_exp
+  ): [film!]!
+
+  """
+  fetch aggregated fields from the table: "film"
+  """
+  film_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_order_by!]
+
+    """filter the rows returned"""
+    where: film_bool_exp
+  ): film_aggregate!
+
+  """
+  fetch data from the table: "film_market_estimation"
+  """
+  film_market_estimation(
+    """distinct select on columns"""
+    distinct_on: [film_market_estimation_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_market_estimation_order_by!]
+
+    """filter the rows returned"""
+    where: film_market_estimation_bool_exp
+  ): [film_market_estimation!]!
+
+  """
+  fetch aggregated fields from the table: "film_market_estimation"
+  """
+  film_market_estimation_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_market_estimation_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_market_estimation_order_by!]
+
+    """filter the rows returned"""
+    where: film_market_estimation_bool_exp
+  ): film_market_estimation_aggregate!
+
+  """
+  fetch data from the table: "market"
+  """
+  market(
+    """distinct select on columns"""
+    distinct_on: [market_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [market_order_by!]
+
+    """filter the rows returned"""
+    where: market_bool_exp
+  ): [market!]!
+
+  """
+  fetch aggregated fields from the table: "market"
+  """
+  market_aggregate(
+    """distinct select on columns"""
+    distinct_on: [market_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [market_order_by!]
+
+    """filter the rows returned"""
+    where: market_bool_exp
+  ): market_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "film"
+  """
+  film(
+    """distinct select on columns"""
+    distinct_on: [film_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_order_by!]
+
+    """filter the rows returned"""
+    where: film_bool_exp
+  ): [film!]!
+
+  """
+  fetch aggregated fields from the table: "film"
+  """
+  film_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_order_by!]
+
+    """filter the rows returned"""
+    where: film_bool_exp
+  ): film_aggregate!
+
+  """
+  fetch data from the table: "film_market_estimation"
+  """
+  film_market_estimation(
+    """distinct select on columns"""
+    distinct_on: [film_market_estimation_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_market_estimation_order_by!]
+
+    """filter the rows returned"""
+    where: film_market_estimation_bool_exp
+  ): [film_market_estimation!]!
+
+  """
+  fetch aggregated fields from the table: "film_market_estimation"
+  """
+  film_market_estimation_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_market_estimation_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_market_estimation_order_by!]
+
+    """filter the rows returned"""
+    where: film_market_estimation_bool_exp
+  ): film_market_estimation_aggregate!
+
+  """
+  fetch data from the table: "market"
+  """
+  market(
+    """distinct select on columns"""
+    distinct_on: [market_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [market_order_by!]
+
+    """filter the rows returned"""
+    where: market_bool_exp
+  ): [market!]!
+
+  """
+  fetch aggregated fields from the table: "market"
+  """
+  market_aggregate(
+    """distinct select on columns"""
+    distinct_on: [market_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [market_order_by!]
+
+    """filter the rows returned"""
+    where: market_bool_exp
+  ): market_aggregate!
+}

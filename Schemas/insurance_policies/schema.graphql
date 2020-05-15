@@ -1,0 +1,2707 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "claims"
+"""
+type claims {
+  amount_claimed: bigint
+  amount_settled: bigint
+  claim_id: bigint!
+
+  """An object relationship"""
+  customer_policy: customer_policies
+  date_claim_made: date
+  date_claim_settled: date
+  policy_id: bigint
+
+  """An array relationship"""
+  settlements(
+    """distinct select on columns"""
+    distinct_on: [settlements_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [settlements_order_by!]
+
+    """filter the rows returned"""
+    where: settlements_bool_exp
+  ): [settlements!]!
+
+  """An aggregated array relationship"""
+  settlements_aggregate(
+    """distinct select on columns"""
+    distinct_on: [settlements_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [settlements_order_by!]
+
+    """filter the rows returned"""
+    where: settlements_bool_exp
+  ): settlements_aggregate!
+}
+
+"""
+aggregated selection of "claims"
+"""
+type claims_aggregate {
+  aggregate: claims_aggregate_fields
+  nodes: [claims!]!
+}
+
+"""
+aggregate fields of "claims"
+"""
+type claims_aggregate_fields {
+  avg: claims_avg_fields
+  count(columns: [claims_select_column!], distinct: Boolean): Int
+  max: claims_max_fields
+  min: claims_min_fields
+  stddev: claims_stddev_fields
+  stddev_pop: claims_stddev_pop_fields
+  stddev_samp: claims_stddev_samp_fields
+  sum: claims_sum_fields
+  var_pop: claims_var_pop_fields
+  var_samp: claims_var_samp_fields
+  variance: claims_variance_fields
+}
+
+"""
+order by aggregate values of table "claims"
+"""
+input claims_aggregate_order_by {
+  avg: claims_avg_order_by
+  count: order_by
+  max: claims_max_order_by
+  min: claims_min_order_by
+  stddev: claims_stddev_order_by
+  stddev_pop: claims_stddev_pop_order_by
+  stddev_samp: claims_stddev_samp_order_by
+  sum: claims_sum_order_by
+  var_pop: claims_var_pop_order_by
+  var_samp: claims_var_samp_order_by
+  variance: claims_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "claims"
+"""
+input claims_arr_rel_insert_input {
+  data: [claims_insert_input!]!
+  on_conflict: claims_on_conflict
+}
+
+"""aggregate avg on columns"""
+type claims_avg_fields {
+  amount_claimed: Float
+  amount_settled: Float
+  claim_id: Float
+  policy_id: Float
+}
+
+"""
+order by avg() on columns of table "claims"
+"""
+input claims_avg_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  policy_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "claims". All fields are combined with a logical 'AND'.
+"""
+input claims_bool_exp {
+  _and: [claims_bool_exp]
+  _not: claims_bool_exp
+  _or: [claims_bool_exp]
+  amount_claimed: bigint_comparison_exp
+  amount_settled: bigint_comparison_exp
+  claim_id: bigint_comparison_exp
+  customer_policy: customer_policies_bool_exp
+  date_claim_made: date_comparison_exp
+  date_claim_settled: date_comparison_exp
+  policy_id: bigint_comparison_exp
+  settlements: settlements_bool_exp
+}
+
+"""
+unique or primary key constraints on table "claims"
+"""
+enum claims_constraint {
+  """unique or primary key constraint"""
+  idx_23141_claims_pkey
+}
+
+"""
+input type for incrementing integer columne in table "claims"
+"""
+input claims_inc_input {
+  amount_claimed: bigint
+  amount_settled: bigint
+  claim_id: bigint
+  policy_id: bigint
+}
+
+"""
+input type for inserting data into table "claims"
+"""
+input claims_insert_input {
+  amount_claimed: bigint
+  amount_settled: bigint
+  claim_id: bigint
+  customer_policy: customer_policies_obj_rel_insert_input
+  date_claim_made: date
+  date_claim_settled: date
+  policy_id: bigint
+  settlements: settlements_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type claims_max_fields {
+  amount_claimed: bigint
+  amount_settled: bigint
+  claim_id: bigint
+  date_claim_made: date
+  date_claim_settled: date
+  policy_id: bigint
+}
+
+"""
+order by max() on columns of table "claims"
+"""
+input claims_max_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  date_claim_made: order_by
+  date_claim_settled: order_by
+  policy_id: order_by
+}
+
+"""aggregate min on columns"""
+type claims_min_fields {
+  amount_claimed: bigint
+  amount_settled: bigint
+  claim_id: bigint
+  date_claim_made: date
+  date_claim_settled: date
+  policy_id: bigint
+}
+
+"""
+order by min() on columns of table "claims"
+"""
+input claims_min_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  date_claim_made: order_by
+  date_claim_settled: order_by
+  policy_id: order_by
+}
+
+"""
+response of any mutation on the table "claims"
+"""
+type claims_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [claims!]!
+}
+
+"""
+input type for inserting object relation for remote table "claims"
+"""
+input claims_obj_rel_insert_input {
+  data: claims_insert_input!
+  on_conflict: claims_on_conflict
+}
+
+"""
+on conflict condition type for table "claims"
+"""
+input claims_on_conflict {
+  constraint: claims_constraint!
+  update_columns: [claims_update_column!]!
+  where: claims_bool_exp
+}
+
+"""
+ordering options when selecting data from "claims"
+"""
+input claims_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  customer_policy: customer_policies_order_by
+  date_claim_made: order_by
+  date_claim_settled: order_by
+  policy_id: order_by
+  settlements_aggregate: settlements_aggregate_order_by
+}
+
+"""
+select columns of table "claims"
+"""
+enum claims_select_column {
+  """column name"""
+  amount_claimed
+
+  """column name"""
+  amount_settled
+
+  """column name"""
+  claim_id
+
+  """column name"""
+  date_claim_made
+
+  """column name"""
+  date_claim_settled
+
+  """column name"""
+  policy_id
+}
+
+"""
+input type for updating data in table "claims"
+"""
+input claims_set_input {
+  amount_claimed: bigint
+  amount_settled: bigint
+  claim_id: bigint
+  date_claim_made: date
+  date_claim_settled: date
+  policy_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type claims_stddev_fields {
+  amount_claimed: Float
+  amount_settled: Float
+  claim_id: Float
+  policy_id: Float
+}
+
+"""
+order by stddev() on columns of table "claims"
+"""
+input claims_stddev_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type claims_stddev_pop_fields {
+  amount_claimed: Float
+  amount_settled: Float
+  claim_id: Float
+  policy_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "claims"
+"""
+input claims_stddev_pop_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type claims_stddev_samp_fields {
+  amount_claimed: Float
+  amount_settled: Float
+  claim_id: Float
+  policy_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "claims"
+"""
+input claims_stddev_samp_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate sum on columns"""
+type claims_sum_fields {
+  amount_claimed: bigint
+  amount_settled: bigint
+  claim_id: bigint
+  policy_id: bigint
+}
+
+"""
+order by sum() on columns of table "claims"
+"""
+input claims_sum_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  policy_id: order_by
+}
+
+"""
+update columns of table "claims"
+"""
+enum claims_update_column {
+  """column name"""
+  amount_claimed
+
+  """column name"""
+  amount_settled
+
+  """column name"""
+  claim_id
+
+  """column name"""
+  date_claim_made
+
+  """column name"""
+  date_claim_settled
+
+  """column name"""
+  policy_id
+}
+
+"""aggregate var_pop on columns"""
+type claims_var_pop_fields {
+  amount_claimed: Float
+  amount_settled: Float
+  claim_id: Float
+  policy_id: Float
+}
+
+"""
+order by var_pop() on columns of table "claims"
+"""
+input claims_var_pop_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type claims_var_samp_fields {
+  amount_claimed: Float
+  amount_settled: Float
+  claim_id: Float
+  policy_id: Float
+}
+
+"""
+order by var_samp() on columns of table "claims"
+"""
+input claims_var_samp_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate variance on columns"""
+type claims_variance_fields {
+  amount_claimed: Float
+  amount_settled: Float
+  claim_id: Float
+  policy_id: Float
+}
+
+"""
+order by variance() on columns of table "claims"
+"""
+input claims_variance_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  policy_id: order_by
+}
+
+"""
+columns and relationships of "customer_policies"
+"""
+type customer_policies {
+  """An array relationship"""
+  claims(
+    """distinct select on columns"""
+    distinct_on: [claims_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_order_by!]
+
+    """filter the rows returned"""
+    where: claims_bool_exp
+  ): [claims!]!
+
+  """An aggregated array relationship"""
+  claims_aggregate(
+    """distinct select on columns"""
+    distinct_on: [claims_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_order_by!]
+
+    """filter the rows returned"""
+    where: claims_bool_exp
+  ): claims_aggregate!
+
+  """An object relationship"""
+  customer: customers
+  customer_id: bigint
+  end_date: date
+  policy_id: bigint!
+  policy_type_code: String
+  start_date: date
+}
+
+"""
+aggregated selection of "customer_policies"
+"""
+type customer_policies_aggregate {
+  aggregate: customer_policies_aggregate_fields
+  nodes: [customer_policies!]!
+}
+
+"""
+aggregate fields of "customer_policies"
+"""
+type customer_policies_aggregate_fields {
+  avg: customer_policies_avg_fields
+  count(columns: [customer_policies_select_column!], distinct: Boolean): Int
+  max: customer_policies_max_fields
+  min: customer_policies_min_fields
+  stddev: customer_policies_stddev_fields
+  stddev_pop: customer_policies_stddev_pop_fields
+  stddev_samp: customer_policies_stddev_samp_fields
+  sum: customer_policies_sum_fields
+  var_pop: customer_policies_var_pop_fields
+  var_samp: customer_policies_var_samp_fields
+  variance: customer_policies_variance_fields
+}
+
+"""
+order by aggregate values of table "customer_policies"
+"""
+input customer_policies_aggregate_order_by {
+  avg: customer_policies_avg_order_by
+  count: order_by
+  max: customer_policies_max_order_by
+  min: customer_policies_min_order_by
+  stddev: customer_policies_stddev_order_by
+  stddev_pop: customer_policies_stddev_pop_order_by
+  stddev_samp: customer_policies_stddev_samp_order_by
+  sum: customer_policies_sum_order_by
+  var_pop: customer_policies_var_pop_order_by
+  var_samp: customer_policies_var_samp_order_by
+  variance: customer_policies_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "customer_policies"
+"""
+input customer_policies_arr_rel_insert_input {
+  data: [customer_policies_insert_input!]!
+  on_conflict: customer_policies_on_conflict
+}
+
+"""aggregate avg on columns"""
+type customer_policies_avg_fields {
+  customer_id: Float
+  policy_id: Float
+}
+
+"""
+order by avg() on columns of table "customer_policies"
+"""
+input customer_policies_avg_order_by {
+  customer_id: order_by
+  policy_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "customer_policies". All fields are combined with a logical 'AND'.
+"""
+input customer_policies_bool_exp {
+  _and: [customer_policies_bool_exp]
+  _not: customer_policies_bool_exp
+  _or: [customer_policies_bool_exp]
+  claims: claims_bool_exp
+  customer: customers_bool_exp
+  customer_id: bigint_comparison_exp
+  end_date: date_comparison_exp
+  policy_id: bigint_comparison_exp
+  policy_type_code: String_comparison_exp
+  start_date: date_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "customer_policies"
+"""
+enum customer_policies_constraint {
+  """unique or primary key constraint"""
+  idx_23135_customer_policies_pkey
+}
+
+"""
+input type for incrementing integer columne in table "customer_policies"
+"""
+input customer_policies_inc_input {
+  customer_id: bigint
+  policy_id: bigint
+}
+
+"""
+input type for inserting data into table "customer_policies"
+"""
+input customer_policies_insert_input {
+  claims: claims_arr_rel_insert_input
+  customer: customers_obj_rel_insert_input
+  customer_id: bigint
+  end_date: date
+  policy_id: bigint
+  policy_type_code: String
+  start_date: date
+}
+
+"""aggregate max on columns"""
+type customer_policies_max_fields {
+  customer_id: bigint
+  end_date: date
+  policy_id: bigint
+  policy_type_code: String
+  start_date: date
+}
+
+"""
+order by max() on columns of table "customer_policies"
+"""
+input customer_policies_max_order_by {
+  customer_id: order_by
+  end_date: order_by
+  policy_id: order_by
+  policy_type_code: order_by
+  start_date: order_by
+}
+
+"""aggregate min on columns"""
+type customer_policies_min_fields {
+  customer_id: bigint
+  end_date: date
+  policy_id: bigint
+  policy_type_code: String
+  start_date: date
+}
+
+"""
+order by min() on columns of table "customer_policies"
+"""
+input customer_policies_min_order_by {
+  customer_id: order_by
+  end_date: order_by
+  policy_id: order_by
+  policy_type_code: order_by
+  start_date: order_by
+}
+
+"""
+response of any mutation on the table "customer_policies"
+"""
+type customer_policies_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [customer_policies!]!
+}
+
+"""
+input type for inserting object relation for remote table "customer_policies"
+"""
+input customer_policies_obj_rel_insert_input {
+  data: customer_policies_insert_input!
+  on_conflict: customer_policies_on_conflict
+}
+
+"""
+on conflict condition type for table "customer_policies"
+"""
+input customer_policies_on_conflict {
+  constraint: customer_policies_constraint!
+  update_columns: [customer_policies_update_column!]!
+  where: customer_policies_bool_exp
+}
+
+"""
+ordering options when selecting data from "customer_policies"
+"""
+input customer_policies_order_by {
+  claims_aggregate: claims_aggregate_order_by
+  customer: customers_order_by
+  customer_id: order_by
+  end_date: order_by
+  policy_id: order_by
+  policy_type_code: order_by
+  start_date: order_by
+}
+
+"""
+select columns of table "customer_policies"
+"""
+enum customer_policies_select_column {
+  """column name"""
+  customer_id
+
+  """column name"""
+  end_date
+
+  """column name"""
+  policy_id
+
+  """column name"""
+  policy_type_code
+
+  """column name"""
+  start_date
+}
+
+"""
+input type for updating data in table "customer_policies"
+"""
+input customer_policies_set_input {
+  customer_id: bigint
+  end_date: date
+  policy_id: bigint
+  policy_type_code: String
+  start_date: date
+}
+
+"""aggregate stddev on columns"""
+type customer_policies_stddev_fields {
+  customer_id: Float
+  policy_id: Float
+}
+
+"""
+order by stddev() on columns of table "customer_policies"
+"""
+input customer_policies_stddev_order_by {
+  customer_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type customer_policies_stddev_pop_fields {
+  customer_id: Float
+  policy_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "customer_policies"
+"""
+input customer_policies_stddev_pop_order_by {
+  customer_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type customer_policies_stddev_samp_fields {
+  customer_id: Float
+  policy_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "customer_policies"
+"""
+input customer_policies_stddev_samp_order_by {
+  customer_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate sum on columns"""
+type customer_policies_sum_fields {
+  customer_id: bigint
+  policy_id: bigint
+}
+
+"""
+order by sum() on columns of table "customer_policies"
+"""
+input customer_policies_sum_order_by {
+  customer_id: order_by
+  policy_id: order_by
+}
+
+"""
+update columns of table "customer_policies"
+"""
+enum customer_policies_update_column {
+  """column name"""
+  customer_id
+
+  """column name"""
+  end_date
+
+  """column name"""
+  policy_id
+
+  """column name"""
+  policy_type_code
+
+  """column name"""
+  start_date
+}
+
+"""aggregate var_pop on columns"""
+type customer_policies_var_pop_fields {
+  customer_id: Float
+  policy_id: Float
+}
+
+"""
+order by var_pop() on columns of table "customer_policies"
+"""
+input customer_policies_var_pop_order_by {
+  customer_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type customer_policies_var_samp_fields {
+  customer_id: Float
+  policy_id: Float
+}
+
+"""
+order by var_samp() on columns of table "customer_policies"
+"""
+input customer_policies_var_samp_order_by {
+  customer_id: order_by
+  policy_id: order_by
+}
+
+"""aggregate variance on columns"""
+type customer_policies_variance_fields {
+  customer_id: Float
+  policy_id: Float
+}
+
+"""
+order by variance() on columns of table "customer_policies"
+"""
+input customer_policies_variance_order_by {
+  customer_id: order_by
+  policy_id: order_by
+}
+
+"""
+columns and relationships of "customers"
+"""
+type customers {
+  customer_details: String
+  customer_id: bigint!
+
+  """An array relationship"""
+  customer_policies(
+    """distinct select on columns"""
+    distinct_on: [customer_policies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_policies_order_by!]
+
+    """filter the rows returned"""
+    where: customer_policies_bool_exp
+  ): [customer_policies!]!
+
+  """An aggregated array relationship"""
+  customer_policies_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_policies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_policies_order_by!]
+
+    """filter the rows returned"""
+    where: customer_policies_bool_exp
+  ): customer_policies_aggregate!
+}
+
+"""
+aggregated selection of "customers"
+"""
+type customers_aggregate {
+  aggregate: customers_aggregate_fields
+  nodes: [customers!]!
+}
+
+"""
+aggregate fields of "customers"
+"""
+type customers_aggregate_fields {
+  avg: customers_avg_fields
+  count(columns: [customers_select_column!], distinct: Boolean): Int
+  max: customers_max_fields
+  min: customers_min_fields
+  stddev: customers_stddev_fields
+  stddev_pop: customers_stddev_pop_fields
+  stddev_samp: customers_stddev_samp_fields
+  sum: customers_sum_fields
+  var_pop: customers_var_pop_fields
+  var_samp: customers_var_samp_fields
+  variance: customers_variance_fields
+}
+
+"""
+order by aggregate values of table "customers"
+"""
+input customers_aggregate_order_by {
+  avg: customers_avg_order_by
+  count: order_by
+  max: customers_max_order_by
+  min: customers_min_order_by
+  stddev: customers_stddev_order_by
+  stddev_pop: customers_stddev_pop_order_by
+  stddev_samp: customers_stddev_samp_order_by
+  sum: customers_sum_order_by
+  var_pop: customers_var_pop_order_by
+  var_samp: customers_var_samp_order_by
+  variance: customers_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "customers"
+"""
+input customers_arr_rel_insert_input {
+  data: [customers_insert_input!]!
+  on_conflict: customers_on_conflict
+}
+
+"""aggregate avg on columns"""
+type customers_avg_fields {
+  customer_id: Float
+}
+
+"""
+order by avg() on columns of table "customers"
+"""
+input customers_avg_order_by {
+  customer_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "customers". All fields are combined with a logical 'AND'.
+"""
+input customers_bool_exp {
+  _and: [customers_bool_exp]
+  _not: customers_bool_exp
+  _or: [customers_bool_exp]
+  customer_details: String_comparison_exp
+  customer_id: bigint_comparison_exp
+  customer_policies: customer_policies_bool_exp
+}
+
+"""
+unique or primary key constraints on table "customers"
+"""
+enum customers_constraint {
+  """unique or primary key constraint"""
+  idx_23129_customers_pkey
+}
+
+"""
+input type for incrementing integer columne in table "customers"
+"""
+input customers_inc_input {
+  customer_id: bigint
+}
+
+"""
+input type for inserting data into table "customers"
+"""
+input customers_insert_input {
+  customer_details: String
+  customer_id: bigint
+  customer_policies: customer_policies_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type customers_max_fields {
+  customer_details: String
+  customer_id: bigint
+}
+
+"""
+order by max() on columns of table "customers"
+"""
+input customers_max_order_by {
+  customer_details: order_by
+  customer_id: order_by
+}
+
+"""aggregate min on columns"""
+type customers_min_fields {
+  customer_details: String
+  customer_id: bigint
+}
+
+"""
+order by min() on columns of table "customers"
+"""
+input customers_min_order_by {
+  customer_details: order_by
+  customer_id: order_by
+}
+
+"""
+response of any mutation on the table "customers"
+"""
+type customers_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [customers!]!
+}
+
+"""
+input type for inserting object relation for remote table "customers"
+"""
+input customers_obj_rel_insert_input {
+  data: customers_insert_input!
+  on_conflict: customers_on_conflict
+}
+
+"""
+on conflict condition type for table "customers"
+"""
+input customers_on_conflict {
+  constraint: customers_constraint!
+  update_columns: [customers_update_column!]!
+  where: customers_bool_exp
+}
+
+"""
+ordering options when selecting data from "customers"
+"""
+input customers_order_by {
+  customer_details: order_by
+  customer_id: order_by
+  customer_policies_aggregate: customer_policies_aggregate_order_by
+}
+
+"""
+select columns of table "customers"
+"""
+enum customers_select_column {
+  """column name"""
+  customer_details
+
+  """column name"""
+  customer_id
+}
+
+"""
+input type for updating data in table "customers"
+"""
+input customers_set_input {
+  customer_details: String
+  customer_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type customers_stddev_fields {
+  customer_id: Float
+}
+
+"""
+order by stddev() on columns of table "customers"
+"""
+input customers_stddev_order_by {
+  customer_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type customers_stddev_pop_fields {
+  customer_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "customers"
+"""
+input customers_stddev_pop_order_by {
+  customer_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type customers_stddev_samp_fields {
+  customer_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "customers"
+"""
+input customers_stddev_samp_order_by {
+  customer_id: order_by
+}
+
+"""aggregate sum on columns"""
+type customers_sum_fields {
+  customer_id: bigint
+}
+
+"""
+order by sum() on columns of table "customers"
+"""
+input customers_sum_order_by {
+  customer_id: order_by
+}
+
+"""
+update columns of table "customers"
+"""
+enum customers_update_column {
+  """column name"""
+  customer_details
+
+  """column name"""
+  customer_id
+}
+
+"""aggregate var_pop on columns"""
+type customers_var_pop_fields {
+  customer_id: Float
+}
+
+"""
+order by var_pop() on columns of table "customers"
+"""
+input customers_var_pop_order_by {
+  customer_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type customers_var_samp_fields {
+  customer_id: Float
+}
+
+"""
+order by var_samp() on columns of table "customers"
+"""
+input customers_var_samp_order_by {
+  customer_id: order_by
+}
+
+"""aggregate variance on columns"""
+type customers_variance_fields {
+  customer_id: Float
+}
+
+"""
+order by variance() on columns of table "customers"
+"""
+input customers_variance_order_by {
+  customer_id: order_by
+}
+
+scalar date
+
+"""
+expression to compare columns of type date. All fields are combined with logical 'AND'.
+"""
+input date_comparison_exp {
+  _eq: date
+  _gt: date
+  _gte: date
+  _in: [date!]
+  _is_null: Boolean
+  _lt: date
+  _lte: date
+  _neq: date
+  _nin: [date!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "claims"
+  """
+  delete_claims(
+    """filter the rows which have to be deleted"""
+    where: claims_bool_exp!
+  ): claims_mutation_response
+
+  """
+  delete data from the table: "customer_policies"
+  """
+  delete_customer_policies(
+    """filter the rows which have to be deleted"""
+    where: customer_policies_bool_exp!
+  ): customer_policies_mutation_response
+
+  """
+  delete data from the table: "customers"
+  """
+  delete_customers(
+    """filter the rows which have to be deleted"""
+    where: customers_bool_exp!
+  ): customers_mutation_response
+
+  """
+  delete data from the table: "payments"
+  """
+  delete_payments(
+    """filter the rows which have to be deleted"""
+    where: payments_bool_exp!
+  ): payments_mutation_response
+
+  """
+  delete data from the table: "settlements"
+  """
+  delete_settlements(
+    """filter the rows which have to be deleted"""
+    where: settlements_bool_exp!
+  ): settlements_mutation_response
+
+  """
+  insert data into the table: "claims"
+  """
+  insert_claims(
+    """the rows to be inserted"""
+    objects: [claims_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: claims_on_conflict
+  ): claims_mutation_response
+
+  """
+  insert data into the table: "customer_policies"
+  """
+  insert_customer_policies(
+    """the rows to be inserted"""
+    objects: [customer_policies_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: customer_policies_on_conflict
+  ): customer_policies_mutation_response
+
+  """
+  insert data into the table: "customers"
+  """
+  insert_customers(
+    """the rows to be inserted"""
+    objects: [customers_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: customers_on_conflict
+  ): customers_mutation_response
+
+  """
+  insert data into the table: "payments"
+  """
+  insert_payments(
+    """the rows to be inserted"""
+    objects: [payments_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: payments_on_conflict
+  ): payments_mutation_response
+
+  """
+  insert data into the table: "settlements"
+  """
+  insert_settlements(
+    """the rows to be inserted"""
+    objects: [settlements_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: settlements_on_conflict
+  ): settlements_mutation_response
+
+  """
+  update data of the table: "claims"
+  """
+  update_claims(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: claims_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: claims_set_input
+
+    """filter the rows which have to be updated"""
+    where: claims_bool_exp!
+  ): claims_mutation_response
+
+  """
+  update data of the table: "customer_policies"
+  """
+  update_customer_policies(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customer_policies_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customer_policies_set_input
+
+    """filter the rows which have to be updated"""
+    where: customer_policies_bool_exp!
+  ): customer_policies_mutation_response
+
+  """
+  update data of the table: "customers"
+  """
+  update_customers(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customers_set_input
+
+    """filter the rows which have to be updated"""
+    where: customers_bool_exp!
+  ): customers_mutation_response
+
+  """
+  update data of the table: "payments"
+  """
+  update_payments(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: payments_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: payments_set_input
+
+    """filter the rows which have to be updated"""
+    where: payments_bool_exp!
+  ): payments_mutation_response
+
+  """
+  update data of the table: "settlements"
+  """
+  update_settlements(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: settlements_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: settlements_set_input
+
+    """filter the rows which have to be updated"""
+    where: settlements_bool_exp!
+  ): settlements_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "payments"
+"""
+type payments {
+  amount_payment: bigint
+  date_payment_made: date
+  payment_id: bigint!
+  payment_method_code: String
+
+  """An object relationship"""
+  settlement: settlements
+  settlement_id: bigint
+}
+
+"""
+aggregated selection of "payments"
+"""
+type payments_aggregate {
+  aggregate: payments_aggregate_fields
+  nodes: [payments!]!
+}
+
+"""
+aggregate fields of "payments"
+"""
+type payments_aggregate_fields {
+  avg: payments_avg_fields
+  count(columns: [payments_select_column!], distinct: Boolean): Int
+  max: payments_max_fields
+  min: payments_min_fields
+  stddev: payments_stddev_fields
+  stddev_pop: payments_stddev_pop_fields
+  stddev_samp: payments_stddev_samp_fields
+  sum: payments_sum_fields
+  var_pop: payments_var_pop_fields
+  var_samp: payments_var_samp_fields
+  variance: payments_variance_fields
+}
+
+"""
+order by aggregate values of table "payments"
+"""
+input payments_aggregate_order_by {
+  avg: payments_avg_order_by
+  count: order_by
+  max: payments_max_order_by
+  min: payments_min_order_by
+  stddev: payments_stddev_order_by
+  stddev_pop: payments_stddev_pop_order_by
+  stddev_samp: payments_stddev_samp_order_by
+  sum: payments_sum_order_by
+  var_pop: payments_var_pop_order_by
+  var_samp: payments_var_samp_order_by
+  variance: payments_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "payments"
+"""
+input payments_arr_rel_insert_input {
+  data: [payments_insert_input!]!
+  on_conflict: payments_on_conflict
+}
+
+"""aggregate avg on columns"""
+type payments_avg_fields {
+  amount_payment: Float
+  payment_id: Float
+  settlement_id: Float
+}
+
+"""
+order by avg() on columns of table "payments"
+"""
+input payments_avg_order_by {
+  amount_payment: order_by
+  payment_id: order_by
+  settlement_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "payments". All fields are combined with a logical 'AND'.
+"""
+input payments_bool_exp {
+  _and: [payments_bool_exp]
+  _not: payments_bool_exp
+  _or: [payments_bool_exp]
+  amount_payment: bigint_comparison_exp
+  date_payment_made: date_comparison_exp
+  payment_id: bigint_comparison_exp
+  payment_method_code: String_comparison_exp
+  settlement: settlements_bool_exp
+  settlement_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "payments"
+"""
+enum payments_constraint {
+  """unique or primary key constraint"""
+  idx_23147_payments_pkey
+}
+
+"""
+input type for incrementing integer columne in table "payments"
+"""
+input payments_inc_input {
+  amount_payment: bigint
+  payment_id: bigint
+  settlement_id: bigint
+}
+
+"""
+input type for inserting data into table "payments"
+"""
+input payments_insert_input {
+  amount_payment: bigint
+  date_payment_made: date
+  payment_id: bigint
+  payment_method_code: String
+  settlement: settlements_obj_rel_insert_input
+  settlement_id: bigint
+}
+
+"""aggregate max on columns"""
+type payments_max_fields {
+  amount_payment: bigint
+  date_payment_made: date
+  payment_id: bigint
+  payment_method_code: String
+  settlement_id: bigint
+}
+
+"""
+order by max() on columns of table "payments"
+"""
+input payments_max_order_by {
+  amount_payment: order_by
+  date_payment_made: order_by
+  payment_id: order_by
+  payment_method_code: order_by
+  settlement_id: order_by
+}
+
+"""aggregate min on columns"""
+type payments_min_fields {
+  amount_payment: bigint
+  date_payment_made: date
+  payment_id: bigint
+  payment_method_code: String
+  settlement_id: bigint
+}
+
+"""
+order by min() on columns of table "payments"
+"""
+input payments_min_order_by {
+  amount_payment: order_by
+  date_payment_made: order_by
+  payment_id: order_by
+  payment_method_code: order_by
+  settlement_id: order_by
+}
+
+"""
+response of any mutation on the table "payments"
+"""
+type payments_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [payments!]!
+}
+
+"""
+input type for inserting object relation for remote table "payments"
+"""
+input payments_obj_rel_insert_input {
+  data: payments_insert_input!
+  on_conflict: payments_on_conflict
+}
+
+"""
+on conflict condition type for table "payments"
+"""
+input payments_on_conflict {
+  constraint: payments_constraint!
+  update_columns: [payments_update_column!]!
+  where: payments_bool_exp
+}
+
+"""
+ordering options when selecting data from "payments"
+"""
+input payments_order_by {
+  amount_payment: order_by
+  date_payment_made: order_by
+  payment_id: order_by
+  payment_method_code: order_by
+  settlement: settlements_order_by
+  settlement_id: order_by
+}
+
+"""
+select columns of table "payments"
+"""
+enum payments_select_column {
+  """column name"""
+  amount_payment
+
+  """column name"""
+  date_payment_made
+
+  """column name"""
+  payment_id
+
+  """column name"""
+  payment_method_code
+
+  """column name"""
+  settlement_id
+}
+
+"""
+input type for updating data in table "payments"
+"""
+input payments_set_input {
+  amount_payment: bigint
+  date_payment_made: date
+  payment_id: bigint
+  payment_method_code: String
+  settlement_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type payments_stddev_fields {
+  amount_payment: Float
+  payment_id: Float
+  settlement_id: Float
+}
+
+"""
+order by stddev() on columns of table "payments"
+"""
+input payments_stddev_order_by {
+  amount_payment: order_by
+  payment_id: order_by
+  settlement_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type payments_stddev_pop_fields {
+  amount_payment: Float
+  payment_id: Float
+  settlement_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "payments"
+"""
+input payments_stddev_pop_order_by {
+  amount_payment: order_by
+  payment_id: order_by
+  settlement_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type payments_stddev_samp_fields {
+  amount_payment: Float
+  payment_id: Float
+  settlement_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "payments"
+"""
+input payments_stddev_samp_order_by {
+  amount_payment: order_by
+  payment_id: order_by
+  settlement_id: order_by
+}
+
+"""aggregate sum on columns"""
+type payments_sum_fields {
+  amount_payment: bigint
+  payment_id: bigint
+  settlement_id: bigint
+}
+
+"""
+order by sum() on columns of table "payments"
+"""
+input payments_sum_order_by {
+  amount_payment: order_by
+  payment_id: order_by
+  settlement_id: order_by
+}
+
+"""
+update columns of table "payments"
+"""
+enum payments_update_column {
+  """column name"""
+  amount_payment
+
+  """column name"""
+  date_payment_made
+
+  """column name"""
+  payment_id
+
+  """column name"""
+  payment_method_code
+
+  """column name"""
+  settlement_id
+}
+
+"""aggregate var_pop on columns"""
+type payments_var_pop_fields {
+  amount_payment: Float
+  payment_id: Float
+  settlement_id: Float
+}
+
+"""
+order by var_pop() on columns of table "payments"
+"""
+input payments_var_pop_order_by {
+  amount_payment: order_by
+  payment_id: order_by
+  settlement_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type payments_var_samp_fields {
+  amount_payment: Float
+  payment_id: Float
+  settlement_id: Float
+}
+
+"""
+order by var_samp() on columns of table "payments"
+"""
+input payments_var_samp_order_by {
+  amount_payment: order_by
+  payment_id: order_by
+  settlement_id: order_by
+}
+
+"""aggregate variance on columns"""
+type payments_variance_fields {
+  amount_payment: Float
+  payment_id: Float
+  settlement_id: Float
+}
+
+"""
+order by variance() on columns of table "payments"
+"""
+input payments_variance_order_by {
+  amount_payment: order_by
+  payment_id: order_by
+  settlement_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "claims"
+  """
+  claims(
+    """distinct select on columns"""
+    distinct_on: [claims_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_order_by!]
+
+    """filter the rows returned"""
+    where: claims_bool_exp
+  ): [claims!]!
+
+  """
+  fetch aggregated fields from the table: "claims"
+  """
+  claims_aggregate(
+    """distinct select on columns"""
+    distinct_on: [claims_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_order_by!]
+
+    """filter the rows returned"""
+    where: claims_bool_exp
+  ): claims_aggregate!
+
+  """fetch data from the table: "claims" using primary key columns"""
+  claims_by_pk(claim_id: bigint!): claims
+
+  """
+  fetch data from the table: "customer_policies"
+  """
+  customer_policies(
+    """distinct select on columns"""
+    distinct_on: [customer_policies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_policies_order_by!]
+
+    """filter the rows returned"""
+    where: customer_policies_bool_exp
+  ): [customer_policies!]!
+
+  """
+  fetch aggregated fields from the table: "customer_policies"
+  """
+  customer_policies_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_policies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_policies_order_by!]
+
+    """filter the rows returned"""
+    where: customer_policies_bool_exp
+  ): customer_policies_aggregate!
+
+  """
+  fetch data from the table: "customer_policies" using primary key columns
+  """
+  customer_policies_by_pk(policy_id: bigint!): customer_policies
+
+  """
+  fetch data from the table: "customers"
+  """
+  customers(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): [customers!]!
+
+  """
+  fetch aggregated fields from the table: "customers"
+  """
+  customers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): customers_aggregate!
+
+  """fetch data from the table: "customers" using primary key columns"""
+  customers_by_pk(customer_id: bigint!): customers
+
+  """
+  fetch data from the table: "payments"
+  """
+  payments(
+    """distinct select on columns"""
+    distinct_on: [payments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payments_order_by!]
+
+    """filter the rows returned"""
+    where: payments_bool_exp
+  ): [payments!]!
+
+  """
+  fetch aggregated fields from the table: "payments"
+  """
+  payments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [payments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payments_order_by!]
+
+    """filter the rows returned"""
+    where: payments_bool_exp
+  ): payments_aggregate!
+
+  """fetch data from the table: "payments" using primary key columns"""
+  payments_by_pk(payment_id: bigint!): payments
+
+  """
+  fetch data from the table: "settlements"
+  """
+  settlements(
+    """distinct select on columns"""
+    distinct_on: [settlements_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [settlements_order_by!]
+
+    """filter the rows returned"""
+    where: settlements_bool_exp
+  ): [settlements!]!
+
+  """
+  fetch aggregated fields from the table: "settlements"
+  """
+  settlements_aggregate(
+    """distinct select on columns"""
+    distinct_on: [settlements_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [settlements_order_by!]
+
+    """filter the rows returned"""
+    where: settlements_bool_exp
+  ): settlements_aggregate!
+
+  """fetch data from the table: "settlements" using primary key columns"""
+  settlements_by_pk(settlement_id: bigint!): settlements
+}
+
+"""
+columns and relationships of "settlements"
+"""
+type settlements {
+  amount_claimed: bigint
+  amount_settled: bigint
+
+  """An object relationship"""
+  claim: claims
+  claim_id: bigint
+  customer_policy_id: bigint
+  date_claim_made: date
+  date_claim_settled: date
+
+  """An array relationship"""
+  payments(
+    """distinct select on columns"""
+    distinct_on: [payments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payments_order_by!]
+
+    """filter the rows returned"""
+    where: payments_bool_exp
+  ): [payments!]!
+
+  """An aggregated array relationship"""
+  payments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [payments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payments_order_by!]
+
+    """filter the rows returned"""
+    where: payments_bool_exp
+  ): payments_aggregate!
+  settlement_id: bigint!
+}
+
+"""
+aggregated selection of "settlements"
+"""
+type settlements_aggregate {
+  aggregate: settlements_aggregate_fields
+  nodes: [settlements!]!
+}
+
+"""
+aggregate fields of "settlements"
+"""
+type settlements_aggregate_fields {
+  avg: settlements_avg_fields
+  count(columns: [settlements_select_column!], distinct: Boolean): Int
+  max: settlements_max_fields
+  min: settlements_min_fields
+  stddev: settlements_stddev_fields
+  stddev_pop: settlements_stddev_pop_fields
+  stddev_samp: settlements_stddev_samp_fields
+  sum: settlements_sum_fields
+  var_pop: settlements_var_pop_fields
+  var_samp: settlements_var_samp_fields
+  variance: settlements_variance_fields
+}
+
+"""
+order by aggregate values of table "settlements"
+"""
+input settlements_aggregate_order_by {
+  avg: settlements_avg_order_by
+  count: order_by
+  max: settlements_max_order_by
+  min: settlements_min_order_by
+  stddev: settlements_stddev_order_by
+  stddev_pop: settlements_stddev_pop_order_by
+  stddev_samp: settlements_stddev_samp_order_by
+  sum: settlements_sum_order_by
+  var_pop: settlements_var_pop_order_by
+  var_samp: settlements_var_samp_order_by
+  variance: settlements_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "settlements"
+"""
+input settlements_arr_rel_insert_input {
+  data: [settlements_insert_input!]!
+  on_conflict: settlements_on_conflict
+}
+
+"""aggregate avg on columns"""
+type settlements_avg_fields {
+  amount_claimed: Float
+  amount_settled: Float
+  claim_id: Float
+  customer_policy_id: Float
+  settlement_id: Float
+}
+
+"""
+order by avg() on columns of table "settlements"
+"""
+input settlements_avg_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  customer_policy_id: order_by
+  settlement_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "settlements". All fields are combined with a logical 'AND'.
+"""
+input settlements_bool_exp {
+  _and: [settlements_bool_exp]
+  _not: settlements_bool_exp
+  _or: [settlements_bool_exp]
+  amount_claimed: bigint_comparison_exp
+  amount_settled: bigint_comparison_exp
+  claim: claims_bool_exp
+  claim_id: bigint_comparison_exp
+  customer_policy_id: bigint_comparison_exp
+  date_claim_made: date_comparison_exp
+  date_claim_settled: date_comparison_exp
+  payments: payments_bool_exp
+  settlement_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "settlements"
+"""
+enum settlements_constraint {
+  """unique or primary key constraint"""
+  idx_23144_settlements_pkey
+}
+
+"""
+input type for incrementing integer columne in table "settlements"
+"""
+input settlements_inc_input {
+  amount_claimed: bigint
+  amount_settled: bigint
+  claim_id: bigint
+  customer_policy_id: bigint
+  settlement_id: bigint
+}
+
+"""
+input type for inserting data into table "settlements"
+"""
+input settlements_insert_input {
+  amount_claimed: bigint
+  amount_settled: bigint
+  claim: claims_obj_rel_insert_input
+  claim_id: bigint
+  customer_policy_id: bigint
+  date_claim_made: date
+  date_claim_settled: date
+  payments: payments_arr_rel_insert_input
+  settlement_id: bigint
+}
+
+"""aggregate max on columns"""
+type settlements_max_fields {
+  amount_claimed: bigint
+  amount_settled: bigint
+  claim_id: bigint
+  customer_policy_id: bigint
+  date_claim_made: date
+  date_claim_settled: date
+  settlement_id: bigint
+}
+
+"""
+order by max() on columns of table "settlements"
+"""
+input settlements_max_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  customer_policy_id: order_by
+  date_claim_made: order_by
+  date_claim_settled: order_by
+  settlement_id: order_by
+}
+
+"""aggregate min on columns"""
+type settlements_min_fields {
+  amount_claimed: bigint
+  amount_settled: bigint
+  claim_id: bigint
+  customer_policy_id: bigint
+  date_claim_made: date
+  date_claim_settled: date
+  settlement_id: bigint
+}
+
+"""
+order by min() on columns of table "settlements"
+"""
+input settlements_min_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  customer_policy_id: order_by
+  date_claim_made: order_by
+  date_claim_settled: order_by
+  settlement_id: order_by
+}
+
+"""
+response of any mutation on the table "settlements"
+"""
+type settlements_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [settlements!]!
+}
+
+"""
+input type for inserting object relation for remote table "settlements"
+"""
+input settlements_obj_rel_insert_input {
+  data: settlements_insert_input!
+  on_conflict: settlements_on_conflict
+}
+
+"""
+on conflict condition type for table "settlements"
+"""
+input settlements_on_conflict {
+  constraint: settlements_constraint!
+  update_columns: [settlements_update_column!]!
+  where: settlements_bool_exp
+}
+
+"""
+ordering options when selecting data from "settlements"
+"""
+input settlements_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim: claims_order_by
+  claim_id: order_by
+  customer_policy_id: order_by
+  date_claim_made: order_by
+  date_claim_settled: order_by
+  payments_aggregate: payments_aggregate_order_by
+  settlement_id: order_by
+}
+
+"""
+select columns of table "settlements"
+"""
+enum settlements_select_column {
+  """column name"""
+  amount_claimed
+
+  """column name"""
+  amount_settled
+
+  """column name"""
+  claim_id
+
+  """column name"""
+  customer_policy_id
+
+  """column name"""
+  date_claim_made
+
+  """column name"""
+  date_claim_settled
+
+  """column name"""
+  settlement_id
+}
+
+"""
+input type for updating data in table "settlements"
+"""
+input settlements_set_input {
+  amount_claimed: bigint
+  amount_settled: bigint
+  claim_id: bigint
+  customer_policy_id: bigint
+  date_claim_made: date
+  date_claim_settled: date
+  settlement_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type settlements_stddev_fields {
+  amount_claimed: Float
+  amount_settled: Float
+  claim_id: Float
+  customer_policy_id: Float
+  settlement_id: Float
+}
+
+"""
+order by stddev() on columns of table "settlements"
+"""
+input settlements_stddev_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  customer_policy_id: order_by
+  settlement_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type settlements_stddev_pop_fields {
+  amount_claimed: Float
+  amount_settled: Float
+  claim_id: Float
+  customer_policy_id: Float
+  settlement_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "settlements"
+"""
+input settlements_stddev_pop_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  customer_policy_id: order_by
+  settlement_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type settlements_stddev_samp_fields {
+  amount_claimed: Float
+  amount_settled: Float
+  claim_id: Float
+  customer_policy_id: Float
+  settlement_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "settlements"
+"""
+input settlements_stddev_samp_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  customer_policy_id: order_by
+  settlement_id: order_by
+}
+
+"""aggregate sum on columns"""
+type settlements_sum_fields {
+  amount_claimed: bigint
+  amount_settled: bigint
+  claim_id: bigint
+  customer_policy_id: bigint
+  settlement_id: bigint
+}
+
+"""
+order by sum() on columns of table "settlements"
+"""
+input settlements_sum_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  customer_policy_id: order_by
+  settlement_id: order_by
+}
+
+"""
+update columns of table "settlements"
+"""
+enum settlements_update_column {
+  """column name"""
+  amount_claimed
+
+  """column name"""
+  amount_settled
+
+  """column name"""
+  claim_id
+
+  """column name"""
+  customer_policy_id
+
+  """column name"""
+  date_claim_made
+
+  """column name"""
+  date_claim_settled
+
+  """column name"""
+  settlement_id
+}
+
+"""aggregate var_pop on columns"""
+type settlements_var_pop_fields {
+  amount_claimed: Float
+  amount_settled: Float
+  claim_id: Float
+  customer_policy_id: Float
+  settlement_id: Float
+}
+
+"""
+order by var_pop() on columns of table "settlements"
+"""
+input settlements_var_pop_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  customer_policy_id: order_by
+  settlement_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type settlements_var_samp_fields {
+  amount_claimed: Float
+  amount_settled: Float
+  claim_id: Float
+  customer_policy_id: Float
+  settlement_id: Float
+}
+
+"""
+order by var_samp() on columns of table "settlements"
+"""
+input settlements_var_samp_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  customer_policy_id: order_by
+  settlement_id: order_by
+}
+
+"""aggregate variance on columns"""
+type settlements_variance_fields {
+  amount_claimed: Float
+  amount_settled: Float
+  claim_id: Float
+  customer_policy_id: Float
+  settlement_id: Float
+}
+
+"""
+order by variance() on columns of table "settlements"
+"""
+input settlements_variance_order_by {
+  amount_claimed: order_by
+  amount_settled: order_by
+  claim_id: order_by
+  customer_policy_id: order_by
+  settlement_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "claims"
+  """
+  claims(
+    """distinct select on columns"""
+    distinct_on: [claims_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_order_by!]
+
+    """filter the rows returned"""
+    where: claims_bool_exp
+  ): [claims!]!
+
+  """
+  fetch aggregated fields from the table: "claims"
+  """
+  claims_aggregate(
+    """distinct select on columns"""
+    distinct_on: [claims_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claims_order_by!]
+
+    """filter the rows returned"""
+    where: claims_bool_exp
+  ): claims_aggregate!
+
+  """fetch data from the table: "claims" using primary key columns"""
+  claims_by_pk(claim_id: bigint!): claims
+
+  """
+  fetch data from the table: "customer_policies"
+  """
+  customer_policies(
+    """distinct select on columns"""
+    distinct_on: [customer_policies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_policies_order_by!]
+
+    """filter the rows returned"""
+    where: customer_policies_bool_exp
+  ): [customer_policies!]!
+
+  """
+  fetch aggregated fields from the table: "customer_policies"
+  """
+  customer_policies_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_policies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_policies_order_by!]
+
+    """filter the rows returned"""
+    where: customer_policies_bool_exp
+  ): customer_policies_aggregate!
+
+  """
+  fetch data from the table: "customer_policies" using primary key columns
+  """
+  customer_policies_by_pk(policy_id: bigint!): customer_policies
+
+  """
+  fetch data from the table: "customers"
+  """
+  customers(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): [customers!]!
+
+  """
+  fetch aggregated fields from the table: "customers"
+  """
+  customers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): customers_aggregate!
+
+  """fetch data from the table: "customers" using primary key columns"""
+  customers_by_pk(customer_id: bigint!): customers
+
+  """
+  fetch data from the table: "payments"
+  """
+  payments(
+    """distinct select on columns"""
+    distinct_on: [payments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payments_order_by!]
+
+    """filter the rows returned"""
+    where: payments_bool_exp
+  ): [payments!]!
+
+  """
+  fetch aggregated fields from the table: "payments"
+  """
+  payments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [payments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payments_order_by!]
+
+    """filter the rows returned"""
+    where: payments_bool_exp
+  ): payments_aggregate!
+
+  """fetch data from the table: "payments" using primary key columns"""
+  payments_by_pk(payment_id: bigint!): payments
+
+  """
+  fetch data from the table: "settlements"
+  """
+  settlements(
+    """distinct select on columns"""
+    distinct_on: [settlements_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [settlements_order_by!]
+
+    """filter the rows returned"""
+    where: settlements_bool_exp
+  ): [settlements!]!
+
+  """
+  fetch aggregated fields from the table: "settlements"
+  """
+  settlements_aggregate(
+    """distinct select on columns"""
+    distinct_on: [settlements_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [settlements_order_by!]
+
+    """filter the rows returned"""
+    where: settlements_bool_exp
+  ): settlements_aggregate!
+
+  """fetch data from the table: "settlements" using primary key columns"""
+  settlements_by_pk(settlement_id: bigint!): settlements
+}

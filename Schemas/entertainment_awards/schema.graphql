@@ -1,0 +1,1520 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "artwork"
+"""
+type artwork {
+  artwork_id: Int
+  name: String
+
+  """An array relationship"""
+  nominations(
+    """distinct select on columns"""
+    distinct_on: [nomination_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [nomination_order_by!]
+
+    """filter the rows returned"""
+    where: nomination_bool_exp
+  ): [nomination!]!
+
+  """An aggregated array relationship"""
+  nominations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [nomination_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [nomination_order_by!]
+
+    """filter the rows returned"""
+    where: nomination_bool_exp
+  ): nomination_aggregate!
+  type: String
+}
+
+"""
+aggregated selection of "artwork"
+"""
+type artwork_aggregate {
+  aggregate: artwork_aggregate_fields
+  nodes: [artwork!]!
+}
+
+"""
+aggregate fields of "artwork"
+"""
+type artwork_aggregate_fields {
+  avg: artwork_avg_fields
+  count(columns: [artwork_select_column!], distinct: Boolean): Int
+  max: artwork_max_fields
+  min: artwork_min_fields
+  stddev: artwork_stddev_fields
+  stddev_pop: artwork_stddev_pop_fields
+  stddev_samp: artwork_stddev_samp_fields
+  sum: artwork_sum_fields
+  var_pop: artwork_var_pop_fields
+  var_samp: artwork_var_samp_fields
+  variance: artwork_variance_fields
+}
+
+"""
+order by aggregate values of table "artwork"
+"""
+input artwork_aggregate_order_by {
+  avg: artwork_avg_order_by
+  count: order_by
+  max: artwork_max_order_by
+  min: artwork_min_order_by
+  stddev: artwork_stddev_order_by
+  stddev_pop: artwork_stddev_pop_order_by
+  stddev_samp: artwork_stddev_samp_order_by
+  sum: artwork_sum_order_by
+  var_pop: artwork_var_pop_order_by
+  var_samp: artwork_var_samp_order_by
+  variance: artwork_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "artwork"
+"""
+input artwork_arr_rel_insert_input {
+  data: [artwork_insert_input!]!
+  on_conflict: artwork_on_conflict
+}
+
+"""aggregate avg on columns"""
+type artwork_avg_fields {
+  artwork_id: Float
+}
+
+"""
+order by avg() on columns of table "artwork"
+"""
+input artwork_avg_order_by {
+  artwork_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "artwork". All fields are combined with a logical 'AND'.
+"""
+input artwork_bool_exp {
+  _and: [artwork_bool_exp]
+  _not: artwork_bool_exp
+  _or: [artwork_bool_exp]
+  artwork_id: Int_comparison_exp
+  name: String_comparison_exp
+  nominations: nomination_bool_exp
+  type: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "artwork"
+"""
+enum artwork_constraint {
+  """unique or primary key constraint"""
+  idx_21764_sqlite_autoindex_artwork_1
+}
+
+"""
+input type for incrementing integer columne in table "artwork"
+"""
+input artwork_inc_input {
+  artwork_id: Int
+}
+
+"""
+input type for inserting data into table "artwork"
+"""
+input artwork_insert_input {
+  artwork_id: Int
+  name: String
+  nominations: nomination_arr_rel_insert_input
+  type: String
+}
+
+"""aggregate max on columns"""
+type artwork_max_fields {
+  artwork_id: Int
+  name: String
+  type: String
+}
+
+"""
+order by max() on columns of table "artwork"
+"""
+input artwork_max_order_by {
+  artwork_id: order_by
+  name: order_by
+  type: order_by
+}
+
+"""aggregate min on columns"""
+type artwork_min_fields {
+  artwork_id: Int
+  name: String
+  type: String
+}
+
+"""
+order by min() on columns of table "artwork"
+"""
+input artwork_min_order_by {
+  artwork_id: order_by
+  name: order_by
+  type: order_by
+}
+
+"""
+response of any mutation on the table "artwork"
+"""
+type artwork_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [artwork!]!
+}
+
+"""
+input type for inserting object relation for remote table "artwork"
+"""
+input artwork_obj_rel_insert_input {
+  data: artwork_insert_input!
+  on_conflict: artwork_on_conflict
+}
+
+"""
+on conflict condition type for table "artwork"
+"""
+input artwork_on_conflict {
+  constraint: artwork_constraint!
+  update_columns: [artwork_update_column!]!
+  where: artwork_bool_exp
+}
+
+"""
+ordering options when selecting data from "artwork"
+"""
+input artwork_order_by {
+  artwork_id: order_by
+  name: order_by
+  nominations_aggregate: nomination_aggregate_order_by
+  type: order_by
+}
+
+"""
+select columns of table "artwork"
+"""
+enum artwork_select_column {
+  """column name"""
+  artwork_id
+
+  """column name"""
+  name
+
+  """column name"""
+  type
+}
+
+"""
+input type for updating data in table "artwork"
+"""
+input artwork_set_input {
+  artwork_id: Int
+  name: String
+  type: String
+}
+
+"""aggregate stddev on columns"""
+type artwork_stddev_fields {
+  artwork_id: Float
+}
+
+"""
+order by stddev() on columns of table "artwork"
+"""
+input artwork_stddev_order_by {
+  artwork_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type artwork_stddev_pop_fields {
+  artwork_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "artwork"
+"""
+input artwork_stddev_pop_order_by {
+  artwork_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type artwork_stddev_samp_fields {
+  artwork_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "artwork"
+"""
+input artwork_stddev_samp_order_by {
+  artwork_id: order_by
+}
+
+"""aggregate sum on columns"""
+type artwork_sum_fields {
+  artwork_id: Int
+}
+
+"""
+order by sum() on columns of table "artwork"
+"""
+input artwork_sum_order_by {
+  artwork_id: order_by
+}
+
+"""
+update columns of table "artwork"
+"""
+enum artwork_update_column {
+  """column name"""
+  artwork_id
+
+  """column name"""
+  name
+
+  """column name"""
+  type
+}
+
+"""aggregate var_pop on columns"""
+type artwork_var_pop_fields {
+  artwork_id: Float
+}
+
+"""
+order by var_pop() on columns of table "artwork"
+"""
+input artwork_var_pop_order_by {
+  artwork_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type artwork_var_samp_fields {
+  artwork_id: Float
+}
+
+"""
+order by var_samp() on columns of table "artwork"
+"""
+input artwork_var_samp_order_by {
+  artwork_id: order_by
+}
+
+"""aggregate variance on columns"""
+type artwork_variance_fields {
+  artwork_id: Float
+}
+
+"""
+order by variance() on columns of table "artwork"
+"""
+input artwork_variance_order_by {
+  artwork_id: order_by
+}
+
+"""
+columns and relationships of "festival_detail"
+"""
+type festival_detail {
+  chair_name: String
+  festival_id: Int
+  festival_name: String
+  location: String
+
+  """An array relationship"""
+  nominations(
+    """distinct select on columns"""
+    distinct_on: [nomination_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [nomination_order_by!]
+
+    """filter the rows returned"""
+    where: nomination_bool_exp
+  ): [nomination!]!
+
+  """An aggregated array relationship"""
+  nominations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [nomination_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [nomination_order_by!]
+
+    """filter the rows returned"""
+    where: nomination_bool_exp
+  ): nomination_aggregate!
+  num_of_audience: Int
+  year: Int
+}
+
+"""
+aggregated selection of "festival_detail"
+"""
+type festival_detail_aggregate {
+  aggregate: festival_detail_aggregate_fields
+  nodes: [festival_detail!]!
+}
+
+"""
+aggregate fields of "festival_detail"
+"""
+type festival_detail_aggregate_fields {
+  avg: festival_detail_avg_fields
+  count(columns: [festival_detail_select_column!], distinct: Boolean): Int
+  max: festival_detail_max_fields
+  min: festival_detail_min_fields
+  stddev: festival_detail_stddev_fields
+  stddev_pop: festival_detail_stddev_pop_fields
+  stddev_samp: festival_detail_stddev_samp_fields
+  sum: festival_detail_sum_fields
+  var_pop: festival_detail_var_pop_fields
+  var_samp: festival_detail_var_samp_fields
+  variance: festival_detail_variance_fields
+}
+
+"""
+order by aggregate values of table "festival_detail"
+"""
+input festival_detail_aggregate_order_by {
+  avg: festival_detail_avg_order_by
+  count: order_by
+  max: festival_detail_max_order_by
+  min: festival_detail_min_order_by
+  stddev: festival_detail_stddev_order_by
+  stddev_pop: festival_detail_stddev_pop_order_by
+  stddev_samp: festival_detail_stddev_samp_order_by
+  sum: festival_detail_sum_order_by
+  var_pop: festival_detail_var_pop_order_by
+  var_samp: festival_detail_var_samp_order_by
+  variance: festival_detail_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "festival_detail"
+"""
+input festival_detail_arr_rel_insert_input {
+  data: [festival_detail_insert_input!]!
+  on_conflict: festival_detail_on_conflict
+}
+
+"""aggregate avg on columns"""
+type festival_detail_avg_fields {
+  festival_id: Float
+  num_of_audience: Float
+  year: Float
+}
+
+"""
+order by avg() on columns of table "festival_detail"
+"""
+input festival_detail_avg_order_by {
+  festival_id: order_by
+  num_of_audience: order_by
+  year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "festival_detail". All fields are combined with a logical 'AND'.
+"""
+input festival_detail_bool_exp {
+  _and: [festival_detail_bool_exp]
+  _not: festival_detail_bool_exp
+  _or: [festival_detail_bool_exp]
+  chair_name: String_comparison_exp
+  festival_id: Int_comparison_exp
+  festival_name: String_comparison_exp
+  location: String_comparison_exp
+  nominations: nomination_bool_exp
+  num_of_audience: Int_comparison_exp
+  year: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "festival_detail"
+"""
+enum festival_detail_constraint {
+  """unique or primary key constraint"""
+  idx_21758_sqlite_autoindex_festival_detail_1
+}
+
+"""
+input type for incrementing integer columne in table "festival_detail"
+"""
+input festival_detail_inc_input {
+  festival_id: Int
+  num_of_audience: Int
+  year: Int
+}
+
+"""
+input type for inserting data into table "festival_detail"
+"""
+input festival_detail_insert_input {
+  chair_name: String
+  festival_id: Int
+  festival_name: String
+  location: String
+  nominations: nomination_arr_rel_insert_input
+  num_of_audience: Int
+  year: Int
+}
+
+"""aggregate max on columns"""
+type festival_detail_max_fields {
+  chair_name: String
+  festival_id: Int
+  festival_name: String
+  location: String
+  num_of_audience: Int
+  year: Int
+}
+
+"""
+order by max() on columns of table "festival_detail"
+"""
+input festival_detail_max_order_by {
+  chair_name: order_by
+  festival_id: order_by
+  festival_name: order_by
+  location: order_by
+  num_of_audience: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type festival_detail_min_fields {
+  chair_name: String
+  festival_id: Int
+  festival_name: String
+  location: String
+  num_of_audience: Int
+  year: Int
+}
+
+"""
+order by min() on columns of table "festival_detail"
+"""
+input festival_detail_min_order_by {
+  chair_name: order_by
+  festival_id: order_by
+  festival_name: order_by
+  location: order_by
+  num_of_audience: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "festival_detail"
+"""
+type festival_detail_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [festival_detail!]!
+}
+
+"""
+input type for inserting object relation for remote table "festival_detail"
+"""
+input festival_detail_obj_rel_insert_input {
+  data: festival_detail_insert_input!
+  on_conflict: festival_detail_on_conflict
+}
+
+"""
+on conflict condition type for table "festival_detail"
+"""
+input festival_detail_on_conflict {
+  constraint: festival_detail_constraint!
+  update_columns: [festival_detail_update_column!]!
+  where: festival_detail_bool_exp
+}
+
+"""
+ordering options when selecting data from "festival_detail"
+"""
+input festival_detail_order_by {
+  chair_name: order_by
+  festival_id: order_by
+  festival_name: order_by
+  location: order_by
+  nominations_aggregate: nomination_aggregate_order_by
+  num_of_audience: order_by
+  year: order_by
+}
+
+"""
+select columns of table "festival_detail"
+"""
+enum festival_detail_select_column {
+  """column name"""
+  chair_name
+
+  """column name"""
+  festival_id
+
+  """column name"""
+  festival_name
+
+  """column name"""
+  location
+
+  """column name"""
+  num_of_audience
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "festival_detail"
+"""
+input festival_detail_set_input {
+  chair_name: String
+  festival_id: Int
+  festival_name: String
+  location: String
+  num_of_audience: Int
+  year: Int
+}
+
+"""aggregate stddev on columns"""
+type festival_detail_stddev_fields {
+  festival_id: Float
+  num_of_audience: Float
+  year: Float
+}
+
+"""
+order by stddev() on columns of table "festival_detail"
+"""
+input festival_detail_stddev_order_by {
+  festival_id: order_by
+  num_of_audience: order_by
+  year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type festival_detail_stddev_pop_fields {
+  festival_id: Float
+  num_of_audience: Float
+  year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "festival_detail"
+"""
+input festival_detail_stddev_pop_order_by {
+  festival_id: order_by
+  num_of_audience: order_by
+  year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type festival_detail_stddev_samp_fields {
+  festival_id: Float
+  num_of_audience: Float
+  year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "festival_detail"
+"""
+input festival_detail_stddev_samp_order_by {
+  festival_id: order_by
+  num_of_audience: order_by
+  year: order_by
+}
+
+"""aggregate sum on columns"""
+type festival_detail_sum_fields {
+  festival_id: Int
+  num_of_audience: Int
+  year: Int
+}
+
+"""
+order by sum() on columns of table "festival_detail"
+"""
+input festival_detail_sum_order_by {
+  festival_id: order_by
+  num_of_audience: order_by
+  year: order_by
+}
+
+"""
+update columns of table "festival_detail"
+"""
+enum festival_detail_update_column {
+  """column name"""
+  chair_name
+
+  """column name"""
+  festival_id
+
+  """column name"""
+  festival_name
+
+  """column name"""
+  location
+
+  """column name"""
+  num_of_audience
+
+  """column name"""
+  year
+}
+
+"""aggregate var_pop on columns"""
+type festival_detail_var_pop_fields {
+  festival_id: Float
+  num_of_audience: Float
+  year: Float
+}
+
+"""
+order by var_pop() on columns of table "festival_detail"
+"""
+input festival_detail_var_pop_order_by {
+  festival_id: order_by
+  num_of_audience: order_by
+  year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type festival_detail_var_samp_fields {
+  festival_id: Float
+  num_of_audience: Float
+  year: Float
+}
+
+"""
+order by var_samp() on columns of table "festival_detail"
+"""
+input festival_detail_var_samp_order_by {
+  festival_id: order_by
+  num_of_audience: order_by
+  year: order_by
+}
+
+"""aggregate variance on columns"""
+type festival_detail_variance_fields {
+  festival_id: Float
+  num_of_audience: Float
+  year: Float
+}
+
+"""
+order by variance() on columns of table "festival_detail"
+"""
+input festival_detail_variance_order_by {
+  festival_id: order_by
+  num_of_audience: order_by
+  year: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "artwork"
+  """
+  delete_artwork(
+    """filter the rows which have to be deleted"""
+    where: artwork_bool_exp!
+  ): artwork_mutation_response
+
+  """
+  delete data from the table: "festival_detail"
+  """
+  delete_festival_detail(
+    """filter the rows which have to be deleted"""
+    where: festival_detail_bool_exp!
+  ): festival_detail_mutation_response
+
+  """
+  delete data from the table: "nomination"
+  """
+  delete_nomination(
+    """filter the rows which have to be deleted"""
+    where: nomination_bool_exp!
+  ): nomination_mutation_response
+
+  """
+  insert data into the table: "artwork"
+  """
+  insert_artwork(
+    """the rows to be inserted"""
+    objects: [artwork_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: artwork_on_conflict
+  ): artwork_mutation_response
+
+  """
+  insert data into the table: "festival_detail"
+  """
+  insert_festival_detail(
+    """the rows to be inserted"""
+    objects: [festival_detail_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: festival_detail_on_conflict
+  ): festival_detail_mutation_response
+
+  """
+  insert data into the table: "nomination"
+  """
+  insert_nomination(
+    """the rows to be inserted"""
+    objects: [nomination_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: nomination_on_conflict
+  ): nomination_mutation_response
+
+  """
+  update data of the table: "artwork"
+  """
+  update_artwork(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: artwork_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: artwork_set_input
+
+    """filter the rows which have to be updated"""
+    where: artwork_bool_exp!
+  ): artwork_mutation_response
+
+  """
+  update data of the table: "festival_detail"
+  """
+  update_festival_detail(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: festival_detail_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: festival_detail_set_input
+
+    """filter the rows which have to be updated"""
+    where: festival_detail_bool_exp!
+  ): festival_detail_mutation_response
+
+  """
+  update data of the table: "nomination"
+  """
+  update_nomination(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: nomination_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: nomination_set_input
+
+    """filter the rows which have to be updated"""
+    where: nomination_bool_exp!
+  ): nomination_mutation_response
+}
+
+"""
+columns and relationships of "nomination"
+"""
+type nomination {
+  """An object relationship"""
+  artwork: artwork
+  artwork_id: Int
+
+  """An object relationship"""
+  festival_detail: festival_detail
+  festival_id: Int
+  result: String
+}
+
+"""
+aggregated selection of "nomination"
+"""
+type nomination_aggregate {
+  aggregate: nomination_aggregate_fields
+  nodes: [nomination!]!
+}
+
+"""
+aggregate fields of "nomination"
+"""
+type nomination_aggregate_fields {
+  avg: nomination_avg_fields
+  count(columns: [nomination_select_column!], distinct: Boolean): Int
+  max: nomination_max_fields
+  min: nomination_min_fields
+  stddev: nomination_stddev_fields
+  stddev_pop: nomination_stddev_pop_fields
+  stddev_samp: nomination_stddev_samp_fields
+  sum: nomination_sum_fields
+  var_pop: nomination_var_pop_fields
+  var_samp: nomination_var_samp_fields
+  variance: nomination_variance_fields
+}
+
+"""
+order by aggregate values of table "nomination"
+"""
+input nomination_aggregate_order_by {
+  avg: nomination_avg_order_by
+  count: order_by
+  max: nomination_max_order_by
+  min: nomination_min_order_by
+  stddev: nomination_stddev_order_by
+  stddev_pop: nomination_stddev_pop_order_by
+  stddev_samp: nomination_stddev_samp_order_by
+  sum: nomination_sum_order_by
+  var_pop: nomination_var_pop_order_by
+  var_samp: nomination_var_samp_order_by
+  variance: nomination_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "nomination"
+"""
+input nomination_arr_rel_insert_input {
+  data: [nomination_insert_input!]!
+  on_conflict: nomination_on_conflict
+}
+
+"""aggregate avg on columns"""
+type nomination_avg_fields {
+  artwork_id: Float
+  festival_id: Float
+}
+
+"""
+order by avg() on columns of table "nomination"
+"""
+input nomination_avg_order_by {
+  artwork_id: order_by
+  festival_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "nomination". All fields are combined with a logical 'AND'.
+"""
+input nomination_bool_exp {
+  _and: [nomination_bool_exp]
+  _not: nomination_bool_exp
+  _or: [nomination_bool_exp]
+  artwork: artwork_bool_exp
+  artwork_id: Int_comparison_exp
+  festival_detail: festival_detail_bool_exp
+  festival_id: Int_comparison_exp
+  result: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "nomination"
+"""
+enum nomination_constraint {
+  """unique or primary key constraint"""
+  idx_21770_sqlite_autoindex_nomination_1
+}
+
+"""
+input type for incrementing integer columne in table "nomination"
+"""
+input nomination_inc_input {
+  artwork_id: Int
+  festival_id: Int
+}
+
+"""
+input type for inserting data into table "nomination"
+"""
+input nomination_insert_input {
+  artwork: artwork_obj_rel_insert_input
+  artwork_id: Int
+  festival_detail: festival_detail_obj_rel_insert_input
+  festival_id: Int
+  result: String
+}
+
+"""aggregate max on columns"""
+type nomination_max_fields {
+  artwork_id: Int
+  festival_id: Int
+  result: String
+}
+
+"""
+order by max() on columns of table "nomination"
+"""
+input nomination_max_order_by {
+  artwork_id: order_by
+  festival_id: order_by
+  result: order_by
+}
+
+"""aggregate min on columns"""
+type nomination_min_fields {
+  artwork_id: Int
+  festival_id: Int
+  result: String
+}
+
+"""
+order by min() on columns of table "nomination"
+"""
+input nomination_min_order_by {
+  artwork_id: order_by
+  festival_id: order_by
+  result: order_by
+}
+
+"""
+response of any mutation on the table "nomination"
+"""
+type nomination_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [nomination!]!
+}
+
+"""
+input type for inserting object relation for remote table "nomination"
+"""
+input nomination_obj_rel_insert_input {
+  data: nomination_insert_input!
+  on_conflict: nomination_on_conflict
+}
+
+"""
+on conflict condition type for table "nomination"
+"""
+input nomination_on_conflict {
+  constraint: nomination_constraint!
+  update_columns: [nomination_update_column!]!
+  where: nomination_bool_exp
+}
+
+"""
+ordering options when selecting data from "nomination"
+"""
+input nomination_order_by {
+  artwork: artwork_order_by
+  artwork_id: order_by
+  festival_detail: festival_detail_order_by
+  festival_id: order_by
+  result: order_by
+}
+
+"""
+select columns of table "nomination"
+"""
+enum nomination_select_column {
+  """column name"""
+  artwork_id
+
+  """column name"""
+  festival_id
+
+  """column name"""
+  result
+}
+
+"""
+input type for updating data in table "nomination"
+"""
+input nomination_set_input {
+  artwork_id: Int
+  festival_id: Int
+  result: String
+}
+
+"""aggregate stddev on columns"""
+type nomination_stddev_fields {
+  artwork_id: Float
+  festival_id: Float
+}
+
+"""
+order by stddev() on columns of table "nomination"
+"""
+input nomination_stddev_order_by {
+  artwork_id: order_by
+  festival_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type nomination_stddev_pop_fields {
+  artwork_id: Float
+  festival_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "nomination"
+"""
+input nomination_stddev_pop_order_by {
+  artwork_id: order_by
+  festival_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type nomination_stddev_samp_fields {
+  artwork_id: Float
+  festival_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "nomination"
+"""
+input nomination_stddev_samp_order_by {
+  artwork_id: order_by
+  festival_id: order_by
+}
+
+"""aggregate sum on columns"""
+type nomination_sum_fields {
+  artwork_id: Int
+  festival_id: Int
+}
+
+"""
+order by sum() on columns of table "nomination"
+"""
+input nomination_sum_order_by {
+  artwork_id: order_by
+  festival_id: order_by
+}
+
+"""
+update columns of table "nomination"
+"""
+enum nomination_update_column {
+  """column name"""
+  artwork_id
+
+  """column name"""
+  festival_id
+
+  """column name"""
+  result
+}
+
+"""aggregate var_pop on columns"""
+type nomination_var_pop_fields {
+  artwork_id: Float
+  festival_id: Float
+}
+
+"""
+order by var_pop() on columns of table "nomination"
+"""
+input nomination_var_pop_order_by {
+  artwork_id: order_by
+  festival_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type nomination_var_samp_fields {
+  artwork_id: Float
+  festival_id: Float
+}
+
+"""
+order by var_samp() on columns of table "nomination"
+"""
+input nomination_var_samp_order_by {
+  artwork_id: order_by
+  festival_id: order_by
+}
+
+"""aggregate variance on columns"""
+type nomination_variance_fields {
+  artwork_id: Float
+  festival_id: Float
+}
+
+"""
+order by variance() on columns of table "nomination"
+"""
+input nomination_variance_order_by {
+  artwork_id: order_by
+  festival_id: order_by
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "artwork"
+  """
+  artwork(
+    """distinct select on columns"""
+    distinct_on: [artwork_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [artwork_order_by!]
+
+    """filter the rows returned"""
+    where: artwork_bool_exp
+  ): [artwork!]!
+
+  """
+  fetch aggregated fields from the table: "artwork"
+  """
+  artwork_aggregate(
+    """distinct select on columns"""
+    distinct_on: [artwork_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [artwork_order_by!]
+
+    """filter the rows returned"""
+    where: artwork_bool_exp
+  ): artwork_aggregate!
+
+  """
+  fetch data from the table: "festival_detail"
+  """
+  festival_detail(
+    """distinct select on columns"""
+    distinct_on: [festival_detail_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [festival_detail_order_by!]
+
+    """filter the rows returned"""
+    where: festival_detail_bool_exp
+  ): [festival_detail!]!
+
+  """
+  fetch aggregated fields from the table: "festival_detail"
+  """
+  festival_detail_aggregate(
+    """distinct select on columns"""
+    distinct_on: [festival_detail_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [festival_detail_order_by!]
+
+    """filter the rows returned"""
+    where: festival_detail_bool_exp
+  ): festival_detail_aggregate!
+
+  """
+  fetch data from the table: "nomination"
+  """
+  nomination(
+    """distinct select on columns"""
+    distinct_on: [nomination_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [nomination_order_by!]
+
+    """filter the rows returned"""
+    where: nomination_bool_exp
+  ): [nomination!]!
+
+  """
+  fetch aggregated fields from the table: "nomination"
+  """
+  nomination_aggregate(
+    """distinct select on columns"""
+    distinct_on: [nomination_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [nomination_order_by!]
+
+    """filter the rows returned"""
+    where: nomination_bool_exp
+  ): nomination_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "artwork"
+  """
+  artwork(
+    """distinct select on columns"""
+    distinct_on: [artwork_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [artwork_order_by!]
+
+    """filter the rows returned"""
+    where: artwork_bool_exp
+  ): [artwork!]!
+
+  """
+  fetch aggregated fields from the table: "artwork"
+  """
+  artwork_aggregate(
+    """distinct select on columns"""
+    distinct_on: [artwork_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [artwork_order_by!]
+
+    """filter the rows returned"""
+    where: artwork_bool_exp
+  ): artwork_aggregate!
+
+  """
+  fetch data from the table: "festival_detail"
+  """
+  festival_detail(
+    """distinct select on columns"""
+    distinct_on: [festival_detail_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [festival_detail_order_by!]
+
+    """filter the rows returned"""
+    where: festival_detail_bool_exp
+  ): [festival_detail!]!
+
+  """
+  fetch aggregated fields from the table: "festival_detail"
+  """
+  festival_detail_aggregate(
+    """distinct select on columns"""
+    distinct_on: [festival_detail_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [festival_detail_order_by!]
+
+    """filter the rows returned"""
+    where: festival_detail_bool_exp
+  ): festival_detail_aggregate!
+
+  """
+  fetch data from the table: "nomination"
+  """
+  nomination(
+    """distinct select on columns"""
+    distinct_on: [nomination_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [nomination_order_by!]
+
+    """filter the rows returned"""
+    where: nomination_bool_exp
+  ): [nomination!]!
+
+  """
+  fetch aggregated fields from the table: "nomination"
+  """
+  nomination_aggregate(
+    """distinct select on columns"""
+    distinct_on: [nomination_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [nomination_order_by!]
+
+    """filter the rows returned"""
+    where: nomination_bool_exp
+  ): nomination_aggregate!
+}

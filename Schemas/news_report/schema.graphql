@@ -1,0 +1,1535 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "event"
+"""
+type event {
+  date: String
+  event_attendance: Int
+  event_id: Int
+  name: String
+
+  """An array relationship"""
+  news_reports(
+    """distinct select on columns"""
+    distinct_on: [news_report_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [news_report_order_by!]
+
+    """filter the rows returned"""
+    where: news_report_bool_exp
+  ): [news_report!]!
+
+  """An aggregated array relationship"""
+  news_reports_aggregate(
+    """distinct select on columns"""
+    distinct_on: [news_report_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [news_report_order_by!]
+
+    """filter the rows returned"""
+    where: news_report_bool_exp
+  ): news_report_aggregate!
+  venue: String
+}
+
+"""
+aggregated selection of "event"
+"""
+type event_aggregate {
+  aggregate: event_aggregate_fields
+  nodes: [event!]!
+}
+
+"""
+aggregate fields of "event"
+"""
+type event_aggregate_fields {
+  avg: event_avg_fields
+  count(columns: [event_select_column!], distinct: Boolean): Int
+  max: event_max_fields
+  min: event_min_fields
+  stddev: event_stddev_fields
+  stddev_pop: event_stddev_pop_fields
+  stddev_samp: event_stddev_samp_fields
+  sum: event_sum_fields
+  var_pop: event_var_pop_fields
+  var_samp: event_var_samp_fields
+  variance: event_variance_fields
+}
+
+"""
+order by aggregate values of table "event"
+"""
+input event_aggregate_order_by {
+  avg: event_avg_order_by
+  count: order_by
+  max: event_max_order_by
+  min: event_min_order_by
+  stddev: event_stddev_order_by
+  stddev_pop: event_stddev_pop_order_by
+  stddev_samp: event_stddev_samp_order_by
+  sum: event_sum_order_by
+  var_pop: event_var_pop_order_by
+  var_samp: event_var_samp_order_by
+  variance: event_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "event"
+"""
+input event_arr_rel_insert_input {
+  data: [event_insert_input!]!
+  on_conflict: event_on_conflict
+}
+
+"""aggregate avg on columns"""
+type event_avg_fields {
+  event_attendance: Float
+  event_id: Float
+}
+
+"""
+order by avg() on columns of table "event"
+"""
+input event_avg_order_by {
+  event_attendance: order_by
+  event_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "event". All fields are combined with a logical 'AND'.
+"""
+input event_bool_exp {
+  _and: [event_bool_exp]
+  _not: event_bool_exp
+  _or: [event_bool_exp]
+  date: String_comparison_exp
+  event_attendance: Int_comparison_exp
+  event_id: Int_comparison_exp
+  name: String_comparison_exp
+  news_reports: news_report_bool_exp
+  venue: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "event"
+"""
+enum event_constraint {
+  """unique or primary key constraint"""
+  idx_18131_sqlite_autoindex_event_1
+}
+
+"""
+input type for incrementing integer columne in table "event"
+"""
+input event_inc_input {
+  event_attendance: Int
+  event_id: Int
+}
+
+"""
+input type for inserting data into table "event"
+"""
+input event_insert_input {
+  date: String
+  event_attendance: Int
+  event_id: Int
+  name: String
+  news_reports: news_report_arr_rel_insert_input
+  venue: String
+}
+
+"""aggregate max on columns"""
+type event_max_fields {
+  date: String
+  event_attendance: Int
+  event_id: Int
+  name: String
+  venue: String
+}
+
+"""
+order by max() on columns of table "event"
+"""
+input event_max_order_by {
+  date: order_by
+  event_attendance: order_by
+  event_id: order_by
+  name: order_by
+  venue: order_by
+}
+
+"""aggregate min on columns"""
+type event_min_fields {
+  date: String
+  event_attendance: Int
+  event_id: Int
+  name: String
+  venue: String
+}
+
+"""
+order by min() on columns of table "event"
+"""
+input event_min_order_by {
+  date: order_by
+  event_attendance: order_by
+  event_id: order_by
+  name: order_by
+  venue: order_by
+}
+
+"""
+response of any mutation on the table "event"
+"""
+type event_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [event!]!
+}
+
+"""
+input type for inserting object relation for remote table "event"
+"""
+input event_obj_rel_insert_input {
+  data: event_insert_input!
+  on_conflict: event_on_conflict
+}
+
+"""
+on conflict condition type for table "event"
+"""
+input event_on_conflict {
+  constraint: event_constraint!
+  update_columns: [event_update_column!]!
+  where: event_bool_exp
+}
+
+"""
+ordering options when selecting data from "event"
+"""
+input event_order_by {
+  date: order_by
+  event_attendance: order_by
+  event_id: order_by
+  name: order_by
+  news_reports_aggregate: news_report_aggregate_order_by
+  venue: order_by
+}
+
+"""
+select columns of table "event"
+"""
+enum event_select_column {
+  """column name"""
+  date
+
+  """column name"""
+  event_attendance
+
+  """column name"""
+  event_id
+
+  """column name"""
+  name
+
+  """column name"""
+  venue
+}
+
+"""
+input type for updating data in table "event"
+"""
+input event_set_input {
+  date: String
+  event_attendance: Int
+  event_id: Int
+  name: String
+  venue: String
+}
+
+"""aggregate stddev on columns"""
+type event_stddev_fields {
+  event_attendance: Float
+  event_id: Float
+}
+
+"""
+order by stddev() on columns of table "event"
+"""
+input event_stddev_order_by {
+  event_attendance: order_by
+  event_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type event_stddev_pop_fields {
+  event_attendance: Float
+  event_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "event"
+"""
+input event_stddev_pop_order_by {
+  event_attendance: order_by
+  event_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type event_stddev_samp_fields {
+  event_attendance: Float
+  event_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "event"
+"""
+input event_stddev_samp_order_by {
+  event_attendance: order_by
+  event_id: order_by
+}
+
+"""aggregate sum on columns"""
+type event_sum_fields {
+  event_attendance: Int
+  event_id: Int
+}
+
+"""
+order by sum() on columns of table "event"
+"""
+input event_sum_order_by {
+  event_attendance: order_by
+  event_id: order_by
+}
+
+"""
+update columns of table "event"
+"""
+enum event_update_column {
+  """column name"""
+  date
+
+  """column name"""
+  event_attendance
+
+  """column name"""
+  event_id
+
+  """column name"""
+  name
+
+  """column name"""
+  venue
+}
+
+"""aggregate var_pop on columns"""
+type event_var_pop_fields {
+  event_attendance: Float
+  event_id: Float
+}
+
+"""
+order by var_pop() on columns of table "event"
+"""
+input event_var_pop_order_by {
+  event_attendance: order_by
+  event_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type event_var_samp_fields {
+  event_attendance: Float
+  event_id: Float
+}
+
+"""
+order by var_samp() on columns of table "event"
+"""
+input event_var_samp_order_by {
+  event_attendance: order_by
+  event_id: order_by
+}
+
+"""aggregate variance on columns"""
+type event_variance_fields {
+  event_attendance: Float
+  event_id: Float
+}
+
+"""
+order by variance() on columns of table "event"
+"""
+input event_variance_order_by {
+  event_attendance: order_by
+  event_id: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "journalist"
+"""
+type journalist {
+  age: String
+  journalist_id: Int
+  name: String
+  nationality: String
+
+  """An array relationship"""
+  news_reports(
+    """distinct select on columns"""
+    distinct_on: [news_report_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [news_report_order_by!]
+
+    """filter the rows returned"""
+    where: news_report_bool_exp
+  ): [news_report!]!
+
+  """An aggregated array relationship"""
+  news_reports_aggregate(
+    """distinct select on columns"""
+    distinct_on: [news_report_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [news_report_order_by!]
+
+    """filter the rows returned"""
+    where: news_report_bool_exp
+  ): news_report_aggregate!
+  years_working: Int
+}
+
+"""
+aggregated selection of "journalist"
+"""
+type journalist_aggregate {
+  aggregate: journalist_aggregate_fields
+  nodes: [journalist!]!
+}
+
+"""
+aggregate fields of "journalist"
+"""
+type journalist_aggregate_fields {
+  avg: journalist_avg_fields
+  count(columns: [journalist_select_column!], distinct: Boolean): Int
+  max: journalist_max_fields
+  min: journalist_min_fields
+  stddev: journalist_stddev_fields
+  stddev_pop: journalist_stddev_pop_fields
+  stddev_samp: journalist_stddev_samp_fields
+  sum: journalist_sum_fields
+  var_pop: journalist_var_pop_fields
+  var_samp: journalist_var_samp_fields
+  variance: journalist_variance_fields
+}
+
+"""
+order by aggregate values of table "journalist"
+"""
+input journalist_aggregate_order_by {
+  avg: journalist_avg_order_by
+  count: order_by
+  max: journalist_max_order_by
+  min: journalist_min_order_by
+  stddev: journalist_stddev_order_by
+  stddev_pop: journalist_stddev_pop_order_by
+  stddev_samp: journalist_stddev_samp_order_by
+  sum: journalist_sum_order_by
+  var_pop: journalist_var_pop_order_by
+  var_samp: journalist_var_samp_order_by
+  variance: journalist_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "journalist"
+"""
+input journalist_arr_rel_insert_input {
+  data: [journalist_insert_input!]!
+  on_conflict: journalist_on_conflict
+}
+
+"""aggregate avg on columns"""
+type journalist_avg_fields {
+  journalist_id: Float
+  years_working: Float
+}
+
+"""
+order by avg() on columns of table "journalist"
+"""
+input journalist_avg_order_by {
+  journalist_id: order_by
+  years_working: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "journalist". All fields are combined with a logical 'AND'.
+"""
+input journalist_bool_exp {
+  _and: [journalist_bool_exp]
+  _not: journalist_bool_exp
+  _or: [journalist_bool_exp]
+  age: String_comparison_exp
+  journalist_id: Int_comparison_exp
+  name: String_comparison_exp
+  nationality: String_comparison_exp
+  news_reports: news_report_bool_exp
+  years_working: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "journalist"
+"""
+enum journalist_constraint {
+  """unique or primary key constraint"""
+  idx_18137_sqlite_autoindex_journalist_1
+}
+
+"""
+input type for incrementing integer columne in table "journalist"
+"""
+input journalist_inc_input {
+  journalist_id: Int
+  years_working: Int
+}
+
+"""
+input type for inserting data into table "journalist"
+"""
+input journalist_insert_input {
+  age: String
+  journalist_id: Int
+  name: String
+  nationality: String
+  news_reports: news_report_arr_rel_insert_input
+  years_working: Int
+}
+
+"""aggregate max on columns"""
+type journalist_max_fields {
+  age: String
+  journalist_id: Int
+  name: String
+  nationality: String
+  years_working: Int
+}
+
+"""
+order by max() on columns of table "journalist"
+"""
+input journalist_max_order_by {
+  age: order_by
+  journalist_id: order_by
+  name: order_by
+  nationality: order_by
+  years_working: order_by
+}
+
+"""aggregate min on columns"""
+type journalist_min_fields {
+  age: String
+  journalist_id: Int
+  name: String
+  nationality: String
+  years_working: Int
+}
+
+"""
+order by min() on columns of table "journalist"
+"""
+input journalist_min_order_by {
+  age: order_by
+  journalist_id: order_by
+  name: order_by
+  nationality: order_by
+  years_working: order_by
+}
+
+"""
+response of any mutation on the table "journalist"
+"""
+type journalist_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [journalist!]!
+}
+
+"""
+input type for inserting object relation for remote table "journalist"
+"""
+input journalist_obj_rel_insert_input {
+  data: journalist_insert_input!
+  on_conflict: journalist_on_conflict
+}
+
+"""
+on conflict condition type for table "journalist"
+"""
+input journalist_on_conflict {
+  constraint: journalist_constraint!
+  update_columns: [journalist_update_column!]!
+  where: journalist_bool_exp
+}
+
+"""
+ordering options when selecting data from "journalist"
+"""
+input journalist_order_by {
+  age: order_by
+  journalist_id: order_by
+  name: order_by
+  nationality: order_by
+  news_reports_aggregate: news_report_aggregate_order_by
+  years_working: order_by
+}
+
+"""
+select columns of table "journalist"
+"""
+enum journalist_select_column {
+  """column name"""
+  age
+
+  """column name"""
+  journalist_id
+
+  """column name"""
+  name
+
+  """column name"""
+  nationality
+
+  """column name"""
+  years_working
+}
+
+"""
+input type for updating data in table "journalist"
+"""
+input journalist_set_input {
+  age: String
+  journalist_id: Int
+  name: String
+  nationality: String
+  years_working: Int
+}
+
+"""aggregate stddev on columns"""
+type journalist_stddev_fields {
+  journalist_id: Float
+  years_working: Float
+}
+
+"""
+order by stddev() on columns of table "journalist"
+"""
+input journalist_stddev_order_by {
+  journalist_id: order_by
+  years_working: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type journalist_stddev_pop_fields {
+  journalist_id: Float
+  years_working: Float
+}
+
+"""
+order by stddev_pop() on columns of table "journalist"
+"""
+input journalist_stddev_pop_order_by {
+  journalist_id: order_by
+  years_working: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type journalist_stddev_samp_fields {
+  journalist_id: Float
+  years_working: Float
+}
+
+"""
+order by stddev_samp() on columns of table "journalist"
+"""
+input journalist_stddev_samp_order_by {
+  journalist_id: order_by
+  years_working: order_by
+}
+
+"""aggregate sum on columns"""
+type journalist_sum_fields {
+  journalist_id: Int
+  years_working: Int
+}
+
+"""
+order by sum() on columns of table "journalist"
+"""
+input journalist_sum_order_by {
+  journalist_id: order_by
+  years_working: order_by
+}
+
+"""
+update columns of table "journalist"
+"""
+enum journalist_update_column {
+  """column name"""
+  age
+
+  """column name"""
+  journalist_id
+
+  """column name"""
+  name
+
+  """column name"""
+  nationality
+
+  """column name"""
+  years_working
+}
+
+"""aggregate var_pop on columns"""
+type journalist_var_pop_fields {
+  journalist_id: Float
+  years_working: Float
+}
+
+"""
+order by var_pop() on columns of table "journalist"
+"""
+input journalist_var_pop_order_by {
+  journalist_id: order_by
+  years_working: order_by
+}
+
+"""aggregate var_samp on columns"""
+type journalist_var_samp_fields {
+  journalist_id: Float
+  years_working: Float
+}
+
+"""
+order by var_samp() on columns of table "journalist"
+"""
+input journalist_var_samp_order_by {
+  journalist_id: order_by
+  years_working: order_by
+}
+
+"""aggregate variance on columns"""
+type journalist_variance_fields {
+  journalist_id: Float
+  years_working: Float
+}
+
+"""
+order by variance() on columns of table "journalist"
+"""
+input journalist_variance_order_by {
+  journalist_id: order_by
+  years_working: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "event"
+  """
+  delete_event(
+    """filter the rows which have to be deleted"""
+    where: event_bool_exp!
+  ): event_mutation_response
+
+  """
+  delete data from the table: "journalist"
+  """
+  delete_journalist(
+    """filter the rows which have to be deleted"""
+    where: journalist_bool_exp!
+  ): journalist_mutation_response
+
+  """
+  delete data from the table: "news_report"
+  """
+  delete_news_report(
+    """filter the rows which have to be deleted"""
+    where: news_report_bool_exp!
+  ): news_report_mutation_response
+
+  """
+  insert data into the table: "event"
+  """
+  insert_event(
+    """the rows to be inserted"""
+    objects: [event_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: event_on_conflict
+  ): event_mutation_response
+
+  """
+  insert data into the table: "journalist"
+  """
+  insert_journalist(
+    """the rows to be inserted"""
+    objects: [journalist_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: journalist_on_conflict
+  ): journalist_mutation_response
+
+  """
+  insert data into the table: "news_report"
+  """
+  insert_news_report(
+    """the rows to be inserted"""
+    objects: [news_report_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: news_report_on_conflict
+  ): news_report_mutation_response
+
+  """
+  update data of the table: "event"
+  """
+  update_event(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: event_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: event_set_input
+
+    """filter the rows which have to be updated"""
+    where: event_bool_exp!
+  ): event_mutation_response
+
+  """
+  update data of the table: "journalist"
+  """
+  update_journalist(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: journalist_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: journalist_set_input
+
+    """filter the rows which have to be updated"""
+    where: journalist_bool_exp!
+  ): journalist_mutation_response
+
+  """
+  update data of the table: "news_report"
+  """
+  update_news_report(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: news_report_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: news_report_set_input
+
+    """filter the rows which have to be updated"""
+    where: news_report_bool_exp!
+  ): news_report_mutation_response
+}
+
+"""
+columns and relationships of "news_report"
+"""
+type news_report {
+  """An object relationship"""
+  event: event
+  event_id: Int
+
+  """An object relationship"""
+  journalist: journalist
+  journalist_id: Int
+  work_type: String
+}
+
+"""
+aggregated selection of "news_report"
+"""
+type news_report_aggregate {
+  aggregate: news_report_aggregate_fields
+  nodes: [news_report!]!
+}
+
+"""
+aggregate fields of "news_report"
+"""
+type news_report_aggregate_fields {
+  avg: news_report_avg_fields
+  count(columns: [news_report_select_column!], distinct: Boolean): Int
+  max: news_report_max_fields
+  min: news_report_min_fields
+  stddev: news_report_stddev_fields
+  stddev_pop: news_report_stddev_pop_fields
+  stddev_samp: news_report_stddev_samp_fields
+  sum: news_report_sum_fields
+  var_pop: news_report_var_pop_fields
+  var_samp: news_report_var_samp_fields
+  variance: news_report_variance_fields
+}
+
+"""
+order by aggregate values of table "news_report"
+"""
+input news_report_aggregate_order_by {
+  avg: news_report_avg_order_by
+  count: order_by
+  max: news_report_max_order_by
+  min: news_report_min_order_by
+  stddev: news_report_stddev_order_by
+  stddev_pop: news_report_stddev_pop_order_by
+  stddev_samp: news_report_stddev_samp_order_by
+  sum: news_report_sum_order_by
+  var_pop: news_report_var_pop_order_by
+  var_samp: news_report_var_samp_order_by
+  variance: news_report_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "news_report"
+"""
+input news_report_arr_rel_insert_input {
+  data: [news_report_insert_input!]!
+  on_conflict: news_report_on_conflict
+}
+
+"""aggregate avg on columns"""
+type news_report_avg_fields {
+  event_id: Float
+  journalist_id: Float
+}
+
+"""
+order by avg() on columns of table "news_report"
+"""
+input news_report_avg_order_by {
+  event_id: order_by
+  journalist_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "news_report". All fields are combined with a logical 'AND'.
+"""
+input news_report_bool_exp {
+  _and: [news_report_bool_exp]
+  _not: news_report_bool_exp
+  _or: [news_report_bool_exp]
+  event: event_bool_exp
+  event_id: Int_comparison_exp
+  journalist: journalist_bool_exp
+  journalist_id: Int_comparison_exp
+  work_type: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "news_report"
+"""
+enum news_report_constraint {
+  """unique or primary key constraint"""
+  idx_18143_sqlite_autoindex_news_report_1
+}
+
+"""
+input type for incrementing integer columne in table "news_report"
+"""
+input news_report_inc_input {
+  event_id: Int
+  journalist_id: Int
+}
+
+"""
+input type for inserting data into table "news_report"
+"""
+input news_report_insert_input {
+  event: event_obj_rel_insert_input
+  event_id: Int
+  journalist: journalist_obj_rel_insert_input
+  journalist_id: Int
+  work_type: String
+}
+
+"""aggregate max on columns"""
+type news_report_max_fields {
+  event_id: Int
+  journalist_id: Int
+  work_type: String
+}
+
+"""
+order by max() on columns of table "news_report"
+"""
+input news_report_max_order_by {
+  event_id: order_by
+  journalist_id: order_by
+  work_type: order_by
+}
+
+"""aggregate min on columns"""
+type news_report_min_fields {
+  event_id: Int
+  journalist_id: Int
+  work_type: String
+}
+
+"""
+order by min() on columns of table "news_report"
+"""
+input news_report_min_order_by {
+  event_id: order_by
+  journalist_id: order_by
+  work_type: order_by
+}
+
+"""
+response of any mutation on the table "news_report"
+"""
+type news_report_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [news_report!]!
+}
+
+"""
+input type for inserting object relation for remote table "news_report"
+"""
+input news_report_obj_rel_insert_input {
+  data: news_report_insert_input!
+  on_conflict: news_report_on_conflict
+}
+
+"""
+on conflict condition type for table "news_report"
+"""
+input news_report_on_conflict {
+  constraint: news_report_constraint!
+  update_columns: [news_report_update_column!]!
+  where: news_report_bool_exp
+}
+
+"""
+ordering options when selecting data from "news_report"
+"""
+input news_report_order_by {
+  event: event_order_by
+  event_id: order_by
+  journalist: journalist_order_by
+  journalist_id: order_by
+  work_type: order_by
+}
+
+"""
+select columns of table "news_report"
+"""
+enum news_report_select_column {
+  """column name"""
+  event_id
+
+  """column name"""
+  journalist_id
+
+  """column name"""
+  work_type
+}
+
+"""
+input type for updating data in table "news_report"
+"""
+input news_report_set_input {
+  event_id: Int
+  journalist_id: Int
+  work_type: String
+}
+
+"""aggregate stddev on columns"""
+type news_report_stddev_fields {
+  event_id: Float
+  journalist_id: Float
+}
+
+"""
+order by stddev() on columns of table "news_report"
+"""
+input news_report_stddev_order_by {
+  event_id: order_by
+  journalist_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type news_report_stddev_pop_fields {
+  event_id: Float
+  journalist_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "news_report"
+"""
+input news_report_stddev_pop_order_by {
+  event_id: order_by
+  journalist_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type news_report_stddev_samp_fields {
+  event_id: Float
+  journalist_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "news_report"
+"""
+input news_report_stddev_samp_order_by {
+  event_id: order_by
+  journalist_id: order_by
+}
+
+"""aggregate sum on columns"""
+type news_report_sum_fields {
+  event_id: Int
+  journalist_id: Int
+}
+
+"""
+order by sum() on columns of table "news_report"
+"""
+input news_report_sum_order_by {
+  event_id: order_by
+  journalist_id: order_by
+}
+
+"""
+update columns of table "news_report"
+"""
+enum news_report_update_column {
+  """column name"""
+  event_id
+
+  """column name"""
+  journalist_id
+
+  """column name"""
+  work_type
+}
+
+"""aggregate var_pop on columns"""
+type news_report_var_pop_fields {
+  event_id: Float
+  journalist_id: Float
+}
+
+"""
+order by var_pop() on columns of table "news_report"
+"""
+input news_report_var_pop_order_by {
+  event_id: order_by
+  journalist_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type news_report_var_samp_fields {
+  event_id: Float
+  journalist_id: Float
+}
+
+"""
+order by var_samp() on columns of table "news_report"
+"""
+input news_report_var_samp_order_by {
+  event_id: order_by
+  journalist_id: order_by
+}
+
+"""aggregate variance on columns"""
+type news_report_variance_fields {
+  event_id: Float
+  journalist_id: Float
+}
+
+"""
+order by variance() on columns of table "news_report"
+"""
+input news_report_variance_order_by {
+  event_id: order_by
+  journalist_id: order_by
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "event"
+  """
+  event(
+    """distinct select on columns"""
+    distinct_on: [event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [event_order_by!]
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): [event!]!
+
+  """
+  fetch aggregated fields from the table: "event"
+  """
+  event_aggregate(
+    """distinct select on columns"""
+    distinct_on: [event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [event_order_by!]
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): event_aggregate!
+
+  """
+  fetch data from the table: "journalist"
+  """
+  journalist(
+    """distinct select on columns"""
+    distinct_on: [journalist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [journalist_order_by!]
+
+    """filter the rows returned"""
+    where: journalist_bool_exp
+  ): [journalist!]!
+
+  """
+  fetch aggregated fields from the table: "journalist"
+  """
+  journalist_aggregate(
+    """distinct select on columns"""
+    distinct_on: [journalist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [journalist_order_by!]
+
+    """filter the rows returned"""
+    where: journalist_bool_exp
+  ): journalist_aggregate!
+
+  """
+  fetch data from the table: "news_report"
+  """
+  news_report(
+    """distinct select on columns"""
+    distinct_on: [news_report_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [news_report_order_by!]
+
+    """filter the rows returned"""
+    where: news_report_bool_exp
+  ): [news_report!]!
+
+  """
+  fetch aggregated fields from the table: "news_report"
+  """
+  news_report_aggregate(
+    """distinct select on columns"""
+    distinct_on: [news_report_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [news_report_order_by!]
+
+    """filter the rows returned"""
+    where: news_report_bool_exp
+  ): news_report_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "event"
+  """
+  event(
+    """distinct select on columns"""
+    distinct_on: [event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [event_order_by!]
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): [event!]!
+
+  """
+  fetch aggregated fields from the table: "event"
+  """
+  event_aggregate(
+    """distinct select on columns"""
+    distinct_on: [event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [event_order_by!]
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): event_aggregate!
+
+  """
+  fetch data from the table: "journalist"
+  """
+  journalist(
+    """distinct select on columns"""
+    distinct_on: [journalist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [journalist_order_by!]
+
+    """filter the rows returned"""
+    where: journalist_bool_exp
+  ): [journalist!]!
+
+  """
+  fetch aggregated fields from the table: "journalist"
+  """
+  journalist_aggregate(
+    """distinct select on columns"""
+    distinct_on: [journalist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [journalist_order_by!]
+
+    """filter the rows returned"""
+    where: journalist_bool_exp
+  ): journalist_aggregate!
+
+  """
+  fetch data from the table: "news_report"
+  """
+  news_report(
+    """distinct select on columns"""
+    distinct_on: [news_report_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [news_report_order_by!]
+
+    """filter the rows returned"""
+    where: news_report_bool_exp
+  ): [news_report!]!
+
+  """
+  fetch aggregated fields from the table: "news_report"
+  """
+  news_report_aggregate(
+    """distinct select on columns"""
+    distinct_on: [news_report_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [news_report_order_by!]
+
+    """filter the rows returned"""
+    where: news_report_bool_exp
+  ): news_report_aggregate!
+}

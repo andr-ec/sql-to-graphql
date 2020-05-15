@@ -1,0 +1,1697 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "buildings"
+"""
+type buildings {
+  city: String
+  height: Int
+  id: Int!
+  name: String
+
+  """An array relationship"""
+  office_locations(
+    """distinct select on columns"""
+    distinct_on: [office_locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [office_locations_order_by!]
+
+    """filter the rows returned"""
+    where: office_locations_bool_exp
+  ): [office_locations!]!
+
+  """An aggregated array relationship"""
+  office_locations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [office_locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [office_locations_order_by!]
+
+    """filter the rows returned"""
+    where: office_locations_bool_exp
+  ): office_locations_aggregate!
+  status: String
+  stories: Int
+}
+
+"""
+aggregated selection of "buildings"
+"""
+type buildings_aggregate {
+  aggregate: buildings_aggregate_fields
+  nodes: [buildings!]!
+}
+
+"""
+aggregate fields of "buildings"
+"""
+type buildings_aggregate_fields {
+  avg: buildings_avg_fields
+  count(columns: [buildings_select_column!], distinct: Boolean): Int
+  max: buildings_max_fields
+  min: buildings_min_fields
+  stddev: buildings_stddev_fields
+  stddev_pop: buildings_stddev_pop_fields
+  stddev_samp: buildings_stddev_samp_fields
+  sum: buildings_sum_fields
+  var_pop: buildings_var_pop_fields
+  var_samp: buildings_var_samp_fields
+  variance: buildings_variance_fields
+}
+
+"""
+order by aggregate values of table "buildings"
+"""
+input buildings_aggregate_order_by {
+  avg: buildings_avg_order_by
+  count: order_by
+  max: buildings_max_order_by
+  min: buildings_min_order_by
+  stddev: buildings_stddev_order_by
+  stddev_pop: buildings_stddev_pop_order_by
+  stddev_samp: buildings_stddev_samp_order_by
+  sum: buildings_sum_order_by
+  var_pop: buildings_var_pop_order_by
+  var_samp: buildings_var_samp_order_by
+  variance: buildings_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "buildings"
+"""
+input buildings_arr_rel_insert_input {
+  data: [buildings_insert_input!]!
+  on_conflict: buildings_on_conflict
+}
+
+"""aggregate avg on columns"""
+type buildings_avg_fields {
+  height: Float
+  id: Float
+  stories: Float
+}
+
+"""
+order by avg() on columns of table "buildings"
+"""
+input buildings_avg_order_by {
+  height: order_by
+  id: order_by
+  stories: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "buildings". All fields are combined with a logical 'AND'.
+"""
+input buildings_bool_exp {
+  _and: [buildings_bool_exp]
+  _not: buildings_bool_exp
+  _or: [buildings_bool_exp]
+  city: String_comparison_exp
+  height: Int_comparison_exp
+  id: Int_comparison_exp
+  name: String_comparison_exp
+  office_locations: office_locations_bool_exp
+  status: String_comparison_exp
+  stories: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "buildings"
+"""
+enum buildings_constraint {
+  """unique or primary key constraint"""
+  idx_25313_sqlite_autoindex_buildings_1
+}
+
+"""
+input type for incrementing integer columne in table "buildings"
+"""
+input buildings_inc_input {
+  height: Int
+  id: Int
+  stories: Int
+}
+
+"""
+input type for inserting data into table "buildings"
+"""
+input buildings_insert_input {
+  city: String
+  height: Int
+  id: Int
+  name: String
+  office_locations: office_locations_arr_rel_insert_input
+  status: String
+  stories: Int
+}
+
+"""aggregate max on columns"""
+type buildings_max_fields {
+  city: String
+  height: Int
+  id: Int
+  name: String
+  status: String
+  stories: Int
+}
+
+"""
+order by max() on columns of table "buildings"
+"""
+input buildings_max_order_by {
+  city: order_by
+  height: order_by
+  id: order_by
+  name: order_by
+  status: order_by
+  stories: order_by
+}
+
+"""aggregate min on columns"""
+type buildings_min_fields {
+  city: String
+  height: Int
+  id: Int
+  name: String
+  status: String
+  stories: Int
+}
+
+"""
+order by min() on columns of table "buildings"
+"""
+input buildings_min_order_by {
+  city: order_by
+  height: order_by
+  id: order_by
+  name: order_by
+  status: order_by
+  stories: order_by
+}
+
+"""
+response of any mutation on the table "buildings"
+"""
+type buildings_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [buildings!]!
+}
+
+"""
+input type for inserting object relation for remote table "buildings"
+"""
+input buildings_obj_rel_insert_input {
+  data: buildings_insert_input!
+  on_conflict: buildings_on_conflict
+}
+
+"""
+on conflict condition type for table "buildings"
+"""
+input buildings_on_conflict {
+  constraint: buildings_constraint!
+  update_columns: [buildings_update_column!]!
+  where: buildings_bool_exp
+}
+
+"""
+ordering options when selecting data from "buildings"
+"""
+input buildings_order_by {
+  city: order_by
+  height: order_by
+  id: order_by
+  name: order_by
+  office_locations_aggregate: office_locations_aggregate_order_by
+  status: order_by
+  stories: order_by
+}
+
+"""
+select columns of table "buildings"
+"""
+enum buildings_select_column {
+  """column name"""
+  city
+
+  """column name"""
+  height
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  status
+
+  """column name"""
+  stories
+}
+
+"""
+input type for updating data in table "buildings"
+"""
+input buildings_set_input {
+  city: String
+  height: Int
+  id: Int
+  name: String
+  status: String
+  stories: Int
+}
+
+"""aggregate stddev on columns"""
+type buildings_stddev_fields {
+  height: Float
+  id: Float
+  stories: Float
+}
+
+"""
+order by stddev() on columns of table "buildings"
+"""
+input buildings_stddev_order_by {
+  height: order_by
+  id: order_by
+  stories: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type buildings_stddev_pop_fields {
+  height: Float
+  id: Float
+  stories: Float
+}
+
+"""
+order by stddev_pop() on columns of table "buildings"
+"""
+input buildings_stddev_pop_order_by {
+  height: order_by
+  id: order_by
+  stories: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type buildings_stddev_samp_fields {
+  height: Float
+  id: Float
+  stories: Float
+}
+
+"""
+order by stddev_samp() on columns of table "buildings"
+"""
+input buildings_stddev_samp_order_by {
+  height: order_by
+  id: order_by
+  stories: order_by
+}
+
+"""aggregate sum on columns"""
+type buildings_sum_fields {
+  height: Int
+  id: Int
+  stories: Int
+}
+
+"""
+order by sum() on columns of table "buildings"
+"""
+input buildings_sum_order_by {
+  height: order_by
+  id: order_by
+  stories: order_by
+}
+
+"""
+update columns of table "buildings"
+"""
+enum buildings_update_column {
+  """column name"""
+  city
+
+  """column name"""
+  height
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  status
+
+  """column name"""
+  stories
+}
+
+"""aggregate var_pop on columns"""
+type buildings_var_pop_fields {
+  height: Float
+  id: Float
+  stories: Float
+}
+
+"""
+order by var_pop() on columns of table "buildings"
+"""
+input buildings_var_pop_order_by {
+  height: order_by
+  id: order_by
+  stories: order_by
+}
+
+"""aggregate var_samp on columns"""
+type buildings_var_samp_fields {
+  height: Float
+  id: Float
+  stories: Float
+}
+
+"""
+order by var_samp() on columns of table "buildings"
+"""
+input buildings_var_samp_order_by {
+  height: order_by
+  id: order_by
+  stories: order_by
+}
+
+"""aggregate variance on columns"""
+type buildings_variance_fields {
+  height: Float
+  id: Float
+  stories: Float
+}
+
+"""
+order by variance() on columns of table "buildings"
+"""
+input buildings_variance_order_by {
+  height: order_by
+  id: order_by
+  stories: order_by
+}
+
+"""
+columns and relationships of "companies"
+"""
+type companies {
+  assets_billion: Float
+  headquarters: String
+  id: Int!
+  industry: String
+  market_value_billion: String
+  name: String
+
+  """An array relationship"""
+  office_locations(
+    """distinct select on columns"""
+    distinct_on: [office_locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [office_locations_order_by!]
+
+    """filter the rows returned"""
+    where: office_locations_bool_exp
+  ): [office_locations!]!
+
+  """An aggregated array relationship"""
+  office_locations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [office_locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [office_locations_order_by!]
+
+    """filter the rows returned"""
+    where: office_locations_bool_exp
+  ): office_locations_aggregate!
+  profits_billion: Float
+  sales_billion: Float
+}
+
+"""
+aggregated selection of "companies"
+"""
+type companies_aggregate {
+  aggregate: companies_aggregate_fields
+  nodes: [companies!]!
+}
+
+"""
+aggregate fields of "companies"
+"""
+type companies_aggregate_fields {
+  avg: companies_avg_fields
+  count(columns: [companies_select_column!], distinct: Boolean): Int
+  max: companies_max_fields
+  min: companies_min_fields
+  stddev: companies_stddev_fields
+  stddev_pop: companies_stddev_pop_fields
+  stddev_samp: companies_stddev_samp_fields
+  sum: companies_sum_fields
+  var_pop: companies_var_pop_fields
+  var_samp: companies_var_samp_fields
+  variance: companies_variance_fields
+}
+
+"""
+order by aggregate values of table "companies"
+"""
+input companies_aggregate_order_by {
+  avg: companies_avg_order_by
+  count: order_by
+  max: companies_max_order_by
+  min: companies_min_order_by
+  stddev: companies_stddev_order_by
+  stddev_pop: companies_stddev_pop_order_by
+  stddev_samp: companies_stddev_samp_order_by
+  sum: companies_sum_order_by
+  var_pop: companies_var_pop_order_by
+  var_samp: companies_var_samp_order_by
+  variance: companies_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "companies"
+"""
+input companies_arr_rel_insert_input {
+  data: [companies_insert_input!]!
+  on_conflict: companies_on_conflict
+}
+
+"""aggregate avg on columns"""
+type companies_avg_fields {
+  assets_billion: Float
+  id: Float
+  profits_billion: Float
+  sales_billion: Float
+}
+
+"""
+order by avg() on columns of table "companies"
+"""
+input companies_avg_order_by {
+  assets_billion: order_by
+  id: order_by
+  profits_billion: order_by
+  sales_billion: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "companies". All fields are combined with a logical 'AND'.
+"""
+input companies_bool_exp {
+  _and: [companies_bool_exp]
+  _not: companies_bool_exp
+  _or: [companies_bool_exp]
+  assets_billion: Float_comparison_exp
+  headquarters: String_comparison_exp
+  id: Int_comparison_exp
+  industry: String_comparison_exp
+  market_value_billion: String_comparison_exp
+  name: String_comparison_exp
+  office_locations: office_locations_bool_exp
+  profits_billion: Float_comparison_exp
+  sales_billion: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "companies"
+"""
+enum companies_constraint {
+  """unique or primary key constraint"""
+  idx_25319_sqlite_autoindex_companies_1
+}
+
+"""
+input type for incrementing integer columne in table "companies"
+"""
+input companies_inc_input {
+  id: Int
+}
+
+"""
+input type for inserting data into table "companies"
+"""
+input companies_insert_input {
+  assets_billion: Float
+  headquarters: String
+  id: Int
+  industry: String
+  market_value_billion: String
+  name: String
+  office_locations: office_locations_arr_rel_insert_input
+  profits_billion: Float
+  sales_billion: Float
+}
+
+"""aggregate max on columns"""
+type companies_max_fields {
+  assets_billion: Float
+  headquarters: String
+  id: Int
+  industry: String
+  market_value_billion: String
+  name: String
+  profits_billion: Float
+  sales_billion: Float
+}
+
+"""
+order by max() on columns of table "companies"
+"""
+input companies_max_order_by {
+  assets_billion: order_by
+  headquarters: order_by
+  id: order_by
+  industry: order_by
+  market_value_billion: order_by
+  name: order_by
+  profits_billion: order_by
+  sales_billion: order_by
+}
+
+"""aggregate min on columns"""
+type companies_min_fields {
+  assets_billion: Float
+  headquarters: String
+  id: Int
+  industry: String
+  market_value_billion: String
+  name: String
+  profits_billion: Float
+  sales_billion: Float
+}
+
+"""
+order by min() on columns of table "companies"
+"""
+input companies_min_order_by {
+  assets_billion: order_by
+  headquarters: order_by
+  id: order_by
+  industry: order_by
+  market_value_billion: order_by
+  name: order_by
+  profits_billion: order_by
+  sales_billion: order_by
+}
+
+"""
+response of any mutation on the table "companies"
+"""
+type companies_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [companies!]!
+}
+
+"""
+input type for inserting object relation for remote table "companies"
+"""
+input companies_obj_rel_insert_input {
+  data: companies_insert_input!
+  on_conflict: companies_on_conflict
+}
+
+"""
+on conflict condition type for table "companies"
+"""
+input companies_on_conflict {
+  constraint: companies_constraint!
+  update_columns: [companies_update_column!]!
+  where: companies_bool_exp
+}
+
+"""
+ordering options when selecting data from "companies"
+"""
+input companies_order_by {
+  assets_billion: order_by
+  headquarters: order_by
+  id: order_by
+  industry: order_by
+  market_value_billion: order_by
+  name: order_by
+  office_locations_aggregate: office_locations_aggregate_order_by
+  profits_billion: order_by
+  sales_billion: order_by
+}
+
+"""
+select columns of table "companies"
+"""
+enum companies_select_column {
+  """column name"""
+  assets_billion
+
+  """column name"""
+  headquarters
+
+  """column name"""
+  id
+
+  """column name"""
+  industry
+
+  """column name"""
+  market_value_billion
+
+  """column name"""
+  name
+
+  """column name"""
+  profits_billion
+
+  """column name"""
+  sales_billion
+}
+
+"""
+input type for updating data in table "companies"
+"""
+input companies_set_input {
+  assets_billion: Float
+  headquarters: String
+  id: Int
+  industry: String
+  market_value_billion: String
+  name: String
+  profits_billion: Float
+  sales_billion: Float
+}
+
+"""aggregate stddev on columns"""
+type companies_stddev_fields {
+  assets_billion: Float
+  id: Float
+  profits_billion: Float
+  sales_billion: Float
+}
+
+"""
+order by stddev() on columns of table "companies"
+"""
+input companies_stddev_order_by {
+  assets_billion: order_by
+  id: order_by
+  profits_billion: order_by
+  sales_billion: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type companies_stddev_pop_fields {
+  assets_billion: Float
+  id: Float
+  profits_billion: Float
+  sales_billion: Float
+}
+
+"""
+order by stddev_pop() on columns of table "companies"
+"""
+input companies_stddev_pop_order_by {
+  assets_billion: order_by
+  id: order_by
+  profits_billion: order_by
+  sales_billion: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type companies_stddev_samp_fields {
+  assets_billion: Float
+  id: Float
+  profits_billion: Float
+  sales_billion: Float
+}
+
+"""
+order by stddev_samp() on columns of table "companies"
+"""
+input companies_stddev_samp_order_by {
+  assets_billion: order_by
+  id: order_by
+  profits_billion: order_by
+  sales_billion: order_by
+}
+
+"""aggregate sum on columns"""
+type companies_sum_fields {
+  assets_billion: Float
+  id: Int
+  profits_billion: Float
+  sales_billion: Float
+}
+
+"""
+order by sum() on columns of table "companies"
+"""
+input companies_sum_order_by {
+  assets_billion: order_by
+  id: order_by
+  profits_billion: order_by
+  sales_billion: order_by
+}
+
+"""
+update columns of table "companies"
+"""
+enum companies_update_column {
+  """column name"""
+  assets_billion
+
+  """column name"""
+  headquarters
+
+  """column name"""
+  id
+
+  """column name"""
+  industry
+
+  """column name"""
+  market_value_billion
+
+  """column name"""
+  name
+
+  """column name"""
+  profits_billion
+
+  """column name"""
+  sales_billion
+}
+
+"""aggregate var_pop on columns"""
+type companies_var_pop_fields {
+  assets_billion: Float
+  id: Float
+  profits_billion: Float
+  sales_billion: Float
+}
+
+"""
+order by var_pop() on columns of table "companies"
+"""
+input companies_var_pop_order_by {
+  assets_billion: order_by
+  id: order_by
+  profits_billion: order_by
+  sales_billion: order_by
+}
+
+"""aggregate var_samp on columns"""
+type companies_var_samp_fields {
+  assets_billion: Float
+  id: Float
+  profits_billion: Float
+  sales_billion: Float
+}
+
+"""
+order by var_samp() on columns of table "companies"
+"""
+input companies_var_samp_order_by {
+  assets_billion: order_by
+  id: order_by
+  profits_billion: order_by
+  sales_billion: order_by
+}
+
+"""aggregate variance on columns"""
+type companies_variance_fields {
+  assets_billion: Float
+  id: Float
+  profits_billion: Float
+  sales_billion: Float
+}
+
+"""
+order by variance() on columns of table "companies"
+"""
+input companies_variance_order_by {
+  assets_billion: order_by
+  id: order_by
+  profits_billion: order_by
+  sales_billion: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "buildings"
+  """
+  delete_buildings(
+    """filter the rows which have to be deleted"""
+    where: buildings_bool_exp!
+  ): buildings_mutation_response
+
+  """
+  delete data from the table: "companies"
+  """
+  delete_companies(
+    """filter the rows which have to be deleted"""
+    where: companies_bool_exp!
+  ): companies_mutation_response
+
+  """
+  delete data from the table: "office_locations"
+  """
+  delete_office_locations(
+    """filter the rows which have to be deleted"""
+    where: office_locations_bool_exp!
+  ): office_locations_mutation_response
+
+  """
+  insert data into the table: "buildings"
+  """
+  insert_buildings(
+    """the rows to be inserted"""
+    objects: [buildings_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: buildings_on_conflict
+  ): buildings_mutation_response
+
+  """
+  insert data into the table: "companies"
+  """
+  insert_companies(
+    """the rows to be inserted"""
+    objects: [companies_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: companies_on_conflict
+  ): companies_mutation_response
+
+  """
+  insert data into the table: "office_locations"
+  """
+  insert_office_locations(
+    """the rows to be inserted"""
+    objects: [office_locations_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: office_locations_on_conflict
+  ): office_locations_mutation_response
+
+  """
+  update data of the table: "buildings"
+  """
+  update_buildings(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: buildings_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: buildings_set_input
+
+    """filter the rows which have to be updated"""
+    where: buildings_bool_exp!
+  ): buildings_mutation_response
+
+  """
+  update data of the table: "companies"
+  """
+  update_companies(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: companies_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: companies_set_input
+
+    """filter the rows which have to be updated"""
+    where: companies_bool_exp!
+  ): companies_mutation_response
+
+  """
+  update data of the table: "office_locations"
+  """
+  update_office_locations(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: office_locations_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: office_locations_set_input
+
+    """filter the rows which have to be updated"""
+    where: office_locations_bool_exp!
+  ): office_locations_mutation_response
+}
+
+"""
+columns and relationships of "office_locations"
+"""
+type office_locations {
+  """An object relationship"""
+  building: buildings!
+  building_id: Int!
+
+  """An object relationship"""
+  company: companies!
+  company_id: Int!
+  move_in_year: Int
+}
+
+"""
+aggregated selection of "office_locations"
+"""
+type office_locations_aggregate {
+  aggregate: office_locations_aggregate_fields
+  nodes: [office_locations!]!
+}
+
+"""
+aggregate fields of "office_locations"
+"""
+type office_locations_aggregate_fields {
+  avg: office_locations_avg_fields
+  count(columns: [office_locations_select_column!], distinct: Boolean): Int
+  max: office_locations_max_fields
+  min: office_locations_min_fields
+  stddev: office_locations_stddev_fields
+  stddev_pop: office_locations_stddev_pop_fields
+  stddev_samp: office_locations_stddev_samp_fields
+  sum: office_locations_sum_fields
+  var_pop: office_locations_var_pop_fields
+  var_samp: office_locations_var_samp_fields
+  variance: office_locations_variance_fields
+}
+
+"""
+order by aggregate values of table "office_locations"
+"""
+input office_locations_aggregate_order_by {
+  avg: office_locations_avg_order_by
+  count: order_by
+  max: office_locations_max_order_by
+  min: office_locations_min_order_by
+  stddev: office_locations_stddev_order_by
+  stddev_pop: office_locations_stddev_pop_order_by
+  stddev_samp: office_locations_stddev_samp_order_by
+  sum: office_locations_sum_order_by
+  var_pop: office_locations_var_pop_order_by
+  var_samp: office_locations_var_samp_order_by
+  variance: office_locations_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "office_locations"
+"""
+input office_locations_arr_rel_insert_input {
+  data: [office_locations_insert_input!]!
+  on_conflict: office_locations_on_conflict
+}
+
+"""aggregate avg on columns"""
+type office_locations_avg_fields {
+  building_id: Float
+  company_id: Float
+  move_in_year: Float
+}
+
+"""
+order by avg() on columns of table "office_locations"
+"""
+input office_locations_avg_order_by {
+  building_id: order_by
+  company_id: order_by
+  move_in_year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "office_locations". All fields are combined with a logical 'AND'.
+"""
+input office_locations_bool_exp {
+  _and: [office_locations_bool_exp]
+  _not: office_locations_bool_exp
+  _or: [office_locations_bool_exp]
+  building: buildings_bool_exp
+  building_id: Int_comparison_exp
+  company: companies_bool_exp
+  company_id: Int_comparison_exp
+  move_in_year: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "office_locations"
+"""
+enum office_locations_constraint {
+  """unique or primary key constraint"""
+  idx_25325_sqlite_autoindex_office_locations_1
+}
+
+"""
+input type for incrementing integer columne in table "office_locations"
+"""
+input office_locations_inc_input {
+  building_id: Int
+  company_id: Int
+  move_in_year: Int
+}
+
+"""
+input type for inserting data into table "office_locations"
+"""
+input office_locations_insert_input {
+  building: buildings_obj_rel_insert_input
+  building_id: Int
+  company: companies_obj_rel_insert_input
+  company_id: Int
+  move_in_year: Int
+}
+
+"""aggregate max on columns"""
+type office_locations_max_fields {
+  building_id: Int
+  company_id: Int
+  move_in_year: Int
+}
+
+"""
+order by max() on columns of table "office_locations"
+"""
+input office_locations_max_order_by {
+  building_id: order_by
+  company_id: order_by
+  move_in_year: order_by
+}
+
+"""aggregate min on columns"""
+type office_locations_min_fields {
+  building_id: Int
+  company_id: Int
+  move_in_year: Int
+}
+
+"""
+order by min() on columns of table "office_locations"
+"""
+input office_locations_min_order_by {
+  building_id: order_by
+  company_id: order_by
+  move_in_year: order_by
+}
+
+"""
+response of any mutation on the table "office_locations"
+"""
+type office_locations_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [office_locations!]!
+}
+
+"""
+input type for inserting object relation for remote table "office_locations"
+"""
+input office_locations_obj_rel_insert_input {
+  data: office_locations_insert_input!
+  on_conflict: office_locations_on_conflict
+}
+
+"""
+on conflict condition type for table "office_locations"
+"""
+input office_locations_on_conflict {
+  constraint: office_locations_constraint!
+  update_columns: [office_locations_update_column!]!
+  where: office_locations_bool_exp
+}
+
+"""
+ordering options when selecting data from "office_locations"
+"""
+input office_locations_order_by {
+  building: buildings_order_by
+  building_id: order_by
+  company: companies_order_by
+  company_id: order_by
+  move_in_year: order_by
+}
+
+"""
+select columns of table "office_locations"
+"""
+enum office_locations_select_column {
+  """column name"""
+  building_id
+
+  """column name"""
+  company_id
+
+  """column name"""
+  move_in_year
+}
+
+"""
+input type for updating data in table "office_locations"
+"""
+input office_locations_set_input {
+  building_id: Int
+  company_id: Int
+  move_in_year: Int
+}
+
+"""aggregate stddev on columns"""
+type office_locations_stddev_fields {
+  building_id: Float
+  company_id: Float
+  move_in_year: Float
+}
+
+"""
+order by stddev() on columns of table "office_locations"
+"""
+input office_locations_stddev_order_by {
+  building_id: order_by
+  company_id: order_by
+  move_in_year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type office_locations_stddev_pop_fields {
+  building_id: Float
+  company_id: Float
+  move_in_year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "office_locations"
+"""
+input office_locations_stddev_pop_order_by {
+  building_id: order_by
+  company_id: order_by
+  move_in_year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type office_locations_stddev_samp_fields {
+  building_id: Float
+  company_id: Float
+  move_in_year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "office_locations"
+"""
+input office_locations_stddev_samp_order_by {
+  building_id: order_by
+  company_id: order_by
+  move_in_year: order_by
+}
+
+"""aggregate sum on columns"""
+type office_locations_sum_fields {
+  building_id: Int
+  company_id: Int
+  move_in_year: Int
+}
+
+"""
+order by sum() on columns of table "office_locations"
+"""
+input office_locations_sum_order_by {
+  building_id: order_by
+  company_id: order_by
+  move_in_year: order_by
+}
+
+"""
+update columns of table "office_locations"
+"""
+enum office_locations_update_column {
+  """column name"""
+  building_id
+
+  """column name"""
+  company_id
+
+  """column name"""
+  move_in_year
+}
+
+"""aggregate var_pop on columns"""
+type office_locations_var_pop_fields {
+  building_id: Float
+  company_id: Float
+  move_in_year: Float
+}
+
+"""
+order by var_pop() on columns of table "office_locations"
+"""
+input office_locations_var_pop_order_by {
+  building_id: order_by
+  company_id: order_by
+  move_in_year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type office_locations_var_samp_fields {
+  building_id: Float
+  company_id: Float
+  move_in_year: Float
+}
+
+"""
+order by var_samp() on columns of table "office_locations"
+"""
+input office_locations_var_samp_order_by {
+  building_id: order_by
+  company_id: order_by
+  move_in_year: order_by
+}
+
+"""aggregate variance on columns"""
+type office_locations_variance_fields {
+  building_id: Float
+  company_id: Float
+  move_in_year: Float
+}
+
+"""
+order by variance() on columns of table "office_locations"
+"""
+input office_locations_variance_order_by {
+  building_id: order_by
+  company_id: order_by
+  move_in_year: order_by
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "buildings"
+  """
+  buildings(
+    """distinct select on columns"""
+    distinct_on: [buildings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [buildings_order_by!]
+
+    """filter the rows returned"""
+    where: buildings_bool_exp
+  ): [buildings!]!
+
+  """
+  fetch aggregated fields from the table: "buildings"
+  """
+  buildings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [buildings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [buildings_order_by!]
+
+    """filter the rows returned"""
+    where: buildings_bool_exp
+  ): buildings_aggregate!
+
+  """fetch data from the table: "buildings" using primary key columns"""
+  buildings_by_pk(id: Int!): buildings
+
+  """
+  fetch data from the table: "companies"
+  """
+  companies(
+    """distinct select on columns"""
+    distinct_on: [companies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [companies_order_by!]
+
+    """filter the rows returned"""
+    where: companies_bool_exp
+  ): [companies!]!
+
+  """
+  fetch aggregated fields from the table: "companies"
+  """
+  companies_aggregate(
+    """distinct select on columns"""
+    distinct_on: [companies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [companies_order_by!]
+
+    """filter the rows returned"""
+    where: companies_bool_exp
+  ): companies_aggregate!
+
+  """fetch data from the table: "companies" using primary key columns"""
+  companies_by_pk(id: Int!): companies
+
+  """
+  fetch data from the table: "office_locations"
+  """
+  office_locations(
+    """distinct select on columns"""
+    distinct_on: [office_locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [office_locations_order_by!]
+
+    """filter the rows returned"""
+    where: office_locations_bool_exp
+  ): [office_locations!]!
+
+  """
+  fetch aggregated fields from the table: "office_locations"
+  """
+  office_locations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [office_locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [office_locations_order_by!]
+
+    """filter the rows returned"""
+    where: office_locations_bool_exp
+  ): office_locations_aggregate!
+
+  """
+  fetch data from the table: "office_locations" using primary key columns
+  """
+  office_locations_by_pk(building_id: Int!, company_id: Int!): office_locations
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "buildings"
+  """
+  buildings(
+    """distinct select on columns"""
+    distinct_on: [buildings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [buildings_order_by!]
+
+    """filter the rows returned"""
+    where: buildings_bool_exp
+  ): [buildings!]!
+
+  """
+  fetch aggregated fields from the table: "buildings"
+  """
+  buildings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [buildings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [buildings_order_by!]
+
+    """filter the rows returned"""
+    where: buildings_bool_exp
+  ): buildings_aggregate!
+
+  """fetch data from the table: "buildings" using primary key columns"""
+  buildings_by_pk(id: Int!): buildings
+
+  """
+  fetch data from the table: "companies"
+  """
+  companies(
+    """distinct select on columns"""
+    distinct_on: [companies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [companies_order_by!]
+
+    """filter the rows returned"""
+    where: companies_bool_exp
+  ): [companies!]!
+
+  """
+  fetch aggregated fields from the table: "companies"
+  """
+  companies_aggregate(
+    """distinct select on columns"""
+    distinct_on: [companies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [companies_order_by!]
+
+    """filter the rows returned"""
+    where: companies_bool_exp
+  ): companies_aggregate!
+
+  """fetch data from the table: "companies" using primary key columns"""
+  companies_by_pk(id: Int!): companies
+
+  """
+  fetch data from the table: "office_locations"
+  """
+  office_locations(
+    """distinct select on columns"""
+    distinct_on: [office_locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [office_locations_order_by!]
+
+    """filter the rows returned"""
+    where: office_locations_bool_exp
+  ): [office_locations!]!
+
+  """
+  fetch aggregated fields from the table: "office_locations"
+  """
+  office_locations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [office_locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [office_locations_order_by!]
+
+    """filter the rows returned"""
+    where: office_locations_bool_exp
+  ): office_locations_aggregate!
+
+  """
+  fetch data from the table: "office_locations" using primary key columns
+  """
+  office_locations_by_pk(building_id: Int!, company_id: Int!): office_locations
+}

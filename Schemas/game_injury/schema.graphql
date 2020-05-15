@@ -1,0 +1,1738 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+columns and relationships of "game"
+"""
+type game {
+  away_team: String
+  competition: String
+  date: String
+  home_team: String
+  id: Int!
+
+  """An array relationship"""
+  injury_accidents(
+    """distinct select on columns"""
+    distinct_on: [injury_accident_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [injury_accident_order_by!]
+
+    """filter the rows returned"""
+    where: injury_accident_bool_exp
+  ): [injury_accident!]!
+
+  """An aggregated array relationship"""
+  injury_accidents_aggregate(
+    """distinct select on columns"""
+    distinct_on: [injury_accident_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [injury_accident_order_by!]
+
+    """filter the rows returned"""
+    where: injury_accident_bool_exp
+  ): injury_accident_aggregate!
+  score: String
+  season: Int
+
+  """An object relationship"""
+  stadium: stadium
+  stadium_id: Int
+}
+
+"""
+aggregated selection of "game"
+"""
+type game_aggregate {
+  aggregate: game_aggregate_fields
+  nodes: [game!]!
+}
+
+"""
+aggregate fields of "game"
+"""
+type game_aggregate_fields {
+  avg: game_avg_fields
+  count(columns: [game_select_column!], distinct: Boolean): Int
+  max: game_max_fields
+  min: game_min_fields
+  stddev: game_stddev_fields
+  stddev_pop: game_stddev_pop_fields
+  stddev_samp: game_stddev_samp_fields
+  sum: game_sum_fields
+  var_pop: game_var_pop_fields
+  var_samp: game_var_samp_fields
+  variance: game_variance_fields
+}
+
+"""
+order by aggregate values of table "game"
+"""
+input game_aggregate_order_by {
+  avg: game_avg_order_by
+  count: order_by
+  max: game_max_order_by
+  min: game_min_order_by
+  stddev: game_stddev_order_by
+  stddev_pop: game_stddev_pop_order_by
+  stddev_samp: game_stddev_samp_order_by
+  sum: game_sum_order_by
+  var_pop: game_var_pop_order_by
+  var_samp: game_var_samp_order_by
+  variance: game_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "game"
+"""
+input game_arr_rel_insert_input {
+  data: [game_insert_input!]!
+  on_conflict: game_on_conflict
+}
+
+"""aggregate avg on columns"""
+type game_avg_fields {
+  id: Float
+  season: Float
+  stadium_id: Float
+}
+
+"""
+order by avg() on columns of table "game"
+"""
+input game_avg_order_by {
+  id: order_by
+  season: order_by
+  stadium_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "game". All fields are combined with a logical 'AND'.
+"""
+input game_bool_exp {
+  _and: [game_bool_exp]
+  _not: game_bool_exp
+  _or: [game_bool_exp]
+  away_team: String_comparison_exp
+  competition: String_comparison_exp
+  date: String_comparison_exp
+  home_team: String_comparison_exp
+  id: Int_comparison_exp
+  injury_accidents: injury_accident_bool_exp
+  score: String_comparison_exp
+  season: Int_comparison_exp
+  stadium: stadium_bool_exp
+  stadium_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "game"
+"""
+enum game_constraint {
+  """unique or primary key constraint"""
+  idx_17188_sqlite_autoindex_game_1
+}
+
+"""
+input type for incrementing integer columne in table "game"
+"""
+input game_inc_input {
+  id: Int
+  season: Int
+  stadium_id: Int
+}
+
+"""
+input type for inserting data into table "game"
+"""
+input game_insert_input {
+  away_team: String
+  competition: String
+  date: String
+  home_team: String
+  id: Int
+  injury_accidents: injury_accident_arr_rel_insert_input
+  score: String
+  season: Int
+  stadium: stadium_obj_rel_insert_input
+  stadium_id: Int
+}
+
+"""aggregate max on columns"""
+type game_max_fields {
+  away_team: String
+  competition: String
+  date: String
+  home_team: String
+  id: Int
+  score: String
+  season: Int
+  stadium_id: Int
+}
+
+"""
+order by max() on columns of table "game"
+"""
+input game_max_order_by {
+  away_team: order_by
+  competition: order_by
+  date: order_by
+  home_team: order_by
+  id: order_by
+  score: order_by
+  season: order_by
+  stadium_id: order_by
+}
+
+"""aggregate min on columns"""
+type game_min_fields {
+  away_team: String
+  competition: String
+  date: String
+  home_team: String
+  id: Int
+  score: String
+  season: Int
+  stadium_id: Int
+}
+
+"""
+order by min() on columns of table "game"
+"""
+input game_min_order_by {
+  away_team: order_by
+  competition: order_by
+  date: order_by
+  home_team: order_by
+  id: order_by
+  score: order_by
+  season: order_by
+  stadium_id: order_by
+}
+
+"""
+response of any mutation on the table "game"
+"""
+type game_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [game!]!
+}
+
+"""
+input type for inserting object relation for remote table "game"
+"""
+input game_obj_rel_insert_input {
+  data: game_insert_input!
+  on_conflict: game_on_conflict
+}
+
+"""
+on conflict condition type for table "game"
+"""
+input game_on_conflict {
+  constraint: game_constraint!
+  update_columns: [game_update_column!]!
+  where: game_bool_exp
+}
+
+"""
+ordering options when selecting data from "game"
+"""
+input game_order_by {
+  away_team: order_by
+  competition: order_by
+  date: order_by
+  home_team: order_by
+  id: order_by
+  injury_accidents_aggregate: injury_accident_aggregate_order_by
+  score: order_by
+  season: order_by
+  stadium: stadium_order_by
+  stadium_id: order_by
+}
+
+"""
+select columns of table "game"
+"""
+enum game_select_column {
+  """column name"""
+  away_team
+
+  """column name"""
+  competition
+
+  """column name"""
+  date
+
+  """column name"""
+  home_team
+
+  """column name"""
+  id
+
+  """column name"""
+  score
+
+  """column name"""
+  season
+
+  """column name"""
+  stadium_id
+}
+
+"""
+input type for updating data in table "game"
+"""
+input game_set_input {
+  away_team: String
+  competition: String
+  date: String
+  home_team: String
+  id: Int
+  score: String
+  season: Int
+  stadium_id: Int
+}
+
+"""aggregate stddev on columns"""
+type game_stddev_fields {
+  id: Float
+  season: Float
+  stadium_id: Float
+}
+
+"""
+order by stddev() on columns of table "game"
+"""
+input game_stddev_order_by {
+  id: order_by
+  season: order_by
+  stadium_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type game_stddev_pop_fields {
+  id: Float
+  season: Float
+  stadium_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "game"
+"""
+input game_stddev_pop_order_by {
+  id: order_by
+  season: order_by
+  stadium_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type game_stddev_samp_fields {
+  id: Float
+  season: Float
+  stadium_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "game"
+"""
+input game_stddev_samp_order_by {
+  id: order_by
+  season: order_by
+  stadium_id: order_by
+}
+
+"""aggregate sum on columns"""
+type game_sum_fields {
+  id: Int
+  season: Int
+  stadium_id: Int
+}
+
+"""
+order by sum() on columns of table "game"
+"""
+input game_sum_order_by {
+  id: order_by
+  season: order_by
+  stadium_id: order_by
+}
+
+"""
+update columns of table "game"
+"""
+enum game_update_column {
+  """column name"""
+  away_team
+
+  """column name"""
+  competition
+
+  """column name"""
+  date
+
+  """column name"""
+  home_team
+
+  """column name"""
+  id
+
+  """column name"""
+  score
+
+  """column name"""
+  season
+
+  """column name"""
+  stadium_id
+}
+
+"""aggregate var_pop on columns"""
+type game_var_pop_fields {
+  id: Float
+  season: Float
+  stadium_id: Float
+}
+
+"""
+order by var_pop() on columns of table "game"
+"""
+input game_var_pop_order_by {
+  id: order_by
+  season: order_by
+  stadium_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type game_var_samp_fields {
+  id: Float
+  season: Float
+  stadium_id: Float
+}
+
+"""
+order by var_samp() on columns of table "game"
+"""
+input game_var_samp_order_by {
+  id: order_by
+  season: order_by
+  stadium_id: order_by
+}
+
+"""aggregate variance on columns"""
+type game_variance_fields {
+  id: Float
+  season: Float
+  stadium_id: Float
+}
+
+"""
+order by variance() on columns of table "game"
+"""
+input game_variance_order_by {
+  id: order_by
+  season: order_by
+  stadium_id: order_by
+}
+
+"""
+columns and relationships of "injury_accident"
+"""
+type injury_accident {
+  """An object relationship"""
+  game: game
+  game_id: Int
+  id: Int!
+  injury: String
+  number_of_matches: String
+  player: String
+  source: String
+}
+
+"""
+aggregated selection of "injury_accident"
+"""
+type injury_accident_aggregate {
+  aggregate: injury_accident_aggregate_fields
+  nodes: [injury_accident!]!
+}
+
+"""
+aggregate fields of "injury_accident"
+"""
+type injury_accident_aggregate_fields {
+  avg: injury_accident_avg_fields
+  count(columns: [injury_accident_select_column!], distinct: Boolean): Int
+  max: injury_accident_max_fields
+  min: injury_accident_min_fields
+  stddev: injury_accident_stddev_fields
+  stddev_pop: injury_accident_stddev_pop_fields
+  stddev_samp: injury_accident_stddev_samp_fields
+  sum: injury_accident_sum_fields
+  var_pop: injury_accident_var_pop_fields
+  var_samp: injury_accident_var_samp_fields
+  variance: injury_accident_variance_fields
+}
+
+"""
+order by aggregate values of table "injury_accident"
+"""
+input injury_accident_aggregate_order_by {
+  avg: injury_accident_avg_order_by
+  count: order_by
+  max: injury_accident_max_order_by
+  min: injury_accident_min_order_by
+  stddev: injury_accident_stddev_order_by
+  stddev_pop: injury_accident_stddev_pop_order_by
+  stddev_samp: injury_accident_stddev_samp_order_by
+  sum: injury_accident_sum_order_by
+  var_pop: injury_accident_var_pop_order_by
+  var_samp: injury_accident_var_samp_order_by
+  variance: injury_accident_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "injury_accident"
+"""
+input injury_accident_arr_rel_insert_input {
+  data: [injury_accident_insert_input!]!
+  on_conflict: injury_accident_on_conflict
+}
+
+"""aggregate avg on columns"""
+type injury_accident_avg_fields {
+  game_id: Float
+  id: Float
+}
+
+"""
+order by avg() on columns of table "injury_accident"
+"""
+input injury_accident_avg_order_by {
+  game_id: order_by
+  id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "injury_accident". All fields are combined with a logical 'AND'.
+"""
+input injury_accident_bool_exp {
+  _and: [injury_accident_bool_exp]
+  _not: injury_accident_bool_exp
+  _or: [injury_accident_bool_exp]
+  game: game_bool_exp
+  game_id: Int_comparison_exp
+  id: Int_comparison_exp
+  injury: String_comparison_exp
+  number_of_matches: String_comparison_exp
+  player: String_comparison_exp
+  source: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "injury_accident"
+"""
+enum injury_accident_constraint {
+  """unique or primary key constraint"""
+  idx_17194_sqlite_autoindex_injury_accident_1
+}
+
+"""
+input type for incrementing integer columne in table "injury_accident"
+"""
+input injury_accident_inc_input {
+  game_id: Int
+  id: Int
+}
+
+"""
+input type for inserting data into table "injury_accident"
+"""
+input injury_accident_insert_input {
+  game: game_obj_rel_insert_input
+  game_id: Int
+  id: Int
+  injury: String
+  number_of_matches: String
+  player: String
+  source: String
+}
+
+"""aggregate max on columns"""
+type injury_accident_max_fields {
+  game_id: Int
+  id: Int
+  injury: String
+  number_of_matches: String
+  player: String
+  source: String
+}
+
+"""
+order by max() on columns of table "injury_accident"
+"""
+input injury_accident_max_order_by {
+  game_id: order_by
+  id: order_by
+  injury: order_by
+  number_of_matches: order_by
+  player: order_by
+  source: order_by
+}
+
+"""aggregate min on columns"""
+type injury_accident_min_fields {
+  game_id: Int
+  id: Int
+  injury: String
+  number_of_matches: String
+  player: String
+  source: String
+}
+
+"""
+order by min() on columns of table "injury_accident"
+"""
+input injury_accident_min_order_by {
+  game_id: order_by
+  id: order_by
+  injury: order_by
+  number_of_matches: order_by
+  player: order_by
+  source: order_by
+}
+
+"""
+response of any mutation on the table "injury_accident"
+"""
+type injury_accident_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [injury_accident!]!
+}
+
+"""
+input type for inserting object relation for remote table "injury_accident"
+"""
+input injury_accident_obj_rel_insert_input {
+  data: injury_accident_insert_input!
+  on_conflict: injury_accident_on_conflict
+}
+
+"""
+on conflict condition type for table "injury_accident"
+"""
+input injury_accident_on_conflict {
+  constraint: injury_accident_constraint!
+  update_columns: [injury_accident_update_column!]!
+  where: injury_accident_bool_exp
+}
+
+"""
+ordering options when selecting data from "injury_accident"
+"""
+input injury_accident_order_by {
+  game: game_order_by
+  game_id: order_by
+  id: order_by
+  injury: order_by
+  number_of_matches: order_by
+  player: order_by
+  source: order_by
+}
+
+"""
+select columns of table "injury_accident"
+"""
+enum injury_accident_select_column {
+  """column name"""
+  game_id
+
+  """column name"""
+  id
+
+  """column name"""
+  injury
+
+  """column name"""
+  number_of_matches
+
+  """column name"""
+  player
+
+  """column name"""
+  source
+}
+
+"""
+input type for updating data in table "injury_accident"
+"""
+input injury_accident_set_input {
+  game_id: Int
+  id: Int
+  injury: String
+  number_of_matches: String
+  player: String
+  source: String
+}
+
+"""aggregate stddev on columns"""
+type injury_accident_stddev_fields {
+  game_id: Float
+  id: Float
+}
+
+"""
+order by stddev() on columns of table "injury_accident"
+"""
+input injury_accident_stddev_order_by {
+  game_id: order_by
+  id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type injury_accident_stddev_pop_fields {
+  game_id: Float
+  id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "injury_accident"
+"""
+input injury_accident_stddev_pop_order_by {
+  game_id: order_by
+  id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type injury_accident_stddev_samp_fields {
+  game_id: Float
+  id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "injury_accident"
+"""
+input injury_accident_stddev_samp_order_by {
+  game_id: order_by
+  id: order_by
+}
+
+"""aggregate sum on columns"""
+type injury_accident_sum_fields {
+  game_id: Int
+  id: Int
+}
+
+"""
+order by sum() on columns of table "injury_accident"
+"""
+input injury_accident_sum_order_by {
+  game_id: order_by
+  id: order_by
+}
+
+"""
+update columns of table "injury_accident"
+"""
+enum injury_accident_update_column {
+  """column name"""
+  game_id
+
+  """column name"""
+  id
+
+  """column name"""
+  injury
+
+  """column name"""
+  number_of_matches
+
+  """column name"""
+  player
+
+  """column name"""
+  source
+}
+
+"""aggregate var_pop on columns"""
+type injury_accident_var_pop_fields {
+  game_id: Float
+  id: Float
+}
+
+"""
+order by var_pop() on columns of table "injury_accident"
+"""
+input injury_accident_var_pop_order_by {
+  game_id: order_by
+  id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type injury_accident_var_samp_fields {
+  game_id: Float
+  id: Float
+}
+
+"""
+order by var_samp() on columns of table "injury_accident"
+"""
+input injury_accident_var_samp_order_by {
+  game_id: order_by
+  id: order_by
+}
+
+"""aggregate variance on columns"""
+type injury_accident_variance_fields {
+  game_id: Float
+  id: Float
+}
+
+"""
+order by variance() on columns of table "injury_accident"
+"""
+input injury_accident_variance_order_by {
+  game_id: order_by
+  id: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "game"
+  """
+  delete_game(
+    """filter the rows which have to be deleted"""
+    where: game_bool_exp!
+  ): game_mutation_response
+
+  """
+  delete data from the table: "injury_accident"
+  """
+  delete_injury_accident(
+    """filter the rows which have to be deleted"""
+    where: injury_accident_bool_exp!
+  ): injury_accident_mutation_response
+
+  """
+  delete data from the table: "stadium"
+  """
+  delete_stadium(
+    """filter the rows which have to be deleted"""
+    where: stadium_bool_exp!
+  ): stadium_mutation_response
+
+  """
+  insert data into the table: "game"
+  """
+  insert_game(
+    """the rows to be inserted"""
+    objects: [game_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: game_on_conflict
+  ): game_mutation_response
+
+  """
+  insert data into the table: "injury_accident"
+  """
+  insert_injury_accident(
+    """the rows to be inserted"""
+    objects: [injury_accident_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: injury_accident_on_conflict
+  ): injury_accident_mutation_response
+
+  """
+  insert data into the table: "stadium"
+  """
+  insert_stadium(
+    """the rows to be inserted"""
+    objects: [stadium_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: stadium_on_conflict
+  ): stadium_mutation_response
+
+  """
+  update data of the table: "game"
+  """
+  update_game(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: game_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: game_set_input
+
+    """filter the rows which have to be updated"""
+    where: game_bool_exp!
+  ): game_mutation_response
+
+  """
+  update data of the table: "injury_accident"
+  """
+  update_injury_accident(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: injury_accident_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: injury_accident_set_input
+
+    """filter the rows which have to be updated"""
+    where: injury_accident_bool_exp!
+  ): injury_accident_mutation_response
+
+  """
+  update data of the table: "stadium"
+  """
+  update_stadium(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: stadium_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: stadium_set_input
+
+    """filter the rows which have to be updated"""
+    where: stadium_bool_exp!
+  ): stadium_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "game"
+  """
+  game(
+    """distinct select on columns"""
+    distinct_on: [game_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [game_order_by!]
+
+    """filter the rows returned"""
+    where: game_bool_exp
+  ): [game!]!
+
+  """
+  fetch aggregated fields from the table: "game"
+  """
+  game_aggregate(
+    """distinct select on columns"""
+    distinct_on: [game_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [game_order_by!]
+
+    """filter the rows returned"""
+    where: game_bool_exp
+  ): game_aggregate!
+
+  """fetch data from the table: "game" using primary key columns"""
+  game_by_pk(id: Int!): game
+
+  """
+  fetch data from the table: "injury_accident"
+  """
+  injury_accident(
+    """distinct select on columns"""
+    distinct_on: [injury_accident_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [injury_accident_order_by!]
+
+    """filter the rows returned"""
+    where: injury_accident_bool_exp
+  ): [injury_accident!]!
+
+  """
+  fetch aggregated fields from the table: "injury_accident"
+  """
+  injury_accident_aggregate(
+    """distinct select on columns"""
+    distinct_on: [injury_accident_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [injury_accident_order_by!]
+
+    """filter the rows returned"""
+    where: injury_accident_bool_exp
+  ): injury_accident_aggregate!
+
+  """fetch data from the table: "injury_accident" using primary key columns"""
+  injury_accident_by_pk(id: Int!): injury_accident
+
+  """
+  fetch data from the table: "stadium"
+  """
+  stadium(
+    """distinct select on columns"""
+    distinct_on: [stadium_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stadium_order_by!]
+
+    """filter the rows returned"""
+    where: stadium_bool_exp
+  ): [stadium!]!
+
+  """
+  fetch aggregated fields from the table: "stadium"
+  """
+  stadium_aggregate(
+    """distinct select on columns"""
+    distinct_on: [stadium_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stadium_order_by!]
+
+    """filter the rows returned"""
+    where: stadium_bool_exp
+  ): stadium_aggregate!
+
+  """fetch data from the table: "stadium" using primary key columns"""
+  stadium_by_pk(id: Int!): stadium
+}
+
+"""
+columns and relationships of "stadium"
+"""
+type stadium {
+  average_attendance: Float
+  capacity_percentage: Float
+
+  """An array relationship"""
+  games(
+    """distinct select on columns"""
+    distinct_on: [game_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [game_order_by!]
+
+    """filter the rows returned"""
+    where: game_bool_exp
+  ): [game!]!
+
+  """An aggregated array relationship"""
+  games_aggregate(
+    """distinct select on columns"""
+    distinct_on: [game_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [game_order_by!]
+
+    """filter the rows returned"""
+    where: game_bool_exp
+  ): game_aggregate!
+  home_games: Int
+  id: Int!
+  name: String
+  total_attendance: Float
+}
+
+"""
+aggregated selection of "stadium"
+"""
+type stadium_aggregate {
+  aggregate: stadium_aggregate_fields
+  nodes: [stadium!]!
+}
+
+"""
+aggregate fields of "stadium"
+"""
+type stadium_aggregate_fields {
+  avg: stadium_avg_fields
+  count(columns: [stadium_select_column!], distinct: Boolean): Int
+  max: stadium_max_fields
+  min: stadium_min_fields
+  stddev: stadium_stddev_fields
+  stddev_pop: stadium_stddev_pop_fields
+  stddev_samp: stadium_stddev_samp_fields
+  sum: stadium_sum_fields
+  var_pop: stadium_var_pop_fields
+  var_samp: stadium_var_samp_fields
+  variance: stadium_variance_fields
+}
+
+"""
+order by aggregate values of table "stadium"
+"""
+input stadium_aggregate_order_by {
+  avg: stadium_avg_order_by
+  count: order_by
+  max: stadium_max_order_by
+  min: stadium_min_order_by
+  stddev: stadium_stddev_order_by
+  stddev_pop: stadium_stddev_pop_order_by
+  stddev_samp: stadium_stddev_samp_order_by
+  sum: stadium_sum_order_by
+  var_pop: stadium_var_pop_order_by
+  var_samp: stadium_var_samp_order_by
+  variance: stadium_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "stadium"
+"""
+input stadium_arr_rel_insert_input {
+  data: [stadium_insert_input!]!
+  on_conflict: stadium_on_conflict
+}
+
+"""aggregate avg on columns"""
+type stadium_avg_fields {
+  average_attendance: Float
+  capacity_percentage: Float
+  home_games: Float
+  id: Float
+  total_attendance: Float
+}
+
+"""
+order by avg() on columns of table "stadium"
+"""
+input stadium_avg_order_by {
+  average_attendance: order_by
+  capacity_percentage: order_by
+  home_games: order_by
+  id: order_by
+  total_attendance: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "stadium". All fields are combined with a logical 'AND'.
+"""
+input stadium_bool_exp {
+  _and: [stadium_bool_exp]
+  _not: stadium_bool_exp
+  _or: [stadium_bool_exp]
+  average_attendance: Float_comparison_exp
+  capacity_percentage: Float_comparison_exp
+  games: game_bool_exp
+  home_games: Int_comparison_exp
+  id: Int_comparison_exp
+  name: String_comparison_exp
+  total_attendance: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "stadium"
+"""
+enum stadium_constraint {
+  """unique or primary key constraint"""
+  idx_17182_sqlite_autoindex_stadium_1
+}
+
+"""
+input type for incrementing integer columne in table "stadium"
+"""
+input stadium_inc_input {
+  home_games: Int
+  id: Int
+}
+
+"""
+input type for inserting data into table "stadium"
+"""
+input stadium_insert_input {
+  average_attendance: Float
+  capacity_percentage: Float
+  games: game_arr_rel_insert_input
+  home_games: Int
+  id: Int
+  name: String
+  total_attendance: Float
+}
+
+"""aggregate max on columns"""
+type stadium_max_fields {
+  average_attendance: Float
+  capacity_percentage: Float
+  home_games: Int
+  id: Int
+  name: String
+  total_attendance: Float
+}
+
+"""
+order by max() on columns of table "stadium"
+"""
+input stadium_max_order_by {
+  average_attendance: order_by
+  capacity_percentage: order_by
+  home_games: order_by
+  id: order_by
+  name: order_by
+  total_attendance: order_by
+}
+
+"""aggregate min on columns"""
+type stadium_min_fields {
+  average_attendance: Float
+  capacity_percentage: Float
+  home_games: Int
+  id: Int
+  name: String
+  total_attendance: Float
+}
+
+"""
+order by min() on columns of table "stadium"
+"""
+input stadium_min_order_by {
+  average_attendance: order_by
+  capacity_percentage: order_by
+  home_games: order_by
+  id: order_by
+  name: order_by
+  total_attendance: order_by
+}
+
+"""
+response of any mutation on the table "stadium"
+"""
+type stadium_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [stadium!]!
+}
+
+"""
+input type for inserting object relation for remote table "stadium"
+"""
+input stadium_obj_rel_insert_input {
+  data: stadium_insert_input!
+  on_conflict: stadium_on_conflict
+}
+
+"""
+on conflict condition type for table "stadium"
+"""
+input stadium_on_conflict {
+  constraint: stadium_constraint!
+  update_columns: [stadium_update_column!]!
+  where: stadium_bool_exp
+}
+
+"""
+ordering options when selecting data from "stadium"
+"""
+input stadium_order_by {
+  average_attendance: order_by
+  capacity_percentage: order_by
+  games_aggregate: game_aggregate_order_by
+  home_games: order_by
+  id: order_by
+  name: order_by
+  total_attendance: order_by
+}
+
+"""
+select columns of table "stadium"
+"""
+enum stadium_select_column {
+  """column name"""
+  average_attendance
+
+  """column name"""
+  capacity_percentage
+
+  """column name"""
+  home_games
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  total_attendance
+}
+
+"""
+input type for updating data in table "stadium"
+"""
+input stadium_set_input {
+  average_attendance: Float
+  capacity_percentage: Float
+  home_games: Int
+  id: Int
+  name: String
+  total_attendance: Float
+}
+
+"""aggregate stddev on columns"""
+type stadium_stddev_fields {
+  average_attendance: Float
+  capacity_percentage: Float
+  home_games: Float
+  id: Float
+  total_attendance: Float
+}
+
+"""
+order by stddev() on columns of table "stadium"
+"""
+input stadium_stddev_order_by {
+  average_attendance: order_by
+  capacity_percentage: order_by
+  home_games: order_by
+  id: order_by
+  total_attendance: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type stadium_stddev_pop_fields {
+  average_attendance: Float
+  capacity_percentage: Float
+  home_games: Float
+  id: Float
+  total_attendance: Float
+}
+
+"""
+order by stddev_pop() on columns of table "stadium"
+"""
+input stadium_stddev_pop_order_by {
+  average_attendance: order_by
+  capacity_percentage: order_by
+  home_games: order_by
+  id: order_by
+  total_attendance: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type stadium_stddev_samp_fields {
+  average_attendance: Float
+  capacity_percentage: Float
+  home_games: Float
+  id: Float
+  total_attendance: Float
+}
+
+"""
+order by stddev_samp() on columns of table "stadium"
+"""
+input stadium_stddev_samp_order_by {
+  average_attendance: order_by
+  capacity_percentage: order_by
+  home_games: order_by
+  id: order_by
+  total_attendance: order_by
+}
+
+"""aggregate sum on columns"""
+type stadium_sum_fields {
+  average_attendance: Float
+  capacity_percentage: Float
+  home_games: Int
+  id: Int
+  total_attendance: Float
+}
+
+"""
+order by sum() on columns of table "stadium"
+"""
+input stadium_sum_order_by {
+  average_attendance: order_by
+  capacity_percentage: order_by
+  home_games: order_by
+  id: order_by
+  total_attendance: order_by
+}
+
+"""
+update columns of table "stadium"
+"""
+enum stadium_update_column {
+  """column name"""
+  average_attendance
+
+  """column name"""
+  capacity_percentage
+
+  """column name"""
+  home_games
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  total_attendance
+}
+
+"""aggregate var_pop on columns"""
+type stadium_var_pop_fields {
+  average_attendance: Float
+  capacity_percentage: Float
+  home_games: Float
+  id: Float
+  total_attendance: Float
+}
+
+"""
+order by var_pop() on columns of table "stadium"
+"""
+input stadium_var_pop_order_by {
+  average_attendance: order_by
+  capacity_percentage: order_by
+  home_games: order_by
+  id: order_by
+  total_attendance: order_by
+}
+
+"""aggregate var_samp on columns"""
+type stadium_var_samp_fields {
+  average_attendance: Float
+  capacity_percentage: Float
+  home_games: Float
+  id: Float
+  total_attendance: Float
+}
+
+"""
+order by var_samp() on columns of table "stadium"
+"""
+input stadium_var_samp_order_by {
+  average_attendance: order_by
+  capacity_percentage: order_by
+  home_games: order_by
+  id: order_by
+  total_attendance: order_by
+}
+
+"""aggregate variance on columns"""
+type stadium_variance_fields {
+  average_attendance: Float
+  capacity_percentage: Float
+  home_games: Float
+  id: Float
+  total_attendance: Float
+}
+
+"""
+order by variance() on columns of table "stadium"
+"""
+input stadium_variance_order_by {
+  average_attendance: order_by
+  capacity_percentage: order_by
+  home_games: order_by
+  id: order_by
+  total_attendance: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "game"
+  """
+  game(
+    """distinct select on columns"""
+    distinct_on: [game_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [game_order_by!]
+
+    """filter the rows returned"""
+    where: game_bool_exp
+  ): [game!]!
+
+  """
+  fetch aggregated fields from the table: "game"
+  """
+  game_aggregate(
+    """distinct select on columns"""
+    distinct_on: [game_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [game_order_by!]
+
+    """filter the rows returned"""
+    where: game_bool_exp
+  ): game_aggregate!
+
+  """fetch data from the table: "game" using primary key columns"""
+  game_by_pk(id: Int!): game
+
+  """
+  fetch data from the table: "injury_accident"
+  """
+  injury_accident(
+    """distinct select on columns"""
+    distinct_on: [injury_accident_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [injury_accident_order_by!]
+
+    """filter the rows returned"""
+    where: injury_accident_bool_exp
+  ): [injury_accident!]!
+
+  """
+  fetch aggregated fields from the table: "injury_accident"
+  """
+  injury_accident_aggregate(
+    """distinct select on columns"""
+    distinct_on: [injury_accident_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [injury_accident_order_by!]
+
+    """filter the rows returned"""
+    where: injury_accident_bool_exp
+  ): injury_accident_aggregate!
+
+  """fetch data from the table: "injury_accident" using primary key columns"""
+  injury_accident_by_pk(id: Int!): injury_accident
+
+  """
+  fetch data from the table: "stadium"
+  """
+  stadium(
+    """distinct select on columns"""
+    distinct_on: [stadium_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stadium_order_by!]
+
+    """filter the rows returned"""
+    where: stadium_bool_exp
+  ): [stadium!]!
+
+  """
+  fetch aggregated fields from the table: "stadium"
+  """
+  stadium_aggregate(
+    """distinct select on columns"""
+    distinct_on: [stadium_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stadium_order_by!]
+
+    """filter the rows returned"""
+    where: stadium_bool_exp
+  ): stadium_aggregate!
+
+  """fetch data from the table: "stadium" using primary key columns"""
+  stadium_by_pk(id: Int!): stadium
+}

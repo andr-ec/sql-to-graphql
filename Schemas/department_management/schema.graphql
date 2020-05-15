@@ -1,0 +1,1581 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "department"
+"""
+type department {
+  budget_in_billions: Float
+  creation: String
+  department_id: Int
+
+  """An array relationship"""
+  management(
+    """distinct select on columns"""
+    distinct_on: [management_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [management_order_by!]
+
+    """filter the rows returned"""
+    where: management_bool_exp
+  ): [management!]!
+
+  """An aggregated array relationship"""
+  management_aggregate(
+    """distinct select on columns"""
+    distinct_on: [management_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [management_order_by!]
+
+    """filter the rows returned"""
+    where: management_bool_exp
+  ): management_aggregate!
+  name: String
+  num_employees: Float
+  ranking: Int
+}
+
+"""
+aggregated selection of "department"
+"""
+type department_aggregate {
+  aggregate: department_aggregate_fields
+  nodes: [department!]!
+}
+
+"""
+aggregate fields of "department"
+"""
+type department_aggregate_fields {
+  avg: department_avg_fields
+  count(columns: [department_select_column!], distinct: Boolean): Int
+  max: department_max_fields
+  min: department_min_fields
+  stddev: department_stddev_fields
+  stddev_pop: department_stddev_pop_fields
+  stddev_samp: department_stddev_samp_fields
+  sum: department_sum_fields
+  var_pop: department_var_pop_fields
+  var_samp: department_var_samp_fields
+  variance: department_variance_fields
+}
+
+"""
+order by aggregate values of table "department"
+"""
+input department_aggregate_order_by {
+  avg: department_avg_order_by
+  count: order_by
+  max: department_max_order_by
+  min: department_min_order_by
+  stddev: department_stddev_order_by
+  stddev_pop: department_stddev_pop_order_by
+  stddev_samp: department_stddev_samp_order_by
+  sum: department_sum_order_by
+  var_pop: department_var_pop_order_by
+  var_samp: department_var_samp_order_by
+  variance: department_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "department"
+"""
+input department_arr_rel_insert_input {
+  data: [department_insert_input!]!
+  on_conflict: department_on_conflict
+}
+
+"""aggregate avg on columns"""
+type department_avg_fields {
+  budget_in_billions: Float
+  department_id: Float
+  num_employees: Float
+  ranking: Float
+}
+
+"""
+order by avg() on columns of table "department"
+"""
+input department_avg_order_by {
+  budget_in_billions: order_by
+  department_id: order_by
+  num_employees: order_by
+  ranking: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "department". All fields are combined with a logical 'AND'.
+"""
+input department_bool_exp {
+  _and: [department_bool_exp]
+  _not: department_bool_exp
+  _or: [department_bool_exp]
+  budget_in_billions: Float_comparison_exp
+  creation: String_comparison_exp
+  department_id: Int_comparison_exp
+  management: management_bool_exp
+  name: String_comparison_exp
+  num_employees: Float_comparison_exp
+  ranking: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "department"
+"""
+enum department_constraint {
+  """unique or primary key constraint"""
+  idx_18095_sqlite_autoindex_department_1
+}
+
+"""
+input type for incrementing integer columne in table "department"
+"""
+input department_inc_input {
+  department_id: Int
+  ranking: Int
+}
+
+"""
+input type for inserting data into table "department"
+"""
+input department_insert_input {
+  budget_in_billions: Float
+  creation: String
+  department_id: Int
+  management: management_arr_rel_insert_input
+  name: String
+  num_employees: Float
+  ranking: Int
+}
+
+"""aggregate max on columns"""
+type department_max_fields {
+  budget_in_billions: Float
+  creation: String
+  department_id: Int
+  name: String
+  num_employees: Float
+  ranking: Int
+}
+
+"""
+order by max() on columns of table "department"
+"""
+input department_max_order_by {
+  budget_in_billions: order_by
+  creation: order_by
+  department_id: order_by
+  name: order_by
+  num_employees: order_by
+  ranking: order_by
+}
+
+"""aggregate min on columns"""
+type department_min_fields {
+  budget_in_billions: Float
+  creation: String
+  department_id: Int
+  name: String
+  num_employees: Float
+  ranking: Int
+}
+
+"""
+order by min() on columns of table "department"
+"""
+input department_min_order_by {
+  budget_in_billions: order_by
+  creation: order_by
+  department_id: order_by
+  name: order_by
+  num_employees: order_by
+  ranking: order_by
+}
+
+"""
+response of any mutation on the table "department"
+"""
+type department_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [department!]!
+}
+
+"""
+input type for inserting object relation for remote table "department"
+"""
+input department_obj_rel_insert_input {
+  data: department_insert_input!
+  on_conflict: department_on_conflict
+}
+
+"""
+on conflict condition type for table "department"
+"""
+input department_on_conflict {
+  constraint: department_constraint!
+  update_columns: [department_update_column!]!
+  where: department_bool_exp
+}
+
+"""
+ordering options when selecting data from "department"
+"""
+input department_order_by {
+  budget_in_billions: order_by
+  creation: order_by
+  department_id: order_by
+  management_aggregate: management_aggregate_order_by
+  name: order_by
+  num_employees: order_by
+  ranking: order_by
+}
+
+"""
+select columns of table "department"
+"""
+enum department_select_column {
+  """column name"""
+  budget_in_billions
+
+  """column name"""
+  creation
+
+  """column name"""
+  department_id
+
+  """column name"""
+  name
+
+  """column name"""
+  num_employees
+
+  """column name"""
+  ranking
+}
+
+"""
+input type for updating data in table "department"
+"""
+input department_set_input {
+  budget_in_billions: Float
+  creation: String
+  department_id: Int
+  name: String
+  num_employees: Float
+  ranking: Int
+}
+
+"""aggregate stddev on columns"""
+type department_stddev_fields {
+  budget_in_billions: Float
+  department_id: Float
+  num_employees: Float
+  ranking: Float
+}
+
+"""
+order by stddev() on columns of table "department"
+"""
+input department_stddev_order_by {
+  budget_in_billions: order_by
+  department_id: order_by
+  num_employees: order_by
+  ranking: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type department_stddev_pop_fields {
+  budget_in_billions: Float
+  department_id: Float
+  num_employees: Float
+  ranking: Float
+}
+
+"""
+order by stddev_pop() on columns of table "department"
+"""
+input department_stddev_pop_order_by {
+  budget_in_billions: order_by
+  department_id: order_by
+  num_employees: order_by
+  ranking: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type department_stddev_samp_fields {
+  budget_in_billions: Float
+  department_id: Float
+  num_employees: Float
+  ranking: Float
+}
+
+"""
+order by stddev_samp() on columns of table "department"
+"""
+input department_stddev_samp_order_by {
+  budget_in_billions: order_by
+  department_id: order_by
+  num_employees: order_by
+  ranking: order_by
+}
+
+"""aggregate sum on columns"""
+type department_sum_fields {
+  budget_in_billions: Float
+  department_id: Int
+  num_employees: Float
+  ranking: Int
+}
+
+"""
+order by sum() on columns of table "department"
+"""
+input department_sum_order_by {
+  budget_in_billions: order_by
+  department_id: order_by
+  num_employees: order_by
+  ranking: order_by
+}
+
+"""
+update columns of table "department"
+"""
+enum department_update_column {
+  """column name"""
+  budget_in_billions
+
+  """column name"""
+  creation
+
+  """column name"""
+  department_id
+
+  """column name"""
+  name
+
+  """column name"""
+  num_employees
+
+  """column name"""
+  ranking
+}
+
+"""aggregate var_pop on columns"""
+type department_var_pop_fields {
+  budget_in_billions: Float
+  department_id: Float
+  num_employees: Float
+  ranking: Float
+}
+
+"""
+order by var_pop() on columns of table "department"
+"""
+input department_var_pop_order_by {
+  budget_in_billions: order_by
+  department_id: order_by
+  num_employees: order_by
+  ranking: order_by
+}
+
+"""aggregate var_samp on columns"""
+type department_var_samp_fields {
+  budget_in_billions: Float
+  department_id: Float
+  num_employees: Float
+  ranking: Float
+}
+
+"""
+order by var_samp() on columns of table "department"
+"""
+input department_var_samp_order_by {
+  budget_in_billions: order_by
+  department_id: order_by
+  num_employees: order_by
+  ranking: order_by
+}
+
+"""aggregate variance on columns"""
+type department_variance_fields {
+  budget_in_billions: Float
+  department_id: Float
+  num_employees: Float
+  ranking: Float
+}
+
+"""
+order by variance() on columns of table "department"
+"""
+input department_variance_order_by {
+  budget_in_billions: order_by
+  department_id: order_by
+  num_employees: order_by
+  ranking: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+columns and relationships of "head"
+"""
+type head {
+  age: Float
+  born_state: String
+  head_id: Int
+
+  """An array relationship"""
+  management(
+    """distinct select on columns"""
+    distinct_on: [management_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [management_order_by!]
+
+    """filter the rows returned"""
+    where: management_bool_exp
+  ): [management!]!
+
+  """An aggregated array relationship"""
+  management_aggregate(
+    """distinct select on columns"""
+    distinct_on: [management_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [management_order_by!]
+
+    """filter the rows returned"""
+    where: management_bool_exp
+  ): management_aggregate!
+  name: String
+}
+
+"""
+aggregated selection of "head"
+"""
+type head_aggregate {
+  aggregate: head_aggregate_fields
+  nodes: [head!]!
+}
+
+"""
+aggregate fields of "head"
+"""
+type head_aggregate_fields {
+  avg: head_avg_fields
+  count(columns: [head_select_column!], distinct: Boolean): Int
+  max: head_max_fields
+  min: head_min_fields
+  stddev: head_stddev_fields
+  stddev_pop: head_stddev_pop_fields
+  stddev_samp: head_stddev_samp_fields
+  sum: head_sum_fields
+  var_pop: head_var_pop_fields
+  var_samp: head_var_samp_fields
+  variance: head_variance_fields
+}
+
+"""
+order by aggregate values of table "head"
+"""
+input head_aggregate_order_by {
+  avg: head_avg_order_by
+  count: order_by
+  max: head_max_order_by
+  min: head_min_order_by
+  stddev: head_stddev_order_by
+  stddev_pop: head_stddev_pop_order_by
+  stddev_samp: head_stddev_samp_order_by
+  sum: head_sum_order_by
+  var_pop: head_var_pop_order_by
+  var_samp: head_var_samp_order_by
+  variance: head_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "head"
+"""
+input head_arr_rel_insert_input {
+  data: [head_insert_input!]!
+  on_conflict: head_on_conflict
+}
+
+"""aggregate avg on columns"""
+type head_avg_fields {
+  age: Float
+  head_id: Float
+}
+
+"""
+order by avg() on columns of table "head"
+"""
+input head_avg_order_by {
+  age: order_by
+  head_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "head". All fields are combined with a logical 'AND'.
+"""
+input head_bool_exp {
+  _and: [head_bool_exp]
+  _not: head_bool_exp
+  _or: [head_bool_exp]
+  age: Float_comparison_exp
+  born_state: String_comparison_exp
+  head_id: Int_comparison_exp
+  management: management_bool_exp
+  name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "head"
+"""
+enum head_constraint {
+  """unique or primary key constraint"""
+  idx_18101_sqlite_autoindex_head_1
+}
+
+"""
+input type for incrementing integer columne in table "head"
+"""
+input head_inc_input {
+  head_id: Int
+}
+
+"""
+input type for inserting data into table "head"
+"""
+input head_insert_input {
+  age: Float
+  born_state: String
+  head_id: Int
+  management: management_arr_rel_insert_input
+  name: String
+}
+
+"""aggregate max on columns"""
+type head_max_fields {
+  age: Float
+  born_state: String
+  head_id: Int
+  name: String
+}
+
+"""
+order by max() on columns of table "head"
+"""
+input head_max_order_by {
+  age: order_by
+  born_state: order_by
+  head_id: order_by
+  name: order_by
+}
+
+"""aggregate min on columns"""
+type head_min_fields {
+  age: Float
+  born_state: String
+  head_id: Int
+  name: String
+}
+
+"""
+order by min() on columns of table "head"
+"""
+input head_min_order_by {
+  age: order_by
+  born_state: order_by
+  head_id: order_by
+  name: order_by
+}
+
+"""
+response of any mutation on the table "head"
+"""
+type head_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [head!]!
+}
+
+"""
+input type for inserting object relation for remote table "head"
+"""
+input head_obj_rel_insert_input {
+  data: head_insert_input!
+  on_conflict: head_on_conflict
+}
+
+"""
+on conflict condition type for table "head"
+"""
+input head_on_conflict {
+  constraint: head_constraint!
+  update_columns: [head_update_column!]!
+  where: head_bool_exp
+}
+
+"""
+ordering options when selecting data from "head"
+"""
+input head_order_by {
+  age: order_by
+  born_state: order_by
+  head_id: order_by
+  management_aggregate: management_aggregate_order_by
+  name: order_by
+}
+
+"""
+select columns of table "head"
+"""
+enum head_select_column {
+  """column name"""
+  age
+
+  """column name"""
+  born_state
+
+  """column name"""
+  head_id
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "head"
+"""
+input head_set_input {
+  age: Float
+  born_state: String
+  head_id: Int
+  name: String
+}
+
+"""aggregate stddev on columns"""
+type head_stddev_fields {
+  age: Float
+  head_id: Float
+}
+
+"""
+order by stddev() on columns of table "head"
+"""
+input head_stddev_order_by {
+  age: order_by
+  head_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type head_stddev_pop_fields {
+  age: Float
+  head_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "head"
+"""
+input head_stddev_pop_order_by {
+  age: order_by
+  head_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type head_stddev_samp_fields {
+  age: Float
+  head_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "head"
+"""
+input head_stddev_samp_order_by {
+  age: order_by
+  head_id: order_by
+}
+
+"""aggregate sum on columns"""
+type head_sum_fields {
+  age: Float
+  head_id: Int
+}
+
+"""
+order by sum() on columns of table "head"
+"""
+input head_sum_order_by {
+  age: order_by
+  head_id: order_by
+}
+
+"""
+update columns of table "head"
+"""
+enum head_update_column {
+  """column name"""
+  age
+
+  """column name"""
+  born_state
+
+  """column name"""
+  head_id
+
+  """column name"""
+  name
+}
+
+"""aggregate var_pop on columns"""
+type head_var_pop_fields {
+  age: Float
+  head_id: Float
+}
+
+"""
+order by var_pop() on columns of table "head"
+"""
+input head_var_pop_order_by {
+  age: order_by
+  head_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type head_var_samp_fields {
+  age: Float
+  head_id: Float
+}
+
+"""
+order by var_samp() on columns of table "head"
+"""
+input head_var_samp_order_by {
+  age: order_by
+  head_id: order_by
+}
+
+"""aggregate variance on columns"""
+type head_variance_fields {
+  age: Float
+  head_id: Float
+}
+
+"""
+order by variance() on columns of table "head"
+"""
+input head_variance_order_by {
+  age: order_by
+  head_id: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "management"
+"""
+type management {
+  """An object relationship"""
+  department: department
+  department_id: Int
+
+  """An object relationship"""
+  head: head
+  head_id: Int
+  temporary_acting: String
+}
+
+"""
+aggregated selection of "management"
+"""
+type management_aggregate {
+  aggregate: management_aggregate_fields
+  nodes: [management!]!
+}
+
+"""
+aggregate fields of "management"
+"""
+type management_aggregate_fields {
+  avg: management_avg_fields
+  count(columns: [management_select_column!], distinct: Boolean): Int
+  max: management_max_fields
+  min: management_min_fields
+  stddev: management_stddev_fields
+  stddev_pop: management_stddev_pop_fields
+  stddev_samp: management_stddev_samp_fields
+  sum: management_sum_fields
+  var_pop: management_var_pop_fields
+  var_samp: management_var_samp_fields
+  variance: management_variance_fields
+}
+
+"""
+order by aggregate values of table "management"
+"""
+input management_aggregate_order_by {
+  avg: management_avg_order_by
+  count: order_by
+  max: management_max_order_by
+  min: management_min_order_by
+  stddev: management_stddev_order_by
+  stddev_pop: management_stddev_pop_order_by
+  stddev_samp: management_stddev_samp_order_by
+  sum: management_sum_order_by
+  var_pop: management_var_pop_order_by
+  var_samp: management_var_samp_order_by
+  variance: management_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "management"
+"""
+input management_arr_rel_insert_input {
+  data: [management_insert_input!]!
+  on_conflict: management_on_conflict
+}
+
+"""aggregate avg on columns"""
+type management_avg_fields {
+  department_id: Float
+  head_id: Float
+}
+
+"""
+order by avg() on columns of table "management"
+"""
+input management_avg_order_by {
+  department_id: order_by
+  head_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "management". All fields are combined with a logical 'AND'.
+"""
+input management_bool_exp {
+  _and: [management_bool_exp]
+  _not: management_bool_exp
+  _or: [management_bool_exp]
+  department: department_bool_exp
+  department_id: Int_comparison_exp
+  head: head_bool_exp
+  head_id: Int_comparison_exp
+  temporary_acting: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "management"
+"""
+enum management_constraint {
+  """unique or primary key constraint"""
+  idx_18107_sqlite_autoindex_management_1
+}
+
+"""
+input type for incrementing integer columne in table "management"
+"""
+input management_inc_input {
+  department_id: Int
+  head_id: Int
+}
+
+"""
+input type for inserting data into table "management"
+"""
+input management_insert_input {
+  department: department_obj_rel_insert_input
+  department_id: Int
+  head: head_obj_rel_insert_input
+  head_id: Int
+  temporary_acting: String
+}
+
+"""aggregate max on columns"""
+type management_max_fields {
+  department_id: Int
+  head_id: Int
+  temporary_acting: String
+}
+
+"""
+order by max() on columns of table "management"
+"""
+input management_max_order_by {
+  department_id: order_by
+  head_id: order_by
+  temporary_acting: order_by
+}
+
+"""aggregate min on columns"""
+type management_min_fields {
+  department_id: Int
+  head_id: Int
+  temporary_acting: String
+}
+
+"""
+order by min() on columns of table "management"
+"""
+input management_min_order_by {
+  department_id: order_by
+  head_id: order_by
+  temporary_acting: order_by
+}
+
+"""
+response of any mutation on the table "management"
+"""
+type management_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [management!]!
+}
+
+"""
+input type for inserting object relation for remote table "management"
+"""
+input management_obj_rel_insert_input {
+  data: management_insert_input!
+  on_conflict: management_on_conflict
+}
+
+"""
+on conflict condition type for table "management"
+"""
+input management_on_conflict {
+  constraint: management_constraint!
+  update_columns: [management_update_column!]!
+  where: management_bool_exp
+}
+
+"""
+ordering options when selecting data from "management"
+"""
+input management_order_by {
+  department: department_order_by
+  department_id: order_by
+  head: head_order_by
+  head_id: order_by
+  temporary_acting: order_by
+}
+
+"""
+select columns of table "management"
+"""
+enum management_select_column {
+  """column name"""
+  department_id
+
+  """column name"""
+  head_id
+
+  """column name"""
+  temporary_acting
+}
+
+"""
+input type for updating data in table "management"
+"""
+input management_set_input {
+  department_id: Int
+  head_id: Int
+  temporary_acting: String
+}
+
+"""aggregate stddev on columns"""
+type management_stddev_fields {
+  department_id: Float
+  head_id: Float
+}
+
+"""
+order by stddev() on columns of table "management"
+"""
+input management_stddev_order_by {
+  department_id: order_by
+  head_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type management_stddev_pop_fields {
+  department_id: Float
+  head_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "management"
+"""
+input management_stddev_pop_order_by {
+  department_id: order_by
+  head_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type management_stddev_samp_fields {
+  department_id: Float
+  head_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "management"
+"""
+input management_stddev_samp_order_by {
+  department_id: order_by
+  head_id: order_by
+}
+
+"""aggregate sum on columns"""
+type management_sum_fields {
+  department_id: Int
+  head_id: Int
+}
+
+"""
+order by sum() on columns of table "management"
+"""
+input management_sum_order_by {
+  department_id: order_by
+  head_id: order_by
+}
+
+"""
+update columns of table "management"
+"""
+enum management_update_column {
+  """column name"""
+  department_id
+
+  """column name"""
+  head_id
+
+  """column name"""
+  temporary_acting
+}
+
+"""aggregate var_pop on columns"""
+type management_var_pop_fields {
+  department_id: Float
+  head_id: Float
+}
+
+"""
+order by var_pop() on columns of table "management"
+"""
+input management_var_pop_order_by {
+  department_id: order_by
+  head_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type management_var_samp_fields {
+  department_id: Float
+  head_id: Float
+}
+
+"""
+order by var_samp() on columns of table "management"
+"""
+input management_var_samp_order_by {
+  department_id: order_by
+  head_id: order_by
+}
+
+"""aggregate variance on columns"""
+type management_variance_fields {
+  department_id: Float
+  head_id: Float
+}
+
+"""
+order by variance() on columns of table "management"
+"""
+input management_variance_order_by {
+  department_id: order_by
+  head_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "department"
+  """
+  delete_department(
+    """filter the rows which have to be deleted"""
+    where: department_bool_exp!
+  ): department_mutation_response
+
+  """
+  delete data from the table: "head"
+  """
+  delete_head(
+    """filter the rows which have to be deleted"""
+    where: head_bool_exp!
+  ): head_mutation_response
+
+  """
+  delete data from the table: "management"
+  """
+  delete_management(
+    """filter the rows which have to be deleted"""
+    where: management_bool_exp!
+  ): management_mutation_response
+
+  """
+  insert data into the table: "department"
+  """
+  insert_department(
+    """the rows to be inserted"""
+    objects: [department_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: department_on_conflict
+  ): department_mutation_response
+
+  """
+  insert data into the table: "head"
+  """
+  insert_head(
+    """the rows to be inserted"""
+    objects: [head_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: head_on_conflict
+  ): head_mutation_response
+
+  """
+  insert data into the table: "management"
+  """
+  insert_management(
+    """the rows to be inserted"""
+    objects: [management_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: management_on_conflict
+  ): management_mutation_response
+
+  """
+  update data of the table: "department"
+  """
+  update_department(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: department_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: department_set_input
+
+    """filter the rows which have to be updated"""
+    where: department_bool_exp!
+  ): department_mutation_response
+
+  """
+  update data of the table: "head"
+  """
+  update_head(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: head_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: head_set_input
+
+    """filter the rows which have to be updated"""
+    where: head_bool_exp!
+  ): head_mutation_response
+
+  """
+  update data of the table: "management"
+  """
+  update_management(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: management_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: management_set_input
+
+    """filter the rows which have to be updated"""
+    where: management_bool_exp!
+  ): management_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "department"
+  """
+  department(
+    """distinct select on columns"""
+    distinct_on: [department_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [department_order_by!]
+
+    """filter the rows returned"""
+    where: department_bool_exp
+  ): [department!]!
+
+  """
+  fetch aggregated fields from the table: "department"
+  """
+  department_aggregate(
+    """distinct select on columns"""
+    distinct_on: [department_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [department_order_by!]
+
+    """filter the rows returned"""
+    where: department_bool_exp
+  ): department_aggregate!
+
+  """
+  fetch data from the table: "head"
+  """
+  head(
+    """distinct select on columns"""
+    distinct_on: [head_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [head_order_by!]
+
+    """filter the rows returned"""
+    where: head_bool_exp
+  ): [head!]!
+
+  """
+  fetch aggregated fields from the table: "head"
+  """
+  head_aggregate(
+    """distinct select on columns"""
+    distinct_on: [head_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [head_order_by!]
+
+    """filter the rows returned"""
+    where: head_bool_exp
+  ): head_aggregate!
+
+  """
+  fetch data from the table: "management"
+  """
+  management(
+    """distinct select on columns"""
+    distinct_on: [management_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [management_order_by!]
+
+    """filter the rows returned"""
+    where: management_bool_exp
+  ): [management!]!
+
+  """
+  fetch aggregated fields from the table: "management"
+  """
+  management_aggregate(
+    """distinct select on columns"""
+    distinct_on: [management_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [management_order_by!]
+
+    """filter the rows returned"""
+    where: management_bool_exp
+  ): management_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "department"
+  """
+  department(
+    """distinct select on columns"""
+    distinct_on: [department_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [department_order_by!]
+
+    """filter the rows returned"""
+    where: department_bool_exp
+  ): [department!]!
+
+  """
+  fetch aggregated fields from the table: "department"
+  """
+  department_aggregate(
+    """distinct select on columns"""
+    distinct_on: [department_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [department_order_by!]
+
+    """filter the rows returned"""
+    where: department_bool_exp
+  ): department_aggregate!
+
+  """
+  fetch data from the table: "head"
+  """
+  head(
+    """distinct select on columns"""
+    distinct_on: [head_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [head_order_by!]
+
+    """filter the rows returned"""
+    where: head_bool_exp
+  ): [head!]!
+
+  """
+  fetch aggregated fields from the table: "head"
+  """
+  head_aggregate(
+    """distinct select on columns"""
+    distinct_on: [head_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [head_order_by!]
+
+    """filter the rows returned"""
+    where: head_bool_exp
+  ): head_aggregate!
+
+  """
+  fetch data from the table: "management"
+  """
+  management(
+    """distinct select on columns"""
+    distinct_on: [management_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [management_order_by!]
+
+    """filter the rows returned"""
+    where: management_bool_exp
+  ): [management!]!
+
+  """
+  fetch aggregated fields from the table: "management"
+  """
+  management_aggregate(
+    """distinct select on columns"""
+    distinct_on: [management_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [management_order_by!]
+
+    """filter the rows returned"""
+    where: management_bool_exp
+  ): management_aggregate!
+}

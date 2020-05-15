@@ -1,0 +1,1690 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "bank"
+"""
+type bank {
+  bname: String
+  branch_id: Int
+  city: String
+
+  """An array relationship"""
+  customers(
+    """distinct select on columns"""
+    distinct_on: [customer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_order_by!]
+
+    """filter the rows returned"""
+    where: customer_bool_exp
+  ): [customer!]!
+
+  """An aggregated array relationship"""
+  customers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_order_by!]
+
+    """filter the rows returned"""
+    where: customer_bool_exp
+  ): customer_aggregate!
+
+  """An array relationship"""
+  loans(
+    """distinct select on columns"""
+    distinct_on: [loan_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [loan_order_by!]
+
+    """filter the rows returned"""
+    where: loan_bool_exp
+  ): [loan!]!
+
+  """An aggregated array relationship"""
+  loans_aggregate(
+    """distinct select on columns"""
+    distinct_on: [loan_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [loan_order_by!]
+
+    """filter the rows returned"""
+    where: loan_bool_exp
+  ): loan_aggregate!
+  no_of_customers: Int
+  state: String
+}
+
+"""
+aggregated selection of "bank"
+"""
+type bank_aggregate {
+  aggregate: bank_aggregate_fields
+  nodes: [bank!]!
+}
+
+"""
+aggregate fields of "bank"
+"""
+type bank_aggregate_fields {
+  avg: bank_avg_fields
+  count(columns: [bank_select_column!], distinct: Boolean): Int
+  max: bank_max_fields
+  min: bank_min_fields
+  stddev: bank_stddev_fields
+  stddev_pop: bank_stddev_pop_fields
+  stddev_samp: bank_stddev_samp_fields
+  sum: bank_sum_fields
+  var_pop: bank_var_pop_fields
+  var_samp: bank_var_samp_fields
+  variance: bank_variance_fields
+}
+
+"""
+order by aggregate values of table "bank"
+"""
+input bank_aggregate_order_by {
+  avg: bank_avg_order_by
+  count: order_by
+  max: bank_max_order_by
+  min: bank_min_order_by
+  stddev: bank_stddev_order_by
+  stddev_pop: bank_stddev_pop_order_by
+  stddev_samp: bank_stddev_samp_order_by
+  sum: bank_sum_order_by
+  var_pop: bank_var_pop_order_by
+  var_samp: bank_var_samp_order_by
+  variance: bank_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "bank"
+"""
+input bank_arr_rel_insert_input {
+  data: [bank_insert_input!]!
+  on_conflict: bank_on_conflict
+}
+
+"""aggregate avg on columns"""
+type bank_avg_fields {
+  branch_id: Float
+  no_of_customers: Float
+}
+
+"""
+order by avg() on columns of table "bank"
+"""
+input bank_avg_order_by {
+  branch_id: order_by
+  no_of_customers: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "bank". All fields are combined with a logical 'AND'.
+"""
+input bank_bool_exp {
+  _and: [bank_bool_exp]
+  _not: bank_bool_exp
+  _or: [bank_bool_exp]
+  bname: String_comparison_exp
+  branch_id: Int_comparison_exp
+  city: String_comparison_exp
+  customers: customer_bool_exp
+  loans: loan_bool_exp
+  no_of_customers: Int_comparison_exp
+  state: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "bank"
+"""
+enum bank_constraint {
+  """unique or primary key constraint"""
+  idx_20438_sqlite_autoindex_bank_1
+}
+
+"""
+input type for incrementing integer columne in table "bank"
+"""
+input bank_inc_input {
+  branch_id: Int
+  no_of_customers: Int
+}
+
+"""
+input type for inserting data into table "bank"
+"""
+input bank_insert_input {
+  bname: String
+  branch_id: Int
+  city: String
+  customers: customer_arr_rel_insert_input
+  loans: loan_arr_rel_insert_input
+  no_of_customers: Int
+  state: String
+}
+
+"""aggregate max on columns"""
+type bank_max_fields {
+  bname: String
+  branch_id: Int
+  city: String
+  no_of_customers: Int
+  state: String
+}
+
+"""
+order by max() on columns of table "bank"
+"""
+input bank_max_order_by {
+  bname: order_by
+  branch_id: order_by
+  city: order_by
+  no_of_customers: order_by
+  state: order_by
+}
+
+"""aggregate min on columns"""
+type bank_min_fields {
+  bname: String
+  branch_id: Int
+  city: String
+  no_of_customers: Int
+  state: String
+}
+
+"""
+order by min() on columns of table "bank"
+"""
+input bank_min_order_by {
+  bname: order_by
+  branch_id: order_by
+  city: order_by
+  no_of_customers: order_by
+  state: order_by
+}
+
+"""
+response of any mutation on the table "bank"
+"""
+type bank_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [bank!]!
+}
+
+"""
+input type for inserting object relation for remote table "bank"
+"""
+input bank_obj_rel_insert_input {
+  data: bank_insert_input!
+  on_conflict: bank_on_conflict
+}
+
+"""
+on conflict condition type for table "bank"
+"""
+input bank_on_conflict {
+  constraint: bank_constraint!
+  update_columns: [bank_update_column!]!
+  where: bank_bool_exp
+}
+
+"""
+ordering options when selecting data from "bank"
+"""
+input bank_order_by {
+  bname: order_by
+  branch_id: order_by
+  city: order_by
+  customers_aggregate: customer_aggregate_order_by
+  loans_aggregate: loan_aggregate_order_by
+  no_of_customers: order_by
+  state: order_by
+}
+
+"""
+select columns of table "bank"
+"""
+enum bank_select_column {
+  """column name"""
+  bname
+
+  """column name"""
+  branch_id
+
+  """column name"""
+  city
+
+  """column name"""
+  no_of_customers
+
+  """column name"""
+  state
+}
+
+"""
+input type for updating data in table "bank"
+"""
+input bank_set_input {
+  bname: String
+  branch_id: Int
+  city: String
+  no_of_customers: Int
+  state: String
+}
+
+"""aggregate stddev on columns"""
+type bank_stddev_fields {
+  branch_id: Float
+  no_of_customers: Float
+}
+
+"""
+order by stddev() on columns of table "bank"
+"""
+input bank_stddev_order_by {
+  branch_id: order_by
+  no_of_customers: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type bank_stddev_pop_fields {
+  branch_id: Float
+  no_of_customers: Float
+}
+
+"""
+order by stddev_pop() on columns of table "bank"
+"""
+input bank_stddev_pop_order_by {
+  branch_id: order_by
+  no_of_customers: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type bank_stddev_samp_fields {
+  branch_id: Float
+  no_of_customers: Float
+}
+
+"""
+order by stddev_samp() on columns of table "bank"
+"""
+input bank_stddev_samp_order_by {
+  branch_id: order_by
+  no_of_customers: order_by
+}
+
+"""aggregate sum on columns"""
+type bank_sum_fields {
+  branch_id: Int
+  no_of_customers: Int
+}
+
+"""
+order by sum() on columns of table "bank"
+"""
+input bank_sum_order_by {
+  branch_id: order_by
+  no_of_customers: order_by
+}
+
+"""
+update columns of table "bank"
+"""
+enum bank_update_column {
+  """column name"""
+  bname
+
+  """column name"""
+  branch_id
+
+  """column name"""
+  city
+
+  """column name"""
+  no_of_customers
+
+  """column name"""
+  state
+}
+
+"""aggregate var_pop on columns"""
+type bank_var_pop_fields {
+  branch_id: Float
+  no_of_customers: Float
+}
+
+"""
+order by var_pop() on columns of table "bank"
+"""
+input bank_var_pop_order_by {
+  branch_id: order_by
+  no_of_customers: order_by
+}
+
+"""aggregate var_samp on columns"""
+type bank_var_samp_fields {
+  branch_id: Float
+  no_of_customers: Float
+}
+
+"""
+order by var_samp() on columns of table "bank"
+"""
+input bank_var_samp_order_by {
+  branch_id: order_by
+  no_of_customers: order_by
+}
+
+"""aggregate variance on columns"""
+type bank_variance_fields {
+  branch_id: Float
+  no_of_customers: Float
+}
+
+"""
+order by variance() on columns of table "bank"
+"""
+input bank_variance_order_by {
+  branch_id: order_by
+  no_of_customers: order_by
+}
+
+"""
+columns and relationships of "customer"
+"""
+type customer {
+  acc_bal: Int
+  acc_type: String
+
+  """An object relationship"""
+  bank: bank
+  branch_id: Int
+  credit_score: Int
+  cust_id: String
+  cust_name: String
+
+  """An array relationship"""
+  loans(
+    """distinct select on columns"""
+    distinct_on: [loan_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [loan_order_by!]
+
+    """filter the rows returned"""
+    where: loan_bool_exp
+  ): [loan!]!
+
+  """An aggregated array relationship"""
+  loans_aggregate(
+    """distinct select on columns"""
+    distinct_on: [loan_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [loan_order_by!]
+
+    """filter the rows returned"""
+    where: loan_bool_exp
+  ): loan_aggregate!
+  no_of_loans: Int
+  state: String
+}
+
+"""
+aggregated selection of "customer"
+"""
+type customer_aggregate {
+  aggregate: customer_aggregate_fields
+  nodes: [customer!]!
+}
+
+"""
+aggregate fields of "customer"
+"""
+type customer_aggregate_fields {
+  avg: customer_avg_fields
+  count(columns: [customer_select_column!], distinct: Boolean): Int
+  max: customer_max_fields
+  min: customer_min_fields
+  stddev: customer_stddev_fields
+  stddev_pop: customer_stddev_pop_fields
+  stddev_samp: customer_stddev_samp_fields
+  sum: customer_sum_fields
+  var_pop: customer_var_pop_fields
+  var_samp: customer_var_samp_fields
+  variance: customer_variance_fields
+}
+
+"""
+order by aggregate values of table "customer"
+"""
+input customer_aggregate_order_by {
+  avg: customer_avg_order_by
+  count: order_by
+  max: customer_max_order_by
+  min: customer_min_order_by
+  stddev: customer_stddev_order_by
+  stddev_pop: customer_stddev_pop_order_by
+  stddev_samp: customer_stddev_samp_order_by
+  sum: customer_sum_order_by
+  var_pop: customer_var_pop_order_by
+  var_samp: customer_var_samp_order_by
+  variance: customer_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "customer"
+"""
+input customer_arr_rel_insert_input {
+  data: [customer_insert_input!]!
+  on_conflict: customer_on_conflict
+}
+
+"""aggregate avg on columns"""
+type customer_avg_fields {
+  acc_bal: Float
+  branch_id: Float
+  credit_score: Float
+  no_of_loans: Float
+}
+
+"""
+order by avg() on columns of table "customer"
+"""
+input customer_avg_order_by {
+  acc_bal: order_by
+  branch_id: order_by
+  credit_score: order_by
+  no_of_loans: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "customer". All fields are combined with a logical 'AND'.
+"""
+input customer_bool_exp {
+  _and: [customer_bool_exp]
+  _not: customer_bool_exp
+  _or: [customer_bool_exp]
+  acc_bal: Int_comparison_exp
+  acc_type: String_comparison_exp
+  bank: bank_bool_exp
+  branch_id: Int_comparison_exp
+  credit_score: Int_comparison_exp
+  cust_id: String_comparison_exp
+  cust_name: String_comparison_exp
+  loans: loan_bool_exp
+  no_of_loans: Int_comparison_exp
+  state: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "customer"
+"""
+enum customer_constraint {
+  """unique or primary key constraint"""
+  idx_20444_sqlite_autoindex_customer_1
+}
+
+"""
+input type for incrementing integer columne in table "customer"
+"""
+input customer_inc_input {
+  acc_bal: Int
+  branch_id: Int
+  credit_score: Int
+  no_of_loans: Int
+}
+
+"""
+input type for inserting data into table "customer"
+"""
+input customer_insert_input {
+  acc_bal: Int
+  acc_type: String
+  bank: bank_obj_rel_insert_input
+  branch_id: Int
+  credit_score: Int
+  cust_id: String
+  cust_name: String
+  loans: loan_arr_rel_insert_input
+  no_of_loans: Int
+  state: String
+}
+
+"""aggregate max on columns"""
+type customer_max_fields {
+  acc_bal: Int
+  acc_type: String
+  branch_id: Int
+  credit_score: Int
+  cust_id: String
+  cust_name: String
+  no_of_loans: Int
+  state: String
+}
+
+"""
+order by max() on columns of table "customer"
+"""
+input customer_max_order_by {
+  acc_bal: order_by
+  acc_type: order_by
+  branch_id: order_by
+  credit_score: order_by
+  cust_id: order_by
+  cust_name: order_by
+  no_of_loans: order_by
+  state: order_by
+}
+
+"""aggregate min on columns"""
+type customer_min_fields {
+  acc_bal: Int
+  acc_type: String
+  branch_id: Int
+  credit_score: Int
+  cust_id: String
+  cust_name: String
+  no_of_loans: Int
+  state: String
+}
+
+"""
+order by min() on columns of table "customer"
+"""
+input customer_min_order_by {
+  acc_bal: order_by
+  acc_type: order_by
+  branch_id: order_by
+  credit_score: order_by
+  cust_id: order_by
+  cust_name: order_by
+  no_of_loans: order_by
+  state: order_by
+}
+
+"""
+response of any mutation on the table "customer"
+"""
+type customer_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [customer!]!
+}
+
+"""
+input type for inserting object relation for remote table "customer"
+"""
+input customer_obj_rel_insert_input {
+  data: customer_insert_input!
+  on_conflict: customer_on_conflict
+}
+
+"""
+on conflict condition type for table "customer"
+"""
+input customer_on_conflict {
+  constraint: customer_constraint!
+  update_columns: [customer_update_column!]!
+  where: customer_bool_exp
+}
+
+"""
+ordering options when selecting data from "customer"
+"""
+input customer_order_by {
+  acc_bal: order_by
+  acc_type: order_by
+  bank: bank_order_by
+  branch_id: order_by
+  credit_score: order_by
+  cust_id: order_by
+  cust_name: order_by
+  loans_aggregate: loan_aggregate_order_by
+  no_of_loans: order_by
+  state: order_by
+}
+
+"""
+select columns of table "customer"
+"""
+enum customer_select_column {
+  """column name"""
+  acc_bal
+
+  """column name"""
+  acc_type
+
+  """column name"""
+  branch_id
+
+  """column name"""
+  credit_score
+
+  """column name"""
+  cust_id
+
+  """column name"""
+  cust_name
+
+  """column name"""
+  no_of_loans
+
+  """column name"""
+  state
+}
+
+"""
+input type for updating data in table "customer"
+"""
+input customer_set_input {
+  acc_bal: Int
+  acc_type: String
+  branch_id: Int
+  credit_score: Int
+  cust_id: String
+  cust_name: String
+  no_of_loans: Int
+  state: String
+}
+
+"""aggregate stddev on columns"""
+type customer_stddev_fields {
+  acc_bal: Float
+  branch_id: Float
+  credit_score: Float
+  no_of_loans: Float
+}
+
+"""
+order by stddev() on columns of table "customer"
+"""
+input customer_stddev_order_by {
+  acc_bal: order_by
+  branch_id: order_by
+  credit_score: order_by
+  no_of_loans: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type customer_stddev_pop_fields {
+  acc_bal: Float
+  branch_id: Float
+  credit_score: Float
+  no_of_loans: Float
+}
+
+"""
+order by stddev_pop() on columns of table "customer"
+"""
+input customer_stddev_pop_order_by {
+  acc_bal: order_by
+  branch_id: order_by
+  credit_score: order_by
+  no_of_loans: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type customer_stddev_samp_fields {
+  acc_bal: Float
+  branch_id: Float
+  credit_score: Float
+  no_of_loans: Float
+}
+
+"""
+order by stddev_samp() on columns of table "customer"
+"""
+input customer_stddev_samp_order_by {
+  acc_bal: order_by
+  branch_id: order_by
+  credit_score: order_by
+  no_of_loans: order_by
+}
+
+"""aggregate sum on columns"""
+type customer_sum_fields {
+  acc_bal: Int
+  branch_id: Int
+  credit_score: Int
+  no_of_loans: Int
+}
+
+"""
+order by sum() on columns of table "customer"
+"""
+input customer_sum_order_by {
+  acc_bal: order_by
+  branch_id: order_by
+  credit_score: order_by
+  no_of_loans: order_by
+}
+
+"""
+update columns of table "customer"
+"""
+enum customer_update_column {
+  """column name"""
+  acc_bal
+
+  """column name"""
+  acc_type
+
+  """column name"""
+  branch_id
+
+  """column name"""
+  credit_score
+
+  """column name"""
+  cust_id
+
+  """column name"""
+  cust_name
+
+  """column name"""
+  no_of_loans
+
+  """column name"""
+  state
+}
+
+"""aggregate var_pop on columns"""
+type customer_var_pop_fields {
+  acc_bal: Float
+  branch_id: Float
+  credit_score: Float
+  no_of_loans: Float
+}
+
+"""
+order by var_pop() on columns of table "customer"
+"""
+input customer_var_pop_order_by {
+  acc_bal: order_by
+  branch_id: order_by
+  credit_score: order_by
+  no_of_loans: order_by
+}
+
+"""aggregate var_samp on columns"""
+type customer_var_samp_fields {
+  acc_bal: Float
+  branch_id: Float
+  credit_score: Float
+  no_of_loans: Float
+}
+
+"""
+order by var_samp() on columns of table "customer"
+"""
+input customer_var_samp_order_by {
+  acc_bal: order_by
+  branch_id: order_by
+  credit_score: order_by
+  no_of_loans: order_by
+}
+
+"""aggregate variance on columns"""
+type customer_variance_fields {
+  acc_bal: Float
+  branch_id: Float
+  credit_score: Float
+  no_of_loans: Float
+}
+
+"""
+order by variance() on columns of table "customer"
+"""
+input customer_variance_order_by {
+  acc_bal: order_by
+  branch_id: order_by
+  credit_score: order_by
+  no_of_loans: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "loan"
+"""
+type loan {
+  amount: Int
+
+  """An object relationship"""
+  bank: bank
+  branch_id: Int
+  cust_id: String
+
+  """An object relationship"""
+  customer: customer
+  loan_id: String
+  loan_type: String
+}
+
+"""
+aggregated selection of "loan"
+"""
+type loan_aggregate {
+  aggregate: loan_aggregate_fields
+  nodes: [loan!]!
+}
+
+"""
+aggregate fields of "loan"
+"""
+type loan_aggregate_fields {
+  avg: loan_avg_fields
+  count(columns: [loan_select_column!], distinct: Boolean): Int
+  max: loan_max_fields
+  min: loan_min_fields
+  stddev: loan_stddev_fields
+  stddev_pop: loan_stddev_pop_fields
+  stddev_samp: loan_stddev_samp_fields
+  sum: loan_sum_fields
+  var_pop: loan_var_pop_fields
+  var_samp: loan_var_samp_fields
+  variance: loan_variance_fields
+}
+
+"""
+order by aggregate values of table "loan"
+"""
+input loan_aggregate_order_by {
+  avg: loan_avg_order_by
+  count: order_by
+  max: loan_max_order_by
+  min: loan_min_order_by
+  stddev: loan_stddev_order_by
+  stddev_pop: loan_stddev_pop_order_by
+  stddev_samp: loan_stddev_samp_order_by
+  sum: loan_sum_order_by
+  var_pop: loan_var_pop_order_by
+  var_samp: loan_var_samp_order_by
+  variance: loan_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "loan"
+"""
+input loan_arr_rel_insert_input {
+  data: [loan_insert_input!]!
+  on_conflict: loan_on_conflict
+}
+
+"""aggregate avg on columns"""
+type loan_avg_fields {
+  amount: Float
+  branch_id: Float
+}
+
+"""
+order by avg() on columns of table "loan"
+"""
+input loan_avg_order_by {
+  amount: order_by
+  branch_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "loan". All fields are combined with a logical 'AND'.
+"""
+input loan_bool_exp {
+  _and: [loan_bool_exp]
+  _not: loan_bool_exp
+  _or: [loan_bool_exp]
+  amount: Int_comparison_exp
+  bank: bank_bool_exp
+  branch_id: Int_comparison_exp
+  cust_id: String_comparison_exp
+  customer: customer_bool_exp
+  loan_id: String_comparison_exp
+  loan_type: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "loan"
+"""
+enum loan_constraint {
+  """unique or primary key constraint"""
+  idx_20450_sqlite_autoindex_loan_1
+}
+
+"""
+input type for incrementing integer columne in table "loan"
+"""
+input loan_inc_input {
+  amount: Int
+  branch_id: Int
+}
+
+"""
+input type for inserting data into table "loan"
+"""
+input loan_insert_input {
+  amount: Int
+  bank: bank_obj_rel_insert_input
+  branch_id: Int
+  cust_id: String
+  customer: customer_obj_rel_insert_input
+  loan_id: String
+  loan_type: String
+}
+
+"""aggregate max on columns"""
+type loan_max_fields {
+  amount: Int
+  branch_id: Int
+  cust_id: String
+  loan_id: String
+  loan_type: String
+}
+
+"""
+order by max() on columns of table "loan"
+"""
+input loan_max_order_by {
+  amount: order_by
+  branch_id: order_by
+  cust_id: order_by
+  loan_id: order_by
+  loan_type: order_by
+}
+
+"""aggregate min on columns"""
+type loan_min_fields {
+  amount: Int
+  branch_id: Int
+  cust_id: String
+  loan_id: String
+  loan_type: String
+}
+
+"""
+order by min() on columns of table "loan"
+"""
+input loan_min_order_by {
+  amount: order_by
+  branch_id: order_by
+  cust_id: order_by
+  loan_id: order_by
+  loan_type: order_by
+}
+
+"""
+response of any mutation on the table "loan"
+"""
+type loan_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [loan!]!
+}
+
+"""
+input type for inserting object relation for remote table "loan"
+"""
+input loan_obj_rel_insert_input {
+  data: loan_insert_input!
+  on_conflict: loan_on_conflict
+}
+
+"""
+on conflict condition type for table "loan"
+"""
+input loan_on_conflict {
+  constraint: loan_constraint!
+  update_columns: [loan_update_column!]!
+  where: loan_bool_exp
+}
+
+"""
+ordering options when selecting data from "loan"
+"""
+input loan_order_by {
+  amount: order_by
+  bank: bank_order_by
+  branch_id: order_by
+  cust_id: order_by
+  customer: customer_order_by
+  loan_id: order_by
+  loan_type: order_by
+}
+
+"""
+select columns of table "loan"
+"""
+enum loan_select_column {
+  """column name"""
+  amount
+
+  """column name"""
+  branch_id
+
+  """column name"""
+  cust_id
+
+  """column name"""
+  loan_id
+
+  """column name"""
+  loan_type
+}
+
+"""
+input type for updating data in table "loan"
+"""
+input loan_set_input {
+  amount: Int
+  branch_id: Int
+  cust_id: String
+  loan_id: String
+  loan_type: String
+}
+
+"""aggregate stddev on columns"""
+type loan_stddev_fields {
+  amount: Float
+  branch_id: Float
+}
+
+"""
+order by stddev() on columns of table "loan"
+"""
+input loan_stddev_order_by {
+  amount: order_by
+  branch_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type loan_stddev_pop_fields {
+  amount: Float
+  branch_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "loan"
+"""
+input loan_stddev_pop_order_by {
+  amount: order_by
+  branch_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type loan_stddev_samp_fields {
+  amount: Float
+  branch_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "loan"
+"""
+input loan_stddev_samp_order_by {
+  amount: order_by
+  branch_id: order_by
+}
+
+"""aggregate sum on columns"""
+type loan_sum_fields {
+  amount: Int
+  branch_id: Int
+}
+
+"""
+order by sum() on columns of table "loan"
+"""
+input loan_sum_order_by {
+  amount: order_by
+  branch_id: order_by
+}
+
+"""
+update columns of table "loan"
+"""
+enum loan_update_column {
+  """column name"""
+  amount
+
+  """column name"""
+  branch_id
+
+  """column name"""
+  cust_id
+
+  """column name"""
+  loan_id
+
+  """column name"""
+  loan_type
+}
+
+"""aggregate var_pop on columns"""
+type loan_var_pop_fields {
+  amount: Float
+  branch_id: Float
+}
+
+"""
+order by var_pop() on columns of table "loan"
+"""
+input loan_var_pop_order_by {
+  amount: order_by
+  branch_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type loan_var_samp_fields {
+  amount: Float
+  branch_id: Float
+}
+
+"""
+order by var_samp() on columns of table "loan"
+"""
+input loan_var_samp_order_by {
+  amount: order_by
+  branch_id: order_by
+}
+
+"""aggregate variance on columns"""
+type loan_variance_fields {
+  amount: Float
+  branch_id: Float
+}
+
+"""
+order by variance() on columns of table "loan"
+"""
+input loan_variance_order_by {
+  amount: order_by
+  branch_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "bank"
+  """
+  delete_bank(
+    """filter the rows which have to be deleted"""
+    where: bank_bool_exp!
+  ): bank_mutation_response
+
+  """
+  delete data from the table: "customer"
+  """
+  delete_customer(
+    """filter the rows which have to be deleted"""
+    where: customer_bool_exp!
+  ): customer_mutation_response
+
+  """
+  delete data from the table: "loan"
+  """
+  delete_loan(
+    """filter the rows which have to be deleted"""
+    where: loan_bool_exp!
+  ): loan_mutation_response
+
+  """
+  insert data into the table: "bank"
+  """
+  insert_bank(
+    """the rows to be inserted"""
+    objects: [bank_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: bank_on_conflict
+  ): bank_mutation_response
+
+  """
+  insert data into the table: "customer"
+  """
+  insert_customer(
+    """the rows to be inserted"""
+    objects: [customer_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: customer_on_conflict
+  ): customer_mutation_response
+
+  """
+  insert data into the table: "loan"
+  """
+  insert_loan(
+    """the rows to be inserted"""
+    objects: [loan_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: loan_on_conflict
+  ): loan_mutation_response
+
+  """
+  update data of the table: "bank"
+  """
+  update_bank(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: bank_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: bank_set_input
+
+    """filter the rows which have to be updated"""
+    where: bank_bool_exp!
+  ): bank_mutation_response
+
+  """
+  update data of the table: "customer"
+  """
+  update_customer(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customer_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customer_set_input
+
+    """filter the rows which have to be updated"""
+    where: customer_bool_exp!
+  ): customer_mutation_response
+
+  """
+  update data of the table: "loan"
+  """
+  update_loan(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: loan_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: loan_set_input
+
+    """filter the rows which have to be updated"""
+    where: loan_bool_exp!
+  ): loan_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "bank"
+  """
+  bank(
+    """distinct select on columns"""
+    distinct_on: [bank_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [bank_order_by!]
+
+    """filter the rows returned"""
+    where: bank_bool_exp
+  ): [bank!]!
+
+  """
+  fetch aggregated fields from the table: "bank"
+  """
+  bank_aggregate(
+    """distinct select on columns"""
+    distinct_on: [bank_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [bank_order_by!]
+
+    """filter the rows returned"""
+    where: bank_bool_exp
+  ): bank_aggregate!
+
+  """
+  fetch data from the table: "customer"
+  """
+  customer(
+    """distinct select on columns"""
+    distinct_on: [customer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_order_by!]
+
+    """filter the rows returned"""
+    where: customer_bool_exp
+  ): [customer!]!
+
+  """
+  fetch aggregated fields from the table: "customer"
+  """
+  customer_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_order_by!]
+
+    """filter the rows returned"""
+    where: customer_bool_exp
+  ): customer_aggregate!
+
+  """
+  fetch data from the table: "loan"
+  """
+  loan(
+    """distinct select on columns"""
+    distinct_on: [loan_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [loan_order_by!]
+
+    """filter the rows returned"""
+    where: loan_bool_exp
+  ): [loan!]!
+
+  """
+  fetch aggregated fields from the table: "loan"
+  """
+  loan_aggregate(
+    """distinct select on columns"""
+    distinct_on: [loan_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [loan_order_by!]
+
+    """filter the rows returned"""
+    where: loan_bool_exp
+  ): loan_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "bank"
+  """
+  bank(
+    """distinct select on columns"""
+    distinct_on: [bank_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [bank_order_by!]
+
+    """filter the rows returned"""
+    where: bank_bool_exp
+  ): [bank!]!
+
+  """
+  fetch aggregated fields from the table: "bank"
+  """
+  bank_aggregate(
+    """distinct select on columns"""
+    distinct_on: [bank_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [bank_order_by!]
+
+    """filter the rows returned"""
+    where: bank_bool_exp
+  ): bank_aggregate!
+
+  """
+  fetch data from the table: "customer"
+  """
+  customer(
+    """distinct select on columns"""
+    distinct_on: [customer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_order_by!]
+
+    """filter the rows returned"""
+    where: customer_bool_exp
+  ): [customer!]!
+
+  """
+  fetch aggregated fields from the table: "customer"
+  """
+  customer_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_order_by!]
+
+    """filter the rows returned"""
+    where: customer_bool_exp
+  ): customer_aggregate!
+
+  """
+  fetch data from the table: "loan"
+  """
+  loan(
+    """distinct select on columns"""
+    distinct_on: [loan_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [loan_order_by!]
+
+    """filter the rows returned"""
+    where: loan_bool_exp
+  ): [loan!]!
+
+  """
+  fetch aggregated fields from the table: "loan"
+  """
+  loan_aggregate(
+    """distinct select on columns"""
+    distinct_on: [loan_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [loan_order_by!]
+
+    """filter the rows returned"""
+    where: loan_bool_exp
+  ): loan_aggregate!
+}

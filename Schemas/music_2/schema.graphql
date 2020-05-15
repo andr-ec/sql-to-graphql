@@ -1,0 +1,3494 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "albums"
+"""
+type albums {
+  aid: bigint!
+  label: String
+  title: String
+
+  """An array relationship"""
+  tracklists(
+    """distinct select on columns"""
+    distinct_on: [tracklists_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tracklists_order_by!]
+
+    """filter the rows returned"""
+    where: tracklists_bool_exp
+  ): [tracklists!]!
+
+  """An aggregated array relationship"""
+  tracklists_aggregate(
+    """distinct select on columns"""
+    distinct_on: [tracklists_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tracklists_order_by!]
+
+    """filter the rows returned"""
+    where: tracklists_bool_exp
+  ): tracklists_aggregate!
+  type: String
+  year: bigint
+}
+
+"""
+aggregated selection of "albums"
+"""
+type albums_aggregate {
+  aggregate: albums_aggregate_fields
+  nodes: [albums!]!
+}
+
+"""
+aggregate fields of "albums"
+"""
+type albums_aggregate_fields {
+  avg: albums_avg_fields
+  count(columns: [albums_select_column!], distinct: Boolean): Int
+  max: albums_max_fields
+  min: albums_min_fields
+  stddev: albums_stddev_fields
+  stddev_pop: albums_stddev_pop_fields
+  stddev_samp: albums_stddev_samp_fields
+  sum: albums_sum_fields
+  var_pop: albums_var_pop_fields
+  var_samp: albums_var_samp_fields
+  variance: albums_variance_fields
+}
+
+"""
+order by aggregate values of table "albums"
+"""
+input albums_aggregate_order_by {
+  avg: albums_avg_order_by
+  count: order_by
+  max: albums_max_order_by
+  min: albums_min_order_by
+  stddev: albums_stddev_order_by
+  stddev_pop: albums_stddev_pop_order_by
+  stddev_samp: albums_stddev_samp_order_by
+  sum: albums_sum_order_by
+  var_pop: albums_var_pop_order_by
+  var_samp: albums_var_samp_order_by
+  variance: albums_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "albums"
+"""
+input albums_arr_rel_insert_input {
+  data: [albums_insert_input!]!
+  on_conflict: albums_on_conflict
+}
+
+"""aggregate avg on columns"""
+type albums_avg_fields {
+  aid: Float
+  year: Float
+}
+
+"""
+order by avg() on columns of table "albums"
+"""
+input albums_avg_order_by {
+  aid: order_by
+  year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "albums". All fields are combined with a logical 'AND'.
+"""
+input albums_bool_exp {
+  _and: [albums_bool_exp]
+  _not: albums_bool_exp
+  _or: [albums_bool_exp]
+  aid: bigint_comparison_exp
+  label: String_comparison_exp
+  title: String_comparison_exp
+  tracklists: tracklists_bool_exp
+  type: String_comparison_exp
+  year: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "albums"
+"""
+enum albums_constraint {
+  """unique or primary key constraint"""
+  idx_23516_albums_pkey
+}
+
+"""
+input type for incrementing integer columne in table "albums"
+"""
+input albums_inc_input {
+  aid: bigint
+  year: bigint
+}
+
+"""
+input type for inserting data into table "albums"
+"""
+input albums_insert_input {
+  aid: bigint
+  label: String
+  title: String
+  tracklists: tracklists_arr_rel_insert_input
+  type: String
+  year: bigint
+}
+
+"""aggregate max on columns"""
+type albums_max_fields {
+  aid: bigint
+  label: String
+  title: String
+  type: String
+  year: bigint
+}
+
+"""
+order by max() on columns of table "albums"
+"""
+input albums_max_order_by {
+  aid: order_by
+  label: order_by
+  title: order_by
+  type: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type albums_min_fields {
+  aid: bigint
+  label: String
+  title: String
+  type: String
+  year: bigint
+}
+
+"""
+order by min() on columns of table "albums"
+"""
+input albums_min_order_by {
+  aid: order_by
+  label: order_by
+  title: order_by
+  type: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "albums"
+"""
+type albums_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [albums!]!
+}
+
+"""
+input type for inserting object relation for remote table "albums"
+"""
+input albums_obj_rel_insert_input {
+  data: albums_insert_input!
+  on_conflict: albums_on_conflict
+}
+
+"""
+on conflict condition type for table "albums"
+"""
+input albums_on_conflict {
+  constraint: albums_constraint!
+  update_columns: [albums_update_column!]!
+  where: albums_bool_exp
+}
+
+"""
+ordering options when selecting data from "albums"
+"""
+input albums_order_by {
+  aid: order_by
+  label: order_by
+  title: order_by
+  tracklists_aggregate: tracklists_aggregate_order_by
+  type: order_by
+  year: order_by
+}
+
+"""
+select columns of table "albums"
+"""
+enum albums_select_column {
+  """column name"""
+  aid
+
+  """column name"""
+  label
+
+  """column name"""
+  title
+
+  """column name"""
+  type
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "albums"
+"""
+input albums_set_input {
+  aid: bigint
+  label: String
+  title: String
+  type: String
+  year: bigint
+}
+
+"""aggregate stddev on columns"""
+type albums_stddev_fields {
+  aid: Float
+  year: Float
+}
+
+"""
+order by stddev() on columns of table "albums"
+"""
+input albums_stddev_order_by {
+  aid: order_by
+  year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type albums_stddev_pop_fields {
+  aid: Float
+  year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "albums"
+"""
+input albums_stddev_pop_order_by {
+  aid: order_by
+  year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type albums_stddev_samp_fields {
+  aid: Float
+  year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "albums"
+"""
+input albums_stddev_samp_order_by {
+  aid: order_by
+  year: order_by
+}
+
+"""aggregate sum on columns"""
+type albums_sum_fields {
+  aid: bigint
+  year: bigint
+}
+
+"""
+order by sum() on columns of table "albums"
+"""
+input albums_sum_order_by {
+  aid: order_by
+  year: order_by
+}
+
+"""
+update columns of table "albums"
+"""
+enum albums_update_column {
+  """column name"""
+  aid
+
+  """column name"""
+  label
+
+  """column name"""
+  title
+
+  """column name"""
+  type
+
+  """column name"""
+  year
+}
+
+"""aggregate var_pop on columns"""
+type albums_var_pop_fields {
+  aid: Float
+  year: Float
+}
+
+"""
+order by var_pop() on columns of table "albums"
+"""
+input albums_var_pop_order_by {
+  aid: order_by
+  year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type albums_var_samp_fields {
+  aid: Float
+  year: Float
+}
+
+"""
+order by var_samp() on columns of table "albums"
+"""
+input albums_var_samp_order_by {
+  aid: order_by
+  year: order_by
+}
+
+"""aggregate variance on columns"""
+type albums_variance_fields {
+  aid: Float
+  year: Float
+}
+
+"""
+order by variance() on columns of table "albums"
+"""
+input albums_variance_order_by {
+  aid: order_by
+  year: order_by
+}
+
+"""
+columns and relationships of "band"
+"""
+type band {
+  firstname: String
+  id: bigint!
+
+  """An array relationship"""
+  instruments(
+    """distinct select on columns"""
+    distinct_on: [instruments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [instruments_order_by!]
+
+    """filter the rows returned"""
+    where: instruments_bool_exp
+  ): [instruments!]!
+
+  """An aggregated array relationship"""
+  instruments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [instruments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [instruments_order_by!]
+
+    """filter the rows returned"""
+    where: instruments_bool_exp
+  ): instruments_aggregate!
+  lastname: String
+
+  """An array relationship"""
+  performances(
+    """distinct select on columns"""
+    distinct_on: [performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [performance_order_by!]
+
+    """filter the rows returned"""
+    where: performance_bool_exp
+  ): [performance!]!
+
+  """An aggregated array relationship"""
+  performances_aggregate(
+    """distinct select on columns"""
+    distinct_on: [performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [performance_order_by!]
+
+    """filter the rows returned"""
+    where: performance_bool_exp
+  ): performance_aggregate!
+
+  """An array relationship"""
+  vocals(
+    """distinct select on columns"""
+    distinct_on: [vocals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [vocals_order_by!]
+
+    """filter the rows returned"""
+    where: vocals_bool_exp
+  ): [vocals!]!
+
+  """An aggregated array relationship"""
+  vocals_aggregate(
+    """distinct select on columns"""
+    distinct_on: [vocals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [vocals_order_by!]
+
+    """filter the rows returned"""
+    where: vocals_bool_exp
+  ): vocals_aggregate!
+}
+
+"""
+aggregated selection of "band"
+"""
+type band_aggregate {
+  aggregate: band_aggregate_fields
+  nodes: [band!]!
+}
+
+"""
+aggregate fields of "band"
+"""
+type band_aggregate_fields {
+  avg: band_avg_fields
+  count(columns: [band_select_column!], distinct: Boolean): Int
+  max: band_max_fields
+  min: band_min_fields
+  stddev: band_stddev_fields
+  stddev_pop: band_stddev_pop_fields
+  stddev_samp: band_stddev_samp_fields
+  sum: band_sum_fields
+  var_pop: band_var_pop_fields
+  var_samp: band_var_samp_fields
+  variance: band_variance_fields
+}
+
+"""
+order by aggregate values of table "band"
+"""
+input band_aggregate_order_by {
+  avg: band_avg_order_by
+  count: order_by
+  max: band_max_order_by
+  min: band_min_order_by
+  stddev: band_stddev_order_by
+  stddev_pop: band_stddev_pop_order_by
+  stddev_samp: band_stddev_samp_order_by
+  sum: band_sum_order_by
+  var_pop: band_var_pop_order_by
+  var_samp: band_var_samp_order_by
+  variance: band_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "band"
+"""
+input band_arr_rel_insert_input {
+  data: [band_insert_input!]!
+  on_conflict: band_on_conflict
+}
+
+"""aggregate avg on columns"""
+type band_avg_fields {
+  id: Float
+}
+
+"""
+order by avg() on columns of table "band"
+"""
+input band_avg_order_by {
+  id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "band". All fields are combined with a logical 'AND'.
+"""
+input band_bool_exp {
+  _and: [band_bool_exp]
+  _not: band_bool_exp
+  _or: [band_bool_exp]
+  firstname: String_comparison_exp
+  id: bigint_comparison_exp
+  instruments: instruments_bool_exp
+  lastname: String_comparison_exp
+  performances: performance_bool_exp
+  vocals: vocals_bool_exp
+}
+
+"""
+unique or primary key constraints on table "band"
+"""
+enum band_constraint {
+  """unique or primary key constraint"""
+  idx_23522_band_pkey
+}
+
+"""
+input type for incrementing integer columne in table "band"
+"""
+input band_inc_input {
+  id: bigint
+}
+
+"""
+input type for inserting data into table "band"
+"""
+input band_insert_input {
+  firstname: String
+  id: bigint
+  instruments: instruments_arr_rel_insert_input
+  lastname: String
+  performances: performance_arr_rel_insert_input
+  vocals: vocals_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type band_max_fields {
+  firstname: String
+  id: bigint
+  lastname: String
+}
+
+"""
+order by max() on columns of table "band"
+"""
+input band_max_order_by {
+  firstname: order_by
+  id: order_by
+  lastname: order_by
+}
+
+"""aggregate min on columns"""
+type band_min_fields {
+  firstname: String
+  id: bigint
+  lastname: String
+}
+
+"""
+order by min() on columns of table "band"
+"""
+input band_min_order_by {
+  firstname: order_by
+  id: order_by
+  lastname: order_by
+}
+
+"""
+response of any mutation on the table "band"
+"""
+type band_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [band!]!
+}
+
+"""
+input type for inserting object relation for remote table "band"
+"""
+input band_obj_rel_insert_input {
+  data: band_insert_input!
+  on_conflict: band_on_conflict
+}
+
+"""
+on conflict condition type for table "band"
+"""
+input band_on_conflict {
+  constraint: band_constraint!
+  update_columns: [band_update_column!]!
+  where: band_bool_exp
+}
+
+"""
+ordering options when selecting data from "band"
+"""
+input band_order_by {
+  firstname: order_by
+  id: order_by
+  instruments_aggregate: instruments_aggregate_order_by
+  lastname: order_by
+  performances_aggregate: performance_aggregate_order_by
+  vocals_aggregate: vocals_aggregate_order_by
+}
+
+"""
+select columns of table "band"
+"""
+enum band_select_column {
+  """column name"""
+  firstname
+
+  """column name"""
+  id
+
+  """column name"""
+  lastname
+}
+
+"""
+input type for updating data in table "band"
+"""
+input band_set_input {
+  firstname: String
+  id: bigint
+  lastname: String
+}
+
+"""aggregate stddev on columns"""
+type band_stddev_fields {
+  id: Float
+}
+
+"""
+order by stddev() on columns of table "band"
+"""
+input band_stddev_order_by {
+  id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type band_stddev_pop_fields {
+  id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "band"
+"""
+input band_stddev_pop_order_by {
+  id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type band_stddev_samp_fields {
+  id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "band"
+"""
+input band_stddev_samp_order_by {
+  id: order_by
+}
+
+"""aggregate sum on columns"""
+type band_sum_fields {
+  id: bigint
+}
+
+"""
+order by sum() on columns of table "band"
+"""
+input band_sum_order_by {
+  id: order_by
+}
+
+"""
+update columns of table "band"
+"""
+enum band_update_column {
+  """column name"""
+  firstname
+
+  """column name"""
+  id
+
+  """column name"""
+  lastname
+}
+
+"""aggregate var_pop on columns"""
+type band_var_pop_fields {
+  id: Float
+}
+
+"""
+order by var_pop() on columns of table "band"
+"""
+input band_var_pop_order_by {
+  id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type band_var_samp_fields {
+  id: Float
+}
+
+"""
+order by var_samp() on columns of table "band"
+"""
+input band_var_samp_order_by {
+  id: order_by
+}
+
+"""aggregate variance on columns"""
+type band_variance_fields {
+  id: Float
+}
+
+"""
+order by variance() on columns of table "band"
+"""
+input band_variance_order_by {
+  id: order_by
+}
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "instruments"
+"""
+type instruments {
+  """An object relationship"""
+  band: band
+  bandmateid: bigint
+  instrument: String
+
+  """An object relationship"""
+  song: songs
+  songid: bigint
+}
+
+"""
+aggregated selection of "instruments"
+"""
+type instruments_aggregate {
+  aggregate: instruments_aggregate_fields
+  nodes: [instruments!]!
+}
+
+"""
+aggregate fields of "instruments"
+"""
+type instruments_aggregate_fields {
+  avg: instruments_avg_fields
+  count(columns: [instruments_select_column!], distinct: Boolean): Int
+  max: instruments_max_fields
+  min: instruments_min_fields
+  stddev: instruments_stddev_fields
+  stddev_pop: instruments_stddev_pop_fields
+  stddev_samp: instruments_stddev_samp_fields
+  sum: instruments_sum_fields
+  var_pop: instruments_var_pop_fields
+  var_samp: instruments_var_samp_fields
+  variance: instruments_variance_fields
+}
+
+"""
+order by aggregate values of table "instruments"
+"""
+input instruments_aggregate_order_by {
+  avg: instruments_avg_order_by
+  count: order_by
+  max: instruments_max_order_by
+  min: instruments_min_order_by
+  stddev: instruments_stddev_order_by
+  stddev_pop: instruments_stddev_pop_order_by
+  stddev_samp: instruments_stddev_samp_order_by
+  sum: instruments_sum_order_by
+  var_pop: instruments_var_pop_order_by
+  var_samp: instruments_var_samp_order_by
+  variance: instruments_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "instruments"
+"""
+input instruments_arr_rel_insert_input {
+  data: [instruments_insert_input!]!
+  on_conflict: instruments_on_conflict
+}
+
+"""aggregate avg on columns"""
+type instruments_avg_fields {
+  bandmateid: Float
+  songid: Float
+}
+
+"""
+order by avg() on columns of table "instruments"
+"""
+input instruments_avg_order_by {
+  bandmateid: order_by
+  songid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "instruments". All fields are combined with a logical 'AND'.
+"""
+input instruments_bool_exp {
+  _and: [instruments_bool_exp]
+  _not: instruments_bool_exp
+  _or: [instruments_bool_exp]
+  band: band_bool_exp
+  bandmateid: bigint_comparison_exp
+  instrument: String_comparison_exp
+  song: songs_bool_exp
+  songid: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "instruments"
+"""
+enum instruments_constraint {
+  """unique or primary key constraint"""
+  idx_23528_sqlite_autoindex_instruments_1
+}
+
+"""
+input type for incrementing integer columne in table "instruments"
+"""
+input instruments_inc_input {
+  bandmateid: bigint
+  songid: bigint
+}
+
+"""
+input type for inserting data into table "instruments"
+"""
+input instruments_insert_input {
+  band: band_obj_rel_insert_input
+  bandmateid: bigint
+  instrument: String
+  song: songs_obj_rel_insert_input
+  songid: bigint
+}
+
+"""aggregate max on columns"""
+type instruments_max_fields {
+  bandmateid: bigint
+  instrument: String
+  songid: bigint
+}
+
+"""
+order by max() on columns of table "instruments"
+"""
+input instruments_max_order_by {
+  bandmateid: order_by
+  instrument: order_by
+  songid: order_by
+}
+
+"""aggregate min on columns"""
+type instruments_min_fields {
+  bandmateid: bigint
+  instrument: String
+  songid: bigint
+}
+
+"""
+order by min() on columns of table "instruments"
+"""
+input instruments_min_order_by {
+  bandmateid: order_by
+  instrument: order_by
+  songid: order_by
+}
+
+"""
+response of any mutation on the table "instruments"
+"""
+type instruments_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [instruments!]!
+}
+
+"""
+input type for inserting object relation for remote table "instruments"
+"""
+input instruments_obj_rel_insert_input {
+  data: instruments_insert_input!
+  on_conflict: instruments_on_conflict
+}
+
+"""
+on conflict condition type for table "instruments"
+"""
+input instruments_on_conflict {
+  constraint: instruments_constraint!
+  update_columns: [instruments_update_column!]!
+  where: instruments_bool_exp
+}
+
+"""
+ordering options when selecting data from "instruments"
+"""
+input instruments_order_by {
+  band: band_order_by
+  bandmateid: order_by
+  instrument: order_by
+  song: songs_order_by
+  songid: order_by
+}
+
+"""
+select columns of table "instruments"
+"""
+enum instruments_select_column {
+  """column name"""
+  bandmateid
+
+  """column name"""
+  instrument
+
+  """column name"""
+  songid
+}
+
+"""
+input type for updating data in table "instruments"
+"""
+input instruments_set_input {
+  bandmateid: bigint
+  instrument: String
+  songid: bigint
+}
+
+"""aggregate stddev on columns"""
+type instruments_stddev_fields {
+  bandmateid: Float
+  songid: Float
+}
+
+"""
+order by stddev() on columns of table "instruments"
+"""
+input instruments_stddev_order_by {
+  bandmateid: order_by
+  songid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type instruments_stddev_pop_fields {
+  bandmateid: Float
+  songid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "instruments"
+"""
+input instruments_stddev_pop_order_by {
+  bandmateid: order_by
+  songid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type instruments_stddev_samp_fields {
+  bandmateid: Float
+  songid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "instruments"
+"""
+input instruments_stddev_samp_order_by {
+  bandmateid: order_by
+  songid: order_by
+}
+
+"""aggregate sum on columns"""
+type instruments_sum_fields {
+  bandmateid: bigint
+  songid: bigint
+}
+
+"""
+order by sum() on columns of table "instruments"
+"""
+input instruments_sum_order_by {
+  bandmateid: order_by
+  songid: order_by
+}
+
+"""
+update columns of table "instruments"
+"""
+enum instruments_update_column {
+  """column name"""
+  bandmateid
+
+  """column name"""
+  instrument
+
+  """column name"""
+  songid
+}
+
+"""aggregate var_pop on columns"""
+type instruments_var_pop_fields {
+  bandmateid: Float
+  songid: Float
+}
+
+"""
+order by var_pop() on columns of table "instruments"
+"""
+input instruments_var_pop_order_by {
+  bandmateid: order_by
+  songid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type instruments_var_samp_fields {
+  bandmateid: Float
+  songid: Float
+}
+
+"""
+order by var_samp() on columns of table "instruments"
+"""
+input instruments_var_samp_order_by {
+  bandmateid: order_by
+  songid: order_by
+}
+
+"""aggregate variance on columns"""
+type instruments_variance_fields {
+  bandmateid: Float
+  songid: Float
+}
+
+"""
+order by variance() on columns of table "instruments"
+"""
+input instruments_variance_order_by {
+  bandmateid: order_by
+  songid: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "albums"
+  """
+  delete_albums(
+    """filter the rows which have to be deleted"""
+    where: albums_bool_exp!
+  ): albums_mutation_response
+
+  """
+  delete data from the table: "band"
+  """
+  delete_band(
+    """filter the rows which have to be deleted"""
+    where: band_bool_exp!
+  ): band_mutation_response
+
+  """
+  delete data from the table: "instruments"
+  """
+  delete_instruments(
+    """filter the rows which have to be deleted"""
+    where: instruments_bool_exp!
+  ): instruments_mutation_response
+
+  """
+  delete data from the table: "performance"
+  """
+  delete_performance(
+    """filter the rows which have to be deleted"""
+    where: performance_bool_exp!
+  ): performance_mutation_response
+
+  """
+  delete data from the table: "songs"
+  """
+  delete_songs(
+    """filter the rows which have to be deleted"""
+    where: songs_bool_exp!
+  ): songs_mutation_response
+
+  """
+  delete data from the table: "tracklists"
+  """
+  delete_tracklists(
+    """filter the rows which have to be deleted"""
+    where: tracklists_bool_exp!
+  ): tracklists_mutation_response
+
+  """
+  delete data from the table: "vocals"
+  """
+  delete_vocals(
+    """filter the rows which have to be deleted"""
+    where: vocals_bool_exp!
+  ): vocals_mutation_response
+
+  """
+  insert data into the table: "albums"
+  """
+  insert_albums(
+    """the rows to be inserted"""
+    objects: [albums_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: albums_on_conflict
+  ): albums_mutation_response
+
+  """
+  insert data into the table: "band"
+  """
+  insert_band(
+    """the rows to be inserted"""
+    objects: [band_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: band_on_conflict
+  ): band_mutation_response
+
+  """
+  insert data into the table: "instruments"
+  """
+  insert_instruments(
+    """the rows to be inserted"""
+    objects: [instruments_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: instruments_on_conflict
+  ): instruments_mutation_response
+
+  """
+  insert data into the table: "performance"
+  """
+  insert_performance(
+    """the rows to be inserted"""
+    objects: [performance_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: performance_on_conflict
+  ): performance_mutation_response
+
+  """
+  insert data into the table: "songs"
+  """
+  insert_songs(
+    """the rows to be inserted"""
+    objects: [songs_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: songs_on_conflict
+  ): songs_mutation_response
+
+  """
+  insert data into the table: "tracklists"
+  """
+  insert_tracklists(
+    """the rows to be inserted"""
+    objects: [tracklists_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: tracklists_on_conflict
+  ): tracklists_mutation_response
+
+  """
+  insert data into the table: "vocals"
+  """
+  insert_vocals(
+    """the rows to be inserted"""
+    objects: [vocals_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: vocals_on_conflict
+  ): vocals_mutation_response
+
+  """
+  update data of the table: "albums"
+  """
+  update_albums(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: albums_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: albums_set_input
+
+    """filter the rows which have to be updated"""
+    where: albums_bool_exp!
+  ): albums_mutation_response
+
+  """
+  update data of the table: "band"
+  """
+  update_band(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: band_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: band_set_input
+
+    """filter the rows which have to be updated"""
+    where: band_bool_exp!
+  ): band_mutation_response
+
+  """
+  update data of the table: "instruments"
+  """
+  update_instruments(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: instruments_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: instruments_set_input
+
+    """filter the rows which have to be updated"""
+    where: instruments_bool_exp!
+  ): instruments_mutation_response
+
+  """
+  update data of the table: "performance"
+  """
+  update_performance(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: performance_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: performance_set_input
+
+    """filter the rows which have to be updated"""
+    where: performance_bool_exp!
+  ): performance_mutation_response
+
+  """
+  update data of the table: "songs"
+  """
+  update_songs(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: songs_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: songs_set_input
+
+    """filter the rows which have to be updated"""
+    where: songs_bool_exp!
+  ): songs_mutation_response
+
+  """
+  update data of the table: "tracklists"
+  """
+  update_tracklists(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: tracklists_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: tracklists_set_input
+
+    """filter the rows which have to be updated"""
+    where: tracklists_bool_exp!
+  ): tracklists_mutation_response
+
+  """
+  update data of the table: "vocals"
+  """
+  update_vocals(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: vocals_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: vocals_set_input
+
+    """filter the rows which have to be updated"""
+    where: vocals_bool_exp!
+  ): vocals_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "performance"
+"""
+type performance {
+  """An object relationship"""
+  band: band!
+  bandmate: bigint!
+
+  """An object relationship"""
+  song: songs!
+  songid: bigint!
+  stageposition: String
+}
+
+"""
+aggregated selection of "performance"
+"""
+type performance_aggregate {
+  aggregate: performance_aggregate_fields
+  nodes: [performance!]!
+}
+
+"""
+aggregate fields of "performance"
+"""
+type performance_aggregate_fields {
+  avg: performance_avg_fields
+  count(columns: [performance_select_column!], distinct: Boolean): Int
+  max: performance_max_fields
+  min: performance_min_fields
+  stddev: performance_stddev_fields
+  stddev_pop: performance_stddev_pop_fields
+  stddev_samp: performance_stddev_samp_fields
+  sum: performance_sum_fields
+  var_pop: performance_var_pop_fields
+  var_samp: performance_var_samp_fields
+  variance: performance_variance_fields
+}
+
+"""
+order by aggregate values of table "performance"
+"""
+input performance_aggregate_order_by {
+  avg: performance_avg_order_by
+  count: order_by
+  max: performance_max_order_by
+  min: performance_min_order_by
+  stddev: performance_stddev_order_by
+  stddev_pop: performance_stddev_pop_order_by
+  stddev_samp: performance_stddev_samp_order_by
+  sum: performance_sum_order_by
+  var_pop: performance_var_pop_order_by
+  var_samp: performance_var_samp_order_by
+  variance: performance_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "performance"
+"""
+input performance_arr_rel_insert_input {
+  data: [performance_insert_input!]!
+  on_conflict: performance_on_conflict
+}
+
+"""aggregate avg on columns"""
+type performance_avg_fields {
+  bandmate: Float
+  songid: Float
+}
+
+"""
+order by avg() on columns of table "performance"
+"""
+input performance_avg_order_by {
+  bandmate: order_by
+  songid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "performance". All fields are combined with a logical 'AND'.
+"""
+input performance_bool_exp {
+  _and: [performance_bool_exp]
+  _not: performance_bool_exp
+  _or: [performance_bool_exp]
+  band: band_bool_exp
+  bandmate: bigint_comparison_exp
+  song: songs_bool_exp
+  songid: bigint_comparison_exp
+  stageposition: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "performance"
+"""
+enum performance_constraint {
+  """unique or primary key constraint"""
+  idx_23534_performance_pkey
+
+  """unique or primary key constraint"""
+  idx_23534_sqlite_autoindex_performance_1
+}
+
+"""
+input type for incrementing integer columne in table "performance"
+"""
+input performance_inc_input {
+  bandmate: bigint
+  songid: bigint
+}
+
+"""
+input type for inserting data into table "performance"
+"""
+input performance_insert_input {
+  band: band_obj_rel_insert_input
+  bandmate: bigint
+  song: songs_obj_rel_insert_input
+  songid: bigint
+  stageposition: String
+}
+
+"""aggregate max on columns"""
+type performance_max_fields {
+  bandmate: bigint
+  songid: bigint
+  stageposition: String
+}
+
+"""
+order by max() on columns of table "performance"
+"""
+input performance_max_order_by {
+  bandmate: order_by
+  songid: order_by
+  stageposition: order_by
+}
+
+"""aggregate min on columns"""
+type performance_min_fields {
+  bandmate: bigint
+  songid: bigint
+  stageposition: String
+}
+
+"""
+order by min() on columns of table "performance"
+"""
+input performance_min_order_by {
+  bandmate: order_by
+  songid: order_by
+  stageposition: order_by
+}
+
+"""
+response of any mutation on the table "performance"
+"""
+type performance_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [performance!]!
+}
+
+"""
+input type for inserting object relation for remote table "performance"
+"""
+input performance_obj_rel_insert_input {
+  data: performance_insert_input!
+  on_conflict: performance_on_conflict
+}
+
+"""
+on conflict condition type for table "performance"
+"""
+input performance_on_conflict {
+  constraint: performance_constraint!
+  update_columns: [performance_update_column!]!
+  where: performance_bool_exp
+}
+
+"""
+ordering options when selecting data from "performance"
+"""
+input performance_order_by {
+  band: band_order_by
+  bandmate: order_by
+  song: songs_order_by
+  songid: order_by
+  stageposition: order_by
+}
+
+"""
+select columns of table "performance"
+"""
+enum performance_select_column {
+  """column name"""
+  bandmate
+
+  """column name"""
+  songid
+
+  """column name"""
+  stageposition
+}
+
+"""
+input type for updating data in table "performance"
+"""
+input performance_set_input {
+  bandmate: bigint
+  songid: bigint
+  stageposition: String
+}
+
+"""aggregate stddev on columns"""
+type performance_stddev_fields {
+  bandmate: Float
+  songid: Float
+}
+
+"""
+order by stddev() on columns of table "performance"
+"""
+input performance_stddev_order_by {
+  bandmate: order_by
+  songid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type performance_stddev_pop_fields {
+  bandmate: Float
+  songid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "performance"
+"""
+input performance_stddev_pop_order_by {
+  bandmate: order_by
+  songid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type performance_stddev_samp_fields {
+  bandmate: Float
+  songid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "performance"
+"""
+input performance_stddev_samp_order_by {
+  bandmate: order_by
+  songid: order_by
+}
+
+"""aggregate sum on columns"""
+type performance_sum_fields {
+  bandmate: bigint
+  songid: bigint
+}
+
+"""
+order by sum() on columns of table "performance"
+"""
+input performance_sum_order_by {
+  bandmate: order_by
+  songid: order_by
+}
+
+"""
+update columns of table "performance"
+"""
+enum performance_update_column {
+  """column name"""
+  bandmate
+
+  """column name"""
+  songid
+
+  """column name"""
+  stageposition
+}
+
+"""aggregate var_pop on columns"""
+type performance_var_pop_fields {
+  bandmate: Float
+  songid: Float
+}
+
+"""
+order by var_pop() on columns of table "performance"
+"""
+input performance_var_pop_order_by {
+  bandmate: order_by
+  songid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type performance_var_samp_fields {
+  bandmate: Float
+  songid: Float
+}
+
+"""
+order by var_samp() on columns of table "performance"
+"""
+input performance_var_samp_order_by {
+  bandmate: order_by
+  songid: order_by
+}
+
+"""aggregate variance on columns"""
+type performance_variance_fields {
+  bandmate: Float
+  songid: Float
+}
+
+"""
+order by variance() on columns of table "performance"
+"""
+input performance_variance_order_by {
+  bandmate: order_by
+  songid: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "albums"
+  """
+  albums(
+    """distinct select on columns"""
+    distinct_on: [albums_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [albums_order_by!]
+
+    """filter the rows returned"""
+    where: albums_bool_exp
+  ): [albums!]!
+
+  """
+  fetch aggregated fields from the table: "albums"
+  """
+  albums_aggregate(
+    """distinct select on columns"""
+    distinct_on: [albums_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [albums_order_by!]
+
+    """filter the rows returned"""
+    where: albums_bool_exp
+  ): albums_aggregate!
+
+  """fetch data from the table: "albums" using primary key columns"""
+  albums_by_pk(aid: bigint!): albums
+
+  """
+  fetch data from the table: "band"
+  """
+  band(
+    """distinct select on columns"""
+    distinct_on: [band_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [band_order_by!]
+
+    """filter the rows returned"""
+    where: band_bool_exp
+  ): [band!]!
+
+  """
+  fetch aggregated fields from the table: "band"
+  """
+  band_aggregate(
+    """distinct select on columns"""
+    distinct_on: [band_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [band_order_by!]
+
+    """filter the rows returned"""
+    where: band_bool_exp
+  ): band_aggregate!
+
+  """fetch data from the table: "band" using primary key columns"""
+  band_by_pk(id: bigint!): band
+
+  """
+  fetch data from the table: "instruments"
+  """
+  instruments(
+    """distinct select on columns"""
+    distinct_on: [instruments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [instruments_order_by!]
+
+    """filter the rows returned"""
+    where: instruments_bool_exp
+  ): [instruments!]!
+
+  """
+  fetch aggregated fields from the table: "instruments"
+  """
+  instruments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [instruments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [instruments_order_by!]
+
+    """filter the rows returned"""
+    where: instruments_bool_exp
+  ): instruments_aggregate!
+
+  """
+  fetch data from the table: "performance"
+  """
+  performance(
+    """distinct select on columns"""
+    distinct_on: [performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [performance_order_by!]
+
+    """filter the rows returned"""
+    where: performance_bool_exp
+  ): [performance!]!
+
+  """
+  fetch aggregated fields from the table: "performance"
+  """
+  performance_aggregate(
+    """distinct select on columns"""
+    distinct_on: [performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [performance_order_by!]
+
+    """filter the rows returned"""
+    where: performance_bool_exp
+  ): performance_aggregate!
+
+  """fetch data from the table: "performance" using primary key columns"""
+  performance_by_pk(bandmate: bigint!, songid: bigint!): performance
+
+  """
+  fetch data from the table: "songs"
+  """
+  songs(
+    """distinct select on columns"""
+    distinct_on: [songs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [songs_order_by!]
+
+    """filter the rows returned"""
+    where: songs_bool_exp
+  ): [songs!]!
+
+  """
+  fetch aggregated fields from the table: "songs"
+  """
+  songs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [songs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [songs_order_by!]
+
+    """filter the rows returned"""
+    where: songs_bool_exp
+  ): songs_aggregate!
+
+  """fetch data from the table: "songs" using primary key columns"""
+  songs_by_pk(songid: bigint!): songs
+
+  """
+  fetch data from the table: "tracklists"
+  """
+  tracklists(
+    """distinct select on columns"""
+    distinct_on: [tracklists_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tracklists_order_by!]
+
+    """filter the rows returned"""
+    where: tracklists_bool_exp
+  ): [tracklists!]!
+
+  """
+  fetch aggregated fields from the table: "tracklists"
+  """
+  tracklists_aggregate(
+    """distinct select on columns"""
+    distinct_on: [tracklists_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tracklists_order_by!]
+
+    """filter the rows returned"""
+    where: tracklists_bool_exp
+  ): tracklists_aggregate!
+
+  """fetch data from the table: "tracklists" using primary key columns"""
+  tracklists_by_pk(albumid: bigint!, position: bigint!): tracklists
+
+  """
+  fetch data from the table: "vocals"
+  """
+  vocals(
+    """distinct select on columns"""
+    distinct_on: [vocals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [vocals_order_by!]
+
+    """filter the rows returned"""
+    where: vocals_bool_exp
+  ): [vocals!]!
+
+  """
+  fetch aggregated fields from the table: "vocals"
+  """
+  vocals_aggregate(
+    """distinct select on columns"""
+    distinct_on: [vocals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [vocals_order_by!]
+
+    """filter the rows returned"""
+    where: vocals_bool_exp
+  ): vocals_aggregate!
+
+  """fetch data from the table: "vocals" using primary key columns"""
+  vocals_by_pk(bandmate: bigint!, songid: bigint!): vocals
+}
+
+"""
+columns and relationships of "songs"
+"""
+type songs {
+  """An array relationship"""
+  instruments(
+    """distinct select on columns"""
+    distinct_on: [instruments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [instruments_order_by!]
+
+    """filter the rows returned"""
+    where: instruments_bool_exp
+  ): [instruments!]!
+
+  """An aggregated array relationship"""
+  instruments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [instruments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [instruments_order_by!]
+
+    """filter the rows returned"""
+    where: instruments_bool_exp
+  ): instruments_aggregate!
+
+  """An array relationship"""
+  performances(
+    """distinct select on columns"""
+    distinct_on: [performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [performance_order_by!]
+
+    """filter the rows returned"""
+    where: performance_bool_exp
+  ): [performance!]!
+
+  """An aggregated array relationship"""
+  performances_aggregate(
+    """distinct select on columns"""
+    distinct_on: [performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [performance_order_by!]
+
+    """filter the rows returned"""
+    where: performance_bool_exp
+  ): performance_aggregate!
+  songid: bigint!
+  title: String
+
+  """An array relationship"""
+  tracklists(
+    """distinct select on columns"""
+    distinct_on: [tracklists_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tracklists_order_by!]
+
+    """filter the rows returned"""
+    where: tracklists_bool_exp
+  ): [tracklists!]!
+
+  """An aggregated array relationship"""
+  tracklists_aggregate(
+    """distinct select on columns"""
+    distinct_on: [tracklists_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tracklists_order_by!]
+
+    """filter the rows returned"""
+    where: tracklists_bool_exp
+  ): tracklists_aggregate!
+
+  """An array relationship"""
+  vocals(
+    """distinct select on columns"""
+    distinct_on: [vocals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [vocals_order_by!]
+
+    """filter the rows returned"""
+    where: vocals_bool_exp
+  ): [vocals!]!
+
+  """An aggregated array relationship"""
+  vocals_aggregate(
+    """distinct select on columns"""
+    distinct_on: [vocals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [vocals_order_by!]
+
+    """filter the rows returned"""
+    where: vocals_bool_exp
+  ): vocals_aggregate!
+}
+
+"""
+aggregated selection of "songs"
+"""
+type songs_aggregate {
+  aggregate: songs_aggregate_fields
+  nodes: [songs!]!
+}
+
+"""
+aggregate fields of "songs"
+"""
+type songs_aggregate_fields {
+  avg: songs_avg_fields
+  count(columns: [songs_select_column!], distinct: Boolean): Int
+  max: songs_max_fields
+  min: songs_min_fields
+  stddev: songs_stddev_fields
+  stddev_pop: songs_stddev_pop_fields
+  stddev_samp: songs_stddev_samp_fields
+  sum: songs_sum_fields
+  var_pop: songs_var_pop_fields
+  var_samp: songs_var_samp_fields
+  variance: songs_variance_fields
+}
+
+"""
+order by aggregate values of table "songs"
+"""
+input songs_aggregate_order_by {
+  avg: songs_avg_order_by
+  count: order_by
+  max: songs_max_order_by
+  min: songs_min_order_by
+  stddev: songs_stddev_order_by
+  stddev_pop: songs_stddev_pop_order_by
+  stddev_samp: songs_stddev_samp_order_by
+  sum: songs_sum_order_by
+  var_pop: songs_var_pop_order_by
+  var_samp: songs_var_samp_order_by
+  variance: songs_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "songs"
+"""
+input songs_arr_rel_insert_input {
+  data: [songs_insert_input!]!
+  on_conflict: songs_on_conflict
+}
+
+"""aggregate avg on columns"""
+type songs_avg_fields {
+  songid: Float
+}
+
+"""
+order by avg() on columns of table "songs"
+"""
+input songs_avg_order_by {
+  songid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "songs". All fields are combined with a logical 'AND'.
+"""
+input songs_bool_exp {
+  _and: [songs_bool_exp]
+  _not: songs_bool_exp
+  _or: [songs_bool_exp]
+  instruments: instruments_bool_exp
+  performances: performance_bool_exp
+  songid: bigint_comparison_exp
+  title: String_comparison_exp
+  tracklists: tracklists_bool_exp
+  vocals: vocals_bool_exp
+}
+
+"""
+unique or primary key constraints on table "songs"
+"""
+enum songs_constraint {
+  """unique or primary key constraint"""
+  idx_23510_songs_pkey
+}
+
+"""
+input type for incrementing integer columne in table "songs"
+"""
+input songs_inc_input {
+  songid: bigint
+}
+
+"""
+input type for inserting data into table "songs"
+"""
+input songs_insert_input {
+  instruments: instruments_arr_rel_insert_input
+  performances: performance_arr_rel_insert_input
+  songid: bigint
+  title: String
+  tracklists: tracklists_arr_rel_insert_input
+  vocals: vocals_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type songs_max_fields {
+  songid: bigint
+  title: String
+}
+
+"""
+order by max() on columns of table "songs"
+"""
+input songs_max_order_by {
+  songid: order_by
+  title: order_by
+}
+
+"""aggregate min on columns"""
+type songs_min_fields {
+  songid: bigint
+  title: String
+}
+
+"""
+order by min() on columns of table "songs"
+"""
+input songs_min_order_by {
+  songid: order_by
+  title: order_by
+}
+
+"""
+response of any mutation on the table "songs"
+"""
+type songs_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [songs!]!
+}
+
+"""
+input type for inserting object relation for remote table "songs"
+"""
+input songs_obj_rel_insert_input {
+  data: songs_insert_input!
+  on_conflict: songs_on_conflict
+}
+
+"""
+on conflict condition type for table "songs"
+"""
+input songs_on_conflict {
+  constraint: songs_constraint!
+  update_columns: [songs_update_column!]!
+  where: songs_bool_exp
+}
+
+"""
+ordering options when selecting data from "songs"
+"""
+input songs_order_by {
+  instruments_aggregate: instruments_aggregate_order_by
+  performances_aggregate: performance_aggregate_order_by
+  songid: order_by
+  title: order_by
+  tracklists_aggregate: tracklists_aggregate_order_by
+  vocals_aggregate: vocals_aggregate_order_by
+}
+
+"""
+select columns of table "songs"
+"""
+enum songs_select_column {
+  """column name"""
+  songid
+
+  """column name"""
+  title
+}
+
+"""
+input type for updating data in table "songs"
+"""
+input songs_set_input {
+  songid: bigint
+  title: String
+}
+
+"""aggregate stddev on columns"""
+type songs_stddev_fields {
+  songid: Float
+}
+
+"""
+order by stddev() on columns of table "songs"
+"""
+input songs_stddev_order_by {
+  songid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type songs_stddev_pop_fields {
+  songid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "songs"
+"""
+input songs_stddev_pop_order_by {
+  songid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type songs_stddev_samp_fields {
+  songid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "songs"
+"""
+input songs_stddev_samp_order_by {
+  songid: order_by
+}
+
+"""aggregate sum on columns"""
+type songs_sum_fields {
+  songid: bigint
+}
+
+"""
+order by sum() on columns of table "songs"
+"""
+input songs_sum_order_by {
+  songid: order_by
+}
+
+"""
+update columns of table "songs"
+"""
+enum songs_update_column {
+  """column name"""
+  songid
+
+  """column name"""
+  title
+}
+
+"""aggregate var_pop on columns"""
+type songs_var_pop_fields {
+  songid: Float
+}
+
+"""
+order by var_pop() on columns of table "songs"
+"""
+input songs_var_pop_order_by {
+  songid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type songs_var_samp_fields {
+  songid: Float
+}
+
+"""
+order by var_samp() on columns of table "songs"
+"""
+input songs_var_samp_order_by {
+  songid: order_by
+}
+
+"""aggregate variance on columns"""
+type songs_variance_fields {
+  songid: Float
+}
+
+"""
+order by variance() on columns of table "songs"
+"""
+input songs_variance_order_by {
+  songid: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "albums"
+  """
+  albums(
+    """distinct select on columns"""
+    distinct_on: [albums_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [albums_order_by!]
+
+    """filter the rows returned"""
+    where: albums_bool_exp
+  ): [albums!]!
+
+  """
+  fetch aggregated fields from the table: "albums"
+  """
+  albums_aggregate(
+    """distinct select on columns"""
+    distinct_on: [albums_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [albums_order_by!]
+
+    """filter the rows returned"""
+    where: albums_bool_exp
+  ): albums_aggregate!
+
+  """fetch data from the table: "albums" using primary key columns"""
+  albums_by_pk(aid: bigint!): albums
+
+  """
+  fetch data from the table: "band"
+  """
+  band(
+    """distinct select on columns"""
+    distinct_on: [band_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [band_order_by!]
+
+    """filter the rows returned"""
+    where: band_bool_exp
+  ): [band!]!
+
+  """
+  fetch aggregated fields from the table: "band"
+  """
+  band_aggregate(
+    """distinct select on columns"""
+    distinct_on: [band_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [band_order_by!]
+
+    """filter the rows returned"""
+    where: band_bool_exp
+  ): band_aggregate!
+
+  """fetch data from the table: "band" using primary key columns"""
+  band_by_pk(id: bigint!): band
+
+  """
+  fetch data from the table: "instruments"
+  """
+  instruments(
+    """distinct select on columns"""
+    distinct_on: [instruments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [instruments_order_by!]
+
+    """filter the rows returned"""
+    where: instruments_bool_exp
+  ): [instruments!]!
+
+  """
+  fetch aggregated fields from the table: "instruments"
+  """
+  instruments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [instruments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [instruments_order_by!]
+
+    """filter the rows returned"""
+    where: instruments_bool_exp
+  ): instruments_aggregate!
+
+  """
+  fetch data from the table: "performance"
+  """
+  performance(
+    """distinct select on columns"""
+    distinct_on: [performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [performance_order_by!]
+
+    """filter the rows returned"""
+    where: performance_bool_exp
+  ): [performance!]!
+
+  """
+  fetch aggregated fields from the table: "performance"
+  """
+  performance_aggregate(
+    """distinct select on columns"""
+    distinct_on: [performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [performance_order_by!]
+
+    """filter the rows returned"""
+    where: performance_bool_exp
+  ): performance_aggregate!
+
+  """fetch data from the table: "performance" using primary key columns"""
+  performance_by_pk(bandmate: bigint!, songid: bigint!): performance
+
+  """
+  fetch data from the table: "songs"
+  """
+  songs(
+    """distinct select on columns"""
+    distinct_on: [songs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [songs_order_by!]
+
+    """filter the rows returned"""
+    where: songs_bool_exp
+  ): [songs!]!
+
+  """
+  fetch aggregated fields from the table: "songs"
+  """
+  songs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [songs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [songs_order_by!]
+
+    """filter the rows returned"""
+    where: songs_bool_exp
+  ): songs_aggregate!
+
+  """fetch data from the table: "songs" using primary key columns"""
+  songs_by_pk(songid: bigint!): songs
+
+  """
+  fetch data from the table: "tracklists"
+  """
+  tracklists(
+    """distinct select on columns"""
+    distinct_on: [tracklists_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tracklists_order_by!]
+
+    """filter the rows returned"""
+    where: tracklists_bool_exp
+  ): [tracklists!]!
+
+  """
+  fetch aggregated fields from the table: "tracklists"
+  """
+  tracklists_aggregate(
+    """distinct select on columns"""
+    distinct_on: [tracklists_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tracklists_order_by!]
+
+    """filter the rows returned"""
+    where: tracklists_bool_exp
+  ): tracklists_aggregate!
+
+  """fetch data from the table: "tracklists" using primary key columns"""
+  tracklists_by_pk(albumid: bigint!, position: bigint!): tracklists
+
+  """
+  fetch data from the table: "vocals"
+  """
+  vocals(
+    """distinct select on columns"""
+    distinct_on: [vocals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [vocals_order_by!]
+
+    """filter the rows returned"""
+    where: vocals_bool_exp
+  ): [vocals!]!
+
+  """
+  fetch aggregated fields from the table: "vocals"
+  """
+  vocals_aggregate(
+    """distinct select on columns"""
+    distinct_on: [vocals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [vocals_order_by!]
+
+    """filter the rows returned"""
+    where: vocals_bool_exp
+  ): vocals_aggregate!
+
+  """fetch data from the table: "vocals" using primary key columns"""
+  vocals_by_pk(bandmate: bigint!, songid: bigint!): vocals
+}
+
+"""
+columns and relationships of "tracklists"
+"""
+type tracklists {
+  """An object relationship"""
+  album: albums!
+  albumid: bigint!
+  position: bigint!
+
+  """An object relationship"""
+  song: songs
+  songid: bigint
+}
+
+"""
+aggregated selection of "tracklists"
+"""
+type tracklists_aggregate {
+  aggregate: tracklists_aggregate_fields
+  nodes: [tracklists!]!
+}
+
+"""
+aggregate fields of "tracklists"
+"""
+type tracklists_aggregate_fields {
+  avg: tracklists_avg_fields
+  count(columns: [tracklists_select_column!], distinct: Boolean): Int
+  max: tracklists_max_fields
+  min: tracklists_min_fields
+  stddev: tracklists_stddev_fields
+  stddev_pop: tracklists_stddev_pop_fields
+  stddev_samp: tracklists_stddev_samp_fields
+  sum: tracklists_sum_fields
+  var_pop: tracklists_var_pop_fields
+  var_samp: tracklists_var_samp_fields
+  variance: tracklists_variance_fields
+}
+
+"""
+order by aggregate values of table "tracklists"
+"""
+input tracklists_aggregate_order_by {
+  avg: tracklists_avg_order_by
+  count: order_by
+  max: tracklists_max_order_by
+  min: tracklists_min_order_by
+  stddev: tracklists_stddev_order_by
+  stddev_pop: tracklists_stddev_pop_order_by
+  stddev_samp: tracklists_stddev_samp_order_by
+  sum: tracklists_sum_order_by
+  var_pop: tracklists_var_pop_order_by
+  var_samp: tracklists_var_samp_order_by
+  variance: tracklists_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "tracklists"
+"""
+input tracklists_arr_rel_insert_input {
+  data: [tracklists_insert_input!]!
+  on_conflict: tracklists_on_conflict
+}
+
+"""aggregate avg on columns"""
+type tracklists_avg_fields {
+  albumid: Float
+  position: Float
+  songid: Float
+}
+
+"""
+order by avg() on columns of table "tracklists"
+"""
+input tracklists_avg_order_by {
+  albumid: order_by
+  position: order_by
+  songid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "tracklists". All fields are combined with a logical 'AND'.
+"""
+input tracklists_bool_exp {
+  _and: [tracklists_bool_exp]
+  _not: tracklists_bool_exp
+  _or: [tracklists_bool_exp]
+  album: albums_bool_exp
+  albumid: bigint_comparison_exp
+  position: bigint_comparison_exp
+  song: songs_bool_exp
+  songid: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "tracklists"
+"""
+enum tracklists_constraint {
+  """unique or primary key constraint"""
+  idx_23540_sqlite_autoindex_tracklists_1
+
+  """unique or primary key constraint"""
+  idx_23540_tracklists_pkey
+}
+
+"""
+input type for incrementing integer columne in table "tracklists"
+"""
+input tracklists_inc_input {
+  albumid: bigint
+  position: bigint
+  songid: bigint
+}
+
+"""
+input type for inserting data into table "tracklists"
+"""
+input tracklists_insert_input {
+  album: albums_obj_rel_insert_input
+  albumid: bigint
+  position: bigint
+  song: songs_obj_rel_insert_input
+  songid: bigint
+}
+
+"""aggregate max on columns"""
+type tracklists_max_fields {
+  albumid: bigint
+  position: bigint
+  songid: bigint
+}
+
+"""
+order by max() on columns of table "tracklists"
+"""
+input tracklists_max_order_by {
+  albumid: order_by
+  position: order_by
+  songid: order_by
+}
+
+"""aggregate min on columns"""
+type tracklists_min_fields {
+  albumid: bigint
+  position: bigint
+  songid: bigint
+}
+
+"""
+order by min() on columns of table "tracklists"
+"""
+input tracklists_min_order_by {
+  albumid: order_by
+  position: order_by
+  songid: order_by
+}
+
+"""
+response of any mutation on the table "tracklists"
+"""
+type tracklists_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [tracklists!]!
+}
+
+"""
+input type for inserting object relation for remote table "tracklists"
+"""
+input tracklists_obj_rel_insert_input {
+  data: tracklists_insert_input!
+  on_conflict: tracklists_on_conflict
+}
+
+"""
+on conflict condition type for table "tracklists"
+"""
+input tracklists_on_conflict {
+  constraint: tracklists_constraint!
+  update_columns: [tracklists_update_column!]!
+  where: tracklists_bool_exp
+}
+
+"""
+ordering options when selecting data from "tracklists"
+"""
+input tracklists_order_by {
+  album: albums_order_by
+  albumid: order_by
+  position: order_by
+  song: songs_order_by
+  songid: order_by
+}
+
+"""
+select columns of table "tracklists"
+"""
+enum tracklists_select_column {
+  """column name"""
+  albumid
+
+  """column name"""
+  position
+
+  """column name"""
+  songid
+}
+
+"""
+input type for updating data in table "tracklists"
+"""
+input tracklists_set_input {
+  albumid: bigint
+  position: bigint
+  songid: bigint
+}
+
+"""aggregate stddev on columns"""
+type tracklists_stddev_fields {
+  albumid: Float
+  position: Float
+  songid: Float
+}
+
+"""
+order by stddev() on columns of table "tracklists"
+"""
+input tracklists_stddev_order_by {
+  albumid: order_by
+  position: order_by
+  songid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type tracklists_stddev_pop_fields {
+  albumid: Float
+  position: Float
+  songid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "tracklists"
+"""
+input tracklists_stddev_pop_order_by {
+  albumid: order_by
+  position: order_by
+  songid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type tracklists_stddev_samp_fields {
+  albumid: Float
+  position: Float
+  songid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "tracklists"
+"""
+input tracklists_stddev_samp_order_by {
+  albumid: order_by
+  position: order_by
+  songid: order_by
+}
+
+"""aggregate sum on columns"""
+type tracklists_sum_fields {
+  albumid: bigint
+  position: bigint
+  songid: bigint
+}
+
+"""
+order by sum() on columns of table "tracklists"
+"""
+input tracklists_sum_order_by {
+  albumid: order_by
+  position: order_by
+  songid: order_by
+}
+
+"""
+update columns of table "tracklists"
+"""
+enum tracklists_update_column {
+  """column name"""
+  albumid
+
+  """column name"""
+  position
+
+  """column name"""
+  songid
+}
+
+"""aggregate var_pop on columns"""
+type tracklists_var_pop_fields {
+  albumid: Float
+  position: Float
+  songid: Float
+}
+
+"""
+order by var_pop() on columns of table "tracklists"
+"""
+input tracklists_var_pop_order_by {
+  albumid: order_by
+  position: order_by
+  songid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type tracklists_var_samp_fields {
+  albumid: Float
+  position: Float
+  songid: Float
+}
+
+"""
+order by var_samp() on columns of table "tracklists"
+"""
+input tracklists_var_samp_order_by {
+  albumid: order_by
+  position: order_by
+  songid: order_by
+}
+
+"""aggregate variance on columns"""
+type tracklists_variance_fields {
+  albumid: Float
+  position: Float
+  songid: Float
+}
+
+"""
+order by variance() on columns of table "tracklists"
+"""
+input tracklists_variance_order_by {
+  albumid: order_by
+  position: order_by
+  songid: order_by
+}
+
+"""
+columns and relationships of "vocals"
+"""
+type vocals {
+  """An object relationship"""
+  band: band!
+  bandmate: bigint!
+
+  """An object relationship"""
+  song: songs!
+  songid: bigint!
+  type: String
+}
+
+"""
+aggregated selection of "vocals"
+"""
+type vocals_aggregate {
+  aggregate: vocals_aggregate_fields
+  nodes: [vocals!]!
+}
+
+"""
+aggregate fields of "vocals"
+"""
+type vocals_aggregate_fields {
+  avg: vocals_avg_fields
+  count(columns: [vocals_select_column!], distinct: Boolean): Int
+  max: vocals_max_fields
+  min: vocals_min_fields
+  stddev: vocals_stddev_fields
+  stddev_pop: vocals_stddev_pop_fields
+  stddev_samp: vocals_stddev_samp_fields
+  sum: vocals_sum_fields
+  var_pop: vocals_var_pop_fields
+  var_samp: vocals_var_samp_fields
+  variance: vocals_variance_fields
+}
+
+"""
+order by aggregate values of table "vocals"
+"""
+input vocals_aggregate_order_by {
+  avg: vocals_avg_order_by
+  count: order_by
+  max: vocals_max_order_by
+  min: vocals_min_order_by
+  stddev: vocals_stddev_order_by
+  stddev_pop: vocals_stddev_pop_order_by
+  stddev_samp: vocals_stddev_samp_order_by
+  sum: vocals_sum_order_by
+  var_pop: vocals_var_pop_order_by
+  var_samp: vocals_var_samp_order_by
+  variance: vocals_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "vocals"
+"""
+input vocals_arr_rel_insert_input {
+  data: [vocals_insert_input!]!
+  on_conflict: vocals_on_conflict
+}
+
+"""aggregate avg on columns"""
+type vocals_avg_fields {
+  bandmate: Float
+  songid: Float
+}
+
+"""
+order by avg() on columns of table "vocals"
+"""
+input vocals_avg_order_by {
+  bandmate: order_by
+  songid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "vocals". All fields are combined with a logical 'AND'.
+"""
+input vocals_bool_exp {
+  _and: [vocals_bool_exp]
+  _not: vocals_bool_exp
+  _or: [vocals_bool_exp]
+  band: band_bool_exp
+  bandmate: bigint_comparison_exp
+  song: songs_bool_exp
+  songid: bigint_comparison_exp
+  type: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "vocals"
+"""
+enum vocals_constraint {
+  """unique or primary key constraint"""
+  idx_23543_sqlite_autoindex_vocals_1
+
+  """unique or primary key constraint"""
+  idx_23543_vocals_pkey
+}
+
+"""
+input type for incrementing integer columne in table "vocals"
+"""
+input vocals_inc_input {
+  bandmate: bigint
+  songid: bigint
+}
+
+"""
+input type for inserting data into table "vocals"
+"""
+input vocals_insert_input {
+  band: band_obj_rel_insert_input
+  bandmate: bigint
+  song: songs_obj_rel_insert_input
+  songid: bigint
+  type: String
+}
+
+"""aggregate max on columns"""
+type vocals_max_fields {
+  bandmate: bigint
+  songid: bigint
+  type: String
+}
+
+"""
+order by max() on columns of table "vocals"
+"""
+input vocals_max_order_by {
+  bandmate: order_by
+  songid: order_by
+  type: order_by
+}
+
+"""aggregate min on columns"""
+type vocals_min_fields {
+  bandmate: bigint
+  songid: bigint
+  type: String
+}
+
+"""
+order by min() on columns of table "vocals"
+"""
+input vocals_min_order_by {
+  bandmate: order_by
+  songid: order_by
+  type: order_by
+}
+
+"""
+response of any mutation on the table "vocals"
+"""
+type vocals_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [vocals!]!
+}
+
+"""
+input type for inserting object relation for remote table "vocals"
+"""
+input vocals_obj_rel_insert_input {
+  data: vocals_insert_input!
+  on_conflict: vocals_on_conflict
+}
+
+"""
+on conflict condition type for table "vocals"
+"""
+input vocals_on_conflict {
+  constraint: vocals_constraint!
+  update_columns: [vocals_update_column!]!
+  where: vocals_bool_exp
+}
+
+"""
+ordering options when selecting data from "vocals"
+"""
+input vocals_order_by {
+  band: band_order_by
+  bandmate: order_by
+  song: songs_order_by
+  songid: order_by
+  type: order_by
+}
+
+"""
+select columns of table "vocals"
+"""
+enum vocals_select_column {
+  """column name"""
+  bandmate
+
+  """column name"""
+  songid
+
+  """column name"""
+  type
+}
+
+"""
+input type for updating data in table "vocals"
+"""
+input vocals_set_input {
+  bandmate: bigint
+  songid: bigint
+  type: String
+}
+
+"""aggregate stddev on columns"""
+type vocals_stddev_fields {
+  bandmate: Float
+  songid: Float
+}
+
+"""
+order by stddev() on columns of table "vocals"
+"""
+input vocals_stddev_order_by {
+  bandmate: order_by
+  songid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type vocals_stddev_pop_fields {
+  bandmate: Float
+  songid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "vocals"
+"""
+input vocals_stddev_pop_order_by {
+  bandmate: order_by
+  songid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type vocals_stddev_samp_fields {
+  bandmate: Float
+  songid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "vocals"
+"""
+input vocals_stddev_samp_order_by {
+  bandmate: order_by
+  songid: order_by
+}
+
+"""aggregate sum on columns"""
+type vocals_sum_fields {
+  bandmate: bigint
+  songid: bigint
+}
+
+"""
+order by sum() on columns of table "vocals"
+"""
+input vocals_sum_order_by {
+  bandmate: order_by
+  songid: order_by
+}
+
+"""
+update columns of table "vocals"
+"""
+enum vocals_update_column {
+  """column name"""
+  bandmate
+
+  """column name"""
+  songid
+
+  """column name"""
+  type
+}
+
+"""aggregate var_pop on columns"""
+type vocals_var_pop_fields {
+  bandmate: Float
+  songid: Float
+}
+
+"""
+order by var_pop() on columns of table "vocals"
+"""
+input vocals_var_pop_order_by {
+  bandmate: order_by
+  songid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type vocals_var_samp_fields {
+  bandmate: Float
+  songid: Float
+}
+
+"""
+order by var_samp() on columns of table "vocals"
+"""
+input vocals_var_samp_order_by {
+  bandmate: order_by
+  songid: order_by
+}
+
+"""aggregate variance on columns"""
+type vocals_variance_fields {
+  bandmate: Float
+  songid: Float
+}
+
+"""
+order by variance() on columns of table "vocals"
+"""
+input vocals_variance_order_by {
+  bandmate: order_by
+  songid: order_by
+}

@@ -1,0 +1,1187 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "country"
+"""
+type country {
+  area: Int
+  country_id: Int
+  languages: String
+  name: String
+  population: Int
+
+  """An array relationship"""
+  roller_coasters(
+    """distinct select on columns"""
+    distinct_on: [roller_coaster_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [roller_coaster_order_by!]
+
+    """filter the rows returned"""
+    where: roller_coaster_bool_exp
+  ): [roller_coaster!]!
+
+  """An aggregated array relationship"""
+  roller_coasters_aggregate(
+    """distinct select on columns"""
+    distinct_on: [roller_coaster_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [roller_coaster_order_by!]
+
+    """filter the rows returned"""
+    where: roller_coaster_bool_exp
+  ): roller_coaster_aggregate!
+}
+
+"""
+aggregated selection of "country"
+"""
+type country_aggregate {
+  aggregate: country_aggregate_fields
+  nodes: [country!]!
+}
+
+"""
+aggregate fields of "country"
+"""
+type country_aggregate_fields {
+  avg: country_avg_fields
+  count(columns: [country_select_column!], distinct: Boolean): Int
+  max: country_max_fields
+  min: country_min_fields
+  stddev: country_stddev_fields
+  stddev_pop: country_stddev_pop_fields
+  stddev_samp: country_stddev_samp_fields
+  sum: country_sum_fields
+  var_pop: country_var_pop_fields
+  var_samp: country_var_samp_fields
+  variance: country_variance_fields
+}
+
+"""
+order by aggregate values of table "country"
+"""
+input country_aggregate_order_by {
+  avg: country_avg_order_by
+  count: order_by
+  max: country_max_order_by
+  min: country_min_order_by
+  stddev: country_stddev_order_by
+  stddev_pop: country_stddev_pop_order_by
+  stddev_samp: country_stddev_samp_order_by
+  sum: country_sum_order_by
+  var_pop: country_var_pop_order_by
+  var_samp: country_var_samp_order_by
+  variance: country_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "country"
+"""
+input country_arr_rel_insert_input {
+  data: [country_insert_input!]!
+  on_conflict: country_on_conflict
+}
+
+"""aggregate avg on columns"""
+type country_avg_fields {
+  area: Float
+  country_id: Float
+  population: Float
+}
+
+"""
+order by avg() on columns of table "country"
+"""
+input country_avg_order_by {
+  area: order_by
+  country_id: order_by
+  population: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "country". All fields are combined with a logical 'AND'.
+"""
+input country_bool_exp {
+  _and: [country_bool_exp]
+  _not: country_bool_exp
+  _or: [country_bool_exp]
+  area: Int_comparison_exp
+  country_id: Int_comparison_exp
+  languages: String_comparison_exp
+  name: String_comparison_exp
+  population: Int_comparison_exp
+  roller_coasters: roller_coaster_bool_exp
+}
+
+"""
+unique or primary key constraints on table "country"
+"""
+enum country_constraint {
+  """unique or primary key constraint"""
+  idx_22216_sqlite_autoindex_country_1
+}
+
+"""
+input type for incrementing integer columne in table "country"
+"""
+input country_inc_input {
+  area: Int
+  country_id: Int
+  population: Int
+}
+
+"""
+input type for inserting data into table "country"
+"""
+input country_insert_input {
+  area: Int
+  country_id: Int
+  languages: String
+  name: String
+  population: Int
+  roller_coasters: roller_coaster_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type country_max_fields {
+  area: Int
+  country_id: Int
+  languages: String
+  name: String
+  population: Int
+}
+
+"""
+order by max() on columns of table "country"
+"""
+input country_max_order_by {
+  area: order_by
+  country_id: order_by
+  languages: order_by
+  name: order_by
+  population: order_by
+}
+
+"""aggregate min on columns"""
+type country_min_fields {
+  area: Int
+  country_id: Int
+  languages: String
+  name: String
+  population: Int
+}
+
+"""
+order by min() on columns of table "country"
+"""
+input country_min_order_by {
+  area: order_by
+  country_id: order_by
+  languages: order_by
+  name: order_by
+  population: order_by
+}
+
+"""
+response of any mutation on the table "country"
+"""
+type country_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [country!]!
+}
+
+"""
+input type for inserting object relation for remote table "country"
+"""
+input country_obj_rel_insert_input {
+  data: country_insert_input!
+  on_conflict: country_on_conflict
+}
+
+"""
+on conflict condition type for table "country"
+"""
+input country_on_conflict {
+  constraint: country_constraint!
+  update_columns: [country_update_column!]!
+  where: country_bool_exp
+}
+
+"""
+ordering options when selecting data from "country"
+"""
+input country_order_by {
+  area: order_by
+  country_id: order_by
+  languages: order_by
+  name: order_by
+  population: order_by
+  roller_coasters_aggregate: roller_coaster_aggregate_order_by
+}
+
+"""
+select columns of table "country"
+"""
+enum country_select_column {
+  """column name"""
+  area
+
+  """column name"""
+  country_id
+
+  """column name"""
+  languages
+
+  """column name"""
+  name
+
+  """column name"""
+  population
+}
+
+"""
+input type for updating data in table "country"
+"""
+input country_set_input {
+  area: Int
+  country_id: Int
+  languages: String
+  name: String
+  population: Int
+}
+
+"""aggregate stddev on columns"""
+type country_stddev_fields {
+  area: Float
+  country_id: Float
+  population: Float
+}
+
+"""
+order by stddev() on columns of table "country"
+"""
+input country_stddev_order_by {
+  area: order_by
+  country_id: order_by
+  population: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type country_stddev_pop_fields {
+  area: Float
+  country_id: Float
+  population: Float
+}
+
+"""
+order by stddev_pop() on columns of table "country"
+"""
+input country_stddev_pop_order_by {
+  area: order_by
+  country_id: order_by
+  population: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type country_stddev_samp_fields {
+  area: Float
+  country_id: Float
+  population: Float
+}
+
+"""
+order by stddev_samp() on columns of table "country"
+"""
+input country_stddev_samp_order_by {
+  area: order_by
+  country_id: order_by
+  population: order_by
+}
+
+"""aggregate sum on columns"""
+type country_sum_fields {
+  area: Int
+  country_id: Int
+  population: Int
+}
+
+"""
+order by sum() on columns of table "country"
+"""
+input country_sum_order_by {
+  area: order_by
+  country_id: order_by
+  population: order_by
+}
+
+"""
+update columns of table "country"
+"""
+enum country_update_column {
+  """column name"""
+  area
+
+  """column name"""
+  country_id
+
+  """column name"""
+  languages
+
+  """column name"""
+  name
+
+  """column name"""
+  population
+}
+
+"""aggregate var_pop on columns"""
+type country_var_pop_fields {
+  area: Float
+  country_id: Float
+  population: Float
+}
+
+"""
+order by var_pop() on columns of table "country"
+"""
+input country_var_pop_order_by {
+  area: order_by
+  country_id: order_by
+  population: order_by
+}
+
+"""aggregate var_samp on columns"""
+type country_var_samp_fields {
+  area: Float
+  country_id: Float
+  population: Float
+}
+
+"""
+order by var_samp() on columns of table "country"
+"""
+input country_var_samp_order_by {
+  area: order_by
+  country_id: order_by
+  population: order_by
+}
+
+"""aggregate variance on columns"""
+type country_variance_fields {
+  area: Float
+  country_id: Float
+  population: Float
+}
+
+"""
+order by variance() on columns of table "country"
+"""
+input country_variance_order_by {
+  area: order_by
+  country_id: order_by
+  population: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "country"
+  """
+  delete_country(
+    """filter the rows which have to be deleted"""
+    where: country_bool_exp!
+  ): country_mutation_response
+
+  """
+  delete data from the table: "roller_coaster"
+  """
+  delete_roller_coaster(
+    """filter the rows which have to be deleted"""
+    where: roller_coaster_bool_exp!
+  ): roller_coaster_mutation_response
+
+  """
+  insert data into the table: "country"
+  """
+  insert_country(
+    """the rows to be inserted"""
+    objects: [country_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: country_on_conflict
+  ): country_mutation_response
+
+  """
+  insert data into the table: "roller_coaster"
+  """
+  insert_roller_coaster(
+    """the rows to be inserted"""
+    objects: [roller_coaster_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: roller_coaster_on_conflict
+  ): roller_coaster_mutation_response
+
+  """
+  update data of the table: "country"
+  """
+  update_country(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: country_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: country_set_input
+
+    """filter the rows which have to be updated"""
+    where: country_bool_exp!
+  ): country_mutation_response
+
+  """
+  update data of the table: "roller_coaster"
+  """
+  update_roller_coaster(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: roller_coaster_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: roller_coaster_set_input
+
+    """filter the rows which have to be updated"""
+    where: roller_coaster_bool_exp!
+  ): roller_coaster_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "country"
+  """
+  country(
+    """distinct select on columns"""
+    distinct_on: [country_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [country_order_by!]
+
+    """filter the rows returned"""
+    where: country_bool_exp
+  ): [country!]!
+
+  """
+  fetch aggregated fields from the table: "country"
+  """
+  country_aggregate(
+    """distinct select on columns"""
+    distinct_on: [country_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [country_order_by!]
+
+    """filter the rows returned"""
+    where: country_bool_exp
+  ): country_aggregate!
+
+  """
+  fetch data from the table: "roller_coaster"
+  """
+  roller_coaster(
+    """distinct select on columns"""
+    distinct_on: [roller_coaster_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [roller_coaster_order_by!]
+
+    """filter the rows returned"""
+    where: roller_coaster_bool_exp
+  ): [roller_coaster!]!
+
+  """
+  fetch aggregated fields from the table: "roller_coaster"
+  """
+  roller_coaster_aggregate(
+    """distinct select on columns"""
+    distinct_on: [roller_coaster_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [roller_coaster_order_by!]
+
+    """filter the rows returned"""
+    where: roller_coaster_bool_exp
+  ): roller_coaster_aggregate!
+}
+
+"""
+columns and relationships of "roller_coaster"
+"""
+type roller_coaster {
+  """An object relationship"""
+  country: country
+  country_id: Int
+  height: Float
+  length: Float
+  name: String
+  opened: String
+  park: String
+  roller_coaster_id: Int
+  speed: String
+  status: String
+}
+
+"""
+aggregated selection of "roller_coaster"
+"""
+type roller_coaster_aggregate {
+  aggregate: roller_coaster_aggregate_fields
+  nodes: [roller_coaster!]!
+}
+
+"""
+aggregate fields of "roller_coaster"
+"""
+type roller_coaster_aggregate_fields {
+  avg: roller_coaster_avg_fields
+  count(columns: [roller_coaster_select_column!], distinct: Boolean): Int
+  max: roller_coaster_max_fields
+  min: roller_coaster_min_fields
+  stddev: roller_coaster_stddev_fields
+  stddev_pop: roller_coaster_stddev_pop_fields
+  stddev_samp: roller_coaster_stddev_samp_fields
+  sum: roller_coaster_sum_fields
+  var_pop: roller_coaster_var_pop_fields
+  var_samp: roller_coaster_var_samp_fields
+  variance: roller_coaster_variance_fields
+}
+
+"""
+order by aggregate values of table "roller_coaster"
+"""
+input roller_coaster_aggregate_order_by {
+  avg: roller_coaster_avg_order_by
+  count: order_by
+  max: roller_coaster_max_order_by
+  min: roller_coaster_min_order_by
+  stddev: roller_coaster_stddev_order_by
+  stddev_pop: roller_coaster_stddev_pop_order_by
+  stddev_samp: roller_coaster_stddev_samp_order_by
+  sum: roller_coaster_sum_order_by
+  var_pop: roller_coaster_var_pop_order_by
+  var_samp: roller_coaster_var_samp_order_by
+  variance: roller_coaster_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "roller_coaster"
+"""
+input roller_coaster_arr_rel_insert_input {
+  data: [roller_coaster_insert_input!]!
+  on_conflict: roller_coaster_on_conflict
+}
+
+"""aggregate avg on columns"""
+type roller_coaster_avg_fields {
+  country_id: Float
+  height: Float
+  length: Float
+  roller_coaster_id: Float
+}
+
+"""
+order by avg() on columns of table "roller_coaster"
+"""
+input roller_coaster_avg_order_by {
+  country_id: order_by
+  height: order_by
+  length: order_by
+  roller_coaster_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "roller_coaster". All fields are combined with a logical 'AND'.
+"""
+input roller_coaster_bool_exp {
+  _and: [roller_coaster_bool_exp]
+  _not: roller_coaster_bool_exp
+  _or: [roller_coaster_bool_exp]
+  country: country_bool_exp
+  country_id: Int_comparison_exp
+  height: Float_comparison_exp
+  length: Float_comparison_exp
+  name: String_comparison_exp
+  opened: String_comparison_exp
+  park: String_comparison_exp
+  roller_coaster_id: Int_comparison_exp
+  speed: String_comparison_exp
+  status: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "roller_coaster"
+"""
+enum roller_coaster_constraint {
+  """unique or primary key constraint"""
+  idx_22210_sqlite_autoindex_roller_coaster_1
+}
+
+"""
+input type for incrementing integer columne in table "roller_coaster"
+"""
+input roller_coaster_inc_input {
+  country_id: Int
+  roller_coaster_id: Int
+}
+
+"""
+input type for inserting data into table "roller_coaster"
+"""
+input roller_coaster_insert_input {
+  country: country_obj_rel_insert_input
+  country_id: Int
+  height: Float
+  length: Float
+  name: String
+  opened: String
+  park: String
+  roller_coaster_id: Int
+  speed: String
+  status: String
+}
+
+"""aggregate max on columns"""
+type roller_coaster_max_fields {
+  country_id: Int
+  height: Float
+  length: Float
+  name: String
+  opened: String
+  park: String
+  roller_coaster_id: Int
+  speed: String
+  status: String
+}
+
+"""
+order by max() on columns of table "roller_coaster"
+"""
+input roller_coaster_max_order_by {
+  country_id: order_by
+  height: order_by
+  length: order_by
+  name: order_by
+  opened: order_by
+  park: order_by
+  roller_coaster_id: order_by
+  speed: order_by
+  status: order_by
+}
+
+"""aggregate min on columns"""
+type roller_coaster_min_fields {
+  country_id: Int
+  height: Float
+  length: Float
+  name: String
+  opened: String
+  park: String
+  roller_coaster_id: Int
+  speed: String
+  status: String
+}
+
+"""
+order by min() on columns of table "roller_coaster"
+"""
+input roller_coaster_min_order_by {
+  country_id: order_by
+  height: order_by
+  length: order_by
+  name: order_by
+  opened: order_by
+  park: order_by
+  roller_coaster_id: order_by
+  speed: order_by
+  status: order_by
+}
+
+"""
+response of any mutation on the table "roller_coaster"
+"""
+type roller_coaster_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [roller_coaster!]!
+}
+
+"""
+input type for inserting object relation for remote table "roller_coaster"
+"""
+input roller_coaster_obj_rel_insert_input {
+  data: roller_coaster_insert_input!
+  on_conflict: roller_coaster_on_conflict
+}
+
+"""
+on conflict condition type for table "roller_coaster"
+"""
+input roller_coaster_on_conflict {
+  constraint: roller_coaster_constraint!
+  update_columns: [roller_coaster_update_column!]!
+  where: roller_coaster_bool_exp
+}
+
+"""
+ordering options when selecting data from "roller_coaster"
+"""
+input roller_coaster_order_by {
+  country: country_order_by
+  country_id: order_by
+  height: order_by
+  length: order_by
+  name: order_by
+  opened: order_by
+  park: order_by
+  roller_coaster_id: order_by
+  speed: order_by
+  status: order_by
+}
+
+"""
+select columns of table "roller_coaster"
+"""
+enum roller_coaster_select_column {
+  """column name"""
+  country_id
+
+  """column name"""
+  height
+
+  """column name"""
+  length
+
+  """column name"""
+  name
+
+  """column name"""
+  opened
+
+  """column name"""
+  park
+
+  """column name"""
+  roller_coaster_id
+
+  """column name"""
+  speed
+
+  """column name"""
+  status
+}
+
+"""
+input type for updating data in table "roller_coaster"
+"""
+input roller_coaster_set_input {
+  country_id: Int
+  height: Float
+  length: Float
+  name: String
+  opened: String
+  park: String
+  roller_coaster_id: Int
+  speed: String
+  status: String
+}
+
+"""aggregate stddev on columns"""
+type roller_coaster_stddev_fields {
+  country_id: Float
+  height: Float
+  length: Float
+  roller_coaster_id: Float
+}
+
+"""
+order by stddev() on columns of table "roller_coaster"
+"""
+input roller_coaster_stddev_order_by {
+  country_id: order_by
+  height: order_by
+  length: order_by
+  roller_coaster_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type roller_coaster_stddev_pop_fields {
+  country_id: Float
+  height: Float
+  length: Float
+  roller_coaster_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "roller_coaster"
+"""
+input roller_coaster_stddev_pop_order_by {
+  country_id: order_by
+  height: order_by
+  length: order_by
+  roller_coaster_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type roller_coaster_stddev_samp_fields {
+  country_id: Float
+  height: Float
+  length: Float
+  roller_coaster_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "roller_coaster"
+"""
+input roller_coaster_stddev_samp_order_by {
+  country_id: order_by
+  height: order_by
+  length: order_by
+  roller_coaster_id: order_by
+}
+
+"""aggregate sum on columns"""
+type roller_coaster_sum_fields {
+  country_id: Int
+  height: Float
+  length: Float
+  roller_coaster_id: Int
+}
+
+"""
+order by sum() on columns of table "roller_coaster"
+"""
+input roller_coaster_sum_order_by {
+  country_id: order_by
+  height: order_by
+  length: order_by
+  roller_coaster_id: order_by
+}
+
+"""
+update columns of table "roller_coaster"
+"""
+enum roller_coaster_update_column {
+  """column name"""
+  country_id
+
+  """column name"""
+  height
+
+  """column name"""
+  length
+
+  """column name"""
+  name
+
+  """column name"""
+  opened
+
+  """column name"""
+  park
+
+  """column name"""
+  roller_coaster_id
+
+  """column name"""
+  speed
+
+  """column name"""
+  status
+}
+
+"""aggregate var_pop on columns"""
+type roller_coaster_var_pop_fields {
+  country_id: Float
+  height: Float
+  length: Float
+  roller_coaster_id: Float
+}
+
+"""
+order by var_pop() on columns of table "roller_coaster"
+"""
+input roller_coaster_var_pop_order_by {
+  country_id: order_by
+  height: order_by
+  length: order_by
+  roller_coaster_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type roller_coaster_var_samp_fields {
+  country_id: Float
+  height: Float
+  length: Float
+  roller_coaster_id: Float
+}
+
+"""
+order by var_samp() on columns of table "roller_coaster"
+"""
+input roller_coaster_var_samp_order_by {
+  country_id: order_by
+  height: order_by
+  length: order_by
+  roller_coaster_id: order_by
+}
+
+"""aggregate variance on columns"""
+type roller_coaster_variance_fields {
+  country_id: Float
+  height: Float
+  length: Float
+  roller_coaster_id: Float
+}
+
+"""
+order by variance() on columns of table "roller_coaster"
+"""
+input roller_coaster_variance_order_by {
+  country_id: order_by
+  height: order_by
+  length: order_by
+  roller_coaster_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "country"
+  """
+  country(
+    """distinct select on columns"""
+    distinct_on: [country_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [country_order_by!]
+
+    """filter the rows returned"""
+    where: country_bool_exp
+  ): [country!]!
+
+  """
+  fetch aggregated fields from the table: "country"
+  """
+  country_aggregate(
+    """distinct select on columns"""
+    distinct_on: [country_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [country_order_by!]
+
+    """filter the rows returned"""
+    where: country_bool_exp
+  ): country_aggregate!
+
+  """
+  fetch data from the table: "roller_coaster"
+  """
+  roller_coaster(
+    """distinct select on columns"""
+    distinct_on: [roller_coaster_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [roller_coaster_order_by!]
+
+    """filter the rows returned"""
+    where: roller_coaster_bool_exp
+  ): [roller_coaster!]!
+
+  """
+  fetch aggregated fields from the table: "roller_coaster"
+  """
+  roller_coaster_aggregate(
+    """distinct select on columns"""
+    distinct_on: [roller_coaster_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [roller_coaster_order_by!]
+
+    """filter the rows returned"""
+    where: roller_coaster_bool_exp
+  ): roller_coaster_aggregate!
+}

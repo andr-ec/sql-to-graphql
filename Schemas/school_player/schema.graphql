@@ -1,0 +1,2187 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "player"
+  """
+  delete_player(
+    """filter the rows which have to be deleted"""
+    where: player_bool_exp!
+  ): player_mutation_response
+
+  """
+  delete data from the table: "school"
+  """
+  delete_school(
+    """filter the rows which have to be deleted"""
+    where: school_bool_exp!
+  ): school_mutation_response
+
+  """
+  delete data from the table: "school_details"
+  """
+  delete_school_details(
+    """filter the rows which have to be deleted"""
+    where: school_details_bool_exp!
+  ): school_details_mutation_response
+
+  """
+  delete data from the table: "school_performance"
+  """
+  delete_school_performance(
+    """filter the rows which have to be deleted"""
+    where: school_performance_bool_exp!
+  ): school_performance_mutation_response
+
+  """
+  insert data into the table: "player"
+  """
+  insert_player(
+    """the rows to be inserted"""
+    objects: [player_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: player_on_conflict
+  ): player_mutation_response
+
+  """
+  insert data into the table: "school"
+  """
+  insert_school(
+    """the rows to be inserted"""
+    objects: [school_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: school_on_conflict
+  ): school_mutation_response
+
+  """
+  insert data into the table: "school_details"
+  """
+  insert_school_details(
+    """the rows to be inserted"""
+    objects: [school_details_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: school_details_on_conflict
+  ): school_details_mutation_response
+
+  """
+  insert data into the table: "school_performance"
+  """
+  insert_school_performance(
+    """the rows to be inserted"""
+    objects: [school_performance_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: school_performance_on_conflict
+  ): school_performance_mutation_response
+
+  """
+  update data of the table: "player"
+  """
+  update_player(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: player_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: player_set_input
+
+    """filter the rows which have to be updated"""
+    where: player_bool_exp!
+  ): player_mutation_response
+
+  """
+  update data of the table: "school"
+  """
+  update_school(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: school_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: school_set_input
+
+    """filter the rows which have to be updated"""
+    where: school_bool_exp!
+  ): school_mutation_response
+
+  """
+  update data of the table: "school_details"
+  """
+  update_school_details(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: school_details_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: school_details_set_input
+
+    """filter the rows which have to be updated"""
+    where: school_details_bool_exp!
+  ): school_details_mutation_response
+
+  """
+  update data of the table: "school_performance"
+  """
+  update_school_performance(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: school_performance_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: school_performance_set_input
+
+    """filter the rows which have to be updated"""
+    where: school_performance_bool_exp!
+  ): school_performance_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "player"
+"""
+type player {
+  age: Int
+  player: String
+  player_id: Int
+  position: String
+
+  """An object relationship"""
+  school: school
+  school_id: Int
+  team: String
+}
+
+"""
+aggregated selection of "player"
+"""
+type player_aggregate {
+  aggregate: player_aggregate_fields
+  nodes: [player!]!
+}
+
+"""
+aggregate fields of "player"
+"""
+type player_aggregate_fields {
+  avg: player_avg_fields
+  count(columns: [player_select_column!], distinct: Boolean): Int
+  max: player_max_fields
+  min: player_min_fields
+  stddev: player_stddev_fields
+  stddev_pop: player_stddev_pop_fields
+  stddev_samp: player_stddev_samp_fields
+  sum: player_sum_fields
+  var_pop: player_var_pop_fields
+  var_samp: player_var_samp_fields
+  variance: player_variance_fields
+}
+
+"""
+order by aggregate values of table "player"
+"""
+input player_aggregate_order_by {
+  avg: player_avg_order_by
+  count: order_by
+  max: player_max_order_by
+  min: player_min_order_by
+  stddev: player_stddev_order_by
+  stddev_pop: player_stddev_pop_order_by
+  stddev_samp: player_stddev_samp_order_by
+  sum: player_sum_order_by
+  var_pop: player_var_pop_order_by
+  var_samp: player_var_samp_order_by
+  variance: player_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "player"
+"""
+input player_arr_rel_insert_input {
+  data: [player_insert_input!]!
+  on_conflict: player_on_conflict
+}
+
+"""aggregate avg on columns"""
+type player_avg_fields {
+  age: Float
+  player_id: Float
+  school_id: Float
+}
+
+"""
+order by avg() on columns of table "player"
+"""
+input player_avg_order_by {
+  age: order_by
+  player_id: order_by
+  school_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "player". All fields are combined with a logical 'AND'.
+"""
+input player_bool_exp {
+  _and: [player_bool_exp]
+  _not: player_bool_exp
+  _or: [player_bool_exp]
+  age: Int_comparison_exp
+  player: String_comparison_exp
+  player_id: Int_comparison_exp
+  position: String_comparison_exp
+  school: school_bool_exp
+  school_id: Int_comparison_exp
+  team: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "player"
+"""
+enum player_constraint {
+  """unique or primary key constraint"""
+  idx_27255_sqlite_autoindex_player_1
+}
+
+"""
+input type for incrementing integer columne in table "player"
+"""
+input player_inc_input {
+  age: Int
+  player_id: Int
+  school_id: Int
+}
+
+"""
+input type for inserting data into table "player"
+"""
+input player_insert_input {
+  age: Int
+  player: String
+  player_id: Int
+  position: String
+  school: school_obj_rel_insert_input
+  school_id: Int
+  team: String
+}
+
+"""aggregate max on columns"""
+type player_max_fields {
+  age: Int
+  player: String
+  player_id: Int
+  position: String
+  school_id: Int
+  team: String
+}
+
+"""
+order by max() on columns of table "player"
+"""
+input player_max_order_by {
+  age: order_by
+  player: order_by
+  player_id: order_by
+  position: order_by
+  school_id: order_by
+  team: order_by
+}
+
+"""aggregate min on columns"""
+type player_min_fields {
+  age: Int
+  player: String
+  player_id: Int
+  position: String
+  school_id: Int
+  team: String
+}
+
+"""
+order by min() on columns of table "player"
+"""
+input player_min_order_by {
+  age: order_by
+  player: order_by
+  player_id: order_by
+  position: order_by
+  school_id: order_by
+  team: order_by
+}
+
+"""
+response of any mutation on the table "player"
+"""
+type player_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [player!]!
+}
+
+"""
+input type for inserting object relation for remote table "player"
+"""
+input player_obj_rel_insert_input {
+  data: player_insert_input!
+  on_conflict: player_on_conflict
+}
+
+"""
+on conflict condition type for table "player"
+"""
+input player_on_conflict {
+  constraint: player_constraint!
+  update_columns: [player_update_column!]!
+  where: player_bool_exp
+}
+
+"""
+ordering options when selecting data from "player"
+"""
+input player_order_by {
+  age: order_by
+  player: order_by
+  player_id: order_by
+  position: order_by
+  school: school_order_by
+  school_id: order_by
+  team: order_by
+}
+
+"""
+select columns of table "player"
+"""
+enum player_select_column {
+  """column name"""
+  age
+
+  """column name"""
+  player
+
+  """column name"""
+  player_id
+
+  """column name"""
+  position
+
+  """column name"""
+  school_id
+
+  """column name"""
+  team
+}
+
+"""
+input type for updating data in table "player"
+"""
+input player_set_input {
+  age: Int
+  player: String
+  player_id: Int
+  position: String
+  school_id: Int
+  team: String
+}
+
+"""aggregate stddev on columns"""
+type player_stddev_fields {
+  age: Float
+  player_id: Float
+  school_id: Float
+}
+
+"""
+order by stddev() on columns of table "player"
+"""
+input player_stddev_order_by {
+  age: order_by
+  player_id: order_by
+  school_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type player_stddev_pop_fields {
+  age: Float
+  player_id: Float
+  school_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "player"
+"""
+input player_stddev_pop_order_by {
+  age: order_by
+  player_id: order_by
+  school_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type player_stddev_samp_fields {
+  age: Float
+  player_id: Float
+  school_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "player"
+"""
+input player_stddev_samp_order_by {
+  age: order_by
+  player_id: order_by
+  school_id: order_by
+}
+
+"""aggregate sum on columns"""
+type player_sum_fields {
+  age: Int
+  player_id: Int
+  school_id: Int
+}
+
+"""
+order by sum() on columns of table "player"
+"""
+input player_sum_order_by {
+  age: order_by
+  player_id: order_by
+  school_id: order_by
+}
+
+"""
+update columns of table "player"
+"""
+enum player_update_column {
+  """column name"""
+  age
+
+  """column name"""
+  player
+
+  """column name"""
+  player_id
+
+  """column name"""
+  position
+
+  """column name"""
+  school_id
+
+  """column name"""
+  team
+}
+
+"""aggregate var_pop on columns"""
+type player_var_pop_fields {
+  age: Float
+  player_id: Float
+  school_id: Float
+}
+
+"""
+order by var_pop() on columns of table "player"
+"""
+input player_var_pop_order_by {
+  age: order_by
+  player_id: order_by
+  school_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type player_var_samp_fields {
+  age: Float
+  player_id: Float
+  school_id: Float
+}
+
+"""
+order by var_samp() on columns of table "player"
+"""
+input player_var_samp_order_by {
+  age: order_by
+  player_id: order_by
+  school_id: order_by
+}
+
+"""aggregate variance on columns"""
+type player_variance_fields {
+  age: Float
+  player_id: Float
+  school_id: Float
+}
+
+"""
+order by variance() on columns of table "player"
+"""
+input player_variance_order_by {
+  age: order_by
+  player_id: order_by
+  school_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "player"
+  """
+  player(
+    """distinct select on columns"""
+    distinct_on: [player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_order_by!]
+
+    """filter the rows returned"""
+    where: player_bool_exp
+  ): [player!]!
+
+  """
+  fetch aggregated fields from the table: "player"
+  """
+  player_aggregate(
+    """distinct select on columns"""
+    distinct_on: [player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_order_by!]
+
+    """filter the rows returned"""
+    where: player_bool_exp
+  ): player_aggregate!
+
+  """
+  fetch data from the table: "school"
+  """
+  school(
+    """distinct select on columns"""
+    distinct_on: [school_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_order_by!]
+
+    """filter the rows returned"""
+    where: school_bool_exp
+  ): [school!]!
+
+  """
+  fetch aggregated fields from the table: "school"
+  """
+  school_aggregate(
+    """distinct select on columns"""
+    distinct_on: [school_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_order_by!]
+
+    """filter the rows returned"""
+    where: school_bool_exp
+  ): school_aggregate!
+
+  """
+  fetch data from the table: "school_details"
+  """
+  school_details(
+    """distinct select on columns"""
+    distinct_on: [school_details_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_details_order_by!]
+
+    """filter the rows returned"""
+    where: school_details_bool_exp
+  ): [school_details!]!
+
+  """
+  fetch aggregated fields from the table: "school_details"
+  """
+  school_details_aggregate(
+    """distinct select on columns"""
+    distinct_on: [school_details_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_details_order_by!]
+
+    """filter the rows returned"""
+    where: school_details_bool_exp
+  ): school_details_aggregate!
+
+  """
+  fetch data from the table: "school_performance"
+  """
+  school_performance(
+    """distinct select on columns"""
+    distinct_on: [school_performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_performance_order_by!]
+
+    """filter the rows returned"""
+    where: school_performance_bool_exp
+  ): [school_performance!]!
+
+  """
+  fetch aggregated fields from the table: "school_performance"
+  """
+  school_performance_aggregate(
+    """distinct select on columns"""
+    distinct_on: [school_performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_performance_order_by!]
+
+    """filter the rows returned"""
+    where: school_performance_bool_exp
+  ): school_performance_aggregate!
+}
+
+"""
+columns and relationships of "school"
+"""
+type school {
+  boys_or_girls: String
+  day_or_boarding: String
+  denomination: String
+  enrollment: Float
+  founded: Float
+  location: String
+
+  """An array relationship"""
+  players(
+    """distinct select on columns"""
+    distinct_on: [player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_order_by!]
+
+    """filter the rows returned"""
+    where: player_bool_exp
+  ): [player!]!
+
+  """An aggregated array relationship"""
+  players_aggregate(
+    """distinct select on columns"""
+    distinct_on: [player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_order_by!]
+
+    """filter the rows returned"""
+    where: player_bool_exp
+  ): player_aggregate!
+  school: String
+  school_colors: String
+
+  """An array relationship"""
+  school_details(
+    """distinct select on columns"""
+    distinct_on: [school_details_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_details_order_by!]
+
+    """filter the rows returned"""
+    where: school_details_bool_exp
+  ): [school_details!]!
+
+  """An aggregated array relationship"""
+  school_details_aggregate(
+    """distinct select on columns"""
+    distinct_on: [school_details_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_details_order_by!]
+
+    """filter the rows returned"""
+    where: school_details_bool_exp
+  ): school_details_aggregate!
+  school_id: Int
+
+  """An array relationship"""
+  school_performances(
+    """distinct select on columns"""
+    distinct_on: [school_performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_performance_order_by!]
+
+    """filter the rows returned"""
+    where: school_performance_bool_exp
+  ): [school_performance!]!
+
+  """An aggregated array relationship"""
+  school_performances_aggregate(
+    """distinct select on columns"""
+    distinct_on: [school_performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_performance_order_by!]
+
+    """filter the rows returned"""
+    where: school_performance_bool_exp
+  ): school_performance_aggregate!
+  year_entered_competition: Float
+}
+
+"""
+aggregated selection of "school"
+"""
+type school_aggregate {
+  aggregate: school_aggregate_fields
+  nodes: [school!]!
+}
+
+"""
+aggregate fields of "school"
+"""
+type school_aggregate_fields {
+  avg: school_avg_fields
+  count(columns: [school_select_column!], distinct: Boolean): Int
+  max: school_max_fields
+  min: school_min_fields
+  stddev: school_stddev_fields
+  stddev_pop: school_stddev_pop_fields
+  stddev_samp: school_stddev_samp_fields
+  sum: school_sum_fields
+  var_pop: school_var_pop_fields
+  var_samp: school_var_samp_fields
+  variance: school_variance_fields
+}
+
+"""
+order by aggregate values of table "school"
+"""
+input school_aggregate_order_by {
+  avg: school_avg_order_by
+  count: order_by
+  max: school_max_order_by
+  min: school_min_order_by
+  stddev: school_stddev_order_by
+  stddev_pop: school_stddev_pop_order_by
+  stddev_samp: school_stddev_samp_order_by
+  sum: school_sum_order_by
+  var_pop: school_var_pop_order_by
+  var_samp: school_var_samp_order_by
+  variance: school_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "school"
+"""
+input school_arr_rel_insert_input {
+  data: [school_insert_input!]!
+  on_conflict: school_on_conflict
+}
+
+"""aggregate avg on columns"""
+type school_avg_fields {
+  enrollment: Float
+  founded: Float
+  school_id: Float
+  year_entered_competition: Float
+}
+
+"""
+order by avg() on columns of table "school"
+"""
+input school_avg_order_by {
+  enrollment: order_by
+  founded: order_by
+  school_id: order_by
+  year_entered_competition: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "school". All fields are combined with a logical 'AND'.
+"""
+input school_bool_exp {
+  _and: [school_bool_exp]
+  _not: school_bool_exp
+  _or: [school_bool_exp]
+  boys_or_girls: String_comparison_exp
+  day_or_boarding: String_comparison_exp
+  denomination: String_comparison_exp
+  enrollment: Float_comparison_exp
+  founded: Float_comparison_exp
+  location: String_comparison_exp
+  players: player_bool_exp
+  school: String_comparison_exp
+  school_colors: String_comparison_exp
+  school_details: school_details_bool_exp
+  school_id: Int_comparison_exp
+  school_performances: school_performance_bool_exp
+  year_entered_competition: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "school"
+"""
+enum school_constraint {
+  """unique or primary key constraint"""
+  idx_27237_sqlite_autoindex_school_1
+}
+
+"""
+columns and relationships of "school_details"
+"""
+type school_details {
+  class: String
+  colors: String
+  division: String
+  league: String
+  nickname: String
+
+  """An object relationship"""
+  school: school
+  school_id: Int
+}
+
+"""
+aggregated selection of "school_details"
+"""
+type school_details_aggregate {
+  aggregate: school_details_aggregate_fields
+  nodes: [school_details!]!
+}
+
+"""
+aggregate fields of "school_details"
+"""
+type school_details_aggregate_fields {
+  avg: school_details_avg_fields
+  count(columns: [school_details_select_column!], distinct: Boolean): Int
+  max: school_details_max_fields
+  min: school_details_min_fields
+  stddev: school_details_stddev_fields
+  stddev_pop: school_details_stddev_pop_fields
+  stddev_samp: school_details_stddev_samp_fields
+  sum: school_details_sum_fields
+  var_pop: school_details_var_pop_fields
+  var_samp: school_details_var_samp_fields
+  variance: school_details_variance_fields
+}
+
+"""
+order by aggregate values of table "school_details"
+"""
+input school_details_aggregate_order_by {
+  avg: school_details_avg_order_by
+  count: order_by
+  max: school_details_max_order_by
+  min: school_details_min_order_by
+  stddev: school_details_stddev_order_by
+  stddev_pop: school_details_stddev_pop_order_by
+  stddev_samp: school_details_stddev_samp_order_by
+  sum: school_details_sum_order_by
+  var_pop: school_details_var_pop_order_by
+  var_samp: school_details_var_samp_order_by
+  variance: school_details_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "school_details"
+"""
+input school_details_arr_rel_insert_input {
+  data: [school_details_insert_input!]!
+  on_conflict: school_details_on_conflict
+}
+
+"""aggregate avg on columns"""
+type school_details_avg_fields {
+  school_id: Float
+}
+
+"""
+order by avg() on columns of table "school_details"
+"""
+input school_details_avg_order_by {
+  school_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "school_details". All fields are combined with a logical 'AND'.
+"""
+input school_details_bool_exp {
+  _and: [school_details_bool_exp]
+  _not: school_details_bool_exp
+  _or: [school_details_bool_exp]
+  class: String_comparison_exp
+  colors: String_comparison_exp
+  division: String_comparison_exp
+  league: String_comparison_exp
+  nickname: String_comparison_exp
+  school: school_bool_exp
+  school_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "school_details"
+"""
+enum school_details_constraint {
+  """unique or primary key constraint"""
+  idx_27243_sqlite_autoindex_school_details_1
+}
+
+"""
+input type for incrementing integer columne in table "school_details"
+"""
+input school_details_inc_input {
+  school_id: Int
+}
+
+"""
+input type for inserting data into table "school_details"
+"""
+input school_details_insert_input {
+  class: String
+  colors: String
+  division: String
+  league: String
+  nickname: String
+  school: school_obj_rel_insert_input
+  school_id: Int
+}
+
+"""aggregate max on columns"""
+type school_details_max_fields {
+  class: String
+  colors: String
+  division: String
+  league: String
+  nickname: String
+  school_id: Int
+}
+
+"""
+order by max() on columns of table "school_details"
+"""
+input school_details_max_order_by {
+  class: order_by
+  colors: order_by
+  division: order_by
+  league: order_by
+  nickname: order_by
+  school_id: order_by
+}
+
+"""aggregate min on columns"""
+type school_details_min_fields {
+  class: String
+  colors: String
+  division: String
+  league: String
+  nickname: String
+  school_id: Int
+}
+
+"""
+order by min() on columns of table "school_details"
+"""
+input school_details_min_order_by {
+  class: order_by
+  colors: order_by
+  division: order_by
+  league: order_by
+  nickname: order_by
+  school_id: order_by
+}
+
+"""
+response of any mutation on the table "school_details"
+"""
+type school_details_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [school_details!]!
+}
+
+"""
+input type for inserting object relation for remote table "school_details"
+"""
+input school_details_obj_rel_insert_input {
+  data: school_details_insert_input!
+  on_conflict: school_details_on_conflict
+}
+
+"""
+on conflict condition type for table "school_details"
+"""
+input school_details_on_conflict {
+  constraint: school_details_constraint!
+  update_columns: [school_details_update_column!]!
+  where: school_details_bool_exp
+}
+
+"""
+ordering options when selecting data from "school_details"
+"""
+input school_details_order_by {
+  class: order_by
+  colors: order_by
+  division: order_by
+  league: order_by
+  nickname: order_by
+  school: school_order_by
+  school_id: order_by
+}
+
+"""
+select columns of table "school_details"
+"""
+enum school_details_select_column {
+  """column name"""
+  class
+
+  """column name"""
+  colors
+
+  """column name"""
+  division
+
+  """column name"""
+  league
+
+  """column name"""
+  nickname
+
+  """column name"""
+  school_id
+}
+
+"""
+input type for updating data in table "school_details"
+"""
+input school_details_set_input {
+  class: String
+  colors: String
+  division: String
+  league: String
+  nickname: String
+  school_id: Int
+}
+
+"""aggregate stddev on columns"""
+type school_details_stddev_fields {
+  school_id: Float
+}
+
+"""
+order by stddev() on columns of table "school_details"
+"""
+input school_details_stddev_order_by {
+  school_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type school_details_stddev_pop_fields {
+  school_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "school_details"
+"""
+input school_details_stddev_pop_order_by {
+  school_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type school_details_stddev_samp_fields {
+  school_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "school_details"
+"""
+input school_details_stddev_samp_order_by {
+  school_id: order_by
+}
+
+"""aggregate sum on columns"""
+type school_details_sum_fields {
+  school_id: Int
+}
+
+"""
+order by sum() on columns of table "school_details"
+"""
+input school_details_sum_order_by {
+  school_id: order_by
+}
+
+"""
+update columns of table "school_details"
+"""
+enum school_details_update_column {
+  """column name"""
+  class
+
+  """column name"""
+  colors
+
+  """column name"""
+  division
+
+  """column name"""
+  league
+
+  """column name"""
+  nickname
+
+  """column name"""
+  school_id
+}
+
+"""aggregate var_pop on columns"""
+type school_details_var_pop_fields {
+  school_id: Float
+}
+
+"""
+order by var_pop() on columns of table "school_details"
+"""
+input school_details_var_pop_order_by {
+  school_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type school_details_var_samp_fields {
+  school_id: Float
+}
+
+"""
+order by var_samp() on columns of table "school_details"
+"""
+input school_details_var_samp_order_by {
+  school_id: order_by
+}
+
+"""aggregate variance on columns"""
+type school_details_variance_fields {
+  school_id: Float
+}
+
+"""
+order by variance() on columns of table "school_details"
+"""
+input school_details_variance_order_by {
+  school_id: order_by
+}
+
+"""
+input type for incrementing integer columne in table "school"
+"""
+input school_inc_input {
+  school_id: Int
+}
+
+"""
+input type for inserting data into table "school"
+"""
+input school_insert_input {
+  boys_or_girls: String
+  day_or_boarding: String
+  denomination: String
+  enrollment: Float
+  founded: Float
+  location: String
+  players: player_arr_rel_insert_input
+  school: String
+  school_colors: String
+  school_details: school_details_arr_rel_insert_input
+  school_id: Int
+  school_performances: school_performance_arr_rel_insert_input
+  year_entered_competition: Float
+}
+
+"""aggregate max on columns"""
+type school_max_fields {
+  boys_or_girls: String
+  day_or_boarding: String
+  denomination: String
+  enrollment: Float
+  founded: Float
+  location: String
+  school: String
+  school_colors: String
+  school_id: Int
+  year_entered_competition: Float
+}
+
+"""
+order by max() on columns of table "school"
+"""
+input school_max_order_by {
+  boys_or_girls: order_by
+  day_or_boarding: order_by
+  denomination: order_by
+  enrollment: order_by
+  founded: order_by
+  location: order_by
+  school: order_by
+  school_colors: order_by
+  school_id: order_by
+  year_entered_competition: order_by
+}
+
+"""aggregate min on columns"""
+type school_min_fields {
+  boys_or_girls: String
+  day_or_boarding: String
+  denomination: String
+  enrollment: Float
+  founded: Float
+  location: String
+  school: String
+  school_colors: String
+  school_id: Int
+  year_entered_competition: Float
+}
+
+"""
+order by min() on columns of table "school"
+"""
+input school_min_order_by {
+  boys_or_girls: order_by
+  day_or_boarding: order_by
+  denomination: order_by
+  enrollment: order_by
+  founded: order_by
+  location: order_by
+  school: order_by
+  school_colors: order_by
+  school_id: order_by
+  year_entered_competition: order_by
+}
+
+"""
+response of any mutation on the table "school"
+"""
+type school_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [school!]!
+}
+
+"""
+input type for inserting object relation for remote table "school"
+"""
+input school_obj_rel_insert_input {
+  data: school_insert_input!
+  on_conflict: school_on_conflict
+}
+
+"""
+on conflict condition type for table "school"
+"""
+input school_on_conflict {
+  constraint: school_constraint!
+  update_columns: [school_update_column!]!
+  where: school_bool_exp
+}
+
+"""
+ordering options when selecting data from "school"
+"""
+input school_order_by {
+  boys_or_girls: order_by
+  day_or_boarding: order_by
+  denomination: order_by
+  enrollment: order_by
+  founded: order_by
+  location: order_by
+  players_aggregate: player_aggregate_order_by
+  school: order_by
+  school_colors: order_by
+  school_details_aggregate: school_details_aggregate_order_by
+  school_id: order_by
+  school_performances_aggregate: school_performance_aggregate_order_by
+  year_entered_competition: order_by
+}
+
+"""
+columns and relationships of "school_performance"
+"""
+type school_performance {
+  class_a: String
+  class_aa: String
+
+  """An object relationship"""
+  school: school
+  school_id: Int
+  school_year: String
+}
+
+"""
+aggregated selection of "school_performance"
+"""
+type school_performance_aggregate {
+  aggregate: school_performance_aggregate_fields
+  nodes: [school_performance!]!
+}
+
+"""
+aggregate fields of "school_performance"
+"""
+type school_performance_aggregate_fields {
+  avg: school_performance_avg_fields
+  count(columns: [school_performance_select_column!], distinct: Boolean): Int
+  max: school_performance_max_fields
+  min: school_performance_min_fields
+  stddev: school_performance_stddev_fields
+  stddev_pop: school_performance_stddev_pop_fields
+  stddev_samp: school_performance_stddev_samp_fields
+  sum: school_performance_sum_fields
+  var_pop: school_performance_var_pop_fields
+  var_samp: school_performance_var_samp_fields
+  variance: school_performance_variance_fields
+}
+
+"""
+order by aggregate values of table "school_performance"
+"""
+input school_performance_aggregate_order_by {
+  avg: school_performance_avg_order_by
+  count: order_by
+  max: school_performance_max_order_by
+  min: school_performance_min_order_by
+  stddev: school_performance_stddev_order_by
+  stddev_pop: school_performance_stddev_pop_order_by
+  stddev_samp: school_performance_stddev_samp_order_by
+  sum: school_performance_sum_order_by
+  var_pop: school_performance_var_pop_order_by
+  var_samp: school_performance_var_samp_order_by
+  variance: school_performance_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "school_performance"
+"""
+input school_performance_arr_rel_insert_input {
+  data: [school_performance_insert_input!]!
+  on_conflict: school_performance_on_conflict
+}
+
+"""aggregate avg on columns"""
+type school_performance_avg_fields {
+  school_id: Float
+}
+
+"""
+order by avg() on columns of table "school_performance"
+"""
+input school_performance_avg_order_by {
+  school_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "school_performance". All fields are combined with a logical 'AND'.
+"""
+input school_performance_bool_exp {
+  _and: [school_performance_bool_exp]
+  _not: school_performance_bool_exp
+  _or: [school_performance_bool_exp]
+  class_a: String_comparison_exp
+  class_aa: String_comparison_exp
+  school: school_bool_exp
+  school_id: Int_comparison_exp
+  school_year: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "school_performance"
+"""
+enum school_performance_constraint {
+  """unique or primary key constraint"""
+  idx_27249_sqlite_autoindex_school_performance_1
+}
+
+"""
+input type for incrementing integer columne in table "school_performance"
+"""
+input school_performance_inc_input {
+  school_id: Int
+}
+
+"""
+input type for inserting data into table "school_performance"
+"""
+input school_performance_insert_input {
+  class_a: String
+  class_aa: String
+  school: school_obj_rel_insert_input
+  school_id: Int
+  school_year: String
+}
+
+"""aggregate max on columns"""
+type school_performance_max_fields {
+  class_a: String
+  class_aa: String
+  school_id: Int
+  school_year: String
+}
+
+"""
+order by max() on columns of table "school_performance"
+"""
+input school_performance_max_order_by {
+  class_a: order_by
+  class_aa: order_by
+  school_id: order_by
+  school_year: order_by
+}
+
+"""aggregate min on columns"""
+type school_performance_min_fields {
+  class_a: String
+  class_aa: String
+  school_id: Int
+  school_year: String
+}
+
+"""
+order by min() on columns of table "school_performance"
+"""
+input school_performance_min_order_by {
+  class_a: order_by
+  class_aa: order_by
+  school_id: order_by
+  school_year: order_by
+}
+
+"""
+response of any mutation on the table "school_performance"
+"""
+type school_performance_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [school_performance!]!
+}
+
+"""
+input type for inserting object relation for remote table "school_performance"
+"""
+input school_performance_obj_rel_insert_input {
+  data: school_performance_insert_input!
+  on_conflict: school_performance_on_conflict
+}
+
+"""
+on conflict condition type for table "school_performance"
+"""
+input school_performance_on_conflict {
+  constraint: school_performance_constraint!
+  update_columns: [school_performance_update_column!]!
+  where: school_performance_bool_exp
+}
+
+"""
+ordering options when selecting data from "school_performance"
+"""
+input school_performance_order_by {
+  class_a: order_by
+  class_aa: order_by
+  school: school_order_by
+  school_id: order_by
+  school_year: order_by
+}
+
+"""
+select columns of table "school_performance"
+"""
+enum school_performance_select_column {
+  """column name"""
+  class_a
+
+  """column name"""
+  class_aa
+
+  """column name"""
+  school_id
+
+  """column name"""
+  school_year
+}
+
+"""
+input type for updating data in table "school_performance"
+"""
+input school_performance_set_input {
+  class_a: String
+  class_aa: String
+  school_id: Int
+  school_year: String
+}
+
+"""aggregate stddev on columns"""
+type school_performance_stddev_fields {
+  school_id: Float
+}
+
+"""
+order by stddev() on columns of table "school_performance"
+"""
+input school_performance_stddev_order_by {
+  school_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type school_performance_stddev_pop_fields {
+  school_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "school_performance"
+"""
+input school_performance_stddev_pop_order_by {
+  school_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type school_performance_stddev_samp_fields {
+  school_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "school_performance"
+"""
+input school_performance_stddev_samp_order_by {
+  school_id: order_by
+}
+
+"""aggregate sum on columns"""
+type school_performance_sum_fields {
+  school_id: Int
+}
+
+"""
+order by sum() on columns of table "school_performance"
+"""
+input school_performance_sum_order_by {
+  school_id: order_by
+}
+
+"""
+update columns of table "school_performance"
+"""
+enum school_performance_update_column {
+  """column name"""
+  class_a
+
+  """column name"""
+  class_aa
+
+  """column name"""
+  school_id
+
+  """column name"""
+  school_year
+}
+
+"""aggregate var_pop on columns"""
+type school_performance_var_pop_fields {
+  school_id: Float
+}
+
+"""
+order by var_pop() on columns of table "school_performance"
+"""
+input school_performance_var_pop_order_by {
+  school_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type school_performance_var_samp_fields {
+  school_id: Float
+}
+
+"""
+order by var_samp() on columns of table "school_performance"
+"""
+input school_performance_var_samp_order_by {
+  school_id: order_by
+}
+
+"""aggregate variance on columns"""
+type school_performance_variance_fields {
+  school_id: Float
+}
+
+"""
+order by variance() on columns of table "school_performance"
+"""
+input school_performance_variance_order_by {
+  school_id: order_by
+}
+
+"""
+select columns of table "school"
+"""
+enum school_select_column {
+  """column name"""
+  boys_or_girls
+
+  """column name"""
+  day_or_boarding
+
+  """column name"""
+  denomination
+
+  """column name"""
+  enrollment
+
+  """column name"""
+  founded
+
+  """column name"""
+  location
+
+  """column name"""
+  school
+
+  """column name"""
+  school_colors
+
+  """column name"""
+  school_id
+
+  """column name"""
+  year_entered_competition
+}
+
+"""
+input type for updating data in table "school"
+"""
+input school_set_input {
+  boys_or_girls: String
+  day_or_boarding: String
+  denomination: String
+  enrollment: Float
+  founded: Float
+  location: String
+  school: String
+  school_colors: String
+  school_id: Int
+  year_entered_competition: Float
+}
+
+"""aggregate stddev on columns"""
+type school_stddev_fields {
+  enrollment: Float
+  founded: Float
+  school_id: Float
+  year_entered_competition: Float
+}
+
+"""
+order by stddev() on columns of table "school"
+"""
+input school_stddev_order_by {
+  enrollment: order_by
+  founded: order_by
+  school_id: order_by
+  year_entered_competition: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type school_stddev_pop_fields {
+  enrollment: Float
+  founded: Float
+  school_id: Float
+  year_entered_competition: Float
+}
+
+"""
+order by stddev_pop() on columns of table "school"
+"""
+input school_stddev_pop_order_by {
+  enrollment: order_by
+  founded: order_by
+  school_id: order_by
+  year_entered_competition: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type school_stddev_samp_fields {
+  enrollment: Float
+  founded: Float
+  school_id: Float
+  year_entered_competition: Float
+}
+
+"""
+order by stddev_samp() on columns of table "school"
+"""
+input school_stddev_samp_order_by {
+  enrollment: order_by
+  founded: order_by
+  school_id: order_by
+  year_entered_competition: order_by
+}
+
+"""aggregate sum on columns"""
+type school_sum_fields {
+  enrollment: Float
+  founded: Float
+  school_id: Int
+  year_entered_competition: Float
+}
+
+"""
+order by sum() on columns of table "school"
+"""
+input school_sum_order_by {
+  enrollment: order_by
+  founded: order_by
+  school_id: order_by
+  year_entered_competition: order_by
+}
+
+"""
+update columns of table "school"
+"""
+enum school_update_column {
+  """column name"""
+  boys_or_girls
+
+  """column name"""
+  day_or_boarding
+
+  """column name"""
+  denomination
+
+  """column name"""
+  enrollment
+
+  """column name"""
+  founded
+
+  """column name"""
+  location
+
+  """column name"""
+  school
+
+  """column name"""
+  school_colors
+
+  """column name"""
+  school_id
+
+  """column name"""
+  year_entered_competition
+}
+
+"""aggregate var_pop on columns"""
+type school_var_pop_fields {
+  enrollment: Float
+  founded: Float
+  school_id: Float
+  year_entered_competition: Float
+}
+
+"""
+order by var_pop() on columns of table "school"
+"""
+input school_var_pop_order_by {
+  enrollment: order_by
+  founded: order_by
+  school_id: order_by
+  year_entered_competition: order_by
+}
+
+"""aggregate var_samp on columns"""
+type school_var_samp_fields {
+  enrollment: Float
+  founded: Float
+  school_id: Float
+  year_entered_competition: Float
+}
+
+"""
+order by var_samp() on columns of table "school"
+"""
+input school_var_samp_order_by {
+  enrollment: order_by
+  founded: order_by
+  school_id: order_by
+  year_entered_competition: order_by
+}
+
+"""aggregate variance on columns"""
+type school_variance_fields {
+  enrollment: Float
+  founded: Float
+  school_id: Float
+  year_entered_competition: Float
+}
+
+"""
+order by variance() on columns of table "school"
+"""
+input school_variance_order_by {
+  enrollment: order_by
+  founded: order_by
+  school_id: order_by
+  year_entered_competition: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "player"
+  """
+  player(
+    """distinct select on columns"""
+    distinct_on: [player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_order_by!]
+
+    """filter the rows returned"""
+    where: player_bool_exp
+  ): [player!]!
+
+  """
+  fetch aggregated fields from the table: "player"
+  """
+  player_aggregate(
+    """distinct select on columns"""
+    distinct_on: [player_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [player_order_by!]
+
+    """filter the rows returned"""
+    where: player_bool_exp
+  ): player_aggregate!
+
+  """
+  fetch data from the table: "school"
+  """
+  school(
+    """distinct select on columns"""
+    distinct_on: [school_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_order_by!]
+
+    """filter the rows returned"""
+    where: school_bool_exp
+  ): [school!]!
+
+  """
+  fetch aggregated fields from the table: "school"
+  """
+  school_aggregate(
+    """distinct select on columns"""
+    distinct_on: [school_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_order_by!]
+
+    """filter the rows returned"""
+    where: school_bool_exp
+  ): school_aggregate!
+
+  """
+  fetch data from the table: "school_details"
+  """
+  school_details(
+    """distinct select on columns"""
+    distinct_on: [school_details_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_details_order_by!]
+
+    """filter the rows returned"""
+    where: school_details_bool_exp
+  ): [school_details!]!
+
+  """
+  fetch aggregated fields from the table: "school_details"
+  """
+  school_details_aggregate(
+    """distinct select on columns"""
+    distinct_on: [school_details_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_details_order_by!]
+
+    """filter the rows returned"""
+    where: school_details_bool_exp
+  ): school_details_aggregate!
+
+  """
+  fetch data from the table: "school_performance"
+  """
+  school_performance(
+    """distinct select on columns"""
+    distinct_on: [school_performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_performance_order_by!]
+
+    """filter the rows returned"""
+    where: school_performance_bool_exp
+  ): [school_performance!]!
+
+  """
+  fetch aggregated fields from the table: "school_performance"
+  """
+  school_performance_aggregate(
+    """distinct select on columns"""
+    distinct_on: [school_performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_performance_order_by!]
+
+    """filter the rows returned"""
+    where: school_performance_bool_exp
+  ): school_performance_aggregate!
+}

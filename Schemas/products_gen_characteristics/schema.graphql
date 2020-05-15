@@ -1,0 +1,2519 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "characteristics"
+"""
+type characteristics {
+  characteristic_data_type: String
+  characteristic_id: bigint!
+  characteristic_name: String
+  characteristic_type_code: String
+  other_characteristic_details: String
+
+  """An array relationship"""
+  product_characteristics(
+    """distinct select on columns"""
+    distinct_on: [product_characteristics_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [product_characteristics_order_by!]
+
+    """filter the rows returned"""
+    where: product_characteristics_bool_exp
+  ): [product_characteristics!]!
+
+  """An aggregated array relationship"""
+  product_characteristics_aggregate(
+    """distinct select on columns"""
+    distinct_on: [product_characteristics_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [product_characteristics_order_by!]
+
+    """filter the rows returned"""
+    where: product_characteristics_bool_exp
+  ): product_characteristics_aggregate!
+
+  """An object relationship"""
+  ref_characteristic_type: ref_characteristic_types
+}
+
+"""
+aggregated selection of "characteristics"
+"""
+type characteristics_aggregate {
+  aggregate: characteristics_aggregate_fields
+  nodes: [characteristics!]!
+}
+
+"""
+aggregate fields of "characteristics"
+"""
+type characteristics_aggregate_fields {
+  avg: characteristics_avg_fields
+  count(columns: [characteristics_select_column!], distinct: Boolean): Int
+  max: characteristics_max_fields
+  min: characteristics_min_fields
+  stddev: characteristics_stddev_fields
+  stddev_pop: characteristics_stddev_pop_fields
+  stddev_samp: characteristics_stddev_samp_fields
+  sum: characteristics_sum_fields
+  var_pop: characteristics_var_pop_fields
+  var_samp: characteristics_var_samp_fields
+  variance: characteristics_variance_fields
+}
+
+"""
+order by aggregate values of table "characteristics"
+"""
+input characteristics_aggregate_order_by {
+  avg: characteristics_avg_order_by
+  count: order_by
+  max: characteristics_max_order_by
+  min: characteristics_min_order_by
+  stddev: characteristics_stddev_order_by
+  stddev_pop: characteristics_stddev_pop_order_by
+  stddev_samp: characteristics_stddev_samp_order_by
+  sum: characteristics_sum_order_by
+  var_pop: characteristics_var_pop_order_by
+  var_samp: characteristics_var_samp_order_by
+  variance: characteristics_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "characteristics"
+"""
+input characteristics_arr_rel_insert_input {
+  data: [characteristics_insert_input!]!
+  on_conflict: characteristics_on_conflict
+}
+
+"""aggregate avg on columns"""
+type characteristics_avg_fields {
+  characteristic_id: Float
+}
+
+"""
+order by avg() on columns of table "characteristics"
+"""
+input characteristics_avg_order_by {
+  characteristic_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "characteristics". All fields are combined with a logical 'AND'.
+"""
+input characteristics_bool_exp {
+  _and: [characteristics_bool_exp]
+  _not: characteristics_bool_exp
+  _or: [characteristics_bool_exp]
+  characteristic_data_type: String_comparison_exp
+  characteristic_id: bigint_comparison_exp
+  characteristic_name: String_comparison_exp
+  characteristic_type_code: String_comparison_exp
+  other_characteristic_details: String_comparison_exp
+  product_characteristics: product_characteristics_bool_exp
+  ref_characteristic_type: ref_characteristic_types_bool_exp
+}
+
+"""
+unique or primary key constraints on table "characteristics"
+"""
+enum characteristics_constraint {
+  """unique or primary key constraint"""
+  idx_18483_characteristics_pkey
+}
+
+"""
+input type for incrementing integer columne in table "characteristics"
+"""
+input characteristics_inc_input {
+  characteristic_id: bigint
+}
+
+"""
+input type for inserting data into table "characteristics"
+"""
+input characteristics_insert_input {
+  characteristic_data_type: String
+  characteristic_id: bigint
+  characteristic_name: String
+  characteristic_type_code: String
+  other_characteristic_details: String
+  product_characteristics: product_characteristics_arr_rel_insert_input
+  ref_characteristic_type: ref_characteristic_types_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type characteristics_max_fields {
+  characteristic_data_type: String
+  characteristic_id: bigint
+  characteristic_name: String
+  characteristic_type_code: String
+  other_characteristic_details: String
+}
+
+"""
+order by max() on columns of table "characteristics"
+"""
+input characteristics_max_order_by {
+  characteristic_data_type: order_by
+  characteristic_id: order_by
+  characteristic_name: order_by
+  characteristic_type_code: order_by
+  other_characteristic_details: order_by
+}
+
+"""aggregate min on columns"""
+type characteristics_min_fields {
+  characteristic_data_type: String
+  characteristic_id: bigint
+  characteristic_name: String
+  characteristic_type_code: String
+  other_characteristic_details: String
+}
+
+"""
+order by min() on columns of table "characteristics"
+"""
+input characteristics_min_order_by {
+  characteristic_data_type: order_by
+  characteristic_id: order_by
+  characteristic_name: order_by
+  characteristic_type_code: order_by
+  other_characteristic_details: order_by
+}
+
+"""
+response of any mutation on the table "characteristics"
+"""
+type characteristics_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [characteristics!]!
+}
+
+"""
+input type for inserting object relation for remote table "characteristics"
+"""
+input characteristics_obj_rel_insert_input {
+  data: characteristics_insert_input!
+  on_conflict: characteristics_on_conflict
+}
+
+"""
+on conflict condition type for table "characteristics"
+"""
+input characteristics_on_conflict {
+  constraint: characteristics_constraint!
+  update_columns: [characteristics_update_column!]!
+  where: characteristics_bool_exp
+}
+
+"""
+ordering options when selecting data from "characteristics"
+"""
+input characteristics_order_by {
+  characteristic_data_type: order_by
+  characteristic_id: order_by
+  characteristic_name: order_by
+  characteristic_type_code: order_by
+  other_characteristic_details: order_by
+  product_characteristics_aggregate: product_characteristics_aggregate_order_by
+  ref_characteristic_type: ref_characteristic_types_order_by
+}
+
+"""
+select columns of table "characteristics"
+"""
+enum characteristics_select_column {
+  """column name"""
+  characteristic_data_type
+
+  """column name"""
+  characteristic_id
+
+  """column name"""
+  characteristic_name
+
+  """column name"""
+  characteristic_type_code
+
+  """column name"""
+  other_characteristic_details
+}
+
+"""
+input type for updating data in table "characteristics"
+"""
+input characteristics_set_input {
+  characteristic_data_type: String
+  characteristic_id: bigint
+  characteristic_name: String
+  characteristic_type_code: String
+  other_characteristic_details: String
+}
+
+"""aggregate stddev on columns"""
+type characteristics_stddev_fields {
+  characteristic_id: Float
+}
+
+"""
+order by stddev() on columns of table "characteristics"
+"""
+input characteristics_stddev_order_by {
+  characteristic_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type characteristics_stddev_pop_fields {
+  characteristic_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "characteristics"
+"""
+input characteristics_stddev_pop_order_by {
+  characteristic_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type characteristics_stddev_samp_fields {
+  characteristic_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "characteristics"
+"""
+input characteristics_stddev_samp_order_by {
+  characteristic_id: order_by
+}
+
+"""aggregate sum on columns"""
+type characteristics_sum_fields {
+  characteristic_id: bigint
+}
+
+"""
+order by sum() on columns of table "characteristics"
+"""
+input characteristics_sum_order_by {
+  characteristic_id: order_by
+}
+
+"""
+update columns of table "characteristics"
+"""
+enum characteristics_update_column {
+  """column name"""
+  characteristic_data_type
+
+  """column name"""
+  characteristic_id
+
+  """column name"""
+  characteristic_name
+
+  """column name"""
+  characteristic_type_code
+
+  """column name"""
+  other_characteristic_details
+}
+
+"""aggregate var_pop on columns"""
+type characteristics_var_pop_fields {
+  characteristic_id: Float
+}
+
+"""
+order by var_pop() on columns of table "characteristics"
+"""
+input characteristics_var_pop_order_by {
+  characteristic_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type characteristics_var_samp_fields {
+  characteristic_id: Float
+}
+
+"""
+order by var_samp() on columns of table "characteristics"
+"""
+input characteristics_var_samp_order_by {
+  characteristic_id: order_by
+}
+
+"""aggregate variance on columns"""
+type characteristics_variance_fields {
+  characteristic_id: Float
+}
+
+"""
+order by variance() on columns of table "characteristics"
+"""
+input characteristics_variance_order_by {
+  characteristic_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "characteristics"
+  """
+  delete_characteristics(
+    """filter the rows which have to be deleted"""
+    where: characteristics_bool_exp!
+  ): characteristics_mutation_response
+
+  """
+  delete data from the table: "product_characteristics"
+  """
+  delete_product_characteristics(
+    """filter the rows which have to be deleted"""
+    where: product_characteristics_bool_exp!
+  ): product_characteristics_mutation_response
+
+  """
+  delete data from the table: "products"
+  """
+  delete_products(
+    """filter the rows which have to be deleted"""
+    where: products_bool_exp!
+  ): products_mutation_response
+
+  """
+  delete data from the table: "ref_characteristic_types"
+  """
+  delete_ref_characteristic_types(
+    """filter the rows which have to be deleted"""
+    where: ref_characteristic_types_bool_exp!
+  ): ref_characteristic_types_mutation_response
+
+  """
+  delete data from the table: "ref_colors"
+  """
+  delete_ref_colors(
+    """filter the rows which have to be deleted"""
+    where: ref_colors_bool_exp!
+  ): ref_colors_mutation_response
+
+  """
+  delete data from the table: "ref_product_categories"
+  """
+  delete_ref_product_categories(
+    """filter the rows which have to be deleted"""
+    where: ref_product_categories_bool_exp!
+  ): ref_product_categories_mutation_response
+
+  """
+  insert data into the table: "characteristics"
+  """
+  insert_characteristics(
+    """the rows to be inserted"""
+    objects: [characteristics_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: characteristics_on_conflict
+  ): characteristics_mutation_response
+
+  """
+  insert data into the table: "product_characteristics"
+  """
+  insert_product_characteristics(
+    """the rows to be inserted"""
+    objects: [product_characteristics_insert_input!]!
+  ): product_characteristics_mutation_response
+
+  """
+  insert data into the table: "products"
+  """
+  insert_products(
+    """the rows to be inserted"""
+    objects: [products_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: products_on_conflict
+  ): products_mutation_response
+
+  """
+  insert data into the table: "ref_characteristic_types"
+  """
+  insert_ref_characteristic_types(
+    """the rows to be inserted"""
+    objects: [ref_characteristic_types_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: ref_characteristic_types_on_conflict
+  ): ref_characteristic_types_mutation_response
+
+  """
+  insert data into the table: "ref_colors"
+  """
+  insert_ref_colors(
+    """the rows to be inserted"""
+    objects: [ref_colors_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: ref_colors_on_conflict
+  ): ref_colors_mutation_response
+
+  """
+  insert data into the table: "ref_product_categories"
+  """
+  insert_ref_product_categories(
+    """the rows to be inserted"""
+    objects: [ref_product_categories_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: ref_product_categories_on_conflict
+  ): ref_product_categories_mutation_response
+
+  """
+  update data of the table: "characteristics"
+  """
+  update_characteristics(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: characteristics_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: characteristics_set_input
+
+    """filter the rows which have to be updated"""
+    where: characteristics_bool_exp!
+  ): characteristics_mutation_response
+
+  """
+  update data of the table: "product_characteristics"
+  """
+  update_product_characteristics(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: product_characteristics_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: product_characteristics_set_input
+
+    """filter the rows which have to be updated"""
+    where: product_characteristics_bool_exp!
+  ): product_characteristics_mutation_response
+
+  """
+  update data of the table: "products"
+  """
+  update_products(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: products_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: products_set_input
+
+    """filter the rows which have to be updated"""
+    where: products_bool_exp!
+  ): products_mutation_response
+
+  """
+  update data of the table: "ref_characteristic_types"
+  """
+  update_ref_characteristic_types(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ref_characteristic_types_set_input
+
+    """filter the rows which have to be updated"""
+    where: ref_characteristic_types_bool_exp!
+  ): ref_characteristic_types_mutation_response
+
+  """
+  update data of the table: "ref_colors"
+  """
+  update_ref_colors(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ref_colors_set_input
+
+    """filter the rows which have to be updated"""
+    where: ref_colors_bool_exp!
+  ): ref_colors_mutation_response
+
+  """
+  update data of the table: "ref_product_categories"
+  """
+  update_ref_product_categories(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ref_product_categories_set_input
+
+    """filter the rows which have to be updated"""
+    where: ref_product_categories_bool_exp!
+  ): ref_product_categories_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "product_characteristics"
+"""
+type product_characteristics {
+  """An object relationship"""
+  characteristic: characteristics
+  characteristic_id: bigint
+
+  """An object relationship"""
+  product: products
+  product_characteristic_value: String
+  product_id: bigint
+}
+
+"""
+aggregated selection of "product_characteristics"
+"""
+type product_characteristics_aggregate {
+  aggregate: product_characteristics_aggregate_fields
+  nodes: [product_characteristics!]!
+}
+
+"""
+aggregate fields of "product_characteristics"
+"""
+type product_characteristics_aggregate_fields {
+  avg: product_characteristics_avg_fields
+  count(columns: [product_characteristics_select_column!], distinct: Boolean): Int
+  max: product_characteristics_max_fields
+  min: product_characteristics_min_fields
+  stddev: product_characteristics_stddev_fields
+  stddev_pop: product_characteristics_stddev_pop_fields
+  stddev_samp: product_characteristics_stddev_samp_fields
+  sum: product_characteristics_sum_fields
+  var_pop: product_characteristics_var_pop_fields
+  var_samp: product_characteristics_var_samp_fields
+  variance: product_characteristics_variance_fields
+}
+
+"""
+order by aggregate values of table "product_characteristics"
+"""
+input product_characteristics_aggregate_order_by {
+  avg: product_characteristics_avg_order_by
+  count: order_by
+  max: product_characteristics_max_order_by
+  min: product_characteristics_min_order_by
+  stddev: product_characteristics_stddev_order_by
+  stddev_pop: product_characteristics_stddev_pop_order_by
+  stddev_samp: product_characteristics_stddev_samp_order_by
+  sum: product_characteristics_sum_order_by
+  var_pop: product_characteristics_var_pop_order_by
+  var_samp: product_characteristics_var_samp_order_by
+  variance: product_characteristics_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "product_characteristics"
+"""
+input product_characteristics_arr_rel_insert_input {
+  data: [product_characteristics_insert_input!]!
+}
+
+"""aggregate avg on columns"""
+type product_characteristics_avg_fields {
+  characteristic_id: Float
+  product_id: Float
+}
+
+"""
+order by avg() on columns of table "product_characteristics"
+"""
+input product_characteristics_avg_order_by {
+  characteristic_id: order_by
+  product_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "product_characteristics". All fields are combined with a logical 'AND'.
+"""
+input product_characteristics_bool_exp {
+  _and: [product_characteristics_bool_exp]
+  _not: product_characteristics_bool_exp
+  _or: [product_characteristics_bool_exp]
+  characteristic: characteristics_bool_exp
+  characteristic_id: bigint_comparison_exp
+  product: products_bool_exp
+  product_characteristic_value: String_comparison_exp
+  product_id: bigint_comparison_exp
+}
+
+"""
+input type for incrementing integer columne in table "product_characteristics"
+"""
+input product_characteristics_inc_input {
+  characteristic_id: bigint
+  product_id: bigint
+}
+
+"""
+input type for inserting data into table "product_characteristics"
+"""
+input product_characteristics_insert_input {
+  characteristic: characteristics_obj_rel_insert_input
+  characteristic_id: bigint
+  product: products_obj_rel_insert_input
+  product_characteristic_value: String
+  product_id: bigint
+}
+
+"""aggregate max on columns"""
+type product_characteristics_max_fields {
+  characteristic_id: bigint
+  product_characteristic_value: String
+  product_id: bigint
+}
+
+"""
+order by max() on columns of table "product_characteristics"
+"""
+input product_characteristics_max_order_by {
+  characteristic_id: order_by
+  product_characteristic_value: order_by
+  product_id: order_by
+}
+
+"""aggregate min on columns"""
+type product_characteristics_min_fields {
+  characteristic_id: bigint
+  product_characteristic_value: String
+  product_id: bigint
+}
+
+"""
+order by min() on columns of table "product_characteristics"
+"""
+input product_characteristics_min_order_by {
+  characteristic_id: order_by
+  product_characteristic_value: order_by
+  product_id: order_by
+}
+
+"""
+response of any mutation on the table "product_characteristics"
+"""
+type product_characteristics_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [product_characteristics!]!
+}
+
+"""
+input type for inserting object relation for remote table "product_characteristics"
+"""
+input product_characteristics_obj_rel_insert_input {
+  data: product_characteristics_insert_input!
+}
+
+"""
+ordering options when selecting data from "product_characteristics"
+"""
+input product_characteristics_order_by {
+  characteristic: characteristics_order_by
+  characteristic_id: order_by
+  product: products_order_by
+  product_characteristic_value: order_by
+  product_id: order_by
+}
+
+"""
+select columns of table "product_characteristics"
+"""
+enum product_characteristics_select_column {
+  """column name"""
+  characteristic_id
+
+  """column name"""
+  product_characteristic_value
+
+  """column name"""
+  product_id
+}
+
+"""
+input type for updating data in table "product_characteristics"
+"""
+input product_characteristics_set_input {
+  characteristic_id: bigint
+  product_characteristic_value: String
+  product_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type product_characteristics_stddev_fields {
+  characteristic_id: Float
+  product_id: Float
+}
+
+"""
+order by stddev() on columns of table "product_characteristics"
+"""
+input product_characteristics_stddev_order_by {
+  characteristic_id: order_by
+  product_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type product_characteristics_stddev_pop_fields {
+  characteristic_id: Float
+  product_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "product_characteristics"
+"""
+input product_characteristics_stddev_pop_order_by {
+  characteristic_id: order_by
+  product_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type product_characteristics_stddev_samp_fields {
+  characteristic_id: Float
+  product_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "product_characteristics"
+"""
+input product_characteristics_stddev_samp_order_by {
+  characteristic_id: order_by
+  product_id: order_by
+}
+
+"""aggregate sum on columns"""
+type product_characteristics_sum_fields {
+  characteristic_id: bigint
+  product_id: bigint
+}
+
+"""
+order by sum() on columns of table "product_characteristics"
+"""
+input product_characteristics_sum_order_by {
+  characteristic_id: order_by
+  product_id: order_by
+}
+
+"""aggregate var_pop on columns"""
+type product_characteristics_var_pop_fields {
+  characteristic_id: Float
+  product_id: Float
+}
+
+"""
+order by var_pop() on columns of table "product_characteristics"
+"""
+input product_characteristics_var_pop_order_by {
+  characteristic_id: order_by
+  product_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type product_characteristics_var_samp_fields {
+  characteristic_id: Float
+  product_id: Float
+}
+
+"""
+order by var_samp() on columns of table "product_characteristics"
+"""
+input product_characteristics_var_samp_order_by {
+  characteristic_id: order_by
+  product_id: order_by
+}
+
+"""aggregate variance on columns"""
+type product_characteristics_variance_fields {
+  characteristic_id: Float
+  product_id: Float
+}
+
+"""
+order by variance() on columns of table "product_characteristics"
+"""
+input product_characteristics_variance_order_by {
+  characteristic_id: order_by
+  product_id: order_by
+}
+
+"""
+columns and relationships of "products"
+"""
+type products {
+  color_code: String
+  other_product_details: String
+  product_category_code: String
+
+  """An array relationship"""
+  product_characteristics(
+    """distinct select on columns"""
+    distinct_on: [product_characteristics_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [product_characteristics_order_by!]
+
+    """filter the rows returned"""
+    where: product_characteristics_bool_exp
+  ): [product_characteristics!]!
+
+  """An aggregated array relationship"""
+  product_characteristics_aggregate(
+    """distinct select on columns"""
+    distinct_on: [product_characteristics_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [product_characteristics_order_by!]
+
+    """filter the rows returned"""
+    where: product_characteristics_bool_exp
+  ): product_characteristics_aggregate!
+  product_description: String
+  product_id: bigint!
+  product_name: String
+
+  """An object relationship"""
+  ref_color: ref_colors
+
+  """An object relationship"""
+  ref_product_category: ref_product_categories
+  typical_buying_price: String
+  typical_selling_price: String
+}
+
+"""
+aggregated selection of "products"
+"""
+type products_aggregate {
+  aggregate: products_aggregate_fields
+  nodes: [products!]!
+}
+
+"""
+aggregate fields of "products"
+"""
+type products_aggregate_fields {
+  avg: products_avg_fields
+  count(columns: [products_select_column!], distinct: Boolean): Int
+  max: products_max_fields
+  min: products_min_fields
+  stddev: products_stddev_fields
+  stddev_pop: products_stddev_pop_fields
+  stddev_samp: products_stddev_samp_fields
+  sum: products_sum_fields
+  var_pop: products_var_pop_fields
+  var_samp: products_var_samp_fields
+  variance: products_variance_fields
+}
+
+"""
+order by aggregate values of table "products"
+"""
+input products_aggregate_order_by {
+  avg: products_avg_order_by
+  count: order_by
+  max: products_max_order_by
+  min: products_min_order_by
+  stddev: products_stddev_order_by
+  stddev_pop: products_stddev_pop_order_by
+  stddev_samp: products_stddev_samp_order_by
+  sum: products_sum_order_by
+  var_pop: products_var_pop_order_by
+  var_samp: products_var_samp_order_by
+  variance: products_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "products"
+"""
+input products_arr_rel_insert_input {
+  data: [products_insert_input!]!
+  on_conflict: products_on_conflict
+}
+
+"""aggregate avg on columns"""
+type products_avg_fields {
+  product_id: Float
+}
+
+"""
+order by avg() on columns of table "products"
+"""
+input products_avg_order_by {
+  product_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "products". All fields are combined with a logical 'AND'.
+"""
+input products_bool_exp {
+  _and: [products_bool_exp]
+  _not: products_bool_exp
+  _or: [products_bool_exp]
+  color_code: String_comparison_exp
+  other_product_details: String_comparison_exp
+  product_category_code: String_comparison_exp
+  product_characteristics: product_characteristics_bool_exp
+  product_description: String_comparison_exp
+  product_id: bigint_comparison_exp
+  product_name: String_comparison_exp
+  ref_color: ref_colors_bool_exp
+  ref_product_category: ref_product_categories_bool_exp
+  typical_buying_price: String_comparison_exp
+  typical_selling_price: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "products"
+"""
+enum products_constraint {
+  """unique or primary key constraint"""
+  idx_18489_products_pkey
+}
+
+"""
+input type for incrementing integer columne in table "products"
+"""
+input products_inc_input {
+  product_id: bigint
+}
+
+"""
+input type for inserting data into table "products"
+"""
+input products_insert_input {
+  color_code: String
+  other_product_details: String
+  product_category_code: String
+  product_characteristics: product_characteristics_arr_rel_insert_input
+  product_description: String
+  product_id: bigint
+  product_name: String
+  ref_color: ref_colors_obj_rel_insert_input
+  ref_product_category: ref_product_categories_obj_rel_insert_input
+  typical_buying_price: String
+  typical_selling_price: String
+}
+
+"""aggregate max on columns"""
+type products_max_fields {
+  color_code: String
+  other_product_details: String
+  product_category_code: String
+  product_description: String
+  product_id: bigint
+  product_name: String
+  typical_buying_price: String
+  typical_selling_price: String
+}
+
+"""
+order by max() on columns of table "products"
+"""
+input products_max_order_by {
+  color_code: order_by
+  other_product_details: order_by
+  product_category_code: order_by
+  product_description: order_by
+  product_id: order_by
+  product_name: order_by
+  typical_buying_price: order_by
+  typical_selling_price: order_by
+}
+
+"""aggregate min on columns"""
+type products_min_fields {
+  color_code: String
+  other_product_details: String
+  product_category_code: String
+  product_description: String
+  product_id: bigint
+  product_name: String
+  typical_buying_price: String
+  typical_selling_price: String
+}
+
+"""
+order by min() on columns of table "products"
+"""
+input products_min_order_by {
+  color_code: order_by
+  other_product_details: order_by
+  product_category_code: order_by
+  product_description: order_by
+  product_id: order_by
+  product_name: order_by
+  typical_buying_price: order_by
+  typical_selling_price: order_by
+}
+
+"""
+response of any mutation on the table "products"
+"""
+type products_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [products!]!
+}
+
+"""
+input type for inserting object relation for remote table "products"
+"""
+input products_obj_rel_insert_input {
+  data: products_insert_input!
+  on_conflict: products_on_conflict
+}
+
+"""
+on conflict condition type for table "products"
+"""
+input products_on_conflict {
+  constraint: products_constraint!
+  update_columns: [products_update_column!]!
+  where: products_bool_exp
+}
+
+"""
+ordering options when selecting data from "products"
+"""
+input products_order_by {
+  color_code: order_by
+  other_product_details: order_by
+  product_category_code: order_by
+  product_characteristics_aggregate: product_characteristics_aggregate_order_by
+  product_description: order_by
+  product_id: order_by
+  product_name: order_by
+  ref_color: ref_colors_order_by
+  ref_product_category: ref_product_categories_order_by
+  typical_buying_price: order_by
+  typical_selling_price: order_by
+}
+
+"""
+select columns of table "products"
+"""
+enum products_select_column {
+  """column name"""
+  color_code
+
+  """column name"""
+  other_product_details
+
+  """column name"""
+  product_category_code
+
+  """column name"""
+  product_description
+
+  """column name"""
+  product_id
+
+  """column name"""
+  product_name
+
+  """column name"""
+  typical_buying_price
+
+  """column name"""
+  typical_selling_price
+}
+
+"""
+input type for updating data in table "products"
+"""
+input products_set_input {
+  color_code: String
+  other_product_details: String
+  product_category_code: String
+  product_description: String
+  product_id: bigint
+  product_name: String
+  typical_buying_price: String
+  typical_selling_price: String
+}
+
+"""aggregate stddev on columns"""
+type products_stddev_fields {
+  product_id: Float
+}
+
+"""
+order by stddev() on columns of table "products"
+"""
+input products_stddev_order_by {
+  product_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type products_stddev_pop_fields {
+  product_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "products"
+"""
+input products_stddev_pop_order_by {
+  product_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type products_stddev_samp_fields {
+  product_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "products"
+"""
+input products_stddev_samp_order_by {
+  product_id: order_by
+}
+
+"""aggregate sum on columns"""
+type products_sum_fields {
+  product_id: bigint
+}
+
+"""
+order by sum() on columns of table "products"
+"""
+input products_sum_order_by {
+  product_id: order_by
+}
+
+"""
+update columns of table "products"
+"""
+enum products_update_column {
+  """column name"""
+  color_code
+
+  """column name"""
+  other_product_details
+
+  """column name"""
+  product_category_code
+
+  """column name"""
+  product_description
+
+  """column name"""
+  product_id
+
+  """column name"""
+  product_name
+
+  """column name"""
+  typical_buying_price
+
+  """column name"""
+  typical_selling_price
+}
+
+"""aggregate var_pop on columns"""
+type products_var_pop_fields {
+  product_id: Float
+}
+
+"""
+order by var_pop() on columns of table "products"
+"""
+input products_var_pop_order_by {
+  product_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type products_var_samp_fields {
+  product_id: Float
+}
+
+"""
+order by var_samp() on columns of table "products"
+"""
+input products_var_samp_order_by {
+  product_id: order_by
+}
+
+"""aggregate variance on columns"""
+type products_variance_fields {
+  product_id: Float
+}
+
+"""
+order by variance() on columns of table "products"
+"""
+input products_variance_order_by {
+  product_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "characteristics"
+  """
+  characteristics(
+    """distinct select on columns"""
+    distinct_on: [characteristics_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [characteristics_order_by!]
+
+    """filter the rows returned"""
+    where: characteristics_bool_exp
+  ): [characteristics!]!
+
+  """
+  fetch aggregated fields from the table: "characteristics"
+  """
+  characteristics_aggregate(
+    """distinct select on columns"""
+    distinct_on: [characteristics_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [characteristics_order_by!]
+
+    """filter the rows returned"""
+    where: characteristics_bool_exp
+  ): characteristics_aggregate!
+
+  """fetch data from the table: "characteristics" using primary key columns"""
+  characteristics_by_pk(characteristic_id: bigint!): characteristics
+
+  """
+  fetch data from the table: "product_characteristics"
+  """
+  product_characteristics(
+    """distinct select on columns"""
+    distinct_on: [product_characteristics_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [product_characteristics_order_by!]
+
+    """filter the rows returned"""
+    where: product_characteristics_bool_exp
+  ): [product_characteristics!]!
+
+  """
+  fetch aggregated fields from the table: "product_characteristics"
+  """
+  product_characteristics_aggregate(
+    """distinct select on columns"""
+    distinct_on: [product_characteristics_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [product_characteristics_order_by!]
+
+    """filter the rows returned"""
+    where: product_characteristics_bool_exp
+  ): product_characteristics_aggregate!
+
+  """
+  fetch data from the table: "products"
+  """
+  products(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): [products!]!
+
+  """
+  fetch aggregated fields from the table: "products"
+  """
+  products_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): products_aggregate!
+
+  """fetch data from the table: "products" using primary key columns"""
+  products_by_pk(product_id: bigint!): products
+
+  """
+  fetch data from the table: "ref_characteristic_types"
+  """
+  ref_characteristic_types(
+    """distinct select on columns"""
+    distinct_on: [ref_characteristic_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_characteristic_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_characteristic_types_bool_exp
+  ): [ref_characteristic_types!]!
+
+  """
+  fetch aggregated fields from the table: "ref_characteristic_types"
+  """
+  ref_characteristic_types_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_characteristic_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_characteristic_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_characteristic_types_bool_exp
+  ): ref_characteristic_types_aggregate!
+
+  """
+  fetch data from the table: "ref_characteristic_types" using primary key columns
+  """
+  ref_characteristic_types_by_pk(characteristic_type_code: String!): ref_characteristic_types
+
+  """
+  fetch data from the table: "ref_colors"
+  """
+  ref_colors(
+    """distinct select on columns"""
+    distinct_on: [ref_colors_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_colors_order_by!]
+
+    """filter the rows returned"""
+    where: ref_colors_bool_exp
+  ): [ref_colors!]!
+
+  """
+  fetch aggregated fields from the table: "ref_colors"
+  """
+  ref_colors_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_colors_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_colors_order_by!]
+
+    """filter the rows returned"""
+    where: ref_colors_bool_exp
+  ): ref_colors_aggregate!
+
+  """fetch data from the table: "ref_colors" using primary key columns"""
+  ref_colors_by_pk(color_code: String!): ref_colors
+
+  """
+  fetch data from the table: "ref_product_categories"
+  """
+  ref_product_categories(
+    """distinct select on columns"""
+    distinct_on: [ref_product_categories_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_product_categories_order_by!]
+
+    """filter the rows returned"""
+    where: ref_product_categories_bool_exp
+  ): [ref_product_categories!]!
+
+  """
+  fetch aggregated fields from the table: "ref_product_categories"
+  """
+  ref_product_categories_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_product_categories_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_product_categories_order_by!]
+
+    """filter the rows returned"""
+    where: ref_product_categories_bool_exp
+  ): ref_product_categories_aggregate!
+
+  """
+  fetch data from the table: "ref_product_categories" using primary key columns
+  """
+  ref_product_categories_by_pk(product_category_code: String!): ref_product_categories
+}
+
+"""
+columns and relationships of "ref_characteristic_types"
+"""
+type ref_characteristic_types {
+  characteristic_type_code: String!
+  characteristic_type_description: String
+
+  """An array relationship"""
+  characteristics(
+    """distinct select on columns"""
+    distinct_on: [characteristics_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [characteristics_order_by!]
+
+    """filter the rows returned"""
+    where: characteristics_bool_exp
+  ): [characteristics!]!
+
+  """An aggregated array relationship"""
+  characteristics_aggregate(
+    """distinct select on columns"""
+    distinct_on: [characteristics_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [characteristics_order_by!]
+
+    """filter the rows returned"""
+    where: characteristics_bool_exp
+  ): characteristics_aggregate!
+}
+
+"""
+aggregated selection of "ref_characteristic_types"
+"""
+type ref_characteristic_types_aggregate {
+  aggregate: ref_characteristic_types_aggregate_fields
+  nodes: [ref_characteristic_types!]!
+}
+
+"""
+aggregate fields of "ref_characteristic_types"
+"""
+type ref_characteristic_types_aggregate_fields {
+  count(columns: [ref_characteristic_types_select_column!], distinct: Boolean): Int
+  max: ref_characteristic_types_max_fields
+  min: ref_characteristic_types_min_fields
+}
+
+"""
+order by aggregate values of table "ref_characteristic_types"
+"""
+input ref_characteristic_types_aggregate_order_by {
+  count: order_by
+  max: ref_characteristic_types_max_order_by
+  min: ref_characteristic_types_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "ref_characteristic_types"
+"""
+input ref_characteristic_types_arr_rel_insert_input {
+  data: [ref_characteristic_types_insert_input!]!
+  on_conflict: ref_characteristic_types_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "ref_characteristic_types". All fields are combined with a logical 'AND'.
+"""
+input ref_characteristic_types_bool_exp {
+  _and: [ref_characteristic_types_bool_exp]
+  _not: ref_characteristic_types_bool_exp
+  _or: [ref_characteristic_types_bool_exp]
+  characteristic_type_code: String_comparison_exp
+  characteristic_type_description: String_comparison_exp
+  characteristics: characteristics_bool_exp
+}
+
+"""
+unique or primary key constraints on table "ref_characteristic_types"
+"""
+enum ref_characteristic_types_constraint {
+  """unique or primary key constraint"""
+  idx_18465_sqlite_autoindex_ref_characteristic_types_1
+}
+
+"""
+input type for inserting data into table "ref_characteristic_types"
+"""
+input ref_characteristic_types_insert_input {
+  characteristic_type_code: String
+  characteristic_type_description: String
+  characteristics: characteristics_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type ref_characteristic_types_max_fields {
+  characteristic_type_code: String
+  characteristic_type_description: String
+}
+
+"""
+order by max() on columns of table "ref_characteristic_types"
+"""
+input ref_characteristic_types_max_order_by {
+  characteristic_type_code: order_by
+  characteristic_type_description: order_by
+}
+
+"""aggregate min on columns"""
+type ref_characteristic_types_min_fields {
+  characteristic_type_code: String
+  characteristic_type_description: String
+}
+
+"""
+order by min() on columns of table "ref_characteristic_types"
+"""
+input ref_characteristic_types_min_order_by {
+  characteristic_type_code: order_by
+  characteristic_type_description: order_by
+}
+
+"""
+response of any mutation on the table "ref_characteristic_types"
+"""
+type ref_characteristic_types_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [ref_characteristic_types!]!
+}
+
+"""
+input type for inserting object relation for remote table "ref_characteristic_types"
+"""
+input ref_characteristic_types_obj_rel_insert_input {
+  data: ref_characteristic_types_insert_input!
+  on_conflict: ref_characteristic_types_on_conflict
+}
+
+"""
+on conflict condition type for table "ref_characteristic_types"
+"""
+input ref_characteristic_types_on_conflict {
+  constraint: ref_characteristic_types_constraint!
+  update_columns: [ref_characteristic_types_update_column!]!
+  where: ref_characteristic_types_bool_exp
+}
+
+"""
+ordering options when selecting data from "ref_characteristic_types"
+"""
+input ref_characteristic_types_order_by {
+  characteristic_type_code: order_by
+  characteristic_type_description: order_by
+  characteristics_aggregate: characteristics_aggregate_order_by
+}
+
+"""
+select columns of table "ref_characteristic_types"
+"""
+enum ref_characteristic_types_select_column {
+  """column name"""
+  characteristic_type_code
+
+  """column name"""
+  characteristic_type_description
+}
+
+"""
+input type for updating data in table "ref_characteristic_types"
+"""
+input ref_characteristic_types_set_input {
+  characteristic_type_code: String
+  characteristic_type_description: String
+}
+
+"""
+update columns of table "ref_characteristic_types"
+"""
+enum ref_characteristic_types_update_column {
+  """column name"""
+  characteristic_type_code
+
+  """column name"""
+  characteristic_type_description
+}
+
+"""
+columns and relationships of "ref_colors"
+"""
+type ref_colors {
+  color_code: String!
+  color_description: String
+
+  """An array relationship"""
+  products(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): [products!]!
+
+  """An aggregated array relationship"""
+  products_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): products_aggregate!
+}
+
+"""
+aggregated selection of "ref_colors"
+"""
+type ref_colors_aggregate {
+  aggregate: ref_colors_aggregate_fields
+  nodes: [ref_colors!]!
+}
+
+"""
+aggregate fields of "ref_colors"
+"""
+type ref_colors_aggregate_fields {
+  count(columns: [ref_colors_select_column!], distinct: Boolean): Int
+  max: ref_colors_max_fields
+  min: ref_colors_min_fields
+}
+
+"""
+order by aggregate values of table "ref_colors"
+"""
+input ref_colors_aggregate_order_by {
+  count: order_by
+  max: ref_colors_max_order_by
+  min: ref_colors_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "ref_colors"
+"""
+input ref_colors_arr_rel_insert_input {
+  data: [ref_colors_insert_input!]!
+  on_conflict: ref_colors_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "ref_colors". All fields are combined with a logical 'AND'.
+"""
+input ref_colors_bool_exp {
+  _and: [ref_colors_bool_exp]
+  _not: ref_colors_bool_exp
+  _or: [ref_colors_bool_exp]
+  color_code: String_comparison_exp
+  color_description: String_comparison_exp
+  products: products_bool_exp
+}
+
+"""
+unique or primary key constraints on table "ref_colors"
+"""
+enum ref_colors_constraint {
+  """unique or primary key constraint"""
+  idx_18471_sqlite_autoindex_ref_colors_1
+}
+
+"""
+input type for inserting data into table "ref_colors"
+"""
+input ref_colors_insert_input {
+  color_code: String
+  color_description: String
+  products: products_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type ref_colors_max_fields {
+  color_code: String
+  color_description: String
+}
+
+"""
+order by max() on columns of table "ref_colors"
+"""
+input ref_colors_max_order_by {
+  color_code: order_by
+  color_description: order_by
+}
+
+"""aggregate min on columns"""
+type ref_colors_min_fields {
+  color_code: String
+  color_description: String
+}
+
+"""
+order by min() on columns of table "ref_colors"
+"""
+input ref_colors_min_order_by {
+  color_code: order_by
+  color_description: order_by
+}
+
+"""
+response of any mutation on the table "ref_colors"
+"""
+type ref_colors_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [ref_colors!]!
+}
+
+"""
+input type for inserting object relation for remote table "ref_colors"
+"""
+input ref_colors_obj_rel_insert_input {
+  data: ref_colors_insert_input!
+  on_conflict: ref_colors_on_conflict
+}
+
+"""
+on conflict condition type for table "ref_colors"
+"""
+input ref_colors_on_conflict {
+  constraint: ref_colors_constraint!
+  update_columns: [ref_colors_update_column!]!
+  where: ref_colors_bool_exp
+}
+
+"""
+ordering options when selecting data from "ref_colors"
+"""
+input ref_colors_order_by {
+  color_code: order_by
+  color_description: order_by
+  products_aggregate: products_aggregate_order_by
+}
+
+"""
+select columns of table "ref_colors"
+"""
+enum ref_colors_select_column {
+  """column name"""
+  color_code
+
+  """column name"""
+  color_description
+}
+
+"""
+input type for updating data in table "ref_colors"
+"""
+input ref_colors_set_input {
+  color_code: String
+  color_description: String
+}
+
+"""
+update columns of table "ref_colors"
+"""
+enum ref_colors_update_column {
+  """column name"""
+  color_code
+
+  """column name"""
+  color_description
+}
+
+"""
+columns and relationships of "ref_product_categories"
+"""
+type ref_product_categories {
+  product_category_code: String!
+  product_category_description: String
+
+  """An array relationship"""
+  products(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): [products!]!
+
+  """An aggregated array relationship"""
+  products_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): products_aggregate!
+  unit_of_measure: String
+}
+
+"""
+aggregated selection of "ref_product_categories"
+"""
+type ref_product_categories_aggregate {
+  aggregate: ref_product_categories_aggregate_fields
+  nodes: [ref_product_categories!]!
+}
+
+"""
+aggregate fields of "ref_product_categories"
+"""
+type ref_product_categories_aggregate_fields {
+  count(columns: [ref_product_categories_select_column!], distinct: Boolean): Int
+  max: ref_product_categories_max_fields
+  min: ref_product_categories_min_fields
+}
+
+"""
+order by aggregate values of table "ref_product_categories"
+"""
+input ref_product_categories_aggregate_order_by {
+  count: order_by
+  max: ref_product_categories_max_order_by
+  min: ref_product_categories_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "ref_product_categories"
+"""
+input ref_product_categories_arr_rel_insert_input {
+  data: [ref_product_categories_insert_input!]!
+  on_conflict: ref_product_categories_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "ref_product_categories". All fields are combined with a logical 'AND'.
+"""
+input ref_product_categories_bool_exp {
+  _and: [ref_product_categories_bool_exp]
+  _not: ref_product_categories_bool_exp
+  _or: [ref_product_categories_bool_exp]
+  product_category_code: String_comparison_exp
+  product_category_description: String_comparison_exp
+  products: products_bool_exp
+  unit_of_measure: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "ref_product_categories"
+"""
+enum ref_product_categories_constraint {
+  """unique or primary key constraint"""
+  idx_18477_sqlite_autoindex_ref_product_categories_1
+}
+
+"""
+input type for inserting data into table "ref_product_categories"
+"""
+input ref_product_categories_insert_input {
+  product_category_code: String
+  product_category_description: String
+  products: products_arr_rel_insert_input
+  unit_of_measure: String
+}
+
+"""aggregate max on columns"""
+type ref_product_categories_max_fields {
+  product_category_code: String
+  product_category_description: String
+  unit_of_measure: String
+}
+
+"""
+order by max() on columns of table "ref_product_categories"
+"""
+input ref_product_categories_max_order_by {
+  product_category_code: order_by
+  product_category_description: order_by
+  unit_of_measure: order_by
+}
+
+"""aggregate min on columns"""
+type ref_product_categories_min_fields {
+  product_category_code: String
+  product_category_description: String
+  unit_of_measure: String
+}
+
+"""
+order by min() on columns of table "ref_product_categories"
+"""
+input ref_product_categories_min_order_by {
+  product_category_code: order_by
+  product_category_description: order_by
+  unit_of_measure: order_by
+}
+
+"""
+response of any mutation on the table "ref_product_categories"
+"""
+type ref_product_categories_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [ref_product_categories!]!
+}
+
+"""
+input type for inserting object relation for remote table "ref_product_categories"
+"""
+input ref_product_categories_obj_rel_insert_input {
+  data: ref_product_categories_insert_input!
+  on_conflict: ref_product_categories_on_conflict
+}
+
+"""
+on conflict condition type for table "ref_product_categories"
+"""
+input ref_product_categories_on_conflict {
+  constraint: ref_product_categories_constraint!
+  update_columns: [ref_product_categories_update_column!]!
+  where: ref_product_categories_bool_exp
+}
+
+"""
+ordering options when selecting data from "ref_product_categories"
+"""
+input ref_product_categories_order_by {
+  product_category_code: order_by
+  product_category_description: order_by
+  products_aggregate: products_aggregate_order_by
+  unit_of_measure: order_by
+}
+
+"""
+select columns of table "ref_product_categories"
+"""
+enum ref_product_categories_select_column {
+  """column name"""
+  product_category_code
+
+  """column name"""
+  product_category_description
+
+  """column name"""
+  unit_of_measure
+}
+
+"""
+input type for updating data in table "ref_product_categories"
+"""
+input ref_product_categories_set_input {
+  product_category_code: String
+  product_category_description: String
+  unit_of_measure: String
+}
+
+"""
+update columns of table "ref_product_categories"
+"""
+enum ref_product_categories_update_column {
+  """column name"""
+  product_category_code
+
+  """column name"""
+  product_category_description
+
+  """column name"""
+  unit_of_measure
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "characteristics"
+  """
+  characteristics(
+    """distinct select on columns"""
+    distinct_on: [characteristics_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [characteristics_order_by!]
+
+    """filter the rows returned"""
+    where: characteristics_bool_exp
+  ): [characteristics!]!
+
+  """
+  fetch aggregated fields from the table: "characteristics"
+  """
+  characteristics_aggregate(
+    """distinct select on columns"""
+    distinct_on: [characteristics_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [characteristics_order_by!]
+
+    """filter the rows returned"""
+    where: characteristics_bool_exp
+  ): characteristics_aggregate!
+
+  """fetch data from the table: "characteristics" using primary key columns"""
+  characteristics_by_pk(characteristic_id: bigint!): characteristics
+
+  """
+  fetch data from the table: "product_characteristics"
+  """
+  product_characteristics(
+    """distinct select on columns"""
+    distinct_on: [product_characteristics_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [product_characteristics_order_by!]
+
+    """filter the rows returned"""
+    where: product_characteristics_bool_exp
+  ): [product_characteristics!]!
+
+  """
+  fetch aggregated fields from the table: "product_characteristics"
+  """
+  product_characteristics_aggregate(
+    """distinct select on columns"""
+    distinct_on: [product_characteristics_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [product_characteristics_order_by!]
+
+    """filter the rows returned"""
+    where: product_characteristics_bool_exp
+  ): product_characteristics_aggregate!
+
+  """
+  fetch data from the table: "products"
+  """
+  products(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): [products!]!
+
+  """
+  fetch aggregated fields from the table: "products"
+  """
+  products_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): products_aggregate!
+
+  """fetch data from the table: "products" using primary key columns"""
+  products_by_pk(product_id: bigint!): products
+
+  """
+  fetch data from the table: "ref_characteristic_types"
+  """
+  ref_characteristic_types(
+    """distinct select on columns"""
+    distinct_on: [ref_characteristic_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_characteristic_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_characteristic_types_bool_exp
+  ): [ref_characteristic_types!]!
+
+  """
+  fetch aggregated fields from the table: "ref_characteristic_types"
+  """
+  ref_characteristic_types_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_characteristic_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_characteristic_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_characteristic_types_bool_exp
+  ): ref_characteristic_types_aggregate!
+
+  """
+  fetch data from the table: "ref_characteristic_types" using primary key columns
+  """
+  ref_characteristic_types_by_pk(characteristic_type_code: String!): ref_characteristic_types
+
+  """
+  fetch data from the table: "ref_colors"
+  """
+  ref_colors(
+    """distinct select on columns"""
+    distinct_on: [ref_colors_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_colors_order_by!]
+
+    """filter the rows returned"""
+    where: ref_colors_bool_exp
+  ): [ref_colors!]!
+
+  """
+  fetch aggregated fields from the table: "ref_colors"
+  """
+  ref_colors_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_colors_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_colors_order_by!]
+
+    """filter the rows returned"""
+    where: ref_colors_bool_exp
+  ): ref_colors_aggregate!
+
+  """fetch data from the table: "ref_colors" using primary key columns"""
+  ref_colors_by_pk(color_code: String!): ref_colors
+
+  """
+  fetch data from the table: "ref_product_categories"
+  """
+  ref_product_categories(
+    """distinct select on columns"""
+    distinct_on: [ref_product_categories_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_product_categories_order_by!]
+
+    """filter the rows returned"""
+    where: ref_product_categories_bool_exp
+  ): [ref_product_categories!]!
+
+  """
+  fetch aggregated fields from the table: "ref_product_categories"
+  """
+  ref_product_categories_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_product_categories_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_product_categories_order_by!]
+
+    """filter the rows returned"""
+    where: ref_product_categories_bool_exp
+  ): ref_product_categories_aggregate!
+
+  """
+  fetch data from the table: "ref_product_categories" using primary key columns
+  """
+  ref_product_categories_by_pk(product_category_code: String!): ref_product_categories
+}

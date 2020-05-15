@@ -1,0 +1,1672 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "county"
+"""
+type county {
+  county_id: Int
+  county_name: String
+
+  """An array relationship"""
+  elections(
+    """distinct select on columns"""
+    distinct_on: [election_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [election_order_by!]
+
+    """filter the rows returned"""
+    where: election_bool_exp
+  ): [election!]!
+
+  """An aggregated array relationship"""
+  elections_aggregate(
+    """distinct select on columns"""
+    distinct_on: [election_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [election_order_by!]
+
+    """filter the rows returned"""
+    where: election_bool_exp
+  ): election_aggregate!
+  population: Float
+  zip_code: String
+}
+
+"""
+aggregated selection of "county"
+"""
+type county_aggregate {
+  aggregate: county_aggregate_fields
+  nodes: [county!]!
+}
+
+"""
+aggregate fields of "county"
+"""
+type county_aggregate_fields {
+  avg: county_avg_fields
+  count(columns: [county_select_column!], distinct: Boolean): Int
+  max: county_max_fields
+  min: county_min_fields
+  stddev: county_stddev_fields
+  stddev_pop: county_stddev_pop_fields
+  stddev_samp: county_stddev_samp_fields
+  sum: county_sum_fields
+  var_pop: county_var_pop_fields
+  var_samp: county_var_samp_fields
+  variance: county_variance_fields
+}
+
+"""
+order by aggregate values of table "county"
+"""
+input county_aggregate_order_by {
+  avg: county_avg_order_by
+  count: order_by
+  max: county_max_order_by
+  min: county_min_order_by
+  stddev: county_stddev_order_by
+  stddev_pop: county_stddev_pop_order_by
+  stddev_samp: county_stddev_samp_order_by
+  sum: county_sum_order_by
+  var_pop: county_var_pop_order_by
+  var_samp: county_var_samp_order_by
+  variance: county_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "county"
+"""
+input county_arr_rel_insert_input {
+  data: [county_insert_input!]!
+  on_conflict: county_on_conflict
+}
+
+"""aggregate avg on columns"""
+type county_avg_fields {
+  county_id: Float
+  population: Float
+}
+
+"""
+order by avg() on columns of table "county"
+"""
+input county_avg_order_by {
+  county_id: order_by
+  population: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "county". All fields are combined with a logical 'AND'.
+"""
+input county_bool_exp {
+  _and: [county_bool_exp]
+  _not: county_bool_exp
+  _or: [county_bool_exp]
+  county_id: Int_comparison_exp
+  county_name: String_comparison_exp
+  elections: election_bool_exp
+  population: Float_comparison_exp
+  zip_code: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "county"
+"""
+enum county_constraint {
+  """unique or primary key constraint"""
+  idx_24163_sqlite_autoindex_county_1
+}
+
+"""
+input type for incrementing integer columne in table "county"
+"""
+input county_inc_input {
+  county_id: Int
+}
+
+"""
+input type for inserting data into table "county"
+"""
+input county_insert_input {
+  county_id: Int
+  county_name: String
+  elections: election_arr_rel_insert_input
+  population: Float
+  zip_code: String
+}
+
+"""aggregate max on columns"""
+type county_max_fields {
+  county_id: Int
+  county_name: String
+  population: Float
+  zip_code: String
+}
+
+"""
+order by max() on columns of table "county"
+"""
+input county_max_order_by {
+  county_id: order_by
+  county_name: order_by
+  population: order_by
+  zip_code: order_by
+}
+
+"""aggregate min on columns"""
+type county_min_fields {
+  county_id: Int
+  county_name: String
+  population: Float
+  zip_code: String
+}
+
+"""
+order by min() on columns of table "county"
+"""
+input county_min_order_by {
+  county_id: order_by
+  county_name: order_by
+  population: order_by
+  zip_code: order_by
+}
+
+"""
+response of any mutation on the table "county"
+"""
+type county_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [county!]!
+}
+
+"""
+input type for inserting object relation for remote table "county"
+"""
+input county_obj_rel_insert_input {
+  data: county_insert_input!
+  on_conflict: county_on_conflict
+}
+
+"""
+on conflict condition type for table "county"
+"""
+input county_on_conflict {
+  constraint: county_constraint!
+  update_columns: [county_update_column!]!
+  where: county_bool_exp
+}
+
+"""
+ordering options when selecting data from "county"
+"""
+input county_order_by {
+  county_id: order_by
+  county_name: order_by
+  elections_aggregate: election_aggregate_order_by
+  population: order_by
+  zip_code: order_by
+}
+
+"""
+select columns of table "county"
+"""
+enum county_select_column {
+  """column name"""
+  county_id
+
+  """column name"""
+  county_name
+
+  """column name"""
+  population
+
+  """column name"""
+  zip_code
+}
+
+"""
+input type for updating data in table "county"
+"""
+input county_set_input {
+  county_id: Int
+  county_name: String
+  population: Float
+  zip_code: String
+}
+
+"""aggregate stddev on columns"""
+type county_stddev_fields {
+  county_id: Float
+  population: Float
+}
+
+"""
+order by stddev() on columns of table "county"
+"""
+input county_stddev_order_by {
+  county_id: order_by
+  population: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type county_stddev_pop_fields {
+  county_id: Float
+  population: Float
+}
+
+"""
+order by stddev_pop() on columns of table "county"
+"""
+input county_stddev_pop_order_by {
+  county_id: order_by
+  population: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type county_stddev_samp_fields {
+  county_id: Float
+  population: Float
+}
+
+"""
+order by stddev_samp() on columns of table "county"
+"""
+input county_stddev_samp_order_by {
+  county_id: order_by
+  population: order_by
+}
+
+"""aggregate sum on columns"""
+type county_sum_fields {
+  county_id: Int
+  population: Float
+}
+
+"""
+order by sum() on columns of table "county"
+"""
+input county_sum_order_by {
+  county_id: order_by
+  population: order_by
+}
+
+"""
+update columns of table "county"
+"""
+enum county_update_column {
+  """column name"""
+  county_id
+
+  """column name"""
+  county_name
+
+  """column name"""
+  population
+
+  """column name"""
+  zip_code
+}
+
+"""aggregate var_pop on columns"""
+type county_var_pop_fields {
+  county_id: Float
+  population: Float
+}
+
+"""
+order by var_pop() on columns of table "county"
+"""
+input county_var_pop_order_by {
+  county_id: order_by
+  population: order_by
+}
+
+"""aggregate var_samp on columns"""
+type county_var_samp_fields {
+  county_id: Float
+  population: Float
+}
+
+"""
+order by var_samp() on columns of table "county"
+"""
+input county_var_samp_order_by {
+  county_id: order_by
+  population: order_by
+}
+
+"""aggregate variance on columns"""
+type county_variance_fields {
+  county_id: Float
+  population: Float
+}
+
+"""
+order by variance() on columns of table "county"
+"""
+input county_variance_order_by {
+  county_id: order_by
+  population: order_by
+}
+
+"""
+columns and relationships of "election"
+"""
+type election {
+  committee: String
+  counties_represented: String
+
+  """An object relationship"""
+  county: county
+  delegate: String
+  district: Int
+  election_id: Int
+  first_elected: Float
+  party: Int
+
+  """An object relationship"""
+  partyByParty: party
+}
+
+"""
+aggregated selection of "election"
+"""
+type election_aggregate {
+  aggregate: election_aggregate_fields
+  nodes: [election!]!
+}
+
+"""
+aggregate fields of "election"
+"""
+type election_aggregate_fields {
+  avg: election_avg_fields
+  count(columns: [election_select_column!], distinct: Boolean): Int
+  max: election_max_fields
+  min: election_min_fields
+  stddev: election_stddev_fields
+  stddev_pop: election_stddev_pop_fields
+  stddev_samp: election_stddev_samp_fields
+  sum: election_sum_fields
+  var_pop: election_var_pop_fields
+  var_samp: election_var_samp_fields
+  variance: election_variance_fields
+}
+
+"""
+order by aggregate values of table "election"
+"""
+input election_aggregate_order_by {
+  avg: election_avg_order_by
+  count: order_by
+  max: election_max_order_by
+  min: election_min_order_by
+  stddev: election_stddev_order_by
+  stddev_pop: election_stddev_pop_order_by
+  stddev_samp: election_stddev_samp_order_by
+  sum: election_sum_order_by
+  var_pop: election_var_pop_order_by
+  var_samp: election_var_samp_order_by
+  variance: election_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "election"
+"""
+input election_arr_rel_insert_input {
+  data: [election_insert_input!]!
+  on_conflict: election_on_conflict
+}
+
+"""aggregate avg on columns"""
+type election_avg_fields {
+  district: Float
+  election_id: Float
+  first_elected: Float
+  party: Float
+}
+
+"""
+order by avg() on columns of table "election"
+"""
+input election_avg_order_by {
+  district: order_by
+  election_id: order_by
+  first_elected: order_by
+  party: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "election". All fields are combined with a logical 'AND'.
+"""
+input election_bool_exp {
+  _and: [election_bool_exp]
+  _not: election_bool_exp
+  _or: [election_bool_exp]
+  committee: String_comparison_exp
+  counties_represented: String_comparison_exp
+  county: county_bool_exp
+  delegate: String_comparison_exp
+  district: Int_comparison_exp
+  election_id: Int_comparison_exp
+  first_elected: Float_comparison_exp
+  party: Int_comparison_exp
+  partyByParty: party_bool_exp
+}
+
+"""
+unique or primary key constraints on table "election"
+"""
+enum election_constraint {
+  """unique or primary key constraint"""
+  idx_24175_sqlite_autoindex_election_1
+}
+
+"""
+input type for incrementing integer columne in table "election"
+"""
+input election_inc_input {
+  district: Int
+  election_id: Int
+  party: Int
+}
+
+"""
+input type for inserting data into table "election"
+"""
+input election_insert_input {
+  committee: String
+  counties_represented: String
+  county: county_obj_rel_insert_input
+  delegate: String
+  district: Int
+  election_id: Int
+  first_elected: Float
+  party: Int
+  partyByParty: party_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type election_max_fields {
+  committee: String
+  counties_represented: String
+  delegate: String
+  district: Int
+  election_id: Int
+  first_elected: Float
+  party: Int
+}
+
+"""
+order by max() on columns of table "election"
+"""
+input election_max_order_by {
+  committee: order_by
+  counties_represented: order_by
+  delegate: order_by
+  district: order_by
+  election_id: order_by
+  first_elected: order_by
+  party: order_by
+}
+
+"""aggregate min on columns"""
+type election_min_fields {
+  committee: String
+  counties_represented: String
+  delegate: String
+  district: Int
+  election_id: Int
+  first_elected: Float
+  party: Int
+}
+
+"""
+order by min() on columns of table "election"
+"""
+input election_min_order_by {
+  committee: order_by
+  counties_represented: order_by
+  delegate: order_by
+  district: order_by
+  election_id: order_by
+  first_elected: order_by
+  party: order_by
+}
+
+"""
+response of any mutation on the table "election"
+"""
+type election_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [election!]!
+}
+
+"""
+input type for inserting object relation for remote table "election"
+"""
+input election_obj_rel_insert_input {
+  data: election_insert_input!
+  on_conflict: election_on_conflict
+}
+
+"""
+on conflict condition type for table "election"
+"""
+input election_on_conflict {
+  constraint: election_constraint!
+  update_columns: [election_update_column!]!
+  where: election_bool_exp
+}
+
+"""
+ordering options when selecting data from "election"
+"""
+input election_order_by {
+  committee: order_by
+  counties_represented: order_by
+  county: county_order_by
+  delegate: order_by
+  district: order_by
+  election_id: order_by
+  first_elected: order_by
+  party: order_by
+  partyByParty: party_order_by
+}
+
+"""
+select columns of table "election"
+"""
+enum election_select_column {
+  """column name"""
+  committee
+
+  """column name"""
+  counties_represented
+
+  """column name"""
+  delegate
+
+  """column name"""
+  district
+
+  """column name"""
+  election_id
+
+  """column name"""
+  first_elected
+
+  """column name"""
+  party
+}
+
+"""
+input type for updating data in table "election"
+"""
+input election_set_input {
+  committee: String
+  counties_represented: String
+  delegate: String
+  district: Int
+  election_id: Int
+  first_elected: Float
+  party: Int
+}
+
+"""aggregate stddev on columns"""
+type election_stddev_fields {
+  district: Float
+  election_id: Float
+  first_elected: Float
+  party: Float
+}
+
+"""
+order by stddev() on columns of table "election"
+"""
+input election_stddev_order_by {
+  district: order_by
+  election_id: order_by
+  first_elected: order_by
+  party: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type election_stddev_pop_fields {
+  district: Float
+  election_id: Float
+  first_elected: Float
+  party: Float
+}
+
+"""
+order by stddev_pop() on columns of table "election"
+"""
+input election_stddev_pop_order_by {
+  district: order_by
+  election_id: order_by
+  first_elected: order_by
+  party: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type election_stddev_samp_fields {
+  district: Float
+  election_id: Float
+  first_elected: Float
+  party: Float
+}
+
+"""
+order by stddev_samp() on columns of table "election"
+"""
+input election_stddev_samp_order_by {
+  district: order_by
+  election_id: order_by
+  first_elected: order_by
+  party: order_by
+}
+
+"""aggregate sum on columns"""
+type election_sum_fields {
+  district: Int
+  election_id: Int
+  first_elected: Float
+  party: Int
+}
+
+"""
+order by sum() on columns of table "election"
+"""
+input election_sum_order_by {
+  district: order_by
+  election_id: order_by
+  first_elected: order_by
+  party: order_by
+}
+
+"""
+update columns of table "election"
+"""
+enum election_update_column {
+  """column name"""
+  committee
+
+  """column name"""
+  counties_represented
+
+  """column name"""
+  delegate
+
+  """column name"""
+  district
+
+  """column name"""
+  election_id
+
+  """column name"""
+  first_elected
+
+  """column name"""
+  party
+}
+
+"""aggregate var_pop on columns"""
+type election_var_pop_fields {
+  district: Float
+  election_id: Float
+  first_elected: Float
+  party: Float
+}
+
+"""
+order by var_pop() on columns of table "election"
+"""
+input election_var_pop_order_by {
+  district: order_by
+  election_id: order_by
+  first_elected: order_by
+  party: order_by
+}
+
+"""aggregate var_samp on columns"""
+type election_var_samp_fields {
+  district: Float
+  election_id: Float
+  first_elected: Float
+  party: Float
+}
+
+"""
+order by var_samp() on columns of table "election"
+"""
+input election_var_samp_order_by {
+  district: order_by
+  election_id: order_by
+  first_elected: order_by
+  party: order_by
+}
+
+"""aggregate variance on columns"""
+type election_variance_fields {
+  district: Float
+  election_id: Float
+  first_elected: Float
+  party: Float
+}
+
+"""
+order by variance() on columns of table "election"
+"""
+input election_variance_order_by {
+  district: order_by
+  election_id: order_by
+  first_elected: order_by
+  party: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "county"
+  """
+  delete_county(
+    """filter the rows which have to be deleted"""
+    where: county_bool_exp!
+  ): county_mutation_response
+
+  """
+  delete data from the table: "election"
+  """
+  delete_election(
+    """filter the rows which have to be deleted"""
+    where: election_bool_exp!
+  ): election_mutation_response
+
+  """
+  delete data from the table: "party"
+  """
+  delete_party(
+    """filter the rows which have to be deleted"""
+    where: party_bool_exp!
+  ): party_mutation_response
+
+  """
+  insert data into the table: "county"
+  """
+  insert_county(
+    """the rows to be inserted"""
+    objects: [county_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: county_on_conflict
+  ): county_mutation_response
+
+  """
+  insert data into the table: "election"
+  """
+  insert_election(
+    """the rows to be inserted"""
+    objects: [election_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: election_on_conflict
+  ): election_mutation_response
+
+  """
+  insert data into the table: "party"
+  """
+  insert_party(
+    """the rows to be inserted"""
+    objects: [party_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: party_on_conflict
+  ): party_mutation_response
+
+  """
+  update data of the table: "county"
+  """
+  update_county(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: county_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: county_set_input
+
+    """filter the rows which have to be updated"""
+    where: county_bool_exp!
+  ): county_mutation_response
+
+  """
+  update data of the table: "election"
+  """
+  update_election(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: election_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: election_set_input
+
+    """filter the rows which have to be updated"""
+    where: election_bool_exp!
+  ): election_mutation_response
+
+  """
+  update data of the table: "party"
+  """
+  update_party(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: party_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: party_set_input
+
+    """filter the rows which have to be updated"""
+    where: party_bool_exp!
+  ): party_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "party"
+"""
+type party {
+  attorney_general: String
+  comptroller: String
+
+  """An array relationship"""
+  elections(
+    """distinct select on columns"""
+    distinct_on: [election_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [election_order_by!]
+
+    """filter the rows returned"""
+    where: election_bool_exp
+  ): [election!]!
+
+  """An aggregated array relationship"""
+  elections_aggregate(
+    """distinct select on columns"""
+    distinct_on: [election_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [election_order_by!]
+
+    """filter the rows returned"""
+    where: election_bool_exp
+  ): election_aggregate!
+  governor: String
+  lieutenant_governor: String
+  party: String
+  party_id: Int
+  us_senate: String
+  year: Float
+}
+
+"""
+aggregated selection of "party"
+"""
+type party_aggregate {
+  aggregate: party_aggregate_fields
+  nodes: [party!]!
+}
+
+"""
+aggregate fields of "party"
+"""
+type party_aggregate_fields {
+  avg: party_avg_fields
+  count(columns: [party_select_column!], distinct: Boolean): Int
+  max: party_max_fields
+  min: party_min_fields
+  stddev: party_stddev_fields
+  stddev_pop: party_stddev_pop_fields
+  stddev_samp: party_stddev_samp_fields
+  sum: party_sum_fields
+  var_pop: party_var_pop_fields
+  var_samp: party_var_samp_fields
+  variance: party_variance_fields
+}
+
+"""
+order by aggregate values of table "party"
+"""
+input party_aggregate_order_by {
+  avg: party_avg_order_by
+  count: order_by
+  max: party_max_order_by
+  min: party_min_order_by
+  stddev: party_stddev_order_by
+  stddev_pop: party_stddev_pop_order_by
+  stddev_samp: party_stddev_samp_order_by
+  sum: party_sum_order_by
+  var_pop: party_var_pop_order_by
+  var_samp: party_var_samp_order_by
+  variance: party_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "party"
+"""
+input party_arr_rel_insert_input {
+  data: [party_insert_input!]!
+  on_conflict: party_on_conflict
+}
+
+"""aggregate avg on columns"""
+type party_avg_fields {
+  party_id: Float
+  year: Float
+}
+
+"""
+order by avg() on columns of table "party"
+"""
+input party_avg_order_by {
+  party_id: order_by
+  year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "party". All fields are combined with a logical 'AND'.
+"""
+input party_bool_exp {
+  _and: [party_bool_exp]
+  _not: party_bool_exp
+  _or: [party_bool_exp]
+  attorney_general: String_comparison_exp
+  comptroller: String_comparison_exp
+  elections: election_bool_exp
+  governor: String_comparison_exp
+  lieutenant_governor: String_comparison_exp
+  party: String_comparison_exp
+  party_id: Int_comparison_exp
+  us_senate: String_comparison_exp
+  year: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "party"
+"""
+enum party_constraint {
+  """unique or primary key constraint"""
+  idx_24169_sqlite_autoindex_party_1
+}
+
+"""
+input type for incrementing integer columne in table "party"
+"""
+input party_inc_input {
+  party_id: Int
+}
+
+"""
+input type for inserting data into table "party"
+"""
+input party_insert_input {
+  attorney_general: String
+  comptroller: String
+  elections: election_arr_rel_insert_input
+  governor: String
+  lieutenant_governor: String
+  party: String
+  party_id: Int
+  us_senate: String
+  year: Float
+}
+
+"""aggregate max on columns"""
+type party_max_fields {
+  attorney_general: String
+  comptroller: String
+  governor: String
+  lieutenant_governor: String
+  party: String
+  party_id: Int
+  us_senate: String
+  year: Float
+}
+
+"""
+order by max() on columns of table "party"
+"""
+input party_max_order_by {
+  attorney_general: order_by
+  comptroller: order_by
+  governor: order_by
+  lieutenant_governor: order_by
+  party: order_by
+  party_id: order_by
+  us_senate: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type party_min_fields {
+  attorney_general: String
+  comptroller: String
+  governor: String
+  lieutenant_governor: String
+  party: String
+  party_id: Int
+  us_senate: String
+  year: Float
+}
+
+"""
+order by min() on columns of table "party"
+"""
+input party_min_order_by {
+  attorney_general: order_by
+  comptroller: order_by
+  governor: order_by
+  lieutenant_governor: order_by
+  party: order_by
+  party_id: order_by
+  us_senate: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "party"
+"""
+type party_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [party!]!
+}
+
+"""
+input type for inserting object relation for remote table "party"
+"""
+input party_obj_rel_insert_input {
+  data: party_insert_input!
+  on_conflict: party_on_conflict
+}
+
+"""
+on conflict condition type for table "party"
+"""
+input party_on_conflict {
+  constraint: party_constraint!
+  update_columns: [party_update_column!]!
+  where: party_bool_exp
+}
+
+"""
+ordering options when selecting data from "party"
+"""
+input party_order_by {
+  attorney_general: order_by
+  comptroller: order_by
+  elections_aggregate: election_aggregate_order_by
+  governor: order_by
+  lieutenant_governor: order_by
+  party: order_by
+  party_id: order_by
+  us_senate: order_by
+  year: order_by
+}
+
+"""
+select columns of table "party"
+"""
+enum party_select_column {
+  """column name"""
+  attorney_general
+
+  """column name"""
+  comptroller
+
+  """column name"""
+  governor
+
+  """column name"""
+  lieutenant_governor
+
+  """column name"""
+  party
+
+  """column name"""
+  party_id
+
+  """column name"""
+  us_senate
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "party"
+"""
+input party_set_input {
+  attorney_general: String
+  comptroller: String
+  governor: String
+  lieutenant_governor: String
+  party: String
+  party_id: Int
+  us_senate: String
+  year: Float
+}
+
+"""aggregate stddev on columns"""
+type party_stddev_fields {
+  party_id: Float
+  year: Float
+}
+
+"""
+order by stddev() on columns of table "party"
+"""
+input party_stddev_order_by {
+  party_id: order_by
+  year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type party_stddev_pop_fields {
+  party_id: Float
+  year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "party"
+"""
+input party_stddev_pop_order_by {
+  party_id: order_by
+  year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type party_stddev_samp_fields {
+  party_id: Float
+  year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "party"
+"""
+input party_stddev_samp_order_by {
+  party_id: order_by
+  year: order_by
+}
+
+"""aggregate sum on columns"""
+type party_sum_fields {
+  party_id: Int
+  year: Float
+}
+
+"""
+order by sum() on columns of table "party"
+"""
+input party_sum_order_by {
+  party_id: order_by
+  year: order_by
+}
+
+"""
+update columns of table "party"
+"""
+enum party_update_column {
+  """column name"""
+  attorney_general
+
+  """column name"""
+  comptroller
+
+  """column name"""
+  governor
+
+  """column name"""
+  lieutenant_governor
+
+  """column name"""
+  party
+
+  """column name"""
+  party_id
+
+  """column name"""
+  us_senate
+
+  """column name"""
+  year
+}
+
+"""aggregate var_pop on columns"""
+type party_var_pop_fields {
+  party_id: Float
+  year: Float
+}
+
+"""
+order by var_pop() on columns of table "party"
+"""
+input party_var_pop_order_by {
+  party_id: order_by
+  year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type party_var_samp_fields {
+  party_id: Float
+  year: Float
+}
+
+"""
+order by var_samp() on columns of table "party"
+"""
+input party_var_samp_order_by {
+  party_id: order_by
+  year: order_by
+}
+
+"""aggregate variance on columns"""
+type party_variance_fields {
+  party_id: Float
+  year: Float
+}
+
+"""
+order by variance() on columns of table "party"
+"""
+input party_variance_order_by {
+  party_id: order_by
+  year: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "county"
+  """
+  county(
+    """distinct select on columns"""
+    distinct_on: [county_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [county_order_by!]
+
+    """filter the rows returned"""
+    where: county_bool_exp
+  ): [county!]!
+
+  """
+  fetch aggregated fields from the table: "county"
+  """
+  county_aggregate(
+    """distinct select on columns"""
+    distinct_on: [county_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [county_order_by!]
+
+    """filter the rows returned"""
+    where: county_bool_exp
+  ): county_aggregate!
+
+  """
+  fetch data from the table: "election"
+  """
+  election(
+    """distinct select on columns"""
+    distinct_on: [election_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [election_order_by!]
+
+    """filter the rows returned"""
+    where: election_bool_exp
+  ): [election!]!
+
+  """
+  fetch aggregated fields from the table: "election"
+  """
+  election_aggregate(
+    """distinct select on columns"""
+    distinct_on: [election_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [election_order_by!]
+
+    """filter the rows returned"""
+    where: election_bool_exp
+  ): election_aggregate!
+
+  """
+  fetch data from the table: "party"
+  """
+  party(
+    """distinct select on columns"""
+    distinct_on: [party_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_order_by!]
+
+    """filter the rows returned"""
+    where: party_bool_exp
+  ): [party!]!
+
+  """
+  fetch aggregated fields from the table: "party"
+  """
+  party_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_order_by!]
+
+    """filter the rows returned"""
+    where: party_bool_exp
+  ): party_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "county"
+  """
+  county(
+    """distinct select on columns"""
+    distinct_on: [county_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [county_order_by!]
+
+    """filter the rows returned"""
+    where: county_bool_exp
+  ): [county!]!
+
+  """
+  fetch aggregated fields from the table: "county"
+  """
+  county_aggregate(
+    """distinct select on columns"""
+    distinct_on: [county_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [county_order_by!]
+
+    """filter the rows returned"""
+    where: county_bool_exp
+  ): county_aggregate!
+
+  """
+  fetch data from the table: "election"
+  """
+  election(
+    """distinct select on columns"""
+    distinct_on: [election_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [election_order_by!]
+
+    """filter the rows returned"""
+    where: election_bool_exp
+  ): [election!]!
+
+  """
+  fetch aggregated fields from the table: "election"
+  """
+  election_aggregate(
+    """distinct select on columns"""
+    distinct_on: [election_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [election_order_by!]
+
+    """filter the rows returned"""
+    where: election_bool_exp
+  ): election_aggregate!
+
+  """
+  fetch data from the table: "party"
+  """
+  party(
+    """distinct select on columns"""
+    distinct_on: [party_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_order_by!]
+
+    """filter the rows returned"""
+    where: party_bool_exp
+  ): [party!]!
+
+  """
+  fetch aggregated fields from the table: "party"
+  """
+  party_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_order_by!]
+
+    """filter the rows returned"""
+    where: party_bool_exp
+  ): party_aggregate!
+}

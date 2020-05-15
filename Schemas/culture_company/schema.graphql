@@ -1,0 +1,1635 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "book_club"
+"""
+type book_club {
+  author_or_editor: String
+  book_club_id: Int!
+  book_title: String
+  category: String
+
+  """An object relationship"""
+  culture_company: culture_company
+  publisher: String
+  result: String
+  year: Int
+}
+
+"""
+aggregated selection of "book_club"
+"""
+type book_club_aggregate {
+  aggregate: book_club_aggregate_fields
+  nodes: [book_club!]!
+}
+
+"""
+aggregate fields of "book_club"
+"""
+type book_club_aggregate_fields {
+  avg: book_club_avg_fields
+  count(columns: [book_club_select_column!], distinct: Boolean): Int
+  max: book_club_max_fields
+  min: book_club_min_fields
+  stddev: book_club_stddev_fields
+  stddev_pop: book_club_stddev_pop_fields
+  stddev_samp: book_club_stddev_samp_fields
+  sum: book_club_sum_fields
+  var_pop: book_club_var_pop_fields
+  var_samp: book_club_var_samp_fields
+  variance: book_club_variance_fields
+}
+
+"""
+order by aggregate values of table "book_club"
+"""
+input book_club_aggregate_order_by {
+  avg: book_club_avg_order_by
+  count: order_by
+  max: book_club_max_order_by
+  min: book_club_min_order_by
+  stddev: book_club_stddev_order_by
+  stddev_pop: book_club_stddev_pop_order_by
+  stddev_samp: book_club_stddev_samp_order_by
+  sum: book_club_sum_order_by
+  var_pop: book_club_var_pop_order_by
+  var_samp: book_club_var_samp_order_by
+  variance: book_club_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "book_club"
+"""
+input book_club_arr_rel_insert_input {
+  data: [book_club_insert_input!]!
+  on_conflict: book_club_on_conflict
+}
+
+"""aggregate avg on columns"""
+type book_club_avg_fields {
+  book_club_id: Float
+  year: Float
+}
+
+"""
+order by avg() on columns of table "book_club"
+"""
+input book_club_avg_order_by {
+  book_club_id: order_by
+  year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "book_club". All fields are combined with a logical 'AND'.
+"""
+input book_club_bool_exp {
+  _and: [book_club_bool_exp]
+  _not: book_club_bool_exp
+  _or: [book_club_bool_exp]
+  author_or_editor: String_comparison_exp
+  book_club_id: Int_comparison_exp
+  book_title: String_comparison_exp
+  category: String_comparison_exp
+  culture_company: culture_company_bool_exp
+  publisher: String_comparison_exp
+  result: String_comparison_exp
+  year: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "book_club"
+"""
+enum book_club_constraint {
+  """unique or primary key constraint"""
+  idx_18788_sqlite_autoindex_book_club_1
+}
+
+"""
+input type for incrementing integer columne in table "book_club"
+"""
+input book_club_inc_input {
+  book_club_id: Int
+  year: Int
+}
+
+"""
+input type for inserting data into table "book_club"
+"""
+input book_club_insert_input {
+  author_or_editor: String
+  book_club_id: Int
+  book_title: String
+  category: String
+  culture_company: culture_company_obj_rel_insert_input
+  publisher: String
+  result: String
+  year: Int
+}
+
+"""aggregate max on columns"""
+type book_club_max_fields {
+  author_or_editor: String
+  book_club_id: Int
+  book_title: String
+  category: String
+  publisher: String
+  result: String
+  year: Int
+}
+
+"""
+order by max() on columns of table "book_club"
+"""
+input book_club_max_order_by {
+  author_or_editor: order_by
+  book_club_id: order_by
+  book_title: order_by
+  category: order_by
+  publisher: order_by
+  result: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type book_club_min_fields {
+  author_or_editor: String
+  book_club_id: Int
+  book_title: String
+  category: String
+  publisher: String
+  result: String
+  year: Int
+}
+
+"""
+order by min() on columns of table "book_club"
+"""
+input book_club_min_order_by {
+  author_or_editor: order_by
+  book_club_id: order_by
+  book_title: order_by
+  category: order_by
+  publisher: order_by
+  result: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "book_club"
+"""
+type book_club_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [book_club!]!
+}
+
+"""
+input type for inserting object relation for remote table "book_club"
+"""
+input book_club_obj_rel_insert_input {
+  data: book_club_insert_input!
+  on_conflict: book_club_on_conflict
+}
+
+"""
+on conflict condition type for table "book_club"
+"""
+input book_club_on_conflict {
+  constraint: book_club_constraint!
+  update_columns: [book_club_update_column!]!
+  where: book_club_bool_exp
+}
+
+"""
+ordering options when selecting data from "book_club"
+"""
+input book_club_order_by {
+  author_or_editor: order_by
+  book_club_id: order_by
+  book_title: order_by
+  category: order_by
+  culture_company: culture_company_order_by
+  publisher: order_by
+  result: order_by
+  year: order_by
+}
+
+"""
+select columns of table "book_club"
+"""
+enum book_club_select_column {
+  """column name"""
+  author_or_editor
+
+  """column name"""
+  book_club_id
+
+  """column name"""
+  book_title
+
+  """column name"""
+  category
+
+  """column name"""
+  publisher
+
+  """column name"""
+  result
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "book_club"
+"""
+input book_club_set_input {
+  author_or_editor: String
+  book_club_id: Int
+  book_title: String
+  category: String
+  publisher: String
+  result: String
+  year: Int
+}
+
+"""aggregate stddev on columns"""
+type book_club_stddev_fields {
+  book_club_id: Float
+  year: Float
+}
+
+"""
+order by stddev() on columns of table "book_club"
+"""
+input book_club_stddev_order_by {
+  book_club_id: order_by
+  year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type book_club_stddev_pop_fields {
+  book_club_id: Float
+  year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "book_club"
+"""
+input book_club_stddev_pop_order_by {
+  book_club_id: order_by
+  year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type book_club_stddev_samp_fields {
+  book_club_id: Float
+  year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "book_club"
+"""
+input book_club_stddev_samp_order_by {
+  book_club_id: order_by
+  year: order_by
+}
+
+"""aggregate sum on columns"""
+type book_club_sum_fields {
+  book_club_id: Int
+  year: Int
+}
+
+"""
+order by sum() on columns of table "book_club"
+"""
+input book_club_sum_order_by {
+  book_club_id: order_by
+  year: order_by
+}
+
+"""
+update columns of table "book_club"
+"""
+enum book_club_update_column {
+  """column name"""
+  author_or_editor
+
+  """column name"""
+  book_club_id
+
+  """column name"""
+  book_title
+
+  """column name"""
+  category
+
+  """column name"""
+  publisher
+
+  """column name"""
+  result
+
+  """column name"""
+  year
+}
+
+"""aggregate var_pop on columns"""
+type book_club_var_pop_fields {
+  book_club_id: Float
+  year: Float
+}
+
+"""
+order by var_pop() on columns of table "book_club"
+"""
+input book_club_var_pop_order_by {
+  book_club_id: order_by
+  year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type book_club_var_samp_fields {
+  book_club_id: Float
+  year: Float
+}
+
+"""
+order by var_samp() on columns of table "book_club"
+"""
+input book_club_var_samp_order_by {
+  book_club_id: order_by
+  year: order_by
+}
+
+"""aggregate variance on columns"""
+type book_club_variance_fields {
+  book_club_id: Float
+  year: Float
+}
+
+"""
+order by variance() on columns of table "book_club"
+"""
+input book_club_variance_order_by {
+  book_club_id: order_by
+  year: order_by
+}
+
+"""
+columns and relationships of "culture_company"
+"""
+type culture_company {
+  """An object relationship"""
+  book_club: book_club
+  book_club_id: Int
+  company_name: String
+  group_equity_shareholding: Float
+  incorporated_in: String
+
+  """An object relationship"""
+  movie: movie
+  movie_id: Int
+  type: String
+}
+
+"""
+aggregated selection of "culture_company"
+"""
+type culture_company_aggregate {
+  aggregate: culture_company_aggregate_fields
+  nodes: [culture_company!]!
+}
+
+"""
+aggregate fields of "culture_company"
+"""
+type culture_company_aggregate_fields {
+  avg: culture_company_avg_fields
+  count(columns: [culture_company_select_column!], distinct: Boolean): Int
+  max: culture_company_max_fields
+  min: culture_company_min_fields
+  stddev: culture_company_stddev_fields
+  stddev_pop: culture_company_stddev_pop_fields
+  stddev_samp: culture_company_stddev_samp_fields
+  sum: culture_company_sum_fields
+  var_pop: culture_company_var_pop_fields
+  var_samp: culture_company_var_samp_fields
+  variance: culture_company_variance_fields
+}
+
+"""
+order by aggregate values of table "culture_company"
+"""
+input culture_company_aggregate_order_by {
+  avg: culture_company_avg_order_by
+  count: order_by
+  max: culture_company_max_order_by
+  min: culture_company_min_order_by
+  stddev: culture_company_stddev_order_by
+  stddev_pop: culture_company_stddev_pop_order_by
+  stddev_samp: culture_company_stddev_samp_order_by
+  sum: culture_company_sum_order_by
+  var_pop: culture_company_var_pop_order_by
+  var_samp: culture_company_var_samp_order_by
+  variance: culture_company_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "culture_company"
+"""
+input culture_company_arr_rel_insert_input {
+  data: [culture_company_insert_input!]!
+  on_conflict: culture_company_on_conflict
+}
+
+"""aggregate avg on columns"""
+type culture_company_avg_fields {
+  book_club_id: Float
+  group_equity_shareholding: Float
+  movie_id: Float
+}
+
+"""
+order by avg() on columns of table "culture_company"
+"""
+input culture_company_avg_order_by {
+  book_club_id: order_by
+  group_equity_shareholding: order_by
+  movie_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "culture_company". All fields are combined with a logical 'AND'.
+"""
+input culture_company_bool_exp {
+  _and: [culture_company_bool_exp]
+  _not: culture_company_bool_exp
+  _or: [culture_company_bool_exp]
+  book_club: book_club_bool_exp
+  book_club_id: Int_comparison_exp
+  company_name: String_comparison_exp
+  group_equity_shareholding: Float_comparison_exp
+  incorporated_in: String_comparison_exp
+  movie: movie_bool_exp
+  movie_id: Int_comparison_exp
+  type: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "culture_company"
+"""
+enum culture_company_constraint {
+  """unique or primary key constraint"""
+  idx_18800_sqlite_autoindex_culture_company_1
+}
+
+"""
+input type for incrementing integer columne in table "culture_company"
+"""
+input culture_company_inc_input {
+  book_club_id: Int
+  movie_id: Int
+}
+
+"""
+input type for inserting data into table "culture_company"
+"""
+input culture_company_insert_input {
+  book_club: book_club_obj_rel_insert_input
+  book_club_id: Int
+  company_name: String
+  group_equity_shareholding: Float
+  incorporated_in: String
+  movie: movie_obj_rel_insert_input
+  movie_id: Int
+  type: String
+}
+
+"""aggregate max on columns"""
+type culture_company_max_fields {
+  book_club_id: Int
+  company_name: String
+  group_equity_shareholding: Float
+  incorporated_in: String
+  movie_id: Int
+  type: String
+}
+
+"""
+order by max() on columns of table "culture_company"
+"""
+input culture_company_max_order_by {
+  book_club_id: order_by
+  company_name: order_by
+  group_equity_shareholding: order_by
+  incorporated_in: order_by
+  movie_id: order_by
+  type: order_by
+}
+
+"""aggregate min on columns"""
+type culture_company_min_fields {
+  book_club_id: Int
+  company_name: String
+  group_equity_shareholding: Float
+  incorporated_in: String
+  movie_id: Int
+  type: String
+}
+
+"""
+order by min() on columns of table "culture_company"
+"""
+input culture_company_min_order_by {
+  book_club_id: order_by
+  company_name: order_by
+  group_equity_shareholding: order_by
+  incorporated_in: order_by
+  movie_id: order_by
+  type: order_by
+}
+
+"""
+response of any mutation on the table "culture_company"
+"""
+type culture_company_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [culture_company!]!
+}
+
+"""
+input type for inserting object relation for remote table "culture_company"
+"""
+input culture_company_obj_rel_insert_input {
+  data: culture_company_insert_input!
+  on_conflict: culture_company_on_conflict
+}
+
+"""
+on conflict condition type for table "culture_company"
+"""
+input culture_company_on_conflict {
+  constraint: culture_company_constraint!
+  update_columns: [culture_company_update_column!]!
+  where: culture_company_bool_exp
+}
+
+"""
+ordering options when selecting data from "culture_company"
+"""
+input culture_company_order_by {
+  book_club: book_club_order_by
+  book_club_id: order_by
+  company_name: order_by
+  group_equity_shareholding: order_by
+  incorporated_in: order_by
+  movie: movie_order_by
+  movie_id: order_by
+  type: order_by
+}
+
+"""
+select columns of table "culture_company"
+"""
+enum culture_company_select_column {
+  """column name"""
+  book_club_id
+
+  """column name"""
+  company_name
+
+  """column name"""
+  group_equity_shareholding
+
+  """column name"""
+  incorporated_in
+
+  """column name"""
+  movie_id
+
+  """column name"""
+  type
+}
+
+"""
+input type for updating data in table "culture_company"
+"""
+input culture_company_set_input {
+  book_club_id: Int
+  company_name: String
+  group_equity_shareholding: Float
+  incorporated_in: String
+  movie_id: Int
+  type: String
+}
+
+"""aggregate stddev on columns"""
+type culture_company_stddev_fields {
+  book_club_id: Float
+  group_equity_shareholding: Float
+  movie_id: Float
+}
+
+"""
+order by stddev() on columns of table "culture_company"
+"""
+input culture_company_stddev_order_by {
+  book_club_id: order_by
+  group_equity_shareholding: order_by
+  movie_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type culture_company_stddev_pop_fields {
+  book_club_id: Float
+  group_equity_shareholding: Float
+  movie_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "culture_company"
+"""
+input culture_company_stddev_pop_order_by {
+  book_club_id: order_by
+  group_equity_shareholding: order_by
+  movie_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type culture_company_stddev_samp_fields {
+  book_club_id: Float
+  group_equity_shareholding: Float
+  movie_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "culture_company"
+"""
+input culture_company_stddev_samp_order_by {
+  book_club_id: order_by
+  group_equity_shareholding: order_by
+  movie_id: order_by
+}
+
+"""aggregate sum on columns"""
+type culture_company_sum_fields {
+  book_club_id: Int
+  group_equity_shareholding: Float
+  movie_id: Int
+}
+
+"""
+order by sum() on columns of table "culture_company"
+"""
+input culture_company_sum_order_by {
+  book_club_id: order_by
+  group_equity_shareholding: order_by
+  movie_id: order_by
+}
+
+"""
+update columns of table "culture_company"
+"""
+enum culture_company_update_column {
+  """column name"""
+  book_club_id
+
+  """column name"""
+  company_name
+
+  """column name"""
+  group_equity_shareholding
+
+  """column name"""
+  incorporated_in
+
+  """column name"""
+  movie_id
+
+  """column name"""
+  type
+}
+
+"""aggregate var_pop on columns"""
+type culture_company_var_pop_fields {
+  book_club_id: Float
+  group_equity_shareholding: Float
+  movie_id: Float
+}
+
+"""
+order by var_pop() on columns of table "culture_company"
+"""
+input culture_company_var_pop_order_by {
+  book_club_id: order_by
+  group_equity_shareholding: order_by
+  movie_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type culture_company_var_samp_fields {
+  book_club_id: Float
+  group_equity_shareholding: Float
+  movie_id: Float
+}
+
+"""
+order by var_samp() on columns of table "culture_company"
+"""
+input culture_company_var_samp_order_by {
+  book_club_id: order_by
+  group_equity_shareholding: order_by
+  movie_id: order_by
+}
+
+"""aggregate variance on columns"""
+type culture_company_variance_fields {
+  book_club_id: Float
+  group_equity_shareholding: Float
+  movie_id: Float
+}
+
+"""
+order by variance() on columns of table "culture_company"
+"""
+input culture_company_variance_order_by {
+  book_club_id: order_by
+  group_equity_shareholding: order_by
+  movie_id: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "movie"
+"""
+type movie {
+  budget_million: Float
+
+  """An object relationship"""
+  culture_company: culture_company
+  director: String
+  gross_worldwide: Int
+  movie_id: Int!
+  title: String
+  year: Int
+}
+
+"""
+aggregated selection of "movie"
+"""
+type movie_aggregate {
+  aggregate: movie_aggregate_fields
+  nodes: [movie!]!
+}
+
+"""
+aggregate fields of "movie"
+"""
+type movie_aggregate_fields {
+  avg: movie_avg_fields
+  count(columns: [movie_select_column!], distinct: Boolean): Int
+  max: movie_max_fields
+  min: movie_min_fields
+  stddev: movie_stddev_fields
+  stddev_pop: movie_stddev_pop_fields
+  stddev_samp: movie_stddev_samp_fields
+  sum: movie_sum_fields
+  var_pop: movie_var_pop_fields
+  var_samp: movie_var_samp_fields
+  variance: movie_variance_fields
+}
+
+"""
+order by aggregate values of table "movie"
+"""
+input movie_aggregate_order_by {
+  avg: movie_avg_order_by
+  count: order_by
+  max: movie_max_order_by
+  min: movie_min_order_by
+  stddev: movie_stddev_order_by
+  stddev_pop: movie_stddev_pop_order_by
+  stddev_samp: movie_stddev_samp_order_by
+  sum: movie_sum_order_by
+  var_pop: movie_var_pop_order_by
+  var_samp: movie_var_samp_order_by
+  variance: movie_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "movie"
+"""
+input movie_arr_rel_insert_input {
+  data: [movie_insert_input!]!
+  on_conflict: movie_on_conflict
+}
+
+"""aggregate avg on columns"""
+type movie_avg_fields {
+  budget_million: Float
+  gross_worldwide: Float
+  movie_id: Float
+  year: Float
+}
+
+"""
+order by avg() on columns of table "movie"
+"""
+input movie_avg_order_by {
+  budget_million: order_by
+  gross_worldwide: order_by
+  movie_id: order_by
+  year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "movie". All fields are combined with a logical 'AND'.
+"""
+input movie_bool_exp {
+  _and: [movie_bool_exp]
+  _not: movie_bool_exp
+  _or: [movie_bool_exp]
+  budget_million: Float_comparison_exp
+  culture_company: culture_company_bool_exp
+  director: String_comparison_exp
+  gross_worldwide: Int_comparison_exp
+  movie_id: Int_comparison_exp
+  title: String_comparison_exp
+  year: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "movie"
+"""
+enum movie_constraint {
+  """unique or primary key constraint"""
+  idx_18794_sqlite_autoindex_movie_1
+}
+
+"""
+input type for incrementing integer columne in table "movie"
+"""
+input movie_inc_input {
+  gross_worldwide: Int
+  movie_id: Int
+  year: Int
+}
+
+"""
+input type for inserting data into table "movie"
+"""
+input movie_insert_input {
+  budget_million: Float
+  culture_company: culture_company_obj_rel_insert_input
+  director: String
+  gross_worldwide: Int
+  movie_id: Int
+  title: String
+  year: Int
+}
+
+"""aggregate max on columns"""
+type movie_max_fields {
+  budget_million: Float
+  director: String
+  gross_worldwide: Int
+  movie_id: Int
+  title: String
+  year: Int
+}
+
+"""
+order by max() on columns of table "movie"
+"""
+input movie_max_order_by {
+  budget_million: order_by
+  director: order_by
+  gross_worldwide: order_by
+  movie_id: order_by
+  title: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type movie_min_fields {
+  budget_million: Float
+  director: String
+  gross_worldwide: Int
+  movie_id: Int
+  title: String
+  year: Int
+}
+
+"""
+order by min() on columns of table "movie"
+"""
+input movie_min_order_by {
+  budget_million: order_by
+  director: order_by
+  gross_worldwide: order_by
+  movie_id: order_by
+  title: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "movie"
+"""
+type movie_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [movie!]!
+}
+
+"""
+input type for inserting object relation for remote table "movie"
+"""
+input movie_obj_rel_insert_input {
+  data: movie_insert_input!
+  on_conflict: movie_on_conflict
+}
+
+"""
+on conflict condition type for table "movie"
+"""
+input movie_on_conflict {
+  constraint: movie_constraint!
+  update_columns: [movie_update_column!]!
+  where: movie_bool_exp
+}
+
+"""
+ordering options when selecting data from "movie"
+"""
+input movie_order_by {
+  budget_million: order_by
+  culture_company: culture_company_order_by
+  director: order_by
+  gross_worldwide: order_by
+  movie_id: order_by
+  title: order_by
+  year: order_by
+}
+
+"""
+select columns of table "movie"
+"""
+enum movie_select_column {
+  """column name"""
+  budget_million
+
+  """column name"""
+  director
+
+  """column name"""
+  gross_worldwide
+
+  """column name"""
+  movie_id
+
+  """column name"""
+  title
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "movie"
+"""
+input movie_set_input {
+  budget_million: Float
+  director: String
+  gross_worldwide: Int
+  movie_id: Int
+  title: String
+  year: Int
+}
+
+"""aggregate stddev on columns"""
+type movie_stddev_fields {
+  budget_million: Float
+  gross_worldwide: Float
+  movie_id: Float
+  year: Float
+}
+
+"""
+order by stddev() on columns of table "movie"
+"""
+input movie_stddev_order_by {
+  budget_million: order_by
+  gross_worldwide: order_by
+  movie_id: order_by
+  year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type movie_stddev_pop_fields {
+  budget_million: Float
+  gross_worldwide: Float
+  movie_id: Float
+  year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "movie"
+"""
+input movie_stddev_pop_order_by {
+  budget_million: order_by
+  gross_worldwide: order_by
+  movie_id: order_by
+  year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type movie_stddev_samp_fields {
+  budget_million: Float
+  gross_worldwide: Float
+  movie_id: Float
+  year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "movie"
+"""
+input movie_stddev_samp_order_by {
+  budget_million: order_by
+  gross_worldwide: order_by
+  movie_id: order_by
+  year: order_by
+}
+
+"""aggregate sum on columns"""
+type movie_sum_fields {
+  budget_million: Float
+  gross_worldwide: Int
+  movie_id: Int
+  year: Int
+}
+
+"""
+order by sum() on columns of table "movie"
+"""
+input movie_sum_order_by {
+  budget_million: order_by
+  gross_worldwide: order_by
+  movie_id: order_by
+  year: order_by
+}
+
+"""
+update columns of table "movie"
+"""
+enum movie_update_column {
+  """column name"""
+  budget_million
+
+  """column name"""
+  director
+
+  """column name"""
+  gross_worldwide
+
+  """column name"""
+  movie_id
+
+  """column name"""
+  title
+
+  """column name"""
+  year
+}
+
+"""aggregate var_pop on columns"""
+type movie_var_pop_fields {
+  budget_million: Float
+  gross_worldwide: Float
+  movie_id: Float
+  year: Float
+}
+
+"""
+order by var_pop() on columns of table "movie"
+"""
+input movie_var_pop_order_by {
+  budget_million: order_by
+  gross_worldwide: order_by
+  movie_id: order_by
+  year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type movie_var_samp_fields {
+  budget_million: Float
+  gross_worldwide: Float
+  movie_id: Float
+  year: Float
+}
+
+"""
+order by var_samp() on columns of table "movie"
+"""
+input movie_var_samp_order_by {
+  budget_million: order_by
+  gross_worldwide: order_by
+  movie_id: order_by
+  year: order_by
+}
+
+"""aggregate variance on columns"""
+type movie_variance_fields {
+  budget_million: Float
+  gross_worldwide: Float
+  movie_id: Float
+  year: Float
+}
+
+"""
+order by variance() on columns of table "movie"
+"""
+input movie_variance_order_by {
+  budget_million: order_by
+  gross_worldwide: order_by
+  movie_id: order_by
+  year: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "book_club"
+  """
+  delete_book_club(
+    """filter the rows which have to be deleted"""
+    where: book_club_bool_exp!
+  ): book_club_mutation_response
+
+  """
+  delete data from the table: "culture_company"
+  """
+  delete_culture_company(
+    """filter the rows which have to be deleted"""
+    where: culture_company_bool_exp!
+  ): culture_company_mutation_response
+
+  """
+  delete data from the table: "movie"
+  """
+  delete_movie(
+    """filter the rows which have to be deleted"""
+    where: movie_bool_exp!
+  ): movie_mutation_response
+
+  """
+  insert data into the table: "book_club"
+  """
+  insert_book_club(
+    """the rows to be inserted"""
+    objects: [book_club_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: book_club_on_conflict
+  ): book_club_mutation_response
+
+  """
+  insert data into the table: "culture_company"
+  """
+  insert_culture_company(
+    """the rows to be inserted"""
+    objects: [culture_company_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: culture_company_on_conflict
+  ): culture_company_mutation_response
+
+  """
+  insert data into the table: "movie"
+  """
+  insert_movie(
+    """the rows to be inserted"""
+    objects: [movie_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: movie_on_conflict
+  ): movie_mutation_response
+
+  """
+  update data of the table: "book_club"
+  """
+  update_book_club(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: book_club_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: book_club_set_input
+
+    """filter the rows which have to be updated"""
+    where: book_club_bool_exp!
+  ): book_club_mutation_response
+
+  """
+  update data of the table: "culture_company"
+  """
+  update_culture_company(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: culture_company_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: culture_company_set_input
+
+    """filter the rows which have to be updated"""
+    where: culture_company_bool_exp!
+  ): culture_company_mutation_response
+
+  """
+  update data of the table: "movie"
+  """
+  update_movie(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: movie_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: movie_set_input
+
+    """filter the rows which have to be updated"""
+    where: movie_bool_exp!
+  ): movie_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "book_club"
+  """
+  book_club(
+    """distinct select on columns"""
+    distinct_on: [book_club_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [book_club_order_by!]
+
+    """filter the rows returned"""
+    where: book_club_bool_exp
+  ): [book_club!]!
+
+  """
+  fetch aggregated fields from the table: "book_club"
+  """
+  book_club_aggregate(
+    """distinct select on columns"""
+    distinct_on: [book_club_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [book_club_order_by!]
+
+    """filter the rows returned"""
+    where: book_club_bool_exp
+  ): book_club_aggregate!
+
+  """fetch data from the table: "book_club" using primary key columns"""
+  book_club_by_pk(book_club_id: Int!): book_club
+
+  """
+  fetch data from the table: "culture_company"
+  """
+  culture_company(
+    """distinct select on columns"""
+    distinct_on: [culture_company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [culture_company_order_by!]
+
+    """filter the rows returned"""
+    where: culture_company_bool_exp
+  ): [culture_company!]!
+
+  """
+  fetch aggregated fields from the table: "culture_company"
+  """
+  culture_company_aggregate(
+    """distinct select on columns"""
+    distinct_on: [culture_company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [culture_company_order_by!]
+
+    """filter the rows returned"""
+    where: culture_company_bool_exp
+  ): culture_company_aggregate!
+
+  """
+  fetch data from the table: "movie"
+  """
+  movie(
+    """distinct select on columns"""
+    distinct_on: [movie_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [movie_order_by!]
+
+    """filter the rows returned"""
+    where: movie_bool_exp
+  ): [movie!]!
+
+  """
+  fetch aggregated fields from the table: "movie"
+  """
+  movie_aggregate(
+    """distinct select on columns"""
+    distinct_on: [movie_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [movie_order_by!]
+
+    """filter the rows returned"""
+    where: movie_bool_exp
+  ): movie_aggregate!
+
+  """fetch data from the table: "movie" using primary key columns"""
+  movie_by_pk(movie_id: Int!): movie
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "book_club"
+  """
+  book_club(
+    """distinct select on columns"""
+    distinct_on: [book_club_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [book_club_order_by!]
+
+    """filter the rows returned"""
+    where: book_club_bool_exp
+  ): [book_club!]!
+
+  """
+  fetch aggregated fields from the table: "book_club"
+  """
+  book_club_aggregate(
+    """distinct select on columns"""
+    distinct_on: [book_club_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [book_club_order_by!]
+
+    """filter the rows returned"""
+    where: book_club_bool_exp
+  ): book_club_aggregate!
+
+  """fetch data from the table: "book_club" using primary key columns"""
+  book_club_by_pk(book_club_id: Int!): book_club
+
+  """
+  fetch data from the table: "culture_company"
+  """
+  culture_company(
+    """distinct select on columns"""
+    distinct_on: [culture_company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [culture_company_order_by!]
+
+    """filter the rows returned"""
+    where: culture_company_bool_exp
+  ): [culture_company!]!
+
+  """
+  fetch aggregated fields from the table: "culture_company"
+  """
+  culture_company_aggregate(
+    """distinct select on columns"""
+    distinct_on: [culture_company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [culture_company_order_by!]
+
+    """filter the rows returned"""
+    where: culture_company_bool_exp
+  ): culture_company_aggregate!
+
+  """
+  fetch data from the table: "movie"
+  """
+  movie(
+    """distinct select on columns"""
+    distinct_on: [movie_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [movie_order_by!]
+
+    """filter the rows returned"""
+    where: movie_bool_exp
+  ): [movie!]!
+
+  """
+  fetch aggregated fields from the table: "movie"
+  """
+  movie_aggregate(
+    """distinct select on columns"""
+    distinct_on: [movie_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [movie_order_by!]
+
+    """filter the rows returned"""
+    where: movie_bool_exp
+  ): movie_aggregate!
+
+  """fetch data from the table: "movie" using primary key columns"""
+  movie_by_pk(movie_id: Int!): movie
+}

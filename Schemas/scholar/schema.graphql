@@ -1,0 +1,4713 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "author"
+"""
+type author {
+  authorid: bigint!
+  authorname: String
+
+  """An array relationship"""
+  writes(
+    """distinct select on columns"""
+    distinct_on: [writes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [writes_order_by!]
+
+    """filter the rows returned"""
+    where: writes_bool_exp
+  ): [writes!]!
+
+  """An aggregated array relationship"""
+  writes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [writes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [writes_order_by!]
+
+    """filter the rows returned"""
+    where: writes_bool_exp
+  ): writes_aggregate!
+}
+
+"""
+aggregated selection of "author"
+"""
+type author_aggregate {
+  aggregate: author_aggregate_fields
+  nodes: [author!]!
+}
+
+"""
+aggregate fields of "author"
+"""
+type author_aggregate_fields {
+  avg: author_avg_fields
+  count(columns: [author_select_column!], distinct: Boolean): Int
+  max: author_max_fields
+  min: author_min_fields
+  stddev: author_stddev_fields
+  stddev_pop: author_stddev_pop_fields
+  stddev_samp: author_stddev_samp_fields
+  sum: author_sum_fields
+  var_pop: author_var_pop_fields
+  var_samp: author_var_samp_fields
+  variance: author_variance_fields
+}
+
+"""
+order by aggregate values of table "author"
+"""
+input author_aggregate_order_by {
+  avg: author_avg_order_by
+  count: order_by
+  max: author_max_order_by
+  min: author_min_order_by
+  stddev: author_stddev_order_by
+  stddev_pop: author_stddev_pop_order_by
+  stddev_samp: author_stddev_samp_order_by
+  sum: author_sum_order_by
+  var_pop: author_var_pop_order_by
+  var_samp: author_var_samp_order_by
+  variance: author_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "author"
+"""
+input author_arr_rel_insert_input {
+  data: [author_insert_input!]!
+  on_conflict: author_on_conflict
+}
+
+"""aggregate avg on columns"""
+type author_avg_fields {
+  authorid: Float
+}
+
+"""
+order by avg() on columns of table "author"
+"""
+input author_avg_order_by {
+  authorid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "author". All fields are combined with a logical 'AND'.
+"""
+input author_bool_exp {
+  _and: [author_bool_exp]
+  _not: author_bool_exp
+  _or: [author_bool_exp]
+  authorid: bigint_comparison_exp
+  authorname: String_comparison_exp
+  writes: writes_bool_exp
+}
+
+"""
+unique or primary key constraints on table "author"
+"""
+enum author_constraint {
+  """unique or primary key constraint"""
+  idx_26021_author_pkey
+}
+
+"""
+input type for incrementing integer columne in table "author"
+"""
+input author_inc_input {
+  authorid: bigint
+}
+
+"""
+input type for inserting data into table "author"
+"""
+input author_insert_input {
+  authorid: bigint
+  authorname: String
+  writes: writes_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type author_max_fields {
+  authorid: bigint
+  authorname: String
+}
+
+"""
+order by max() on columns of table "author"
+"""
+input author_max_order_by {
+  authorid: order_by
+  authorname: order_by
+}
+
+"""aggregate min on columns"""
+type author_min_fields {
+  authorid: bigint
+  authorname: String
+}
+
+"""
+order by min() on columns of table "author"
+"""
+input author_min_order_by {
+  authorid: order_by
+  authorname: order_by
+}
+
+"""
+response of any mutation on the table "author"
+"""
+type author_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [author!]!
+}
+
+"""
+input type for inserting object relation for remote table "author"
+"""
+input author_obj_rel_insert_input {
+  data: author_insert_input!
+  on_conflict: author_on_conflict
+}
+
+"""
+on conflict condition type for table "author"
+"""
+input author_on_conflict {
+  constraint: author_constraint!
+  update_columns: [author_update_column!]!
+  where: author_bool_exp
+}
+
+"""
+ordering options when selecting data from "author"
+"""
+input author_order_by {
+  authorid: order_by
+  authorname: order_by
+  writes_aggregate: writes_aggregate_order_by
+}
+
+"""
+select columns of table "author"
+"""
+enum author_select_column {
+  """column name"""
+  authorid
+
+  """column name"""
+  authorname
+}
+
+"""
+input type for updating data in table "author"
+"""
+input author_set_input {
+  authorid: bigint
+  authorname: String
+}
+
+"""aggregate stddev on columns"""
+type author_stddev_fields {
+  authorid: Float
+}
+
+"""
+order by stddev() on columns of table "author"
+"""
+input author_stddev_order_by {
+  authorid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type author_stddev_pop_fields {
+  authorid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "author"
+"""
+input author_stddev_pop_order_by {
+  authorid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type author_stddev_samp_fields {
+  authorid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "author"
+"""
+input author_stddev_samp_order_by {
+  authorid: order_by
+}
+
+"""aggregate sum on columns"""
+type author_sum_fields {
+  authorid: bigint
+}
+
+"""
+order by sum() on columns of table "author"
+"""
+input author_sum_order_by {
+  authorid: order_by
+}
+
+"""
+update columns of table "author"
+"""
+enum author_update_column {
+  """column name"""
+  authorid
+
+  """column name"""
+  authorname
+}
+
+"""aggregate var_pop on columns"""
+type author_var_pop_fields {
+  authorid: Float
+}
+
+"""
+order by var_pop() on columns of table "author"
+"""
+input author_var_pop_order_by {
+  authorid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type author_var_samp_fields {
+  authorid: Float
+}
+
+"""
+order by var_samp() on columns of table "author"
+"""
+input author_var_samp_order_by {
+  authorid: order_by
+}
+
+"""aggregate variance on columns"""
+type author_variance_fields {
+  authorid: Float
+}
+
+"""
+order by variance() on columns of table "author"
+"""
+input author_variance_order_by {
+  authorid: order_by
+}
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "cite"
+"""
+type cite {
+  citedpaperid: bigint!
+  citingpaperid: bigint!
+
+  """An object relationship"""
+  paper: paper!
+
+  """An object relationship"""
+  paperByCitingpaperid: paper!
+}
+
+"""
+aggregated selection of "cite"
+"""
+type cite_aggregate {
+  aggregate: cite_aggregate_fields
+  nodes: [cite!]!
+}
+
+"""
+aggregate fields of "cite"
+"""
+type cite_aggregate_fields {
+  avg: cite_avg_fields
+  count(columns: [cite_select_column!], distinct: Boolean): Int
+  max: cite_max_fields
+  min: cite_min_fields
+  stddev: cite_stddev_fields
+  stddev_pop: cite_stddev_pop_fields
+  stddev_samp: cite_stddev_samp_fields
+  sum: cite_sum_fields
+  var_pop: cite_var_pop_fields
+  var_samp: cite_var_samp_fields
+  variance: cite_variance_fields
+}
+
+"""
+order by aggregate values of table "cite"
+"""
+input cite_aggregate_order_by {
+  avg: cite_avg_order_by
+  count: order_by
+  max: cite_max_order_by
+  min: cite_min_order_by
+  stddev: cite_stddev_order_by
+  stddev_pop: cite_stddev_pop_order_by
+  stddev_samp: cite_stddev_samp_order_by
+  sum: cite_sum_order_by
+  var_pop: cite_var_pop_order_by
+  var_samp: cite_var_samp_order_by
+  variance: cite_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "cite"
+"""
+input cite_arr_rel_insert_input {
+  data: [cite_insert_input!]!
+  on_conflict: cite_on_conflict
+}
+
+"""aggregate avg on columns"""
+type cite_avg_fields {
+  citedpaperid: Float
+  citingpaperid: Float
+}
+
+"""
+order by avg() on columns of table "cite"
+"""
+input cite_avg_order_by {
+  citedpaperid: order_by
+  citingpaperid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "cite". All fields are combined with a logical 'AND'.
+"""
+input cite_bool_exp {
+  _and: [cite_bool_exp]
+  _not: cite_bool_exp
+  _or: [cite_bool_exp]
+  citedpaperid: bigint_comparison_exp
+  citingpaperid: bigint_comparison_exp
+  paper: paper_bool_exp
+  paperByCitingpaperid: paper_bool_exp
+}
+
+"""
+unique or primary key constraints on table "cite"
+"""
+enum cite_constraint {
+  """unique or primary key constraint"""
+  idx_26051_cite_pkey
+
+  """unique or primary key constraint"""
+  idx_26051_sqlite_autoindex_cite_1
+}
+
+"""
+input type for incrementing integer columne in table "cite"
+"""
+input cite_inc_input {
+  citedpaperid: bigint
+  citingpaperid: bigint
+}
+
+"""
+input type for inserting data into table "cite"
+"""
+input cite_insert_input {
+  citedpaperid: bigint
+  citingpaperid: bigint
+  paper: paper_obj_rel_insert_input
+  paperByCitingpaperid: paper_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type cite_max_fields {
+  citedpaperid: bigint
+  citingpaperid: bigint
+}
+
+"""
+order by max() on columns of table "cite"
+"""
+input cite_max_order_by {
+  citedpaperid: order_by
+  citingpaperid: order_by
+}
+
+"""aggregate min on columns"""
+type cite_min_fields {
+  citedpaperid: bigint
+  citingpaperid: bigint
+}
+
+"""
+order by min() on columns of table "cite"
+"""
+input cite_min_order_by {
+  citedpaperid: order_by
+  citingpaperid: order_by
+}
+
+"""
+response of any mutation on the table "cite"
+"""
+type cite_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [cite!]!
+}
+
+"""
+input type for inserting object relation for remote table "cite"
+"""
+input cite_obj_rel_insert_input {
+  data: cite_insert_input!
+  on_conflict: cite_on_conflict
+}
+
+"""
+on conflict condition type for table "cite"
+"""
+input cite_on_conflict {
+  constraint: cite_constraint!
+  update_columns: [cite_update_column!]!
+  where: cite_bool_exp
+}
+
+"""
+ordering options when selecting data from "cite"
+"""
+input cite_order_by {
+  citedpaperid: order_by
+  citingpaperid: order_by
+  paper: paper_order_by
+  paperByCitingpaperid: paper_order_by
+}
+
+"""
+select columns of table "cite"
+"""
+enum cite_select_column {
+  """column name"""
+  citedpaperid
+
+  """column name"""
+  citingpaperid
+}
+
+"""
+input type for updating data in table "cite"
+"""
+input cite_set_input {
+  citedpaperid: bigint
+  citingpaperid: bigint
+}
+
+"""aggregate stddev on columns"""
+type cite_stddev_fields {
+  citedpaperid: Float
+  citingpaperid: Float
+}
+
+"""
+order by stddev() on columns of table "cite"
+"""
+input cite_stddev_order_by {
+  citedpaperid: order_by
+  citingpaperid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type cite_stddev_pop_fields {
+  citedpaperid: Float
+  citingpaperid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "cite"
+"""
+input cite_stddev_pop_order_by {
+  citedpaperid: order_by
+  citingpaperid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type cite_stddev_samp_fields {
+  citedpaperid: Float
+  citingpaperid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "cite"
+"""
+input cite_stddev_samp_order_by {
+  citedpaperid: order_by
+  citingpaperid: order_by
+}
+
+"""aggregate sum on columns"""
+type cite_sum_fields {
+  citedpaperid: bigint
+  citingpaperid: bigint
+}
+
+"""
+order by sum() on columns of table "cite"
+"""
+input cite_sum_order_by {
+  citedpaperid: order_by
+  citingpaperid: order_by
+}
+
+"""
+update columns of table "cite"
+"""
+enum cite_update_column {
+  """column name"""
+  citedpaperid
+
+  """column name"""
+  citingpaperid
+}
+
+"""aggregate var_pop on columns"""
+type cite_var_pop_fields {
+  citedpaperid: Float
+  citingpaperid: Float
+}
+
+"""
+order by var_pop() on columns of table "cite"
+"""
+input cite_var_pop_order_by {
+  citedpaperid: order_by
+  citingpaperid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type cite_var_samp_fields {
+  citedpaperid: Float
+  citingpaperid: Float
+}
+
+"""
+order by var_samp() on columns of table "cite"
+"""
+input cite_var_samp_order_by {
+  citedpaperid: order_by
+  citingpaperid: order_by
+}
+
+"""aggregate variance on columns"""
+type cite_variance_fields {
+  citedpaperid: Float
+  citingpaperid: Float
+}
+
+"""
+order by variance() on columns of table "cite"
+"""
+input cite_variance_order_by {
+  citedpaperid: order_by
+  citingpaperid: order_by
+}
+
+"""
+columns and relationships of "dataset"
+"""
+type dataset {
+  datasetid: bigint!
+  datasetname: String
+}
+
+"""
+aggregated selection of "dataset"
+"""
+type dataset_aggregate {
+  aggregate: dataset_aggregate_fields
+  nodes: [dataset!]!
+}
+
+"""
+aggregate fields of "dataset"
+"""
+type dataset_aggregate_fields {
+  avg: dataset_avg_fields
+  count(columns: [dataset_select_column!], distinct: Boolean): Int
+  max: dataset_max_fields
+  min: dataset_min_fields
+  stddev: dataset_stddev_fields
+  stddev_pop: dataset_stddev_pop_fields
+  stddev_samp: dataset_stddev_samp_fields
+  sum: dataset_sum_fields
+  var_pop: dataset_var_pop_fields
+  var_samp: dataset_var_samp_fields
+  variance: dataset_variance_fields
+}
+
+"""
+order by aggregate values of table "dataset"
+"""
+input dataset_aggregate_order_by {
+  avg: dataset_avg_order_by
+  count: order_by
+  max: dataset_max_order_by
+  min: dataset_min_order_by
+  stddev: dataset_stddev_order_by
+  stddev_pop: dataset_stddev_pop_order_by
+  stddev_samp: dataset_stddev_samp_order_by
+  sum: dataset_sum_order_by
+  var_pop: dataset_var_pop_order_by
+  var_samp: dataset_var_samp_order_by
+  variance: dataset_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "dataset"
+"""
+input dataset_arr_rel_insert_input {
+  data: [dataset_insert_input!]!
+  on_conflict: dataset_on_conflict
+}
+
+"""aggregate avg on columns"""
+type dataset_avg_fields {
+  datasetid: Float
+}
+
+"""
+order by avg() on columns of table "dataset"
+"""
+input dataset_avg_order_by {
+  datasetid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "dataset". All fields are combined with a logical 'AND'.
+"""
+input dataset_bool_exp {
+  _and: [dataset_bool_exp]
+  _not: dataset_bool_exp
+  _or: [dataset_bool_exp]
+  datasetid: bigint_comparison_exp
+  datasetname: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "dataset"
+"""
+enum dataset_constraint {
+  """unique or primary key constraint"""
+  idx_26027_dataset_pkey
+}
+
+"""
+input type for incrementing integer columne in table "dataset"
+"""
+input dataset_inc_input {
+  datasetid: bigint
+}
+
+"""
+input type for inserting data into table "dataset"
+"""
+input dataset_insert_input {
+  datasetid: bigint
+  datasetname: String
+}
+
+"""aggregate max on columns"""
+type dataset_max_fields {
+  datasetid: bigint
+  datasetname: String
+}
+
+"""
+order by max() on columns of table "dataset"
+"""
+input dataset_max_order_by {
+  datasetid: order_by
+  datasetname: order_by
+}
+
+"""aggregate min on columns"""
+type dataset_min_fields {
+  datasetid: bigint
+  datasetname: String
+}
+
+"""
+order by min() on columns of table "dataset"
+"""
+input dataset_min_order_by {
+  datasetid: order_by
+  datasetname: order_by
+}
+
+"""
+response of any mutation on the table "dataset"
+"""
+type dataset_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [dataset!]!
+}
+
+"""
+input type for inserting object relation for remote table "dataset"
+"""
+input dataset_obj_rel_insert_input {
+  data: dataset_insert_input!
+  on_conflict: dataset_on_conflict
+}
+
+"""
+on conflict condition type for table "dataset"
+"""
+input dataset_on_conflict {
+  constraint: dataset_constraint!
+  update_columns: [dataset_update_column!]!
+  where: dataset_bool_exp
+}
+
+"""
+ordering options when selecting data from "dataset"
+"""
+input dataset_order_by {
+  datasetid: order_by
+  datasetname: order_by
+}
+
+"""
+select columns of table "dataset"
+"""
+enum dataset_select_column {
+  """column name"""
+  datasetid
+
+  """column name"""
+  datasetname
+}
+
+"""
+input type for updating data in table "dataset"
+"""
+input dataset_set_input {
+  datasetid: bigint
+  datasetname: String
+}
+
+"""aggregate stddev on columns"""
+type dataset_stddev_fields {
+  datasetid: Float
+}
+
+"""
+order by stddev() on columns of table "dataset"
+"""
+input dataset_stddev_order_by {
+  datasetid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type dataset_stddev_pop_fields {
+  datasetid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "dataset"
+"""
+input dataset_stddev_pop_order_by {
+  datasetid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type dataset_stddev_samp_fields {
+  datasetid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "dataset"
+"""
+input dataset_stddev_samp_order_by {
+  datasetid: order_by
+}
+
+"""aggregate sum on columns"""
+type dataset_sum_fields {
+  datasetid: bigint
+}
+
+"""
+order by sum() on columns of table "dataset"
+"""
+input dataset_sum_order_by {
+  datasetid: order_by
+}
+
+"""
+update columns of table "dataset"
+"""
+enum dataset_update_column {
+  """column name"""
+  datasetid
+
+  """column name"""
+  datasetname
+}
+
+"""aggregate var_pop on columns"""
+type dataset_var_pop_fields {
+  datasetid: Float
+}
+
+"""
+order by var_pop() on columns of table "dataset"
+"""
+input dataset_var_pop_order_by {
+  datasetid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type dataset_var_samp_fields {
+  datasetid: Float
+}
+
+"""
+order by var_samp() on columns of table "dataset"
+"""
+input dataset_var_samp_order_by {
+  datasetid: order_by
+}
+
+"""aggregate variance on columns"""
+type dataset_variance_fields {
+  datasetid: Float
+}
+
+"""
+order by variance() on columns of table "dataset"
+"""
+input dataset_variance_order_by {
+  datasetid: order_by
+}
+
+"""
+columns and relationships of "journal"
+"""
+type journal {
+  journalid: bigint!
+  journalname: String
+
+  """An array relationship"""
+  papers(
+    """distinct select on columns"""
+    distinct_on: [paper_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paper_order_by!]
+
+    """filter the rows returned"""
+    where: paper_bool_exp
+  ): [paper!]!
+
+  """An aggregated array relationship"""
+  papers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [paper_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paper_order_by!]
+
+    """filter the rows returned"""
+    where: paper_bool_exp
+  ): paper_aggregate!
+}
+
+"""
+aggregated selection of "journal"
+"""
+type journal_aggregate {
+  aggregate: journal_aggregate_fields
+  nodes: [journal!]!
+}
+
+"""
+aggregate fields of "journal"
+"""
+type journal_aggregate_fields {
+  avg: journal_avg_fields
+  count(columns: [journal_select_column!], distinct: Boolean): Int
+  max: journal_max_fields
+  min: journal_min_fields
+  stddev: journal_stddev_fields
+  stddev_pop: journal_stddev_pop_fields
+  stddev_samp: journal_stddev_samp_fields
+  sum: journal_sum_fields
+  var_pop: journal_var_pop_fields
+  var_samp: journal_var_samp_fields
+  variance: journal_variance_fields
+}
+
+"""
+order by aggregate values of table "journal"
+"""
+input journal_aggregate_order_by {
+  avg: journal_avg_order_by
+  count: order_by
+  max: journal_max_order_by
+  min: journal_min_order_by
+  stddev: journal_stddev_order_by
+  stddev_pop: journal_stddev_pop_order_by
+  stddev_samp: journal_stddev_samp_order_by
+  sum: journal_sum_order_by
+  var_pop: journal_var_pop_order_by
+  var_samp: journal_var_samp_order_by
+  variance: journal_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "journal"
+"""
+input journal_arr_rel_insert_input {
+  data: [journal_insert_input!]!
+  on_conflict: journal_on_conflict
+}
+
+"""aggregate avg on columns"""
+type journal_avg_fields {
+  journalid: Float
+}
+
+"""
+order by avg() on columns of table "journal"
+"""
+input journal_avg_order_by {
+  journalid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "journal". All fields are combined with a logical 'AND'.
+"""
+input journal_bool_exp {
+  _and: [journal_bool_exp]
+  _not: journal_bool_exp
+  _or: [journal_bool_exp]
+  journalid: bigint_comparison_exp
+  journalname: String_comparison_exp
+  papers: paper_bool_exp
+}
+
+"""
+unique or primary key constraints on table "journal"
+"""
+enum journal_constraint {
+  """unique or primary key constraint"""
+  idx_26033_journal_pkey
+}
+
+"""
+input type for incrementing integer columne in table "journal"
+"""
+input journal_inc_input {
+  journalid: bigint
+}
+
+"""
+input type for inserting data into table "journal"
+"""
+input journal_insert_input {
+  journalid: bigint
+  journalname: String
+  papers: paper_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type journal_max_fields {
+  journalid: bigint
+  journalname: String
+}
+
+"""
+order by max() on columns of table "journal"
+"""
+input journal_max_order_by {
+  journalid: order_by
+  journalname: order_by
+}
+
+"""aggregate min on columns"""
+type journal_min_fields {
+  journalid: bigint
+  journalname: String
+}
+
+"""
+order by min() on columns of table "journal"
+"""
+input journal_min_order_by {
+  journalid: order_by
+  journalname: order_by
+}
+
+"""
+response of any mutation on the table "journal"
+"""
+type journal_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [journal!]!
+}
+
+"""
+input type for inserting object relation for remote table "journal"
+"""
+input journal_obj_rel_insert_input {
+  data: journal_insert_input!
+  on_conflict: journal_on_conflict
+}
+
+"""
+on conflict condition type for table "journal"
+"""
+input journal_on_conflict {
+  constraint: journal_constraint!
+  update_columns: [journal_update_column!]!
+  where: journal_bool_exp
+}
+
+"""
+ordering options when selecting data from "journal"
+"""
+input journal_order_by {
+  journalid: order_by
+  journalname: order_by
+  papers_aggregate: paper_aggregate_order_by
+}
+
+"""
+select columns of table "journal"
+"""
+enum journal_select_column {
+  """column name"""
+  journalid
+
+  """column name"""
+  journalname
+}
+
+"""
+input type for updating data in table "journal"
+"""
+input journal_set_input {
+  journalid: bigint
+  journalname: String
+}
+
+"""aggregate stddev on columns"""
+type journal_stddev_fields {
+  journalid: Float
+}
+
+"""
+order by stddev() on columns of table "journal"
+"""
+input journal_stddev_order_by {
+  journalid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type journal_stddev_pop_fields {
+  journalid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "journal"
+"""
+input journal_stddev_pop_order_by {
+  journalid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type journal_stddev_samp_fields {
+  journalid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "journal"
+"""
+input journal_stddev_samp_order_by {
+  journalid: order_by
+}
+
+"""aggregate sum on columns"""
+type journal_sum_fields {
+  journalid: bigint
+}
+
+"""
+order by sum() on columns of table "journal"
+"""
+input journal_sum_order_by {
+  journalid: order_by
+}
+
+"""
+update columns of table "journal"
+"""
+enum journal_update_column {
+  """column name"""
+  journalid
+
+  """column name"""
+  journalname
+}
+
+"""aggregate var_pop on columns"""
+type journal_var_pop_fields {
+  journalid: Float
+}
+
+"""
+order by var_pop() on columns of table "journal"
+"""
+input journal_var_pop_order_by {
+  journalid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type journal_var_samp_fields {
+  journalid: Float
+}
+
+"""
+order by var_samp() on columns of table "journal"
+"""
+input journal_var_samp_order_by {
+  journalid: order_by
+}
+
+"""aggregate variance on columns"""
+type journal_variance_fields {
+  journalid: Float
+}
+
+"""
+order by variance() on columns of table "journal"
+"""
+input journal_variance_order_by {
+  journalid: order_by
+}
+
+"""
+columns and relationships of "keyphrase"
+"""
+type keyphrase {
+  keyphraseid: bigint!
+  keyphrasename: String
+
+  """An array relationship"""
+  paperkeyphrases(
+    """distinct select on columns"""
+    distinct_on: [paperkeyphrase_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paperkeyphrase_order_by!]
+
+    """filter the rows returned"""
+    where: paperkeyphrase_bool_exp
+  ): [paperkeyphrase!]!
+
+  """An aggregated array relationship"""
+  paperkeyphrases_aggregate(
+    """distinct select on columns"""
+    distinct_on: [paperkeyphrase_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paperkeyphrase_order_by!]
+
+    """filter the rows returned"""
+    where: paperkeyphrase_bool_exp
+  ): paperkeyphrase_aggregate!
+}
+
+"""
+aggregated selection of "keyphrase"
+"""
+type keyphrase_aggregate {
+  aggregate: keyphrase_aggregate_fields
+  nodes: [keyphrase!]!
+}
+
+"""
+aggregate fields of "keyphrase"
+"""
+type keyphrase_aggregate_fields {
+  avg: keyphrase_avg_fields
+  count(columns: [keyphrase_select_column!], distinct: Boolean): Int
+  max: keyphrase_max_fields
+  min: keyphrase_min_fields
+  stddev: keyphrase_stddev_fields
+  stddev_pop: keyphrase_stddev_pop_fields
+  stddev_samp: keyphrase_stddev_samp_fields
+  sum: keyphrase_sum_fields
+  var_pop: keyphrase_var_pop_fields
+  var_samp: keyphrase_var_samp_fields
+  variance: keyphrase_variance_fields
+}
+
+"""
+order by aggregate values of table "keyphrase"
+"""
+input keyphrase_aggregate_order_by {
+  avg: keyphrase_avg_order_by
+  count: order_by
+  max: keyphrase_max_order_by
+  min: keyphrase_min_order_by
+  stddev: keyphrase_stddev_order_by
+  stddev_pop: keyphrase_stddev_pop_order_by
+  stddev_samp: keyphrase_stddev_samp_order_by
+  sum: keyphrase_sum_order_by
+  var_pop: keyphrase_var_pop_order_by
+  var_samp: keyphrase_var_samp_order_by
+  variance: keyphrase_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "keyphrase"
+"""
+input keyphrase_arr_rel_insert_input {
+  data: [keyphrase_insert_input!]!
+  on_conflict: keyphrase_on_conflict
+}
+
+"""aggregate avg on columns"""
+type keyphrase_avg_fields {
+  keyphraseid: Float
+}
+
+"""
+order by avg() on columns of table "keyphrase"
+"""
+input keyphrase_avg_order_by {
+  keyphraseid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "keyphrase". All fields are combined with a logical 'AND'.
+"""
+input keyphrase_bool_exp {
+  _and: [keyphrase_bool_exp]
+  _not: keyphrase_bool_exp
+  _or: [keyphrase_bool_exp]
+  keyphraseid: bigint_comparison_exp
+  keyphrasename: String_comparison_exp
+  paperkeyphrases: paperkeyphrase_bool_exp
+}
+
+"""
+unique or primary key constraints on table "keyphrase"
+"""
+enum keyphrase_constraint {
+  """unique or primary key constraint"""
+  idx_26039_keyphrase_pkey
+}
+
+"""
+input type for incrementing integer columne in table "keyphrase"
+"""
+input keyphrase_inc_input {
+  keyphraseid: bigint
+}
+
+"""
+input type for inserting data into table "keyphrase"
+"""
+input keyphrase_insert_input {
+  keyphraseid: bigint
+  keyphrasename: String
+  paperkeyphrases: paperkeyphrase_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type keyphrase_max_fields {
+  keyphraseid: bigint
+  keyphrasename: String
+}
+
+"""
+order by max() on columns of table "keyphrase"
+"""
+input keyphrase_max_order_by {
+  keyphraseid: order_by
+  keyphrasename: order_by
+}
+
+"""aggregate min on columns"""
+type keyphrase_min_fields {
+  keyphraseid: bigint
+  keyphrasename: String
+}
+
+"""
+order by min() on columns of table "keyphrase"
+"""
+input keyphrase_min_order_by {
+  keyphraseid: order_by
+  keyphrasename: order_by
+}
+
+"""
+response of any mutation on the table "keyphrase"
+"""
+type keyphrase_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [keyphrase!]!
+}
+
+"""
+input type for inserting object relation for remote table "keyphrase"
+"""
+input keyphrase_obj_rel_insert_input {
+  data: keyphrase_insert_input!
+  on_conflict: keyphrase_on_conflict
+}
+
+"""
+on conflict condition type for table "keyphrase"
+"""
+input keyphrase_on_conflict {
+  constraint: keyphrase_constraint!
+  update_columns: [keyphrase_update_column!]!
+  where: keyphrase_bool_exp
+}
+
+"""
+ordering options when selecting data from "keyphrase"
+"""
+input keyphrase_order_by {
+  keyphraseid: order_by
+  keyphrasename: order_by
+  paperkeyphrases_aggregate: paperkeyphrase_aggregate_order_by
+}
+
+"""
+select columns of table "keyphrase"
+"""
+enum keyphrase_select_column {
+  """column name"""
+  keyphraseid
+
+  """column name"""
+  keyphrasename
+}
+
+"""
+input type for updating data in table "keyphrase"
+"""
+input keyphrase_set_input {
+  keyphraseid: bigint
+  keyphrasename: String
+}
+
+"""aggregate stddev on columns"""
+type keyphrase_stddev_fields {
+  keyphraseid: Float
+}
+
+"""
+order by stddev() on columns of table "keyphrase"
+"""
+input keyphrase_stddev_order_by {
+  keyphraseid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type keyphrase_stddev_pop_fields {
+  keyphraseid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "keyphrase"
+"""
+input keyphrase_stddev_pop_order_by {
+  keyphraseid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type keyphrase_stddev_samp_fields {
+  keyphraseid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "keyphrase"
+"""
+input keyphrase_stddev_samp_order_by {
+  keyphraseid: order_by
+}
+
+"""aggregate sum on columns"""
+type keyphrase_sum_fields {
+  keyphraseid: bigint
+}
+
+"""
+order by sum() on columns of table "keyphrase"
+"""
+input keyphrase_sum_order_by {
+  keyphraseid: order_by
+}
+
+"""
+update columns of table "keyphrase"
+"""
+enum keyphrase_update_column {
+  """column name"""
+  keyphraseid
+
+  """column name"""
+  keyphrasename
+}
+
+"""aggregate var_pop on columns"""
+type keyphrase_var_pop_fields {
+  keyphraseid: Float
+}
+
+"""
+order by var_pop() on columns of table "keyphrase"
+"""
+input keyphrase_var_pop_order_by {
+  keyphraseid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type keyphrase_var_samp_fields {
+  keyphraseid: Float
+}
+
+"""
+order by var_samp() on columns of table "keyphrase"
+"""
+input keyphrase_var_samp_order_by {
+  keyphraseid: order_by
+}
+
+"""aggregate variance on columns"""
+type keyphrase_variance_fields {
+  keyphraseid: Float
+}
+
+"""
+order by variance() on columns of table "keyphrase"
+"""
+input keyphrase_variance_order_by {
+  keyphraseid: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "author"
+  """
+  delete_author(
+    """filter the rows which have to be deleted"""
+    where: author_bool_exp!
+  ): author_mutation_response
+
+  """
+  delete data from the table: "cite"
+  """
+  delete_cite(
+    """filter the rows which have to be deleted"""
+    where: cite_bool_exp!
+  ): cite_mutation_response
+
+  """
+  delete data from the table: "dataset"
+  """
+  delete_dataset(
+    """filter the rows which have to be deleted"""
+    where: dataset_bool_exp!
+  ): dataset_mutation_response
+
+  """
+  delete data from the table: "journal"
+  """
+  delete_journal(
+    """filter the rows which have to be deleted"""
+    where: journal_bool_exp!
+  ): journal_mutation_response
+
+  """
+  delete data from the table: "keyphrase"
+  """
+  delete_keyphrase(
+    """filter the rows which have to be deleted"""
+    where: keyphrase_bool_exp!
+  ): keyphrase_mutation_response
+
+  """
+  delete data from the table: "paper"
+  """
+  delete_paper(
+    """filter the rows which have to be deleted"""
+    where: paper_bool_exp!
+  ): paper_mutation_response
+
+  """
+  delete data from the table: "paperdataset"
+  """
+  delete_paperdataset(
+    """filter the rows which have to be deleted"""
+    where: paperdataset_bool_exp!
+  ): paperdataset_mutation_response
+
+  """
+  delete data from the table: "paperkeyphrase"
+  """
+  delete_paperkeyphrase(
+    """filter the rows which have to be deleted"""
+    where: paperkeyphrase_bool_exp!
+  ): paperkeyphrase_mutation_response
+
+  """
+  delete data from the table: "venue"
+  """
+  delete_venue(
+    """filter the rows which have to be deleted"""
+    where: venue_bool_exp!
+  ): venue_mutation_response
+
+  """
+  delete data from the table: "writes"
+  """
+  delete_writes(
+    """filter the rows which have to be deleted"""
+    where: writes_bool_exp!
+  ): writes_mutation_response
+
+  """
+  insert data into the table: "author"
+  """
+  insert_author(
+    """the rows to be inserted"""
+    objects: [author_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: author_on_conflict
+  ): author_mutation_response
+
+  """
+  insert data into the table: "cite"
+  """
+  insert_cite(
+    """the rows to be inserted"""
+    objects: [cite_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: cite_on_conflict
+  ): cite_mutation_response
+
+  """
+  insert data into the table: "dataset"
+  """
+  insert_dataset(
+    """the rows to be inserted"""
+    objects: [dataset_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: dataset_on_conflict
+  ): dataset_mutation_response
+
+  """
+  insert data into the table: "journal"
+  """
+  insert_journal(
+    """the rows to be inserted"""
+    objects: [journal_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: journal_on_conflict
+  ): journal_mutation_response
+
+  """
+  insert data into the table: "keyphrase"
+  """
+  insert_keyphrase(
+    """the rows to be inserted"""
+    objects: [keyphrase_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: keyphrase_on_conflict
+  ): keyphrase_mutation_response
+
+  """
+  insert data into the table: "paper"
+  """
+  insert_paper(
+    """the rows to be inserted"""
+    objects: [paper_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: paper_on_conflict
+  ): paper_mutation_response
+
+  """
+  insert data into the table: "paperdataset"
+  """
+  insert_paperdataset(
+    """the rows to be inserted"""
+    objects: [paperdataset_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: paperdataset_on_conflict
+  ): paperdataset_mutation_response
+
+  """
+  insert data into the table: "paperkeyphrase"
+  """
+  insert_paperkeyphrase(
+    """the rows to be inserted"""
+    objects: [paperkeyphrase_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: paperkeyphrase_on_conflict
+  ): paperkeyphrase_mutation_response
+
+  """
+  insert data into the table: "venue"
+  """
+  insert_venue(
+    """the rows to be inserted"""
+    objects: [venue_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: venue_on_conflict
+  ): venue_mutation_response
+
+  """
+  insert data into the table: "writes"
+  """
+  insert_writes(
+    """the rows to be inserted"""
+    objects: [writes_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: writes_on_conflict
+  ): writes_mutation_response
+
+  """
+  update data of the table: "author"
+  """
+  update_author(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: author_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: author_set_input
+
+    """filter the rows which have to be updated"""
+    where: author_bool_exp!
+  ): author_mutation_response
+
+  """
+  update data of the table: "cite"
+  """
+  update_cite(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: cite_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: cite_set_input
+
+    """filter the rows which have to be updated"""
+    where: cite_bool_exp!
+  ): cite_mutation_response
+
+  """
+  update data of the table: "dataset"
+  """
+  update_dataset(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: dataset_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: dataset_set_input
+
+    """filter the rows which have to be updated"""
+    where: dataset_bool_exp!
+  ): dataset_mutation_response
+
+  """
+  update data of the table: "journal"
+  """
+  update_journal(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: journal_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: journal_set_input
+
+    """filter the rows which have to be updated"""
+    where: journal_bool_exp!
+  ): journal_mutation_response
+
+  """
+  update data of the table: "keyphrase"
+  """
+  update_keyphrase(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: keyphrase_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: keyphrase_set_input
+
+    """filter the rows which have to be updated"""
+    where: keyphrase_bool_exp!
+  ): keyphrase_mutation_response
+
+  """
+  update data of the table: "paper"
+  """
+  update_paper(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: paper_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: paper_set_input
+
+    """filter the rows which have to be updated"""
+    where: paper_bool_exp!
+  ): paper_mutation_response
+
+  """
+  update data of the table: "paperdataset"
+  """
+  update_paperdataset(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: paperdataset_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: paperdataset_set_input
+
+    """filter the rows which have to be updated"""
+    where: paperdataset_bool_exp!
+  ): paperdataset_mutation_response
+
+  """
+  update data of the table: "paperkeyphrase"
+  """
+  update_paperkeyphrase(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: paperkeyphrase_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: paperkeyphrase_set_input
+
+    """filter the rows which have to be updated"""
+    where: paperkeyphrase_bool_exp!
+  ): paperkeyphrase_mutation_response
+
+  """
+  update data of the table: "venue"
+  """
+  update_venue(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: venue_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: venue_set_input
+
+    """filter the rows which have to be updated"""
+    where: venue_bool_exp!
+  ): venue_mutation_response
+
+  """
+  update data of the table: "writes"
+  """
+  update_writes(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: writes_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: writes_set_input
+
+    """filter the rows which have to be updated"""
+    where: writes_bool_exp!
+  ): writes_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "paper"
+"""
+type paper {
+  """An array relationship"""
+  cites(
+    """distinct select on columns"""
+    distinct_on: [cite_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cite_order_by!]
+
+    """filter the rows returned"""
+    where: cite_bool_exp
+  ): [cite!]!
+
+  """An array relationship"""
+  citesByCitedpaperid(
+    """distinct select on columns"""
+    distinct_on: [cite_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cite_order_by!]
+
+    """filter the rows returned"""
+    where: cite_bool_exp
+  ): [cite!]!
+
+  """An aggregated array relationship"""
+  citesByCitedpaperid_aggregate(
+    """distinct select on columns"""
+    distinct_on: [cite_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cite_order_by!]
+
+    """filter the rows returned"""
+    where: cite_bool_exp
+  ): cite_aggregate!
+
+  """An aggregated array relationship"""
+  cites_aggregate(
+    """distinct select on columns"""
+    distinct_on: [cite_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cite_order_by!]
+
+    """filter the rows returned"""
+    where: cite_bool_exp
+  ): cite_aggregate!
+
+  """An object relationship"""
+  journal: journal
+  journalid: bigint
+  numcitedby: bigint
+  numciting: bigint
+  paperid: bigint!
+
+  """An array relationship"""
+  paperkeyphrases(
+    """distinct select on columns"""
+    distinct_on: [paperkeyphrase_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paperkeyphrase_order_by!]
+
+    """filter the rows returned"""
+    where: paperkeyphrase_bool_exp
+  ): [paperkeyphrase!]!
+
+  """An aggregated array relationship"""
+  paperkeyphrases_aggregate(
+    """distinct select on columns"""
+    distinct_on: [paperkeyphrase_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paperkeyphrase_order_by!]
+
+    """filter the rows returned"""
+    where: paperkeyphrase_bool_exp
+  ): paperkeyphrase_aggregate!
+  title: String
+
+  """An object relationship"""
+  venue: venue
+  venueid: bigint
+
+  """An array relationship"""
+  writes(
+    """distinct select on columns"""
+    distinct_on: [writes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [writes_order_by!]
+
+    """filter the rows returned"""
+    where: writes_bool_exp
+  ): [writes!]!
+
+  """An aggregated array relationship"""
+  writes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [writes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [writes_order_by!]
+
+    """filter the rows returned"""
+    where: writes_bool_exp
+  ): writes_aggregate!
+  year: bigint
+}
+
+"""
+aggregated selection of "paper"
+"""
+type paper_aggregate {
+  aggregate: paper_aggregate_fields
+  nodes: [paper!]!
+}
+
+"""
+aggregate fields of "paper"
+"""
+type paper_aggregate_fields {
+  avg: paper_avg_fields
+  count(columns: [paper_select_column!], distinct: Boolean): Int
+  max: paper_max_fields
+  min: paper_min_fields
+  stddev: paper_stddev_fields
+  stddev_pop: paper_stddev_pop_fields
+  stddev_samp: paper_stddev_samp_fields
+  sum: paper_sum_fields
+  var_pop: paper_var_pop_fields
+  var_samp: paper_var_samp_fields
+  variance: paper_variance_fields
+}
+
+"""
+order by aggregate values of table "paper"
+"""
+input paper_aggregate_order_by {
+  avg: paper_avg_order_by
+  count: order_by
+  max: paper_max_order_by
+  min: paper_min_order_by
+  stddev: paper_stddev_order_by
+  stddev_pop: paper_stddev_pop_order_by
+  stddev_samp: paper_stddev_samp_order_by
+  sum: paper_sum_order_by
+  var_pop: paper_var_pop_order_by
+  var_samp: paper_var_samp_order_by
+  variance: paper_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "paper"
+"""
+input paper_arr_rel_insert_input {
+  data: [paper_insert_input!]!
+  on_conflict: paper_on_conflict
+}
+
+"""aggregate avg on columns"""
+type paper_avg_fields {
+  journalid: Float
+  numcitedby: Float
+  numciting: Float
+  paperid: Float
+  venueid: Float
+  year: Float
+}
+
+"""
+order by avg() on columns of table "paper"
+"""
+input paper_avg_order_by {
+  journalid: order_by
+  numcitedby: order_by
+  numciting: order_by
+  paperid: order_by
+  venueid: order_by
+  year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "paper". All fields are combined with a logical 'AND'.
+"""
+input paper_bool_exp {
+  _and: [paper_bool_exp]
+  _not: paper_bool_exp
+  _or: [paper_bool_exp]
+  cites: cite_bool_exp
+  citesByCitedpaperid: cite_bool_exp
+  journal: journal_bool_exp
+  journalid: bigint_comparison_exp
+  numcitedby: bigint_comparison_exp
+  numciting: bigint_comparison_exp
+  paperid: bigint_comparison_exp
+  paperkeyphrases: paperkeyphrase_bool_exp
+  title: String_comparison_exp
+  venue: venue_bool_exp
+  venueid: bigint_comparison_exp
+  writes: writes_bool_exp
+  year: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "paper"
+"""
+enum paper_constraint {
+  """unique or primary key constraint"""
+  idx_26045_paper_pkey
+}
+
+"""
+input type for incrementing integer columne in table "paper"
+"""
+input paper_inc_input {
+  journalid: bigint
+  numcitedby: bigint
+  numciting: bigint
+  paperid: bigint
+  venueid: bigint
+  year: bigint
+}
+
+"""
+input type for inserting data into table "paper"
+"""
+input paper_insert_input {
+  cites: cite_arr_rel_insert_input
+  citesByCitedpaperid: cite_arr_rel_insert_input
+  journal: journal_obj_rel_insert_input
+  journalid: bigint
+  numcitedby: bigint
+  numciting: bigint
+  paperid: bigint
+  paperkeyphrases: paperkeyphrase_arr_rel_insert_input
+  title: String
+  venue: venue_obj_rel_insert_input
+  venueid: bigint
+  writes: writes_arr_rel_insert_input
+  year: bigint
+}
+
+"""aggregate max on columns"""
+type paper_max_fields {
+  journalid: bigint
+  numcitedby: bigint
+  numciting: bigint
+  paperid: bigint
+  title: String
+  venueid: bigint
+  year: bigint
+}
+
+"""
+order by max() on columns of table "paper"
+"""
+input paper_max_order_by {
+  journalid: order_by
+  numcitedby: order_by
+  numciting: order_by
+  paperid: order_by
+  title: order_by
+  venueid: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type paper_min_fields {
+  journalid: bigint
+  numcitedby: bigint
+  numciting: bigint
+  paperid: bigint
+  title: String
+  venueid: bigint
+  year: bigint
+}
+
+"""
+order by min() on columns of table "paper"
+"""
+input paper_min_order_by {
+  journalid: order_by
+  numcitedby: order_by
+  numciting: order_by
+  paperid: order_by
+  title: order_by
+  venueid: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "paper"
+"""
+type paper_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [paper!]!
+}
+
+"""
+input type for inserting object relation for remote table "paper"
+"""
+input paper_obj_rel_insert_input {
+  data: paper_insert_input!
+  on_conflict: paper_on_conflict
+}
+
+"""
+on conflict condition type for table "paper"
+"""
+input paper_on_conflict {
+  constraint: paper_constraint!
+  update_columns: [paper_update_column!]!
+  where: paper_bool_exp
+}
+
+"""
+ordering options when selecting data from "paper"
+"""
+input paper_order_by {
+  citesByCitedpaperid_aggregate: cite_aggregate_order_by
+  cites_aggregate: cite_aggregate_order_by
+  journal: journal_order_by
+  journalid: order_by
+  numcitedby: order_by
+  numciting: order_by
+  paperid: order_by
+  paperkeyphrases_aggregate: paperkeyphrase_aggregate_order_by
+  title: order_by
+  venue: venue_order_by
+  venueid: order_by
+  writes_aggregate: writes_aggregate_order_by
+  year: order_by
+}
+
+"""
+select columns of table "paper"
+"""
+enum paper_select_column {
+  """column name"""
+  journalid
+
+  """column name"""
+  numcitedby
+
+  """column name"""
+  numciting
+
+  """column name"""
+  paperid
+
+  """column name"""
+  title
+
+  """column name"""
+  venueid
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "paper"
+"""
+input paper_set_input {
+  journalid: bigint
+  numcitedby: bigint
+  numciting: bigint
+  paperid: bigint
+  title: String
+  venueid: bigint
+  year: bigint
+}
+
+"""aggregate stddev on columns"""
+type paper_stddev_fields {
+  journalid: Float
+  numcitedby: Float
+  numciting: Float
+  paperid: Float
+  venueid: Float
+  year: Float
+}
+
+"""
+order by stddev() on columns of table "paper"
+"""
+input paper_stddev_order_by {
+  journalid: order_by
+  numcitedby: order_by
+  numciting: order_by
+  paperid: order_by
+  venueid: order_by
+  year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type paper_stddev_pop_fields {
+  journalid: Float
+  numcitedby: Float
+  numciting: Float
+  paperid: Float
+  venueid: Float
+  year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "paper"
+"""
+input paper_stddev_pop_order_by {
+  journalid: order_by
+  numcitedby: order_by
+  numciting: order_by
+  paperid: order_by
+  venueid: order_by
+  year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type paper_stddev_samp_fields {
+  journalid: Float
+  numcitedby: Float
+  numciting: Float
+  paperid: Float
+  venueid: Float
+  year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "paper"
+"""
+input paper_stddev_samp_order_by {
+  journalid: order_by
+  numcitedby: order_by
+  numciting: order_by
+  paperid: order_by
+  venueid: order_by
+  year: order_by
+}
+
+"""aggregate sum on columns"""
+type paper_sum_fields {
+  journalid: bigint
+  numcitedby: bigint
+  numciting: bigint
+  paperid: bigint
+  venueid: bigint
+  year: bigint
+}
+
+"""
+order by sum() on columns of table "paper"
+"""
+input paper_sum_order_by {
+  journalid: order_by
+  numcitedby: order_by
+  numciting: order_by
+  paperid: order_by
+  venueid: order_by
+  year: order_by
+}
+
+"""
+update columns of table "paper"
+"""
+enum paper_update_column {
+  """column name"""
+  journalid
+
+  """column name"""
+  numcitedby
+
+  """column name"""
+  numciting
+
+  """column name"""
+  paperid
+
+  """column name"""
+  title
+
+  """column name"""
+  venueid
+
+  """column name"""
+  year
+}
+
+"""aggregate var_pop on columns"""
+type paper_var_pop_fields {
+  journalid: Float
+  numcitedby: Float
+  numciting: Float
+  paperid: Float
+  venueid: Float
+  year: Float
+}
+
+"""
+order by var_pop() on columns of table "paper"
+"""
+input paper_var_pop_order_by {
+  journalid: order_by
+  numcitedby: order_by
+  numciting: order_by
+  paperid: order_by
+  venueid: order_by
+  year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type paper_var_samp_fields {
+  journalid: Float
+  numcitedby: Float
+  numciting: Float
+  paperid: Float
+  venueid: Float
+  year: Float
+}
+
+"""
+order by var_samp() on columns of table "paper"
+"""
+input paper_var_samp_order_by {
+  journalid: order_by
+  numcitedby: order_by
+  numciting: order_by
+  paperid: order_by
+  venueid: order_by
+  year: order_by
+}
+
+"""aggregate variance on columns"""
+type paper_variance_fields {
+  journalid: Float
+  numcitedby: Float
+  numciting: Float
+  paperid: Float
+  venueid: Float
+  year: Float
+}
+
+"""
+order by variance() on columns of table "paper"
+"""
+input paper_variance_order_by {
+  journalid: order_by
+  numcitedby: order_by
+  numciting: order_by
+  paperid: order_by
+  venueid: order_by
+  year: order_by
+}
+
+"""
+columns and relationships of "paperdataset"
+"""
+type paperdataset {
+  datasetid: bigint!
+  paperid: bigint!
+}
+
+"""
+aggregated selection of "paperdataset"
+"""
+type paperdataset_aggregate {
+  aggregate: paperdataset_aggregate_fields
+  nodes: [paperdataset!]!
+}
+
+"""
+aggregate fields of "paperdataset"
+"""
+type paperdataset_aggregate_fields {
+  avg: paperdataset_avg_fields
+  count(columns: [paperdataset_select_column!], distinct: Boolean): Int
+  max: paperdataset_max_fields
+  min: paperdataset_min_fields
+  stddev: paperdataset_stddev_fields
+  stddev_pop: paperdataset_stddev_pop_fields
+  stddev_samp: paperdataset_stddev_samp_fields
+  sum: paperdataset_sum_fields
+  var_pop: paperdataset_var_pop_fields
+  var_samp: paperdataset_var_samp_fields
+  variance: paperdataset_variance_fields
+}
+
+"""
+order by aggregate values of table "paperdataset"
+"""
+input paperdataset_aggregate_order_by {
+  avg: paperdataset_avg_order_by
+  count: order_by
+  max: paperdataset_max_order_by
+  min: paperdataset_min_order_by
+  stddev: paperdataset_stddev_order_by
+  stddev_pop: paperdataset_stddev_pop_order_by
+  stddev_samp: paperdataset_stddev_samp_order_by
+  sum: paperdataset_sum_order_by
+  var_pop: paperdataset_var_pop_order_by
+  var_samp: paperdataset_var_samp_order_by
+  variance: paperdataset_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "paperdataset"
+"""
+input paperdataset_arr_rel_insert_input {
+  data: [paperdataset_insert_input!]!
+  on_conflict: paperdataset_on_conflict
+}
+
+"""aggregate avg on columns"""
+type paperdataset_avg_fields {
+  datasetid: Float
+  paperid: Float
+}
+
+"""
+order by avg() on columns of table "paperdataset"
+"""
+input paperdataset_avg_order_by {
+  datasetid: order_by
+  paperid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "paperdataset". All fields are combined with a logical 'AND'.
+"""
+input paperdataset_bool_exp {
+  _and: [paperdataset_bool_exp]
+  _not: paperdataset_bool_exp
+  _or: [paperdataset_bool_exp]
+  datasetid: bigint_comparison_exp
+  paperid: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "paperdataset"
+"""
+enum paperdataset_constraint {
+  """unique or primary key constraint"""
+  idx_26054_paperdataset_pkey
+
+  """unique or primary key constraint"""
+  idx_26054_sqlite_autoindex_paperdataset_1
+}
+
+"""
+input type for incrementing integer columne in table "paperdataset"
+"""
+input paperdataset_inc_input {
+  datasetid: bigint
+  paperid: bigint
+}
+
+"""
+input type for inserting data into table "paperdataset"
+"""
+input paperdataset_insert_input {
+  datasetid: bigint
+  paperid: bigint
+}
+
+"""aggregate max on columns"""
+type paperdataset_max_fields {
+  datasetid: bigint
+  paperid: bigint
+}
+
+"""
+order by max() on columns of table "paperdataset"
+"""
+input paperdataset_max_order_by {
+  datasetid: order_by
+  paperid: order_by
+}
+
+"""aggregate min on columns"""
+type paperdataset_min_fields {
+  datasetid: bigint
+  paperid: bigint
+}
+
+"""
+order by min() on columns of table "paperdataset"
+"""
+input paperdataset_min_order_by {
+  datasetid: order_by
+  paperid: order_by
+}
+
+"""
+response of any mutation on the table "paperdataset"
+"""
+type paperdataset_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [paperdataset!]!
+}
+
+"""
+input type for inserting object relation for remote table "paperdataset"
+"""
+input paperdataset_obj_rel_insert_input {
+  data: paperdataset_insert_input!
+  on_conflict: paperdataset_on_conflict
+}
+
+"""
+on conflict condition type for table "paperdataset"
+"""
+input paperdataset_on_conflict {
+  constraint: paperdataset_constraint!
+  update_columns: [paperdataset_update_column!]!
+  where: paperdataset_bool_exp
+}
+
+"""
+ordering options when selecting data from "paperdataset"
+"""
+input paperdataset_order_by {
+  datasetid: order_by
+  paperid: order_by
+}
+
+"""
+select columns of table "paperdataset"
+"""
+enum paperdataset_select_column {
+  """column name"""
+  datasetid
+
+  """column name"""
+  paperid
+}
+
+"""
+input type for updating data in table "paperdataset"
+"""
+input paperdataset_set_input {
+  datasetid: bigint
+  paperid: bigint
+}
+
+"""aggregate stddev on columns"""
+type paperdataset_stddev_fields {
+  datasetid: Float
+  paperid: Float
+}
+
+"""
+order by stddev() on columns of table "paperdataset"
+"""
+input paperdataset_stddev_order_by {
+  datasetid: order_by
+  paperid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type paperdataset_stddev_pop_fields {
+  datasetid: Float
+  paperid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "paperdataset"
+"""
+input paperdataset_stddev_pop_order_by {
+  datasetid: order_by
+  paperid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type paperdataset_stddev_samp_fields {
+  datasetid: Float
+  paperid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "paperdataset"
+"""
+input paperdataset_stddev_samp_order_by {
+  datasetid: order_by
+  paperid: order_by
+}
+
+"""aggregate sum on columns"""
+type paperdataset_sum_fields {
+  datasetid: bigint
+  paperid: bigint
+}
+
+"""
+order by sum() on columns of table "paperdataset"
+"""
+input paperdataset_sum_order_by {
+  datasetid: order_by
+  paperid: order_by
+}
+
+"""
+update columns of table "paperdataset"
+"""
+enum paperdataset_update_column {
+  """column name"""
+  datasetid
+
+  """column name"""
+  paperid
+}
+
+"""aggregate var_pop on columns"""
+type paperdataset_var_pop_fields {
+  datasetid: Float
+  paperid: Float
+}
+
+"""
+order by var_pop() on columns of table "paperdataset"
+"""
+input paperdataset_var_pop_order_by {
+  datasetid: order_by
+  paperid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type paperdataset_var_samp_fields {
+  datasetid: Float
+  paperid: Float
+}
+
+"""
+order by var_samp() on columns of table "paperdataset"
+"""
+input paperdataset_var_samp_order_by {
+  datasetid: order_by
+  paperid: order_by
+}
+
+"""aggregate variance on columns"""
+type paperdataset_variance_fields {
+  datasetid: Float
+  paperid: Float
+}
+
+"""
+order by variance() on columns of table "paperdataset"
+"""
+input paperdataset_variance_order_by {
+  datasetid: order_by
+  paperid: order_by
+}
+
+"""
+columns and relationships of "paperkeyphrase"
+"""
+type paperkeyphrase {
+  """An object relationship"""
+  keyphrase: keyphrase!
+  keyphraseid: bigint!
+
+  """An object relationship"""
+  paper: paper!
+  paperid: bigint!
+}
+
+"""
+aggregated selection of "paperkeyphrase"
+"""
+type paperkeyphrase_aggregate {
+  aggregate: paperkeyphrase_aggregate_fields
+  nodes: [paperkeyphrase!]!
+}
+
+"""
+aggregate fields of "paperkeyphrase"
+"""
+type paperkeyphrase_aggregate_fields {
+  avg: paperkeyphrase_avg_fields
+  count(columns: [paperkeyphrase_select_column!], distinct: Boolean): Int
+  max: paperkeyphrase_max_fields
+  min: paperkeyphrase_min_fields
+  stddev: paperkeyphrase_stddev_fields
+  stddev_pop: paperkeyphrase_stddev_pop_fields
+  stddev_samp: paperkeyphrase_stddev_samp_fields
+  sum: paperkeyphrase_sum_fields
+  var_pop: paperkeyphrase_var_pop_fields
+  var_samp: paperkeyphrase_var_samp_fields
+  variance: paperkeyphrase_variance_fields
+}
+
+"""
+order by aggregate values of table "paperkeyphrase"
+"""
+input paperkeyphrase_aggregate_order_by {
+  avg: paperkeyphrase_avg_order_by
+  count: order_by
+  max: paperkeyphrase_max_order_by
+  min: paperkeyphrase_min_order_by
+  stddev: paperkeyphrase_stddev_order_by
+  stddev_pop: paperkeyphrase_stddev_pop_order_by
+  stddev_samp: paperkeyphrase_stddev_samp_order_by
+  sum: paperkeyphrase_sum_order_by
+  var_pop: paperkeyphrase_var_pop_order_by
+  var_samp: paperkeyphrase_var_samp_order_by
+  variance: paperkeyphrase_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "paperkeyphrase"
+"""
+input paperkeyphrase_arr_rel_insert_input {
+  data: [paperkeyphrase_insert_input!]!
+  on_conflict: paperkeyphrase_on_conflict
+}
+
+"""aggregate avg on columns"""
+type paperkeyphrase_avg_fields {
+  keyphraseid: Float
+  paperid: Float
+}
+
+"""
+order by avg() on columns of table "paperkeyphrase"
+"""
+input paperkeyphrase_avg_order_by {
+  keyphraseid: order_by
+  paperid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "paperkeyphrase". All fields are combined with a logical 'AND'.
+"""
+input paperkeyphrase_bool_exp {
+  _and: [paperkeyphrase_bool_exp]
+  _not: paperkeyphrase_bool_exp
+  _or: [paperkeyphrase_bool_exp]
+  keyphrase: keyphrase_bool_exp
+  keyphraseid: bigint_comparison_exp
+  paper: paper_bool_exp
+  paperid: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "paperkeyphrase"
+"""
+enum paperkeyphrase_constraint {
+  """unique or primary key constraint"""
+  idx_26057_paperkeyphrase_pkey
+
+  """unique or primary key constraint"""
+  idx_26057_sqlite_autoindex_paperkeyphrase_1
+}
+
+"""
+input type for incrementing integer columne in table "paperkeyphrase"
+"""
+input paperkeyphrase_inc_input {
+  keyphraseid: bigint
+  paperid: bigint
+}
+
+"""
+input type for inserting data into table "paperkeyphrase"
+"""
+input paperkeyphrase_insert_input {
+  keyphrase: keyphrase_obj_rel_insert_input
+  keyphraseid: bigint
+  paper: paper_obj_rel_insert_input
+  paperid: bigint
+}
+
+"""aggregate max on columns"""
+type paperkeyphrase_max_fields {
+  keyphraseid: bigint
+  paperid: bigint
+}
+
+"""
+order by max() on columns of table "paperkeyphrase"
+"""
+input paperkeyphrase_max_order_by {
+  keyphraseid: order_by
+  paperid: order_by
+}
+
+"""aggregate min on columns"""
+type paperkeyphrase_min_fields {
+  keyphraseid: bigint
+  paperid: bigint
+}
+
+"""
+order by min() on columns of table "paperkeyphrase"
+"""
+input paperkeyphrase_min_order_by {
+  keyphraseid: order_by
+  paperid: order_by
+}
+
+"""
+response of any mutation on the table "paperkeyphrase"
+"""
+type paperkeyphrase_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [paperkeyphrase!]!
+}
+
+"""
+input type for inserting object relation for remote table "paperkeyphrase"
+"""
+input paperkeyphrase_obj_rel_insert_input {
+  data: paperkeyphrase_insert_input!
+  on_conflict: paperkeyphrase_on_conflict
+}
+
+"""
+on conflict condition type for table "paperkeyphrase"
+"""
+input paperkeyphrase_on_conflict {
+  constraint: paperkeyphrase_constraint!
+  update_columns: [paperkeyphrase_update_column!]!
+  where: paperkeyphrase_bool_exp
+}
+
+"""
+ordering options when selecting data from "paperkeyphrase"
+"""
+input paperkeyphrase_order_by {
+  keyphrase: keyphrase_order_by
+  keyphraseid: order_by
+  paper: paper_order_by
+  paperid: order_by
+}
+
+"""
+select columns of table "paperkeyphrase"
+"""
+enum paperkeyphrase_select_column {
+  """column name"""
+  keyphraseid
+
+  """column name"""
+  paperid
+}
+
+"""
+input type for updating data in table "paperkeyphrase"
+"""
+input paperkeyphrase_set_input {
+  keyphraseid: bigint
+  paperid: bigint
+}
+
+"""aggregate stddev on columns"""
+type paperkeyphrase_stddev_fields {
+  keyphraseid: Float
+  paperid: Float
+}
+
+"""
+order by stddev() on columns of table "paperkeyphrase"
+"""
+input paperkeyphrase_stddev_order_by {
+  keyphraseid: order_by
+  paperid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type paperkeyphrase_stddev_pop_fields {
+  keyphraseid: Float
+  paperid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "paperkeyphrase"
+"""
+input paperkeyphrase_stddev_pop_order_by {
+  keyphraseid: order_by
+  paperid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type paperkeyphrase_stddev_samp_fields {
+  keyphraseid: Float
+  paperid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "paperkeyphrase"
+"""
+input paperkeyphrase_stddev_samp_order_by {
+  keyphraseid: order_by
+  paperid: order_by
+}
+
+"""aggregate sum on columns"""
+type paperkeyphrase_sum_fields {
+  keyphraseid: bigint
+  paperid: bigint
+}
+
+"""
+order by sum() on columns of table "paperkeyphrase"
+"""
+input paperkeyphrase_sum_order_by {
+  keyphraseid: order_by
+  paperid: order_by
+}
+
+"""
+update columns of table "paperkeyphrase"
+"""
+enum paperkeyphrase_update_column {
+  """column name"""
+  keyphraseid
+
+  """column name"""
+  paperid
+}
+
+"""aggregate var_pop on columns"""
+type paperkeyphrase_var_pop_fields {
+  keyphraseid: Float
+  paperid: Float
+}
+
+"""
+order by var_pop() on columns of table "paperkeyphrase"
+"""
+input paperkeyphrase_var_pop_order_by {
+  keyphraseid: order_by
+  paperid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type paperkeyphrase_var_samp_fields {
+  keyphraseid: Float
+  paperid: Float
+}
+
+"""
+order by var_samp() on columns of table "paperkeyphrase"
+"""
+input paperkeyphrase_var_samp_order_by {
+  keyphraseid: order_by
+  paperid: order_by
+}
+
+"""aggregate variance on columns"""
+type paperkeyphrase_variance_fields {
+  keyphraseid: Float
+  paperid: Float
+}
+
+"""
+order by variance() on columns of table "paperkeyphrase"
+"""
+input paperkeyphrase_variance_order_by {
+  keyphraseid: order_by
+  paperid: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "author"
+  """
+  author(
+    """distinct select on columns"""
+    distinct_on: [author_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [author_order_by!]
+
+    """filter the rows returned"""
+    where: author_bool_exp
+  ): [author!]!
+
+  """
+  fetch aggregated fields from the table: "author"
+  """
+  author_aggregate(
+    """distinct select on columns"""
+    distinct_on: [author_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [author_order_by!]
+
+    """filter the rows returned"""
+    where: author_bool_exp
+  ): author_aggregate!
+
+  """fetch data from the table: "author" using primary key columns"""
+  author_by_pk(authorid: bigint!): author
+
+  """
+  fetch data from the table: "cite"
+  """
+  cite(
+    """distinct select on columns"""
+    distinct_on: [cite_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cite_order_by!]
+
+    """filter the rows returned"""
+    where: cite_bool_exp
+  ): [cite!]!
+
+  """
+  fetch aggregated fields from the table: "cite"
+  """
+  cite_aggregate(
+    """distinct select on columns"""
+    distinct_on: [cite_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cite_order_by!]
+
+    """filter the rows returned"""
+    where: cite_bool_exp
+  ): cite_aggregate!
+
+  """fetch data from the table: "cite" using primary key columns"""
+  cite_by_pk(citedpaperid: bigint!, citingpaperid: bigint!): cite
+
+  """
+  fetch data from the table: "dataset"
+  """
+  dataset(
+    """distinct select on columns"""
+    distinct_on: [dataset_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dataset_order_by!]
+
+    """filter the rows returned"""
+    where: dataset_bool_exp
+  ): [dataset!]!
+
+  """
+  fetch aggregated fields from the table: "dataset"
+  """
+  dataset_aggregate(
+    """distinct select on columns"""
+    distinct_on: [dataset_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dataset_order_by!]
+
+    """filter the rows returned"""
+    where: dataset_bool_exp
+  ): dataset_aggregate!
+
+  """fetch data from the table: "dataset" using primary key columns"""
+  dataset_by_pk(datasetid: bigint!): dataset
+
+  """
+  fetch data from the table: "journal"
+  """
+  journal(
+    """distinct select on columns"""
+    distinct_on: [journal_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [journal_order_by!]
+
+    """filter the rows returned"""
+    where: journal_bool_exp
+  ): [journal!]!
+
+  """
+  fetch aggregated fields from the table: "journal"
+  """
+  journal_aggregate(
+    """distinct select on columns"""
+    distinct_on: [journal_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [journal_order_by!]
+
+    """filter the rows returned"""
+    where: journal_bool_exp
+  ): journal_aggregate!
+
+  """fetch data from the table: "journal" using primary key columns"""
+  journal_by_pk(journalid: bigint!): journal
+
+  """
+  fetch data from the table: "keyphrase"
+  """
+  keyphrase(
+    """distinct select on columns"""
+    distinct_on: [keyphrase_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [keyphrase_order_by!]
+
+    """filter the rows returned"""
+    where: keyphrase_bool_exp
+  ): [keyphrase!]!
+
+  """
+  fetch aggregated fields from the table: "keyphrase"
+  """
+  keyphrase_aggregate(
+    """distinct select on columns"""
+    distinct_on: [keyphrase_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [keyphrase_order_by!]
+
+    """filter the rows returned"""
+    where: keyphrase_bool_exp
+  ): keyphrase_aggregate!
+
+  """fetch data from the table: "keyphrase" using primary key columns"""
+  keyphrase_by_pk(keyphraseid: bigint!): keyphrase
+
+  """
+  fetch data from the table: "paper"
+  """
+  paper(
+    """distinct select on columns"""
+    distinct_on: [paper_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paper_order_by!]
+
+    """filter the rows returned"""
+    where: paper_bool_exp
+  ): [paper!]!
+
+  """
+  fetch aggregated fields from the table: "paper"
+  """
+  paper_aggregate(
+    """distinct select on columns"""
+    distinct_on: [paper_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paper_order_by!]
+
+    """filter the rows returned"""
+    where: paper_bool_exp
+  ): paper_aggregate!
+
+  """fetch data from the table: "paper" using primary key columns"""
+  paper_by_pk(paperid: bigint!): paper
+
+  """
+  fetch data from the table: "paperdataset"
+  """
+  paperdataset(
+    """distinct select on columns"""
+    distinct_on: [paperdataset_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paperdataset_order_by!]
+
+    """filter the rows returned"""
+    where: paperdataset_bool_exp
+  ): [paperdataset!]!
+
+  """
+  fetch aggregated fields from the table: "paperdataset"
+  """
+  paperdataset_aggregate(
+    """distinct select on columns"""
+    distinct_on: [paperdataset_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paperdataset_order_by!]
+
+    """filter the rows returned"""
+    where: paperdataset_bool_exp
+  ): paperdataset_aggregate!
+
+  """fetch data from the table: "paperdataset" using primary key columns"""
+  paperdataset_by_pk(datasetid: bigint!, paperid: bigint!): paperdataset
+
+  """
+  fetch data from the table: "paperkeyphrase"
+  """
+  paperkeyphrase(
+    """distinct select on columns"""
+    distinct_on: [paperkeyphrase_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paperkeyphrase_order_by!]
+
+    """filter the rows returned"""
+    where: paperkeyphrase_bool_exp
+  ): [paperkeyphrase!]!
+
+  """
+  fetch aggregated fields from the table: "paperkeyphrase"
+  """
+  paperkeyphrase_aggregate(
+    """distinct select on columns"""
+    distinct_on: [paperkeyphrase_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paperkeyphrase_order_by!]
+
+    """filter the rows returned"""
+    where: paperkeyphrase_bool_exp
+  ): paperkeyphrase_aggregate!
+
+  """fetch data from the table: "paperkeyphrase" using primary key columns"""
+  paperkeyphrase_by_pk(keyphraseid: bigint!, paperid: bigint!): paperkeyphrase
+
+  """
+  fetch data from the table: "venue"
+  """
+  venue(
+    """distinct select on columns"""
+    distinct_on: [venue_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [venue_order_by!]
+
+    """filter the rows returned"""
+    where: venue_bool_exp
+  ): [venue!]!
+
+  """
+  fetch aggregated fields from the table: "venue"
+  """
+  venue_aggregate(
+    """distinct select on columns"""
+    distinct_on: [venue_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [venue_order_by!]
+
+    """filter the rows returned"""
+    where: venue_bool_exp
+  ): venue_aggregate!
+
+  """fetch data from the table: "venue" using primary key columns"""
+  venue_by_pk(venueid: bigint!): venue
+
+  """
+  fetch data from the table: "writes"
+  """
+  writes(
+    """distinct select on columns"""
+    distinct_on: [writes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [writes_order_by!]
+
+    """filter the rows returned"""
+    where: writes_bool_exp
+  ): [writes!]!
+
+  """
+  fetch aggregated fields from the table: "writes"
+  """
+  writes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [writes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [writes_order_by!]
+
+    """filter the rows returned"""
+    where: writes_bool_exp
+  ): writes_aggregate!
+
+  """fetch data from the table: "writes" using primary key columns"""
+  writes_by_pk(authorid: bigint!, paperid: bigint!): writes
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "author"
+  """
+  author(
+    """distinct select on columns"""
+    distinct_on: [author_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [author_order_by!]
+
+    """filter the rows returned"""
+    where: author_bool_exp
+  ): [author!]!
+
+  """
+  fetch aggregated fields from the table: "author"
+  """
+  author_aggregate(
+    """distinct select on columns"""
+    distinct_on: [author_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [author_order_by!]
+
+    """filter the rows returned"""
+    where: author_bool_exp
+  ): author_aggregate!
+
+  """fetch data from the table: "author" using primary key columns"""
+  author_by_pk(authorid: bigint!): author
+
+  """
+  fetch data from the table: "cite"
+  """
+  cite(
+    """distinct select on columns"""
+    distinct_on: [cite_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cite_order_by!]
+
+    """filter the rows returned"""
+    where: cite_bool_exp
+  ): [cite!]!
+
+  """
+  fetch aggregated fields from the table: "cite"
+  """
+  cite_aggregate(
+    """distinct select on columns"""
+    distinct_on: [cite_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cite_order_by!]
+
+    """filter the rows returned"""
+    where: cite_bool_exp
+  ): cite_aggregate!
+
+  """fetch data from the table: "cite" using primary key columns"""
+  cite_by_pk(citedpaperid: bigint!, citingpaperid: bigint!): cite
+
+  """
+  fetch data from the table: "dataset"
+  """
+  dataset(
+    """distinct select on columns"""
+    distinct_on: [dataset_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dataset_order_by!]
+
+    """filter the rows returned"""
+    where: dataset_bool_exp
+  ): [dataset!]!
+
+  """
+  fetch aggregated fields from the table: "dataset"
+  """
+  dataset_aggregate(
+    """distinct select on columns"""
+    distinct_on: [dataset_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dataset_order_by!]
+
+    """filter the rows returned"""
+    where: dataset_bool_exp
+  ): dataset_aggregate!
+
+  """fetch data from the table: "dataset" using primary key columns"""
+  dataset_by_pk(datasetid: bigint!): dataset
+
+  """
+  fetch data from the table: "journal"
+  """
+  journal(
+    """distinct select on columns"""
+    distinct_on: [journal_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [journal_order_by!]
+
+    """filter the rows returned"""
+    where: journal_bool_exp
+  ): [journal!]!
+
+  """
+  fetch aggregated fields from the table: "journal"
+  """
+  journal_aggregate(
+    """distinct select on columns"""
+    distinct_on: [journal_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [journal_order_by!]
+
+    """filter the rows returned"""
+    where: journal_bool_exp
+  ): journal_aggregate!
+
+  """fetch data from the table: "journal" using primary key columns"""
+  journal_by_pk(journalid: bigint!): journal
+
+  """
+  fetch data from the table: "keyphrase"
+  """
+  keyphrase(
+    """distinct select on columns"""
+    distinct_on: [keyphrase_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [keyphrase_order_by!]
+
+    """filter the rows returned"""
+    where: keyphrase_bool_exp
+  ): [keyphrase!]!
+
+  """
+  fetch aggregated fields from the table: "keyphrase"
+  """
+  keyphrase_aggregate(
+    """distinct select on columns"""
+    distinct_on: [keyphrase_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [keyphrase_order_by!]
+
+    """filter the rows returned"""
+    where: keyphrase_bool_exp
+  ): keyphrase_aggregate!
+
+  """fetch data from the table: "keyphrase" using primary key columns"""
+  keyphrase_by_pk(keyphraseid: bigint!): keyphrase
+
+  """
+  fetch data from the table: "paper"
+  """
+  paper(
+    """distinct select on columns"""
+    distinct_on: [paper_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paper_order_by!]
+
+    """filter the rows returned"""
+    where: paper_bool_exp
+  ): [paper!]!
+
+  """
+  fetch aggregated fields from the table: "paper"
+  """
+  paper_aggregate(
+    """distinct select on columns"""
+    distinct_on: [paper_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paper_order_by!]
+
+    """filter the rows returned"""
+    where: paper_bool_exp
+  ): paper_aggregate!
+
+  """fetch data from the table: "paper" using primary key columns"""
+  paper_by_pk(paperid: bigint!): paper
+
+  """
+  fetch data from the table: "paperdataset"
+  """
+  paperdataset(
+    """distinct select on columns"""
+    distinct_on: [paperdataset_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paperdataset_order_by!]
+
+    """filter the rows returned"""
+    where: paperdataset_bool_exp
+  ): [paperdataset!]!
+
+  """
+  fetch aggregated fields from the table: "paperdataset"
+  """
+  paperdataset_aggregate(
+    """distinct select on columns"""
+    distinct_on: [paperdataset_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paperdataset_order_by!]
+
+    """filter the rows returned"""
+    where: paperdataset_bool_exp
+  ): paperdataset_aggregate!
+
+  """fetch data from the table: "paperdataset" using primary key columns"""
+  paperdataset_by_pk(datasetid: bigint!, paperid: bigint!): paperdataset
+
+  """
+  fetch data from the table: "paperkeyphrase"
+  """
+  paperkeyphrase(
+    """distinct select on columns"""
+    distinct_on: [paperkeyphrase_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paperkeyphrase_order_by!]
+
+    """filter the rows returned"""
+    where: paperkeyphrase_bool_exp
+  ): [paperkeyphrase!]!
+
+  """
+  fetch aggregated fields from the table: "paperkeyphrase"
+  """
+  paperkeyphrase_aggregate(
+    """distinct select on columns"""
+    distinct_on: [paperkeyphrase_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paperkeyphrase_order_by!]
+
+    """filter the rows returned"""
+    where: paperkeyphrase_bool_exp
+  ): paperkeyphrase_aggregate!
+
+  """fetch data from the table: "paperkeyphrase" using primary key columns"""
+  paperkeyphrase_by_pk(keyphraseid: bigint!, paperid: bigint!): paperkeyphrase
+
+  """
+  fetch data from the table: "venue"
+  """
+  venue(
+    """distinct select on columns"""
+    distinct_on: [venue_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [venue_order_by!]
+
+    """filter the rows returned"""
+    where: venue_bool_exp
+  ): [venue!]!
+
+  """
+  fetch aggregated fields from the table: "venue"
+  """
+  venue_aggregate(
+    """distinct select on columns"""
+    distinct_on: [venue_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [venue_order_by!]
+
+    """filter the rows returned"""
+    where: venue_bool_exp
+  ): venue_aggregate!
+
+  """fetch data from the table: "venue" using primary key columns"""
+  venue_by_pk(venueid: bigint!): venue
+
+  """
+  fetch data from the table: "writes"
+  """
+  writes(
+    """distinct select on columns"""
+    distinct_on: [writes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [writes_order_by!]
+
+    """filter the rows returned"""
+    where: writes_bool_exp
+  ): [writes!]!
+
+  """
+  fetch aggregated fields from the table: "writes"
+  """
+  writes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [writes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [writes_order_by!]
+
+    """filter the rows returned"""
+    where: writes_bool_exp
+  ): writes_aggregate!
+
+  """fetch data from the table: "writes" using primary key columns"""
+  writes_by_pk(authorid: bigint!, paperid: bigint!): writes
+}
+
+"""
+columns and relationships of "venue"
+"""
+type venue {
+  """An array relationship"""
+  papers(
+    """distinct select on columns"""
+    distinct_on: [paper_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paper_order_by!]
+
+    """filter the rows returned"""
+    where: paper_bool_exp
+  ): [paper!]!
+
+  """An aggregated array relationship"""
+  papers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [paper_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paper_order_by!]
+
+    """filter the rows returned"""
+    where: paper_bool_exp
+  ): paper_aggregate!
+  venueid: bigint!
+  venuename: String
+}
+
+"""
+aggregated selection of "venue"
+"""
+type venue_aggregate {
+  aggregate: venue_aggregate_fields
+  nodes: [venue!]!
+}
+
+"""
+aggregate fields of "venue"
+"""
+type venue_aggregate_fields {
+  avg: venue_avg_fields
+  count(columns: [venue_select_column!], distinct: Boolean): Int
+  max: venue_max_fields
+  min: venue_min_fields
+  stddev: venue_stddev_fields
+  stddev_pop: venue_stddev_pop_fields
+  stddev_samp: venue_stddev_samp_fields
+  sum: venue_sum_fields
+  var_pop: venue_var_pop_fields
+  var_samp: venue_var_samp_fields
+  variance: venue_variance_fields
+}
+
+"""
+order by aggregate values of table "venue"
+"""
+input venue_aggregate_order_by {
+  avg: venue_avg_order_by
+  count: order_by
+  max: venue_max_order_by
+  min: venue_min_order_by
+  stddev: venue_stddev_order_by
+  stddev_pop: venue_stddev_pop_order_by
+  stddev_samp: venue_stddev_samp_order_by
+  sum: venue_sum_order_by
+  var_pop: venue_var_pop_order_by
+  var_samp: venue_var_samp_order_by
+  variance: venue_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "venue"
+"""
+input venue_arr_rel_insert_input {
+  data: [venue_insert_input!]!
+  on_conflict: venue_on_conflict
+}
+
+"""aggregate avg on columns"""
+type venue_avg_fields {
+  venueid: Float
+}
+
+"""
+order by avg() on columns of table "venue"
+"""
+input venue_avg_order_by {
+  venueid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "venue". All fields are combined with a logical 'AND'.
+"""
+input venue_bool_exp {
+  _and: [venue_bool_exp]
+  _not: venue_bool_exp
+  _or: [venue_bool_exp]
+  papers: paper_bool_exp
+  venueid: bigint_comparison_exp
+  venuename: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "venue"
+"""
+enum venue_constraint {
+  """unique or primary key constraint"""
+  idx_26015_venue_pkey
+}
+
+"""
+input type for incrementing integer columne in table "venue"
+"""
+input venue_inc_input {
+  venueid: bigint
+}
+
+"""
+input type for inserting data into table "venue"
+"""
+input venue_insert_input {
+  papers: paper_arr_rel_insert_input
+  venueid: bigint
+  venuename: String
+}
+
+"""aggregate max on columns"""
+type venue_max_fields {
+  venueid: bigint
+  venuename: String
+}
+
+"""
+order by max() on columns of table "venue"
+"""
+input venue_max_order_by {
+  venueid: order_by
+  venuename: order_by
+}
+
+"""aggregate min on columns"""
+type venue_min_fields {
+  venueid: bigint
+  venuename: String
+}
+
+"""
+order by min() on columns of table "venue"
+"""
+input venue_min_order_by {
+  venueid: order_by
+  venuename: order_by
+}
+
+"""
+response of any mutation on the table "venue"
+"""
+type venue_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [venue!]!
+}
+
+"""
+input type for inserting object relation for remote table "venue"
+"""
+input venue_obj_rel_insert_input {
+  data: venue_insert_input!
+  on_conflict: venue_on_conflict
+}
+
+"""
+on conflict condition type for table "venue"
+"""
+input venue_on_conflict {
+  constraint: venue_constraint!
+  update_columns: [venue_update_column!]!
+  where: venue_bool_exp
+}
+
+"""
+ordering options when selecting data from "venue"
+"""
+input venue_order_by {
+  papers_aggregate: paper_aggregate_order_by
+  venueid: order_by
+  venuename: order_by
+}
+
+"""
+select columns of table "venue"
+"""
+enum venue_select_column {
+  """column name"""
+  venueid
+
+  """column name"""
+  venuename
+}
+
+"""
+input type for updating data in table "venue"
+"""
+input venue_set_input {
+  venueid: bigint
+  venuename: String
+}
+
+"""aggregate stddev on columns"""
+type venue_stddev_fields {
+  venueid: Float
+}
+
+"""
+order by stddev() on columns of table "venue"
+"""
+input venue_stddev_order_by {
+  venueid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type venue_stddev_pop_fields {
+  venueid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "venue"
+"""
+input venue_stddev_pop_order_by {
+  venueid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type venue_stddev_samp_fields {
+  venueid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "venue"
+"""
+input venue_stddev_samp_order_by {
+  venueid: order_by
+}
+
+"""aggregate sum on columns"""
+type venue_sum_fields {
+  venueid: bigint
+}
+
+"""
+order by sum() on columns of table "venue"
+"""
+input venue_sum_order_by {
+  venueid: order_by
+}
+
+"""
+update columns of table "venue"
+"""
+enum venue_update_column {
+  """column name"""
+  venueid
+
+  """column name"""
+  venuename
+}
+
+"""aggregate var_pop on columns"""
+type venue_var_pop_fields {
+  venueid: Float
+}
+
+"""
+order by var_pop() on columns of table "venue"
+"""
+input venue_var_pop_order_by {
+  venueid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type venue_var_samp_fields {
+  venueid: Float
+}
+
+"""
+order by var_samp() on columns of table "venue"
+"""
+input venue_var_samp_order_by {
+  venueid: order_by
+}
+
+"""aggregate variance on columns"""
+type venue_variance_fields {
+  venueid: Float
+}
+
+"""
+order by variance() on columns of table "venue"
+"""
+input venue_variance_order_by {
+  venueid: order_by
+}
+
+"""
+columns and relationships of "writes"
+"""
+type writes {
+  """An object relationship"""
+  author: author!
+  authorid: bigint!
+
+  """An object relationship"""
+  paper: paper!
+  paperid: bigint!
+}
+
+"""
+aggregated selection of "writes"
+"""
+type writes_aggregate {
+  aggregate: writes_aggregate_fields
+  nodes: [writes!]!
+}
+
+"""
+aggregate fields of "writes"
+"""
+type writes_aggregate_fields {
+  avg: writes_avg_fields
+  count(columns: [writes_select_column!], distinct: Boolean): Int
+  max: writes_max_fields
+  min: writes_min_fields
+  stddev: writes_stddev_fields
+  stddev_pop: writes_stddev_pop_fields
+  stddev_samp: writes_stddev_samp_fields
+  sum: writes_sum_fields
+  var_pop: writes_var_pop_fields
+  var_samp: writes_var_samp_fields
+  variance: writes_variance_fields
+}
+
+"""
+order by aggregate values of table "writes"
+"""
+input writes_aggregate_order_by {
+  avg: writes_avg_order_by
+  count: order_by
+  max: writes_max_order_by
+  min: writes_min_order_by
+  stddev: writes_stddev_order_by
+  stddev_pop: writes_stddev_pop_order_by
+  stddev_samp: writes_stddev_samp_order_by
+  sum: writes_sum_order_by
+  var_pop: writes_var_pop_order_by
+  var_samp: writes_var_samp_order_by
+  variance: writes_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "writes"
+"""
+input writes_arr_rel_insert_input {
+  data: [writes_insert_input!]!
+  on_conflict: writes_on_conflict
+}
+
+"""aggregate avg on columns"""
+type writes_avg_fields {
+  authorid: Float
+  paperid: Float
+}
+
+"""
+order by avg() on columns of table "writes"
+"""
+input writes_avg_order_by {
+  authorid: order_by
+  paperid: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "writes". All fields are combined with a logical 'AND'.
+"""
+input writes_bool_exp {
+  _and: [writes_bool_exp]
+  _not: writes_bool_exp
+  _or: [writes_bool_exp]
+  author: author_bool_exp
+  authorid: bigint_comparison_exp
+  paper: paper_bool_exp
+  paperid: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "writes"
+"""
+enum writes_constraint {
+  """unique or primary key constraint"""
+  idx_26060_sqlite_autoindex_writes_1
+
+  """unique or primary key constraint"""
+  idx_26060_writes_pkey
+}
+
+"""
+input type for incrementing integer columne in table "writes"
+"""
+input writes_inc_input {
+  authorid: bigint
+  paperid: bigint
+}
+
+"""
+input type for inserting data into table "writes"
+"""
+input writes_insert_input {
+  author: author_obj_rel_insert_input
+  authorid: bigint
+  paper: paper_obj_rel_insert_input
+  paperid: bigint
+}
+
+"""aggregate max on columns"""
+type writes_max_fields {
+  authorid: bigint
+  paperid: bigint
+}
+
+"""
+order by max() on columns of table "writes"
+"""
+input writes_max_order_by {
+  authorid: order_by
+  paperid: order_by
+}
+
+"""aggregate min on columns"""
+type writes_min_fields {
+  authorid: bigint
+  paperid: bigint
+}
+
+"""
+order by min() on columns of table "writes"
+"""
+input writes_min_order_by {
+  authorid: order_by
+  paperid: order_by
+}
+
+"""
+response of any mutation on the table "writes"
+"""
+type writes_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [writes!]!
+}
+
+"""
+input type for inserting object relation for remote table "writes"
+"""
+input writes_obj_rel_insert_input {
+  data: writes_insert_input!
+  on_conflict: writes_on_conflict
+}
+
+"""
+on conflict condition type for table "writes"
+"""
+input writes_on_conflict {
+  constraint: writes_constraint!
+  update_columns: [writes_update_column!]!
+  where: writes_bool_exp
+}
+
+"""
+ordering options when selecting data from "writes"
+"""
+input writes_order_by {
+  author: author_order_by
+  authorid: order_by
+  paper: paper_order_by
+  paperid: order_by
+}
+
+"""
+select columns of table "writes"
+"""
+enum writes_select_column {
+  """column name"""
+  authorid
+
+  """column name"""
+  paperid
+}
+
+"""
+input type for updating data in table "writes"
+"""
+input writes_set_input {
+  authorid: bigint
+  paperid: bigint
+}
+
+"""aggregate stddev on columns"""
+type writes_stddev_fields {
+  authorid: Float
+  paperid: Float
+}
+
+"""
+order by stddev() on columns of table "writes"
+"""
+input writes_stddev_order_by {
+  authorid: order_by
+  paperid: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type writes_stddev_pop_fields {
+  authorid: Float
+  paperid: Float
+}
+
+"""
+order by stddev_pop() on columns of table "writes"
+"""
+input writes_stddev_pop_order_by {
+  authorid: order_by
+  paperid: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type writes_stddev_samp_fields {
+  authorid: Float
+  paperid: Float
+}
+
+"""
+order by stddev_samp() on columns of table "writes"
+"""
+input writes_stddev_samp_order_by {
+  authorid: order_by
+  paperid: order_by
+}
+
+"""aggregate sum on columns"""
+type writes_sum_fields {
+  authorid: bigint
+  paperid: bigint
+}
+
+"""
+order by sum() on columns of table "writes"
+"""
+input writes_sum_order_by {
+  authorid: order_by
+  paperid: order_by
+}
+
+"""
+update columns of table "writes"
+"""
+enum writes_update_column {
+  """column name"""
+  authorid
+
+  """column name"""
+  paperid
+}
+
+"""aggregate var_pop on columns"""
+type writes_var_pop_fields {
+  authorid: Float
+  paperid: Float
+}
+
+"""
+order by var_pop() on columns of table "writes"
+"""
+input writes_var_pop_order_by {
+  authorid: order_by
+  paperid: order_by
+}
+
+"""aggregate var_samp on columns"""
+type writes_var_samp_fields {
+  authorid: Float
+  paperid: Float
+}
+
+"""
+order by var_samp() on columns of table "writes"
+"""
+input writes_var_samp_order_by {
+  authorid: order_by
+  paperid: order_by
+}
+
+"""aggregate variance on columns"""
+type writes_variance_fields {
+  authorid: Float
+  paperid: Float
+}
+
+"""
+order by variance() on columns of table "writes"
+"""
+input writes_variance_order_by {
+  authorid: order_by
+  paperid: order_by
+}

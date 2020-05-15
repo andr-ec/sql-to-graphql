@@ -1,0 +1,1706 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "company"
+"""
+type company {
+  assets_billion: Float
+  company: String
+  company_id: Int
+  headquarters: String
+  main_industry: String
+  market_value: Float
+  profits_billion: Float
+  rank: Int
+  sales_billion: Float
+
+  """An array relationship"""
+  station_companies(
+    """distinct select on columns"""
+    distinct_on: [station_company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_company_order_by!]
+
+    """filter the rows returned"""
+    where: station_company_bool_exp
+  ): [station_company!]!
+
+  """An aggregated array relationship"""
+  station_companies_aggregate(
+    """distinct select on columns"""
+    distinct_on: [station_company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_company_order_by!]
+
+    """filter the rows returned"""
+    where: station_company_bool_exp
+  ): station_company_aggregate!
+}
+
+"""
+aggregated selection of "company"
+"""
+type company_aggregate {
+  aggregate: company_aggregate_fields
+  nodes: [company!]!
+}
+
+"""
+aggregate fields of "company"
+"""
+type company_aggregate_fields {
+  avg: company_avg_fields
+  count(columns: [company_select_column!], distinct: Boolean): Int
+  max: company_max_fields
+  min: company_min_fields
+  stddev: company_stddev_fields
+  stddev_pop: company_stddev_pop_fields
+  stddev_samp: company_stddev_samp_fields
+  sum: company_sum_fields
+  var_pop: company_var_pop_fields
+  var_samp: company_var_samp_fields
+  variance: company_variance_fields
+}
+
+"""
+order by aggregate values of table "company"
+"""
+input company_aggregate_order_by {
+  avg: company_avg_order_by
+  count: order_by
+  max: company_max_order_by
+  min: company_min_order_by
+  stddev: company_stddev_order_by
+  stddev_pop: company_stddev_pop_order_by
+  stddev_samp: company_stddev_samp_order_by
+  sum: company_sum_order_by
+  var_pop: company_var_pop_order_by
+  var_samp: company_var_samp_order_by
+  variance: company_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "company"
+"""
+input company_arr_rel_insert_input {
+  data: [company_insert_input!]!
+  on_conflict: company_on_conflict
+}
+
+"""aggregate avg on columns"""
+type company_avg_fields {
+  assets_billion: Float
+  company_id: Float
+  market_value: Float
+  profits_billion: Float
+  rank: Float
+  sales_billion: Float
+}
+
+"""
+order by avg() on columns of table "company"
+"""
+input company_avg_order_by {
+  assets_billion: order_by
+  company_id: order_by
+  market_value: order_by
+  profits_billion: order_by
+  rank: order_by
+  sales_billion: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "company". All fields are combined with a logical 'AND'.
+"""
+input company_bool_exp {
+  _and: [company_bool_exp]
+  _not: company_bool_exp
+  _or: [company_bool_exp]
+  assets_billion: Float_comparison_exp
+  company: String_comparison_exp
+  company_id: Int_comparison_exp
+  headquarters: String_comparison_exp
+  main_industry: String_comparison_exp
+  market_value: Float_comparison_exp
+  profits_billion: Float_comparison_exp
+  rank: Int_comparison_exp
+  sales_billion: Float_comparison_exp
+  station_companies: station_company_bool_exp
+}
+
+"""
+unique or primary key constraints on table "company"
+"""
+enum company_constraint {
+  """unique or primary key constraint"""
+  idx_19124_sqlite_autoindex_company_1
+}
+
+"""
+input type for incrementing integer columne in table "company"
+"""
+input company_inc_input {
+  company_id: Int
+  rank: Int
+}
+
+"""
+input type for inserting data into table "company"
+"""
+input company_insert_input {
+  assets_billion: Float
+  company: String
+  company_id: Int
+  headquarters: String
+  main_industry: String
+  market_value: Float
+  profits_billion: Float
+  rank: Int
+  sales_billion: Float
+  station_companies: station_company_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type company_max_fields {
+  assets_billion: Float
+  company: String
+  company_id: Int
+  headquarters: String
+  main_industry: String
+  market_value: Float
+  profits_billion: Float
+  rank: Int
+  sales_billion: Float
+}
+
+"""
+order by max() on columns of table "company"
+"""
+input company_max_order_by {
+  assets_billion: order_by
+  company: order_by
+  company_id: order_by
+  headquarters: order_by
+  main_industry: order_by
+  market_value: order_by
+  profits_billion: order_by
+  rank: order_by
+  sales_billion: order_by
+}
+
+"""aggregate min on columns"""
+type company_min_fields {
+  assets_billion: Float
+  company: String
+  company_id: Int
+  headquarters: String
+  main_industry: String
+  market_value: Float
+  profits_billion: Float
+  rank: Int
+  sales_billion: Float
+}
+
+"""
+order by min() on columns of table "company"
+"""
+input company_min_order_by {
+  assets_billion: order_by
+  company: order_by
+  company_id: order_by
+  headquarters: order_by
+  main_industry: order_by
+  market_value: order_by
+  profits_billion: order_by
+  rank: order_by
+  sales_billion: order_by
+}
+
+"""
+response of any mutation on the table "company"
+"""
+type company_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [company!]!
+}
+
+"""
+input type for inserting object relation for remote table "company"
+"""
+input company_obj_rel_insert_input {
+  data: company_insert_input!
+  on_conflict: company_on_conflict
+}
+
+"""
+on conflict condition type for table "company"
+"""
+input company_on_conflict {
+  constraint: company_constraint!
+  update_columns: [company_update_column!]!
+  where: company_bool_exp
+}
+
+"""
+ordering options when selecting data from "company"
+"""
+input company_order_by {
+  assets_billion: order_by
+  company: order_by
+  company_id: order_by
+  headquarters: order_by
+  main_industry: order_by
+  market_value: order_by
+  profits_billion: order_by
+  rank: order_by
+  sales_billion: order_by
+  station_companies_aggregate: station_company_aggregate_order_by
+}
+
+"""
+select columns of table "company"
+"""
+enum company_select_column {
+  """column name"""
+  assets_billion
+
+  """column name"""
+  company
+
+  """column name"""
+  company_id
+
+  """column name"""
+  headquarters
+
+  """column name"""
+  main_industry
+
+  """column name"""
+  market_value
+
+  """column name"""
+  profits_billion
+
+  """column name"""
+  rank
+
+  """column name"""
+  sales_billion
+}
+
+"""
+input type for updating data in table "company"
+"""
+input company_set_input {
+  assets_billion: Float
+  company: String
+  company_id: Int
+  headquarters: String
+  main_industry: String
+  market_value: Float
+  profits_billion: Float
+  rank: Int
+  sales_billion: Float
+}
+
+"""aggregate stddev on columns"""
+type company_stddev_fields {
+  assets_billion: Float
+  company_id: Float
+  market_value: Float
+  profits_billion: Float
+  rank: Float
+  sales_billion: Float
+}
+
+"""
+order by stddev() on columns of table "company"
+"""
+input company_stddev_order_by {
+  assets_billion: order_by
+  company_id: order_by
+  market_value: order_by
+  profits_billion: order_by
+  rank: order_by
+  sales_billion: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type company_stddev_pop_fields {
+  assets_billion: Float
+  company_id: Float
+  market_value: Float
+  profits_billion: Float
+  rank: Float
+  sales_billion: Float
+}
+
+"""
+order by stddev_pop() on columns of table "company"
+"""
+input company_stddev_pop_order_by {
+  assets_billion: order_by
+  company_id: order_by
+  market_value: order_by
+  profits_billion: order_by
+  rank: order_by
+  sales_billion: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type company_stddev_samp_fields {
+  assets_billion: Float
+  company_id: Float
+  market_value: Float
+  profits_billion: Float
+  rank: Float
+  sales_billion: Float
+}
+
+"""
+order by stddev_samp() on columns of table "company"
+"""
+input company_stddev_samp_order_by {
+  assets_billion: order_by
+  company_id: order_by
+  market_value: order_by
+  profits_billion: order_by
+  rank: order_by
+  sales_billion: order_by
+}
+
+"""aggregate sum on columns"""
+type company_sum_fields {
+  assets_billion: Float
+  company_id: Int
+  market_value: Float
+  profits_billion: Float
+  rank: Int
+  sales_billion: Float
+}
+
+"""
+order by sum() on columns of table "company"
+"""
+input company_sum_order_by {
+  assets_billion: order_by
+  company_id: order_by
+  market_value: order_by
+  profits_billion: order_by
+  rank: order_by
+  sales_billion: order_by
+}
+
+"""
+update columns of table "company"
+"""
+enum company_update_column {
+  """column name"""
+  assets_billion
+
+  """column name"""
+  company
+
+  """column name"""
+  company_id
+
+  """column name"""
+  headquarters
+
+  """column name"""
+  main_industry
+
+  """column name"""
+  market_value
+
+  """column name"""
+  profits_billion
+
+  """column name"""
+  rank
+
+  """column name"""
+  sales_billion
+}
+
+"""aggregate var_pop on columns"""
+type company_var_pop_fields {
+  assets_billion: Float
+  company_id: Float
+  market_value: Float
+  profits_billion: Float
+  rank: Float
+  sales_billion: Float
+}
+
+"""
+order by var_pop() on columns of table "company"
+"""
+input company_var_pop_order_by {
+  assets_billion: order_by
+  company_id: order_by
+  market_value: order_by
+  profits_billion: order_by
+  rank: order_by
+  sales_billion: order_by
+}
+
+"""aggregate var_samp on columns"""
+type company_var_samp_fields {
+  assets_billion: Float
+  company_id: Float
+  market_value: Float
+  profits_billion: Float
+  rank: Float
+  sales_billion: Float
+}
+
+"""
+order by var_samp() on columns of table "company"
+"""
+input company_var_samp_order_by {
+  assets_billion: order_by
+  company_id: order_by
+  market_value: order_by
+  profits_billion: order_by
+  rank: order_by
+  sales_billion: order_by
+}
+
+"""aggregate variance on columns"""
+type company_variance_fields {
+  assets_billion: Float
+  company_id: Float
+  market_value: Float
+  profits_billion: Float
+  rank: Float
+  sales_billion: Float
+}
+
+"""
+order by variance() on columns of table "company"
+"""
+input company_variance_order_by {
+  assets_billion: order_by
+  company_id: order_by
+  market_value: order_by
+  profits_billion: order_by
+  rank: order_by
+  sales_billion: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+columns and relationships of "gas_station"
+"""
+type gas_station {
+  location: String
+  manager_name: String
+  open_year: Int
+  representative_name: String
+
+  """An array relationship"""
+  station_companies(
+    """distinct select on columns"""
+    distinct_on: [station_company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_company_order_by!]
+
+    """filter the rows returned"""
+    where: station_company_bool_exp
+  ): [station_company!]!
+
+  """An aggregated array relationship"""
+  station_companies_aggregate(
+    """distinct select on columns"""
+    distinct_on: [station_company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_company_order_by!]
+
+    """filter the rows returned"""
+    where: station_company_bool_exp
+  ): station_company_aggregate!
+  station_id: Int
+  vice_manager_name: String
+}
+
+"""
+aggregated selection of "gas_station"
+"""
+type gas_station_aggregate {
+  aggregate: gas_station_aggregate_fields
+  nodes: [gas_station!]!
+}
+
+"""
+aggregate fields of "gas_station"
+"""
+type gas_station_aggregate_fields {
+  avg: gas_station_avg_fields
+  count(columns: [gas_station_select_column!], distinct: Boolean): Int
+  max: gas_station_max_fields
+  min: gas_station_min_fields
+  stddev: gas_station_stddev_fields
+  stddev_pop: gas_station_stddev_pop_fields
+  stddev_samp: gas_station_stddev_samp_fields
+  sum: gas_station_sum_fields
+  var_pop: gas_station_var_pop_fields
+  var_samp: gas_station_var_samp_fields
+  variance: gas_station_variance_fields
+}
+
+"""
+order by aggregate values of table "gas_station"
+"""
+input gas_station_aggregate_order_by {
+  avg: gas_station_avg_order_by
+  count: order_by
+  max: gas_station_max_order_by
+  min: gas_station_min_order_by
+  stddev: gas_station_stddev_order_by
+  stddev_pop: gas_station_stddev_pop_order_by
+  stddev_samp: gas_station_stddev_samp_order_by
+  sum: gas_station_sum_order_by
+  var_pop: gas_station_var_pop_order_by
+  var_samp: gas_station_var_samp_order_by
+  variance: gas_station_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "gas_station"
+"""
+input gas_station_arr_rel_insert_input {
+  data: [gas_station_insert_input!]!
+  on_conflict: gas_station_on_conflict
+}
+
+"""aggregate avg on columns"""
+type gas_station_avg_fields {
+  open_year: Float
+  station_id: Float
+}
+
+"""
+order by avg() on columns of table "gas_station"
+"""
+input gas_station_avg_order_by {
+  open_year: order_by
+  station_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "gas_station". All fields are combined with a logical 'AND'.
+"""
+input gas_station_bool_exp {
+  _and: [gas_station_bool_exp]
+  _not: gas_station_bool_exp
+  _or: [gas_station_bool_exp]
+  location: String_comparison_exp
+  manager_name: String_comparison_exp
+  open_year: Int_comparison_exp
+  representative_name: String_comparison_exp
+  station_companies: station_company_bool_exp
+  station_id: Int_comparison_exp
+  vice_manager_name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "gas_station"
+"""
+enum gas_station_constraint {
+  """unique or primary key constraint"""
+  idx_19130_sqlite_autoindex_gas_station_1
+}
+
+"""
+input type for incrementing integer columne in table "gas_station"
+"""
+input gas_station_inc_input {
+  open_year: Int
+  station_id: Int
+}
+
+"""
+input type for inserting data into table "gas_station"
+"""
+input gas_station_insert_input {
+  location: String
+  manager_name: String
+  open_year: Int
+  representative_name: String
+  station_companies: station_company_arr_rel_insert_input
+  station_id: Int
+  vice_manager_name: String
+}
+
+"""aggregate max on columns"""
+type gas_station_max_fields {
+  location: String
+  manager_name: String
+  open_year: Int
+  representative_name: String
+  station_id: Int
+  vice_manager_name: String
+}
+
+"""
+order by max() on columns of table "gas_station"
+"""
+input gas_station_max_order_by {
+  location: order_by
+  manager_name: order_by
+  open_year: order_by
+  representative_name: order_by
+  station_id: order_by
+  vice_manager_name: order_by
+}
+
+"""aggregate min on columns"""
+type gas_station_min_fields {
+  location: String
+  manager_name: String
+  open_year: Int
+  representative_name: String
+  station_id: Int
+  vice_manager_name: String
+}
+
+"""
+order by min() on columns of table "gas_station"
+"""
+input gas_station_min_order_by {
+  location: order_by
+  manager_name: order_by
+  open_year: order_by
+  representative_name: order_by
+  station_id: order_by
+  vice_manager_name: order_by
+}
+
+"""
+response of any mutation on the table "gas_station"
+"""
+type gas_station_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [gas_station!]!
+}
+
+"""
+input type for inserting object relation for remote table "gas_station"
+"""
+input gas_station_obj_rel_insert_input {
+  data: gas_station_insert_input!
+  on_conflict: gas_station_on_conflict
+}
+
+"""
+on conflict condition type for table "gas_station"
+"""
+input gas_station_on_conflict {
+  constraint: gas_station_constraint!
+  update_columns: [gas_station_update_column!]!
+  where: gas_station_bool_exp
+}
+
+"""
+ordering options when selecting data from "gas_station"
+"""
+input gas_station_order_by {
+  location: order_by
+  manager_name: order_by
+  open_year: order_by
+  representative_name: order_by
+  station_companies_aggregate: station_company_aggregate_order_by
+  station_id: order_by
+  vice_manager_name: order_by
+}
+
+"""
+select columns of table "gas_station"
+"""
+enum gas_station_select_column {
+  """column name"""
+  location
+
+  """column name"""
+  manager_name
+
+  """column name"""
+  open_year
+
+  """column name"""
+  representative_name
+
+  """column name"""
+  station_id
+
+  """column name"""
+  vice_manager_name
+}
+
+"""
+input type for updating data in table "gas_station"
+"""
+input gas_station_set_input {
+  location: String
+  manager_name: String
+  open_year: Int
+  representative_name: String
+  station_id: Int
+  vice_manager_name: String
+}
+
+"""aggregate stddev on columns"""
+type gas_station_stddev_fields {
+  open_year: Float
+  station_id: Float
+}
+
+"""
+order by stddev() on columns of table "gas_station"
+"""
+input gas_station_stddev_order_by {
+  open_year: order_by
+  station_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type gas_station_stddev_pop_fields {
+  open_year: Float
+  station_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "gas_station"
+"""
+input gas_station_stddev_pop_order_by {
+  open_year: order_by
+  station_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type gas_station_stddev_samp_fields {
+  open_year: Float
+  station_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "gas_station"
+"""
+input gas_station_stddev_samp_order_by {
+  open_year: order_by
+  station_id: order_by
+}
+
+"""aggregate sum on columns"""
+type gas_station_sum_fields {
+  open_year: Int
+  station_id: Int
+}
+
+"""
+order by sum() on columns of table "gas_station"
+"""
+input gas_station_sum_order_by {
+  open_year: order_by
+  station_id: order_by
+}
+
+"""
+update columns of table "gas_station"
+"""
+enum gas_station_update_column {
+  """column name"""
+  location
+
+  """column name"""
+  manager_name
+
+  """column name"""
+  open_year
+
+  """column name"""
+  representative_name
+
+  """column name"""
+  station_id
+
+  """column name"""
+  vice_manager_name
+}
+
+"""aggregate var_pop on columns"""
+type gas_station_var_pop_fields {
+  open_year: Float
+  station_id: Float
+}
+
+"""
+order by var_pop() on columns of table "gas_station"
+"""
+input gas_station_var_pop_order_by {
+  open_year: order_by
+  station_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type gas_station_var_samp_fields {
+  open_year: Float
+  station_id: Float
+}
+
+"""
+order by var_samp() on columns of table "gas_station"
+"""
+input gas_station_var_samp_order_by {
+  open_year: order_by
+  station_id: order_by
+}
+
+"""aggregate variance on columns"""
+type gas_station_variance_fields {
+  open_year: Float
+  station_id: Float
+}
+
+"""
+order by variance() on columns of table "gas_station"
+"""
+input gas_station_variance_order_by {
+  open_year: order_by
+  station_id: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "company"
+  """
+  delete_company(
+    """filter the rows which have to be deleted"""
+    where: company_bool_exp!
+  ): company_mutation_response
+
+  """
+  delete data from the table: "gas_station"
+  """
+  delete_gas_station(
+    """filter the rows which have to be deleted"""
+    where: gas_station_bool_exp!
+  ): gas_station_mutation_response
+
+  """
+  delete data from the table: "station_company"
+  """
+  delete_station_company(
+    """filter the rows which have to be deleted"""
+    where: station_company_bool_exp!
+  ): station_company_mutation_response
+
+  """
+  insert data into the table: "company"
+  """
+  insert_company(
+    """the rows to be inserted"""
+    objects: [company_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: company_on_conflict
+  ): company_mutation_response
+
+  """
+  insert data into the table: "gas_station"
+  """
+  insert_gas_station(
+    """the rows to be inserted"""
+    objects: [gas_station_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: gas_station_on_conflict
+  ): gas_station_mutation_response
+
+  """
+  insert data into the table: "station_company"
+  """
+  insert_station_company(
+    """the rows to be inserted"""
+    objects: [station_company_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: station_company_on_conflict
+  ): station_company_mutation_response
+
+  """
+  update data of the table: "company"
+  """
+  update_company(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: company_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: company_set_input
+
+    """filter the rows which have to be updated"""
+    where: company_bool_exp!
+  ): company_mutation_response
+
+  """
+  update data of the table: "gas_station"
+  """
+  update_gas_station(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: gas_station_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: gas_station_set_input
+
+    """filter the rows which have to be updated"""
+    where: gas_station_bool_exp!
+  ): gas_station_mutation_response
+
+  """
+  update data of the table: "station_company"
+  """
+  update_station_company(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: station_company_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: station_company_set_input
+
+    """filter the rows which have to be updated"""
+    where: station_company_bool_exp!
+  ): station_company_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "company"
+  """
+  company(
+    """distinct select on columns"""
+    distinct_on: [company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [company_order_by!]
+
+    """filter the rows returned"""
+    where: company_bool_exp
+  ): [company!]!
+
+  """
+  fetch aggregated fields from the table: "company"
+  """
+  company_aggregate(
+    """distinct select on columns"""
+    distinct_on: [company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [company_order_by!]
+
+    """filter the rows returned"""
+    where: company_bool_exp
+  ): company_aggregate!
+
+  """
+  fetch data from the table: "gas_station"
+  """
+  gas_station(
+    """distinct select on columns"""
+    distinct_on: [gas_station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [gas_station_order_by!]
+
+    """filter the rows returned"""
+    where: gas_station_bool_exp
+  ): [gas_station!]!
+
+  """
+  fetch aggregated fields from the table: "gas_station"
+  """
+  gas_station_aggregate(
+    """distinct select on columns"""
+    distinct_on: [gas_station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [gas_station_order_by!]
+
+    """filter the rows returned"""
+    where: gas_station_bool_exp
+  ): gas_station_aggregate!
+
+  """
+  fetch data from the table: "station_company"
+  """
+  station_company(
+    """distinct select on columns"""
+    distinct_on: [station_company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_company_order_by!]
+
+    """filter the rows returned"""
+    where: station_company_bool_exp
+  ): [station_company!]!
+
+  """
+  fetch aggregated fields from the table: "station_company"
+  """
+  station_company_aggregate(
+    """distinct select on columns"""
+    distinct_on: [station_company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_company_order_by!]
+
+    """filter the rows returned"""
+    where: station_company_bool_exp
+  ): station_company_aggregate!
+}
+
+"""
+columns and relationships of "station_company"
+"""
+type station_company {
+  """An object relationship"""
+  company: company
+  company_id: Int
+
+  """An object relationship"""
+  gas_station: gas_station
+  rank_of_the_year: Int
+  station_id: Int
+}
+
+"""
+aggregated selection of "station_company"
+"""
+type station_company_aggregate {
+  aggregate: station_company_aggregate_fields
+  nodes: [station_company!]!
+}
+
+"""
+aggregate fields of "station_company"
+"""
+type station_company_aggregate_fields {
+  avg: station_company_avg_fields
+  count(columns: [station_company_select_column!], distinct: Boolean): Int
+  max: station_company_max_fields
+  min: station_company_min_fields
+  stddev: station_company_stddev_fields
+  stddev_pop: station_company_stddev_pop_fields
+  stddev_samp: station_company_stddev_samp_fields
+  sum: station_company_sum_fields
+  var_pop: station_company_var_pop_fields
+  var_samp: station_company_var_samp_fields
+  variance: station_company_variance_fields
+}
+
+"""
+order by aggregate values of table "station_company"
+"""
+input station_company_aggregate_order_by {
+  avg: station_company_avg_order_by
+  count: order_by
+  max: station_company_max_order_by
+  min: station_company_min_order_by
+  stddev: station_company_stddev_order_by
+  stddev_pop: station_company_stddev_pop_order_by
+  stddev_samp: station_company_stddev_samp_order_by
+  sum: station_company_sum_order_by
+  var_pop: station_company_var_pop_order_by
+  var_samp: station_company_var_samp_order_by
+  variance: station_company_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "station_company"
+"""
+input station_company_arr_rel_insert_input {
+  data: [station_company_insert_input!]!
+  on_conflict: station_company_on_conflict
+}
+
+"""aggregate avg on columns"""
+type station_company_avg_fields {
+  company_id: Float
+  rank_of_the_year: Float
+  station_id: Float
+}
+
+"""
+order by avg() on columns of table "station_company"
+"""
+input station_company_avg_order_by {
+  company_id: order_by
+  rank_of_the_year: order_by
+  station_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "station_company". All fields are combined with a logical 'AND'.
+"""
+input station_company_bool_exp {
+  _and: [station_company_bool_exp]
+  _not: station_company_bool_exp
+  _or: [station_company_bool_exp]
+  company: company_bool_exp
+  company_id: Int_comparison_exp
+  gas_station: gas_station_bool_exp
+  rank_of_the_year: Int_comparison_exp
+  station_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "station_company"
+"""
+enum station_company_constraint {
+  """unique or primary key constraint"""
+  idx_19136_sqlite_autoindex_station_company_1
+}
+
+"""
+input type for incrementing integer columne in table "station_company"
+"""
+input station_company_inc_input {
+  company_id: Int
+  rank_of_the_year: Int
+  station_id: Int
+}
+
+"""
+input type for inserting data into table "station_company"
+"""
+input station_company_insert_input {
+  company: company_obj_rel_insert_input
+  company_id: Int
+  gas_station: gas_station_obj_rel_insert_input
+  rank_of_the_year: Int
+  station_id: Int
+}
+
+"""aggregate max on columns"""
+type station_company_max_fields {
+  company_id: Int
+  rank_of_the_year: Int
+  station_id: Int
+}
+
+"""
+order by max() on columns of table "station_company"
+"""
+input station_company_max_order_by {
+  company_id: order_by
+  rank_of_the_year: order_by
+  station_id: order_by
+}
+
+"""aggregate min on columns"""
+type station_company_min_fields {
+  company_id: Int
+  rank_of_the_year: Int
+  station_id: Int
+}
+
+"""
+order by min() on columns of table "station_company"
+"""
+input station_company_min_order_by {
+  company_id: order_by
+  rank_of_the_year: order_by
+  station_id: order_by
+}
+
+"""
+response of any mutation on the table "station_company"
+"""
+type station_company_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [station_company!]!
+}
+
+"""
+input type for inserting object relation for remote table "station_company"
+"""
+input station_company_obj_rel_insert_input {
+  data: station_company_insert_input!
+  on_conflict: station_company_on_conflict
+}
+
+"""
+on conflict condition type for table "station_company"
+"""
+input station_company_on_conflict {
+  constraint: station_company_constraint!
+  update_columns: [station_company_update_column!]!
+  where: station_company_bool_exp
+}
+
+"""
+ordering options when selecting data from "station_company"
+"""
+input station_company_order_by {
+  company: company_order_by
+  company_id: order_by
+  gas_station: gas_station_order_by
+  rank_of_the_year: order_by
+  station_id: order_by
+}
+
+"""
+select columns of table "station_company"
+"""
+enum station_company_select_column {
+  """column name"""
+  company_id
+
+  """column name"""
+  rank_of_the_year
+
+  """column name"""
+  station_id
+}
+
+"""
+input type for updating data in table "station_company"
+"""
+input station_company_set_input {
+  company_id: Int
+  rank_of_the_year: Int
+  station_id: Int
+}
+
+"""aggregate stddev on columns"""
+type station_company_stddev_fields {
+  company_id: Float
+  rank_of_the_year: Float
+  station_id: Float
+}
+
+"""
+order by stddev() on columns of table "station_company"
+"""
+input station_company_stddev_order_by {
+  company_id: order_by
+  rank_of_the_year: order_by
+  station_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type station_company_stddev_pop_fields {
+  company_id: Float
+  rank_of_the_year: Float
+  station_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "station_company"
+"""
+input station_company_stddev_pop_order_by {
+  company_id: order_by
+  rank_of_the_year: order_by
+  station_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type station_company_stddev_samp_fields {
+  company_id: Float
+  rank_of_the_year: Float
+  station_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "station_company"
+"""
+input station_company_stddev_samp_order_by {
+  company_id: order_by
+  rank_of_the_year: order_by
+  station_id: order_by
+}
+
+"""aggregate sum on columns"""
+type station_company_sum_fields {
+  company_id: Int
+  rank_of_the_year: Int
+  station_id: Int
+}
+
+"""
+order by sum() on columns of table "station_company"
+"""
+input station_company_sum_order_by {
+  company_id: order_by
+  rank_of_the_year: order_by
+  station_id: order_by
+}
+
+"""
+update columns of table "station_company"
+"""
+enum station_company_update_column {
+  """column name"""
+  company_id
+
+  """column name"""
+  rank_of_the_year
+
+  """column name"""
+  station_id
+}
+
+"""aggregate var_pop on columns"""
+type station_company_var_pop_fields {
+  company_id: Float
+  rank_of_the_year: Float
+  station_id: Float
+}
+
+"""
+order by var_pop() on columns of table "station_company"
+"""
+input station_company_var_pop_order_by {
+  company_id: order_by
+  rank_of_the_year: order_by
+  station_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type station_company_var_samp_fields {
+  company_id: Float
+  rank_of_the_year: Float
+  station_id: Float
+}
+
+"""
+order by var_samp() on columns of table "station_company"
+"""
+input station_company_var_samp_order_by {
+  company_id: order_by
+  rank_of_the_year: order_by
+  station_id: order_by
+}
+
+"""aggregate variance on columns"""
+type station_company_variance_fields {
+  company_id: Float
+  rank_of_the_year: Float
+  station_id: Float
+}
+
+"""
+order by variance() on columns of table "station_company"
+"""
+input station_company_variance_order_by {
+  company_id: order_by
+  rank_of_the_year: order_by
+  station_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "company"
+  """
+  company(
+    """distinct select on columns"""
+    distinct_on: [company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [company_order_by!]
+
+    """filter the rows returned"""
+    where: company_bool_exp
+  ): [company!]!
+
+  """
+  fetch aggregated fields from the table: "company"
+  """
+  company_aggregate(
+    """distinct select on columns"""
+    distinct_on: [company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [company_order_by!]
+
+    """filter the rows returned"""
+    where: company_bool_exp
+  ): company_aggregate!
+
+  """
+  fetch data from the table: "gas_station"
+  """
+  gas_station(
+    """distinct select on columns"""
+    distinct_on: [gas_station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [gas_station_order_by!]
+
+    """filter the rows returned"""
+    where: gas_station_bool_exp
+  ): [gas_station!]!
+
+  """
+  fetch aggregated fields from the table: "gas_station"
+  """
+  gas_station_aggregate(
+    """distinct select on columns"""
+    distinct_on: [gas_station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [gas_station_order_by!]
+
+    """filter the rows returned"""
+    where: gas_station_bool_exp
+  ): gas_station_aggregate!
+
+  """
+  fetch data from the table: "station_company"
+  """
+  station_company(
+    """distinct select on columns"""
+    distinct_on: [station_company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_company_order_by!]
+
+    """filter the rows returned"""
+    where: station_company_bool_exp
+  ): [station_company!]!
+
+  """
+  fetch aggregated fields from the table: "station_company"
+  """
+  station_company_aggregate(
+    """distinct select on columns"""
+    distinct_on: [station_company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_company_order_by!]
+
+    """filter the rows returned"""
+    where: station_company_bool_exp
+  ): station_company_aggregate!
+}

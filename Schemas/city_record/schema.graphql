@@ -1,0 +1,2362 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "city"
+"""
+type city {
+  city: String
+  city_id: Int
+  gdp: Float
+  hanyu_pinyin: String
+  hanzi: String
+
+  """An array relationship"""
+  hosting_cities(
+    """distinct select on columns"""
+    distinct_on: [hosting_city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hosting_city_order_by!]
+
+    """filter the rows returned"""
+    where: hosting_city_bool_exp
+  ): [hosting_city!]!
+
+  """An aggregated array relationship"""
+  hosting_cities_aggregate(
+    """distinct select on columns"""
+    distinct_on: [hosting_city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hosting_city_order_by!]
+
+    """filter the rows returned"""
+    where: hosting_city_bool_exp
+  ): hosting_city_aggregate!
+  regional_population: Int
+
+  """An array relationship"""
+  temperatures(
+    """distinct select on columns"""
+    distinct_on: [temperature_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [temperature_order_by!]
+
+    """filter the rows returned"""
+    where: temperature_bool_exp
+  ): [temperature!]!
+
+  """An aggregated array relationship"""
+  temperatures_aggregate(
+    """distinct select on columns"""
+    distinct_on: [temperature_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [temperature_order_by!]
+
+    """filter the rows returned"""
+    where: temperature_bool_exp
+  ): temperature_aggregate!
+}
+
+"""
+aggregated selection of "city"
+"""
+type city_aggregate {
+  aggregate: city_aggregate_fields
+  nodes: [city!]!
+}
+
+"""
+aggregate fields of "city"
+"""
+type city_aggregate_fields {
+  avg: city_avg_fields
+  count(columns: [city_select_column!], distinct: Boolean): Int
+  max: city_max_fields
+  min: city_min_fields
+  stddev: city_stddev_fields
+  stddev_pop: city_stddev_pop_fields
+  stddev_samp: city_stddev_samp_fields
+  sum: city_sum_fields
+  var_pop: city_var_pop_fields
+  var_samp: city_var_samp_fields
+  variance: city_variance_fields
+}
+
+"""
+order by aggregate values of table "city"
+"""
+input city_aggregate_order_by {
+  avg: city_avg_order_by
+  count: order_by
+  max: city_max_order_by
+  min: city_min_order_by
+  stddev: city_stddev_order_by
+  stddev_pop: city_stddev_pop_order_by
+  stddev_samp: city_stddev_samp_order_by
+  sum: city_sum_order_by
+  var_pop: city_var_pop_order_by
+  var_samp: city_var_samp_order_by
+  variance: city_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "city"
+"""
+input city_arr_rel_insert_input {
+  data: [city_insert_input!]!
+  on_conflict: city_on_conflict
+}
+
+"""aggregate avg on columns"""
+type city_avg_fields {
+  city_id: Float
+  gdp: Float
+  regional_population: Float
+}
+
+"""
+order by avg() on columns of table "city"
+"""
+input city_avg_order_by {
+  city_id: order_by
+  gdp: order_by
+  regional_population: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "city". All fields are combined with a logical 'AND'.
+"""
+input city_bool_exp {
+  _and: [city_bool_exp]
+  _not: city_bool_exp
+  _or: [city_bool_exp]
+  city: String_comparison_exp
+  city_id: Int_comparison_exp
+  gdp: Float_comparison_exp
+  hanyu_pinyin: String_comparison_exp
+  hanzi: String_comparison_exp
+  hosting_cities: hosting_city_bool_exp
+  regional_population: Int_comparison_exp
+  temperatures: temperature_bool_exp
+}
+
+"""
+unique or primary key constraints on table "city"
+"""
+enum city_constraint {
+  """unique or primary key constraint"""
+  idx_22614_sqlite_autoindex_city_1
+}
+
+"""
+input type for incrementing integer columne in table "city"
+"""
+input city_inc_input {
+  city_id: Int
+  regional_population: Int
+}
+
+"""
+input type for inserting data into table "city"
+"""
+input city_insert_input {
+  city: String
+  city_id: Int
+  gdp: Float
+  hanyu_pinyin: String
+  hanzi: String
+  hosting_cities: hosting_city_arr_rel_insert_input
+  regional_population: Int
+  temperatures: temperature_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type city_max_fields {
+  city: String
+  city_id: Int
+  gdp: Float
+  hanyu_pinyin: String
+  hanzi: String
+  regional_population: Int
+}
+
+"""
+order by max() on columns of table "city"
+"""
+input city_max_order_by {
+  city: order_by
+  city_id: order_by
+  gdp: order_by
+  hanyu_pinyin: order_by
+  hanzi: order_by
+  regional_population: order_by
+}
+
+"""aggregate min on columns"""
+type city_min_fields {
+  city: String
+  city_id: Int
+  gdp: Float
+  hanyu_pinyin: String
+  hanzi: String
+  regional_population: Int
+}
+
+"""
+order by min() on columns of table "city"
+"""
+input city_min_order_by {
+  city: order_by
+  city_id: order_by
+  gdp: order_by
+  hanyu_pinyin: order_by
+  hanzi: order_by
+  regional_population: order_by
+}
+
+"""
+response of any mutation on the table "city"
+"""
+type city_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [city!]!
+}
+
+"""
+input type for inserting object relation for remote table "city"
+"""
+input city_obj_rel_insert_input {
+  data: city_insert_input!
+  on_conflict: city_on_conflict
+}
+
+"""
+on conflict condition type for table "city"
+"""
+input city_on_conflict {
+  constraint: city_constraint!
+  update_columns: [city_update_column!]!
+  where: city_bool_exp
+}
+
+"""
+ordering options when selecting data from "city"
+"""
+input city_order_by {
+  city: order_by
+  city_id: order_by
+  gdp: order_by
+  hanyu_pinyin: order_by
+  hanzi: order_by
+  hosting_cities_aggregate: hosting_city_aggregate_order_by
+  regional_population: order_by
+  temperatures_aggregate: temperature_aggregate_order_by
+}
+
+"""
+select columns of table "city"
+"""
+enum city_select_column {
+  """column name"""
+  city
+
+  """column name"""
+  city_id
+
+  """column name"""
+  gdp
+
+  """column name"""
+  hanyu_pinyin
+
+  """column name"""
+  hanzi
+
+  """column name"""
+  regional_population
+}
+
+"""
+input type for updating data in table "city"
+"""
+input city_set_input {
+  city: String
+  city_id: Int
+  gdp: Float
+  hanyu_pinyin: String
+  hanzi: String
+  regional_population: Int
+}
+
+"""aggregate stddev on columns"""
+type city_stddev_fields {
+  city_id: Float
+  gdp: Float
+  regional_population: Float
+}
+
+"""
+order by stddev() on columns of table "city"
+"""
+input city_stddev_order_by {
+  city_id: order_by
+  gdp: order_by
+  regional_population: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type city_stddev_pop_fields {
+  city_id: Float
+  gdp: Float
+  regional_population: Float
+}
+
+"""
+order by stddev_pop() on columns of table "city"
+"""
+input city_stddev_pop_order_by {
+  city_id: order_by
+  gdp: order_by
+  regional_population: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type city_stddev_samp_fields {
+  city_id: Float
+  gdp: Float
+  regional_population: Float
+}
+
+"""
+order by stddev_samp() on columns of table "city"
+"""
+input city_stddev_samp_order_by {
+  city_id: order_by
+  gdp: order_by
+  regional_population: order_by
+}
+
+"""aggregate sum on columns"""
+type city_sum_fields {
+  city_id: Int
+  gdp: Float
+  regional_population: Int
+}
+
+"""
+order by sum() on columns of table "city"
+"""
+input city_sum_order_by {
+  city_id: order_by
+  gdp: order_by
+  regional_population: order_by
+}
+
+"""
+update columns of table "city"
+"""
+enum city_update_column {
+  """column name"""
+  city
+
+  """column name"""
+  city_id
+
+  """column name"""
+  gdp
+
+  """column name"""
+  hanyu_pinyin
+
+  """column name"""
+  hanzi
+
+  """column name"""
+  regional_population
+}
+
+"""aggregate var_pop on columns"""
+type city_var_pop_fields {
+  city_id: Float
+  gdp: Float
+  regional_population: Float
+}
+
+"""
+order by var_pop() on columns of table "city"
+"""
+input city_var_pop_order_by {
+  city_id: order_by
+  gdp: order_by
+  regional_population: order_by
+}
+
+"""aggregate var_samp on columns"""
+type city_var_samp_fields {
+  city_id: Float
+  gdp: Float
+  regional_population: Float
+}
+
+"""
+order by var_samp() on columns of table "city"
+"""
+input city_var_samp_order_by {
+  city_id: order_by
+  gdp: order_by
+  regional_population: order_by
+}
+
+"""aggregate variance on columns"""
+type city_variance_fields {
+  city_id: Float
+  gdp: Float
+  regional_population: Float
+}
+
+"""
+order by variance() on columns of table "city"
+"""
+input city_variance_order_by {
+  city_id: order_by
+  gdp: order_by
+  regional_population: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+columns and relationships of "hosting_city"
+"""
+type hosting_city {
+  """An object relationship"""
+  city: city
+  host_city: Int
+
+  """An object relationship"""
+  match: match
+  match_id: Int
+  year: Int
+}
+
+"""
+aggregated selection of "hosting_city"
+"""
+type hosting_city_aggregate {
+  aggregate: hosting_city_aggregate_fields
+  nodes: [hosting_city!]!
+}
+
+"""
+aggregate fields of "hosting_city"
+"""
+type hosting_city_aggregate_fields {
+  avg: hosting_city_avg_fields
+  count(columns: [hosting_city_select_column!], distinct: Boolean): Int
+  max: hosting_city_max_fields
+  min: hosting_city_min_fields
+  stddev: hosting_city_stddev_fields
+  stddev_pop: hosting_city_stddev_pop_fields
+  stddev_samp: hosting_city_stddev_samp_fields
+  sum: hosting_city_sum_fields
+  var_pop: hosting_city_var_pop_fields
+  var_samp: hosting_city_var_samp_fields
+  variance: hosting_city_variance_fields
+}
+
+"""
+order by aggregate values of table "hosting_city"
+"""
+input hosting_city_aggregate_order_by {
+  avg: hosting_city_avg_order_by
+  count: order_by
+  max: hosting_city_max_order_by
+  min: hosting_city_min_order_by
+  stddev: hosting_city_stddev_order_by
+  stddev_pop: hosting_city_stddev_pop_order_by
+  stddev_samp: hosting_city_stddev_samp_order_by
+  sum: hosting_city_sum_order_by
+  var_pop: hosting_city_var_pop_order_by
+  var_samp: hosting_city_var_samp_order_by
+  variance: hosting_city_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "hosting_city"
+"""
+input hosting_city_arr_rel_insert_input {
+  data: [hosting_city_insert_input!]!
+  on_conflict: hosting_city_on_conflict
+}
+
+"""aggregate avg on columns"""
+type hosting_city_avg_fields {
+  host_city: Float
+  match_id: Float
+  year: Float
+}
+
+"""
+order by avg() on columns of table "hosting_city"
+"""
+input hosting_city_avg_order_by {
+  host_city: order_by
+  match_id: order_by
+  year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "hosting_city". All fields are combined with a logical 'AND'.
+"""
+input hosting_city_bool_exp {
+  _and: [hosting_city_bool_exp]
+  _not: hosting_city_bool_exp
+  _or: [hosting_city_bool_exp]
+  city: city_bool_exp
+  host_city: Int_comparison_exp
+  match: match_bool_exp
+  match_id: Int_comparison_exp
+  year: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "hosting_city"
+"""
+enum hosting_city_constraint {
+  """unique or primary key constraint"""
+  idx_22629_sqlite_autoindex_hosting_city_1
+}
+
+"""
+input type for incrementing integer columne in table "hosting_city"
+"""
+input hosting_city_inc_input {
+  host_city: Int
+  match_id: Int
+  year: Int
+}
+
+"""
+input type for inserting data into table "hosting_city"
+"""
+input hosting_city_insert_input {
+  city: city_obj_rel_insert_input
+  host_city: Int
+  match: match_obj_rel_insert_input
+  match_id: Int
+  year: Int
+}
+
+"""aggregate max on columns"""
+type hosting_city_max_fields {
+  host_city: Int
+  match_id: Int
+  year: Int
+}
+
+"""
+order by max() on columns of table "hosting_city"
+"""
+input hosting_city_max_order_by {
+  host_city: order_by
+  match_id: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type hosting_city_min_fields {
+  host_city: Int
+  match_id: Int
+  year: Int
+}
+
+"""
+order by min() on columns of table "hosting_city"
+"""
+input hosting_city_min_order_by {
+  host_city: order_by
+  match_id: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "hosting_city"
+"""
+type hosting_city_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [hosting_city!]!
+}
+
+"""
+input type for inserting object relation for remote table "hosting_city"
+"""
+input hosting_city_obj_rel_insert_input {
+  data: hosting_city_insert_input!
+  on_conflict: hosting_city_on_conflict
+}
+
+"""
+on conflict condition type for table "hosting_city"
+"""
+input hosting_city_on_conflict {
+  constraint: hosting_city_constraint!
+  update_columns: [hosting_city_update_column!]!
+  where: hosting_city_bool_exp
+}
+
+"""
+ordering options when selecting data from "hosting_city"
+"""
+input hosting_city_order_by {
+  city: city_order_by
+  host_city: order_by
+  match: match_order_by
+  match_id: order_by
+  year: order_by
+}
+
+"""
+select columns of table "hosting_city"
+"""
+enum hosting_city_select_column {
+  """column name"""
+  host_city
+
+  """column name"""
+  match_id
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "hosting_city"
+"""
+input hosting_city_set_input {
+  host_city: Int
+  match_id: Int
+  year: Int
+}
+
+"""aggregate stddev on columns"""
+type hosting_city_stddev_fields {
+  host_city: Float
+  match_id: Float
+  year: Float
+}
+
+"""
+order by stddev() on columns of table "hosting_city"
+"""
+input hosting_city_stddev_order_by {
+  host_city: order_by
+  match_id: order_by
+  year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type hosting_city_stddev_pop_fields {
+  host_city: Float
+  match_id: Float
+  year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "hosting_city"
+"""
+input hosting_city_stddev_pop_order_by {
+  host_city: order_by
+  match_id: order_by
+  year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type hosting_city_stddev_samp_fields {
+  host_city: Float
+  match_id: Float
+  year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "hosting_city"
+"""
+input hosting_city_stddev_samp_order_by {
+  host_city: order_by
+  match_id: order_by
+  year: order_by
+}
+
+"""aggregate sum on columns"""
+type hosting_city_sum_fields {
+  host_city: Int
+  match_id: Int
+  year: Int
+}
+
+"""
+order by sum() on columns of table "hosting_city"
+"""
+input hosting_city_sum_order_by {
+  host_city: order_by
+  match_id: order_by
+  year: order_by
+}
+
+"""
+update columns of table "hosting_city"
+"""
+enum hosting_city_update_column {
+  """column name"""
+  host_city
+
+  """column name"""
+  match_id
+
+  """column name"""
+  year
+}
+
+"""aggregate var_pop on columns"""
+type hosting_city_var_pop_fields {
+  host_city: Float
+  match_id: Float
+  year: Float
+}
+
+"""
+order by var_pop() on columns of table "hosting_city"
+"""
+input hosting_city_var_pop_order_by {
+  host_city: order_by
+  match_id: order_by
+  year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type hosting_city_var_samp_fields {
+  host_city: Float
+  match_id: Float
+  year: Float
+}
+
+"""
+order by var_samp() on columns of table "hosting_city"
+"""
+input hosting_city_var_samp_order_by {
+  host_city: order_by
+  match_id: order_by
+  year: order_by
+}
+
+"""aggregate variance on columns"""
+type hosting_city_variance_fields {
+  host_city: Float
+  match_id: Float
+  year: Float
+}
+
+"""
+order by variance() on columns of table "hosting_city"
+"""
+input hosting_city_variance_order_by {
+  host_city: order_by
+  match_id: order_by
+  year: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "match"
+"""
+type match {
+  competition: String
+  date: String
+
+  """An array relationship"""
+  hosting_cities(
+    """distinct select on columns"""
+    distinct_on: [hosting_city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hosting_city_order_by!]
+
+    """filter the rows returned"""
+    where: hosting_city_bool_exp
+  ): [hosting_city!]!
+
+  """An aggregated array relationship"""
+  hosting_cities_aggregate(
+    """distinct select on columns"""
+    distinct_on: [hosting_city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hosting_city_order_by!]
+
+    """filter the rows returned"""
+    where: hosting_city_bool_exp
+  ): hosting_city_aggregate!
+  match_id: Int
+  result: String
+  score: String
+  venue: String
+}
+
+"""
+aggregated selection of "match"
+"""
+type match_aggregate {
+  aggregate: match_aggregate_fields
+  nodes: [match!]!
+}
+
+"""
+aggregate fields of "match"
+"""
+type match_aggregate_fields {
+  avg: match_avg_fields
+  count(columns: [match_select_column!], distinct: Boolean): Int
+  max: match_max_fields
+  min: match_min_fields
+  stddev: match_stddev_fields
+  stddev_pop: match_stddev_pop_fields
+  stddev_samp: match_stddev_samp_fields
+  sum: match_sum_fields
+  var_pop: match_var_pop_fields
+  var_samp: match_var_samp_fields
+  variance: match_variance_fields
+}
+
+"""
+order by aggregate values of table "match"
+"""
+input match_aggregate_order_by {
+  avg: match_avg_order_by
+  count: order_by
+  max: match_max_order_by
+  min: match_min_order_by
+  stddev: match_stddev_order_by
+  stddev_pop: match_stddev_pop_order_by
+  stddev_samp: match_stddev_samp_order_by
+  sum: match_sum_order_by
+  var_pop: match_var_pop_order_by
+  var_samp: match_var_samp_order_by
+  variance: match_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "match"
+"""
+input match_arr_rel_insert_input {
+  data: [match_insert_input!]!
+  on_conflict: match_on_conflict
+}
+
+"""aggregate avg on columns"""
+type match_avg_fields {
+  match_id: Float
+}
+
+"""
+order by avg() on columns of table "match"
+"""
+input match_avg_order_by {
+  match_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "match". All fields are combined with a logical 'AND'.
+"""
+input match_bool_exp {
+  _and: [match_bool_exp]
+  _not: match_bool_exp
+  _or: [match_bool_exp]
+  competition: String_comparison_exp
+  date: String_comparison_exp
+  hosting_cities: hosting_city_bool_exp
+  match_id: Int_comparison_exp
+  result: String_comparison_exp
+  score: String_comparison_exp
+  venue: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "match"
+"""
+enum match_constraint {
+  """unique or primary key constraint"""
+  idx_22620_sqlite_autoindex_match_1
+}
+
+"""
+input type for incrementing integer columne in table "match"
+"""
+input match_inc_input {
+  match_id: Int
+}
+
+"""
+input type for inserting data into table "match"
+"""
+input match_insert_input {
+  competition: String
+  date: String
+  hosting_cities: hosting_city_arr_rel_insert_input
+  match_id: Int
+  result: String
+  score: String
+  venue: String
+}
+
+"""aggregate max on columns"""
+type match_max_fields {
+  competition: String
+  date: String
+  match_id: Int
+  result: String
+  score: String
+  venue: String
+}
+
+"""
+order by max() on columns of table "match"
+"""
+input match_max_order_by {
+  competition: order_by
+  date: order_by
+  match_id: order_by
+  result: order_by
+  score: order_by
+  venue: order_by
+}
+
+"""aggregate min on columns"""
+type match_min_fields {
+  competition: String
+  date: String
+  match_id: Int
+  result: String
+  score: String
+  venue: String
+}
+
+"""
+order by min() on columns of table "match"
+"""
+input match_min_order_by {
+  competition: order_by
+  date: order_by
+  match_id: order_by
+  result: order_by
+  score: order_by
+  venue: order_by
+}
+
+"""
+response of any mutation on the table "match"
+"""
+type match_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [match!]!
+}
+
+"""
+input type for inserting object relation for remote table "match"
+"""
+input match_obj_rel_insert_input {
+  data: match_insert_input!
+  on_conflict: match_on_conflict
+}
+
+"""
+on conflict condition type for table "match"
+"""
+input match_on_conflict {
+  constraint: match_constraint!
+  update_columns: [match_update_column!]!
+  where: match_bool_exp
+}
+
+"""
+ordering options when selecting data from "match"
+"""
+input match_order_by {
+  competition: order_by
+  date: order_by
+  hosting_cities_aggregate: hosting_city_aggregate_order_by
+  match_id: order_by
+  result: order_by
+  score: order_by
+  venue: order_by
+}
+
+"""
+select columns of table "match"
+"""
+enum match_select_column {
+  """column name"""
+  competition
+
+  """column name"""
+  date
+
+  """column name"""
+  match_id
+
+  """column name"""
+  result
+
+  """column name"""
+  score
+
+  """column name"""
+  venue
+}
+
+"""
+input type for updating data in table "match"
+"""
+input match_set_input {
+  competition: String
+  date: String
+  match_id: Int
+  result: String
+  score: String
+  venue: String
+}
+
+"""aggregate stddev on columns"""
+type match_stddev_fields {
+  match_id: Float
+}
+
+"""
+order by stddev() on columns of table "match"
+"""
+input match_stddev_order_by {
+  match_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type match_stddev_pop_fields {
+  match_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "match"
+"""
+input match_stddev_pop_order_by {
+  match_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type match_stddev_samp_fields {
+  match_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "match"
+"""
+input match_stddev_samp_order_by {
+  match_id: order_by
+}
+
+"""aggregate sum on columns"""
+type match_sum_fields {
+  match_id: Int
+}
+
+"""
+order by sum() on columns of table "match"
+"""
+input match_sum_order_by {
+  match_id: order_by
+}
+
+"""
+update columns of table "match"
+"""
+enum match_update_column {
+  """column name"""
+  competition
+
+  """column name"""
+  date
+
+  """column name"""
+  match_id
+
+  """column name"""
+  result
+
+  """column name"""
+  score
+
+  """column name"""
+  venue
+}
+
+"""aggregate var_pop on columns"""
+type match_var_pop_fields {
+  match_id: Float
+}
+
+"""
+order by var_pop() on columns of table "match"
+"""
+input match_var_pop_order_by {
+  match_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type match_var_samp_fields {
+  match_id: Float
+}
+
+"""
+order by var_samp() on columns of table "match"
+"""
+input match_var_samp_order_by {
+  match_id: order_by
+}
+
+"""aggregate variance on columns"""
+type match_variance_fields {
+  match_id: Float
+}
+
+"""
+order by variance() on columns of table "match"
+"""
+input match_variance_order_by {
+  match_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "city"
+  """
+  delete_city(
+    """filter the rows which have to be deleted"""
+    where: city_bool_exp!
+  ): city_mutation_response
+
+  """
+  delete data from the table: "hosting_city"
+  """
+  delete_hosting_city(
+    """filter the rows which have to be deleted"""
+    where: hosting_city_bool_exp!
+  ): hosting_city_mutation_response
+
+  """
+  delete data from the table: "match"
+  """
+  delete_match(
+    """filter the rows which have to be deleted"""
+    where: match_bool_exp!
+  ): match_mutation_response
+
+  """
+  delete data from the table: "temperature"
+  """
+  delete_temperature(
+    """filter the rows which have to be deleted"""
+    where: temperature_bool_exp!
+  ): temperature_mutation_response
+
+  """
+  insert data into the table: "city"
+  """
+  insert_city(
+    """the rows to be inserted"""
+    objects: [city_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: city_on_conflict
+  ): city_mutation_response
+
+  """
+  insert data into the table: "hosting_city"
+  """
+  insert_hosting_city(
+    """the rows to be inserted"""
+    objects: [hosting_city_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: hosting_city_on_conflict
+  ): hosting_city_mutation_response
+
+  """
+  insert data into the table: "match"
+  """
+  insert_match(
+    """the rows to be inserted"""
+    objects: [match_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: match_on_conflict
+  ): match_mutation_response
+
+  """
+  insert data into the table: "temperature"
+  """
+  insert_temperature(
+    """the rows to be inserted"""
+    objects: [temperature_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: temperature_on_conflict
+  ): temperature_mutation_response
+
+  """
+  update data of the table: "city"
+  """
+  update_city(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: city_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: city_set_input
+
+    """filter the rows which have to be updated"""
+    where: city_bool_exp!
+  ): city_mutation_response
+
+  """
+  update data of the table: "hosting_city"
+  """
+  update_hosting_city(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: hosting_city_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: hosting_city_set_input
+
+    """filter the rows which have to be updated"""
+    where: hosting_city_bool_exp!
+  ): hosting_city_mutation_response
+
+  """
+  update data of the table: "match"
+  """
+  update_match(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: match_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: match_set_input
+
+    """filter the rows which have to be updated"""
+    where: match_bool_exp!
+  ): match_mutation_response
+
+  """
+  update data of the table: "temperature"
+  """
+  update_temperature(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: temperature_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: temperature_set_input
+
+    """filter the rows which have to be updated"""
+    where: temperature_bool_exp!
+  ): temperature_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "city"
+  """
+  city(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): [city!]!
+
+  """
+  fetch aggregated fields from the table: "city"
+  """
+  city_aggregate(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): city_aggregate!
+
+  """
+  fetch data from the table: "hosting_city"
+  """
+  hosting_city(
+    """distinct select on columns"""
+    distinct_on: [hosting_city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hosting_city_order_by!]
+
+    """filter the rows returned"""
+    where: hosting_city_bool_exp
+  ): [hosting_city!]!
+
+  """
+  fetch aggregated fields from the table: "hosting_city"
+  """
+  hosting_city_aggregate(
+    """distinct select on columns"""
+    distinct_on: [hosting_city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hosting_city_order_by!]
+
+    """filter the rows returned"""
+    where: hosting_city_bool_exp
+  ): hosting_city_aggregate!
+
+  """
+  fetch data from the table: "match"
+  """
+  match(
+    """distinct select on columns"""
+    distinct_on: [match_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [match_order_by!]
+
+    """filter the rows returned"""
+    where: match_bool_exp
+  ): [match!]!
+
+  """
+  fetch aggregated fields from the table: "match"
+  """
+  match_aggregate(
+    """distinct select on columns"""
+    distinct_on: [match_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [match_order_by!]
+
+    """filter the rows returned"""
+    where: match_bool_exp
+  ): match_aggregate!
+
+  """
+  fetch data from the table: "temperature"
+  """
+  temperature(
+    """distinct select on columns"""
+    distinct_on: [temperature_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [temperature_order_by!]
+
+    """filter the rows returned"""
+    where: temperature_bool_exp
+  ): [temperature!]!
+
+  """
+  fetch aggregated fields from the table: "temperature"
+  """
+  temperature_aggregate(
+    """distinct select on columns"""
+    distinct_on: [temperature_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [temperature_order_by!]
+
+    """filter the rows returned"""
+    where: temperature_bool_exp
+  ): temperature_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "city"
+  """
+  city(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): [city!]!
+
+  """
+  fetch aggregated fields from the table: "city"
+  """
+  city_aggregate(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): city_aggregate!
+
+  """
+  fetch data from the table: "hosting_city"
+  """
+  hosting_city(
+    """distinct select on columns"""
+    distinct_on: [hosting_city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hosting_city_order_by!]
+
+    """filter the rows returned"""
+    where: hosting_city_bool_exp
+  ): [hosting_city!]!
+
+  """
+  fetch aggregated fields from the table: "hosting_city"
+  """
+  hosting_city_aggregate(
+    """distinct select on columns"""
+    distinct_on: [hosting_city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hosting_city_order_by!]
+
+    """filter the rows returned"""
+    where: hosting_city_bool_exp
+  ): hosting_city_aggregate!
+
+  """
+  fetch data from the table: "match"
+  """
+  match(
+    """distinct select on columns"""
+    distinct_on: [match_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [match_order_by!]
+
+    """filter the rows returned"""
+    where: match_bool_exp
+  ): [match!]!
+
+  """
+  fetch aggregated fields from the table: "match"
+  """
+  match_aggregate(
+    """distinct select on columns"""
+    distinct_on: [match_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [match_order_by!]
+
+    """filter the rows returned"""
+    where: match_bool_exp
+  ): match_aggregate!
+
+  """
+  fetch data from the table: "temperature"
+  """
+  temperature(
+    """distinct select on columns"""
+    distinct_on: [temperature_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [temperature_order_by!]
+
+    """filter the rows returned"""
+    where: temperature_bool_exp
+  ): [temperature!]!
+
+  """
+  fetch aggregated fields from the table: "temperature"
+  """
+  temperature_aggregate(
+    """distinct select on columns"""
+    distinct_on: [temperature_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [temperature_order_by!]
+
+    """filter the rows returned"""
+    where: temperature_bool_exp
+  ): temperature_aggregate!
+}
+
+"""
+columns and relationships of "temperature"
+"""
+type temperature {
+  apr: Float
+  aug: Float
+
+  """An object relationship"""
+  city: city
+  city_id: Int
+  dec: Float
+  feb: Float
+  jan: Float
+  jul: Float
+  jun: Float
+  mar: Float
+  nov: Float
+  oct: Float
+  sep: Float
+}
+
+"""
+aggregated selection of "temperature"
+"""
+type temperature_aggregate {
+  aggregate: temperature_aggregate_fields
+  nodes: [temperature!]!
+}
+
+"""
+aggregate fields of "temperature"
+"""
+type temperature_aggregate_fields {
+  avg: temperature_avg_fields
+  count(columns: [temperature_select_column!], distinct: Boolean): Int
+  max: temperature_max_fields
+  min: temperature_min_fields
+  stddev: temperature_stddev_fields
+  stddev_pop: temperature_stddev_pop_fields
+  stddev_samp: temperature_stddev_samp_fields
+  sum: temperature_sum_fields
+  var_pop: temperature_var_pop_fields
+  var_samp: temperature_var_samp_fields
+  variance: temperature_variance_fields
+}
+
+"""
+order by aggregate values of table "temperature"
+"""
+input temperature_aggregate_order_by {
+  avg: temperature_avg_order_by
+  count: order_by
+  max: temperature_max_order_by
+  min: temperature_min_order_by
+  stddev: temperature_stddev_order_by
+  stddev_pop: temperature_stddev_pop_order_by
+  stddev_samp: temperature_stddev_samp_order_by
+  sum: temperature_sum_order_by
+  var_pop: temperature_var_pop_order_by
+  var_samp: temperature_var_samp_order_by
+  variance: temperature_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "temperature"
+"""
+input temperature_arr_rel_insert_input {
+  data: [temperature_insert_input!]!
+  on_conflict: temperature_on_conflict
+}
+
+"""aggregate avg on columns"""
+type temperature_avg_fields {
+  apr: Float
+  aug: Float
+  city_id: Float
+  dec: Float
+  feb: Float
+  jan: Float
+  jul: Float
+  jun: Float
+  mar: Float
+  nov: Float
+  oct: Float
+  sep: Float
+}
+
+"""
+order by avg() on columns of table "temperature"
+"""
+input temperature_avg_order_by {
+  apr: order_by
+  aug: order_by
+  city_id: order_by
+  dec: order_by
+  feb: order_by
+  jan: order_by
+  jul: order_by
+  jun: order_by
+  mar: order_by
+  nov: order_by
+  oct: order_by
+  sep: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "temperature". All fields are combined with a logical 'AND'.
+"""
+input temperature_bool_exp {
+  _and: [temperature_bool_exp]
+  _not: temperature_bool_exp
+  _or: [temperature_bool_exp]
+  apr: Float_comparison_exp
+  aug: Float_comparison_exp
+  city: city_bool_exp
+  city_id: Int_comparison_exp
+  dec: Float_comparison_exp
+  feb: Float_comparison_exp
+  jan: Float_comparison_exp
+  jul: Float_comparison_exp
+  jun: Float_comparison_exp
+  mar: Float_comparison_exp
+  nov: Float_comparison_exp
+  oct: Float_comparison_exp
+  sep: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "temperature"
+"""
+enum temperature_constraint {
+  """unique or primary key constraint"""
+  idx_22626_sqlite_autoindex_temperature_1
+}
+
+"""
+input type for incrementing integer columne in table "temperature"
+"""
+input temperature_inc_input {
+  city_id: Int
+}
+
+"""
+input type for inserting data into table "temperature"
+"""
+input temperature_insert_input {
+  apr: Float
+  aug: Float
+  city: city_obj_rel_insert_input
+  city_id: Int
+  dec: Float
+  feb: Float
+  jan: Float
+  jul: Float
+  jun: Float
+  mar: Float
+  nov: Float
+  oct: Float
+  sep: Float
+}
+
+"""aggregate max on columns"""
+type temperature_max_fields {
+  apr: Float
+  aug: Float
+  city_id: Int
+  dec: Float
+  feb: Float
+  jan: Float
+  jul: Float
+  jun: Float
+  mar: Float
+  nov: Float
+  oct: Float
+  sep: Float
+}
+
+"""
+order by max() on columns of table "temperature"
+"""
+input temperature_max_order_by {
+  apr: order_by
+  aug: order_by
+  city_id: order_by
+  dec: order_by
+  feb: order_by
+  jan: order_by
+  jul: order_by
+  jun: order_by
+  mar: order_by
+  nov: order_by
+  oct: order_by
+  sep: order_by
+}
+
+"""aggregate min on columns"""
+type temperature_min_fields {
+  apr: Float
+  aug: Float
+  city_id: Int
+  dec: Float
+  feb: Float
+  jan: Float
+  jul: Float
+  jun: Float
+  mar: Float
+  nov: Float
+  oct: Float
+  sep: Float
+}
+
+"""
+order by min() on columns of table "temperature"
+"""
+input temperature_min_order_by {
+  apr: order_by
+  aug: order_by
+  city_id: order_by
+  dec: order_by
+  feb: order_by
+  jan: order_by
+  jul: order_by
+  jun: order_by
+  mar: order_by
+  nov: order_by
+  oct: order_by
+  sep: order_by
+}
+
+"""
+response of any mutation on the table "temperature"
+"""
+type temperature_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [temperature!]!
+}
+
+"""
+input type for inserting object relation for remote table "temperature"
+"""
+input temperature_obj_rel_insert_input {
+  data: temperature_insert_input!
+  on_conflict: temperature_on_conflict
+}
+
+"""
+on conflict condition type for table "temperature"
+"""
+input temperature_on_conflict {
+  constraint: temperature_constraint!
+  update_columns: [temperature_update_column!]!
+  where: temperature_bool_exp
+}
+
+"""
+ordering options when selecting data from "temperature"
+"""
+input temperature_order_by {
+  apr: order_by
+  aug: order_by
+  city: city_order_by
+  city_id: order_by
+  dec: order_by
+  feb: order_by
+  jan: order_by
+  jul: order_by
+  jun: order_by
+  mar: order_by
+  nov: order_by
+  oct: order_by
+  sep: order_by
+}
+
+"""
+select columns of table "temperature"
+"""
+enum temperature_select_column {
+  """column name"""
+  apr
+
+  """column name"""
+  aug
+
+  """column name"""
+  city_id
+
+  """column name"""
+  dec
+
+  """column name"""
+  feb
+
+  """column name"""
+  jan
+
+  """column name"""
+  jul
+
+  """column name"""
+  jun
+
+  """column name"""
+  mar
+
+  """column name"""
+  nov
+
+  """column name"""
+  oct
+
+  """column name"""
+  sep
+}
+
+"""
+input type for updating data in table "temperature"
+"""
+input temperature_set_input {
+  apr: Float
+  aug: Float
+  city_id: Int
+  dec: Float
+  feb: Float
+  jan: Float
+  jul: Float
+  jun: Float
+  mar: Float
+  nov: Float
+  oct: Float
+  sep: Float
+}
+
+"""aggregate stddev on columns"""
+type temperature_stddev_fields {
+  apr: Float
+  aug: Float
+  city_id: Float
+  dec: Float
+  feb: Float
+  jan: Float
+  jul: Float
+  jun: Float
+  mar: Float
+  nov: Float
+  oct: Float
+  sep: Float
+}
+
+"""
+order by stddev() on columns of table "temperature"
+"""
+input temperature_stddev_order_by {
+  apr: order_by
+  aug: order_by
+  city_id: order_by
+  dec: order_by
+  feb: order_by
+  jan: order_by
+  jul: order_by
+  jun: order_by
+  mar: order_by
+  nov: order_by
+  oct: order_by
+  sep: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type temperature_stddev_pop_fields {
+  apr: Float
+  aug: Float
+  city_id: Float
+  dec: Float
+  feb: Float
+  jan: Float
+  jul: Float
+  jun: Float
+  mar: Float
+  nov: Float
+  oct: Float
+  sep: Float
+}
+
+"""
+order by stddev_pop() on columns of table "temperature"
+"""
+input temperature_stddev_pop_order_by {
+  apr: order_by
+  aug: order_by
+  city_id: order_by
+  dec: order_by
+  feb: order_by
+  jan: order_by
+  jul: order_by
+  jun: order_by
+  mar: order_by
+  nov: order_by
+  oct: order_by
+  sep: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type temperature_stddev_samp_fields {
+  apr: Float
+  aug: Float
+  city_id: Float
+  dec: Float
+  feb: Float
+  jan: Float
+  jul: Float
+  jun: Float
+  mar: Float
+  nov: Float
+  oct: Float
+  sep: Float
+}
+
+"""
+order by stddev_samp() on columns of table "temperature"
+"""
+input temperature_stddev_samp_order_by {
+  apr: order_by
+  aug: order_by
+  city_id: order_by
+  dec: order_by
+  feb: order_by
+  jan: order_by
+  jul: order_by
+  jun: order_by
+  mar: order_by
+  nov: order_by
+  oct: order_by
+  sep: order_by
+}
+
+"""aggregate sum on columns"""
+type temperature_sum_fields {
+  apr: Float
+  aug: Float
+  city_id: Int
+  dec: Float
+  feb: Float
+  jan: Float
+  jul: Float
+  jun: Float
+  mar: Float
+  nov: Float
+  oct: Float
+  sep: Float
+}
+
+"""
+order by sum() on columns of table "temperature"
+"""
+input temperature_sum_order_by {
+  apr: order_by
+  aug: order_by
+  city_id: order_by
+  dec: order_by
+  feb: order_by
+  jan: order_by
+  jul: order_by
+  jun: order_by
+  mar: order_by
+  nov: order_by
+  oct: order_by
+  sep: order_by
+}
+
+"""
+update columns of table "temperature"
+"""
+enum temperature_update_column {
+  """column name"""
+  apr
+
+  """column name"""
+  aug
+
+  """column name"""
+  city_id
+
+  """column name"""
+  dec
+
+  """column name"""
+  feb
+
+  """column name"""
+  jan
+
+  """column name"""
+  jul
+
+  """column name"""
+  jun
+
+  """column name"""
+  mar
+
+  """column name"""
+  nov
+
+  """column name"""
+  oct
+
+  """column name"""
+  sep
+}
+
+"""aggregate var_pop on columns"""
+type temperature_var_pop_fields {
+  apr: Float
+  aug: Float
+  city_id: Float
+  dec: Float
+  feb: Float
+  jan: Float
+  jul: Float
+  jun: Float
+  mar: Float
+  nov: Float
+  oct: Float
+  sep: Float
+}
+
+"""
+order by var_pop() on columns of table "temperature"
+"""
+input temperature_var_pop_order_by {
+  apr: order_by
+  aug: order_by
+  city_id: order_by
+  dec: order_by
+  feb: order_by
+  jan: order_by
+  jul: order_by
+  jun: order_by
+  mar: order_by
+  nov: order_by
+  oct: order_by
+  sep: order_by
+}
+
+"""aggregate var_samp on columns"""
+type temperature_var_samp_fields {
+  apr: Float
+  aug: Float
+  city_id: Float
+  dec: Float
+  feb: Float
+  jan: Float
+  jul: Float
+  jun: Float
+  mar: Float
+  nov: Float
+  oct: Float
+  sep: Float
+}
+
+"""
+order by var_samp() on columns of table "temperature"
+"""
+input temperature_var_samp_order_by {
+  apr: order_by
+  aug: order_by
+  city_id: order_by
+  dec: order_by
+  feb: order_by
+  jan: order_by
+  jul: order_by
+  jun: order_by
+  mar: order_by
+  nov: order_by
+  oct: order_by
+  sep: order_by
+}
+
+"""aggregate variance on columns"""
+type temperature_variance_fields {
+  apr: Float
+  aug: Float
+  city_id: Float
+  dec: Float
+  feb: Float
+  jan: Float
+  jul: Float
+  jun: Float
+  mar: Float
+  nov: Float
+  oct: Float
+  sep: Float
+}
+
+"""
+order by variance() on columns of table "temperature"
+"""
+input temperature_variance_order_by {
+  apr: order_by
+  aug: order_by
+  city_id: order_by
+  dec: order_by
+  feb: order_by
+  jan: order_by
+  jul: order_by
+  jun: order_by
+  mar: order_by
+  nov: order_by
+  oct: order_by
+  sep: order_by
+}

@@ -1,0 +1,1007 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "list"
+"""
+type list {
+  classroom: bigint
+  firstname: String
+  grade: bigint
+  lastname: String
+
+  """An object relationship"""
+  teacher: teachers
+}
+
+"""
+aggregated selection of "list"
+"""
+type list_aggregate {
+  aggregate: list_aggregate_fields
+  nodes: [list!]!
+}
+
+"""
+aggregate fields of "list"
+"""
+type list_aggregate_fields {
+  avg: list_avg_fields
+  count(columns: [list_select_column!], distinct: Boolean): Int
+  max: list_max_fields
+  min: list_min_fields
+  stddev: list_stddev_fields
+  stddev_pop: list_stddev_pop_fields
+  stddev_samp: list_stddev_samp_fields
+  sum: list_sum_fields
+  var_pop: list_var_pop_fields
+  var_samp: list_var_samp_fields
+  variance: list_variance_fields
+}
+
+"""
+order by aggregate values of table "list"
+"""
+input list_aggregate_order_by {
+  avg: list_avg_order_by
+  count: order_by
+  max: list_max_order_by
+  min: list_min_order_by
+  stddev: list_stddev_order_by
+  stddev_pop: list_stddev_pop_order_by
+  stddev_samp: list_stddev_samp_order_by
+  sum: list_sum_order_by
+  var_pop: list_var_pop_order_by
+  var_samp: list_var_samp_order_by
+  variance: list_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "list"
+"""
+input list_arr_rel_insert_input {
+  data: [list_insert_input!]!
+  on_conflict: list_on_conflict
+}
+
+"""aggregate avg on columns"""
+type list_avg_fields {
+  classroom: Float
+  grade: Float
+}
+
+"""
+order by avg() on columns of table "list"
+"""
+input list_avg_order_by {
+  classroom: order_by
+  grade: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "list". All fields are combined with a logical 'AND'.
+"""
+input list_bool_exp {
+  _and: [list_bool_exp]
+  _not: list_bool_exp
+  _or: [list_bool_exp]
+  classroom: bigint_comparison_exp
+  firstname: String_comparison_exp
+  grade: bigint_comparison_exp
+  lastname: String_comparison_exp
+  teacher: teachers_bool_exp
+}
+
+"""
+unique or primary key constraints on table "list"
+"""
+enum list_constraint {
+  """unique or primary key constraint"""
+  idx_24885_sqlite_autoindex_list_1
+}
+
+"""
+input type for incrementing integer columne in table "list"
+"""
+input list_inc_input {
+  classroom: bigint
+  grade: bigint
+}
+
+"""
+input type for inserting data into table "list"
+"""
+input list_insert_input {
+  classroom: bigint
+  firstname: String
+  grade: bigint
+  lastname: String
+  teacher: teachers_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type list_max_fields {
+  classroom: bigint
+  firstname: String
+  grade: bigint
+  lastname: String
+}
+
+"""
+order by max() on columns of table "list"
+"""
+input list_max_order_by {
+  classroom: order_by
+  firstname: order_by
+  grade: order_by
+  lastname: order_by
+}
+
+"""aggregate min on columns"""
+type list_min_fields {
+  classroom: bigint
+  firstname: String
+  grade: bigint
+  lastname: String
+}
+
+"""
+order by min() on columns of table "list"
+"""
+input list_min_order_by {
+  classroom: order_by
+  firstname: order_by
+  grade: order_by
+  lastname: order_by
+}
+
+"""
+response of any mutation on the table "list"
+"""
+type list_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [list!]!
+}
+
+"""
+input type for inserting object relation for remote table "list"
+"""
+input list_obj_rel_insert_input {
+  data: list_insert_input!
+  on_conflict: list_on_conflict
+}
+
+"""
+on conflict condition type for table "list"
+"""
+input list_on_conflict {
+  constraint: list_constraint!
+  update_columns: [list_update_column!]!
+  where: list_bool_exp
+}
+
+"""
+ordering options when selecting data from "list"
+"""
+input list_order_by {
+  classroom: order_by
+  firstname: order_by
+  grade: order_by
+  lastname: order_by
+  teacher: teachers_order_by
+}
+
+"""
+select columns of table "list"
+"""
+enum list_select_column {
+  """column name"""
+  classroom
+
+  """column name"""
+  firstname
+
+  """column name"""
+  grade
+
+  """column name"""
+  lastname
+}
+
+"""
+input type for updating data in table "list"
+"""
+input list_set_input {
+  classroom: bigint
+  firstname: String
+  grade: bigint
+  lastname: String
+}
+
+"""aggregate stddev on columns"""
+type list_stddev_fields {
+  classroom: Float
+  grade: Float
+}
+
+"""
+order by stddev() on columns of table "list"
+"""
+input list_stddev_order_by {
+  classroom: order_by
+  grade: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type list_stddev_pop_fields {
+  classroom: Float
+  grade: Float
+}
+
+"""
+order by stddev_pop() on columns of table "list"
+"""
+input list_stddev_pop_order_by {
+  classroom: order_by
+  grade: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type list_stddev_samp_fields {
+  classroom: Float
+  grade: Float
+}
+
+"""
+order by stddev_samp() on columns of table "list"
+"""
+input list_stddev_samp_order_by {
+  classroom: order_by
+  grade: order_by
+}
+
+"""aggregate sum on columns"""
+type list_sum_fields {
+  classroom: bigint
+  grade: bigint
+}
+
+"""
+order by sum() on columns of table "list"
+"""
+input list_sum_order_by {
+  classroom: order_by
+  grade: order_by
+}
+
+"""
+update columns of table "list"
+"""
+enum list_update_column {
+  """column name"""
+  classroom
+
+  """column name"""
+  firstname
+
+  """column name"""
+  grade
+
+  """column name"""
+  lastname
+}
+
+"""aggregate var_pop on columns"""
+type list_var_pop_fields {
+  classroom: Float
+  grade: Float
+}
+
+"""
+order by var_pop() on columns of table "list"
+"""
+input list_var_pop_order_by {
+  classroom: order_by
+  grade: order_by
+}
+
+"""aggregate var_samp on columns"""
+type list_var_samp_fields {
+  classroom: Float
+  grade: Float
+}
+
+"""
+order by var_samp() on columns of table "list"
+"""
+input list_var_samp_order_by {
+  classroom: order_by
+  grade: order_by
+}
+
+"""aggregate variance on columns"""
+type list_variance_fields {
+  classroom: Float
+  grade: Float
+}
+
+"""
+order by variance() on columns of table "list"
+"""
+input list_variance_order_by {
+  classroom: order_by
+  grade: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "list"
+  """
+  delete_list(
+    """filter the rows which have to be deleted"""
+    where: list_bool_exp!
+  ): list_mutation_response
+
+  """
+  delete data from the table: "teachers"
+  """
+  delete_teachers(
+    """filter the rows which have to be deleted"""
+    where: teachers_bool_exp!
+  ): teachers_mutation_response
+
+  """
+  insert data into the table: "list"
+  """
+  insert_list(
+    """the rows to be inserted"""
+    objects: [list_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: list_on_conflict
+  ): list_mutation_response
+
+  """
+  insert data into the table: "teachers"
+  """
+  insert_teachers(
+    """the rows to be inserted"""
+    objects: [teachers_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: teachers_on_conflict
+  ): teachers_mutation_response
+
+  """
+  update data of the table: "list"
+  """
+  update_list(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: list_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: list_set_input
+
+    """filter the rows which have to be updated"""
+    where: list_bool_exp!
+  ): list_mutation_response
+
+  """
+  update data of the table: "teachers"
+  """
+  update_teachers(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: teachers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: teachers_set_input
+
+    """filter the rows which have to be updated"""
+    where: teachers_bool_exp!
+  ): teachers_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "list"
+  """
+  list(
+    """distinct select on columns"""
+    distinct_on: [list_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [list_order_by!]
+
+    """filter the rows returned"""
+    where: list_bool_exp
+  ): [list!]!
+
+  """
+  fetch aggregated fields from the table: "list"
+  """
+  list_aggregate(
+    """distinct select on columns"""
+    distinct_on: [list_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [list_order_by!]
+
+    """filter the rows returned"""
+    where: list_bool_exp
+  ): list_aggregate!
+
+  """
+  fetch data from the table: "teachers"
+  """
+  teachers(
+    """distinct select on columns"""
+    distinct_on: [teachers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [teachers_order_by!]
+
+    """filter the rows returned"""
+    where: teachers_bool_exp
+  ): [teachers!]!
+
+  """
+  fetch aggregated fields from the table: "teachers"
+  """
+  teachers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [teachers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [teachers_order_by!]
+
+    """filter the rows returned"""
+    where: teachers_bool_exp
+  ): teachers_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "list"
+  """
+  list(
+    """distinct select on columns"""
+    distinct_on: [list_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [list_order_by!]
+
+    """filter the rows returned"""
+    where: list_bool_exp
+  ): [list!]!
+
+  """
+  fetch aggregated fields from the table: "list"
+  """
+  list_aggregate(
+    """distinct select on columns"""
+    distinct_on: [list_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [list_order_by!]
+
+    """filter the rows returned"""
+    where: list_bool_exp
+  ): list_aggregate!
+
+  """
+  fetch data from the table: "teachers"
+  """
+  teachers(
+    """distinct select on columns"""
+    distinct_on: [teachers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [teachers_order_by!]
+
+    """filter the rows returned"""
+    where: teachers_bool_exp
+  ): [teachers!]!
+
+  """
+  fetch aggregated fields from the table: "teachers"
+  """
+  teachers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [teachers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [teachers_order_by!]
+
+    """filter the rows returned"""
+    where: teachers_bool_exp
+  ): teachers_aggregate!
+}
+
+"""
+columns and relationships of "teachers"
+"""
+type teachers {
+  classroom: bigint
+  firstname: String
+  lastname: String
+
+  """An array relationship"""
+  lists(
+    """distinct select on columns"""
+    distinct_on: [list_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [list_order_by!]
+
+    """filter the rows returned"""
+    where: list_bool_exp
+  ): [list!]!
+
+  """An aggregated array relationship"""
+  lists_aggregate(
+    """distinct select on columns"""
+    distinct_on: [list_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [list_order_by!]
+
+    """filter the rows returned"""
+    where: list_bool_exp
+  ): list_aggregate!
+}
+
+"""
+aggregated selection of "teachers"
+"""
+type teachers_aggregate {
+  aggregate: teachers_aggregate_fields
+  nodes: [teachers!]!
+}
+
+"""
+aggregate fields of "teachers"
+"""
+type teachers_aggregate_fields {
+  avg: teachers_avg_fields
+  count(columns: [teachers_select_column!], distinct: Boolean): Int
+  max: teachers_max_fields
+  min: teachers_min_fields
+  stddev: teachers_stddev_fields
+  stddev_pop: teachers_stddev_pop_fields
+  stddev_samp: teachers_stddev_samp_fields
+  sum: teachers_sum_fields
+  var_pop: teachers_var_pop_fields
+  var_samp: teachers_var_samp_fields
+  variance: teachers_variance_fields
+}
+
+"""
+order by aggregate values of table "teachers"
+"""
+input teachers_aggregate_order_by {
+  avg: teachers_avg_order_by
+  count: order_by
+  max: teachers_max_order_by
+  min: teachers_min_order_by
+  stddev: teachers_stddev_order_by
+  stddev_pop: teachers_stddev_pop_order_by
+  stddev_samp: teachers_stddev_samp_order_by
+  sum: teachers_sum_order_by
+  var_pop: teachers_var_pop_order_by
+  var_samp: teachers_var_samp_order_by
+  variance: teachers_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "teachers"
+"""
+input teachers_arr_rel_insert_input {
+  data: [teachers_insert_input!]!
+  on_conflict: teachers_on_conflict
+}
+
+"""aggregate avg on columns"""
+type teachers_avg_fields {
+  classroom: Float
+}
+
+"""
+order by avg() on columns of table "teachers"
+"""
+input teachers_avg_order_by {
+  classroom: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "teachers". All fields are combined with a logical 'AND'.
+"""
+input teachers_bool_exp {
+  _and: [teachers_bool_exp]
+  _not: teachers_bool_exp
+  _or: [teachers_bool_exp]
+  classroom: bigint_comparison_exp
+  firstname: String_comparison_exp
+  lastname: String_comparison_exp
+  lists: list_bool_exp
+}
+
+"""
+unique or primary key constraints on table "teachers"
+"""
+enum teachers_constraint {
+  """unique or primary key constraint"""
+  idx_24891_sqlite_autoindex_teachers_1
+
+  """unique or primary key constraint"""
+  teachers_classroom_key
+}
+
+"""
+input type for incrementing integer columne in table "teachers"
+"""
+input teachers_inc_input {
+  classroom: bigint
+}
+
+"""
+input type for inserting data into table "teachers"
+"""
+input teachers_insert_input {
+  classroom: bigint
+  firstname: String
+  lastname: String
+  lists: list_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type teachers_max_fields {
+  classroom: bigint
+  firstname: String
+  lastname: String
+}
+
+"""
+order by max() on columns of table "teachers"
+"""
+input teachers_max_order_by {
+  classroom: order_by
+  firstname: order_by
+  lastname: order_by
+}
+
+"""aggregate min on columns"""
+type teachers_min_fields {
+  classroom: bigint
+  firstname: String
+  lastname: String
+}
+
+"""
+order by min() on columns of table "teachers"
+"""
+input teachers_min_order_by {
+  classroom: order_by
+  firstname: order_by
+  lastname: order_by
+}
+
+"""
+response of any mutation on the table "teachers"
+"""
+type teachers_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [teachers!]!
+}
+
+"""
+input type for inserting object relation for remote table "teachers"
+"""
+input teachers_obj_rel_insert_input {
+  data: teachers_insert_input!
+  on_conflict: teachers_on_conflict
+}
+
+"""
+on conflict condition type for table "teachers"
+"""
+input teachers_on_conflict {
+  constraint: teachers_constraint!
+  update_columns: [teachers_update_column!]!
+  where: teachers_bool_exp
+}
+
+"""
+ordering options when selecting data from "teachers"
+"""
+input teachers_order_by {
+  classroom: order_by
+  firstname: order_by
+  lastname: order_by
+  lists_aggregate: list_aggregate_order_by
+}
+
+"""
+select columns of table "teachers"
+"""
+enum teachers_select_column {
+  """column name"""
+  classroom
+
+  """column name"""
+  firstname
+
+  """column name"""
+  lastname
+}
+
+"""
+input type for updating data in table "teachers"
+"""
+input teachers_set_input {
+  classroom: bigint
+  firstname: String
+  lastname: String
+}
+
+"""aggregate stddev on columns"""
+type teachers_stddev_fields {
+  classroom: Float
+}
+
+"""
+order by stddev() on columns of table "teachers"
+"""
+input teachers_stddev_order_by {
+  classroom: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type teachers_stddev_pop_fields {
+  classroom: Float
+}
+
+"""
+order by stddev_pop() on columns of table "teachers"
+"""
+input teachers_stddev_pop_order_by {
+  classroom: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type teachers_stddev_samp_fields {
+  classroom: Float
+}
+
+"""
+order by stddev_samp() on columns of table "teachers"
+"""
+input teachers_stddev_samp_order_by {
+  classroom: order_by
+}
+
+"""aggregate sum on columns"""
+type teachers_sum_fields {
+  classroom: bigint
+}
+
+"""
+order by sum() on columns of table "teachers"
+"""
+input teachers_sum_order_by {
+  classroom: order_by
+}
+
+"""
+update columns of table "teachers"
+"""
+enum teachers_update_column {
+  """column name"""
+  classroom
+
+  """column name"""
+  firstname
+
+  """column name"""
+  lastname
+}
+
+"""aggregate var_pop on columns"""
+type teachers_var_pop_fields {
+  classroom: Float
+}
+
+"""
+order by var_pop() on columns of table "teachers"
+"""
+input teachers_var_pop_order_by {
+  classroom: order_by
+}
+
+"""aggregate var_samp on columns"""
+type teachers_var_samp_fields {
+  classroom: Float
+}
+
+"""
+order by var_samp() on columns of table "teachers"
+"""
+input teachers_var_samp_order_by {
+  classroom: order_by
+}
+
+"""aggregate variance on columns"""
+type teachers_variance_fields {
+  classroom: Float
+}
+
+"""
+order by variance() on columns of table "teachers"
+"""
+input teachers_variance_order_by {
+  classroom: order_by
+}

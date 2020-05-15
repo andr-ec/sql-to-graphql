@@ -1,0 +1,3379 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "addresses"
+"""
+type addresses {
+  address_content: String
+  address_id: bigint!
+  city: String
+  country: String
+
+  """An array relationship"""
+  customer_addresses(
+    """distinct select on columns"""
+    distinct_on: [customer_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: customer_addresses_bool_exp
+  ): [customer_addresses!]!
+
+  """An aggregated array relationship"""
+  customer_addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: customer_addresses_bool_exp
+  ): customer_addresses_aggregate!
+  other_address_details: String
+  state_province_county: String
+  zip_postcode: String
+}
+
+"""
+aggregated selection of "addresses"
+"""
+type addresses_aggregate {
+  aggregate: addresses_aggregate_fields
+  nodes: [addresses!]!
+}
+
+"""
+aggregate fields of "addresses"
+"""
+type addresses_aggregate_fields {
+  avg: addresses_avg_fields
+  count(columns: [addresses_select_column!], distinct: Boolean): Int
+  max: addresses_max_fields
+  min: addresses_min_fields
+  stddev: addresses_stddev_fields
+  stddev_pop: addresses_stddev_pop_fields
+  stddev_samp: addresses_stddev_samp_fields
+  sum: addresses_sum_fields
+  var_pop: addresses_var_pop_fields
+  var_samp: addresses_var_samp_fields
+  variance: addresses_variance_fields
+}
+
+"""
+order by aggregate values of table "addresses"
+"""
+input addresses_aggregate_order_by {
+  avg: addresses_avg_order_by
+  count: order_by
+  max: addresses_max_order_by
+  min: addresses_min_order_by
+  stddev: addresses_stddev_order_by
+  stddev_pop: addresses_stddev_pop_order_by
+  stddev_samp: addresses_stddev_samp_order_by
+  sum: addresses_sum_order_by
+  var_pop: addresses_var_pop_order_by
+  var_samp: addresses_var_samp_order_by
+  variance: addresses_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "addresses"
+"""
+input addresses_arr_rel_insert_input {
+  data: [addresses_insert_input!]!
+  on_conflict: addresses_on_conflict
+}
+
+"""aggregate avg on columns"""
+type addresses_avg_fields {
+  address_id: Float
+}
+
+"""
+order by avg() on columns of table "addresses"
+"""
+input addresses_avg_order_by {
+  address_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "addresses". All fields are combined with a logical 'AND'.
+"""
+input addresses_bool_exp {
+  _and: [addresses_bool_exp]
+  _not: addresses_bool_exp
+  _or: [addresses_bool_exp]
+  address_content: String_comparison_exp
+  address_id: bigint_comparison_exp
+  city: String_comparison_exp
+  country: String_comparison_exp
+  customer_addresses: customer_addresses_bool_exp
+  other_address_details: String_comparison_exp
+  state_province_county: String_comparison_exp
+  zip_postcode: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "addresses"
+"""
+enum addresses_constraint {
+  """unique or primary key constraint"""
+  idx_23724_addresses_pkey
+}
+
+"""
+input type for incrementing integer columne in table "addresses"
+"""
+input addresses_inc_input {
+  address_id: bigint
+}
+
+"""
+input type for inserting data into table "addresses"
+"""
+input addresses_insert_input {
+  address_content: String
+  address_id: bigint
+  city: String
+  country: String
+  customer_addresses: customer_addresses_arr_rel_insert_input
+  other_address_details: String
+  state_province_county: String
+  zip_postcode: String
+}
+
+"""aggregate max on columns"""
+type addresses_max_fields {
+  address_content: String
+  address_id: bigint
+  city: String
+  country: String
+  other_address_details: String
+  state_province_county: String
+  zip_postcode: String
+}
+
+"""
+order by max() on columns of table "addresses"
+"""
+input addresses_max_order_by {
+  address_content: order_by
+  address_id: order_by
+  city: order_by
+  country: order_by
+  other_address_details: order_by
+  state_province_county: order_by
+  zip_postcode: order_by
+}
+
+"""aggregate min on columns"""
+type addresses_min_fields {
+  address_content: String
+  address_id: bigint
+  city: String
+  country: String
+  other_address_details: String
+  state_province_county: String
+  zip_postcode: String
+}
+
+"""
+order by min() on columns of table "addresses"
+"""
+input addresses_min_order_by {
+  address_content: order_by
+  address_id: order_by
+  city: order_by
+  country: order_by
+  other_address_details: order_by
+  state_province_county: order_by
+  zip_postcode: order_by
+}
+
+"""
+response of any mutation on the table "addresses"
+"""
+type addresses_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [addresses!]!
+}
+
+"""
+input type for inserting object relation for remote table "addresses"
+"""
+input addresses_obj_rel_insert_input {
+  data: addresses_insert_input!
+  on_conflict: addresses_on_conflict
+}
+
+"""
+on conflict condition type for table "addresses"
+"""
+input addresses_on_conflict {
+  constraint: addresses_constraint!
+  update_columns: [addresses_update_column!]!
+  where: addresses_bool_exp
+}
+
+"""
+ordering options when selecting data from "addresses"
+"""
+input addresses_order_by {
+  address_content: order_by
+  address_id: order_by
+  city: order_by
+  country: order_by
+  customer_addresses_aggregate: customer_addresses_aggregate_order_by
+  other_address_details: order_by
+  state_province_county: order_by
+  zip_postcode: order_by
+}
+
+"""
+select columns of table "addresses"
+"""
+enum addresses_select_column {
+  """column name"""
+  address_content
+
+  """column name"""
+  address_id
+
+  """column name"""
+  city
+
+  """column name"""
+  country
+
+  """column name"""
+  other_address_details
+
+  """column name"""
+  state_province_county
+
+  """column name"""
+  zip_postcode
+}
+
+"""
+input type for updating data in table "addresses"
+"""
+input addresses_set_input {
+  address_content: String
+  address_id: bigint
+  city: String
+  country: String
+  other_address_details: String
+  state_province_county: String
+  zip_postcode: String
+}
+
+"""aggregate stddev on columns"""
+type addresses_stddev_fields {
+  address_id: Float
+}
+
+"""
+order by stddev() on columns of table "addresses"
+"""
+input addresses_stddev_order_by {
+  address_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type addresses_stddev_pop_fields {
+  address_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "addresses"
+"""
+input addresses_stddev_pop_order_by {
+  address_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type addresses_stddev_samp_fields {
+  address_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "addresses"
+"""
+input addresses_stddev_samp_order_by {
+  address_id: order_by
+}
+
+"""aggregate sum on columns"""
+type addresses_sum_fields {
+  address_id: bigint
+}
+
+"""
+order by sum() on columns of table "addresses"
+"""
+input addresses_sum_order_by {
+  address_id: order_by
+}
+
+"""
+update columns of table "addresses"
+"""
+enum addresses_update_column {
+  """column name"""
+  address_content
+
+  """column name"""
+  address_id
+
+  """column name"""
+  city
+
+  """column name"""
+  country
+
+  """column name"""
+  other_address_details
+
+  """column name"""
+  state_province_county
+
+  """column name"""
+  zip_postcode
+}
+
+"""aggregate var_pop on columns"""
+type addresses_var_pop_fields {
+  address_id: Float
+}
+
+"""
+order by var_pop() on columns of table "addresses"
+"""
+input addresses_var_pop_order_by {
+  address_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type addresses_var_samp_fields {
+  address_id: Float
+}
+
+"""
+order by var_samp() on columns of table "addresses"
+"""
+input addresses_var_samp_order_by {
+  address_id: order_by
+}
+
+"""aggregate variance on columns"""
+type addresses_variance_fields {
+  address_id: Float
+}
+
+"""
+order by variance() on columns of table "addresses"
+"""
+input addresses_variance_order_by {
+  address_id: order_by
+}
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "customer_addresses"
+"""
+type customer_addresses {
+  """An object relationship"""
+  address: addresses
+  address_id: bigint
+  address_type: String
+
+  """An object relationship"""
+  customer: customers
+  customer_id: bigint
+  date_address_from: timestamptz
+  date_address_to: timestamptz
+}
+
+"""
+aggregated selection of "customer_addresses"
+"""
+type customer_addresses_aggregate {
+  aggregate: customer_addresses_aggregate_fields
+  nodes: [customer_addresses!]!
+}
+
+"""
+aggregate fields of "customer_addresses"
+"""
+type customer_addresses_aggregate_fields {
+  avg: customer_addresses_avg_fields
+  count(columns: [customer_addresses_select_column!], distinct: Boolean): Int
+  max: customer_addresses_max_fields
+  min: customer_addresses_min_fields
+  stddev: customer_addresses_stddev_fields
+  stddev_pop: customer_addresses_stddev_pop_fields
+  stddev_samp: customer_addresses_stddev_samp_fields
+  sum: customer_addresses_sum_fields
+  var_pop: customer_addresses_var_pop_fields
+  var_samp: customer_addresses_var_samp_fields
+  variance: customer_addresses_variance_fields
+}
+
+"""
+order by aggregate values of table "customer_addresses"
+"""
+input customer_addresses_aggregate_order_by {
+  avg: customer_addresses_avg_order_by
+  count: order_by
+  max: customer_addresses_max_order_by
+  min: customer_addresses_min_order_by
+  stddev: customer_addresses_stddev_order_by
+  stddev_pop: customer_addresses_stddev_pop_order_by
+  stddev_samp: customer_addresses_stddev_samp_order_by
+  sum: customer_addresses_sum_order_by
+  var_pop: customer_addresses_var_pop_order_by
+  var_samp: customer_addresses_var_samp_order_by
+  variance: customer_addresses_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "customer_addresses"
+"""
+input customer_addresses_arr_rel_insert_input {
+  data: [customer_addresses_insert_input!]!
+}
+
+"""aggregate avg on columns"""
+type customer_addresses_avg_fields {
+  address_id: Float
+  customer_id: Float
+}
+
+"""
+order by avg() on columns of table "customer_addresses"
+"""
+input customer_addresses_avg_order_by {
+  address_id: order_by
+  customer_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "customer_addresses". All fields are combined with a logical 'AND'.
+"""
+input customer_addresses_bool_exp {
+  _and: [customer_addresses_bool_exp]
+  _not: customer_addresses_bool_exp
+  _or: [customer_addresses_bool_exp]
+  address: addresses_bool_exp
+  address_id: bigint_comparison_exp
+  address_type: String_comparison_exp
+  customer: customers_bool_exp
+  customer_id: bigint_comparison_exp
+  date_address_from: timestamptz_comparison_exp
+  date_address_to: timestamptz_comparison_exp
+}
+
+"""
+input type for incrementing integer columne in table "customer_addresses"
+"""
+input customer_addresses_inc_input {
+  address_id: bigint
+  customer_id: bigint
+}
+
+"""
+input type for inserting data into table "customer_addresses"
+"""
+input customer_addresses_insert_input {
+  address: addresses_obj_rel_insert_input
+  address_id: bigint
+  address_type: String
+  customer: customers_obj_rel_insert_input
+  customer_id: bigint
+  date_address_from: timestamptz
+  date_address_to: timestamptz
+}
+
+"""aggregate max on columns"""
+type customer_addresses_max_fields {
+  address_id: bigint
+  address_type: String
+  customer_id: bigint
+  date_address_from: timestamptz
+  date_address_to: timestamptz
+}
+
+"""
+order by max() on columns of table "customer_addresses"
+"""
+input customer_addresses_max_order_by {
+  address_id: order_by
+  address_type: order_by
+  customer_id: order_by
+  date_address_from: order_by
+  date_address_to: order_by
+}
+
+"""aggregate min on columns"""
+type customer_addresses_min_fields {
+  address_id: bigint
+  address_type: String
+  customer_id: bigint
+  date_address_from: timestamptz
+  date_address_to: timestamptz
+}
+
+"""
+order by min() on columns of table "customer_addresses"
+"""
+input customer_addresses_min_order_by {
+  address_id: order_by
+  address_type: order_by
+  customer_id: order_by
+  date_address_from: order_by
+  date_address_to: order_by
+}
+
+"""
+response of any mutation on the table "customer_addresses"
+"""
+type customer_addresses_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [customer_addresses!]!
+}
+
+"""
+input type for inserting object relation for remote table "customer_addresses"
+"""
+input customer_addresses_obj_rel_insert_input {
+  data: customer_addresses_insert_input!
+}
+
+"""
+ordering options when selecting data from "customer_addresses"
+"""
+input customer_addresses_order_by {
+  address: addresses_order_by
+  address_id: order_by
+  address_type: order_by
+  customer: customers_order_by
+  customer_id: order_by
+  date_address_from: order_by
+  date_address_to: order_by
+}
+
+"""
+select columns of table "customer_addresses"
+"""
+enum customer_addresses_select_column {
+  """column name"""
+  address_id
+
+  """column name"""
+  address_type
+
+  """column name"""
+  customer_id
+
+  """column name"""
+  date_address_from
+
+  """column name"""
+  date_address_to
+}
+
+"""
+input type for updating data in table "customer_addresses"
+"""
+input customer_addresses_set_input {
+  address_id: bigint
+  address_type: String
+  customer_id: bigint
+  date_address_from: timestamptz
+  date_address_to: timestamptz
+}
+
+"""aggregate stddev on columns"""
+type customer_addresses_stddev_fields {
+  address_id: Float
+  customer_id: Float
+}
+
+"""
+order by stddev() on columns of table "customer_addresses"
+"""
+input customer_addresses_stddev_order_by {
+  address_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type customer_addresses_stddev_pop_fields {
+  address_id: Float
+  customer_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "customer_addresses"
+"""
+input customer_addresses_stddev_pop_order_by {
+  address_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type customer_addresses_stddev_samp_fields {
+  address_id: Float
+  customer_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "customer_addresses"
+"""
+input customer_addresses_stddev_samp_order_by {
+  address_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate sum on columns"""
+type customer_addresses_sum_fields {
+  address_id: bigint
+  customer_id: bigint
+}
+
+"""
+order by sum() on columns of table "customer_addresses"
+"""
+input customer_addresses_sum_order_by {
+  address_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate var_pop on columns"""
+type customer_addresses_var_pop_fields {
+  address_id: Float
+  customer_id: Float
+}
+
+"""
+order by var_pop() on columns of table "customer_addresses"
+"""
+input customer_addresses_var_pop_order_by {
+  address_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type customer_addresses_var_samp_fields {
+  address_id: Float
+  customer_id: Float
+}
+
+"""
+order by var_samp() on columns of table "customer_addresses"
+"""
+input customer_addresses_var_samp_order_by {
+  address_id: order_by
+  customer_id: order_by
+}
+
+"""aggregate variance on columns"""
+type customer_addresses_variance_fields {
+  address_id: Float
+  customer_id: Float
+}
+
+"""
+order by variance() on columns of table "customer_addresses"
+"""
+input customer_addresses_variance_order_by {
+  address_id: order_by
+  customer_id: order_by
+}
+
+"""
+columns and relationships of "customer_contact_channels"
+"""
+type customer_contact_channels {
+  active_from_date: timestamptz
+  active_to_date: timestamptz
+  channel_code: String
+  contact_number: String
+
+  """An object relationship"""
+  customer: customers
+  customer_id: bigint
+}
+
+"""
+aggregated selection of "customer_contact_channels"
+"""
+type customer_contact_channels_aggregate {
+  aggregate: customer_contact_channels_aggregate_fields
+  nodes: [customer_contact_channels!]!
+}
+
+"""
+aggregate fields of "customer_contact_channels"
+"""
+type customer_contact_channels_aggregate_fields {
+  avg: customer_contact_channels_avg_fields
+  count(columns: [customer_contact_channels_select_column!], distinct: Boolean): Int
+  max: customer_contact_channels_max_fields
+  min: customer_contact_channels_min_fields
+  stddev: customer_contact_channels_stddev_fields
+  stddev_pop: customer_contact_channels_stddev_pop_fields
+  stddev_samp: customer_contact_channels_stddev_samp_fields
+  sum: customer_contact_channels_sum_fields
+  var_pop: customer_contact_channels_var_pop_fields
+  var_samp: customer_contact_channels_var_samp_fields
+  variance: customer_contact_channels_variance_fields
+}
+
+"""
+order by aggregate values of table "customer_contact_channels"
+"""
+input customer_contact_channels_aggregate_order_by {
+  avg: customer_contact_channels_avg_order_by
+  count: order_by
+  max: customer_contact_channels_max_order_by
+  min: customer_contact_channels_min_order_by
+  stddev: customer_contact_channels_stddev_order_by
+  stddev_pop: customer_contact_channels_stddev_pop_order_by
+  stddev_samp: customer_contact_channels_stddev_samp_order_by
+  sum: customer_contact_channels_sum_order_by
+  var_pop: customer_contact_channels_var_pop_order_by
+  var_samp: customer_contact_channels_var_samp_order_by
+  variance: customer_contact_channels_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "customer_contact_channels"
+"""
+input customer_contact_channels_arr_rel_insert_input {
+  data: [customer_contact_channels_insert_input!]!
+}
+
+"""aggregate avg on columns"""
+type customer_contact_channels_avg_fields {
+  customer_id: Float
+}
+
+"""
+order by avg() on columns of table "customer_contact_channels"
+"""
+input customer_contact_channels_avg_order_by {
+  customer_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "customer_contact_channels". All fields are combined with a logical 'AND'.
+"""
+input customer_contact_channels_bool_exp {
+  _and: [customer_contact_channels_bool_exp]
+  _not: customer_contact_channels_bool_exp
+  _or: [customer_contact_channels_bool_exp]
+  active_from_date: timestamptz_comparison_exp
+  active_to_date: timestamptz_comparison_exp
+  channel_code: String_comparison_exp
+  contact_number: String_comparison_exp
+  customer: customers_bool_exp
+  customer_id: bigint_comparison_exp
+}
+
+"""
+input type for incrementing integer columne in table "customer_contact_channels"
+"""
+input customer_contact_channels_inc_input {
+  customer_id: bigint
+}
+
+"""
+input type for inserting data into table "customer_contact_channels"
+"""
+input customer_contact_channels_insert_input {
+  active_from_date: timestamptz
+  active_to_date: timestamptz
+  channel_code: String
+  contact_number: String
+  customer: customers_obj_rel_insert_input
+  customer_id: bigint
+}
+
+"""aggregate max on columns"""
+type customer_contact_channels_max_fields {
+  active_from_date: timestamptz
+  active_to_date: timestamptz
+  channel_code: String
+  contact_number: String
+  customer_id: bigint
+}
+
+"""
+order by max() on columns of table "customer_contact_channels"
+"""
+input customer_contact_channels_max_order_by {
+  active_from_date: order_by
+  active_to_date: order_by
+  channel_code: order_by
+  contact_number: order_by
+  customer_id: order_by
+}
+
+"""aggregate min on columns"""
+type customer_contact_channels_min_fields {
+  active_from_date: timestamptz
+  active_to_date: timestamptz
+  channel_code: String
+  contact_number: String
+  customer_id: bigint
+}
+
+"""
+order by min() on columns of table "customer_contact_channels"
+"""
+input customer_contact_channels_min_order_by {
+  active_from_date: order_by
+  active_to_date: order_by
+  channel_code: order_by
+  contact_number: order_by
+  customer_id: order_by
+}
+
+"""
+response of any mutation on the table "customer_contact_channels"
+"""
+type customer_contact_channels_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [customer_contact_channels!]!
+}
+
+"""
+input type for inserting object relation for remote table "customer_contact_channels"
+"""
+input customer_contact_channels_obj_rel_insert_input {
+  data: customer_contact_channels_insert_input!
+}
+
+"""
+ordering options when selecting data from "customer_contact_channels"
+"""
+input customer_contact_channels_order_by {
+  active_from_date: order_by
+  active_to_date: order_by
+  channel_code: order_by
+  contact_number: order_by
+  customer: customers_order_by
+  customer_id: order_by
+}
+
+"""
+select columns of table "customer_contact_channels"
+"""
+enum customer_contact_channels_select_column {
+  """column name"""
+  active_from_date
+
+  """column name"""
+  active_to_date
+
+  """column name"""
+  channel_code
+
+  """column name"""
+  contact_number
+
+  """column name"""
+  customer_id
+}
+
+"""
+input type for updating data in table "customer_contact_channels"
+"""
+input customer_contact_channels_set_input {
+  active_from_date: timestamptz
+  active_to_date: timestamptz
+  channel_code: String
+  contact_number: String
+  customer_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type customer_contact_channels_stddev_fields {
+  customer_id: Float
+}
+
+"""
+order by stddev() on columns of table "customer_contact_channels"
+"""
+input customer_contact_channels_stddev_order_by {
+  customer_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type customer_contact_channels_stddev_pop_fields {
+  customer_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "customer_contact_channels"
+"""
+input customer_contact_channels_stddev_pop_order_by {
+  customer_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type customer_contact_channels_stddev_samp_fields {
+  customer_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "customer_contact_channels"
+"""
+input customer_contact_channels_stddev_samp_order_by {
+  customer_id: order_by
+}
+
+"""aggregate sum on columns"""
+type customer_contact_channels_sum_fields {
+  customer_id: bigint
+}
+
+"""
+order by sum() on columns of table "customer_contact_channels"
+"""
+input customer_contact_channels_sum_order_by {
+  customer_id: order_by
+}
+
+"""aggregate var_pop on columns"""
+type customer_contact_channels_var_pop_fields {
+  customer_id: Float
+}
+
+"""
+order by var_pop() on columns of table "customer_contact_channels"
+"""
+input customer_contact_channels_var_pop_order_by {
+  customer_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type customer_contact_channels_var_samp_fields {
+  customer_id: Float
+}
+
+"""
+order by var_samp() on columns of table "customer_contact_channels"
+"""
+input customer_contact_channels_var_samp_order_by {
+  customer_id: order_by
+}
+
+"""aggregate variance on columns"""
+type customer_contact_channels_variance_fields {
+  customer_id: Float
+}
+
+"""
+order by variance() on columns of table "customer_contact_channels"
+"""
+input customer_contact_channels_variance_order_by {
+  customer_id: order_by
+}
+
+"""
+columns and relationships of "customer_orders"
+"""
+type customer_orders {
+  """An object relationship"""
+  customer: customers
+  customer_id: bigint
+  order_date: timestamptz
+  order_details: String
+  order_id: bigint!
+
+  """An array relationship"""
+  order_items(
+    """distinct select on columns"""
+    distinct_on: [order_items_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [order_items_order_by!]
+
+    """filter the rows returned"""
+    where: order_items_bool_exp
+  ): [order_items!]!
+
+  """An aggregated array relationship"""
+  order_items_aggregate(
+    """distinct select on columns"""
+    distinct_on: [order_items_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [order_items_order_by!]
+
+    """filter the rows returned"""
+    where: order_items_bool_exp
+  ): order_items_aggregate!
+  order_status: String
+}
+
+"""
+aggregated selection of "customer_orders"
+"""
+type customer_orders_aggregate {
+  aggregate: customer_orders_aggregate_fields
+  nodes: [customer_orders!]!
+}
+
+"""
+aggregate fields of "customer_orders"
+"""
+type customer_orders_aggregate_fields {
+  avg: customer_orders_avg_fields
+  count(columns: [customer_orders_select_column!], distinct: Boolean): Int
+  max: customer_orders_max_fields
+  min: customer_orders_min_fields
+  stddev: customer_orders_stddev_fields
+  stddev_pop: customer_orders_stddev_pop_fields
+  stddev_samp: customer_orders_stddev_samp_fields
+  sum: customer_orders_sum_fields
+  var_pop: customer_orders_var_pop_fields
+  var_samp: customer_orders_var_samp_fields
+  variance: customer_orders_variance_fields
+}
+
+"""
+order by aggregate values of table "customer_orders"
+"""
+input customer_orders_aggregate_order_by {
+  avg: customer_orders_avg_order_by
+  count: order_by
+  max: customer_orders_max_order_by
+  min: customer_orders_min_order_by
+  stddev: customer_orders_stddev_order_by
+  stddev_pop: customer_orders_stddev_pop_order_by
+  stddev_samp: customer_orders_stddev_samp_order_by
+  sum: customer_orders_sum_order_by
+  var_pop: customer_orders_var_pop_order_by
+  var_samp: customer_orders_var_samp_order_by
+  variance: customer_orders_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "customer_orders"
+"""
+input customer_orders_arr_rel_insert_input {
+  data: [customer_orders_insert_input!]!
+  on_conflict: customer_orders_on_conflict
+}
+
+"""aggregate avg on columns"""
+type customer_orders_avg_fields {
+  customer_id: Float
+  order_id: Float
+}
+
+"""
+order by avg() on columns of table "customer_orders"
+"""
+input customer_orders_avg_order_by {
+  customer_id: order_by
+  order_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "customer_orders". All fields are combined with a logical 'AND'.
+"""
+input customer_orders_bool_exp {
+  _and: [customer_orders_bool_exp]
+  _not: customer_orders_bool_exp
+  _or: [customer_orders_bool_exp]
+  customer: customers_bool_exp
+  customer_id: bigint_comparison_exp
+  order_date: timestamptz_comparison_exp
+  order_details: String_comparison_exp
+  order_id: bigint_comparison_exp
+  order_items: order_items_bool_exp
+  order_status: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "customer_orders"
+"""
+enum customer_orders_constraint {
+  """unique or primary key constraint"""
+  idx_23754_customer_orders_pkey
+}
+
+"""
+input type for incrementing integer columne in table "customer_orders"
+"""
+input customer_orders_inc_input {
+  customer_id: bigint
+  order_id: bigint
+}
+
+"""
+input type for inserting data into table "customer_orders"
+"""
+input customer_orders_insert_input {
+  customer: customers_obj_rel_insert_input
+  customer_id: bigint
+  order_date: timestamptz
+  order_details: String
+  order_id: bigint
+  order_items: order_items_arr_rel_insert_input
+  order_status: String
+}
+
+"""aggregate max on columns"""
+type customer_orders_max_fields {
+  customer_id: bigint
+  order_date: timestamptz
+  order_details: String
+  order_id: bigint
+  order_status: String
+}
+
+"""
+order by max() on columns of table "customer_orders"
+"""
+input customer_orders_max_order_by {
+  customer_id: order_by
+  order_date: order_by
+  order_details: order_by
+  order_id: order_by
+  order_status: order_by
+}
+
+"""aggregate min on columns"""
+type customer_orders_min_fields {
+  customer_id: bigint
+  order_date: timestamptz
+  order_details: String
+  order_id: bigint
+  order_status: String
+}
+
+"""
+order by min() on columns of table "customer_orders"
+"""
+input customer_orders_min_order_by {
+  customer_id: order_by
+  order_date: order_by
+  order_details: order_by
+  order_id: order_by
+  order_status: order_by
+}
+
+"""
+response of any mutation on the table "customer_orders"
+"""
+type customer_orders_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [customer_orders!]!
+}
+
+"""
+input type for inserting object relation for remote table "customer_orders"
+"""
+input customer_orders_obj_rel_insert_input {
+  data: customer_orders_insert_input!
+  on_conflict: customer_orders_on_conflict
+}
+
+"""
+on conflict condition type for table "customer_orders"
+"""
+input customer_orders_on_conflict {
+  constraint: customer_orders_constraint!
+  update_columns: [customer_orders_update_column!]!
+  where: customer_orders_bool_exp
+}
+
+"""
+ordering options when selecting data from "customer_orders"
+"""
+input customer_orders_order_by {
+  customer: customers_order_by
+  customer_id: order_by
+  order_date: order_by
+  order_details: order_by
+  order_id: order_by
+  order_items_aggregate: order_items_aggregate_order_by
+  order_status: order_by
+}
+
+"""
+select columns of table "customer_orders"
+"""
+enum customer_orders_select_column {
+  """column name"""
+  customer_id
+
+  """column name"""
+  order_date
+
+  """column name"""
+  order_details
+
+  """column name"""
+  order_id
+
+  """column name"""
+  order_status
+}
+
+"""
+input type for updating data in table "customer_orders"
+"""
+input customer_orders_set_input {
+  customer_id: bigint
+  order_date: timestamptz
+  order_details: String
+  order_id: bigint
+  order_status: String
+}
+
+"""aggregate stddev on columns"""
+type customer_orders_stddev_fields {
+  customer_id: Float
+  order_id: Float
+}
+
+"""
+order by stddev() on columns of table "customer_orders"
+"""
+input customer_orders_stddev_order_by {
+  customer_id: order_by
+  order_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type customer_orders_stddev_pop_fields {
+  customer_id: Float
+  order_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "customer_orders"
+"""
+input customer_orders_stddev_pop_order_by {
+  customer_id: order_by
+  order_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type customer_orders_stddev_samp_fields {
+  customer_id: Float
+  order_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "customer_orders"
+"""
+input customer_orders_stddev_samp_order_by {
+  customer_id: order_by
+  order_id: order_by
+}
+
+"""aggregate sum on columns"""
+type customer_orders_sum_fields {
+  customer_id: bigint
+  order_id: bigint
+}
+
+"""
+order by sum() on columns of table "customer_orders"
+"""
+input customer_orders_sum_order_by {
+  customer_id: order_by
+  order_id: order_by
+}
+
+"""
+update columns of table "customer_orders"
+"""
+enum customer_orders_update_column {
+  """column name"""
+  customer_id
+
+  """column name"""
+  order_date
+
+  """column name"""
+  order_details
+
+  """column name"""
+  order_id
+
+  """column name"""
+  order_status
+}
+
+"""aggregate var_pop on columns"""
+type customer_orders_var_pop_fields {
+  customer_id: Float
+  order_id: Float
+}
+
+"""
+order by var_pop() on columns of table "customer_orders"
+"""
+input customer_orders_var_pop_order_by {
+  customer_id: order_by
+  order_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type customer_orders_var_samp_fields {
+  customer_id: Float
+  order_id: Float
+}
+
+"""
+order by var_samp() on columns of table "customer_orders"
+"""
+input customer_orders_var_samp_order_by {
+  customer_id: order_by
+  order_id: order_by
+}
+
+"""aggregate variance on columns"""
+type customer_orders_variance_fields {
+  customer_id: Float
+  order_id: Float
+}
+
+"""
+order by variance() on columns of table "customer_orders"
+"""
+input customer_orders_variance_order_by {
+  customer_id: order_by
+  order_id: order_by
+}
+
+"""
+columns and relationships of "customers"
+"""
+type customers {
+  """An array relationship"""
+  customer_addresses(
+    """distinct select on columns"""
+    distinct_on: [customer_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: customer_addresses_bool_exp
+  ): [customer_addresses!]!
+
+  """An aggregated array relationship"""
+  customer_addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: customer_addresses_bool_exp
+  ): customer_addresses_aggregate!
+
+  """An array relationship"""
+  customer_contact_channels(
+    """distinct select on columns"""
+    distinct_on: [customer_contact_channels_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_contact_channels_order_by!]
+
+    """filter the rows returned"""
+    where: customer_contact_channels_bool_exp
+  ): [customer_contact_channels!]!
+
+  """An aggregated array relationship"""
+  customer_contact_channels_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_contact_channels_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_contact_channels_order_by!]
+
+    """filter the rows returned"""
+    where: customer_contact_channels_bool_exp
+  ): customer_contact_channels_aggregate!
+  customer_id: bigint!
+  customer_name: String
+
+  """An array relationship"""
+  customer_orders(
+    """distinct select on columns"""
+    distinct_on: [customer_orders_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_orders_order_by!]
+
+    """filter the rows returned"""
+    where: customer_orders_bool_exp
+  ): [customer_orders!]!
+
+  """An aggregated array relationship"""
+  customer_orders_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_orders_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_orders_order_by!]
+
+    """filter the rows returned"""
+    where: customer_orders_bool_exp
+  ): customer_orders_aggregate!
+  date_became_customer: timestamptz
+  other_customer_details: String
+  payment_method: String
+}
+
+"""
+aggregated selection of "customers"
+"""
+type customers_aggregate {
+  aggregate: customers_aggregate_fields
+  nodes: [customers!]!
+}
+
+"""
+aggregate fields of "customers"
+"""
+type customers_aggregate_fields {
+  avg: customers_avg_fields
+  count(columns: [customers_select_column!], distinct: Boolean): Int
+  max: customers_max_fields
+  min: customers_min_fields
+  stddev: customers_stddev_fields
+  stddev_pop: customers_stddev_pop_fields
+  stddev_samp: customers_stddev_samp_fields
+  sum: customers_sum_fields
+  var_pop: customers_var_pop_fields
+  var_samp: customers_var_samp_fields
+  variance: customers_variance_fields
+}
+
+"""
+order by aggregate values of table "customers"
+"""
+input customers_aggregate_order_by {
+  avg: customers_avg_order_by
+  count: order_by
+  max: customers_max_order_by
+  min: customers_min_order_by
+  stddev: customers_stddev_order_by
+  stddev_pop: customers_stddev_pop_order_by
+  stddev_samp: customers_stddev_samp_order_by
+  sum: customers_sum_order_by
+  var_pop: customers_var_pop_order_by
+  var_samp: customers_var_samp_order_by
+  variance: customers_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "customers"
+"""
+input customers_arr_rel_insert_input {
+  data: [customers_insert_input!]!
+  on_conflict: customers_on_conflict
+}
+
+"""aggregate avg on columns"""
+type customers_avg_fields {
+  customer_id: Float
+}
+
+"""
+order by avg() on columns of table "customers"
+"""
+input customers_avg_order_by {
+  customer_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "customers". All fields are combined with a logical 'AND'.
+"""
+input customers_bool_exp {
+  _and: [customers_bool_exp]
+  _not: customers_bool_exp
+  _or: [customers_bool_exp]
+  customer_addresses: customer_addresses_bool_exp
+  customer_contact_channels: customer_contact_channels_bool_exp
+  customer_id: bigint_comparison_exp
+  customer_name: String_comparison_exp
+  customer_orders: customer_orders_bool_exp
+  date_became_customer: timestamptz_comparison_exp
+  other_customer_details: String_comparison_exp
+  payment_method: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "customers"
+"""
+enum customers_constraint {
+  """unique or primary key constraint"""
+  idx_23736_customers_pkey
+}
+
+"""
+input type for incrementing integer columne in table "customers"
+"""
+input customers_inc_input {
+  customer_id: bigint
+}
+
+"""
+input type for inserting data into table "customers"
+"""
+input customers_insert_input {
+  customer_addresses: customer_addresses_arr_rel_insert_input
+  customer_contact_channels: customer_contact_channels_arr_rel_insert_input
+  customer_id: bigint
+  customer_name: String
+  customer_orders: customer_orders_arr_rel_insert_input
+  date_became_customer: timestamptz
+  other_customer_details: String
+  payment_method: String
+}
+
+"""aggregate max on columns"""
+type customers_max_fields {
+  customer_id: bigint
+  customer_name: String
+  date_became_customer: timestamptz
+  other_customer_details: String
+  payment_method: String
+}
+
+"""
+order by max() on columns of table "customers"
+"""
+input customers_max_order_by {
+  customer_id: order_by
+  customer_name: order_by
+  date_became_customer: order_by
+  other_customer_details: order_by
+  payment_method: order_by
+}
+
+"""aggregate min on columns"""
+type customers_min_fields {
+  customer_id: bigint
+  customer_name: String
+  date_became_customer: timestamptz
+  other_customer_details: String
+  payment_method: String
+}
+
+"""
+order by min() on columns of table "customers"
+"""
+input customers_min_order_by {
+  customer_id: order_by
+  customer_name: order_by
+  date_became_customer: order_by
+  other_customer_details: order_by
+  payment_method: order_by
+}
+
+"""
+response of any mutation on the table "customers"
+"""
+type customers_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [customers!]!
+}
+
+"""
+input type for inserting object relation for remote table "customers"
+"""
+input customers_obj_rel_insert_input {
+  data: customers_insert_input!
+  on_conflict: customers_on_conflict
+}
+
+"""
+on conflict condition type for table "customers"
+"""
+input customers_on_conflict {
+  constraint: customers_constraint!
+  update_columns: [customers_update_column!]!
+  where: customers_bool_exp
+}
+
+"""
+ordering options when selecting data from "customers"
+"""
+input customers_order_by {
+  customer_addresses_aggregate: customer_addresses_aggregate_order_by
+  customer_contact_channels_aggregate: customer_contact_channels_aggregate_order_by
+  customer_id: order_by
+  customer_name: order_by
+  customer_orders_aggregate: customer_orders_aggregate_order_by
+  date_became_customer: order_by
+  other_customer_details: order_by
+  payment_method: order_by
+}
+
+"""
+select columns of table "customers"
+"""
+enum customers_select_column {
+  """column name"""
+  customer_id
+
+  """column name"""
+  customer_name
+
+  """column name"""
+  date_became_customer
+
+  """column name"""
+  other_customer_details
+
+  """column name"""
+  payment_method
+}
+
+"""
+input type for updating data in table "customers"
+"""
+input customers_set_input {
+  customer_id: bigint
+  customer_name: String
+  date_became_customer: timestamptz
+  other_customer_details: String
+  payment_method: String
+}
+
+"""aggregate stddev on columns"""
+type customers_stddev_fields {
+  customer_id: Float
+}
+
+"""
+order by stddev() on columns of table "customers"
+"""
+input customers_stddev_order_by {
+  customer_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type customers_stddev_pop_fields {
+  customer_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "customers"
+"""
+input customers_stddev_pop_order_by {
+  customer_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type customers_stddev_samp_fields {
+  customer_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "customers"
+"""
+input customers_stddev_samp_order_by {
+  customer_id: order_by
+}
+
+"""aggregate sum on columns"""
+type customers_sum_fields {
+  customer_id: bigint
+}
+
+"""
+order by sum() on columns of table "customers"
+"""
+input customers_sum_order_by {
+  customer_id: order_by
+}
+
+"""
+update columns of table "customers"
+"""
+enum customers_update_column {
+  """column name"""
+  customer_id
+
+  """column name"""
+  customer_name
+
+  """column name"""
+  date_became_customer
+
+  """column name"""
+  other_customer_details
+
+  """column name"""
+  payment_method
+}
+
+"""aggregate var_pop on columns"""
+type customers_var_pop_fields {
+  customer_id: Float
+}
+
+"""
+order by var_pop() on columns of table "customers"
+"""
+input customers_var_pop_order_by {
+  customer_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type customers_var_samp_fields {
+  customer_id: Float
+}
+
+"""
+order by var_samp() on columns of table "customers"
+"""
+input customers_var_samp_order_by {
+  customer_id: order_by
+}
+
+"""aggregate variance on columns"""
+type customers_variance_fields {
+  customer_id: Float
+}
+
+"""
+order by variance() on columns of table "customers"
+"""
+input customers_variance_order_by {
+  customer_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "addresses"
+  """
+  delete_addresses(
+    """filter the rows which have to be deleted"""
+    where: addresses_bool_exp!
+  ): addresses_mutation_response
+
+  """
+  delete data from the table: "customer_addresses"
+  """
+  delete_customer_addresses(
+    """filter the rows which have to be deleted"""
+    where: customer_addresses_bool_exp!
+  ): customer_addresses_mutation_response
+
+  """
+  delete data from the table: "customer_contact_channels"
+  """
+  delete_customer_contact_channels(
+    """filter the rows which have to be deleted"""
+    where: customer_contact_channels_bool_exp!
+  ): customer_contact_channels_mutation_response
+
+  """
+  delete data from the table: "customer_orders"
+  """
+  delete_customer_orders(
+    """filter the rows which have to be deleted"""
+    where: customer_orders_bool_exp!
+  ): customer_orders_mutation_response
+
+  """
+  delete data from the table: "customers"
+  """
+  delete_customers(
+    """filter the rows which have to be deleted"""
+    where: customers_bool_exp!
+  ): customers_mutation_response
+
+  """
+  delete data from the table: "order_items"
+  """
+  delete_order_items(
+    """filter the rows which have to be deleted"""
+    where: order_items_bool_exp!
+  ): order_items_mutation_response
+
+  """
+  delete data from the table: "products"
+  """
+  delete_products(
+    """filter the rows which have to be deleted"""
+    where: products_bool_exp!
+  ): products_mutation_response
+
+  """
+  insert data into the table: "addresses"
+  """
+  insert_addresses(
+    """the rows to be inserted"""
+    objects: [addresses_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: addresses_on_conflict
+  ): addresses_mutation_response
+
+  """
+  insert data into the table: "customer_addresses"
+  """
+  insert_customer_addresses(
+    """the rows to be inserted"""
+    objects: [customer_addresses_insert_input!]!
+  ): customer_addresses_mutation_response
+
+  """
+  insert data into the table: "customer_contact_channels"
+  """
+  insert_customer_contact_channels(
+    """the rows to be inserted"""
+    objects: [customer_contact_channels_insert_input!]!
+  ): customer_contact_channels_mutation_response
+
+  """
+  insert data into the table: "customer_orders"
+  """
+  insert_customer_orders(
+    """the rows to be inserted"""
+    objects: [customer_orders_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: customer_orders_on_conflict
+  ): customer_orders_mutation_response
+
+  """
+  insert data into the table: "customers"
+  """
+  insert_customers(
+    """the rows to be inserted"""
+    objects: [customers_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: customers_on_conflict
+  ): customers_mutation_response
+
+  """
+  insert data into the table: "order_items"
+  """
+  insert_order_items(
+    """the rows to be inserted"""
+    objects: [order_items_insert_input!]!
+  ): order_items_mutation_response
+
+  """
+  insert data into the table: "products"
+  """
+  insert_products(
+    """the rows to be inserted"""
+    objects: [products_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: products_on_conflict
+  ): products_mutation_response
+
+  """
+  update data of the table: "addresses"
+  """
+  update_addresses(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: addresses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: addresses_set_input
+
+    """filter the rows which have to be updated"""
+    where: addresses_bool_exp!
+  ): addresses_mutation_response
+
+  """
+  update data of the table: "customer_addresses"
+  """
+  update_customer_addresses(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customer_addresses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customer_addresses_set_input
+
+    """filter the rows which have to be updated"""
+    where: customer_addresses_bool_exp!
+  ): customer_addresses_mutation_response
+
+  """
+  update data of the table: "customer_contact_channels"
+  """
+  update_customer_contact_channels(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customer_contact_channels_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customer_contact_channels_set_input
+
+    """filter the rows which have to be updated"""
+    where: customer_contact_channels_bool_exp!
+  ): customer_contact_channels_mutation_response
+
+  """
+  update data of the table: "customer_orders"
+  """
+  update_customer_orders(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customer_orders_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customer_orders_set_input
+
+    """filter the rows which have to be updated"""
+    where: customer_orders_bool_exp!
+  ): customer_orders_mutation_response
+
+  """
+  update data of the table: "customers"
+  """
+  update_customers(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customers_set_input
+
+    """filter the rows which have to be updated"""
+    where: customers_bool_exp!
+  ): customers_mutation_response
+
+  """
+  update data of the table: "order_items"
+  """
+  update_order_items(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: order_items_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: order_items_set_input
+
+    """filter the rows which have to be updated"""
+    where: order_items_bool_exp!
+  ): order_items_mutation_response
+
+  """
+  update data of the table: "products"
+  """
+  update_products(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: products_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: products_set_input
+
+    """filter the rows which have to be updated"""
+    where: products_bool_exp!
+  ): products_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "order_items"
+"""
+type order_items {
+  """An object relationship"""
+  customer_order: customer_orders
+  order_id: bigint
+  order_quantity: String
+
+  """An object relationship"""
+  product: products
+  product_id: bigint
+}
+
+"""
+aggregated selection of "order_items"
+"""
+type order_items_aggregate {
+  aggregate: order_items_aggregate_fields
+  nodes: [order_items!]!
+}
+
+"""
+aggregate fields of "order_items"
+"""
+type order_items_aggregate_fields {
+  avg: order_items_avg_fields
+  count(columns: [order_items_select_column!], distinct: Boolean): Int
+  max: order_items_max_fields
+  min: order_items_min_fields
+  stddev: order_items_stddev_fields
+  stddev_pop: order_items_stddev_pop_fields
+  stddev_samp: order_items_stddev_samp_fields
+  sum: order_items_sum_fields
+  var_pop: order_items_var_pop_fields
+  var_samp: order_items_var_samp_fields
+  variance: order_items_variance_fields
+}
+
+"""
+order by aggregate values of table "order_items"
+"""
+input order_items_aggregate_order_by {
+  avg: order_items_avg_order_by
+  count: order_by
+  max: order_items_max_order_by
+  min: order_items_min_order_by
+  stddev: order_items_stddev_order_by
+  stddev_pop: order_items_stddev_pop_order_by
+  stddev_samp: order_items_stddev_samp_order_by
+  sum: order_items_sum_order_by
+  var_pop: order_items_var_pop_order_by
+  var_samp: order_items_var_samp_order_by
+  variance: order_items_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "order_items"
+"""
+input order_items_arr_rel_insert_input {
+  data: [order_items_insert_input!]!
+}
+
+"""aggregate avg on columns"""
+type order_items_avg_fields {
+  order_id: Float
+  product_id: Float
+}
+
+"""
+order by avg() on columns of table "order_items"
+"""
+input order_items_avg_order_by {
+  order_id: order_by
+  product_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "order_items". All fields are combined with a logical 'AND'.
+"""
+input order_items_bool_exp {
+  _and: [order_items_bool_exp]
+  _not: order_items_bool_exp
+  _or: [order_items_bool_exp]
+  customer_order: customer_orders_bool_exp
+  order_id: bigint_comparison_exp
+  order_quantity: String_comparison_exp
+  product: products_bool_exp
+  product_id: bigint_comparison_exp
+}
+
+"""
+input type for incrementing integer columne in table "order_items"
+"""
+input order_items_inc_input {
+  order_id: bigint
+  product_id: bigint
+}
+
+"""
+input type for inserting data into table "order_items"
+"""
+input order_items_insert_input {
+  customer_order: customer_orders_obj_rel_insert_input
+  order_id: bigint
+  order_quantity: String
+  product: products_obj_rel_insert_input
+  product_id: bigint
+}
+
+"""aggregate max on columns"""
+type order_items_max_fields {
+  order_id: bigint
+  order_quantity: String
+  product_id: bigint
+}
+
+"""
+order by max() on columns of table "order_items"
+"""
+input order_items_max_order_by {
+  order_id: order_by
+  order_quantity: order_by
+  product_id: order_by
+}
+
+"""aggregate min on columns"""
+type order_items_min_fields {
+  order_id: bigint
+  order_quantity: String
+  product_id: bigint
+}
+
+"""
+order by min() on columns of table "order_items"
+"""
+input order_items_min_order_by {
+  order_id: order_by
+  order_quantity: order_by
+  product_id: order_by
+}
+
+"""
+response of any mutation on the table "order_items"
+"""
+type order_items_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [order_items!]!
+}
+
+"""
+input type for inserting object relation for remote table "order_items"
+"""
+input order_items_obj_rel_insert_input {
+  data: order_items_insert_input!
+}
+
+"""
+ordering options when selecting data from "order_items"
+"""
+input order_items_order_by {
+  customer_order: customer_orders_order_by
+  order_id: order_by
+  order_quantity: order_by
+  product: products_order_by
+  product_id: order_by
+}
+
+"""
+select columns of table "order_items"
+"""
+enum order_items_select_column {
+  """column name"""
+  order_id
+
+  """column name"""
+  order_quantity
+
+  """column name"""
+  product_id
+}
+
+"""
+input type for updating data in table "order_items"
+"""
+input order_items_set_input {
+  order_id: bigint
+  order_quantity: String
+  product_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type order_items_stddev_fields {
+  order_id: Float
+  product_id: Float
+}
+
+"""
+order by stddev() on columns of table "order_items"
+"""
+input order_items_stddev_order_by {
+  order_id: order_by
+  product_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type order_items_stddev_pop_fields {
+  order_id: Float
+  product_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "order_items"
+"""
+input order_items_stddev_pop_order_by {
+  order_id: order_by
+  product_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type order_items_stddev_samp_fields {
+  order_id: Float
+  product_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "order_items"
+"""
+input order_items_stddev_samp_order_by {
+  order_id: order_by
+  product_id: order_by
+}
+
+"""aggregate sum on columns"""
+type order_items_sum_fields {
+  order_id: bigint
+  product_id: bigint
+}
+
+"""
+order by sum() on columns of table "order_items"
+"""
+input order_items_sum_order_by {
+  order_id: order_by
+  product_id: order_by
+}
+
+"""aggregate var_pop on columns"""
+type order_items_var_pop_fields {
+  order_id: Float
+  product_id: Float
+}
+
+"""
+order by var_pop() on columns of table "order_items"
+"""
+input order_items_var_pop_order_by {
+  order_id: order_by
+  product_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type order_items_var_samp_fields {
+  order_id: Float
+  product_id: Float
+}
+
+"""
+order by var_samp() on columns of table "order_items"
+"""
+input order_items_var_samp_order_by {
+  order_id: order_by
+  product_id: order_by
+}
+
+"""aggregate variance on columns"""
+type order_items_variance_fields {
+  order_id: Float
+  product_id: Float
+}
+
+"""
+order by variance() on columns of table "order_items"
+"""
+input order_items_variance_order_by {
+  order_id: order_by
+  product_id: order_by
+}
+
+"""
+columns and relationships of "products"
+"""
+type products {
+  """An array relationship"""
+  order_items(
+    """distinct select on columns"""
+    distinct_on: [order_items_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [order_items_order_by!]
+
+    """filter the rows returned"""
+    where: order_items_bool_exp
+  ): [order_items!]!
+
+  """An aggregated array relationship"""
+  order_items_aggregate(
+    """distinct select on columns"""
+    distinct_on: [order_items_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [order_items_order_by!]
+
+    """filter the rows returned"""
+    where: order_items_bool_exp
+  ): order_items_aggregate!
+  product_details: String
+  product_id: bigint!
+}
+
+"""
+aggregated selection of "products"
+"""
+type products_aggregate {
+  aggregate: products_aggregate_fields
+  nodes: [products!]!
+}
+
+"""
+aggregate fields of "products"
+"""
+type products_aggregate_fields {
+  avg: products_avg_fields
+  count(columns: [products_select_column!], distinct: Boolean): Int
+  max: products_max_fields
+  min: products_min_fields
+  stddev: products_stddev_fields
+  stddev_pop: products_stddev_pop_fields
+  stddev_samp: products_stddev_samp_fields
+  sum: products_sum_fields
+  var_pop: products_var_pop_fields
+  var_samp: products_var_samp_fields
+  variance: products_variance_fields
+}
+
+"""
+order by aggregate values of table "products"
+"""
+input products_aggregate_order_by {
+  avg: products_avg_order_by
+  count: order_by
+  max: products_max_order_by
+  min: products_min_order_by
+  stddev: products_stddev_order_by
+  stddev_pop: products_stddev_pop_order_by
+  stddev_samp: products_stddev_samp_order_by
+  sum: products_sum_order_by
+  var_pop: products_var_pop_order_by
+  var_samp: products_var_samp_order_by
+  variance: products_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "products"
+"""
+input products_arr_rel_insert_input {
+  data: [products_insert_input!]!
+  on_conflict: products_on_conflict
+}
+
+"""aggregate avg on columns"""
+type products_avg_fields {
+  product_id: Float
+}
+
+"""
+order by avg() on columns of table "products"
+"""
+input products_avg_order_by {
+  product_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "products". All fields are combined with a logical 'AND'.
+"""
+input products_bool_exp {
+  _and: [products_bool_exp]
+  _not: products_bool_exp
+  _or: [products_bool_exp]
+  order_items: order_items_bool_exp
+  product_details: String_comparison_exp
+  product_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "products"
+"""
+enum products_constraint {
+  """unique or primary key constraint"""
+  idx_23730_products_pkey
+}
+
+"""
+input type for incrementing integer columne in table "products"
+"""
+input products_inc_input {
+  product_id: bigint
+}
+
+"""
+input type for inserting data into table "products"
+"""
+input products_insert_input {
+  order_items: order_items_arr_rel_insert_input
+  product_details: String
+  product_id: bigint
+}
+
+"""aggregate max on columns"""
+type products_max_fields {
+  product_details: String
+  product_id: bigint
+}
+
+"""
+order by max() on columns of table "products"
+"""
+input products_max_order_by {
+  product_details: order_by
+  product_id: order_by
+}
+
+"""aggregate min on columns"""
+type products_min_fields {
+  product_details: String
+  product_id: bigint
+}
+
+"""
+order by min() on columns of table "products"
+"""
+input products_min_order_by {
+  product_details: order_by
+  product_id: order_by
+}
+
+"""
+response of any mutation on the table "products"
+"""
+type products_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [products!]!
+}
+
+"""
+input type for inserting object relation for remote table "products"
+"""
+input products_obj_rel_insert_input {
+  data: products_insert_input!
+  on_conflict: products_on_conflict
+}
+
+"""
+on conflict condition type for table "products"
+"""
+input products_on_conflict {
+  constraint: products_constraint!
+  update_columns: [products_update_column!]!
+  where: products_bool_exp
+}
+
+"""
+ordering options when selecting data from "products"
+"""
+input products_order_by {
+  order_items_aggregate: order_items_aggregate_order_by
+  product_details: order_by
+  product_id: order_by
+}
+
+"""
+select columns of table "products"
+"""
+enum products_select_column {
+  """column name"""
+  product_details
+
+  """column name"""
+  product_id
+}
+
+"""
+input type for updating data in table "products"
+"""
+input products_set_input {
+  product_details: String
+  product_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type products_stddev_fields {
+  product_id: Float
+}
+
+"""
+order by stddev() on columns of table "products"
+"""
+input products_stddev_order_by {
+  product_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type products_stddev_pop_fields {
+  product_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "products"
+"""
+input products_stddev_pop_order_by {
+  product_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type products_stddev_samp_fields {
+  product_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "products"
+"""
+input products_stddev_samp_order_by {
+  product_id: order_by
+}
+
+"""aggregate sum on columns"""
+type products_sum_fields {
+  product_id: bigint
+}
+
+"""
+order by sum() on columns of table "products"
+"""
+input products_sum_order_by {
+  product_id: order_by
+}
+
+"""
+update columns of table "products"
+"""
+enum products_update_column {
+  """column name"""
+  product_details
+
+  """column name"""
+  product_id
+}
+
+"""aggregate var_pop on columns"""
+type products_var_pop_fields {
+  product_id: Float
+}
+
+"""
+order by var_pop() on columns of table "products"
+"""
+input products_var_pop_order_by {
+  product_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type products_var_samp_fields {
+  product_id: Float
+}
+
+"""
+order by var_samp() on columns of table "products"
+"""
+input products_var_samp_order_by {
+  product_id: order_by
+}
+
+"""aggregate variance on columns"""
+type products_variance_fields {
+  product_id: Float
+}
+
+"""
+order by variance() on columns of table "products"
+"""
+input products_variance_order_by {
+  product_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "addresses"
+  """
+  addresses(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): [addresses!]!
+
+  """
+  fetch aggregated fields from the table: "addresses"
+  """
+  addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): addresses_aggregate!
+
+  """fetch data from the table: "addresses" using primary key columns"""
+  addresses_by_pk(address_id: bigint!): addresses
+
+  """
+  fetch data from the table: "customer_addresses"
+  """
+  customer_addresses(
+    """distinct select on columns"""
+    distinct_on: [customer_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: customer_addresses_bool_exp
+  ): [customer_addresses!]!
+
+  """
+  fetch aggregated fields from the table: "customer_addresses"
+  """
+  customer_addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: customer_addresses_bool_exp
+  ): customer_addresses_aggregate!
+
+  """
+  fetch data from the table: "customer_contact_channels"
+  """
+  customer_contact_channels(
+    """distinct select on columns"""
+    distinct_on: [customer_contact_channels_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_contact_channels_order_by!]
+
+    """filter the rows returned"""
+    where: customer_contact_channels_bool_exp
+  ): [customer_contact_channels!]!
+
+  """
+  fetch aggregated fields from the table: "customer_contact_channels"
+  """
+  customer_contact_channels_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_contact_channels_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_contact_channels_order_by!]
+
+    """filter the rows returned"""
+    where: customer_contact_channels_bool_exp
+  ): customer_contact_channels_aggregate!
+
+  """
+  fetch data from the table: "customer_orders"
+  """
+  customer_orders(
+    """distinct select on columns"""
+    distinct_on: [customer_orders_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_orders_order_by!]
+
+    """filter the rows returned"""
+    where: customer_orders_bool_exp
+  ): [customer_orders!]!
+
+  """
+  fetch aggregated fields from the table: "customer_orders"
+  """
+  customer_orders_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_orders_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_orders_order_by!]
+
+    """filter the rows returned"""
+    where: customer_orders_bool_exp
+  ): customer_orders_aggregate!
+
+  """fetch data from the table: "customer_orders" using primary key columns"""
+  customer_orders_by_pk(order_id: bigint!): customer_orders
+
+  """
+  fetch data from the table: "customers"
+  """
+  customers(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): [customers!]!
+
+  """
+  fetch aggregated fields from the table: "customers"
+  """
+  customers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): customers_aggregate!
+
+  """fetch data from the table: "customers" using primary key columns"""
+  customers_by_pk(customer_id: bigint!): customers
+
+  """
+  fetch data from the table: "order_items"
+  """
+  order_items(
+    """distinct select on columns"""
+    distinct_on: [order_items_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [order_items_order_by!]
+
+    """filter the rows returned"""
+    where: order_items_bool_exp
+  ): [order_items!]!
+
+  """
+  fetch aggregated fields from the table: "order_items"
+  """
+  order_items_aggregate(
+    """distinct select on columns"""
+    distinct_on: [order_items_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [order_items_order_by!]
+
+    """filter the rows returned"""
+    where: order_items_bool_exp
+  ): order_items_aggregate!
+
+  """
+  fetch data from the table: "products"
+  """
+  products(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): [products!]!
+
+  """
+  fetch aggregated fields from the table: "products"
+  """
+  products_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): products_aggregate!
+
+  """fetch data from the table: "products" using primary key columns"""
+  products_by_pk(product_id: bigint!): products
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "addresses"
+  """
+  addresses(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): [addresses!]!
+
+  """
+  fetch aggregated fields from the table: "addresses"
+  """
+  addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): addresses_aggregate!
+
+  """fetch data from the table: "addresses" using primary key columns"""
+  addresses_by_pk(address_id: bigint!): addresses
+
+  """
+  fetch data from the table: "customer_addresses"
+  """
+  customer_addresses(
+    """distinct select on columns"""
+    distinct_on: [customer_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: customer_addresses_bool_exp
+  ): [customer_addresses!]!
+
+  """
+  fetch aggregated fields from the table: "customer_addresses"
+  """
+  customer_addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: customer_addresses_bool_exp
+  ): customer_addresses_aggregate!
+
+  """
+  fetch data from the table: "customer_contact_channels"
+  """
+  customer_contact_channels(
+    """distinct select on columns"""
+    distinct_on: [customer_contact_channels_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_contact_channels_order_by!]
+
+    """filter the rows returned"""
+    where: customer_contact_channels_bool_exp
+  ): [customer_contact_channels!]!
+
+  """
+  fetch aggregated fields from the table: "customer_contact_channels"
+  """
+  customer_contact_channels_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_contact_channels_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_contact_channels_order_by!]
+
+    """filter the rows returned"""
+    where: customer_contact_channels_bool_exp
+  ): customer_contact_channels_aggregate!
+
+  """
+  fetch data from the table: "customer_orders"
+  """
+  customer_orders(
+    """distinct select on columns"""
+    distinct_on: [customer_orders_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_orders_order_by!]
+
+    """filter the rows returned"""
+    where: customer_orders_bool_exp
+  ): [customer_orders!]!
+
+  """
+  fetch aggregated fields from the table: "customer_orders"
+  """
+  customer_orders_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_orders_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_orders_order_by!]
+
+    """filter the rows returned"""
+    where: customer_orders_bool_exp
+  ): customer_orders_aggregate!
+
+  """fetch data from the table: "customer_orders" using primary key columns"""
+  customer_orders_by_pk(order_id: bigint!): customer_orders
+
+  """
+  fetch data from the table: "customers"
+  """
+  customers(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): [customers!]!
+
+  """
+  fetch aggregated fields from the table: "customers"
+  """
+  customers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customers_order_by!]
+
+    """filter the rows returned"""
+    where: customers_bool_exp
+  ): customers_aggregate!
+
+  """fetch data from the table: "customers" using primary key columns"""
+  customers_by_pk(customer_id: bigint!): customers
+
+  """
+  fetch data from the table: "order_items"
+  """
+  order_items(
+    """distinct select on columns"""
+    distinct_on: [order_items_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [order_items_order_by!]
+
+    """filter the rows returned"""
+    where: order_items_bool_exp
+  ): [order_items!]!
+
+  """
+  fetch aggregated fields from the table: "order_items"
+  """
+  order_items_aggregate(
+    """distinct select on columns"""
+    distinct_on: [order_items_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [order_items_order_by!]
+
+    """filter the rows returned"""
+    where: order_items_bool_exp
+  ): order_items_aggregate!
+
+  """
+  fetch data from the table: "products"
+  """
+  products(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): [products!]!
+
+  """
+  fetch aggregated fields from the table: "products"
+  """
+  products_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): products_aggregate!
+
+  """fetch data from the table: "products" using primary key columns"""
+  products_by_pk(product_id: bigint!): products
+}
+
+scalar timestamptz
+
+"""
+expression to compare columns of type timestamptz. All fields are combined with logical 'AND'.
+"""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}

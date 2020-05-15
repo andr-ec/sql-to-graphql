@@ -1,0 +1,1561 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Boolean. All fields are combined with logical 'AND'.
+"""
+input Boolean_comparison_exp {
+  _eq: Boolean
+  _gt: Boolean
+  _gte: Boolean
+  _in: [Boolean!]
+  _is_null: Boolean
+  _lt: Boolean
+  _lte: Boolean
+  _neq: Boolean
+  _nin: [Boolean!]
+}
+
+"""
+columns and relationships of "driver"
+"""
+type driver {
+  age: Int
+  driver_id: Int
+  home_city: String
+  name: String
+  party: String
+
+  """An array relationship"""
+  school_buses(
+    """distinct select on columns"""
+    distinct_on: [school_bus_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_bus_order_by!]
+
+    """filter the rows returned"""
+    where: school_bus_bool_exp
+  ): [school_bus!]!
+
+  """An aggregated array relationship"""
+  school_buses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [school_bus_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_bus_order_by!]
+
+    """filter the rows returned"""
+    where: school_bus_bool_exp
+  ): school_bus_aggregate!
+}
+
+"""
+aggregated selection of "driver"
+"""
+type driver_aggregate {
+  aggregate: driver_aggregate_fields
+  nodes: [driver!]!
+}
+
+"""
+aggregate fields of "driver"
+"""
+type driver_aggregate_fields {
+  avg: driver_avg_fields
+  count(columns: [driver_select_column!], distinct: Boolean): Int
+  max: driver_max_fields
+  min: driver_min_fields
+  stddev: driver_stddev_fields
+  stddev_pop: driver_stddev_pop_fields
+  stddev_samp: driver_stddev_samp_fields
+  sum: driver_sum_fields
+  var_pop: driver_var_pop_fields
+  var_samp: driver_var_samp_fields
+  variance: driver_variance_fields
+}
+
+"""
+order by aggregate values of table "driver"
+"""
+input driver_aggregate_order_by {
+  avg: driver_avg_order_by
+  count: order_by
+  max: driver_max_order_by
+  min: driver_min_order_by
+  stddev: driver_stddev_order_by
+  stddev_pop: driver_stddev_pop_order_by
+  stddev_samp: driver_stddev_samp_order_by
+  sum: driver_sum_order_by
+  var_pop: driver_var_pop_order_by
+  var_samp: driver_var_samp_order_by
+  variance: driver_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "driver"
+"""
+input driver_arr_rel_insert_input {
+  data: [driver_insert_input!]!
+  on_conflict: driver_on_conflict
+}
+
+"""aggregate avg on columns"""
+type driver_avg_fields {
+  age: Float
+  driver_id: Float
+}
+
+"""
+order by avg() on columns of table "driver"
+"""
+input driver_avg_order_by {
+  age: order_by
+  driver_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "driver". All fields are combined with a logical 'AND'.
+"""
+input driver_bool_exp {
+  _and: [driver_bool_exp]
+  _not: driver_bool_exp
+  _or: [driver_bool_exp]
+  age: Int_comparison_exp
+  driver_id: Int_comparison_exp
+  home_city: String_comparison_exp
+  name: String_comparison_exp
+  party: String_comparison_exp
+  school_buses: school_bus_bool_exp
+}
+
+"""
+unique or primary key constraints on table "driver"
+"""
+enum driver_constraint {
+  """unique or primary key constraint"""
+  idx_24564_sqlite_autoindex_driver_1
+}
+
+"""
+input type for incrementing integer columne in table "driver"
+"""
+input driver_inc_input {
+  age: Int
+  driver_id: Int
+}
+
+"""
+input type for inserting data into table "driver"
+"""
+input driver_insert_input {
+  age: Int
+  driver_id: Int
+  home_city: String
+  name: String
+  party: String
+  school_buses: school_bus_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type driver_max_fields {
+  age: Int
+  driver_id: Int
+  home_city: String
+  name: String
+  party: String
+}
+
+"""
+order by max() on columns of table "driver"
+"""
+input driver_max_order_by {
+  age: order_by
+  driver_id: order_by
+  home_city: order_by
+  name: order_by
+  party: order_by
+}
+
+"""aggregate min on columns"""
+type driver_min_fields {
+  age: Int
+  driver_id: Int
+  home_city: String
+  name: String
+  party: String
+}
+
+"""
+order by min() on columns of table "driver"
+"""
+input driver_min_order_by {
+  age: order_by
+  driver_id: order_by
+  home_city: order_by
+  name: order_by
+  party: order_by
+}
+
+"""
+response of any mutation on the table "driver"
+"""
+type driver_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [driver!]!
+}
+
+"""
+input type for inserting object relation for remote table "driver"
+"""
+input driver_obj_rel_insert_input {
+  data: driver_insert_input!
+  on_conflict: driver_on_conflict
+}
+
+"""
+on conflict condition type for table "driver"
+"""
+input driver_on_conflict {
+  constraint: driver_constraint!
+  update_columns: [driver_update_column!]!
+  where: driver_bool_exp
+}
+
+"""
+ordering options when selecting data from "driver"
+"""
+input driver_order_by {
+  age: order_by
+  driver_id: order_by
+  home_city: order_by
+  name: order_by
+  party: order_by
+  school_buses_aggregate: school_bus_aggregate_order_by
+}
+
+"""
+select columns of table "driver"
+"""
+enum driver_select_column {
+  """column name"""
+  age
+
+  """column name"""
+  driver_id
+
+  """column name"""
+  home_city
+
+  """column name"""
+  name
+
+  """column name"""
+  party
+}
+
+"""
+input type for updating data in table "driver"
+"""
+input driver_set_input {
+  age: Int
+  driver_id: Int
+  home_city: String
+  name: String
+  party: String
+}
+
+"""aggregate stddev on columns"""
+type driver_stddev_fields {
+  age: Float
+  driver_id: Float
+}
+
+"""
+order by stddev() on columns of table "driver"
+"""
+input driver_stddev_order_by {
+  age: order_by
+  driver_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type driver_stddev_pop_fields {
+  age: Float
+  driver_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "driver"
+"""
+input driver_stddev_pop_order_by {
+  age: order_by
+  driver_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type driver_stddev_samp_fields {
+  age: Float
+  driver_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "driver"
+"""
+input driver_stddev_samp_order_by {
+  age: order_by
+  driver_id: order_by
+}
+
+"""aggregate sum on columns"""
+type driver_sum_fields {
+  age: Int
+  driver_id: Int
+}
+
+"""
+order by sum() on columns of table "driver"
+"""
+input driver_sum_order_by {
+  age: order_by
+  driver_id: order_by
+}
+
+"""
+update columns of table "driver"
+"""
+enum driver_update_column {
+  """column name"""
+  age
+
+  """column name"""
+  driver_id
+
+  """column name"""
+  home_city
+
+  """column name"""
+  name
+
+  """column name"""
+  party
+}
+
+"""aggregate var_pop on columns"""
+type driver_var_pop_fields {
+  age: Float
+  driver_id: Float
+}
+
+"""
+order by var_pop() on columns of table "driver"
+"""
+input driver_var_pop_order_by {
+  age: order_by
+  driver_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type driver_var_samp_fields {
+  age: Float
+  driver_id: Float
+}
+
+"""
+order by var_samp() on columns of table "driver"
+"""
+input driver_var_samp_order_by {
+  age: order_by
+  driver_id: order_by
+}
+
+"""aggregate variance on columns"""
+type driver_variance_fields {
+  age: Float
+  driver_id: Float
+}
+
+"""
+order by variance() on columns of table "driver"
+"""
+input driver_variance_order_by {
+  age: order_by
+  driver_id: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "driver"
+  """
+  delete_driver(
+    """filter the rows which have to be deleted"""
+    where: driver_bool_exp!
+  ): driver_mutation_response
+
+  """
+  delete data from the table: "school"
+  """
+  delete_school(
+    """filter the rows which have to be deleted"""
+    where: school_bool_exp!
+  ): school_mutation_response
+
+  """
+  delete data from the table: "school_bus"
+  """
+  delete_school_bus(
+    """filter the rows which have to be deleted"""
+    where: school_bus_bool_exp!
+  ): school_bus_mutation_response
+
+  """
+  insert data into the table: "driver"
+  """
+  insert_driver(
+    """the rows to be inserted"""
+    objects: [driver_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: driver_on_conflict
+  ): driver_mutation_response
+
+  """
+  insert data into the table: "school"
+  """
+  insert_school(
+    """the rows to be inserted"""
+    objects: [school_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: school_on_conflict
+  ): school_mutation_response
+
+  """
+  insert data into the table: "school_bus"
+  """
+  insert_school_bus(
+    """the rows to be inserted"""
+    objects: [school_bus_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: school_bus_on_conflict
+  ): school_bus_mutation_response
+
+  """
+  update data of the table: "driver"
+  """
+  update_driver(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: driver_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: driver_set_input
+
+    """filter the rows which have to be updated"""
+    where: driver_bool_exp!
+  ): driver_mutation_response
+
+  """
+  update data of the table: "school"
+  """
+  update_school(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: school_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: school_set_input
+
+    """filter the rows which have to be updated"""
+    where: school_bool_exp!
+  ): school_mutation_response
+
+  """
+  update data of the table: "school_bus"
+  """
+  update_school_bus(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: school_bus_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: school_bus_set_input
+
+    """filter the rows which have to be updated"""
+    where: school_bus_bool_exp!
+  ): school_bus_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "driver"
+  """
+  driver(
+    """distinct select on columns"""
+    distinct_on: [driver_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [driver_order_by!]
+
+    """filter the rows returned"""
+    where: driver_bool_exp
+  ): [driver!]!
+
+  """
+  fetch aggregated fields from the table: "driver"
+  """
+  driver_aggregate(
+    """distinct select on columns"""
+    distinct_on: [driver_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [driver_order_by!]
+
+    """filter the rows returned"""
+    where: driver_bool_exp
+  ): driver_aggregate!
+
+  """
+  fetch data from the table: "school"
+  """
+  school(
+    """distinct select on columns"""
+    distinct_on: [school_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_order_by!]
+
+    """filter the rows returned"""
+    where: school_bool_exp
+  ): [school!]!
+
+  """
+  fetch aggregated fields from the table: "school"
+  """
+  school_aggregate(
+    """distinct select on columns"""
+    distinct_on: [school_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_order_by!]
+
+    """filter the rows returned"""
+    where: school_bool_exp
+  ): school_aggregate!
+
+  """
+  fetch data from the table: "school_bus"
+  """
+  school_bus(
+    """distinct select on columns"""
+    distinct_on: [school_bus_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_bus_order_by!]
+
+    """filter the rows returned"""
+    where: school_bus_bool_exp
+  ): [school_bus!]!
+
+  """
+  fetch aggregated fields from the table: "school_bus"
+  """
+  school_bus_aggregate(
+    """distinct select on columns"""
+    distinct_on: [school_bus_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_bus_order_by!]
+
+    """filter the rows returned"""
+    where: school_bus_bool_exp
+  ): school_bus_aggregate!
+}
+
+"""
+columns and relationships of "school"
+"""
+type school {
+  grade: String
+  location: String
+  school: String
+
+  """An array relationship"""
+  school_buses(
+    """distinct select on columns"""
+    distinct_on: [school_bus_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_bus_order_by!]
+
+    """filter the rows returned"""
+    where: school_bus_bool_exp
+  ): [school_bus!]!
+
+  """An aggregated array relationship"""
+  school_buses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [school_bus_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_bus_order_by!]
+
+    """filter the rows returned"""
+    where: school_bus_bool_exp
+  ): school_bus_aggregate!
+  school_id: Int
+  type: String
+}
+
+"""
+aggregated selection of "school"
+"""
+type school_aggregate {
+  aggregate: school_aggregate_fields
+  nodes: [school!]!
+}
+
+"""
+aggregate fields of "school"
+"""
+type school_aggregate_fields {
+  avg: school_avg_fields
+  count(columns: [school_select_column!], distinct: Boolean): Int
+  max: school_max_fields
+  min: school_min_fields
+  stddev: school_stddev_fields
+  stddev_pop: school_stddev_pop_fields
+  stddev_samp: school_stddev_samp_fields
+  sum: school_sum_fields
+  var_pop: school_var_pop_fields
+  var_samp: school_var_samp_fields
+  variance: school_variance_fields
+}
+
+"""
+order by aggregate values of table "school"
+"""
+input school_aggregate_order_by {
+  avg: school_avg_order_by
+  count: order_by
+  max: school_max_order_by
+  min: school_min_order_by
+  stddev: school_stddev_order_by
+  stddev_pop: school_stddev_pop_order_by
+  stddev_samp: school_stddev_samp_order_by
+  sum: school_sum_order_by
+  var_pop: school_var_pop_order_by
+  var_samp: school_var_samp_order_by
+  variance: school_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "school"
+"""
+input school_arr_rel_insert_input {
+  data: [school_insert_input!]!
+  on_conflict: school_on_conflict
+}
+
+"""aggregate avg on columns"""
+type school_avg_fields {
+  school_id: Float
+}
+
+"""
+order by avg() on columns of table "school"
+"""
+input school_avg_order_by {
+  school_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "school". All fields are combined with a logical 'AND'.
+"""
+input school_bool_exp {
+  _and: [school_bool_exp]
+  _not: school_bool_exp
+  _or: [school_bool_exp]
+  grade: String_comparison_exp
+  location: String_comparison_exp
+  school: String_comparison_exp
+  school_buses: school_bus_bool_exp
+  school_id: Int_comparison_exp
+  type: String_comparison_exp
+}
+
+"""
+columns and relationships of "school_bus"
+"""
+type school_bus {
+  """An object relationship"""
+  driver: driver
+  driver_id: Int
+  if_full_time: Boolean
+
+  """An object relationship"""
+  school: school
+  school_id: Int
+  years_working: Int
+}
+
+"""
+aggregated selection of "school_bus"
+"""
+type school_bus_aggregate {
+  aggregate: school_bus_aggregate_fields
+  nodes: [school_bus!]!
+}
+
+"""
+aggregate fields of "school_bus"
+"""
+type school_bus_aggregate_fields {
+  avg: school_bus_avg_fields
+  count(columns: [school_bus_select_column!], distinct: Boolean): Int
+  max: school_bus_max_fields
+  min: school_bus_min_fields
+  stddev: school_bus_stddev_fields
+  stddev_pop: school_bus_stddev_pop_fields
+  stddev_samp: school_bus_stddev_samp_fields
+  sum: school_bus_sum_fields
+  var_pop: school_bus_var_pop_fields
+  var_samp: school_bus_var_samp_fields
+  variance: school_bus_variance_fields
+}
+
+"""
+order by aggregate values of table "school_bus"
+"""
+input school_bus_aggregate_order_by {
+  avg: school_bus_avg_order_by
+  count: order_by
+  max: school_bus_max_order_by
+  min: school_bus_min_order_by
+  stddev: school_bus_stddev_order_by
+  stddev_pop: school_bus_stddev_pop_order_by
+  stddev_samp: school_bus_stddev_samp_order_by
+  sum: school_bus_sum_order_by
+  var_pop: school_bus_var_pop_order_by
+  var_samp: school_bus_var_samp_order_by
+  variance: school_bus_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "school_bus"
+"""
+input school_bus_arr_rel_insert_input {
+  data: [school_bus_insert_input!]!
+  on_conflict: school_bus_on_conflict
+}
+
+"""aggregate avg on columns"""
+type school_bus_avg_fields {
+  driver_id: Float
+  school_id: Float
+  years_working: Float
+}
+
+"""
+order by avg() on columns of table "school_bus"
+"""
+input school_bus_avg_order_by {
+  driver_id: order_by
+  school_id: order_by
+  years_working: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "school_bus". All fields are combined with a logical 'AND'.
+"""
+input school_bus_bool_exp {
+  _and: [school_bus_bool_exp]
+  _not: school_bus_bool_exp
+  _or: [school_bus_bool_exp]
+  driver: driver_bool_exp
+  driver_id: Int_comparison_exp
+  if_full_time: Boolean_comparison_exp
+  school: school_bool_exp
+  school_id: Int_comparison_exp
+  years_working: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "school_bus"
+"""
+enum school_bus_constraint {
+  """unique or primary key constraint"""
+  idx_24576_sqlite_autoindex_school_bus_1
+}
+
+"""
+input type for incrementing integer columne in table "school_bus"
+"""
+input school_bus_inc_input {
+  driver_id: Int
+  school_id: Int
+  years_working: Int
+}
+
+"""
+input type for inserting data into table "school_bus"
+"""
+input school_bus_insert_input {
+  driver: driver_obj_rel_insert_input
+  driver_id: Int
+  if_full_time: Boolean
+  school: school_obj_rel_insert_input
+  school_id: Int
+  years_working: Int
+}
+
+"""aggregate max on columns"""
+type school_bus_max_fields {
+  driver_id: Int
+  school_id: Int
+  years_working: Int
+}
+
+"""
+order by max() on columns of table "school_bus"
+"""
+input school_bus_max_order_by {
+  driver_id: order_by
+  school_id: order_by
+  years_working: order_by
+}
+
+"""aggregate min on columns"""
+type school_bus_min_fields {
+  driver_id: Int
+  school_id: Int
+  years_working: Int
+}
+
+"""
+order by min() on columns of table "school_bus"
+"""
+input school_bus_min_order_by {
+  driver_id: order_by
+  school_id: order_by
+  years_working: order_by
+}
+
+"""
+response of any mutation on the table "school_bus"
+"""
+type school_bus_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [school_bus!]!
+}
+
+"""
+input type for inserting object relation for remote table "school_bus"
+"""
+input school_bus_obj_rel_insert_input {
+  data: school_bus_insert_input!
+  on_conflict: school_bus_on_conflict
+}
+
+"""
+on conflict condition type for table "school_bus"
+"""
+input school_bus_on_conflict {
+  constraint: school_bus_constraint!
+  update_columns: [school_bus_update_column!]!
+  where: school_bus_bool_exp
+}
+
+"""
+ordering options when selecting data from "school_bus"
+"""
+input school_bus_order_by {
+  driver: driver_order_by
+  driver_id: order_by
+  if_full_time: order_by
+  school: school_order_by
+  school_id: order_by
+  years_working: order_by
+}
+
+"""
+select columns of table "school_bus"
+"""
+enum school_bus_select_column {
+  """column name"""
+  driver_id
+
+  """column name"""
+  if_full_time
+
+  """column name"""
+  school_id
+
+  """column name"""
+  years_working
+}
+
+"""
+input type for updating data in table "school_bus"
+"""
+input school_bus_set_input {
+  driver_id: Int
+  if_full_time: Boolean
+  school_id: Int
+  years_working: Int
+}
+
+"""aggregate stddev on columns"""
+type school_bus_stddev_fields {
+  driver_id: Float
+  school_id: Float
+  years_working: Float
+}
+
+"""
+order by stddev() on columns of table "school_bus"
+"""
+input school_bus_stddev_order_by {
+  driver_id: order_by
+  school_id: order_by
+  years_working: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type school_bus_stddev_pop_fields {
+  driver_id: Float
+  school_id: Float
+  years_working: Float
+}
+
+"""
+order by stddev_pop() on columns of table "school_bus"
+"""
+input school_bus_stddev_pop_order_by {
+  driver_id: order_by
+  school_id: order_by
+  years_working: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type school_bus_stddev_samp_fields {
+  driver_id: Float
+  school_id: Float
+  years_working: Float
+}
+
+"""
+order by stddev_samp() on columns of table "school_bus"
+"""
+input school_bus_stddev_samp_order_by {
+  driver_id: order_by
+  school_id: order_by
+  years_working: order_by
+}
+
+"""aggregate sum on columns"""
+type school_bus_sum_fields {
+  driver_id: Int
+  school_id: Int
+  years_working: Int
+}
+
+"""
+order by sum() on columns of table "school_bus"
+"""
+input school_bus_sum_order_by {
+  driver_id: order_by
+  school_id: order_by
+  years_working: order_by
+}
+
+"""
+update columns of table "school_bus"
+"""
+enum school_bus_update_column {
+  """column name"""
+  driver_id
+
+  """column name"""
+  if_full_time
+
+  """column name"""
+  school_id
+
+  """column name"""
+  years_working
+}
+
+"""aggregate var_pop on columns"""
+type school_bus_var_pop_fields {
+  driver_id: Float
+  school_id: Float
+  years_working: Float
+}
+
+"""
+order by var_pop() on columns of table "school_bus"
+"""
+input school_bus_var_pop_order_by {
+  driver_id: order_by
+  school_id: order_by
+  years_working: order_by
+}
+
+"""aggregate var_samp on columns"""
+type school_bus_var_samp_fields {
+  driver_id: Float
+  school_id: Float
+  years_working: Float
+}
+
+"""
+order by var_samp() on columns of table "school_bus"
+"""
+input school_bus_var_samp_order_by {
+  driver_id: order_by
+  school_id: order_by
+  years_working: order_by
+}
+
+"""aggregate variance on columns"""
+type school_bus_variance_fields {
+  driver_id: Float
+  school_id: Float
+  years_working: Float
+}
+
+"""
+order by variance() on columns of table "school_bus"
+"""
+input school_bus_variance_order_by {
+  driver_id: order_by
+  school_id: order_by
+  years_working: order_by
+}
+
+"""
+unique or primary key constraints on table "school"
+"""
+enum school_constraint {
+  """unique or primary key constraint"""
+  idx_24570_sqlite_autoindex_school_1
+}
+
+"""
+input type for incrementing integer columne in table "school"
+"""
+input school_inc_input {
+  school_id: Int
+}
+
+"""
+input type for inserting data into table "school"
+"""
+input school_insert_input {
+  grade: String
+  location: String
+  school: String
+  school_buses: school_bus_arr_rel_insert_input
+  school_id: Int
+  type: String
+}
+
+"""aggregate max on columns"""
+type school_max_fields {
+  grade: String
+  location: String
+  school: String
+  school_id: Int
+  type: String
+}
+
+"""
+order by max() on columns of table "school"
+"""
+input school_max_order_by {
+  grade: order_by
+  location: order_by
+  school: order_by
+  school_id: order_by
+  type: order_by
+}
+
+"""aggregate min on columns"""
+type school_min_fields {
+  grade: String
+  location: String
+  school: String
+  school_id: Int
+  type: String
+}
+
+"""
+order by min() on columns of table "school"
+"""
+input school_min_order_by {
+  grade: order_by
+  location: order_by
+  school: order_by
+  school_id: order_by
+  type: order_by
+}
+
+"""
+response of any mutation on the table "school"
+"""
+type school_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [school!]!
+}
+
+"""
+input type for inserting object relation for remote table "school"
+"""
+input school_obj_rel_insert_input {
+  data: school_insert_input!
+  on_conflict: school_on_conflict
+}
+
+"""
+on conflict condition type for table "school"
+"""
+input school_on_conflict {
+  constraint: school_constraint!
+  update_columns: [school_update_column!]!
+  where: school_bool_exp
+}
+
+"""
+ordering options when selecting data from "school"
+"""
+input school_order_by {
+  grade: order_by
+  location: order_by
+  school: order_by
+  school_buses_aggregate: school_bus_aggregate_order_by
+  school_id: order_by
+  type: order_by
+}
+
+"""
+select columns of table "school"
+"""
+enum school_select_column {
+  """column name"""
+  grade
+
+  """column name"""
+  location
+
+  """column name"""
+  school
+
+  """column name"""
+  school_id
+
+  """column name"""
+  type
+}
+
+"""
+input type for updating data in table "school"
+"""
+input school_set_input {
+  grade: String
+  location: String
+  school: String
+  school_id: Int
+  type: String
+}
+
+"""aggregate stddev on columns"""
+type school_stddev_fields {
+  school_id: Float
+}
+
+"""
+order by stddev() on columns of table "school"
+"""
+input school_stddev_order_by {
+  school_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type school_stddev_pop_fields {
+  school_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "school"
+"""
+input school_stddev_pop_order_by {
+  school_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type school_stddev_samp_fields {
+  school_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "school"
+"""
+input school_stddev_samp_order_by {
+  school_id: order_by
+}
+
+"""aggregate sum on columns"""
+type school_sum_fields {
+  school_id: Int
+}
+
+"""
+order by sum() on columns of table "school"
+"""
+input school_sum_order_by {
+  school_id: order_by
+}
+
+"""
+update columns of table "school"
+"""
+enum school_update_column {
+  """column name"""
+  grade
+
+  """column name"""
+  location
+
+  """column name"""
+  school
+
+  """column name"""
+  school_id
+
+  """column name"""
+  type
+}
+
+"""aggregate var_pop on columns"""
+type school_var_pop_fields {
+  school_id: Float
+}
+
+"""
+order by var_pop() on columns of table "school"
+"""
+input school_var_pop_order_by {
+  school_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type school_var_samp_fields {
+  school_id: Float
+}
+
+"""
+order by var_samp() on columns of table "school"
+"""
+input school_var_samp_order_by {
+  school_id: order_by
+}
+
+"""aggregate variance on columns"""
+type school_variance_fields {
+  school_id: Float
+}
+
+"""
+order by variance() on columns of table "school"
+"""
+input school_variance_order_by {
+  school_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "driver"
+  """
+  driver(
+    """distinct select on columns"""
+    distinct_on: [driver_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [driver_order_by!]
+
+    """filter the rows returned"""
+    where: driver_bool_exp
+  ): [driver!]!
+
+  """
+  fetch aggregated fields from the table: "driver"
+  """
+  driver_aggregate(
+    """distinct select on columns"""
+    distinct_on: [driver_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [driver_order_by!]
+
+    """filter the rows returned"""
+    where: driver_bool_exp
+  ): driver_aggregate!
+
+  """
+  fetch data from the table: "school"
+  """
+  school(
+    """distinct select on columns"""
+    distinct_on: [school_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_order_by!]
+
+    """filter the rows returned"""
+    where: school_bool_exp
+  ): [school!]!
+
+  """
+  fetch aggregated fields from the table: "school"
+  """
+  school_aggregate(
+    """distinct select on columns"""
+    distinct_on: [school_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_order_by!]
+
+    """filter the rows returned"""
+    where: school_bool_exp
+  ): school_aggregate!
+
+  """
+  fetch data from the table: "school_bus"
+  """
+  school_bus(
+    """distinct select on columns"""
+    distinct_on: [school_bus_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_bus_order_by!]
+
+    """filter the rows returned"""
+    where: school_bus_bool_exp
+  ): [school_bus!]!
+
+  """
+  fetch aggregated fields from the table: "school_bus"
+  """
+  school_bus_aggregate(
+    """distinct select on columns"""
+    distinct_on: [school_bus_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [school_bus_order_by!]
+
+    """filter the rows returned"""
+    where: school_bus_bool_exp
+  ): school_bus_aggregate!
+}

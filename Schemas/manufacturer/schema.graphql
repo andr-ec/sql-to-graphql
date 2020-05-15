@@ -1,0 +1,1599 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+columns and relationships of "furniture"
+"""
+type furniture {
+  furniture_id: Int
+
+  """An array relationship"""
+  furniture_manufactes(
+    """distinct select on columns"""
+    distinct_on: [furniture_manufacte_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [furniture_manufacte_order_by!]
+
+    """filter the rows returned"""
+    where: furniture_manufacte_bool_exp
+  ): [furniture_manufacte!]!
+
+  """An aggregated array relationship"""
+  furniture_manufactes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [furniture_manufacte_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [furniture_manufacte_order_by!]
+
+    """filter the rows returned"""
+    where: furniture_manufacte_bool_exp
+  ): furniture_manufacte_aggregate!
+  market_rate: Float
+  name: String
+  num_of_component: Int
+}
+
+"""
+aggregated selection of "furniture"
+"""
+type furniture_aggregate {
+  aggregate: furniture_aggregate_fields
+  nodes: [furniture!]!
+}
+
+"""
+aggregate fields of "furniture"
+"""
+type furniture_aggregate_fields {
+  avg: furniture_avg_fields
+  count(columns: [furniture_select_column!], distinct: Boolean): Int
+  max: furniture_max_fields
+  min: furniture_min_fields
+  stddev: furniture_stddev_fields
+  stddev_pop: furniture_stddev_pop_fields
+  stddev_samp: furniture_stddev_samp_fields
+  sum: furniture_sum_fields
+  var_pop: furniture_var_pop_fields
+  var_samp: furniture_var_samp_fields
+  variance: furniture_variance_fields
+}
+
+"""
+order by aggregate values of table "furniture"
+"""
+input furniture_aggregate_order_by {
+  avg: furniture_avg_order_by
+  count: order_by
+  max: furniture_max_order_by
+  min: furniture_min_order_by
+  stddev: furniture_stddev_order_by
+  stddev_pop: furniture_stddev_pop_order_by
+  stddev_samp: furniture_stddev_samp_order_by
+  sum: furniture_sum_order_by
+  var_pop: furniture_var_pop_order_by
+  var_samp: furniture_var_samp_order_by
+  variance: furniture_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "furniture"
+"""
+input furniture_arr_rel_insert_input {
+  data: [furniture_insert_input!]!
+  on_conflict: furniture_on_conflict
+}
+
+"""aggregate avg on columns"""
+type furniture_avg_fields {
+  furniture_id: Float
+  market_rate: Float
+  num_of_component: Float
+}
+
+"""
+order by avg() on columns of table "furniture"
+"""
+input furniture_avg_order_by {
+  furniture_id: order_by
+  market_rate: order_by
+  num_of_component: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "furniture". All fields are combined with a logical 'AND'.
+"""
+input furniture_bool_exp {
+  _and: [furniture_bool_exp]
+  _not: furniture_bool_exp
+  _or: [furniture_bool_exp]
+  furniture_id: Int_comparison_exp
+  furniture_manufactes: furniture_manufacte_bool_exp
+  market_rate: Float_comparison_exp
+  name: String_comparison_exp
+  num_of_component: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "furniture"
+"""
+enum furniture_constraint {
+  """unique or primary key constraint"""
+  idx_17449_sqlite_autoindex_furniture_1
+}
+
+"""
+input type for incrementing integer columne in table "furniture"
+"""
+input furniture_inc_input {
+  furniture_id: Int
+  num_of_component: Int
+}
+
+"""
+input type for inserting data into table "furniture"
+"""
+input furniture_insert_input {
+  furniture_id: Int
+  furniture_manufactes: furniture_manufacte_arr_rel_insert_input
+  market_rate: Float
+  name: String
+  num_of_component: Int
+}
+
+"""
+columns and relationships of "furniture_manufacte"
+"""
+type furniture_manufacte {
+  """An object relationship"""
+  furniture: furniture
+  furniture_id: Int
+
+  """An object relationship"""
+  manufacturer: manufacturer
+  manufacturer_id: Int
+  price_in_dollar: Float
+}
+
+"""
+aggregated selection of "furniture_manufacte"
+"""
+type furniture_manufacte_aggregate {
+  aggregate: furniture_manufacte_aggregate_fields
+  nodes: [furniture_manufacte!]!
+}
+
+"""
+aggregate fields of "furniture_manufacte"
+"""
+type furniture_manufacte_aggregate_fields {
+  avg: furniture_manufacte_avg_fields
+  count(columns: [furniture_manufacte_select_column!], distinct: Boolean): Int
+  max: furniture_manufacte_max_fields
+  min: furniture_manufacte_min_fields
+  stddev: furniture_manufacte_stddev_fields
+  stddev_pop: furniture_manufacte_stddev_pop_fields
+  stddev_samp: furniture_manufacte_stddev_samp_fields
+  sum: furniture_manufacte_sum_fields
+  var_pop: furniture_manufacte_var_pop_fields
+  var_samp: furniture_manufacte_var_samp_fields
+  variance: furniture_manufacte_variance_fields
+}
+
+"""
+order by aggregate values of table "furniture_manufacte"
+"""
+input furniture_manufacte_aggregate_order_by {
+  avg: furniture_manufacte_avg_order_by
+  count: order_by
+  max: furniture_manufacte_max_order_by
+  min: furniture_manufacte_min_order_by
+  stddev: furniture_manufacte_stddev_order_by
+  stddev_pop: furniture_manufacte_stddev_pop_order_by
+  stddev_samp: furniture_manufacte_stddev_samp_order_by
+  sum: furniture_manufacte_sum_order_by
+  var_pop: furniture_manufacte_var_pop_order_by
+  var_samp: furniture_manufacte_var_samp_order_by
+  variance: furniture_manufacte_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "furniture_manufacte"
+"""
+input furniture_manufacte_arr_rel_insert_input {
+  data: [furniture_manufacte_insert_input!]!
+  on_conflict: furniture_manufacte_on_conflict
+}
+
+"""aggregate avg on columns"""
+type furniture_manufacte_avg_fields {
+  furniture_id: Float
+  manufacturer_id: Float
+  price_in_dollar: Float
+}
+
+"""
+order by avg() on columns of table "furniture_manufacte"
+"""
+input furniture_manufacte_avg_order_by {
+  furniture_id: order_by
+  manufacturer_id: order_by
+  price_in_dollar: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "furniture_manufacte". All fields are combined with a logical 'AND'.
+"""
+input furniture_manufacte_bool_exp {
+  _and: [furniture_manufacte_bool_exp]
+  _not: furniture_manufacte_bool_exp
+  _or: [furniture_manufacte_bool_exp]
+  furniture: furniture_bool_exp
+  furniture_id: Int_comparison_exp
+  manufacturer: manufacturer_bool_exp
+  manufacturer_id: Int_comparison_exp
+  price_in_dollar: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "furniture_manufacte"
+"""
+enum furniture_manufacte_constraint {
+  """unique or primary key constraint"""
+  idx_17455_sqlite_autoindex_furniture_manufacte_1
+}
+
+"""
+input type for incrementing integer columne in table "furniture_manufacte"
+"""
+input furniture_manufacte_inc_input {
+  furniture_id: Int
+  manufacturer_id: Int
+}
+
+"""
+input type for inserting data into table "furniture_manufacte"
+"""
+input furniture_manufacte_insert_input {
+  furniture: furniture_obj_rel_insert_input
+  furniture_id: Int
+  manufacturer: manufacturer_obj_rel_insert_input
+  manufacturer_id: Int
+  price_in_dollar: Float
+}
+
+"""aggregate max on columns"""
+type furniture_manufacte_max_fields {
+  furniture_id: Int
+  manufacturer_id: Int
+  price_in_dollar: Float
+}
+
+"""
+order by max() on columns of table "furniture_manufacte"
+"""
+input furniture_manufacte_max_order_by {
+  furniture_id: order_by
+  manufacturer_id: order_by
+  price_in_dollar: order_by
+}
+
+"""aggregate min on columns"""
+type furniture_manufacte_min_fields {
+  furniture_id: Int
+  manufacturer_id: Int
+  price_in_dollar: Float
+}
+
+"""
+order by min() on columns of table "furniture_manufacte"
+"""
+input furniture_manufacte_min_order_by {
+  furniture_id: order_by
+  manufacturer_id: order_by
+  price_in_dollar: order_by
+}
+
+"""
+response of any mutation on the table "furniture_manufacte"
+"""
+type furniture_manufacte_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [furniture_manufacte!]!
+}
+
+"""
+input type for inserting object relation for remote table "furniture_manufacte"
+"""
+input furniture_manufacte_obj_rel_insert_input {
+  data: furniture_manufacte_insert_input!
+  on_conflict: furniture_manufacte_on_conflict
+}
+
+"""
+on conflict condition type for table "furniture_manufacte"
+"""
+input furniture_manufacte_on_conflict {
+  constraint: furniture_manufacte_constraint!
+  update_columns: [furniture_manufacte_update_column!]!
+  where: furniture_manufacte_bool_exp
+}
+
+"""
+ordering options when selecting data from "furniture_manufacte"
+"""
+input furniture_manufacte_order_by {
+  furniture: furniture_order_by
+  furniture_id: order_by
+  manufacturer: manufacturer_order_by
+  manufacturer_id: order_by
+  price_in_dollar: order_by
+}
+
+"""
+select columns of table "furniture_manufacte"
+"""
+enum furniture_manufacte_select_column {
+  """column name"""
+  furniture_id
+
+  """column name"""
+  manufacturer_id
+
+  """column name"""
+  price_in_dollar
+}
+
+"""
+input type for updating data in table "furniture_manufacte"
+"""
+input furniture_manufacte_set_input {
+  furniture_id: Int
+  manufacturer_id: Int
+  price_in_dollar: Float
+}
+
+"""aggregate stddev on columns"""
+type furniture_manufacte_stddev_fields {
+  furniture_id: Float
+  manufacturer_id: Float
+  price_in_dollar: Float
+}
+
+"""
+order by stddev() on columns of table "furniture_manufacte"
+"""
+input furniture_manufacte_stddev_order_by {
+  furniture_id: order_by
+  manufacturer_id: order_by
+  price_in_dollar: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type furniture_manufacte_stddev_pop_fields {
+  furniture_id: Float
+  manufacturer_id: Float
+  price_in_dollar: Float
+}
+
+"""
+order by stddev_pop() on columns of table "furniture_manufacte"
+"""
+input furniture_manufacte_stddev_pop_order_by {
+  furniture_id: order_by
+  manufacturer_id: order_by
+  price_in_dollar: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type furniture_manufacte_stddev_samp_fields {
+  furniture_id: Float
+  manufacturer_id: Float
+  price_in_dollar: Float
+}
+
+"""
+order by stddev_samp() on columns of table "furniture_manufacte"
+"""
+input furniture_manufacte_stddev_samp_order_by {
+  furniture_id: order_by
+  manufacturer_id: order_by
+  price_in_dollar: order_by
+}
+
+"""aggregate sum on columns"""
+type furniture_manufacte_sum_fields {
+  furniture_id: Int
+  manufacturer_id: Int
+  price_in_dollar: Float
+}
+
+"""
+order by sum() on columns of table "furniture_manufacte"
+"""
+input furniture_manufacte_sum_order_by {
+  furniture_id: order_by
+  manufacturer_id: order_by
+  price_in_dollar: order_by
+}
+
+"""
+update columns of table "furniture_manufacte"
+"""
+enum furniture_manufacte_update_column {
+  """column name"""
+  furniture_id
+
+  """column name"""
+  manufacturer_id
+
+  """column name"""
+  price_in_dollar
+}
+
+"""aggregate var_pop on columns"""
+type furniture_manufacte_var_pop_fields {
+  furniture_id: Float
+  manufacturer_id: Float
+  price_in_dollar: Float
+}
+
+"""
+order by var_pop() on columns of table "furniture_manufacte"
+"""
+input furniture_manufacte_var_pop_order_by {
+  furniture_id: order_by
+  manufacturer_id: order_by
+  price_in_dollar: order_by
+}
+
+"""aggregate var_samp on columns"""
+type furniture_manufacte_var_samp_fields {
+  furniture_id: Float
+  manufacturer_id: Float
+  price_in_dollar: Float
+}
+
+"""
+order by var_samp() on columns of table "furniture_manufacte"
+"""
+input furniture_manufacte_var_samp_order_by {
+  furniture_id: order_by
+  manufacturer_id: order_by
+  price_in_dollar: order_by
+}
+
+"""aggregate variance on columns"""
+type furniture_manufacte_variance_fields {
+  furniture_id: Float
+  manufacturer_id: Float
+  price_in_dollar: Float
+}
+
+"""
+order by variance() on columns of table "furniture_manufacte"
+"""
+input furniture_manufacte_variance_order_by {
+  furniture_id: order_by
+  manufacturer_id: order_by
+  price_in_dollar: order_by
+}
+
+"""aggregate max on columns"""
+type furniture_max_fields {
+  furniture_id: Int
+  market_rate: Float
+  name: String
+  num_of_component: Int
+}
+
+"""
+order by max() on columns of table "furniture"
+"""
+input furniture_max_order_by {
+  furniture_id: order_by
+  market_rate: order_by
+  name: order_by
+  num_of_component: order_by
+}
+
+"""aggregate min on columns"""
+type furniture_min_fields {
+  furniture_id: Int
+  market_rate: Float
+  name: String
+  num_of_component: Int
+}
+
+"""
+order by min() on columns of table "furniture"
+"""
+input furniture_min_order_by {
+  furniture_id: order_by
+  market_rate: order_by
+  name: order_by
+  num_of_component: order_by
+}
+
+"""
+response of any mutation on the table "furniture"
+"""
+type furniture_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [furniture!]!
+}
+
+"""
+input type for inserting object relation for remote table "furniture"
+"""
+input furniture_obj_rel_insert_input {
+  data: furniture_insert_input!
+  on_conflict: furniture_on_conflict
+}
+
+"""
+on conflict condition type for table "furniture"
+"""
+input furniture_on_conflict {
+  constraint: furniture_constraint!
+  update_columns: [furniture_update_column!]!
+  where: furniture_bool_exp
+}
+
+"""
+ordering options when selecting data from "furniture"
+"""
+input furniture_order_by {
+  furniture_id: order_by
+  furniture_manufactes_aggregate: furniture_manufacte_aggregate_order_by
+  market_rate: order_by
+  name: order_by
+  num_of_component: order_by
+}
+
+"""
+select columns of table "furniture"
+"""
+enum furniture_select_column {
+  """column name"""
+  furniture_id
+
+  """column name"""
+  market_rate
+
+  """column name"""
+  name
+
+  """column name"""
+  num_of_component
+}
+
+"""
+input type for updating data in table "furniture"
+"""
+input furniture_set_input {
+  furniture_id: Int
+  market_rate: Float
+  name: String
+  num_of_component: Int
+}
+
+"""aggregate stddev on columns"""
+type furniture_stddev_fields {
+  furniture_id: Float
+  market_rate: Float
+  num_of_component: Float
+}
+
+"""
+order by stddev() on columns of table "furniture"
+"""
+input furniture_stddev_order_by {
+  furniture_id: order_by
+  market_rate: order_by
+  num_of_component: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type furniture_stddev_pop_fields {
+  furniture_id: Float
+  market_rate: Float
+  num_of_component: Float
+}
+
+"""
+order by stddev_pop() on columns of table "furniture"
+"""
+input furniture_stddev_pop_order_by {
+  furniture_id: order_by
+  market_rate: order_by
+  num_of_component: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type furniture_stddev_samp_fields {
+  furniture_id: Float
+  market_rate: Float
+  num_of_component: Float
+}
+
+"""
+order by stddev_samp() on columns of table "furniture"
+"""
+input furniture_stddev_samp_order_by {
+  furniture_id: order_by
+  market_rate: order_by
+  num_of_component: order_by
+}
+
+"""aggregate sum on columns"""
+type furniture_sum_fields {
+  furniture_id: Int
+  market_rate: Float
+  num_of_component: Int
+}
+
+"""
+order by sum() on columns of table "furniture"
+"""
+input furniture_sum_order_by {
+  furniture_id: order_by
+  market_rate: order_by
+  num_of_component: order_by
+}
+
+"""
+update columns of table "furniture"
+"""
+enum furniture_update_column {
+  """column name"""
+  furniture_id
+
+  """column name"""
+  market_rate
+
+  """column name"""
+  name
+
+  """column name"""
+  num_of_component
+}
+
+"""aggregate var_pop on columns"""
+type furniture_var_pop_fields {
+  furniture_id: Float
+  market_rate: Float
+  num_of_component: Float
+}
+
+"""
+order by var_pop() on columns of table "furniture"
+"""
+input furniture_var_pop_order_by {
+  furniture_id: order_by
+  market_rate: order_by
+  num_of_component: order_by
+}
+
+"""aggregate var_samp on columns"""
+type furniture_var_samp_fields {
+  furniture_id: Float
+  market_rate: Float
+  num_of_component: Float
+}
+
+"""
+order by var_samp() on columns of table "furniture"
+"""
+input furniture_var_samp_order_by {
+  furniture_id: order_by
+  market_rate: order_by
+  num_of_component: order_by
+}
+
+"""aggregate variance on columns"""
+type furniture_variance_fields {
+  furniture_id: Float
+  market_rate: Float
+  num_of_component: Float
+}
+
+"""
+order by variance() on columns of table "furniture"
+"""
+input furniture_variance_order_by {
+  furniture_id: order_by
+  market_rate: order_by
+  num_of_component: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "manufacturer"
+"""
+type manufacturer {
+  """An array relationship"""
+  furniture_manufactes(
+    """distinct select on columns"""
+    distinct_on: [furniture_manufacte_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [furniture_manufacte_order_by!]
+
+    """filter the rows returned"""
+    where: furniture_manufacte_bool_exp
+  ): [furniture_manufacte!]!
+
+  """An aggregated array relationship"""
+  furniture_manufactes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [furniture_manufacte_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [furniture_manufacte_order_by!]
+
+    """filter the rows returned"""
+    where: furniture_manufacte_bool_exp
+  ): furniture_manufacte_aggregate!
+  manufacturer_id: Int
+  name: String
+  num_of_factories: Int
+  num_of_shops: Int
+  open_year: Float
+}
+
+"""
+aggregated selection of "manufacturer"
+"""
+type manufacturer_aggregate {
+  aggregate: manufacturer_aggregate_fields
+  nodes: [manufacturer!]!
+}
+
+"""
+aggregate fields of "manufacturer"
+"""
+type manufacturer_aggregate_fields {
+  avg: manufacturer_avg_fields
+  count(columns: [manufacturer_select_column!], distinct: Boolean): Int
+  max: manufacturer_max_fields
+  min: manufacturer_min_fields
+  stddev: manufacturer_stddev_fields
+  stddev_pop: manufacturer_stddev_pop_fields
+  stddev_samp: manufacturer_stddev_samp_fields
+  sum: manufacturer_sum_fields
+  var_pop: manufacturer_var_pop_fields
+  var_samp: manufacturer_var_samp_fields
+  variance: manufacturer_variance_fields
+}
+
+"""
+order by aggregate values of table "manufacturer"
+"""
+input manufacturer_aggregate_order_by {
+  avg: manufacturer_avg_order_by
+  count: order_by
+  max: manufacturer_max_order_by
+  min: manufacturer_min_order_by
+  stddev: manufacturer_stddev_order_by
+  stddev_pop: manufacturer_stddev_pop_order_by
+  stddev_samp: manufacturer_stddev_samp_order_by
+  sum: manufacturer_sum_order_by
+  var_pop: manufacturer_var_pop_order_by
+  var_samp: manufacturer_var_samp_order_by
+  variance: manufacturer_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "manufacturer"
+"""
+input manufacturer_arr_rel_insert_input {
+  data: [manufacturer_insert_input!]!
+  on_conflict: manufacturer_on_conflict
+}
+
+"""aggregate avg on columns"""
+type manufacturer_avg_fields {
+  manufacturer_id: Float
+  num_of_factories: Float
+  num_of_shops: Float
+  open_year: Float
+}
+
+"""
+order by avg() on columns of table "manufacturer"
+"""
+input manufacturer_avg_order_by {
+  manufacturer_id: order_by
+  num_of_factories: order_by
+  num_of_shops: order_by
+  open_year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "manufacturer". All fields are combined with a logical 'AND'.
+"""
+input manufacturer_bool_exp {
+  _and: [manufacturer_bool_exp]
+  _not: manufacturer_bool_exp
+  _or: [manufacturer_bool_exp]
+  furniture_manufactes: furniture_manufacte_bool_exp
+  manufacturer_id: Int_comparison_exp
+  name: String_comparison_exp
+  num_of_factories: Int_comparison_exp
+  num_of_shops: Int_comparison_exp
+  open_year: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "manufacturer"
+"""
+enum manufacturer_constraint {
+  """unique or primary key constraint"""
+  idx_17443_sqlite_autoindex_manufacturer_1
+}
+
+"""
+input type for incrementing integer columne in table "manufacturer"
+"""
+input manufacturer_inc_input {
+  manufacturer_id: Int
+  num_of_factories: Int
+  num_of_shops: Int
+}
+
+"""
+input type for inserting data into table "manufacturer"
+"""
+input manufacturer_insert_input {
+  furniture_manufactes: furniture_manufacte_arr_rel_insert_input
+  manufacturer_id: Int
+  name: String
+  num_of_factories: Int
+  num_of_shops: Int
+  open_year: Float
+}
+
+"""aggregate max on columns"""
+type manufacturer_max_fields {
+  manufacturer_id: Int
+  name: String
+  num_of_factories: Int
+  num_of_shops: Int
+  open_year: Float
+}
+
+"""
+order by max() on columns of table "manufacturer"
+"""
+input manufacturer_max_order_by {
+  manufacturer_id: order_by
+  name: order_by
+  num_of_factories: order_by
+  num_of_shops: order_by
+  open_year: order_by
+}
+
+"""aggregate min on columns"""
+type manufacturer_min_fields {
+  manufacturer_id: Int
+  name: String
+  num_of_factories: Int
+  num_of_shops: Int
+  open_year: Float
+}
+
+"""
+order by min() on columns of table "manufacturer"
+"""
+input manufacturer_min_order_by {
+  manufacturer_id: order_by
+  name: order_by
+  num_of_factories: order_by
+  num_of_shops: order_by
+  open_year: order_by
+}
+
+"""
+response of any mutation on the table "manufacturer"
+"""
+type manufacturer_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [manufacturer!]!
+}
+
+"""
+input type for inserting object relation for remote table "manufacturer"
+"""
+input manufacturer_obj_rel_insert_input {
+  data: manufacturer_insert_input!
+  on_conflict: manufacturer_on_conflict
+}
+
+"""
+on conflict condition type for table "manufacturer"
+"""
+input manufacturer_on_conflict {
+  constraint: manufacturer_constraint!
+  update_columns: [manufacturer_update_column!]!
+  where: manufacturer_bool_exp
+}
+
+"""
+ordering options when selecting data from "manufacturer"
+"""
+input manufacturer_order_by {
+  furniture_manufactes_aggregate: furniture_manufacte_aggregate_order_by
+  manufacturer_id: order_by
+  name: order_by
+  num_of_factories: order_by
+  num_of_shops: order_by
+  open_year: order_by
+}
+
+"""
+select columns of table "manufacturer"
+"""
+enum manufacturer_select_column {
+  """column name"""
+  manufacturer_id
+
+  """column name"""
+  name
+
+  """column name"""
+  num_of_factories
+
+  """column name"""
+  num_of_shops
+
+  """column name"""
+  open_year
+}
+
+"""
+input type for updating data in table "manufacturer"
+"""
+input manufacturer_set_input {
+  manufacturer_id: Int
+  name: String
+  num_of_factories: Int
+  num_of_shops: Int
+  open_year: Float
+}
+
+"""aggregate stddev on columns"""
+type manufacturer_stddev_fields {
+  manufacturer_id: Float
+  num_of_factories: Float
+  num_of_shops: Float
+  open_year: Float
+}
+
+"""
+order by stddev() on columns of table "manufacturer"
+"""
+input manufacturer_stddev_order_by {
+  manufacturer_id: order_by
+  num_of_factories: order_by
+  num_of_shops: order_by
+  open_year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type manufacturer_stddev_pop_fields {
+  manufacturer_id: Float
+  num_of_factories: Float
+  num_of_shops: Float
+  open_year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "manufacturer"
+"""
+input manufacturer_stddev_pop_order_by {
+  manufacturer_id: order_by
+  num_of_factories: order_by
+  num_of_shops: order_by
+  open_year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type manufacturer_stddev_samp_fields {
+  manufacturer_id: Float
+  num_of_factories: Float
+  num_of_shops: Float
+  open_year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "manufacturer"
+"""
+input manufacturer_stddev_samp_order_by {
+  manufacturer_id: order_by
+  num_of_factories: order_by
+  num_of_shops: order_by
+  open_year: order_by
+}
+
+"""aggregate sum on columns"""
+type manufacturer_sum_fields {
+  manufacturer_id: Int
+  num_of_factories: Int
+  num_of_shops: Int
+  open_year: Float
+}
+
+"""
+order by sum() on columns of table "manufacturer"
+"""
+input manufacturer_sum_order_by {
+  manufacturer_id: order_by
+  num_of_factories: order_by
+  num_of_shops: order_by
+  open_year: order_by
+}
+
+"""
+update columns of table "manufacturer"
+"""
+enum manufacturer_update_column {
+  """column name"""
+  manufacturer_id
+
+  """column name"""
+  name
+
+  """column name"""
+  num_of_factories
+
+  """column name"""
+  num_of_shops
+
+  """column name"""
+  open_year
+}
+
+"""aggregate var_pop on columns"""
+type manufacturer_var_pop_fields {
+  manufacturer_id: Float
+  num_of_factories: Float
+  num_of_shops: Float
+  open_year: Float
+}
+
+"""
+order by var_pop() on columns of table "manufacturer"
+"""
+input manufacturer_var_pop_order_by {
+  manufacturer_id: order_by
+  num_of_factories: order_by
+  num_of_shops: order_by
+  open_year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type manufacturer_var_samp_fields {
+  manufacturer_id: Float
+  num_of_factories: Float
+  num_of_shops: Float
+  open_year: Float
+}
+
+"""
+order by var_samp() on columns of table "manufacturer"
+"""
+input manufacturer_var_samp_order_by {
+  manufacturer_id: order_by
+  num_of_factories: order_by
+  num_of_shops: order_by
+  open_year: order_by
+}
+
+"""aggregate variance on columns"""
+type manufacturer_variance_fields {
+  manufacturer_id: Float
+  num_of_factories: Float
+  num_of_shops: Float
+  open_year: Float
+}
+
+"""
+order by variance() on columns of table "manufacturer"
+"""
+input manufacturer_variance_order_by {
+  manufacturer_id: order_by
+  num_of_factories: order_by
+  num_of_shops: order_by
+  open_year: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "furniture"
+  """
+  delete_furniture(
+    """filter the rows which have to be deleted"""
+    where: furniture_bool_exp!
+  ): furniture_mutation_response
+
+  """
+  delete data from the table: "furniture_manufacte"
+  """
+  delete_furniture_manufacte(
+    """filter the rows which have to be deleted"""
+    where: furniture_manufacte_bool_exp!
+  ): furniture_manufacte_mutation_response
+
+  """
+  delete data from the table: "manufacturer"
+  """
+  delete_manufacturer(
+    """filter the rows which have to be deleted"""
+    where: manufacturer_bool_exp!
+  ): manufacturer_mutation_response
+
+  """
+  insert data into the table: "furniture"
+  """
+  insert_furniture(
+    """the rows to be inserted"""
+    objects: [furniture_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: furniture_on_conflict
+  ): furniture_mutation_response
+
+  """
+  insert data into the table: "furniture_manufacte"
+  """
+  insert_furniture_manufacte(
+    """the rows to be inserted"""
+    objects: [furniture_manufacte_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: furniture_manufacte_on_conflict
+  ): furniture_manufacte_mutation_response
+
+  """
+  insert data into the table: "manufacturer"
+  """
+  insert_manufacturer(
+    """the rows to be inserted"""
+    objects: [manufacturer_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: manufacturer_on_conflict
+  ): manufacturer_mutation_response
+
+  """
+  update data of the table: "furniture"
+  """
+  update_furniture(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: furniture_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: furniture_set_input
+
+    """filter the rows which have to be updated"""
+    where: furniture_bool_exp!
+  ): furniture_mutation_response
+
+  """
+  update data of the table: "furniture_manufacte"
+  """
+  update_furniture_manufacte(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: furniture_manufacte_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: furniture_manufacte_set_input
+
+    """filter the rows which have to be updated"""
+    where: furniture_manufacte_bool_exp!
+  ): furniture_manufacte_mutation_response
+
+  """
+  update data of the table: "manufacturer"
+  """
+  update_manufacturer(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: manufacturer_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: manufacturer_set_input
+
+    """filter the rows which have to be updated"""
+    where: manufacturer_bool_exp!
+  ): manufacturer_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "furniture"
+  """
+  furniture(
+    """distinct select on columns"""
+    distinct_on: [furniture_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [furniture_order_by!]
+
+    """filter the rows returned"""
+    where: furniture_bool_exp
+  ): [furniture!]!
+
+  """
+  fetch aggregated fields from the table: "furniture"
+  """
+  furniture_aggregate(
+    """distinct select on columns"""
+    distinct_on: [furniture_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [furniture_order_by!]
+
+    """filter the rows returned"""
+    where: furniture_bool_exp
+  ): furniture_aggregate!
+
+  """
+  fetch data from the table: "furniture_manufacte"
+  """
+  furniture_manufacte(
+    """distinct select on columns"""
+    distinct_on: [furniture_manufacte_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [furniture_manufacte_order_by!]
+
+    """filter the rows returned"""
+    where: furniture_manufacte_bool_exp
+  ): [furniture_manufacte!]!
+
+  """
+  fetch aggregated fields from the table: "furniture_manufacte"
+  """
+  furniture_manufacte_aggregate(
+    """distinct select on columns"""
+    distinct_on: [furniture_manufacte_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [furniture_manufacte_order_by!]
+
+    """filter the rows returned"""
+    where: furniture_manufacte_bool_exp
+  ): furniture_manufacte_aggregate!
+
+  """
+  fetch data from the table: "manufacturer"
+  """
+  manufacturer(
+    """distinct select on columns"""
+    distinct_on: [manufacturer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [manufacturer_order_by!]
+
+    """filter the rows returned"""
+    where: manufacturer_bool_exp
+  ): [manufacturer!]!
+
+  """
+  fetch aggregated fields from the table: "manufacturer"
+  """
+  manufacturer_aggregate(
+    """distinct select on columns"""
+    distinct_on: [manufacturer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [manufacturer_order_by!]
+
+    """filter the rows returned"""
+    where: manufacturer_bool_exp
+  ): manufacturer_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "furniture"
+  """
+  furniture(
+    """distinct select on columns"""
+    distinct_on: [furniture_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [furniture_order_by!]
+
+    """filter the rows returned"""
+    where: furniture_bool_exp
+  ): [furniture!]!
+
+  """
+  fetch aggregated fields from the table: "furniture"
+  """
+  furniture_aggregate(
+    """distinct select on columns"""
+    distinct_on: [furniture_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [furniture_order_by!]
+
+    """filter the rows returned"""
+    where: furniture_bool_exp
+  ): furniture_aggregate!
+
+  """
+  fetch data from the table: "furniture_manufacte"
+  """
+  furniture_manufacte(
+    """distinct select on columns"""
+    distinct_on: [furniture_manufacte_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [furniture_manufacte_order_by!]
+
+    """filter the rows returned"""
+    where: furniture_manufacte_bool_exp
+  ): [furniture_manufacte!]!
+
+  """
+  fetch aggregated fields from the table: "furniture_manufacte"
+  """
+  furniture_manufacte_aggregate(
+    """distinct select on columns"""
+    distinct_on: [furniture_manufacte_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [furniture_manufacte_order_by!]
+
+    """filter the rows returned"""
+    where: furniture_manufacte_bool_exp
+  ): furniture_manufacte_aggregate!
+
+  """
+  fetch data from the table: "manufacturer"
+  """
+  manufacturer(
+    """distinct select on columns"""
+    distinct_on: [manufacturer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [manufacturer_order_by!]
+
+    """filter the rows returned"""
+    where: manufacturer_bool_exp
+  ): [manufacturer!]!
+
+  """
+  fetch aggregated fields from the table: "manufacturer"
+  """
+  manufacturer_aggregate(
+    """distinct select on columns"""
+    distinct_on: [manufacturer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [manufacturer_order_by!]
+
+    """filter the rows returned"""
+    where: manufacturer_bool_exp
+  ): manufacturer_aggregate!
+}

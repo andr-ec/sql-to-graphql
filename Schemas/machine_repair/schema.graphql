@@ -1,0 +1,2121 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "machine"
+"""
+type machine {
+  class: String
+  machine_id: Int
+  machine_series: String
+  making_year: Int
+  quality_rank: Int
+
+  """An array relationship"""
+  repair_assignments(
+    """distinct select on columns"""
+    distinct_on: [repair_assignment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [repair_assignment_order_by!]
+
+    """filter the rows returned"""
+    where: repair_assignment_bool_exp
+  ): [repair_assignment!]!
+
+  """An aggregated array relationship"""
+  repair_assignments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [repair_assignment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [repair_assignment_order_by!]
+
+    """filter the rows returned"""
+    where: repair_assignment_bool_exp
+  ): repair_assignment_aggregate!
+  team: String
+  value_points: Float
+}
+
+"""
+aggregated selection of "machine"
+"""
+type machine_aggregate {
+  aggregate: machine_aggregate_fields
+  nodes: [machine!]!
+}
+
+"""
+aggregate fields of "machine"
+"""
+type machine_aggregate_fields {
+  avg: machine_avg_fields
+  count(columns: [machine_select_column!], distinct: Boolean): Int
+  max: machine_max_fields
+  min: machine_min_fields
+  stddev: machine_stddev_fields
+  stddev_pop: machine_stddev_pop_fields
+  stddev_samp: machine_stddev_samp_fields
+  sum: machine_sum_fields
+  var_pop: machine_var_pop_fields
+  var_samp: machine_var_samp_fields
+  variance: machine_variance_fields
+}
+
+"""
+order by aggregate values of table "machine"
+"""
+input machine_aggregate_order_by {
+  avg: machine_avg_order_by
+  count: order_by
+  max: machine_max_order_by
+  min: machine_min_order_by
+  stddev: machine_stddev_order_by
+  stddev_pop: machine_stddev_pop_order_by
+  stddev_samp: machine_stddev_samp_order_by
+  sum: machine_sum_order_by
+  var_pop: machine_var_pop_order_by
+  var_samp: machine_var_samp_order_by
+  variance: machine_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "machine"
+"""
+input machine_arr_rel_insert_input {
+  data: [machine_insert_input!]!
+  on_conflict: machine_on_conflict
+}
+
+"""aggregate avg on columns"""
+type machine_avg_fields {
+  machine_id: Float
+  making_year: Float
+  quality_rank: Float
+  value_points: Float
+}
+
+"""
+order by avg() on columns of table "machine"
+"""
+input machine_avg_order_by {
+  machine_id: order_by
+  making_year: order_by
+  quality_rank: order_by
+  value_points: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "machine". All fields are combined with a logical 'AND'.
+"""
+input machine_bool_exp {
+  _and: [machine_bool_exp]
+  _not: machine_bool_exp
+  _or: [machine_bool_exp]
+  class: String_comparison_exp
+  machine_id: Int_comparison_exp
+  machine_series: String_comparison_exp
+  making_year: Int_comparison_exp
+  quality_rank: Int_comparison_exp
+  repair_assignments: repair_assignment_bool_exp
+  team: String_comparison_exp
+  value_points: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "machine"
+"""
+enum machine_constraint {
+  """unique or primary key constraint"""
+  idx_20998_sqlite_autoindex_machine_1
+}
+
+"""
+input type for incrementing integer columne in table "machine"
+"""
+input machine_inc_input {
+  machine_id: Int
+  making_year: Int
+  quality_rank: Int
+}
+
+"""
+input type for inserting data into table "machine"
+"""
+input machine_insert_input {
+  class: String
+  machine_id: Int
+  machine_series: String
+  making_year: Int
+  quality_rank: Int
+  repair_assignments: repair_assignment_arr_rel_insert_input
+  team: String
+  value_points: Float
+}
+
+"""aggregate max on columns"""
+type machine_max_fields {
+  class: String
+  machine_id: Int
+  machine_series: String
+  making_year: Int
+  quality_rank: Int
+  team: String
+  value_points: Float
+}
+
+"""
+order by max() on columns of table "machine"
+"""
+input machine_max_order_by {
+  class: order_by
+  machine_id: order_by
+  machine_series: order_by
+  making_year: order_by
+  quality_rank: order_by
+  team: order_by
+  value_points: order_by
+}
+
+"""aggregate min on columns"""
+type machine_min_fields {
+  class: String
+  machine_id: Int
+  machine_series: String
+  making_year: Int
+  quality_rank: Int
+  team: String
+  value_points: Float
+}
+
+"""
+order by min() on columns of table "machine"
+"""
+input machine_min_order_by {
+  class: order_by
+  machine_id: order_by
+  machine_series: order_by
+  making_year: order_by
+  quality_rank: order_by
+  team: order_by
+  value_points: order_by
+}
+
+"""
+response of any mutation on the table "machine"
+"""
+type machine_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [machine!]!
+}
+
+"""
+input type for inserting object relation for remote table "machine"
+"""
+input machine_obj_rel_insert_input {
+  data: machine_insert_input!
+  on_conflict: machine_on_conflict
+}
+
+"""
+on conflict condition type for table "machine"
+"""
+input machine_on_conflict {
+  constraint: machine_constraint!
+  update_columns: [machine_update_column!]!
+  where: machine_bool_exp
+}
+
+"""
+ordering options when selecting data from "machine"
+"""
+input machine_order_by {
+  class: order_by
+  machine_id: order_by
+  machine_series: order_by
+  making_year: order_by
+  quality_rank: order_by
+  repair_assignments_aggregate: repair_assignment_aggregate_order_by
+  team: order_by
+  value_points: order_by
+}
+
+"""
+select columns of table "machine"
+"""
+enum machine_select_column {
+  """column name"""
+  class
+
+  """column name"""
+  machine_id
+
+  """column name"""
+  machine_series
+
+  """column name"""
+  making_year
+
+  """column name"""
+  quality_rank
+
+  """column name"""
+  team
+
+  """column name"""
+  value_points
+}
+
+"""
+input type for updating data in table "machine"
+"""
+input machine_set_input {
+  class: String
+  machine_id: Int
+  machine_series: String
+  making_year: Int
+  quality_rank: Int
+  team: String
+  value_points: Float
+}
+
+"""aggregate stddev on columns"""
+type machine_stddev_fields {
+  machine_id: Float
+  making_year: Float
+  quality_rank: Float
+  value_points: Float
+}
+
+"""
+order by stddev() on columns of table "machine"
+"""
+input machine_stddev_order_by {
+  machine_id: order_by
+  making_year: order_by
+  quality_rank: order_by
+  value_points: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type machine_stddev_pop_fields {
+  machine_id: Float
+  making_year: Float
+  quality_rank: Float
+  value_points: Float
+}
+
+"""
+order by stddev_pop() on columns of table "machine"
+"""
+input machine_stddev_pop_order_by {
+  machine_id: order_by
+  making_year: order_by
+  quality_rank: order_by
+  value_points: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type machine_stddev_samp_fields {
+  machine_id: Float
+  making_year: Float
+  quality_rank: Float
+  value_points: Float
+}
+
+"""
+order by stddev_samp() on columns of table "machine"
+"""
+input machine_stddev_samp_order_by {
+  machine_id: order_by
+  making_year: order_by
+  quality_rank: order_by
+  value_points: order_by
+}
+
+"""aggregate sum on columns"""
+type machine_sum_fields {
+  machine_id: Int
+  making_year: Int
+  quality_rank: Int
+  value_points: Float
+}
+
+"""
+order by sum() on columns of table "machine"
+"""
+input machine_sum_order_by {
+  machine_id: order_by
+  making_year: order_by
+  quality_rank: order_by
+  value_points: order_by
+}
+
+"""
+update columns of table "machine"
+"""
+enum machine_update_column {
+  """column name"""
+  class
+
+  """column name"""
+  machine_id
+
+  """column name"""
+  machine_series
+
+  """column name"""
+  making_year
+
+  """column name"""
+  quality_rank
+
+  """column name"""
+  team
+
+  """column name"""
+  value_points
+}
+
+"""aggregate var_pop on columns"""
+type machine_var_pop_fields {
+  machine_id: Float
+  making_year: Float
+  quality_rank: Float
+  value_points: Float
+}
+
+"""
+order by var_pop() on columns of table "machine"
+"""
+input machine_var_pop_order_by {
+  machine_id: order_by
+  making_year: order_by
+  quality_rank: order_by
+  value_points: order_by
+}
+
+"""aggregate var_samp on columns"""
+type machine_var_samp_fields {
+  machine_id: Float
+  making_year: Float
+  quality_rank: Float
+  value_points: Float
+}
+
+"""
+order by var_samp() on columns of table "machine"
+"""
+input machine_var_samp_order_by {
+  machine_id: order_by
+  making_year: order_by
+  quality_rank: order_by
+  value_points: order_by
+}
+
+"""aggregate variance on columns"""
+type machine_variance_fields {
+  machine_id: Float
+  making_year: Float
+  quality_rank: Float
+  value_points: Float
+}
+
+"""
+order by variance() on columns of table "machine"
+"""
+input machine_variance_order_by {
+  machine_id: order_by
+  making_year: order_by
+  quality_rank: order_by
+  value_points: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "machine"
+  """
+  delete_machine(
+    """filter the rows which have to be deleted"""
+    where: machine_bool_exp!
+  ): machine_mutation_response
+
+  """
+  delete data from the table: "repair"
+  """
+  delete_repair(
+    """filter the rows which have to be deleted"""
+    where: repair_bool_exp!
+  ): repair_mutation_response
+
+  """
+  delete data from the table: "repair_assignment"
+  """
+  delete_repair_assignment(
+    """filter the rows which have to be deleted"""
+    where: repair_assignment_bool_exp!
+  ): repair_assignment_mutation_response
+
+  """
+  delete data from the table: "technician"
+  """
+  delete_technician(
+    """filter the rows which have to be deleted"""
+    where: technician_bool_exp!
+  ): technician_mutation_response
+
+  """
+  insert data into the table: "machine"
+  """
+  insert_machine(
+    """the rows to be inserted"""
+    objects: [machine_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: machine_on_conflict
+  ): machine_mutation_response
+
+  """
+  insert data into the table: "repair"
+  """
+  insert_repair(
+    """the rows to be inserted"""
+    objects: [repair_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: repair_on_conflict
+  ): repair_mutation_response
+
+  """
+  insert data into the table: "repair_assignment"
+  """
+  insert_repair_assignment(
+    """the rows to be inserted"""
+    objects: [repair_assignment_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: repair_assignment_on_conflict
+  ): repair_assignment_mutation_response
+
+  """
+  insert data into the table: "technician"
+  """
+  insert_technician(
+    """the rows to be inserted"""
+    objects: [technician_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: technician_on_conflict
+  ): technician_mutation_response
+
+  """
+  update data of the table: "machine"
+  """
+  update_machine(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: machine_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: machine_set_input
+
+    """filter the rows which have to be updated"""
+    where: machine_bool_exp!
+  ): machine_mutation_response
+
+  """
+  update data of the table: "repair"
+  """
+  update_repair(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: repair_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: repair_set_input
+
+    """filter the rows which have to be updated"""
+    where: repair_bool_exp!
+  ): repair_mutation_response
+
+  """
+  update data of the table: "repair_assignment"
+  """
+  update_repair_assignment(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: repair_assignment_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: repair_assignment_set_input
+
+    """filter the rows which have to be updated"""
+    where: repair_assignment_bool_exp!
+  ): repair_assignment_mutation_response
+
+  """
+  update data of the table: "technician"
+  """
+  update_technician(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: technician_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: technician_set_input
+
+    """filter the rows which have to be updated"""
+    where: technician_bool_exp!
+  ): technician_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "machine"
+  """
+  machine(
+    """distinct select on columns"""
+    distinct_on: [machine_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [machine_order_by!]
+
+    """filter the rows returned"""
+    where: machine_bool_exp
+  ): [machine!]!
+
+  """
+  fetch aggregated fields from the table: "machine"
+  """
+  machine_aggregate(
+    """distinct select on columns"""
+    distinct_on: [machine_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [machine_order_by!]
+
+    """filter the rows returned"""
+    where: machine_bool_exp
+  ): machine_aggregate!
+
+  """
+  fetch data from the table: "repair"
+  """
+  repair(
+    """distinct select on columns"""
+    distinct_on: [repair_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [repair_order_by!]
+
+    """filter the rows returned"""
+    where: repair_bool_exp
+  ): [repair!]!
+
+  """
+  fetch aggregated fields from the table: "repair"
+  """
+  repair_aggregate(
+    """distinct select on columns"""
+    distinct_on: [repair_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [repair_order_by!]
+
+    """filter the rows returned"""
+    where: repair_bool_exp
+  ): repair_aggregate!
+
+  """
+  fetch data from the table: "repair_assignment"
+  """
+  repair_assignment(
+    """distinct select on columns"""
+    distinct_on: [repair_assignment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [repair_assignment_order_by!]
+
+    """filter the rows returned"""
+    where: repair_assignment_bool_exp
+  ): [repair_assignment!]!
+
+  """
+  fetch aggregated fields from the table: "repair_assignment"
+  """
+  repair_assignment_aggregate(
+    """distinct select on columns"""
+    distinct_on: [repair_assignment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [repair_assignment_order_by!]
+
+    """filter the rows returned"""
+    where: repair_assignment_bool_exp
+  ): repair_assignment_aggregate!
+
+  """
+  fetch data from the table: "technician"
+  """
+  technician(
+    """distinct select on columns"""
+    distinct_on: [technician_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [technician_order_by!]
+
+    """filter the rows returned"""
+    where: technician_bool_exp
+  ): [technician!]!
+
+  """
+  fetch aggregated fields from the table: "technician"
+  """
+  technician_aggregate(
+    """distinct select on columns"""
+    distinct_on: [technician_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [technician_order_by!]
+
+    """filter the rows returned"""
+    where: technician_bool_exp
+  ): technician_aggregate!
+
+  """fetch data from the table: "technician" using primary key columns"""
+  technician_by_pk(technician_id: Float!): technician
+}
+
+"""
+columns and relationships of "repair"
+"""
+type repair {
+  launch_date: String
+  name: String
+  notes: String
+
+  """An array relationship"""
+  repair_assignments(
+    """distinct select on columns"""
+    distinct_on: [repair_assignment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [repair_assignment_order_by!]
+
+    """filter the rows returned"""
+    where: repair_assignment_bool_exp
+  ): [repair_assignment!]!
+
+  """An aggregated array relationship"""
+  repair_assignments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [repair_assignment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [repair_assignment_order_by!]
+
+    """filter the rows returned"""
+    where: repair_assignment_bool_exp
+  ): repair_assignment_aggregate!
+  repair_id: Int
+}
+
+"""
+aggregated selection of "repair"
+"""
+type repair_aggregate {
+  aggregate: repair_aggregate_fields
+  nodes: [repair!]!
+}
+
+"""
+aggregate fields of "repair"
+"""
+type repair_aggregate_fields {
+  avg: repair_avg_fields
+  count(columns: [repair_select_column!], distinct: Boolean): Int
+  max: repair_max_fields
+  min: repair_min_fields
+  stddev: repair_stddev_fields
+  stddev_pop: repair_stddev_pop_fields
+  stddev_samp: repair_stddev_samp_fields
+  sum: repair_sum_fields
+  var_pop: repair_var_pop_fields
+  var_samp: repair_var_samp_fields
+  variance: repair_variance_fields
+}
+
+"""
+order by aggregate values of table "repair"
+"""
+input repair_aggregate_order_by {
+  avg: repair_avg_order_by
+  count: order_by
+  max: repair_max_order_by
+  min: repair_min_order_by
+  stddev: repair_stddev_order_by
+  stddev_pop: repair_stddev_pop_order_by
+  stddev_samp: repair_stddev_samp_order_by
+  sum: repair_sum_order_by
+  var_pop: repair_var_pop_order_by
+  var_samp: repair_var_samp_order_by
+  variance: repair_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "repair"
+"""
+input repair_arr_rel_insert_input {
+  data: [repair_insert_input!]!
+  on_conflict: repair_on_conflict
+}
+
+"""
+columns and relationships of "repair_assignment"
+"""
+type repair_assignment {
+  """An object relationship"""
+  machine: machine
+  machine_id: Int
+
+  """An object relationship"""
+  repair: repair
+  repair_id: Int
+
+  """An object relationship"""
+  technician: technician
+  technician_id: Int
+}
+
+"""
+aggregated selection of "repair_assignment"
+"""
+type repair_assignment_aggregate {
+  aggregate: repair_assignment_aggregate_fields
+  nodes: [repair_assignment!]!
+}
+
+"""
+aggregate fields of "repair_assignment"
+"""
+type repair_assignment_aggregate_fields {
+  avg: repair_assignment_avg_fields
+  count(columns: [repair_assignment_select_column!], distinct: Boolean): Int
+  max: repair_assignment_max_fields
+  min: repair_assignment_min_fields
+  stddev: repair_assignment_stddev_fields
+  stddev_pop: repair_assignment_stddev_pop_fields
+  stddev_samp: repair_assignment_stddev_samp_fields
+  sum: repair_assignment_sum_fields
+  var_pop: repair_assignment_var_pop_fields
+  var_samp: repair_assignment_var_samp_fields
+  variance: repair_assignment_variance_fields
+}
+
+"""
+order by aggregate values of table "repair_assignment"
+"""
+input repair_assignment_aggregate_order_by {
+  avg: repair_assignment_avg_order_by
+  count: order_by
+  max: repair_assignment_max_order_by
+  min: repair_assignment_min_order_by
+  stddev: repair_assignment_stddev_order_by
+  stddev_pop: repair_assignment_stddev_pop_order_by
+  stddev_samp: repair_assignment_stddev_samp_order_by
+  sum: repair_assignment_sum_order_by
+  var_pop: repair_assignment_var_pop_order_by
+  var_samp: repair_assignment_var_samp_order_by
+  variance: repair_assignment_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "repair_assignment"
+"""
+input repair_assignment_arr_rel_insert_input {
+  data: [repair_assignment_insert_input!]!
+  on_conflict: repair_assignment_on_conflict
+}
+
+"""aggregate avg on columns"""
+type repair_assignment_avg_fields {
+  machine_id: Float
+  repair_id: Float
+  technician_id: Float
+}
+
+"""
+order by avg() on columns of table "repair_assignment"
+"""
+input repair_assignment_avg_order_by {
+  machine_id: order_by
+  repair_id: order_by
+  technician_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "repair_assignment". All fields are combined with a logical 'AND'.
+"""
+input repair_assignment_bool_exp {
+  _and: [repair_assignment_bool_exp]
+  _not: repair_assignment_bool_exp
+  _or: [repair_assignment_bool_exp]
+  machine: machine_bool_exp
+  machine_id: Int_comparison_exp
+  repair: repair_bool_exp
+  repair_id: Int_comparison_exp
+  technician: technician_bool_exp
+  technician_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "repair_assignment"
+"""
+enum repair_assignment_constraint {
+  """unique or primary key constraint"""
+  idx_21010_sqlite_autoindex_repair_assignment_1
+}
+
+"""
+input type for incrementing integer columne in table "repair_assignment"
+"""
+input repair_assignment_inc_input {
+  machine_id: Int
+  repair_id: Int
+  technician_id: Int
+}
+
+"""
+input type for inserting data into table "repair_assignment"
+"""
+input repair_assignment_insert_input {
+  machine: machine_obj_rel_insert_input
+  machine_id: Int
+  repair: repair_obj_rel_insert_input
+  repair_id: Int
+  technician: technician_obj_rel_insert_input
+  technician_id: Int
+}
+
+"""aggregate max on columns"""
+type repair_assignment_max_fields {
+  machine_id: Int
+  repair_id: Int
+  technician_id: Int
+}
+
+"""
+order by max() on columns of table "repair_assignment"
+"""
+input repair_assignment_max_order_by {
+  machine_id: order_by
+  repair_id: order_by
+  technician_id: order_by
+}
+
+"""aggregate min on columns"""
+type repair_assignment_min_fields {
+  machine_id: Int
+  repair_id: Int
+  technician_id: Int
+}
+
+"""
+order by min() on columns of table "repair_assignment"
+"""
+input repair_assignment_min_order_by {
+  machine_id: order_by
+  repair_id: order_by
+  technician_id: order_by
+}
+
+"""
+response of any mutation on the table "repair_assignment"
+"""
+type repair_assignment_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [repair_assignment!]!
+}
+
+"""
+input type for inserting object relation for remote table "repair_assignment"
+"""
+input repair_assignment_obj_rel_insert_input {
+  data: repair_assignment_insert_input!
+  on_conflict: repair_assignment_on_conflict
+}
+
+"""
+on conflict condition type for table "repair_assignment"
+"""
+input repair_assignment_on_conflict {
+  constraint: repair_assignment_constraint!
+  update_columns: [repair_assignment_update_column!]!
+  where: repair_assignment_bool_exp
+}
+
+"""
+ordering options when selecting data from "repair_assignment"
+"""
+input repair_assignment_order_by {
+  machine: machine_order_by
+  machine_id: order_by
+  repair: repair_order_by
+  repair_id: order_by
+  technician: technician_order_by
+  technician_id: order_by
+}
+
+"""
+select columns of table "repair_assignment"
+"""
+enum repair_assignment_select_column {
+  """column name"""
+  machine_id
+
+  """column name"""
+  repair_id
+
+  """column name"""
+  technician_id
+}
+
+"""
+input type for updating data in table "repair_assignment"
+"""
+input repair_assignment_set_input {
+  machine_id: Int
+  repair_id: Int
+  technician_id: Int
+}
+
+"""aggregate stddev on columns"""
+type repair_assignment_stddev_fields {
+  machine_id: Float
+  repair_id: Float
+  technician_id: Float
+}
+
+"""
+order by stddev() on columns of table "repair_assignment"
+"""
+input repair_assignment_stddev_order_by {
+  machine_id: order_by
+  repair_id: order_by
+  technician_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type repair_assignment_stddev_pop_fields {
+  machine_id: Float
+  repair_id: Float
+  technician_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "repair_assignment"
+"""
+input repair_assignment_stddev_pop_order_by {
+  machine_id: order_by
+  repair_id: order_by
+  technician_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type repair_assignment_stddev_samp_fields {
+  machine_id: Float
+  repair_id: Float
+  technician_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "repair_assignment"
+"""
+input repair_assignment_stddev_samp_order_by {
+  machine_id: order_by
+  repair_id: order_by
+  technician_id: order_by
+}
+
+"""aggregate sum on columns"""
+type repair_assignment_sum_fields {
+  machine_id: Int
+  repair_id: Int
+  technician_id: Int
+}
+
+"""
+order by sum() on columns of table "repair_assignment"
+"""
+input repair_assignment_sum_order_by {
+  machine_id: order_by
+  repair_id: order_by
+  technician_id: order_by
+}
+
+"""
+update columns of table "repair_assignment"
+"""
+enum repair_assignment_update_column {
+  """column name"""
+  machine_id
+
+  """column name"""
+  repair_id
+
+  """column name"""
+  technician_id
+}
+
+"""aggregate var_pop on columns"""
+type repair_assignment_var_pop_fields {
+  machine_id: Float
+  repair_id: Float
+  technician_id: Float
+}
+
+"""
+order by var_pop() on columns of table "repair_assignment"
+"""
+input repair_assignment_var_pop_order_by {
+  machine_id: order_by
+  repair_id: order_by
+  technician_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type repair_assignment_var_samp_fields {
+  machine_id: Float
+  repair_id: Float
+  technician_id: Float
+}
+
+"""
+order by var_samp() on columns of table "repair_assignment"
+"""
+input repair_assignment_var_samp_order_by {
+  machine_id: order_by
+  repair_id: order_by
+  technician_id: order_by
+}
+
+"""aggregate variance on columns"""
+type repair_assignment_variance_fields {
+  machine_id: Float
+  repair_id: Float
+  technician_id: Float
+}
+
+"""
+order by variance() on columns of table "repair_assignment"
+"""
+input repair_assignment_variance_order_by {
+  machine_id: order_by
+  repair_id: order_by
+  technician_id: order_by
+}
+
+"""aggregate avg on columns"""
+type repair_avg_fields {
+  repair_id: Float
+}
+
+"""
+order by avg() on columns of table "repair"
+"""
+input repair_avg_order_by {
+  repair_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "repair". All fields are combined with a logical 'AND'.
+"""
+input repair_bool_exp {
+  _and: [repair_bool_exp]
+  _not: repair_bool_exp
+  _or: [repair_bool_exp]
+  launch_date: String_comparison_exp
+  name: String_comparison_exp
+  notes: String_comparison_exp
+  repair_assignments: repair_assignment_bool_exp
+  repair_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "repair"
+"""
+enum repair_constraint {
+  """unique or primary key constraint"""
+  idx_20992_sqlite_autoindex_repair_1
+}
+
+"""
+input type for incrementing integer columne in table "repair"
+"""
+input repair_inc_input {
+  repair_id: Int
+}
+
+"""
+input type for inserting data into table "repair"
+"""
+input repair_insert_input {
+  launch_date: String
+  name: String
+  notes: String
+  repair_assignments: repair_assignment_arr_rel_insert_input
+  repair_id: Int
+}
+
+"""aggregate max on columns"""
+type repair_max_fields {
+  launch_date: String
+  name: String
+  notes: String
+  repair_id: Int
+}
+
+"""
+order by max() on columns of table "repair"
+"""
+input repair_max_order_by {
+  launch_date: order_by
+  name: order_by
+  notes: order_by
+  repair_id: order_by
+}
+
+"""aggregate min on columns"""
+type repair_min_fields {
+  launch_date: String
+  name: String
+  notes: String
+  repair_id: Int
+}
+
+"""
+order by min() on columns of table "repair"
+"""
+input repair_min_order_by {
+  launch_date: order_by
+  name: order_by
+  notes: order_by
+  repair_id: order_by
+}
+
+"""
+response of any mutation on the table "repair"
+"""
+type repair_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [repair!]!
+}
+
+"""
+input type for inserting object relation for remote table "repair"
+"""
+input repair_obj_rel_insert_input {
+  data: repair_insert_input!
+  on_conflict: repair_on_conflict
+}
+
+"""
+on conflict condition type for table "repair"
+"""
+input repair_on_conflict {
+  constraint: repair_constraint!
+  update_columns: [repair_update_column!]!
+  where: repair_bool_exp
+}
+
+"""
+ordering options when selecting data from "repair"
+"""
+input repair_order_by {
+  launch_date: order_by
+  name: order_by
+  notes: order_by
+  repair_assignments_aggregate: repair_assignment_aggregate_order_by
+  repair_id: order_by
+}
+
+"""
+select columns of table "repair"
+"""
+enum repair_select_column {
+  """column name"""
+  launch_date
+
+  """column name"""
+  name
+
+  """column name"""
+  notes
+
+  """column name"""
+  repair_id
+}
+
+"""
+input type for updating data in table "repair"
+"""
+input repair_set_input {
+  launch_date: String
+  name: String
+  notes: String
+  repair_id: Int
+}
+
+"""aggregate stddev on columns"""
+type repair_stddev_fields {
+  repair_id: Float
+}
+
+"""
+order by stddev() on columns of table "repair"
+"""
+input repair_stddev_order_by {
+  repair_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type repair_stddev_pop_fields {
+  repair_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "repair"
+"""
+input repair_stddev_pop_order_by {
+  repair_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type repair_stddev_samp_fields {
+  repair_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "repair"
+"""
+input repair_stddev_samp_order_by {
+  repair_id: order_by
+}
+
+"""aggregate sum on columns"""
+type repair_sum_fields {
+  repair_id: Int
+}
+
+"""
+order by sum() on columns of table "repair"
+"""
+input repair_sum_order_by {
+  repair_id: order_by
+}
+
+"""
+update columns of table "repair"
+"""
+enum repair_update_column {
+  """column name"""
+  launch_date
+
+  """column name"""
+  name
+
+  """column name"""
+  notes
+
+  """column name"""
+  repair_id
+}
+
+"""aggregate var_pop on columns"""
+type repair_var_pop_fields {
+  repair_id: Float
+}
+
+"""
+order by var_pop() on columns of table "repair"
+"""
+input repair_var_pop_order_by {
+  repair_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type repair_var_samp_fields {
+  repair_id: Float
+}
+
+"""
+order by var_samp() on columns of table "repair"
+"""
+input repair_var_samp_order_by {
+  repair_id: order_by
+}
+
+"""aggregate variance on columns"""
+type repair_variance_fields {
+  repair_id: Float
+}
+
+"""
+order by variance() on columns of table "repair"
+"""
+input repair_variance_order_by {
+  repair_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "machine"
+  """
+  machine(
+    """distinct select on columns"""
+    distinct_on: [machine_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [machine_order_by!]
+
+    """filter the rows returned"""
+    where: machine_bool_exp
+  ): [machine!]!
+
+  """
+  fetch aggregated fields from the table: "machine"
+  """
+  machine_aggregate(
+    """distinct select on columns"""
+    distinct_on: [machine_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [machine_order_by!]
+
+    """filter the rows returned"""
+    where: machine_bool_exp
+  ): machine_aggregate!
+
+  """
+  fetch data from the table: "repair"
+  """
+  repair(
+    """distinct select on columns"""
+    distinct_on: [repair_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [repair_order_by!]
+
+    """filter the rows returned"""
+    where: repair_bool_exp
+  ): [repair!]!
+
+  """
+  fetch aggregated fields from the table: "repair"
+  """
+  repair_aggregate(
+    """distinct select on columns"""
+    distinct_on: [repair_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [repair_order_by!]
+
+    """filter the rows returned"""
+    where: repair_bool_exp
+  ): repair_aggregate!
+
+  """
+  fetch data from the table: "repair_assignment"
+  """
+  repair_assignment(
+    """distinct select on columns"""
+    distinct_on: [repair_assignment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [repair_assignment_order_by!]
+
+    """filter the rows returned"""
+    where: repair_assignment_bool_exp
+  ): [repair_assignment!]!
+
+  """
+  fetch aggregated fields from the table: "repair_assignment"
+  """
+  repair_assignment_aggregate(
+    """distinct select on columns"""
+    distinct_on: [repair_assignment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [repair_assignment_order_by!]
+
+    """filter the rows returned"""
+    where: repair_assignment_bool_exp
+  ): repair_assignment_aggregate!
+
+  """
+  fetch data from the table: "technician"
+  """
+  technician(
+    """distinct select on columns"""
+    distinct_on: [technician_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [technician_order_by!]
+
+    """filter the rows returned"""
+    where: technician_bool_exp
+  ): [technician!]!
+
+  """
+  fetch aggregated fields from the table: "technician"
+  """
+  technician_aggregate(
+    """distinct select on columns"""
+    distinct_on: [technician_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [technician_order_by!]
+
+    """filter the rows returned"""
+    where: technician_bool_exp
+  ): technician_aggregate!
+
+  """fetch data from the table: "technician" using primary key columns"""
+  technician_by_pk(technician_id: Float!): technician
+}
+
+"""
+columns and relationships of "technician"
+"""
+type technician {
+  age: Int
+  name: String
+
+  """An array relationship"""
+  repair_assignments(
+    """distinct select on columns"""
+    distinct_on: [repair_assignment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [repair_assignment_order_by!]
+
+    """filter the rows returned"""
+    where: repair_assignment_bool_exp
+  ): [repair_assignment!]!
+
+  """An aggregated array relationship"""
+  repair_assignments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [repair_assignment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [repair_assignment_order_by!]
+
+    """filter the rows returned"""
+    where: repair_assignment_bool_exp
+  ): repair_assignment_aggregate!
+  starting_year: Float
+  team: String
+  technician_id: Float!
+}
+
+"""
+aggregated selection of "technician"
+"""
+type technician_aggregate {
+  aggregate: technician_aggregate_fields
+  nodes: [technician!]!
+}
+
+"""
+aggregate fields of "technician"
+"""
+type technician_aggregate_fields {
+  avg: technician_avg_fields
+  count(columns: [technician_select_column!], distinct: Boolean): Int
+  max: technician_max_fields
+  min: technician_min_fields
+  stddev: technician_stddev_fields
+  stddev_pop: technician_stddev_pop_fields
+  stddev_samp: technician_stddev_samp_fields
+  sum: technician_sum_fields
+  var_pop: technician_var_pop_fields
+  var_samp: technician_var_samp_fields
+  variance: technician_variance_fields
+}
+
+"""
+order by aggregate values of table "technician"
+"""
+input technician_aggregate_order_by {
+  avg: technician_avg_order_by
+  count: order_by
+  max: technician_max_order_by
+  min: technician_min_order_by
+  stddev: technician_stddev_order_by
+  stddev_pop: technician_stddev_pop_order_by
+  stddev_samp: technician_stddev_samp_order_by
+  sum: technician_sum_order_by
+  var_pop: technician_var_pop_order_by
+  var_samp: technician_var_samp_order_by
+  variance: technician_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "technician"
+"""
+input technician_arr_rel_insert_input {
+  data: [technician_insert_input!]!
+  on_conflict: technician_on_conflict
+}
+
+"""aggregate avg on columns"""
+type technician_avg_fields {
+  age: Float
+  starting_year: Float
+  technician_id: Float
+}
+
+"""
+order by avg() on columns of table "technician"
+"""
+input technician_avg_order_by {
+  age: order_by
+  starting_year: order_by
+  technician_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "technician". All fields are combined with a logical 'AND'.
+"""
+input technician_bool_exp {
+  _and: [technician_bool_exp]
+  _not: technician_bool_exp
+  _or: [technician_bool_exp]
+  age: Int_comparison_exp
+  name: String_comparison_exp
+  repair_assignments: repair_assignment_bool_exp
+  starting_year: Float_comparison_exp
+  team: String_comparison_exp
+  technician_id: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "technician"
+"""
+enum technician_constraint {
+  """unique or primary key constraint"""
+  idx_21004_sqlite_autoindex_technician_1
+}
+
+"""
+input type for incrementing integer columne in table "technician"
+"""
+input technician_inc_input {
+  age: Int
+}
+
+"""
+input type for inserting data into table "technician"
+"""
+input technician_insert_input {
+  age: Int
+  name: String
+  repair_assignments: repair_assignment_arr_rel_insert_input
+  starting_year: Float
+  team: String
+  technician_id: Float
+}
+
+"""aggregate max on columns"""
+type technician_max_fields {
+  age: Int
+  name: String
+  starting_year: Float
+  team: String
+  technician_id: Float
+}
+
+"""
+order by max() on columns of table "technician"
+"""
+input technician_max_order_by {
+  age: order_by
+  name: order_by
+  starting_year: order_by
+  team: order_by
+  technician_id: order_by
+}
+
+"""aggregate min on columns"""
+type technician_min_fields {
+  age: Int
+  name: String
+  starting_year: Float
+  team: String
+  technician_id: Float
+}
+
+"""
+order by min() on columns of table "technician"
+"""
+input technician_min_order_by {
+  age: order_by
+  name: order_by
+  starting_year: order_by
+  team: order_by
+  technician_id: order_by
+}
+
+"""
+response of any mutation on the table "technician"
+"""
+type technician_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [technician!]!
+}
+
+"""
+input type for inserting object relation for remote table "technician"
+"""
+input technician_obj_rel_insert_input {
+  data: technician_insert_input!
+  on_conflict: technician_on_conflict
+}
+
+"""
+on conflict condition type for table "technician"
+"""
+input technician_on_conflict {
+  constraint: technician_constraint!
+  update_columns: [technician_update_column!]!
+  where: technician_bool_exp
+}
+
+"""
+ordering options when selecting data from "technician"
+"""
+input technician_order_by {
+  age: order_by
+  name: order_by
+  repair_assignments_aggregate: repair_assignment_aggregate_order_by
+  starting_year: order_by
+  team: order_by
+  technician_id: order_by
+}
+
+"""
+select columns of table "technician"
+"""
+enum technician_select_column {
+  """column name"""
+  age
+
+  """column name"""
+  name
+
+  """column name"""
+  starting_year
+
+  """column name"""
+  team
+
+  """column name"""
+  technician_id
+}
+
+"""
+input type for updating data in table "technician"
+"""
+input technician_set_input {
+  age: Int
+  name: String
+  starting_year: Float
+  team: String
+  technician_id: Float
+}
+
+"""aggregate stddev on columns"""
+type technician_stddev_fields {
+  age: Float
+  starting_year: Float
+  technician_id: Float
+}
+
+"""
+order by stddev() on columns of table "technician"
+"""
+input technician_stddev_order_by {
+  age: order_by
+  starting_year: order_by
+  technician_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type technician_stddev_pop_fields {
+  age: Float
+  starting_year: Float
+  technician_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "technician"
+"""
+input technician_stddev_pop_order_by {
+  age: order_by
+  starting_year: order_by
+  technician_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type technician_stddev_samp_fields {
+  age: Float
+  starting_year: Float
+  technician_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "technician"
+"""
+input technician_stddev_samp_order_by {
+  age: order_by
+  starting_year: order_by
+  technician_id: order_by
+}
+
+"""aggregate sum on columns"""
+type technician_sum_fields {
+  age: Int
+  starting_year: Float
+  technician_id: Float
+}
+
+"""
+order by sum() on columns of table "technician"
+"""
+input technician_sum_order_by {
+  age: order_by
+  starting_year: order_by
+  technician_id: order_by
+}
+
+"""
+update columns of table "technician"
+"""
+enum technician_update_column {
+  """column name"""
+  age
+
+  """column name"""
+  name
+
+  """column name"""
+  starting_year
+
+  """column name"""
+  team
+
+  """column name"""
+  technician_id
+}
+
+"""aggregate var_pop on columns"""
+type technician_var_pop_fields {
+  age: Float
+  starting_year: Float
+  technician_id: Float
+}
+
+"""
+order by var_pop() on columns of table "technician"
+"""
+input technician_var_pop_order_by {
+  age: order_by
+  starting_year: order_by
+  technician_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type technician_var_samp_fields {
+  age: Float
+  starting_year: Float
+  technician_id: Float
+}
+
+"""
+order by var_samp() on columns of table "technician"
+"""
+input technician_var_samp_order_by {
+  age: order_by
+  starting_year: order_by
+  technician_id: order_by
+}
+
+"""aggregate variance on columns"""
+type technician_variance_fields {
+  age: Float
+  starting_year: Float
+  technician_id: Float
+}
+
+"""
+order by variance() on columns of table "technician"
+"""
+input technician_variance_order_by {
+  age: order_by
+  starting_year: order_by
+  technician_id: order_by
+}

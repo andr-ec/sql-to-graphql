@@ -57,7 +57,7 @@ struct ParseSQLtoGraphQL: ParsableCommand {
     func process(dataset: SpiderDataset, databases: [String: Database]) throws {
         // TODO load databases/ datasets only when needed one at a time
         let databasesResults = dataset.schemaToExamples
-            .sorted(by: { $0.key > $1.key})
+            .sorted(by: { $0.key < $1.key})
             .flatMap({ [self.process($0.key, database: databases[$0.key]!, exampleGroup: $0.value)]})
         
         let successfulResults = databasesResults

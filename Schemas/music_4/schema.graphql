@@ -1,0 +1,1626 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "artist"
+"""
+type artist {
+  age: Int
+  artist: String
+  artist_id: Int
+  famous_release_date: String
+  famous_title: String
+
+  """An array relationship"""
+  volumes(
+    """distinct select on columns"""
+    distinct_on: [volume_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [volume_order_by!]
+
+    """filter the rows returned"""
+    where: volume_bool_exp
+  ): [volume!]!
+
+  """An aggregated array relationship"""
+  volumes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [volume_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [volume_order_by!]
+
+    """filter the rows returned"""
+    where: volume_bool_exp
+  ): volume_aggregate!
+}
+
+"""
+aggregated selection of "artist"
+"""
+type artist_aggregate {
+  aggregate: artist_aggregate_fields
+  nodes: [artist!]!
+}
+
+"""
+aggregate fields of "artist"
+"""
+type artist_aggregate_fields {
+  avg: artist_avg_fields
+  count(columns: [artist_select_column!], distinct: Boolean): Int
+  max: artist_max_fields
+  min: artist_min_fields
+  stddev: artist_stddev_fields
+  stddev_pop: artist_stddev_pop_fields
+  stddev_samp: artist_stddev_samp_fields
+  sum: artist_sum_fields
+  var_pop: artist_var_pop_fields
+  var_samp: artist_var_samp_fields
+  variance: artist_variance_fields
+}
+
+"""
+order by aggregate values of table "artist"
+"""
+input artist_aggregate_order_by {
+  avg: artist_avg_order_by
+  count: order_by
+  max: artist_max_order_by
+  min: artist_min_order_by
+  stddev: artist_stddev_order_by
+  stddev_pop: artist_stddev_pop_order_by
+  stddev_samp: artist_stddev_samp_order_by
+  sum: artist_sum_order_by
+  var_pop: artist_var_pop_order_by
+  var_samp: artist_var_samp_order_by
+  variance: artist_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "artist"
+"""
+input artist_arr_rel_insert_input {
+  data: [artist_insert_input!]!
+  on_conflict: artist_on_conflict
+}
+
+"""aggregate avg on columns"""
+type artist_avg_fields {
+  age: Float
+  artist_id: Float
+}
+
+"""
+order by avg() on columns of table "artist"
+"""
+input artist_avg_order_by {
+  age: order_by
+  artist_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "artist". All fields are combined with a logical 'AND'.
+"""
+input artist_bool_exp {
+  _and: [artist_bool_exp]
+  _not: artist_bool_exp
+  _or: [artist_bool_exp]
+  age: Int_comparison_exp
+  artist: String_comparison_exp
+  artist_id: Int_comparison_exp
+  famous_release_date: String_comparison_exp
+  famous_title: String_comparison_exp
+  volumes: volume_bool_exp
+}
+
+"""
+unique or primary key constraints on table "artist"
+"""
+enum artist_constraint {
+  """unique or primary key constraint"""
+  idx_24223_sqlite_autoindex_artist_1
+}
+
+"""
+input type for incrementing integer columne in table "artist"
+"""
+input artist_inc_input {
+  age: Int
+  artist_id: Int
+}
+
+"""
+input type for inserting data into table "artist"
+"""
+input artist_insert_input {
+  age: Int
+  artist: String
+  artist_id: Int
+  famous_release_date: String
+  famous_title: String
+  volumes: volume_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type artist_max_fields {
+  age: Int
+  artist: String
+  artist_id: Int
+  famous_release_date: String
+  famous_title: String
+}
+
+"""
+order by max() on columns of table "artist"
+"""
+input artist_max_order_by {
+  age: order_by
+  artist: order_by
+  artist_id: order_by
+  famous_release_date: order_by
+  famous_title: order_by
+}
+
+"""aggregate min on columns"""
+type artist_min_fields {
+  age: Int
+  artist: String
+  artist_id: Int
+  famous_release_date: String
+  famous_title: String
+}
+
+"""
+order by min() on columns of table "artist"
+"""
+input artist_min_order_by {
+  age: order_by
+  artist: order_by
+  artist_id: order_by
+  famous_release_date: order_by
+  famous_title: order_by
+}
+
+"""
+response of any mutation on the table "artist"
+"""
+type artist_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [artist!]!
+}
+
+"""
+input type for inserting object relation for remote table "artist"
+"""
+input artist_obj_rel_insert_input {
+  data: artist_insert_input!
+  on_conflict: artist_on_conflict
+}
+
+"""
+on conflict condition type for table "artist"
+"""
+input artist_on_conflict {
+  constraint: artist_constraint!
+  update_columns: [artist_update_column!]!
+  where: artist_bool_exp
+}
+
+"""
+ordering options when selecting data from "artist"
+"""
+input artist_order_by {
+  age: order_by
+  artist: order_by
+  artist_id: order_by
+  famous_release_date: order_by
+  famous_title: order_by
+  volumes_aggregate: volume_aggregate_order_by
+}
+
+"""
+select columns of table "artist"
+"""
+enum artist_select_column {
+  """column name"""
+  age
+
+  """column name"""
+  artist
+
+  """column name"""
+  artist_id
+
+  """column name"""
+  famous_release_date
+
+  """column name"""
+  famous_title
+}
+
+"""
+input type for updating data in table "artist"
+"""
+input artist_set_input {
+  age: Int
+  artist: String
+  artist_id: Int
+  famous_release_date: String
+  famous_title: String
+}
+
+"""aggregate stddev on columns"""
+type artist_stddev_fields {
+  age: Float
+  artist_id: Float
+}
+
+"""
+order by stddev() on columns of table "artist"
+"""
+input artist_stddev_order_by {
+  age: order_by
+  artist_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type artist_stddev_pop_fields {
+  age: Float
+  artist_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "artist"
+"""
+input artist_stddev_pop_order_by {
+  age: order_by
+  artist_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type artist_stddev_samp_fields {
+  age: Float
+  artist_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "artist"
+"""
+input artist_stddev_samp_order_by {
+  age: order_by
+  artist_id: order_by
+}
+
+"""aggregate sum on columns"""
+type artist_sum_fields {
+  age: Int
+  artist_id: Int
+}
+
+"""
+order by sum() on columns of table "artist"
+"""
+input artist_sum_order_by {
+  age: order_by
+  artist_id: order_by
+}
+
+"""
+update columns of table "artist"
+"""
+enum artist_update_column {
+  """column name"""
+  age
+
+  """column name"""
+  artist
+
+  """column name"""
+  artist_id
+
+  """column name"""
+  famous_release_date
+
+  """column name"""
+  famous_title
+}
+
+"""aggregate var_pop on columns"""
+type artist_var_pop_fields {
+  age: Float
+  artist_id: Float
+}
+
+"""
+order by var_pop() on columns of table "artist"
+"""
+input artist_var_pop_order_by {
+  age: order_by
+  artist_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type artist_var_samp_fields {
+  age: Float
+  artist_id: Float
+}
+
+"""
+order by var_samp() on columns of table "artist"
+"""
+input artist_var_samp_order_by {
+  age: order_by
+  artist_id: order_by
+}
+
+"""aggregate variance on columns"""
+type artist_variance_fields {
+  age: Float
+  artist_id: Float
+}
+
+"""
+order by variance() on columns of table "artist"
+"""
+input artist_variance_order_by {
+  age: order_by
+  artist_id: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "music_festival"
+"""
+type music_festival {
+  category: String
+  date_of_ceremony: String
+  id: Int
+  music_festival: String
+  result: String
+  volume: Int
+
+  """An object relationship"""
+  volumeByVolume: volume
+}
+
+"""
+aggregated selection of "music_festival"
+"""
+type music_festival_aggregate {
+  aggregate: music_festival_aggregate_fields
+  nodes: [music_festival!]!
+}
+
+"""
+aggregate fields of "music_festival"
+"""
+type music_festival_aggregate_fields {
+  avg: music_festival_avg_fields
+  count(columns: [music_festival_select_column!], distinct: Boolean): Int
+  max: music_festival_max_fields
+  min: music_festival_min_fields
+  stddev: music_festival_stddev_fields
+  stddev_pop: music_festival_stddev_pop_fields
+  stddev_samp: music_festival_stddev_samp_fields
+  sum: music_festival_sum_fields
+  var_pop: music_festival_var_pop_fields
+  var_samp: music_festival_var_samp_fields
+  variance: music_festival_variance_fields
+}
+
+"""
+order by aggregate values of table "music_festival"
+"""
+input music_festival_aggregate_order_by {
+  avg: music_festival_avg_order_by
+  count: order_by
+  max: music_festival_max_order_by
+  min: music_festival_min_order_by
+  stddev: music_festival_stddev_order_by
+  stddev_pop: music_festival_stddev_pop_order_by
+  stddev_samp: music_festival_stddev_samp_order_by
+  sum: music_festival_sum_order_by
+  var_pop: music_festival_var_pop_order_by
+  var_samp: music_festival_var_samp_order_by
+  variance: music_festival_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "music_festival"
+"""
+input music_festival_arr_rel_insert_input {
+  data: [music_festival_insert_input!]!
+  on_conflict: music_festival_on_conflict
+}
+
+"""aggregate avg on columns"""
+type music_festival_avg_fields {
+  id: Float
+  volume: Float
+}
+
+"""
+order by avg() on columns of table "music_festival"
+"""
+input music_festival_avg_order_by {
+  id: order_by
+  volume: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "music_festival". All fields are combined with a logical 'AND'.
+"""
+input music_festival_bool_exp {
+  _and: [music_festival_bool_exp]
+  _not: music_festival_bool_exp
+  _or: [music_festival_bool_exp]
+  category: String_comparison_exp
+  date_of_ceremony: String_comparison_exp
+  id: Int_comparison_exp
+  music_festival: String_comparison_exp
+  result: String_comparison_exp
+  volume: Int_comparison_exp
+  volumeByVolume: volume_bool_exp
+}
+
+"""
+unique or primary key constraints on table "music_festival"
+"""
+enum music_festival_constraint {
+  """unique or primary key constraint"""
+  idx_24235_sqlite_autoindex_music_festival_1
+}
+
+"""
+input type for incrementing integer columne in table "music_festival"
+"""
+input music_festival_inc_input {
+  id: Int
+  volume: Int
+}
+
+"""
+input type for inserting data into table "music_festival"
+"""
+input music_festival_insert_input {
+  category: String
+  date_of_ceremony: String
+  id: Int
+  music_festival: String
+  result: String
+  volume: Int
+  volumeByVolume: volume_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type music_festival_max_fields {
+  category: String
+  date_of_ceremony: String
+  id: Int
+  music_festival: String
+  result: String
+  volume: Int
+}
+
+"""
+order by max() on columns of table "music_festival"
+"""
+input music_festival_max_order_by {
+  category: order_by
+  date_of_ceremony: order_by
+  id: order_by
+  music_festival: order_by
+  result: order_by
+  volume: order_by
+}
+
+"""aggregate min on columns"""
+type music_festival_min_fields {
+  category: String
+  date_of_ceremony: String
+  id: Int
+  music_festival: String
+  result: String
+  volume: Int
+}
+
+"""
+order by min() on columns of table "music_festival"
+"""
+input music_festival_min_order_by {
+  category: order_by
+  date_of_ceremony: order_by
+  id: order_by
+  music_festival: order_by
+  result: order_by
+  volume: order_by
+}
+
+"""
+response of any mutation on the table "music_festival"
+"""
+type music_festival_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [music_festival!]!
+}
+
+"""
+input type for inserting object relation for remote table "music_festival"
+"""
+input music_festival_obj_rel_insert_input {
+  data: music_festival_insert_input!
+  on_conflict: music_festival_on_conflict
+}
+
+"""
+on conflict condition type for table "music_festival"
+"""
+input music_festival_on_conflict {
+  constraint: music_festival_constraint!
+  update_columns: [music_festival_update_column!]!
+  where: music_festival_bool_exp
+}
+
+"""
+ordering options when selecting data from "music_festival"
+"""
+input music_festival_order_by {
+  category: order_by
+  date_of_ceremony: order_by
+  id: order_by
+  music_festival: order_by
+  result: order_by
+  volume: order_by
+  volumeByVolume: volume_order_by
+}
+
+"""
+select columns of table "music_festival"
+"""
+enum music_festival_select_column {
+  """column name"""
+  category
+
+  """column name"""
+  date_of_ceremony
+
+  """column name"""
+  id
+
+  """column name"""
+  music_festival
+
+  """column name"""
+  result
+
+  """column name"""
+  volume
+}
+
+"""
+input type for updating data in table "music_festival"
+"""
+input music_festival_set_input {
+  category: String
+  date_of_ceremony: String
+  id: Int
+  music_festival: String
+  result: String
+  volume: Int
+}
+
+"""aggregate stddev on columns"""
+type music_festival_stddev_fields {
+  id: Float
+  volume: Float
+}
+
+"""
+order by stddev() on columns of table "music_festival"
+"""
+input music_festival_stddev_order_by {
+  id: order_by
+  volume: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type music_festival_stddev_pop_fields {
+  id: Float
+  volume: Float
+}
+
+"""
+order by stddev_pop() on columns of table "music_festival"
+"""
+input music_festival_stddev_pop_order_by {
+  id: order_by
+  volume: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type music_festival_stddev_samp_fields {
+  id: Float
+  volume: Float
+}
+
+"""
+order by stddev_samp() on columns of table "music_festival"
+"""
+input music_festival_stddev_samp_order_by {
+  id: order_by
+  volume: order_by
+}
+
+"""aggregate sum on columns"""
+type music_festival_sum_fields {
+  id: Int
+  volume: Int
+}
+
+"""
+order by sum() on columns of table "music_festival"
+"""
+input music_festival_sum_order_by {
+  id: order_by
+  volume: order_by
+}
+
+"""
+update columns of table "music_festival"
+"""
+enum music_festival_update_column {
+  """column name"""
+  category
+
+  """column name"""
+  date_of_ceremony
+
+  """column name"""
+  id
+
+  """column name"""
+  music_festival
+
+  """column name"""
+  result
+
+  """column name"""
+  volume
+}
+
+"""aggregate var_pop on columns"""
+type music_festival_var_pop_fields {
+  id: Float
+  volume: Float
+}
+
+"""
+order by var_pop() on columns of table "music_festival"
+"""
+input music_festival_var_pop_order_by {
+  id: order_by
+  volume: order_by
+}
+
+"""aggregate var_samp on columns"""
+type music_festival_var_samp_fields {
+  id: Float
+  volume: Float
+}
+
+"""
+order by var_samp() on columns of table "music_festival"
+"""
+input music_festival_var_samp_order_by {
+  id: order_by
+  volume: order_by
+}
+
+"""aggregate variance on columns"""
+type music_festival_variance_fields {
+  id: Float
+  volume: Float
+}
+
+"""
+order by variance() on columns of table "music_festival"
+"""
+input music_festival_variance_order_by {
+  id: order_by
+  volume: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "artist"
+  """
+  delete_artist(
+    """filter the rows which have to be deleted"""
+    where: artist_bool_exp!
+  ): artist_mutation_response
+
+  """
+  delete data from the table: "music_festival"
+  """
+  delete_music_festival(
+    """filter the rows which have to be deleted"""
+    where: music_festival_bool_exp!
+  ): music_festival_mutation_response
+
+  """
+  delete data from the table: "volume"
+  """
+  delete_volume(
+    """filter the rows which have to be deleted"""
+    where: volume_bool_exp!
+  ): volume_mutation_response
+
+  """
+  insert data into the table: "artist"
+  """
+  insert_artist(
+    """the rows to be inserted"""
+    objects: [artist_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: artist_on_conflict
+  ): artist_mutation_response
+
+  """
+  insert data into the table: "music_festival"
+  """
+  insert_music_festival(
+    """the rows to be inserted"""
+    objects: [music_festival_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: music_festival_on_conflict
+  ): music_festival_mutation_response
+
+  """
+  insert data into the table: "volume"
+  """
+  insert_volume(
+    """the rows to be inserted"""
+    objects: [volume_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: volume_on_conflict
+  ): volume_mutation_response
+
+  """
+  update data of the table: "artist"
+  """
+  update_artist(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: artist_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: artist_set_input
+
+    """filter the rows which have to be updated"""
+    where: artist_bool_exp!
+  ): artist_mutation_response
+
+  """
+  update data of the table: "music_festival"
+  """
+  update_music_festival(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: music_festival_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: music_festival_set_input
+
+    """filter the rows which have to be updated"""
+    where: music_festival_bool_exp!
+  ): music_festival_mutation_response
+
+  """
+  update data of the table: "volume"
+  """
+  update_volume(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: volume_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: volume_set_input
+
+    """filter the rows which have to be updated"""
+    where: volume_bool_exp!
+  ): volume_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "artist"
+  """
+  artist(
+    """distinct select on columns"""
+    distinct_on: [artist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [artist_order_by!]
+
+    """filter the rows returned"""
+    where: artist_bool_exp
+  ): [artist!]!
+
+  """
+  fetch aggregated fields from the table: "artist"
+  """
+  artist_aggregate(
+    """distinct select on columns"""
+    distinct_on: [artist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [artist_order_by!]
+
+    """filter the rows returned"""
+    where: artist_bool_exp
+  ): artist_aggregate!
+
+  """
+  fetch data from the table: "music_festival"
+  """
+  music_festival(
+    """distinct select on columns"""
+    distinct_on: [music_festival_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [music_festival_order_by!]
+
+    """filter the rows returned"""
+    where: music_festival_bool_exp
+  ): [music_festival!]!
+
+  """
+  fetch aggregated fields from the table: "music_festival"
+  """
+  music_festival_aggregate(
+    """distinct select on columns"""
+    distinct_on: [music_festival_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [music_festival_order_by!]
+
+    """filter the rows returned"""
+    where: music_festival_bool_exp
+  ): music_festival_aggregate!
+
+  """
+  fetch data from the table: "volume"
+  """
+  volume(
+    """distinct select on columns"""
+    distinct_on: [volume_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [volume_order_by!]
+
+    """filter the rows returned"""
+    where: volume_bool_exp
+  ): [volume!]!
+
+  """
+  fetch aggregated fields from the table: "volume"
+  """
+  volume_aggregate(
+    """distinct select on columns"""
+    distinct_on: [volume_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [volume_order_by!]
+
+    """filter the rows returned"""
+    where: volume_bool_exp
+  ): volume_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "artist"
+  """
+  artist(
+    """distinct select on columns"""
+    distinct_on: [artist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [artist_order_by!]
+
+    """filter the rows returned"""
+    where: artist_bool_exp
+  ): [artist!]!
+
+  """
+  fetch aggregated fields from the table: "artist"
+  """
+  artist_aggregate(
+    """distinct select on columns"""
+    distinct_on: [artist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [artist_order_by!]
+
+    """filter the rows returned"""
+    where: artist_bool_exp
+  ): artist_aggregate!
+
+  """
+  fetch data from the table: "music_festival"
+  """
+  music_festival(
+    """distinct select on columns"""
+    distinct_on: [music_festival_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [music_festival_order_by!]
+
+    """filter the rows returned"""
+    where: music_festival_bool_exp
+  ): [music_festival!]!
+
+  """
+  fetch aggregated fields from the table: "music_festival"
+  """
+  music_festival_aggregate(
+    """distinct select on columns"""
+    distinct_on: [music_festival_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [music_festival_order_by!]
+
+    """filter the rows returned"""
+    where: music_festival_bool_exp
+  ): music_festival_aggregate!
+
+  """
+  fetch data from the table: "volume"
+  """
+  volume(
+    """distinct select on columns"""
+    distinct_on: [volume_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [volume_order_by!]
+
+    """filter the rows returned"""
+    where: volume_bool_exp
+  ): [volume!]!
+
+  """
+  fetch aggregated fields from the table: "volume"
+  """
+  volume_aggregate(
+    """distinct select on columns"""
+    distinct_on: [volume_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [volume_order_by!]
+
+    """filter the rows returned"""
+    where: volume_bool_exp
+  ): volume_aggregate!
+}
+
+"""
+columns and relationships of "volume"
+"""
+type volume {
+  """An object relationship"""
+  artist: artist
+  artist_id: Int
+  issue_date: String
+
+  """An array relationship"""
+  music_festivals(
+    """distinct select on columns"""
+    distinct_on: [music_festival_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [music_festival_order_by!]
+
+    """filter the rows returned"""
+    where: music_festival_bool_exp
+  ): [music_festival!]!
+
+  """An aggregated array relationship"""
+  music_festivals_aggregate(
+    """distinct select on columns"""
+    distinct_on: [music_festival_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [music_festival_order_by!]
+
+    """filter the rows returned"""
+    where: music_festival_bool_exp
+  ): music_festival_aggregate!
+  song: String
+  volume_id: Int
+  volume_issue: String
+  weeks_on_top: Float
+}
+
+"""
+aggregated selection of "volume"
+"""
+type volume_aggregate {
+  aggregate: volume_aggregate_fields
+  nodes: [volume!]!
+}
+
+"""
+aggregate fields of "volume"
+"""
+type volume_aggregate_fields {
+  avg: volume_avg_fields
+  count(columns: [volume_select_column!], distinct: Boolean): Int
+  max: volume_max_fields
+  min: volume_min_fields
+  stddev: volume_stddev_fields
+  stddev_pop: volume_stddev_pop_fields
+  stddev_samp: volume_stddev_samp_fields
+  sum: volume_sum_fields
+  var_pop: volume_var_pop_fields
+  var_samp: volume_var_samp_fields
+  variance: volume_variance_fields
+}
+
+"""
+order by aggregate values of table "volume"
+"""
+input volume_aggregate_order_by {
+  avg: volume_avg_order_by
+  count: order_by
+  max: volume_max_order_by
+  min: volume_min_order_by
+  stddev: volume_stddev_order_by
+  stddev_pop: volume_stddev_pop_order_by
+  stddev_samp: volume_stddev_samp_order_by
+  sum: volume_sum_order_by
+  var_pop: volume_var_pop_order_by
+  var_samp: volume_var_samp_order_by
+  variance: volume_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "volume"
+"""
+input volume_arr_rel_insert_input {
+  data: [volume_insert_input!]!
+  on_conflict: volume_on_conflict
+}
+
+"""aggregate avg on columns"""
+type volume_avg_fields {
+  artist_id: Float
+  volume_id: Float
+  weeks_on_top: Float
+}
+
+"""
+order by avg() on columns of table "volume"
+"""
+input volume_avg_order_by {
+  artist_id: order_by
+  volume_id: order_by
+  weeks_on_top: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "volume". All fields are combined with a logical 'AND'.
+"""
+input volume_bool_exp {
+  _and: [volume_bool_exp]
+  _not: volume_bool_exp
+  _or: [volume_bool_exp]
+  artist: artist_bool_exp
+  artist_id: Int_comparison_exp
+  issue_date: String_comparison_exp
+  music_festivals: music_festival_bool_exp
+  song: String_comparison_exp
+  volume_id: Int_comparison_exp
+  volume_issue: String_comparison_exp
+  weeks_on_top: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "volume"
+"""
+enum volume_constraint {
+  """unique or primary key constraint"""
+  idx_24229_sqlite_autoindex_volume_1
+}
+
+"""
+input type for incrementing integer columne in table "volume"
+"""
+input volume_inc_input {
+  artist_id: Int
+  volume_id: Int
+}
+
+"""
+input type for inserting data into table "volume"
+"""
+input volume_insert_input {
+  artist: artist_obj_rel_insert_input
+  artist_id: Int
+  issue_date: String
+  music_festivals: music_festival_arr_rel_insert_input
+  song: String
+  volume_id: Int
+  volume_issue: String
+  weeks_on_top: Float
+}
+
+"""aggregate max on columns"""
+type volume_max_fields {
+  artist_id: Int
+  issue_date: String
+  song: String
+  volume_id: Int
+  volume_issue: String
+  weeks_on_top: Float
+}
+
+"""
+order by max() on columns of table "volume"
+"""
+input volume_max_order_by {
+  artist_id: order_by
+  issue_date: order_by
+  song: order_by
+  volume_id: order_by
+  volume_issue: order_by
+  weeks_on_top: order_by
+}
+
+"""aggregate min on columns"""
+type volume_min_fields {
+  artist_id: Int
+  issue_date: String
+  song: String
+  volume_id: Int
+  volume_issue: String
+  weeks_on_top: Float
+}
+
+"""
+order by min() on columns of table "volume"
+"""
+input volume_min_order_by {
+  artist_id: order_by
+  issue_date: order_by
+  song: order_by
+  volume_id: order_by
+  volume_issue: order_by
+  weeks_on_top: order_by
+}
+
+"""
+response of any mutation on the table "volume"
+"""
+type volume_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [volume!]!
+}
+
+"""
+input type for inserting object relation for remote table "volume"
+"""
+input volume_obj_rel_insert_input {
+  data: volume_insert_input!
+  on_conflict: volume_on_conflict
+}
+
+"""
+on conflict condition type for table "volume"
+"""
+input volume_on_conflict {
+  constraint: volume_constraint!
+  update_columns: [volume_update_column!]!
+  where: volume_bool_exp
+}
+
+"""
+ordering options when selecting data from "volume"
+"""
+input volume_order_by {
+  artist: artist_order_by
+  artist_id: order_by
+  issue_date: order_by
+  music_festivals_aggregate: music_festival_aggregate_order_by
+  song: order_by
+  volume_id: order_by
+  volume_issue: order_by
+  weeks_on_top: order_by
+}
+
+"""
+select columns of table "volume"
+"""
+enum volume_select_column {
+  """column name"""
+  artist_id
+
+  """column name"""
+  issue_date
+
+  """column name"""
+  song
+
+  """column name"""
+  volume_id
+
+  """column name"""
+  volume_issue
+
+  """column name"""
+  weeks_on_top
+}
+
+"""
+input type for updating data in table "volume"
+"""
+input volume_set_input {
+  artist_id: Int
+  issue_date: String
+  song: String
+  volume_id: Int
+  volume_issue: String
+  weeks_on_top: Float
+}
+
+"""aggregate stddev on columns"""
+type volume_stddev_fields {
+  artist_id: Float
+  volume_id: Float
+  weeks_on_top: Float
+}
+
+"""
+order by stddev() on columns of table "volume"
+"""
+input volume_stddev_order_by {
+  artist_id: order_by
+  volume_id: order_by
+  weeks_on_top: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type volume_stddev_pop_fields {
+  artist_id: Float
+  volume_id: Float
+  weeks_on_top: Float
+}
+
+"""
+order by stddev_pop() on columns of table "volume"
+"""
+input volume_stddev_pop_order_by {
+  artist_id: order_by
+  volume_id: order_by
+  weeks_on_top: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type volume_stddev_samp_fields {
+  artist_id: Float
+  volume_id: Float
+  weeks_on_top: Float
+}
+
+"""
+order by stddev_samp() on columns of table "volume"
+"""
+input volume_stddev_samp_order_by {
+  artist_id: order_by
+  volume_id: order_by
+  weeks_on_top: order_by
+}
+
+"""aggregate sum on columns"""
+type volume_sum_fields {
+  artist_id: Int
+  volume_id: Int
+  weeks_on_top: Float
+}
+
+"""
+order by sum() on columns of table "volume"
+"""
+input volume_sum_order_by {
+  artist_id: order_by
+  volume_id: order_by
+  weeks_on_top: order_by
+}
+
+"""
+update columns of table "volume"
+"""
+enum volume_update_column {
+  """column name"""
+  artist_id
+
+  """column name"""
+  issue_date
+
+  """column name"""
+  song
+
+  """column name"""
+  volume_id
+
+  """column name"""
+  volume_issue
+
+  """column name"""
+  weeks_on_top
+}
+
+"""aggregate var_pop on columns"""
+type volume_var_pop_fields {
+  artist_id: Float
+  volume_id: Float
+  weeks_on_top: Float
+}
+
+"""
+order by var_pop() on columns of table "volume"
+"""
+input volume_var_pop_order_by {
+  artist_id: order_by
+  volume_id: order_by
+  weeks_on_top: order_by
+}
+
+"""aggregate var_samp on columns"""
+type volume_var_samp_fields {
+  artist_id: Float
+  volume_id: Float
+  weeks_on_top: Float
+}
+
+"""
+order by var_samp() on columns of table "volume"
+"""
+input volume_var_samp_order_by {
+  artist_id: order_by
+  volume_id: order_by
+  weeks_on_top: order_by
+}
+
+"""aggregate variance on columns"""
+type volume_variance_fields {
+  artist_id: Float
+  volume_id: Float
+  weeks_on_top: Float
+}
+
+"""
+order by variance() on columns of table "volume"
+"""
+input volume_variance_order_by {
+  artist_id: order_by
+  volume_id: order_by
+  weeks_on_top: order_by
+}

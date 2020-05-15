@@ -1,0 +1,2098 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "manager"
+"""
+type manager {
+  age: Int
+  country: String
+  level: Int
+  manager_id: Int
+  name: String
+
+  """An array relationship"""
+  railway_manages(
+    """distinct select on columns"""
+    distinct_on: [railway_manage_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [railway_manage_order_by!]
+
+    """filter the rows returned"""
+    where: railway_manage_bool_exp
+  ): [railway_manage!]!
+
+  """An aggregated array relationship"""
+  railway_manages_aggregate(
+    """distinct select on columns"""
+    distinct_on: [railway_manage_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [railway_manage_order_by!]
+
+    """filter the rows returned"""
+    where: railway_manage_bool_exp
+  ): railway_manage_aggregate!
+  working_year_starts: String
+}
+
+"""
+aggregated selection of "manager"
+"""
+type manager_aggregate {
+  aggregate: manager_aggregate_fields
+  nodes: [manager!]!
+}
+
+"""
+aggregate fields of "manager"
+"""
+type manager_aggregate_fields {
+  avg: manager_avg_fields
+  count(columns: [manager_select_column!], distinct: Boolean): Int
+  max: manager_max_fields
+  min: manager_min_fields
+  stddev: manager_stddev_fields
+  stddev_pop: manager_stddev_pop_fields
+  stddev_samp: manager_stddev_samp_fields
+  sum: manager_sum_fields
+  var_pop: manager_var_pop_fields
+  var_samp: manager_var_samp_fields
+  variance: manager_variance_fields
+}
+
+"""
+order by aggregate values of table "manager"
+"""
+input manager_aggregate_order_by {
+  avg: manager_avg_order_by
+  count: order_by
+  max: manager_max_order_by
+  min: manager_min_order_by
+  stddev: manager_stddev_order_by
+  stddev_pop: manager_stddev_pop_order_by
+  stddev_samp: manager_stddev_samp_order_by
+  sum: manager_sum_order_by
+  var_pop: manager_var_pop_order_by
+  var_samp: manager_var_samp_order_by
+  variance: manager_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "manager"
+"""
+input manager_arr_rel_insert_input {
+  data: [manager_insert_input!]!
+  on_conflict: manager_on_conflict
+}
+
+"""aggregate avg on columns"""
+type manager_avg_fields {
+  age: Float
+  level: Float
+  manager_id: Float
+}
+
+"""
+order by avg() on columns of table "manager"
+"""
+input manager_avg_order_by {
+  age: order_by
+  level: order_by
+  manager_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "manager". All fields are combined with a logical 'AND'.
+"""
+input manager_bool_exp {
+  _and: [manager_bool_exp]
+  _not: manager_bool_exp
+  _or: [manager_bool_exp]
+  age: Int_comparison_exp
+  country: String_comparison_exp
+  level: Int_comparison_exp
+  manager_id: Int_comparison_exp
+  name: String_comparison_exp
+  railway_manages: railway_manage_bool_exp
+  working_year_starts: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "manager"
+"""
+enum manager_constraint {
+  """unique or primary key constraint"""
+  idx_20486_sqlite_autoindex_manager_1
+}
+
+"""
+input type for incrementing integer columne in table "manager"
+"""
+input manager_inc_input {
+  age: Int
+  level: Int
+  manager_id: Int
+}
+
+"""
+input type for inserting data into table "manager"
+"""
+input manager_insert_input {
+  age: Int
+  country: String
+  level: Int
+  manager_id: Int
+  name: String
+  railway_manages: railway_manage_arr_rel_insert_input
+  working_year_starts: String
+}
+
+"""aggregate max on columns"""
+type manager_max_fields {
+  age: Int
+  country: String
+  level: Int
+  manager_id: Int
+  name: String
+  working_year_starts: String
+}
+
+"""
+order by max() on columns of table "manager"
+"""
+input manager_max_order_by {
+  age: order_by
+  country: order_by
+  level: order_by
+  manager_id: order_by
+  name: order_by
+  working_year_starts: order_by
+}
+
+"""aggregate min on columns"""
+type manager_min_fields {
+  age: Int
+  country: String
+  level: Int
+  manager_id: Int
+  name: String
+  working_year_starts: String
+}
+
+"""
+order by min() on columns of table "manager"
+"""
+input manager_min_order_by {
+  age: order_by
+  country: order_by
+  level: order_by
+  manager_id: order_by
+  name: order_by
+  working_year_starts: order_by
+}
+
+"""
+response of any mutation on the table "manager"
+"""
+type manager_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [manager!]!
+}
+
+"""
+input type for inserting object relation for remote table "manager"
+"""
+input manager_obj_rel_insert_input {
+  data: manager_insert_input!
+  on_conflict: manager_on_conflict
+}
+
+"""
+on conflict condition type for table "manager"
+"""
+input manager_on_conflict {
+  constraint: manager_constraint!
+  update_columns: [manager_update_column!]!
+  where: manager_bool_exp
+}
+
+"""
+ordering options when selecting data from "manager"
+"""
+input manager_order_by {
+  age: order_by
+  country: order_by
+  level: order_by
+  manager_id: order_by
+  name: order_by
+  railway_manages_aggregate: railway_manage_aggregate_order_by
+  working_year_starts: order_by
+}
+
+"""
+select columns of table "manager"
+"""
+enum manager_select_column {
+  """column name"""
+  age
+
+  """column name"""
+  country
+
+  """column name"""
+  level
+
+  """column name"""
+  manager_id
+
+  """column name"""
+  name
+
+  """column name"""
+  working_year_starts
+}
+
+"""
+input type for updating data in table "manager"
+"""
+input manager_set_input {
+  age: Int
+  country: String
+  level: Int
+  manager_id: Int
+  name: String
+  working_year_starts: String
+}
+
+"""aggregate stddev on columns"""
+type manager_stddev_fields {
+  age: Float
+  level: Float
+  manager_id: Float
+}
+
+"""
+order by stddev() on columns of table "manager"
+"""
+input manager_stddev_order_by {
+  age: order_by
+  level: order_by
+  manager_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type manager_stddev_pop_fields {
+  age: Float
+  level: Float
+  manager_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "manager"
+"""
+input manager_stddev_pop_order_by {
+  age: order_by
+  level: order_by
+  manager_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type manager_stddev_samp_fields {
+  age: Float
+  level: Float
+  manager_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "manager"
+"""
+input manager_stddev_samp_order_by {
+  age: order_by
+  level: order_by
+  manager_id: order_by
+}
+
+"""aggregate sum on columns"""
+type manager_sum_fields {
+  age: Int
+  level: Int
+  manager_id: Int
+}
+
+"""
+order by sum() on columns of table "manager"
+"""
+input manager_sum_order_by {
+  age: order_by
+  level: order_by
+  manager_id: order_by
+}
+
+"""
+update columns of table "manager"
+"""
+enum manager_update_column {
+  """column name"""
+  age
+
+  """column name"""
+  country
+
+  """column name"""
+  level
+
+  """column name"""
+  manager_id
+
+  """column name"""
+  name
+
+  """column name"""
+  working_year_starts
+}
+
+"""aggregate var_pop on columns"""
+type manager_var_pop_fields {
+  age: Float
+  level: Float
+  manager_id: Float
+}
+
+"""
+order by var_pop() on columns of table "manager"
+"""
+input manager_var_pop_order_by {
+  age: order_by
+  level: order_by
+  manager_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type manager_var_samp_fields {
+  age: Float
+  level: Float
+  manager_id: Float
+}
+
+"""
+order by var_samp() on columns of table "manager"
+"""
+input manager_var_samp_order_by {
+  age: order_by
+  level: order_by
+  manager_id: order_by
+}
+
+"""aggregate variance on columns"""
+type manager_variance_fields {
+  age: Float
+  level: Float
+  manager_id: Float
+}
+
+"""
+order by variance() on columns of table "manager"
+"""
+input manager_variance_order_by {
+  age: order_by
+  level: order_by
+  manager_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "manager"
+  """
+  delete_manager(
+    """filter the rows which have to be deleted"""
+    where: manager_bool_exp!
+  ): manager_mutation_response
+
+  """
+  delete data from the table: "railway"
+  """
+  delete_railway(
+    """filter the rows which have to be deleted"""
+    where: railway_bool_exp!
+  ): railway_mutation_response
+
+  """
+  delete data from the table: "railway_manage"
+  """
+  delete_railway_manage(
+    """filter the rows which have to be deleted"""
+    where: railway_manage_bool_exp!
+  ): railway_manage_mutation_response
+
+  """
+  delete data from the table: "train"
+  """
+  delete_train(
+    """filter the rows which have to be deleted"""
+    where: train_bool_exp!
+  ): train_mutation_response
+
+  """
+  insert data into the table: "manager"
+  """
+  insert_manager(
+    """the rows to be inserted"""
+    objects: [manager_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: manager_on_conflict
+  ): manager_mutation_response
+
+  """
+  insert data into the table: "railway"
+  """
+  insert_railway(
+    """the rows to be inserted"""
+    objects: [railway_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: railway_on_conflict
+  ): railway_mutation_response
+
+  """
+  insert data into the table: "railway_manage"
+  """
+  insert_railway_manage(
+    """the rows to be inserted"""
+    objects: [railway_manage_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: railway_manage_on_conflict
+  ): railway_manage_mutation_response
+
+  """
+  insert data into the table: "train"
+  """
+  insert_train(
+    """the rows to be inserted"""
+    objects: [train_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: train_on_conflict
+  ): train_mutation_response
+
+  """
+  update data of the table: "manager"
+  """
+  update_manager(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: manager_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: manager_set_input
+
+    """filter the rows which have to be updated"""
+    where: manager_bool_exp!
+  ): manager_mutation_response
+
+  """
+  update data of the table: "railway"
+  """
+  update_railway(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: railway_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: railway_set_input
+
+    """filter the rows which have to be updated"""
+    where: railway_bool_exp!
+  ): railway_mutation_response
+
+  """
+  update data of the table: "railway_manage"
+  """
+  update_railway_manage(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: railway_manage_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: railway_manage_set_input
+
+    """filter the rows which have to be updated"""
+    where: railway_manage_bool_exp!
+  ): railway_manage_mutation_response
+
+  """
+  update data of the table: "train"
+  """
+  update_train(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: train_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: train_set_input
+
+    """filter the rows which have to be updated"""
+    where: train_bool_exp!
+  ): train_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "manager"
+  """
+  manager(
+    """distinct select on columns"""
+    distinct_on: [manager_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [manager_order_by!]
+
+    """filter the rows returned"""
+    where: manager_bool_exp
+  ): [manager!]!
+
+  """
+  fetch aggregated fields from the table: "manager"
+  """
+  manager_aggregate(
+    """distinct select on columns"""
+    distinct_on: [manager_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [manager_order_by!]
+
+    """filter the rows returned"""
+    where: manager_bool_exp
+  ): manager_aggregate!
+
+  """
+  fetch data from the table: "railway"
+  """
+  railway(
+    """distinct select on columns"""
+    distinct_on: [railway_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [railway_order_by!]
+
+    """filter the rows returned"""
+    where: railway_bool_exp
+  ): [railway!]!
+
+  """
+  fetch aggregated fields from the table: "railway"
+  """
+  railway_aggregate(
+    """distinct select on columns"""
+    distinct_on: [railway_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [railway_order_by!]
+
+    """filter the rows returned"""
+    where: railway_bool_exp
+  ): railway_aggregate!
+
+  """
+  fetch data from the table: "railway_manage"
+  """
+  railway_manage(
+    """distinct select on columns"""
+    distinct_on: [railway_manage_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [railway_manage_order_by!]
+
+    """filter the rows returned"""
+    where: railway_manage_bool_exp
+  ): [railway_manage!]!
+
+  """
+  fetch aggregated fields from the table: "railway_manage"
+  """
+  railway_manage_aggregate(
+    """distinct select on columns"""
+    distinct_on: [railway_manage_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [railway_manage_order_by!]
+
+    """filter the rows returned"""
+    where: railway_manage_bool_exp
+  ): railway_manage_aggregate!
+
+  """
+  fetch data from the table: "train"
+  """
+  train(
+    """distinct select on columns"""
+    distinct_on: [train_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_order_by!]
+
+    """filter the rows returned"""
+    where: train_bool_exp
+  ): [train!]!
+
+  """
+  fetch aggregated fields from the table: "train"
+  """
+  train_aggregate(
+    """distinct select on columns"""
+    distinct_on: [train_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_order_by!]
+
+    """filter the rows returned"""
+    where: train_bool_exp
+  ): train_aggregate!
+}
+
+"""
+columns and relationships of "railway"
+"""
+type railway {
+  builder: String
+  built: String
+  location: String
+  objectnumber: String
+  railway: String
+  railway_id: Int
+
+  """An array relationship"""
+  railway_manages(
+    """distinct select on columns"""
+    distinct_on: [railway_manage_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [railway_manage_order_by!]
+
+    """filter the rows returned"""
+    where: railway_manage_bool_exp
+  ): [railway_manage!]!
+
+  """An aggregated array relationship"""
+  railway_manages_aggregate(
+    """distinct select on columns"""
+    distinct_on: [railway_manage_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [railway_manage_order_by!]
+
+    """filter the rows returned"""
+    where: railway_manage_bool_exp
+  ): railway_manage_aggregate!
+
+  """An array relationship"""
+  trains(
+    """distinct select on columns"""
+    distinct_on: [train_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_order_by!]
+
+    """filter the rows returned"""
+    where: train_bool_exp
+  ): [train!]!
+
+  """An aggregated array relationship"""
+  trains_aggregate(
+    """distinct select on columns"""
+    distinct_on: [train_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_order_by!]
+
+    """filter the rows returned"""
+    where: train_bool_exp
+  ): train_aggregate!
+  wheels: String
+}
+
+"""
+aggregated selection of "railway"
+"""
+type railway_aggregate {
+  aggregate: railway_aggregate_fields
+  nodes: [railway!]!
+}
+
+"""
+aggregate fields of "railway"
+"""
+type railway_aggregate_fields {
+  avg: railway_avg_fields
+  count(columns: [railway_select_column!], distinct: Boolean): Int
+  max: railway_max_fields
+  min: railway_min_fields
+  stddev: railway_stddev_fields
+  stddev_pop: railway_stddev_pop_fields
+  stddev_samp: railway_stddev_samp_fields
+  sum: railway_sum_fields
+  var_pop: railway_var_pop_fields
+  var_samp: railway_var_samp_fields
+  variance: railway_variance_fields
+}
+
+"""
+order by aggregate values of table "railway"
+"""
+input railway_aggregate_order_by {
+  avg: railway_avg_order_by
+  count: order_by
+  max: railway_max_order_by
+  min: railway_min_order_by
+  stddev: railway_stddev_order_by
+  stddev_pop: railway_stddev_pop_order_by
+  stddev_samp: railway_stddev_samp_order_by
+  sum: railway_sum_order_by
+  var_pop: railway_var_pop_order_by
+  var_samp: railway_var_samp_order_by
+  variance: railway_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "railway"
+"""
+input railway_arr_rel_insert_input {
+  data: [railway_insert_input!]!
+  on_conflict: railway_on_conflict
+}
+
+"""aggregate avg on columns"""
+type railway_avg_fields {
+  railway_id: Float
+}
+
+"""
+order by avg() on columns of table "railway"
+"""
+input railway_avg_order_by {
+  railway_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "railway". All fields are combined with a logical 'AND'.
+"""
+input railway_bool_exp {
+  _and: [railway_bool_exp]
+  _not: railway_bool_exp
+  _or: [railway_bool_exp]
+  builder: String_comparison_exp
+  built: String_comparison_exp
+  location: String_comparison_exp
+  objectnumber: String_comparison_exp
+  railway: String_comparison_exp
+  railway_id: Int_comparison_exp
+  railway_manages: railway_manage_bool_exp
+  trains: train_bool_exp
+  wheels: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "railway"
+"""
+enum railway_constraint {
+  """unique or primary key constraint"""
+  idx_20474_sqlite_autoindex_railway_1
+}
+
+"""
+input type for incrementing integer columne in table "railway"
+"""
+input railway_inc_input {
+  railway_id: Int
+}
+
+"""
+input type for inserting data into table "railway"
+"""
+input railway_insert_input {
+  builder: String
+  built: String
+  location: String
+  objectnumber: String
+  railway: String
+  railway_id: Int
+  railway_manages: railway_manage_arr_rel_insert_input
+  trains: train_arr_rel_insert_input
+  wheels: String
+}
+
+"""
+columns and relationships of "railway_manage"
+"""
+type railway_manage {
+  from_year: String
+
+  """An object relationship"""
+  manager: manager
+  manager_id: Int
+
+  """An object relationship"""
+  railway: railway
+  railway_id: Int
+}
+
+"""
+aggregated selection of "railway_manage"
+"""
+type railway_manage_aggregate {
+  aggregate: railway_manage_aggregate_fields
+  nodes: [railway_manage!]!
+}
+
+"""
+aggregate fields of "railway_manage"
+"""
+type railway_manage_aggregate_fields {
+  avg: railway_manage_avg_fields
+  count(columns: [railway_manage_select_column!], distinct: Boolean): Int
+  max: railway_manage_max_fields
+  min: railway_manage_min_fields
+  stddev: railway_manage_stddev_fields
+  stddev_pop: railway_manage_stddev_pop_fields
+  stddev_samp: railway_manage_stddev_samp_fields
+  sum: railway_manage_sum_fields
+  var_pop: railway_manage_var_pop_fields
+  var_samp: railway_manage_var_samp_fields
+  variance: railway_manage_variance_fields
+}
+
+"""
+order by aggregate values of table "railway_manage"
+"""
+input railway_manage_aggregate_order_by {
+  avg: railway_manage_avg_order_by
+  count: order_by
+  max: railway_manage_max_order_by
+  min: railway_manage_min_order_by
+  stddev: railway_manage_stddev_order_by
+  stddev_pop: railway_manage_stddev_pop_order_by
+  stddev_samp: railway_manage_stddev_samp_order_by
+  sum: railway_manage_sum_order_by
+  var_pop: railway_manage_var_pop_order_by
+  var_samp: railway_manage_var_samp_order_by
+  variance: railway_manage_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "railway_manage"
+"""
+input railway_manage_arr_rel_insert_input {
+  data: [railway_manage_insert_input!]!
+  on_conflict: railway_manage_on_conflict
+}
+
+"""aggregate avg on columns"""
+type railway_manage_avg_fields {
+  manager_id: Float
+  railway_id: Float
+}
+
+"""
+order by avg() on columns of table "railway_manage"
+"""
+input railway_manage_avg_order_by {
+  manager_id: order_by
+  railway_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "railway_manage". All fields are combined with a logical 'AND'.
+"""
+input railway_manage_bool_exp {
+  _and: [railway_manage_bool_exp]
+  _not: railway_manage_bool_exp
+  _or: [railway_manage_bool_exp]
+  from_year: String_comparison_exp
+  manager: manager_bool_exp
+  manager_id: Int_comparison_exp
+  railway: railway_bool_exp
+  railway_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "railway_manage"
+"""
+enum railway_manage_constraint {
+  """unique or primary key constraint"""
+  idx_20492_sqlite_autoindex_railway_manage_1
+}
+
+"""
+input type for incrementing integer columne in table "railway_manage"
+"""
+input railway_manage_inc_input {
+  manager_id: Int
+  railway_id: Int
+}
+
+"""
+input type for inserting data into table "railway_manage"
+"""
+input railway_manage_insert_input {
+  from_year: String
+  manager: manager_obj_rel_insert_input
+  manager_id: Int
+  railway: railway_obj_rel_insert_input
+  railway_id: Int
+}
+
+"""aggregate max on columns"""
+type railway_manage_max_fields {
+  from_year: String
+  manager_id: Int
+  railway_id: Int
+}
+
+"""
+order by max() on columns of table "railway_manage"
+"""
+input railway_manage_max_order_by {
+  from_year: order_by
+  manager_id: order_by
+  railway_id: order_by
+}
+
+"""aggregate min on columns"""
+type railway_manage_min_fields {
+  from_year: String
+  manager_id: Int
+  railway_id: Int
+}
+
+"""
+order by min() on columns of table "railway_manage"
+"""
+input railway_manage_min_order_by {
+  from_year: order_by
+  manager_id: order_by
+  railway_id: order_by
+}
+
+"""
+response of any mutation on the table "railway_manage"
+"""
+type railway_manage_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [railway_manage!]!
+}
+
+"""
+input type for inserting object relation for remote table "railway_manage"
+"""
+input railway_manage_obj_rel_insert_input {
+  data: railway_manage_insert_input!
+  on_conflict: railway_manage_on_conflict
+}
+
+"""
+on conflict condition type for table "railway_manage"
+"""
+input railway_manage_on_conflict {
+  constraint: railway_manage_constraint!
+  update_columns: [railway_manage_update_column!]!
+  where: railway_manage_bool_exp
+}
+
+"""
+ordering options when selecting data from "railway_manage"
+"""
+input railway_manage_order_by {
+  from_year: order_by
+  manager: manager_order_by
+  manager_id: order_by
+  railway: railway_order_by
+  railway_id: order_by
+}
+
+"""
+select columns of table "railway_manage"
+"""
+enum railway_manage_select_column {
+  """column name"""
+  from_year
+
+  """column name"""
+  manager_id
+
+  """column name"""
+  railway_id
+}
+
+"""
+input type for updating data in table "railway_manage"
+"""
+input railway_manage_set_input {
+  from_year: String
+  manager_id: Int
+  railway_id: Int
+}
+
+"""aggregate stddev on columns"""
+type railway_manage_stddev_fields {
+  manager_id: Float
+  railway_id: Float
+}
+
+"""
+order by stddev() on columns of table "railway_manage"
+"""
+input railway_manage_stddev_order_by {
+  manager_id: order_by
+  railway_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type railway_manage_stddev_pop_fields {
+  manager_id: Float
+  railway_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "railway_manage"
+"""
+input railway_manage_stddev_pop_order_by {
+  manager_id: order_by
+  railway_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type railway_manage_stddev_samp_fields {
+  manager_id: Float
+  railway_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "railway_manage"
+"""
+input railway_manage_stddev_samp_order_by {
+  manager_id: order_by
+  railway_id: order_by
+}
+
+"""aggregate sum on columns"""
+type railway_manage_sum_fields {
+  manager_id: Int
+  railway_id: Int
+}
+
+"""
+order by sum() on columns of table "railway_manage"
+"""
+input railway_manage_sum_order_by {
+  manager_id: order_by
+  railway_id: order_by
+}
+
+"""
+update columns of table "railway_manage"
+"""
+enum railway_manage_update_column {
+  """column name"""
+  from_year
+
+  """column name"""
+  manager_id
+
+  """column name"""
+  railway_id
+}
+
+"""aggregate var_pop on columns"""
+type railway_manage_var_pop_fields {
+  manager_id: Float
+  railway_id: Float
+}
+
+"""
+order by var_pop() on columns of table "railway_manage"
+"""
+input railway_manage_var_pop_order_by {
+  manager_id: order_by
+  railway_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type railway_manage_var_samp_fields {
+  manager_id: Float
+  railway_id: Float
+}
+
+"""
+order by var_samp() on columns of table "railway_manage"
+"""
+input railway_manage_var_samp_order_by {
+  manager_id: order_by
+  railway_id: order_by
+}
+
+"""aggregate variance on columns"""
+type railway_manage_variance_fields {
+  manager_id: Float
+  railway_id: Float
+}
+
+"""
+order by variance() on columns of table "railway_manage"
+"""
+input railway_manage_variance_order_by {
+  manager_id: order_by
+  railway_id: order_by
+}
+
+"""aggregate max on columns"""
+type railway_max_fields {
+  builder: String
+  built: String
+  location: String
+  objectnumber: String
+  railway: String
+  railway_id: Int
+  wheels: String
+}
+
+"""
+order by max() on columns of table "railway"
+"""
+input railway_max_order_by {
+  builder: order_by
+  built: order_by
+  location: order_by
+  objectnumber: order_by
+  railway: order_by
+  railway_id: order_by
+  wheels: order_by
+}
+
+"""aggregate min on columns"""
+type railway_min_fields {
+  builder: String
+  built: String
+  location: String
+  objectnumber: String
+  railway: String
+  railway_id: Int
+  wheels: String
+}
+
+"""
+order by min() on columns of table "railway"
+"""
+input railway_min_order_by {
+  builder: order_by
+  built: order_by
+  location: order_by
+  objectnumber: order_by
+  railway: order_by
+  railway_id: order_by
+  wheels: order_by
+}
+
+"""
+response of any mutation on the table "railway"
+"""
+type railway_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [railway!]!
+}
+
+"""
+input type for inserting object relation for remote table "railway"
+"""
+input railway_obj_rel_insert_input {
+  data: railway_insert_input!
+  on_conflict: railway_on_conflict
+}
+
+"""
+on conflict condition type for table "railway"
+"""
+input railway_on_conflict {
+  constraint: railway_constraint!
+  update_columns: [railway_update_column!]!
+  where: railway_bool_exp
+}
+
+"""
+ordering options when selecting data from "railway"
+"""
+input railway_order_by {
+  builder: order_by
+  built: order_by
+  location: order_by
+  objectnumber: order_by
+  railway: order_by
+  railway_id: order_by
+  railway_manages_aggregate: railway_manage_aggregate_order_by
+  trains_aggregate: train_aggregate_order_by
+  wheels: order_by
+}
+
+"""
+select columns of table "railway"
+"""
+enum railway_select_column {
+  """column name"""
+  builder
+
+  """column name"""
+  built
+
+  """column name"""
+  location
+
+  """column name"""
+  objectnumber
+
+  """column name"""
+  railway
+
+  """column name"""
+  railway_id
+
+  """column name"""
+  wheels
+}
+
+"""
+input type for updating data in table "railway"
+"""
+input railway_set_input {
+  builder: String
+  built: String
+  location: String
+  objectnumber: String
+  railway: String
+  railway_id: Int
+  wheels: String
+}
+
+"""aggregate stddev on columns"""
+type railway_stddev_fields {
+  railway_id: Float
+}
+
+"""
+order by stddev() on columns of table "railway"
+"""
+input railway_stddev_order_by {
+  railway_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type railway_stddev_pop_fields {
+  railway_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "railway"
+"""
+input railway_stddev_pop_order_by {
+  railway_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type railway_stddev_samp_fields {
+  railway_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "railway"
+"""
+input railway_stddev_samp_order_by {
+  railway_id: order_by
+}
+
+"""aggregate sum on columns"""
+type railway_sum_fields {
+  railway_id: Int
+}
+
+"""
+order by sum() on columns of table "railway"
+"""
+input railway_sum_order_by {
+  railway_id: order_by
+}
+
+"""
+update columns of table "railway"
+"""
+enum railway_update_column {
+  """column name"""
+  builder
+
+  """column name"""
+  built
+
+  """column name"""
+  location
+
+  """column name"""
+  objectnumber
+
+  """column name"""
+  railway
+
+  """column name"""
+  railway_id
+
+  """column name"""
+  wheels
+}
+
+"""aggregate var_pop on columns"""
+type railway_var_pop_fields {
+  railway_id: Float
+}
+
+"""
+order by var_pop() on columns of table "railway"
+"""
+input railway_var_pop_order_by {
+  railway_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type railway_var_samp_fields {
+  railway_id: Float
+}
+
+"""
+order by var_samp() on columns of table "railway"
+"""
+input railway_var_samp_order_by {
+  railway_id: order_by
+}
+
+"""aggregate variance on columns"""
+type railway_variance_fields {
+  railway_id: Float
+}
+
+"""
+order by variance() on columns of table "railway"
+"""
+input railway_variance_order_by {
+  railway_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "manager"
+  """
+  manager(
+    """distinct select on columns"""
+    distinct_on: [manager_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [manager_order_by!]
+
+    """filter the rows returned"""
+    where: manager_bool_exp
+  ): [manager!]!
+
+  """
+  fetch aggregated fields from the table: "manager"
+  """
+  manager_aggregate(
+    """distinct select on columns"""
+    distinct_on: [manager_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [manager_order_by!]
+
+    """filter the rows returned"""
+    where: manager_bool_exp
+  ): manager_aggregate!
+
+  """
+  fetch data from the table: "railway"
+  """
+  railway(
+    """distinct select on columns"""
+    distinct_on: [railway_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [railway_order_by!]
+
+    """filter the rows returned"""
+    where: railway_bool_exp
+  ): [railway!]!
+
+  """
+  fetch aggregated fields from the table: "railway"
+  """
+  railway_aggregate(
+    """distinct select on columns"""
+    distinct_on: [railway_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [railway_order_by!]
+
+    """filter the rows returned"""
+    where: railway_bool_exp
+  ): railway_aggregate!
+
+  """
+  fetch data from the table: "railway_manage"
+  """
+  railway_manage(
+    """distinct select on columns"""
+    distinct_on: [railway_manage_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [railway_manage_order_by!]
+
+    """filter the rows returned"""
+    where: railway_manage_bool_exp
+  ): [railway_manage!]!
+
+  """
+  fetch aggregated fields from the table: "railway_manage"
+  """
+  railway_manage_aggregate(
+    """distinct select on columns"""
+    distinct_on: [railway_manage_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [railway_manage_order_by!]
+
+    """filter the rows returned"""
+    where: railway_manage_bool_exp
+  ): railway_manage_aggregate!
+
+  """
+  fetch data from the table: "train"
+  """
+  train(
+    """distinct select on columns"""
+    distinct_on: [train_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_order_by!]
+
+    """filter the rows returned"""
+    where: train_bool_exp
+  ): [train!]!
+
+  """
+  fetch aggregated fields from the table: "train"
+  """
+  train_aggregate(
+    """distinct select on columns"""
+    distinct_on: [train_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_order_by!]
+
+    """filter the rows returned"""
+    where: train_bool_exp
+  ): train_aggregate!
+}
+
+"""
+columns and relationships of "train"
+"""
+type train {
+  arrival: String
+  from: String
+  name: String
+
+  """An object relationship"""
+  railway: railway
+  railway_id: Int
+  train_id: Int
+  train_num: String
+}
+
+"""
+aggregated selection of "train"
+"""
+type train_aggregate {
+  aggregate: train_aggregate_fields
+  nodes: [train!]!
+}
+
+"""
+aggregate fields of "train"
+"""
+type train_aggregate_fields {
+  avg: train_avg_fields
+  count(columns: [train_select_column!], distinct: Boolean): Int
+  max: train_max_fields
+  min: train_min_fields
+  stddev: train_stddev_fields
+  stddev_pop: train_stddev_pop_fields
+  stddev_samp: train_stddev_samp_fields
+  sum: train_sum_fields
+  var_pop: train_var_pop_fields
+  var_samp: train_var_samp_fields
+  variance: train_variance_fields
+}
+
+"""
+order by aggregate values of table "train"
+"""
+input train_aggregate_order_by {
+  avg: train_avg_order_by
+  count: order_by
+  max: train_max_order_by
+  min: train_min_order_by
+  stddev: train_stddev_order_by
+  stddev_pop: train_stddev_pop_order_by
+  stddev_samp: train_stddev_samp_order_by
+  sum: train_sum_order_by
+  var_pop: train_var_pop_order_by
+  var_samp: train_var_samp_order_by
+  variance: train_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "train"
+"""
+input train_arr_rel_insert_input {
+  data: [train_insert_input!]!
+  on_conflict: train_on_conflict
+}
+
+"""aggregate avg on columns"""
+type train_avg_fields {
+  railway_id: Float
+  train_id: Float
+}
+
+"""
+order by avg() on columns of table "train"
+"""
+input train_avg_order_by {
+  railway_id: order_by
+  train_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "train". All fields are combined with a logical 'AND'.
+"""
+input train_bool_exp {
+  _and: [train_bool_exp]
+  _not: train_bool_exp
+  _or: [train_bool_exp]
+  arrival: String_comparison_exp
+  from: String_comparison_exp
+  name: String_comparison_exp
+  railway: railway_bool_exp
+  railway_id: Int_comparison_exp
+  train_id: Int_comparison_exp
+  train_num: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "train"
+"""
+enum train_constraint {
+  """unique or primary key constraint"""
+  idx_20480_sqlite_autoindex_train_1
+}
+
+"""
+input type for incrementing integer columne in table "train"
+"""
+input train_inc_input {
+  railway_id: Int
+  train_id: Int
+}
+
+"""
+input type for inserting data into table "train"
+"""
+input train_insert_input {
+  arrival: String
+  from: String
+  name: String
+  railway: railway_obj_rel_insert_input
+  railway_id: Int
+  train_id: Int
+  train_num: String
+}
+
+"""aggregate max on columns"""
+type train_max_fields {
+  arrival: String
+  from: String
+  name: String
+  railway_id: Int
+  train_id: Int
+  train_num: String
+}
+
+"""
+order by max() on columns of table "train"
+"""
+input train_max_order_by {
+  arrival: order_by
+  from: order_by
+  name: order_by
+  railway_id: order_by
+  train_id: order_by
+  train_num: order_by
+}
+
+"""aggregate min on columns"""
+type train_min_fields {
+  arrival: String
+  from: String
+  name: String
+  railway_id: Int
+  train_id: Int
+  train_num: String
+}
+
+"""
+order by min() on columns of table "train"
+"""
+input train_min_order_by {
+  arrival: order_by
+  from: order_by
+  name: order_by
+  railway_id: order_by
+  train_id: order_by
+  train_num: order_by
+}
+
+"""
+response of any mutation on the table "train"
+"""
+type train_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [train!]!
+}
+
+"""
+input type for inserting object relation for remote table "train"
+"""
+input train_obj_rel_insert_input {
+  data: train_insert_input!
+  on_conflict: train_on_conflict
+}
+
+"""
+on conflict condition type for table "train"
+"""
+input train_on_conflict {
+  constraint: train_constraint!
+  update_columns: [train_update_column!]!
+  where: train_bool_exp
+}
+
+"""
+ordering options when selecting data from "train"
+"""
+input train_order_by {
+  arrival: order_by
+  from: order_by
+  name: order_by
+  railway: railway_order_by
+  railway_id: order_by
+  train_id: order_by
+  train_num: order_by
+}
+
+"""
+select columns of table "train"
+"""
+enum train_select_column {
+  """column name"""
+  arrival
+
+  """column name"""
+  from
+
+  """column name"""
+  name
+
+  """column name"""
+  railway_id
+
+  """column name"""
+  train_id
+
+  """column name"""
+  train_num
+}
+
+"""
+input type for updating data in table "train"
+"""
+input train_set_input {
+  arrival: String
+  from: String
+  name: String
+  railway_id: Int
+  train_id: Int
+  train_num: String
+}
+
+"""aggregate stddev on columns"""
+type train_stddev_fields {
+  railway_id: Float
+  train_id: Float
+}
+
+"""
+order by stddev() on columns of table "train"
+"""
+input train_stddev_order_by {
+  railway_id: order_by
+  train_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type train_stddev_pop_fields {
+  railway_id: Float
+  train_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "train"
+"""
+input train_stddev_pop_order_by {
+  railway_id: order_by
+  train_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type train_stddev_samp_fields {
+  railway_id: Float
+  train_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "train"
+"""
+input train_stddev_samp_order_by {
+  railway_id: order_by
+  train_id: order_by
+}
+
+"""aggregate sum on columns"""
+type train_sum_fields {
+  railway_id: Int
+  train_id: Int
+}
+
+"""
+order by sum() on columns of table "train"
+"""
+input train_sum_order_by {
+  railway_id: order_by
+  train_id: order_by
+}
+
+"""
+update columns of table "train"
+"""
+enum train_update_column {
+  """column name"""
+  arrival
+
+  """column name"""
+  from
+
+  """column name"""
+  name
+
+  """column name"""
+  railway_id
+
+  """column name"""
+  train_id
+
+  """column name"""
+  train_num
+}
+
+"""aggregate var_pop on columns"""
+type train_var_pop_fields {
+  railway_id: Float
+  train_id: Float
+}
+
+"""
+order by var_pop() on columns of table "train"
+"""
+input train_var_pop_order_by {
+  railway_id: order_by
+  train_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type train_var_samp_fields {
+  railway_id: Float
+  train_id: Float
+}
+
+"""
+order by var_samp() on columns of table "train"
+"""
+input train_var_samp_order_by {
+  railway_id: order_by
+  train_id: order_by
+}
+
+"""aggregate variance on columns"""
+type train_variance_fields {
+  railway_id: Float
+  train_id: Float
+}
+
+"""
+order by variance() on columns of table "train"
+"""
+input train_variance_order_by {
+  railway_id: order_by
+  train_id: order_by
+}

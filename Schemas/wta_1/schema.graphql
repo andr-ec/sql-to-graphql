@@ -1,0 +1,2175 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar date
+
+"""
+expression to compare columns of type date. All fields are combined with logical 'AND'.
+"""
+input date_comparison_exp {
+  _eq: date
+  _gt: date
+  _gte: date
+  _in: [date!]
+  _is_null: Boolean
+  _lt: date
+  _lte: date
+  _neq: date
+  _nin: [date!]
+}
+
+scalar float8
+
+"""
+expression to compare columns of type float8. All fields are combined with logical 'AND'.
+"""
+input float8_comparison_exp {
+  _eq: float8
+  _gt: float8
+  _gte: float8
+  _in: [float8!]
+  _is_null: Boolean
+  _lt: float8
+  _lte: float8
+  _neq: float8
+  _nin: [float8!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "matches"
+"""
+type matches {
+  best_of: Int
+  draw_size: Int
+  loser_age: float8
+  loser_entry: String
+  loser_hand: String
+  loser_ht: Int
+  loser_id: Int
+  loser_ioc: String
+  loser_name: String
+  loser_rank: Int
+  loser_rank_points: Int
+  loser_seed: Int
+  match_num: Int
+  minutes: Int
+
+  """An object relationship"""
+  playerByLoserId: players
+
+  """An object relationship"""
+  playerByWinnerId: players
+  round: String
+  score: String
+  surface: String
+  tourney_date: date
+  tourney_id: String
+  tourney_level: String
+  tourney_name: String
+  winner_age: float8
+  winner_entry: String
+  winner_hand: String
+  winner_ht: Int
+  winner_id: Int
+  winner_ioc: String
+  winner_name: String
+  winner_rank: Int
+  winner_rank_points: Int
+  winner_seed: Int
+  year: Int
+}
+
+"""
+aggregated selection of "matches"
+"""
+type matches_aggregate {
+  aggregate: matches_aggregate_fields
+  nodes: [matches!]!
+}
+
+"""
+aggregate fields of "matches"
+"""
+type matches_aggregate_fields {
+  avg: matches_avg_fields
+  count(columns: [matches_select_column!], distinct: Boolean): Int
+  max: matches_max_fields
+  min: matches_min_fields
+  stddev: matches_stddev_fields
+  stddev_pop: matches_stddev_pop_fields
+  stddev_samp: matches_stddev_samp_fields
+  sum: matches_sum_fields
+  var_pop: matches_var_pop_fields
+  var_samp: matches_var_samp_fields
+  variance: matches_variance_fields
+}
+
+"""
+order by aggregate values of table "matches"
+"""
+input matches_aggregate_order_by {
+  avg: matches_avg_order_by
+  count: order_by
+  max: matches_max_order_by
+  min: matches_min_order_by
+  stddev: matches_stddev_order_by
+  stddev_pop: matches_stddev_pop_order_by
+  stddev_samp: matches_stddev_samp_order_by
+  sum: matches_sum_order_by
+  var_pop: matches_var_pop_order_by
+  var_samp: matches_var_samp_order_by
+  variance: matches_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "matches"
+"""
+input matches_arr_rel_insert_input {
+  data: [matches_insert_input!]!
+}
+
+"""aggregate avg on columns"""
+type matches_avg_fields {
+  best_of: Float
+  draw_size: Float
+  loser_age: Float
+  loser_ht: Float
+  loser_id: Float
+  loser_rank: Float
+  loser_rank_points: Float
+  loser_seed: Float
+  match_num: Float
+  minutes: Float
+  winner_age: Float
+  winner_ht: Float
+  winner_id: Float
+  winner_rank: Float
+  winner_rank_points: Float
+  winner_seed: Float
+  year: Float
+}
+
+"""
+order by avg() on columns of table "matches"
+"""
+input matches_avg_order_by {
+  best_of: order_by
+  draw_size: order_by
+  loser_age: order_by
+  loser_ht: order_by
+  loser_id: order_by
+  loser_rank: order_by
+  loser_rank_points: order_by
+  loser_seed: order_by
+  match_num: order_by
+  minutes: order_by
+  winner_age: order_by
+  winner_ht: order_by
+  winner_id: order_by
+  winner_rank: order_by
+  winner_rank_points: order_by
+  winner_seed: order_by
+  year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "matches". All fields are combined with a logical 'AND'.
+"""
+input matches_bool_exp {
+  _and: [matches_bool_exp]
+  _not: matches_bool_exp
+  _or: [matches_bool_exp]
+  best_of: Int_comparison_exp
+  draw_size: Int_comparison_exp
+  loser_age: float8_comparison_exp
+  loser_entry: String_comparison_exp
+  loser_hand: String_comparison_exp
+  loser_ht: Int_comparison_exp
+  loser_id: Int_comparison_exp
+  loser_ioc: String_comparison_exp
+  loser_name: String_comparison_exp
+  loser_rank: Int_comparison_exp
+  loser_rank_points: Int_comparison_exp
+  loser_seed: Int_comparison_exp
+  match_num: Int_comparison_exp
+  minutes: Int_comparison_exp
+  playerByLoserId: players_bool_exp
+  playerByWinnerId: players_bool_exp
+  round: String_comparison_exp
+  score: String_comparison_exp
+  surface: String_comparison_exp
+  tourney_date: date_comparison_exp
+  tourney_id: String_comparison_exp
+  tourney_level: String_comparison_exp
+  tourney_name: String_comparison_exp
+  winner_age: float8_comparison_exp
+  winner_entry: String_comparison_exp
+  winner_hand: String_comparison_exp
+  winner_ht: Int_comparison_exp
+  winner_id: Int_comparison_exp
+  winner_ioc: String_comparison_exp
+  winner_name: String_comparison_exp
+  winner_rank: Int_comparison_exp
+  winner_rank_points: Int_comparison_exp
+  winner_seed: Int_comparison_exp
+  year: Int_comparison_exp
+}
+
+"""
+input type for incrementing integer columne in table "matches"
+"""
+input matches_inc_input {
+  best_of: Int
+  draw_size: Int
+  loser_ht: Int
+  loser_id: Int
+  loser_rank: Int
+  loser_rank_points: Int
+  loser_seed: Int
+  match_num: Int
+  minutes: Int
+  winner_ht: Int
+  winner_id: Int
+  winner_rank: Int
+  winner_rank_points: Int
+  winner_seed: Int
+  year: Int
+}
+
+"""
+input type for inserting data into table "matches"
+"""
+input matches_insert_input {
+  best_of: Int
+  draw_size: Int
+  loser_age: float8
+  loser_entry: String
+  loser_hand: String
+  loser_ht: Int
+  loser_id: Int
+  loser_ioc: String
+  loser_name: String
+  loser_rank: Int
+  loser_rank_points: Int
+  loser_seed: Int
+  match_num: Int
+  minutes: Int
+  playerByLoserId: players_obj_rel_insert_input
+  playerByWinnerId: players_obj_rel_insert_input
+  round: String
+  score: String
+  surface: String
+  tourney_date: date
+  tourney_id: String
+  tourney_level: String
+  tourney_name: String
+  winner_age: float8
+  winner_entry: String
+  winner_hand: String
+  winner_ht: Int
+  winner_id: Int
+  winner_ioc: String
+  winner_name: String
+  winner_rank: Int
+  winner_rank_points: Int
+  winner_seed: Int
+  year: Int
+}
+
+"""aggregate max on columns"""
+type matches_max_fields {
+  best_of: Int
+  draw_size: Int
+  loser_age: float8
+  loser_entry: String
+  loser_hand: String
+  loser_ht: Int
+  loser_id: Int
+  loser_ioc: String
+  loser_name: String
+  loser_rank: Int
+  loser_rank_points: Int
+  loser_seed: Int
+  match_num: Int
+  minutes: Int
+  round: String
+  score: String
+  surface: String
+  tourney_date: date
+  tourney_id: String
+  tourney_level: String
+  tourney_name: String
+  winner_age: float8
+  winner_entry: String
+  winner_hand: String
+  winner_ht: Int
+  winner_id: Int
+  winner_ioc: String
+  winner_name: String
+  winner_rank: Int
+  winner_rank_points: Int
+  winner_seed: Int
+  year: Int
+}
+
+"""
+order by max() on columns of table "matches"
+"""
+input matches_max_order_by {
+  best_of: order_by
+  draw_size: order_by
+  loser_age: order_by
+  loser_entry: order_by
+  loser_hand: order_by
+  loser_ht: order_by
+  loser_id: order_by
+  loser_ioc: order_by
+  loser_name: order_by
+  loser_rank: order_by
+  loser_rank_points: order_by
+  loser_seed: order_by
+  match_num: order_by
+  minutes: order_by
+  round: order_by
+  score: order_by
+  surface: order_by
+  tourney_date: order_by
+  tourney_id: order_by
+  tourney_level: order_by
+  tourney_name: order_by
+  winner_age: order_by
+  winner_entry: order_by
+  winner_hand: order_by
+  winner_ht: order_by
+  winner_id: order_by
+  winner_ioc: order_by
+  winner_name: order_by
+  winner_rank: order_by
+  winner_rank_points: order_by
+  winner_seed: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type matches_min_fields {
+  best_of: Int
+  draw_size: Int
+  loser_age: float8
+  loser_entry: String
+  loser_hand: String
+  loser_ht: Int
+  loser_id: Int
+  loser_ioc: String
+  loser_name: String
+  loser_rank: Int
+  loser_rank_points: Int
+  loser_seed: Int
+  match_num: Int
+  minutes: Int
+  round: String
+  score: String
+  surface: String
+  tourney_date: date
+  tourney_id: String
+  tourney_level: String
+  tourney_name: String
+  winner_age: float8
+  winner_entry: String
+  winner_hand: String
+  winner_ht: Int
+  winner_id: Int
+  winner_ioc: String
+  winner_name: String
+  winner_rank: Int
+  winner_rank_points: Int
+  winner_seed: Int
+  year: Int
+}
+
+"""
+order by min() on columns of table "matches"
+"""
+input matches_min_order_by {
+  best_of: order_by
+  draw_size: order_by
+  loser_age: order_by
+  loser_entry: order_by
+  loser_hand: order_by
+  loser_ht: order_by
+  loser_id: order_by
+  loser_ioc: order_by
+  loser_name: order_by
+  loser_rank: order_by
+  loser_rank_points: order_by
+  loser_seed: order_by
+  match_num: order_by
+  minutes: order_by
+  round: order_by
+  score: order_by
+  surface: order_by
+  tourney_date: order_by
+  tourney_id: order_by
+  tourney_level: order_by
+  tourney_name: order_by
+  winner_age: order_by
+  winner_entry: order_by
+  winner_hand: order_by
+  winner_ht: order_by
+  winner_id: order_by
+  winner_ioc: order_by
+  winner_name: order_by
+  winner_rank: order_by
+  winner_rank_points: order_by
+  winner_seed: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "matches"
+"""
+type matches_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [matches!]!
+}
+
+"""
+input type for inserting object relation for remote table "matches"
+"""
+input matches_obj_rel_insert_input {
+  data: matches_insert_input!
+}
+
+"""
+ordering options when selecting data from "matches"
+"""
+input matches_order_by {
+  best_of: order_by
+  draw_size: order_by
+  loser_age: order_by
+  loser_entry: order_by
+  loser_hand: order_by
+  loser_ht: order_by
+  loser_id: order_by
+  loser_ioc: order_by
+  loser_name: order_by
+  loser_rank: order_by
+  loser_rank_points: order_by
+  loser_seed: order_by
+  match_num: order_by
+  minutes: order_by
+  playerByLoserId: players_order_by
+  playerByWinnerId: players_order_by
+  round: order_by
+  score: order_by
+  surface: order_by
+  tourney_date: order_by
+  tourney_id: order_by
+  tourney_level: order_by
+  tourney_name: order_by
+  winner_age: order_by
+  winner_entry: order_by
+  winner_hand: order_by
+  winner_ht: order_by
+  winner_id: order_by
+  winner_ioc: order_by
+  winner_name: order_by
+  winner_rank: order_by
+  winner_rank_points: order_by
+  winner_seed: order_by
+  year: order_by
+}
+
+"""
+select columns of table "matches"
+"""
+enum matches_select_column {
+  """column name"""
+  best_of
+
+  """column name"""
+  draw_size
+
+  """column name"""
+  loser_age
+
+  """column name"""
+  loser_entry
+
+  """column name"""
+  loser_hand
+
+  """column name"""
+  loser_ht
+
+  """column name"""
+  loser_id
+
+  """column name"""
+  loser_ioc
+
+  """column name"""
+  loser_name
+
+  """column name"""
+  loser_rank
+
+  """column name"""
+  loser_rank_points
+
+  """column name"""
+  loser_seed
+
+  """column name"""
+  match_num
+
+  """column name"""
+  minutes
+
+  """column name"""
+  round
+
+  """column name"""
+  score
+
+  """column name"""
+  surface
+
+  """column name"""
+  tourney_date
+
+  """column name"""
+  tourney_id
+
+  """column name"""
+  tourney_level
+
+  """column name"""
+  tourney_name
+
+  """column name"""
+  winner_age
+
+  """column name"""
+  winner_entry
+
+  """column name"""
+  winner_hand
+
+  """column name"""
+  winner_ht
+
+  """column name"""
+  winner_id
+
+  """column name"""
+  winner_ioc
+
+  """column name"""
+  winner_name
+
+  """column name"""
+  winner_rank
+
+  """column name"""
+  winner_rank_points
+
+  """column name"""
+  winner_seed
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "matches"
+"""
+input matches_set_input {
+  best_of: Int
+  draw_size: Int
+  loser_age: float8
+  loser_entry: String
+  loser_hand: String
+  loser_ht: Int
+  loser_id: Int
+  loser_ioc: String
+  loser_name: String
+  loser_rank: Int
+  loser_rank_points: Int
+  loser_seed: Int
+  match_num: Int
+  minutes: Int
+  round: String
+  score: String
+  surface: String
+  tourney_date: date
+  tourney_id: String
+  tourney_level: String
+  tourney_name: String
+  winner_age: float8
+  winner_entry: String
+  winner_hand: String
+  winner_ht: Int
+  winner_id: Int
+  winner_ioc: String
+  winner_name: String
+  winner_rank: Int
+  winner_rank_points: Int
+  winner_seed: Int
+  year: Int
+}
+
+"""aggregate stddev on columns"""
+type matches_stddev_fields {
+  best_of: Float
+  draw_size: Float
+  loser_age: Float
+  loser_ht: Float
+  loser_id: Float
+  loser_rank: Float
+  loser_rank_points: Float
+  loser_seed: Float
+  match_num: Float
+  minutes: Float
+  winner_age: Float
+  winner_ht: Float
+  winner_id: Float
+  winner_rank: Float
+  winner_rank_points: Float
+  winner_seed: Float
+  year: Float
+}
+
+"""
+order by stddev() on columns of table "matches"
+"""
+input matches_stddev_order_by {
+  best_of: order_by
+  draw_size: order_by
+  loser_age: order_by
+  loser_ht: order_by
+  loser_id: order_by
+  loser_rank: order_by
+  loser_rank_points: order_by
+  loser_seed: order_by
+  match_num: order_by
+  minutes: order_by
+  winner_age: order_by
+  winner_ht: order_by
+  winner_id: order_by
+  winner_rank: order_by
+  winner_rank_points: order_by
+  winner_seed: order_by
+  year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type matches_stddev_pop_fields {
+  best_of: Float
+  draw_size: Float
+  loser_age: Float
+  loser_ht: Float
+  loser_id: Float
+  loser_rank: Float
+  loser_rank_points: Float
+  loser_seed: Float
+  match_num: Float
+  minutes: Float
+  winner_age: Float
+  winner_ht: Float
+  winner_id: Float
+  winner_rank: Float
+  winner_rank_points: Float
+  winner_seed: Float
+  year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "matches"
+"""
+input matches_stddev_pop_order_by {
+  best_of: order_by
+  draw_size: order_by
+  loser_age: order_by
+  loser_ht: order_by
+  loser_id: order_by
+  loser_rank: order_by
+  loser_rank_points: order_by
+  loser_seed: order_by
+  match_num: order_by
+  minutes: order_by
+  winner_age: order_by
+  winner_ht: order_by
+  winner_id: order_by
+  winner_rank: order_by
+  winner_rank_points: order_by
+  winner_seed: order_by
+  year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type matches_stddev_samp_fields {
+  best_of: Float
+  draw_size: Float
+  loser_age: Float
+  loser_ht: Float
+  loser_id: Float
+  loser_rank: Float
+  loser_rank_points: Float
+  loser_seed: Float
+  match_num: Float
+  minutes: Float
+  winner_age: Float
+  winner_ht: Float
+  winner_id: Float
+  winner_rank: Float
+  winner_rank_points: Float
+  winner_seed: Float
+  year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "matches"
+"""
+input matches_stddev_samp_order_by {
+  best_of: order_by
+  draw_size: order_by
+  loser_age: order_by
+  loser_ht: order_by
+  loser_id: order_by
+  loser_rank: order_by
+  loser_rank_points: order_by
+  loser_seed: order_by
+  match_num: order_by
+  minutes: order_by
+  winner_age: order_by
+  winner_ht: order_by
+  winner_id: order_by
+  winner_rank: order_by
+  winner_rank_points: order_by
+  winner_seed: order_by
+  year: order_by
+}
+
+"""aggregate sum on columns"""
+type matches_sum_fields {
+  best_of: Int
+  draw_size: Int
+  loser_age: float8
+  loser_ht: Int
+  loser_id: Int
+  loser_rank: Int
+  loser_rank_points: Int
+  loser_seed: Int
+  match_num: Int
+  minutes: Int
+  winner_age: float8
+  winner_ht: Int
+  winner_id: Int
+  winner_rank: Int
+  winner_rank_points: Int
+  winner_seed: Int
+  year: Int
+}
+
+"""
+order by sum() on columns of table "matches"
+"""
+input matches_sum_order_by {
+  best_of: order_by
+  draw_size: order_by
+  loser_age: order_by
+  loser_ht: order_by
+  loser_id: order_by
+  loser_rank: order_by
+  loser_rank_points: order_by
+  loser_seed: order_by
+  match_num: order_by
+  minutes: order_by
+  winner_age: order_by
+  winner_ht: order_by
+  winner_id: order_by
+  winner_rank: order_by
+  winner_rank_points: order_by
+  winner_seed: order_by
+  year: order_by
+}
+
+"""aggregate var_pop on columns"""
+type matches_var_pop_fields {
+  best_of: Float
+  draw_size: Float
+  loser_age: Float
+  loser_ht: Float
+  loser_id: Float
+  loser_rank: Float
+  loser_rank_points: Float
+  loser_seed: Float
+  match_num: Float
+  minutes: Float
+  winner_age: Float
+  winner_ht: Float
+  winner_id: Float
+  winner_rank: Float
+  winner_rank_points: Float
+  winner_seed: Float
+  year: Float
+}
+
+"""
+order by var_pop() on columns of table "matches"
+"""
+input matches_var_pop_order_by {
+  best_of: order_by
+  draw_size: order_by
+  loser_age: order_by
+  loser_ht: order_by
+  loser_id: order_by
+  loser_rank: order_by
+  loser_rank_points: order_by
+  loser_seed: order_by
+  match_num: order_by
+  minutes: order_by
+  winner_age: order_by
+  winner_ht: order_by
+  winner_id: order_by
+  winner_rank: order_by
+  winner_rank_points: order_by
+  winner_seed: order_by
+  year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type matches_var_samp_fields {
+  best_of: Float
+  draw_size: Float
+  loser_age: Float
+  loser_ht: Float
+  loser_id: Float
+  loser_rank: Float
+  loser_rank_points: Float
+  loser_seed: Float
+  match_num: Float
+  minutes: Float
+  winner_age: Float
+  winner_ht: Float
+  winner_id: Float
+  winner_rank: Float
+  winner_rank_points: Float
+  winner_seed: Float
+  year: Float
+}
+
+"""
+order by var_samp() on columns of table "matches"
+"""
+input matches_var_samp_order_by {
+  best_of: order_by
+  draw_size: order_by
+  loser_age: order_by
+  loser_ht: order_by
+  loser_id: order_by
+  loser_rank: order_by
+  loser_rank_points: order_by
+  loser_seed: order_by
+  match_num: order_by
+  minutes: order_by
+  winner_age: order_by
+  winner_ht: order_by
+  winner_id: order_by
+  winner_rank: order_by
+  winner_rank_points: order_by
+  winner_seed: order_by
+  year: order_by
+}
+
+"""aggregate variance on columns"""
+type matches_variance_fields {
+  best_of: Float
+  draw_size: Float
+  loser_age: Float
+  loser_ht: Float
+  loser_id: Float
+  loser_rank: Float
+  loser_rank_points: Float
+  loser_seed: Float
+  match_num: Float
+  minutes: Float
+  winner_age: Float
+  winner_ht: Float
+  winner_id: Float
+  winner_rank: Float
+  winner_rank_points: Float
+  winner_seed: Float
+  year: Float
+}
+
+"""
+order by variance() on columns of table "matches"
+"""
+input matches_variance_order_by {
+  best_of: order_by
+  draw_size: order_by
+  loser_age: order_by
+  loser_ht: order_by
+  loser_id: order_by
+  loser_rank: order_by
+  loser_rank_points: order_by
+  loser_seed: order_by
+  match_num: order_by
+  minutes: order_by
+  winner_age: order_by
+  winner_ht: order_by
+  winner_id: order_by
+  winner_rank: order_by
+  winner_rank_points: order_by
+  winner_seed: order_by
+  year: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "matches"
+  """
+  delete_matches(
+    """filter the rows which have to be deleted"""
+    where: matches_bool_exp!
+  ): matches_mutation_response
+
+  """
+  delete data from the table: "players"
+  """
+  delete_players(
+    """filter the rows which have to be deleted"""
+    where: players_bool_exp!
+  ): players_mutation_response
+
+  """
+  delete data from the table: "rankings"
+  """
+  delete_rankings(
+    """filter the rows which have to be deleted"""
+    where: rankings_bool_exp!
+  ): rankings_mutation_response
+
+  """
+  insert data into the table: "matches"
+  """
+  insert_matches(
+    """the rows to be inserted"""
+    objects: [matches_insert_input!]!
+  ): matches_mutation_response
+
+  """
+  insert data into the table: "players"
+  """
+  insert_players(
+    """the rows to be inserted"""
+    objects: [players_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: players_on_conflict
+  ): players_mutation_response
+
+  """
+  insert data into the table: "rankings"
+  """
+  insert_rankings(
+    """the rows to be inserted"""
+    objects: [rankings_insert_input!]!
+  ): rankings_mutation_response
+
+  """
+  update data of the table: "matches"
+  """
+  update_matches(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: matches_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: matches_set_input
+
+    """filter the rows which have to be updated"""
+    where: matches_bool_exp!
+  ): matches_mutation_response
+
+  """
+  update data of the table: "players"
+  """
+  update_players(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: players_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: players_set_input
+
+    """filter the rows which have to be updated"""
+    where: players_bool_exp!
+  ): players_mutation_response
+
+  """
+  update data of the table: "rankings"
+  """
+  update_rankings(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: rankings_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: rankings_set_input
+
+    """filter the rows which have to be updated"""
+    where: rankings_bool_exp!
+  ): rankings_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "players"
+"""
+type players {
+  birth_date: date
+  country_code: String
+  first_name: String
+  hand: String
+  last_name: String
+
+  """An array relationship"""
+  matchesByLoserId(
+    """distinct select on columns"""
+    distinct_on: [matches_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [matches_order_by!]
+
+    """filter the rows returned"""
+    where: matches_bool_exp
+  ): [matches!]!
+
+  """An aggregated array relationship"""
+  matchesByLoserId_aggregate(
+    """distinct select on columns"""
+    distinct_on: [matches_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [matches_order_by!]
+
+    """filter the rows returned"""
+    where: matches_bool_exp
+  ): matches_aggregate!
+
+  """An array relationship"""
+  matchesByWinnerId(
+    """distinct select on columns"""
+    distinct_on: [matches_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [matches_order_by!]
+
+    """filter the rows returned"""
+    where: matches_bool_exp
+  ): [matches!]!
+
+  """An aggregated array relationship"""
+  matchesByWinnerId_aggregate(
+    """distinct select on columns"""
+    distinct_on: [matches_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [matches_order_by!]
+
+    """filter the rows returned"""
+    where: matches_bool_exp
+  ): matches_aggregate!
+  player_id: Int!
+
+  """An array relationship"""
+  rankings(
+    """distinct select on columns"""
+    distinct_on: [rankings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rankings_order_by!]
+
+    """filter the rows returned"""
+    where: rankings_bool_exp
+  ): [rankings!]!
+
+  """An aggregated array relationship"""
+  rankings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [rankings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rankings_order_by!]
+
+    """filter the rows returned"""
+    where: rankings_bool_exp
+  ): rankings_aggregate!
+}
+
+"""
+aggregated selection of "players"
+"""
+type players_aggregate {
+  aggregate: players_aggregate_fields
+  nodes: [players!]!
+}
+
+"""
+aggregate fields of "players"
+"""
+type players_aggregate_fields {
+  avg: players_avg_fields
+  count(columns: [players_select_column!], distinct: Boolean): Int
+  max: players_max_fields
+  min: players_min_fields
+  stddev: players_stddev_fields
+  stddev_pop: players_stddev_pop_fields
+  stddev_samp: players_stddev_samp_fields
+  sum: players_sum_fields
+  var_pop: players_var_pop_fields
+  var_samp: players_var_samp_fields
+  variance: players_variance_fields
+}
+
+"""
+order by aggregate values of table "players"
+"""
+input players_aggregate_order_by {
+  avg: players_avg_order_by
+  count: order_by
+  max: players_max_order_by
+  min: players_min_order_by
+  stddev: players_stddev_order_by
+  stddev_pop: players_stddev_pop_order_by
+  stddev_samp: players_stddev_samp_order_by
+  sum: players_sum_order_by
+  var_pop: players_var_pop_order_by
+  var_samp: players_var_samp_order_by
+  variance: players_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "players"
+"""
+input players_arr_rel_insert_input {
+  data: [players_insert_input!]!
+  on_conflict: players_on_conflict
+}
+
+"""aggregate avg on columns"""
+type players_avg_fields {
+  player_id: Float
+}
+
+"""
+order by avg() on columns of table "players"
+"""
+input players_avg_order_by {
+  player_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "players". All fields are combined with a logical 'AND'.
+"""
+input players_bool_exp {
+  _and: [players_bool_exp]
+  _not: players_bool_exp
+  _or: [players_bool_exp]
+  birth_date: date_comparison_exp
+  country_code: String_comparison_exp
+  first_name: String_comparison_exp
+  hand: String_comparison_exp
+  last_name: String_comparison_exp
+  matchesByLoserId: matches_bool_exp
+  matchesByWinnerId: matches_bool_exp
+  player_id: Int_comparison_exp
+  rankings: rankings_bool_exp
+}
+
+"""
+unique or primary key constraints on table "players"
+"""
+enum players_constraint {
+  """unique or primary key constraint"""
+  idx_18816_sqlite_autoindex_players_1
+}
+
+"""
+input type for incrementing integer columne in table "players"
+"""
+input players_inc_input {
+  player_id: Int
+}
+
+"""
+input type for inserting data into table "players"
+"""
+input players_insert_input {
+  birth_date: date
+  country_code: String
+  first_name: String
+  hand: String
+  last_name: String
+  matchesByLoserId: matches_arr_rel_insert_input
+  matchesByWinnerId: matches_arr_rel_insert_input
+  player_id: Int
+  rankings: rankings_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type players_max_fields {
+  birth_date: date
+  country_code: String
+  first_name: String
+  hand: String
+  last_name: String
+  player_id: Int
+}
+
+"""
+order by max() on columns of table "players"
+"""
+input players_max_order_by {
+  birth_date: order_by
+  country_code: order_by
+  first_name: order_by
+  hand: order_by
+  last_name: order_by
+  player_id: order_by
+}
+
+"""aggregate min on columns"""
+type players_min_fields {
+  birth_date: date
+  country_code: String
+  first_name: String
+  hand: String
+  last_name: String
+  player_id: Int
+}
+
+"""
+order by min() on columns of table "players"
+"""
+input players_min_order_by {
+  birth_date: order_by
+  country_code: order_by
+  first_name: order_by
+  hand: order_by
+  last_name: order_by
+  player_id: order_by
+}
+
+"""
+response of any mutation on the table "players"
+"""
+type players_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [players!]!
+}
+
+"""
+input type for inserting object relation for remote table "players"
+"""
+input players_obj_rel_insert_input {
+  data: players_insert_input!
+  on_conflict: players_on_conflict
+}
+
+"""
+on conflict condition type for table "players"
+"""
+input players_on_conflict {
+  constraint: players_constraint!
+  update_columns: [players_update_column!]!
+  where: players_bool_exp
+}
+
+"""
+ordering options when selecting data from "players"
+"""
+input players_order_by {
+  birth_date: order_by
+  country_code: order_by
+  first_name: order_by
+  hand: order_by
+  last_name: order_by
+  matchesByLoserId_aggregate: matches_aggregate_order_by
+  matchesByWinnerId_aggregate: matches_aggregate_order_by
+  player_id: order_by
+  rankings_aggregate: rankings_aggregate_order_by
+}
+
+"""
+select columns of table "players"
+"""
+enum players_select_column {
+  """column name"""
+  birth_date
+
+  """column name"""
+  country_code
+
+  """column name"""
+  first_name
+
+  """column name"""
+  hand
+
+  """column name"""
+  last_name
+
+  """column name"""
+  player_id
+}
+
+"""
+input type for updating data in table "players"
+"""
+input players_set_input {
+  birth_date: date
+  country_code: String
+  first_name: String
+  hand: String
+  last_name: String
+  player_id: Int
+}
+
+"""aggregate stddev on columns"""
+type players_stddev_fields {
+  player_id: Float
+}
+
+"""
+order by stddev() on columns of table "players"
+"""
+input players_stddev_order_by {
+  player_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type players_stddev_pop_fields {
+  player_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "players"
+"""
+input players_stddev_pop_order_by {
+  player_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type players_stddev_samp_fields {
+  player_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "players"
+"""
+input players_stddev_samp_order_by {
+  player_id: order_by
+}
+
+"""aggregate sum on columns"""
+type players_sum_fields {
+  player_id: Int
+}
+
+"""
+order by sum() on columns of table "players"
+"""
+input players_sum_order_by {
+  player_id: order_by
+}
+
+"""
+update columns of table "players"
+"""
+enum players_update_column {
+  """column name"""
+  birth_date
+
+  """column name"""
+  country_code
+
+  """column name"""
+  first_name
+
+  """column name"""
+  hand
+
+  """column name"""
+  last_name
+
+  """column name"""
+  player_id
+}
+
+"""aggregate var_pop on columns"""
+type players_var_pop_fields {
+  player_id: Float
+}
+
+"""
+order by var_pop() on columns of table "players"
+"""
+input players_var_pop_order_by {
+  player_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type players_var_samp_fields {
+  player_id: Float
+}
+
+"""
+order by var_samp() on columns of table "players"
+"""
+input players_var_samp_order_by {
+  player_id: order_by
+}
+
+"""aggregate variance on columns"""
+type players_variance_fields {
+  player_id: Float
+}
+
+"""
+order by variance() on columns of table "players"
+"""
+input players_variance_order_by {
+  player_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "matches"
+  """
+  matches(
+    """distinct select on columns"""
+    distinct_on: [matches_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [matches_order_by!]
+
+    """filter the rows returned"""
+    where: matches_bool_exp
+  ): [matches!]!
+
+  """
+  fetch aggregated fields from the table: "matches"
+  """
+  matches_aggregate(
+    """distinct select on columns"""
+    distinct_on: [matches_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [matches_order_by!]
+
+    """filter the rows returned"""
+    where: matches_bool_exp
+  ): matches_aggregate!
+
+  """
+  fetch data from the table: "players"
+  """
+  players(
+    """distinct select on columns"""
+    distinct_on: [players_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [players_order_by!]
+
+    """filter the rows returned"""
+    where: players_bool_exp
+  ): [players!]!
+
+  """
+  fetch aggregated fields from the table: "players"
+  """
+  players_aggregate(
+    """distinct select on columns"""
+    distinct_on: [players_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [players_order_by!]
+
+    """filter the rows returned"""
+    where: players_bool_exp
+  ): players_aggregate!
+
+  """fetch data from the table: "players" using primary key columns"""
+  players_by_pk(player_id: Int!): players
+
+  """
+  fetch data from the table: "rankings"
+  """
+  rankings(
+    """distinct select on columns"""
+    distinct_on: [rankings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rankings_order_by!]
+
+    """filter the rows returned"""
+    where: rankings_bool_exp
+  ): [rankings!]!
+
+  """
+  fetch aggregated fields from the table: "rankings"
+  """
+  rankings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [rankings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rankings_order_by!]
+
+    """filter the rows returned"""
+    where: rankings_bool_exp
+  ): rankings_aggregate!
+}
+
+"""
+columns and relationships of "rankings"
+"""
+type rankings {
+  """An object relationship"""
+  player: players
+  player_id: Int
+  ranking: Int
+  ranking_date: date
+  ranking_points: Int
+  tours: Int
+}
+
+"""
+aggregated selection of "rankings"
+"""
+type rankings_aggregate {
+  aggregate: rankings_aggregate_fields
+  nodes: [rankings!]!
+}
+
+"""
+aggregate fields of "rankings"
+"""
+type rankings_aggregate_fields {
+  avg: rankings_avg_fields
+  count(columns: [rankings_select_column!], distinct: Boolean): Int
+  max: rankings_max_fields
+  min: rankings_min_fields
+  stddev: rankings_stddev_fields
+  stddev_pop: rankings_stddev_pop_fields
+  stddev_samp: rankings_stddev_samp_fields
+  sum: rankings_sum_fields
+  var_pop: rankings_var_pop_fields
+  var_samp: rankings_var_samp_fields
+  variance: rankings_variance_fields
+}
+
+"""
+order by aggregate values of table "rankings"
+"""
+input rankings_aggregate_order_by {
+  avg: rankings_avg_order_by
+  count: order_by
+  max: rankings_max_order_by
+  min: rankings_min_order_by
+  stddev: rankings_stddev_order_by
+  stddev_pop: rankings_stddev_pop_order_by
+  stddev_samp: rankings_stddev_samp_order_by
+  sum: rankings_sum_order_by
+  var_pop: rankings_var_pop_order_by
+  var_samp: rankings_var_samp_order_by
+  variance: rankings_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "rankings"
+"""
+input rankings_arr_rel_insert_input {
+  data: [rankings_insert_input!]!
+}
+
+"""aggregate avg on columns"""
+type rankings_avg_fields {
+  player_id: Float
+  ranking: Float
+  ranking_points: Float
+  tours: Float
+}
+
+"""
+order by avg() on columns of table "rankings"
+"""
+input rankings_avg_order_by {
+  player_id: order_by
+  ranking: order_by
+  ranking_points: order_by
+  tours: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "rankings". All fields are combined with a logical 'AND'.
+"""
+input rankings_bool_exp {
+  _and: [rankings_bool_exp]
+  _not: rankings_bool_exp
+  _or: [rankings_bool_exp]
+  player: players_bool_exp
+  player_id: Int_comparison_exp
+  ranking: Int_comparison_exp
+  ranking_date: date_comparison_exp
+  ranking_points: Int_comparison_exp
+  tours: Int_comparison_exp
+}
+
+"""
+input type for incrementing integer columne in table "rankings"
+"""
+input rankings_inc_input {
+  player_id: Int
+  ranking: Int
+  ranking_points: Int
+  tours: Int
+}
+
+"""
+input type for inserting data into table "rankings"
+"""
+input rankings_insert_input {
+  player: players_obj_rel_insert_input
+  player_id: Int
+  ranking: Int
+  ranking_date: date
+  ranking_points: Int
+  tours: Int
+}
+
+"""aggregate max on columns"""
+type rankings_max_fields {
+  player_id: Int
+  ranking: Int
+  ranking_date: date
+  ranking_points: Int
+  tours: Int
+}
+
+"""
+order by max() on columns of table "rankings"
+"""
+input rankings_max_order_by {
+  player_id: order_by
+  ranking: order_by
+  ranking_date: order_by
+  ranking_points: order_by
+  tours: order_by
+}
+
+"""aggregate min on columns"""
+type rankings_min_fields {
+  player_id: Int
+  ranking: Int
+  ranking_date: date
+  ranking_points: Int
+  tours: Int
+}
+
+"""
+order by min() on columns of table "rankings"
+"""
+input rankings_min_order_by {
+  player_id: order_by
+  ranking: order_by
+  ranking_date: order_by
+  ranking_points: order_by
+  tours: order_by
+}
+
+"""
+response of any mutation on the table "rankings"
+"""
+type rankings_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [rankings!]!
+}
+
+"""
+input type for inserting object relation for remote table "rankings"
+"""
+input rankings_obj_rel_insert_input {
+  data: rankings_insert_input!
+}
+
+"""
+ordering options when selecting data from "rankings"
+"""
+input rankings_order_by {
+  player: players_order_by
+  player_id: order_by
+  ranking: order_by
+  ranking_date: order_by
+  ranking_points: order_by
+  tours: order_by
+}
+
+"""
+select columns of table "rankings"
+"""
+enum rankings_select_column {
+  """column name"""
+  player_id
+
+  """column name"""
+  ranking
+
+  """column name"""
+  ranking_date
+
+  """column name"""
+  ranking_points
+
+  """column name"""
+  tours
+}
+
+"""
+input type for updating data in table "rankings"
+"""
+input rankings_set_input {
+  player_id: Int
+  ranking: Int
+  ranking_date: date
+  ranking_points: Int
+  tours: Int
+}
+
+"""aggregate stddev on columns"""
+type rankings_stddev_fields {
+  player_id: Float
+  ranking: Float
+  ranking_points: Float
+  tours: Float
+}
+
+"""
+order by stddev() on columns of table "rankings"
+"""
+input rankings_stddev_order_by {
+  player_id: order_by
+  ranking: order_by
+  ranking_points: order_by
+  tours: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type rankings_stddev_pop_fields {
+  player_id: Float
+  ranking: Float
+  ranking_points: Float
+  tours: Float
+}
+
+"""
+order by stddev_pop() on columns of table "rankings"
+"""
+input rankings_stddev_pop_order_by {
+  player_id: order_by
+  ranking: order_by
+  ranking_points: order_by
+  tours: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type rankings_stddev_samp_fields {
+  player_id: Float
+  ranking: Float
+  ranking_points: Float
+  tours: Float
+}
+
+"""
+order by stddev_samp() on columns of table "rankings"
+"""
+input rankings_stddev_samp_order_by {
+  player_id: order_by
+  ranking: order_by
+  ranking_points: order_by
+  tours: order_by
+}
+
+"""aggregate sum on columns"""
+type rankings_sum_fields {
+  player_id: Int
+  ranking: Int
+  ranking_points: Int
+  tours: Int
+}
+
+"""
+order by sum() on columns of table "rankings"
+"""
+input rankings_sum_order_by {
+  player_id: order_by
+  ranking: order_by
+  ranking_points: order_by
+  tours: order_by
+}
+
+"""aggregate var_pop on columns"""
+type rankings_var_pop_fields {
+  player_id: Float
+  ranking: Float
+  ranking_points: Float
+  tours: Float
+}
+
+"""
+order by var_pop() on columns of table "rankings"
+"""
+input rankings_var_pop_order_by {
+  player_id: order_by
+  ranking: order_by
+  ranking_points: order_by
+  tours: order_by
+}
+
+"""aggregate var_samp on columns"""
+type rankings_var_samp_fields {
+  player_id: Float
+  ranking: Float
+  ranking_points: Float
+  tours: Float
+}
+
+"""
+order by var_samp() on columns of table "rankings"
+"""
+input rankings_var_samp_order_by {
+  player_id: order_by
+  ranking: order_by
+  ranking_points: order_by
+  tours: order_by
+}
+
+"""aggregate variance on columns"""
+type rankings_variance_fields {
+  player_id: Float
+  ranking: Float
+  ranking_points: Float
+  tours: Float
+}
+
+"""
+order by variance() on columns of table "rankings"
+"""
+input rankings_variance_order_by {
+  player_id: order_by
+  ranking: order_by
+  ranking_points: order_by
+  tours: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "matches"
+  """
+  matches(
+    """distinct select on columns"""
+    distinct_on: [matches_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [matches_order_by!]
+
+    """filter the rows returned"""
+    where: matches_bool_exp
+  ): [matches!]!
+
+  """
+  fetch aggregated fields from the table: "matches"
+  """
+  matches_aggregate(
+    """distinct select on columns"""
+    distinct_on: [matches_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [matches_order_by!]
+
+    """filter the rows returned"""
+    where: matches_bool_exp
+  ): matches_aggregate!
+
+  """
+  fetch data from the table: "players"
+  """
+  players(
+    """distinct select on columns"""
+    distinct_on: [players_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [players_order_by!]
+
+    """filter the rows returned"""
+    where: players_bool_exp
+  ): [players!]!
+
+  """
+  fetch aggregated fields from the table: "players"
+  """
+  players_aggregate(
+    """distinct select on columns"""
+    distinct_on: [players_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [players_order_by!]
+
+    """filter the rows returned"""
+    where: players_bool_exp
+  ): players_aggregate!
+
+  """fetch data from the table: "players" using primary key columns"""
+  players_by_pk(player_id: Int!): players
+
+  """
+  fetch data from the table: "rankings"
+  """
+  rankings(
+    """distinct select on columns"""
+    distinct_on: [rankings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rankings_order_by!]
+
+    """filter the rows returned"""
+    where: rankings_bool_exp
+  ): [rankings!]!
+
+  """
+  fetch aggregated fields from the table: "rankings"
+  """
+  rankings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [rankings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rankings_order_by!]
+
+    """filter the rows returned"""
+    where: rankings_bool_exp
+  ): rankings_aggregate!
+}

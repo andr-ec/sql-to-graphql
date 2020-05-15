@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import Utilities
 // Raw graphql queries used to create real queries
 
 struct RawGraphQLQueryGroup {
@@ -57,15 +57,15 @@ class RawGraphQLArgument: Hashable {
                 }
             }
         }
-
+        
         /// Backing raw value
         public var rawValue: RawValue {
             switch self {
             case .not: return "not"
             case .whereCase: return "where"
-            case .and: return "and"
-            case .or: return "or"
-            case .distinct: return "distinct"
+            case .and: return "_and"
+            case .or: return "_or"
+            case .distinct: return "distinct_on"
             case .orderBy: return "order_by"
             case .limit: return "limit"
             case .whereOperation(let operation):
@@ -74,7 +74,7 @@ class RawGraphQLArgument: Hashable {
                 return name
             case .column(let column):
                 // TODO check that this is the value I want!
-//                return "\(column.tableName)_\(column.columnName)"
+                //                return "\(column.tableName)_\(column.columnName)"
                 return column.columnName
             case .queryRelation(let relation):
                 return relation
@@ -90,16 +90,20 @@ class RawGraphQLArgument: Hashable {
         case bool(Bool)
         case namedValue(String) // just returns without quotes for example asc or dec
         
-        func encode() -> String {
+        func encode(isOr:Bool = false) -> String {
             switch self {
             case .integer(let val):
                 return "\(val)"
             case .string(let val):
-//                return val
+                //                return val
                 let valReplacing = val.replacingOccurrences(of: "\"", with: "")
                 return "\"\(valReplacing)\""
             case .arguments(let vals):
-                return  "{" + vals.map{ $0.encode()}.joined(separator: ", ")  + "}"
+                if isOr {
+                  return "{ " + vals.map{ $0.encode()}.joined(separator: " } , { ")  + " }"
+                } else {
+                    return  "{ " + vals.map{ $0.encode()}.joined(separator: " , ")  + " }"
+                }
             case .double(let val):
                 return "\(val)"
             case .bool(let val):
@@ -117,7 +121,7 @@ class RawGraphQLArgument: Hashable {
     }
     
     var name: RawGraphQLArgumentName
-    let value: RawGraphQLArgumentValue
+    var value: RawGraphQLArgumentValue
     let not: Bool
     
     func hash(into hasher: inout Hasher) {
@@ -126,11 +130,77 @@ class RawGraphQLArgument: Hashable {
         hasher.combine(not)
     }
     
+    // matches argument to type given in field.
+    func matchArgumentWithType(field: Field)  {
+
+        if case .arguments(let nestedArguments) = self.value {
+            nestedArguments.forEach{ $0.matchArgumentWithType(field: field)}
+            return
+        }
+        
+        // argument.value is not necisarily a scalar.
+        if field.type.name == "String" || field.type.ofType?.name == "String"{
+            if case .double(let val) = self.value {
+                self.value = .string(String(val))
+            } else if case .integer(let val) = self.value {
+                self.value = .string(String(val))
+            }
+            // isn't this supposed to be only scalars?
+            // does getFieldName still work?? Otherwise I might have other issues.
+        } else if field.type.name == "Int"  || field.type.name == "bigint" || field.type.name == "smallint" || field.type.ofType?.name == "Int" || field.type.ofType?.name == "bigint" || field.type.ofType?.name == "smallint"  {
+            if case .double(let val) = self.value {
+                self.value = .integer(Int(val))
+            } else if case .string(let val) = self.value {
+                self.value = .integer(Int(val.replacingOccurrences(of: "\"", with: ""))!)
+            }
+        } else if field.type.name == "float8" || field.type.ofType?.name == "float8" || field.type.name == "Float" || field.type.ofType?.name == "Float" {
+            if case .integer(let val) = self.value {
+                self.value = .double(Double(val))
+            } else if case .string(let val) = self.value {
+                self.value = .double(Double(val)!)
+            }
+        } else if field.type.name == "timestamptz" || field.type.name == "date", case .string(_) = self.value {
+            
+        } else if case .namedValue(_) = self.value {
+            
+        } else if field.type.name == "numeric", case .string(let val) = self.value, val == "\"\"" || val == "\"null\""{
+            self.name = .whereOperation(.isNull)
+            self.value = .bool(true)
+        } else if field.type.name == "numeric" || field.type.ofType?.name == "numeric" {
+            if case .double(_) = self.value {}
+            else if case .integer(_) = self.value {}
+        } else if field.type.name == "Boolean" || field.type.ofType?.name == "Boolean", case .integer(let val ) = self.value {
+            if val == 0 {
+                self.value = .bool(false)
+            } else if val == 1 {
+                self.value = .bool(true)
+            } else {
+                fatalError("Bool error")
+            }
+        } else if field.type.name == "Boolean" || field.type.ofType?.name == "Boolean", case .string(let val) = self.value {
+            let cleanedVal = val.replacingOccurrences(of: "\"", with: "")
+            if cleanedVal == "0" {
+                self.value = .bool(false)
+            } else if cleanedVal == "1" {
+                self.value = .bool(true)
+            } else {
+                fatalError("Bool error")
+            }
+        }
+        else {
+            fatalError("Cannot match type to argument")
+        }
+        
+    }
+    
     func encode() -> String {
         if case .column(_) = name {
             fatalError("column should be replaced with name.")
         }
-        let encoded = "\(name.rawValue): " + value.encode()
+        if name == .or {
+            return "\(name.rawValue) : [ \(value.encode(isOr: true)) ]" // otherwise it's treated as an and.
+        }
+        let encoded = "\(name.rawValue) : " + value.encode()
         return encoded
     }
 }
@@ -138,11 +208,11 @@ class RawGraphQLArgument: Hashable {
 class RawGraphQLQuery: Hashable {
     static func == (lhs: RawGraphQLQuery, rhs: RawGraphQLQuery) -> Bool {
         lhs.table == rhs.table &&
-        lhs.arguments == rhs.arguments &&
-        lhs.queries == rhs.queries &&
-        lhs.fields == rhs.fields &&
-        lhs.hasAggregates == rhs.hasAggregates &&
-        lhs.name == rhs.name
+            lhs.arguments == rhs.arguments &&
+            lhs.queries == rhs.queries &&
+            lhs.fields == rhs.fields &&
+            lhs.hasAggregates == rhs.hasAggregates &&
+            lhs.name == rhs.name
     }
     
     
@@ -174,13 +244,13 @@ class RawGraphQLQuery: Hashable {
         let types = schema.schema.types
         let aggregateEnding = self.hasAggregates ? "_aggregate" : ""
         guard let type = types
-        .first(where: { $0.name.lowercased() == self.table.name.lowercased() + aggregateEnding }) else {
+            .first(where: { $0.name.lowercased() == self.table.name.lowercased() + aggregateEnding }) else {
                 fatalError("table not found in schema")
         }
         self.name = type.name
         if self.hasAggregates,
             let nodesType = types.first(where: { $0.name.lowercased() == self.table.name.lowercased() }) {
-//            let aggregateFieldsType = types.first(where: {$0.name.lowercased() == self.table.name.lowercased() + aggregateEnding + "_fields"}) {
+            //            let aggregateFieldsType = types.first(where: {$0.name.lowercased() == self.table.name.lowercased() + aggregateEnding + "_fields"}) {
             
             self.queries.first?.table = table
             self.queries.first?.name = nodesType.name
@@ -202,6 +272,10 @@ class RawGraphQLQuery: Hashable {
     var nestedQueryCount: Int {
         self.queries.map{$0.nestedQueryCount}.reduce(0, +) + 1
     }
+    
+    var isEmpty: Bool {
+        queries.isEmpty && fields.isEmpty
+    }
     func hash(into hasher: inout Hasher) {
         hasher.combine(table)
         hasher.combine(arguments)
@@ -212,25 +286,37 @@ class RawGraphQLQuery: Hashable {
     }
     
     func encode() -> String {
-        guard !queries.isEmpty || !fields.isEmpty else {
-            return ""
+        guard !self.isEmpty else {
+            return "" // this should never be called since it's handled in encodedQueries
         }
-        let encodedArgs = arguments.count > 0 ? self.encodedArguments() : ""
-        let encodedQueries = queries.count > 0 ? self.encodedQueries() : ""
-        let encodedFields = fields.count > 0 ? self.encodeFields() : ""
-        return "\(name!)\(encodedArgs) { \(encodedFields) \(encodedQueries) }"
+        let encodedArgs = arguments.count > 0 ? self.encodedArguments() : " "
+        var allEncodedFields: String
+        if !fields.isEmpty && queries.isEmpty {
+            allEncodedFields = self.encodeFields()
+        } else if !queries.isEmpty && fields.isEmpty {
+            allEncodedFields = self.encodedQueries()
+        } else if !fields.isEmpty && !queries.isEmpty {
+            allEncodedFields = self.encodeFields() + " " + self.encodedQueries()
+        } else {
+            fatalError("Queries without fields/queries not allowed.")
+        }
+        let encodedQuery = "\(name!)\(encodedArgs){ \(allEncodedFields) }"
+        return encodedQuery
     }
     
     func encodeFields() -> String {
-        self.fields.map{ $0.encode() }.joined(separator: "  ")
+        self.fields.map{ $0.encode() }.joined(separator: " ")
     }
     
     func encodedArguments() -> String {
-        "(" + arguments.map { $0.encode()}.joined(separator: ", ") + ")"
+        " ( " + arguments.map { $0.encode()}.joined(separator: " , ") + " ) "
     }
     
     func encodedQueries() -> String {
-        return queries.map {$0.encode()}.joined(separator: "   ")
+        queries
+            .filter({!$0.isEmpty})
+            .map {$0.encode()}
+            .joined(separator: " ")
     }
 }
 
@@ -249,6 +335,7 @@ struct RawGraphQLField: Hashable {
     let name: RawGraphQLFieldName
     let column: DatabaseColumn
     let arguments: [RawGraphQLArgument]
+    var aggregateFieldName: String? = nil
     
     func encode() -> String {
         // TODO:
@@ -256,7 +343,11 @@ struct RawGraphQLField: Hashable {
         assert(arguments.count == 0 || self.arguments.first!.name == .distinct)
         switch self.name {
         case .aggregate(let operation):
-            return operation.string
+            if operation == .count {
+                return operation.string
+            } else {
+                return "\(operation.string) { \(aggregateFieldName!) }"
+            }
         case .field(let field):
             return field
         case .allFields:
@@ -328,6 +419,6 @@ class GraphQLQuery {
 struct GraphQLDatasetExample: Codable {
     let schemaId: String
     let question: String
-//    let questionTokens: [String]
+    //    let questionTokens: [String]
     let query: String
 }

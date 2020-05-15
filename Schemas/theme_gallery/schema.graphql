@@ -1,0 +1,1600 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "artist"
+"""
+type artist {
+  age: Int
+  artist_id: Int
+  country: String
+
+  """An array relationship"""
+  exhibitions(
+    """distinct select on columns"""
+    distinct_on: [exhibition_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [exhibition_order_by!]
+
+    """filter the rows returned"""
+    where: exhibition_bool_exp
+  ): [exhibition!]!
+
+  """An aggregated array relationship"""
+  exhibitions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [exhibition_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [exhibition_order_by!]
+
+    """filter the rows returned"""
+    where: exhibition_bool_exp
+  ): exhibition_aggregate!
+  name: String
+  year_join: Int
+}
+
+"""
+aggregated selection of "artist"
+"""
+type artist_aggregate {
+  aggregate: artist_aggregate_fields
+  nodes: [artist!]!
+}
+
+"""
+aggregate fields of "artist"
+"""
+type artist_aggregate_fields {
+  avg: artist_avg_fields
+  count(columns: [artist_select_column!], distinct: Boolean): Int
+  max: artist_max_fields
+  min: artist_min_fields
+  stddev: artist_stddev_fields
+  stddev_pop: artist_stddev_pop_fields
+  stddev_samp: artist_stddev_samp_fields
+  sum: artist_sum_fields
+  var_pop: artist_var_pop_fields
+  var_samp: artist_var_samp_fields
+  variance: artist_variance_fields
+}
+
+"""
+order by aggregate values of table "artist"
+"""
+input artist_aggregate_order_by {
+  avg: artist_avg_order_by
+  count: order_by
+  max: artist_max_order_by
+  min: artist_min_order_by
+  stddev: artist_stddev_order_by
+  stddev_pop: artist_stddev_pop_order_by
+  stddev_samp: artist_stddev_samp_order_by
+  sum: artist_sum_order_by
+  var_pop: artist_var_pop_order_by
+  var_samp: artist_var_samp_order_by
+  variance: artist_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "artist"
+"""
+input artist_arr_rel_insert_input {
+  data: [artist_insert_input!]!
+  on_conflict: artist_on_conflict
+}
+
+"""aggregate avg on columns"""
+type artist_avg_fields {
+  age: Float
+  artist_id: Float
+  year_join: Float
+}
+
+"""
+order by avg() on columns of table "artist"
+"""
+input artist_avg_order_by {
+  age: order_by
+  artist_id: order_by
+  year_join: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "artist". All fields are combined with a logical 'AND'.
+"""
+input artist_bool_exp {
+  _and: [artist_bool_exp]
+  _not: artist_bool_exp
+  _or: [artist_bool_exp]
+  age: Int_comparison_exp
+  artist_id: Int_comparison_exp
+  country: String_comparison_exp
+  exhibitions: exhibition_bool_exp
+  name: String_comparison_exp
+  year_join: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "artist"
+"""
+enum artist_constraint {
+  """unique or primary key constraint"""
+  idx_26435_sqlite_autoindex_artist_1
+}
+
+"""
+input type for incrementing integer columne in table "artist"
+"""
+input artist_inc_input {
+  age: Int
+  artist_id: Int
+  year_join: Int
+}
+
+"""
+input type for inserting data into table "artist"
+"""
+input artist_insert_input {
+  age: Int
+  artist_id: Int
+  country: String
+  exhibitions: exhibition_arr_rel_insert_input
+  name: String
+  year_join: Int
+}
+
+"""aggregate max on columns"""
+type artist_max_fields {
+  age: Int
+  artist_id: Int
+  country: String
+  name: String
+  year_join: Int
+}
+
+"""
+order by max() on columns of table "artist"
+"""
+input artist_max_order_by {
+  age: order_by
+  artist_id: order_by
+  country: order_by
+  name: order_by
+  year_join: order_by
+}
+
+"""aggregate min on columns"""
+type artist_min_fields {
+  age: Int
+  artist_id: Int
+  country: String
+  name: String
+  year_join: Int
+}
+
+"""
+order by min() on columns of table "artist"
+"""
+input artist_min_order_by {
+  age: order_by
+  artist_id: order_by
+  country: order_by
+  name: order_by
+  year_join: order_by
+}
+
+"""
+response of any mutation on the table "artist"
+"""
+type artist_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [artist!]!
+}
+
+"""
+input type for inserting object relation for remote table "artist"
+"""
+input artist_obj_rel_insert_input {
+  data: artist_insert_input!
+  on_conflict: artist_on_conflict
+}
+
+"""
+on conflict condition type for table "artist"
+"""
+input artist_on_conflict {
+  constraint: artist_constraint!
+  update_columns: [artist_update_column!]!
+  where: artist_bool_exp
+}
+
+"""
+ordering options when selecting data from "artist"
+"""
+input artist_order_by {
+  age: order_by
+  artist_id: order_by
+  country: order_by
+  exhibitions_aggregate: exhibition_aggregate_order_by
+  name: order_by
+  year_join: order_by
+}
+
+"""
+select columns of table "artist"
+"""
+enum artist_select_column {
+  """column name"""
+  age
+
+  """column name"""
+  artist_id
+
+  """column name"""
+  country
+
+  """column name"""
+  name
+
+  """column name"""
+  year_join
+}
+
+"""
+input type for updating data in table "artist"
+"""
+input artist_set_input {
+  age: Int
+  artist_id: Int
+  country: String
+  name: String
+  year_join: Int
+}
+
+"""aggregate stddev on columns"""
+type artist_stddev_fields {
+  age: Float
+  artist_id: Float
+  year_join: Float
+}
+
+"""
+order by stddev() on columns of table "artist"
+"""
+input artist_stddev_order_by {
+  age: order_by
+  artist_id: order_by
+  year_join: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type artist_stddev_pop_fields {
+  age: Float
+  artist_id: Float
+  year_join: Float
+}
+
+"""
+order by stddev_pop() on columns of table "artist"
+"""
+input artist_stddev_pop_order_by {
+  age: order_by
+  artist_id: order_by
+  year_join: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type artist_stddev_samp_fields {
+  age: Float
+  artist_id: Float
+  year_join: Float
+}
+
+"""
+order by stddev_samp() on columns of table "artist"
+"""
+input artist_stddev_samp_order_by {
+  age: order_by
+  artist_id: order_by
+  year_join: order_by
+}
+
+"""aggregate sum on columns"""
+type artist_sum_fields {
+  age: Int
+  artist_id: Int
+  year_join: Int
+}
+
+"""
+order by sum() on columns of table "artist"
+"""
+input artist_sum_order_by {
+  age: order_by
+  artist_id: order_by
+  year_join: order_by
+}
+
+"""
+update columns of table "artist"
+"""
+enum artist_update_column {
+  """column name"""
+  age
+
+  """column name"""
+  artist_id
+
+  """column name"""
+  country
+
+  """column name"""
+  name
+
+  """column name"""
+  year_join
+}
+
+"""aggregate var_pop on columns"""
+type artist_var_pop_fields {
+  age: Float
+  artist_id: Float
+  year_join: Float
+}
+
+"""
+order by var_pop() on columns of table "artist"
+"""
+input artist_var_pop_order_by {
+  age: order_by
+  artist_id: order_by
+  year_join: order_by
+}
+
+"""aggregate var_samp on columns"""
+type artist_var_samp_fields {
+  age: Float
+  artist_id: Float
+  year_join: Float
+}
+
+"""
+order by var_samp() on columns of table "artist"
+"""
+input artist_var_samp_order_by {
+  age: order_by
+  artist_id: order_by
+  year_join: order_by
+}
+
+"""aggregate variance on columns"""
+type artist_variance_fields {
+  age: Float
+  artist_id: Float
+  year_join: Float
+}
+
+"""
+order by variance() on columns of table "artist"
+"""
+input artist_variance_order_by {
+  age: order_by
+  artist_id: order_by
+  year_join: order_by
+}
+
+"""
+columns and relationships of "exhibition"
+"""
+type exhibition {
+  """An object relationship"""
+  artist: artist
+  artist_id: Int
+  exhibition_id: Int
+
+  """An array relationship"""
+  exhibition_records(
+    """distinct select on columns"""
+    distinct_on: [exhibition_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [exhibition_record_order_by!]
+
+    """filter the rows returned"""
+    where: exhibition_record_bool_exp
+  ): [exhibition_record!]!
+
+  """An aggregated array relationship"""
+  exhibition_records_aggregate(
+    """distinct select on columns"""
+    distinct_on: [exhibition_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [exhibition_record_order_by!]
+
+    """filter the rows returned"""
+    where: exhibition_record_bool_exp
+  ): exhibition_record_aggregate!
+  theme: String
+  ticket_price: Float
+  year: Int
+}
+
+"""
+aggregated selection of "exhibition"
+"""
+type exhibition_aggregate {
+  aggregate: exhibition_aggregate_fields
+  nodes: [exhibition!]!
+}
+
+"""
+aggregate fields of "exhibition"
+"""
+type exhibition_aggregate_fields {
+  avg: exhibition_avg_fields
+  count(columns: [exhibition_select_column!], distinct: Boolean): Int
+  max: exhibition_max_fields
+  min: exhibition_min_fields
+  stddev: exhibition_stddev_fields
+  stddev_pop: exhibition_stddev_pop_fields
+  stddev_samp: exhibition_stddev_samp_fields
+  sum: exhibition_sum_fields
+  var_pop: exhibition_var_pop_fields
+  var_samp: exhibition_var_samp_fields
+  variance: exhibition_variance_fields
+}
+
+"""
+order by aggregate values of table "exhibition"
+"""
+input exhibition_aggregate_order_by {
+  avg: exhibition_avg_order_by
+  count: order_by
+  max: exhibition_max_order_by
+  min: exhibition_min_order_by
+  stddev: exhibition_stddev_order_by
+  stddev_pop: exhibition_stddev_pop_order_by
+  stddev_samp: exhibition_stddev_samp_order_by
+  sum: exhibition_sum_order_by
+  var_pop: exhibition_var_pop_order_by
+  var_samp: exhibition_var_samp_order_by
+  variance: exhibition_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "exhibition"
+"""
+input exhibition_arr_rel_insert_input {
+  data: [exhibition_insert_input!]!
+  on_conflict: exhibition_on_conflict
+}
+
+"""aggregate avg on columns"""
+type exhibition_avg_fields {
+  artist_id: Float
+  exhibition_id: Float
+  ticket_price: Float
+  year: Float
+}
+
+"""
+order by avg() on columns of table "exhibition"
+"""
+input exhibition_avg_order_by {
+  artist_id: order_by
+  exhibition_id: order_by
+  ticket_price: order_by
+  year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "exhibition". All fields are combined with a logical 'AND'.
+"""
+input exhibition_bool_exp {
+  _and: [exhibition_bool_exp]
+  _not: exhibition_bool_exp
+  _or: [exhibition_bool_exp]
+  artist: artist_bool_exp
+  artist_id: Int_comparison_exp
+  exhibition_id: Int_comparison_exp
+  exhibition_records: exhibition_record_bool_exp
+  theme: String_comparison_exp
+  ticket_price: Float_comparison_exp
+  year: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "exhibition"
+"""
+enum exhibition_constraint {
+  """unique or primary key constraint"""
+  idx_26441_sqlite_autoindex_exhibition_1
+}
+
+"""
+input type for incrementing integer columne in table "exhibition"
+"""
+input exhibition_inc_input {
+  artist_id: Int
+  exhibition_id: Int
+  year: Int
+}
+
+"""
+input type for inserting data into table "exhibition"
+"""
+input exhibition_insert_input {
+  artist: artist_obj_rel_insert_input
+  artist_id: Int
+  exhibition_id: Int
+  exhibition_records: exhibition_record_arr_rel_insert_input
+  theme: String
+  ticket_price: Float
+  year: Int
+}
+
+"""aggregate max on columns"""
+type exhibition_max_fields {
+  artist_id: Int
+  exhibition_id: Int
+  theme: String
+  ticket_price: Float
+  year: Int
+}
+
+"""
+order by max() on columns of table "exhibition"
+"""
+input exhibition_max_order_by {
+  artist_id: order_by
+  exhibition_id: order_by
+  theme: order_by
+  ticket_price: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type exhibition_min_fields {
+  artist_id: Int
+  exhibition_id: Int
+  theme: String
+  ticket_price: Float
+  year: Int
+}
+
+"""
+order by min() on columns of table "exhibition"
+"""
+input exhibition_min_order_by {
+  artist_id: order_by
+  exhibition_id: order_by
+  theme: order_by
+  ticket_price: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "exhibition"
+"""
+type exhibition_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [exhibition!]!
+}
+
+"""
+input type for inserting object relation for remote table "exhibition"
+"""
+input exhibition_obj_rel_insert_input {
+  data: exhibition_insert_input!
+  on_conflict: exhibition_on_conflict
+}
+
+"""
+on conflict condition type for table "exhibition"
+"""
+input exhibition_on_conflict {
+  constraint: exhibition_constraint!
+  update_columns: [exhibition_update_column!]!
+  where: exhibition_bool_exp
+}
+
+"""
+ordering options when selecting data from "exhibition"
+"""
+input exhibition_order_by {
+  artist: artist_order_by
+  artist_id: order_by
+  exhibition_id: order_by
+  exhibition_records_aggregate: exhibition_record_aggregate_order_by
+  theme: order_by
+  ticket_price: order_by
+  year: order_by
+}
+
+"""
+columns and relationships of "exhibition_record"
+"""
+type exhibition_record {
+  attendance: Int
+  date: String
+
+  """An object relationship"""
+  exhibition: exhibition
+  exhibition_id: Int
+}
+
+"""
+aggregated selection of "exhibition_record"
+"""
+type exhibition_record_aggregate {
+  aggregate: exhibition_record_aggregate_fields
+  nodes: [exhibition_record!]!
+}
+
+"""
+aggregate fields of "exhibition_record"
+"""
+type exhibition_record_aggregate_fields {
+  avg: exhibition_record_avg_fields
+  count(columns: [exhibition_record_select_column!], distinct: Boolean): Int
+  max: exhibition_record_max_fields
+  min: exhibition_record_min_fields
+  stddev: exhibition_record_stddev_fields
+  stddev_pop: exhibition_record_stddev_pop_fields
+  stddev_samp: exhibition_record_stddev_samp_fields
+  sum: exhibition_record_sum_fields
+  var_pop: exhibition_record_var_pop_fields
+  var_samp: exhibition_record_var_samp_fields
+  variance: exhibition_record_variance_fields
+}
+
+"""
+order by aggregate values of table "exhibition_record"
+"""
+input exhibition_record_aggregate_order_by {
+  avg: exhibition_record_avg_order_by
+  count: order_by
+  max: exhibition_record_max_order_by
+  min: exhibition_record_min_order_by
+  stddev: exhibition_record_stddev_order_by
+  stddev_pop: exhibition_record_stddev_pop_order_by
+  stddev_samp: exhibition_record_stddev_samp_order_by
+  sum: exhibition_record_sum_order_by
+  var_pop: exhibition_record_var_pop_order_by
+  var_samp: exhibition_record_var_samp_order_by
+  variance: exhibition_record_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "exhibition_record"
+"""
+input exhibition_record_arr_rel_insert_input {
+  data: [exhibition_record_insert_input!]!
+  on_conflict: exhibition_record_on_conflict
+}
+
+"""aggregate avg on columns"""
+type exhibition_record_avg_fields {
+  attendance: Float
+  exhibition_id: Float
+}
+
+"""
+order by avg() on columns of table "exhibition_record"
+"""
+input exhibition_record_avg_order_by {
+  attendance: order_by
+  exhibition_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "exhibition_record". All fields are combined with a logical 'AND'.
+"""
+input exhibition_record_bool_exp {
+  _and: [exhibition_record_bool_exp]
+  _not: exhibition_record_bool_exp
+  _or: [exhibition_record_bool_exp]
+  attendance: Int_comparison_exp
+  date: String_comparison_exp
+  exhibition: exhibition_bool_exp
+  exhibition_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "exhibition_record"
+"""
+enum exhibition_record_constraint {
+  """unique or primary key constraint"""
+  idx_26447_sqlite_autoindex_exhibition_record_1
+}
+
+"""
+input type for incrementing integer columne in table "exhibition_record"
+"""
+input exhibition_record_inc_input {
+  attendance: Int
+  exhibition_id: Int
+}
+
+"""
+input type for inserting data into table "exhibition_record"
+"""
+input exhibition_record_insert_input {
+  attendance: Int
+  date: String
+  exhibition: exhibition_obj_rel_insert_input
+  exhibition_id: Int
+}
+
+"""aggregate max on columns"""
+type exhibition_record_max_fields {
+  attendance: Int
+  date: String
+  exhibition_id: Int
+}
+
+"""
+order by max() on columns of table "exhibition_record"
+"""
+input exhibition_record_max_order_by {
+  attendance: order_by
+  date: order_by
+  exhibition_id: order_by
+}
+
+"""aggregate min on columns"""
+type exhibition_record_min_fields {
+  attendance: Int
+  date: String
+  exhibition_id: Int
+}
+
+"""
+order by min() on columns of table "exhibition_record"
+"""
+input exhibition_record_min_order_by {
+  attendance: order_by
+  date: order_by
+  exhibition_id: order_by
+}
+
+"""
+response of any mutation on the table "exhibition_record"
+"""
+type exhibition_record_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [exhibition_record!]!
+}
+
+"""
+input type for inserting object relation for remote table "exhibition_record"
+"""
+input exhibition_record_obj_rel_insert_input {
+  data: exhibition_record_insert_input!
+  on_conflict: exhibition_record_on_conflict
+}
+
+"""
+on conflict condition type for table "exhibition_record"
+"""
+input exhibition_record_on_conflict {
+  constraint: exhibition_record_constraint!
+  update_columns: [exhibition_record_update_column!]!
+  where: exhibition_record_bool_exp
+}
+
+"""
+ordering options when selecting data from "exhibition_record"
+"""
+input exhibition_record_order_by {
+  attendance: order_by
+  date: order_by
+  exhibition: exhibition_order_by
+  exhibition_id: order_by
+}
+
+"""
+select columns of table "exhibition_record"
+"""
+enum exhibition_record_select_column {
+  """column name"""
+  attendance
+
+  """column name"""
+  date
+
+  """column name"""
+  exhibition_id
+}
+
+"""
+input type for updating data in table "exhibition_record"
+"""
+input exhibition_record_set_input {
+  attendance: Int
+  date: String
+  exhibition_id: Int
+}
+
+"""aggregate stddev on columns"""
+type exhibition_record_stddev_fields {
+  attendance: Float
+  exhibition_id: Float
+}
+
+"""
+order by stddev() on columns of table "exhibition_record"
+"""
+input exhibition_record_stddev_order_by {
+  attendance: order_by
+  exhibition_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type exhibition_record_stddev_pop_fields {
+  attendance: Float
+  exhibition_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "exhibition_record"
+"""
+input exhibition_record_stddev_pop_order_by {
+  attendance: order_by
+  exhibition_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type exhibition_record_stddev_samp_fields {
+  attendance: Float
+  exhibition_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "exhibition_record"
+"""
+input exhibition_record_stddev_samp_order_by {
+  attendance: order_by
+  exhibition_id: order_by
+}
+
+"""aggregate sum on columns"""
+type exhibition_record_sum_fields {
+  attendance: Int
+  exhibition_id: Int
+}
+
+"""
+order by sum() on columns of table "exhibition_record"
+"""
+input exhibition_record_sum_order_by {
+  attendance: order_by
+  exhibition_id: order_by
+}
+
+"""
+update columns of table "exhibition_record"
+"""
+enum exhibition_record_update_column {
+  """column name"""
+  attendance
+
+  """column name"""
+  date
+
+  """column name"""
+  exhibition_id
+}
+
+"""aggregate var_pop on columns"""
+type exhibition_record_var_pop_fields {
+  attendance: Float
+  exhibition_id: Float
+}
+
+"""
+order by var_pop() on columns of table "exhibition_record"
+"""
+input exhibition_record_var_pop_order_by {
+  attendance: order_by
+  exhibition_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type exhibition_record_var_samp_fields {
+  attendance: Float
+  exhibition_id: Float
+}
+
+"""
+order by var_samp() on columns of table "exhibition_record"
+"""
+input exhibition_record_var_samp_order_by {
+  attendance: order_by
+  exhibition_id: order_by
+}
+
+"""aggregate variance on columns"""
+type exhibition_record_variance_fields {
+  attendance: Float
+  exhibition_id: Float
+}
+
+"""
+order by variance() on columns of table "exhibition_record"
+"""
+input exhibition_record_variance_order_by {
+  attendance: order_by
+  exhibition_id: order_by
+}
+
+"""
+select columns of table "exhibition"
+"""
+enum exhibition_select_column {
+  """column name"""
+  artist_id
+
+  """column name"""
+  exhibition_id
+
+  """column name"""
+  theme
+
+  """column name"""
+  ticket_price
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "exhibition"
+"""
+input exhibition_set_input {
+  artist_id: Int
+  exhibition_id: Int
+  theme: String
+  ticket_price: Float
+  year: Int
+}
+
+"""aggregate stddev on columns"""
+type exhibition_stddev_fields {
+  artist_id: Float
+  exhibition_id: Float
+  ticket_price: Float
+  year: Float
+}
+
+"""
+order by stddev() on columns of table "exhibition"
+"""
+input exhibition_stddev_order_by {
+  artist_id: order_by
+  exhibition_id: order_by
+  ticket_price: order_by
+  year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type exhibition_stddev_pop_fields {
+  artist_id: Float
+  exhibition_id: Float
+  ticket_price: Float
+  year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "exhibition"
+"""
+input exhibition_stddev_pop_order_by {
+  artist_id: order_by
+  exhibition_id: order_by
+  ticket_price: order_by
+  year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type exhibition_stddev_samp_fields {
+  artist_id: Float
+  exhibition_id: Float
+  ticket_price: Float
+  year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "exhibition"
+"""
+input exhibition_stddev_samp_order_by {
+  artist_id: order_by
+  exhibition_id: order_by
+  ticket_price: order_by
+  year: order_by
+}
+
+"""aggregate sum on columns"""
+type exhibition_sum_fields {
+  artist_id: Int
+  exhibition_id: Int
+  ticket_price: Float
+  year: Int
+}
+
+"""
+order by sum() on columns of table "exhibition"
+"""
+input exhibition_sum_order_by {
+  artist_id: order_by
+  exhibition_id: order_by
+  ticket_price: order_by
+  year: order_by
+}
+
+"""
+update columns of table "exhibition"
+"""
+enum exhibition_update_column {
+  """column name"""
+  artist_id
+
+  """column name"""
+  exhibition_id
+
+  """column name"""
+  theme
+
+  """column name"""
+  ticket_price
+
+  """column name"""
+  year
+}
+
+"""aggregate var_pop on columns"""
+type exhibition_var_pop_fields {
+  artist_id: Float
+  exhibition_id: Float
+  ticket_price: Float
+  year: Float
+}
+
+"""
+order by var_pop() on columns of table "exhibition"
+"""
+input exhibition_var_pop_order_by {
+  artist_id: order_by
+  exhibition_id: order_by
+  ticket_price: order_by
+  year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type exhibition_var_samp_fields {
+  artist_id: Float
+  exhibition_id: Float
+  ticket_price: Float
+  year: Float
+}
+
+"""
+order by var_samp() on columns of table "exhibition"
+"""
+input exhibition_var_samp_order_by {
+  artist_id: order_by
+  exhibition_id: order_by
+  ticket_price: order_by
+  year: order_by
+}
+
+"""aggregate variance on columns"""
+type exhibition_variance_fields {
+  artist_id: Float
+  exhibition_id: Float
+  ticket_price: Float
+  year: Float
+}
+
+"""
+order by variance() on columns of table "exhibition"
+"""
+input exhibition_variance_order_by {
+  artist_id: order_by
+  exhibition_id: order_by
+  ticket_price: order_by
+  year: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "artist"
+  """
+  delete_artist(
+    """filter the rows which have to be deleted"""
+    where: artist_bool_exp!
+  ): artist_mutation_response
+
+  """
+  delete data from the table: "exhibition"
+  """
+  delete_exhibition(
+    """filter the rows which have to be deleted"""
+    where: exhibition_bool_exp!
+  ): exhibition_mutation_response
+
+  """
+  delete data from the table: "exhibition_record"
+  """
+  delete_exhibition_record(
+    """filter the rows which have to be deleted"""
+    where: exhibition_record_bool_exp!
+  ): exhibition_record_mutation_response
+
+  """
+  insert data into the table: "artist"
+  """
+  insert_artist(
+    """the rows to be inserted"""
+    objects: [artist_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: artist_on_conflict
+  ): artist_mutation_response
+
+  """
+  insert data into the table: "exhibition"
+  """
+  insert_exhibition(
+    """the rows to be inserted"""
+    objects: [exhibition_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: exhibition_on_conflict
+  ): exhibition_mutation_response
+
+  """
+  insert data into the table: "exhibition_record"
+  """
+  insert_exhibition_record(
+    """the rows to be inserted"""
+    objects: [exhibition_record_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: exhibition_record_on_conflict
+  ): exhibition_record_mutation_response
+
+  """
+  update data of the table: "artist"
+  """
+  update_artist(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: artist_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: artist_set_input
+
+    """filter the rows which have to be updated"""
+    where: artist_bool_exp!
+  ): artist_mutation_response
+
+  """
+  update data of the table: "exhibition"
+  """
+  update_exhibition(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: exhibition_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: exhibition_set_input
+
+    """filter the rows which have to be updated"""
+    where: exhibition_bool_exp!
+  ): exhibition_mutation_response
+
+  """
+  update data of the table: "exhibition_record"
+  """
+  update_exhibition_record(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: exhibition_record_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: exhibition_record_set_input
+
+    """filter the rows which have to be updated"""
+    where: exhibition_record_bool_exp!
+  ): exhibition_record_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "artist"
+  """
+  artist(
+    """distinct select on columns"""
+    distinct_on: [artist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [artist_order_by!]
+
+    """filter the rows returned"""
+    where: artist_bool_exp
+  ): [artist!]!
+
+  """
+  fetch aggregated fields from the table: "artist"
+  """
+  artist_aggregate(
+    """distinct select on columns"""
+    distinct_on: [artist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [artist_order_by!]
+
+    """filter the rows returned"""
+    where: artist_bool_exp
+  ): artist_aggregate!
+
+  """
+  fetch data from the table: "exhibition"
+  """
+  exhibition(
+    """distinct select on columns"""
+    distinct_on: [exhibition_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [exhibition_order_by!]
+
+    """filter the rows returned"""
+    where: exhibition_bool_exp
+  ): [exhibition!]!
+
+  """
+  fetch aggregated fields from the table: "exhibition"
+  """
+  exhibition_aggregate(
+    """distinct select on columns"""
+    distinct_on: [exhibition_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [exhibition_order_by!]
+
+    """filter the rows returned"""
+    where: exhibition_bool_exp
+  ): exhibition_aggregate!
+
+  """
+  fetch data from the table: "exhibition_record"
+  """
+  exhibition_record(
+    """distinct select on columns"""
+    distinct_on: [exhibition_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [exhibition_record_order_by!]
+
+    """filter the rows returned"""
+    where: exhibition_record_bool_exp
+  ): [exhibition_record!]!
+
+  """
+  fetch aggregated fields from the table: "exhibition_record"
+  """
+  exhibition_record_aggregate(
+    """distinct select on columns"""
+    distinct_on: [exhibition_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [exhibition_record_order_by!]
+
+    """filter the rows returned"""
+    where: exhibition_record_bool_exp
+  ): exhibition_record_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "artist"
+  """
+  artist(
+    """distinct select on columns"""
+    distinct_on: [artist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [artist_order_by!]
+
+    """filter the rows returned"""
+    where: artist_bool_exp
+  ): [artist!]!
+
+  """
+  fetch aggregated fields from the table: "artist"
+  """
+  artist_aggregate(
+    """distinct select on columns"""
+    distinct_on: [artist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [artist_order_by!]
+
+    """filter the rows returned"""
+    where: artist_bool_exp
+  ): artist_aggregate!
+
+  """
+  fetch data from the table: "exhibition"
+  """
+  exhibition(
+    """distinct select on columns"""
+    distinct_on: [exhibition_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [exhibition_order_by!]
+
+    """filter the rows returned"""
+    where: exhibition_bool_exp
+  ): [exhibition!]!
+
+  """
+  fetch aggregated fields from the table: "exhibition"
+  """
+  exhibition_aggregate(
+    """distinct select on columns"""
+    distinct_on: [exhibition_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [exhibition_order_by!]
+
+    """filter the rows returned"""
+    where: exhibition_bool_exp
+  ): exhibition_aggregate!
+
+  """
+  fetch data from the table: "exhibition_record"
+  """
+  exhibition_record(
+    """distinct select on columns"""
+    distinct_on: [exhibition_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [exhibition_record_order_by!]
+
+    """filter the rows returned"""
+    where: exhibition_record_bool_exp
+  ): [exhibition_record!]!
+
+  """
+  fetch aggregated fields from the table: "exhibition_record"
+  """
+  exhibition_record_aggregate(
+    """distinct select on columns"""
+    distinct_on: [exhibition_record_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [exhibition_record_order_by!]
+
+    """filter the rows returned"""
+    where: exhibition_record_bool_exp
+  ): exhibition_record_aggregate!
+}

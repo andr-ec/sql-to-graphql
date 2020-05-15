@@ -1,0 +1,4869 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "addresses"
+"""
+type addresses {
+  address_details: String
+  address_id: bigint!
+
+  """An array relationship"""
+  documents_maileds(
+    """distinct select on columns"""
+    distinct_on: [documents_mailed_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_mailed_order_by!]
+
+    """filter the rows returned"""
+    where: documents_mailed_bool_exp
+  ): [documents_mailed!]!
+
+  """An aggregated array relationship"""
+  documents_maileds_aggregate(
+    """distinct select on columns"""
+    distinct_on: [documents_mailed_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_mailed_order_by!]
+
+    """filter the rows returned"""
+    where: documents_mailed_bool_exp
+  ): documents_mailed_aggregate!
+}
+
+"""
+aggregated selection of "addresses"
+"""
+type addresses_aggregate {
+  aggregate: addresses_aggregate_fields
+  nodes: [addresses!]!
+}
+
+"""
+aggregate fields of "addresses"
+"""
+type addresses_aggregate_fields {
+  avg: addresses_avg_fields
+  count(columns: [addresses_select_column!], distinct: Boolean): Int
+  max: addresses_max_fields
+  min: addresses_min_fields
+  stddev: addresses_stddev_fields
+  stddev_pop: addresses_stddev_pop_fields
+  stddev_samp: addresses_stddev_samp_fields
+  sum: addresses_sum_fields
+  var_pop: addresses_var_pop_fields
+  var_samp: addresses_var_samp_fields
+  variance: addresses_variance_fields
+}
+
+"""
+order by aggregate values of table "addresses"
+"""
+input addresses_aggregate_order_by {
+  avg: addresses_avg_order_by
+  count: order_by
+  max: addresses_max_order_by
+  min: addresses_min_order_by
+  stddev: addresses_stddev_order_by
+  stddev_pop: addresses_stddev_pop_order_by
+  stddev_samp: addresses_stddev_samp_order_by
+  sum: addresses_sum_order_by
+  var_pop: addresses_var_pop_order_by
+  var_samp: addresses_var_samp_order_by
+  variance: addresses_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "addresses"
+"""
+input addresses_arr_rel_insert_input {
+  data: [addresses_insert_input!]!
+  on_conflict: addresses_on_conflict
+}
+
+"""aggregate avg on columns"""
+type addresses_avg_fields {
+  address_id: Float
+}
+
+"""
+order by avg() on columns of table "addresses"
+"""
+input addresses_avg_order_by {
+  address_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "addresses". All fields are combined with a logical 'AND'.
+"""
+input addresses_bool_exp {
+  _and: [addresses_bool_exp]
+  _not: addresses_bool_exp
+  _or: [addresses_bool_exp]
+  address_details: String_comparison_exp
+  address_id: bigint_comparison_exp
+  documents_maileds: documents_mailed_bool_exp
+}
+
+"""
+unique or primary key constraints on table "addresses"
+"""
+enum addresses_constraint {
+  """unique or primary key constraint"""
+  idx_20107_addresses_pkey
+}
+
+"""
+input type for incrementing integer columne in table "addresses"
+"""
+input addresses_inc_input {
+  address_id: bigint
+}
+
+"""
+input type for inserting data into table "addresses"
+"""
+input addresses_insert_input {
+  address_details: String
+  address_id: bigint
+  documents_maileds: documents_mailed_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type addresses_max_fields {
+  address_details: String
+  address_id: bigint
+}
+
+"""
+order by max() on columns of table "addresses"
+"""
+input addresses_max_order_by {
+  address_details: order_by
+  address_id: order_by
+}
+
+"""aggregate min on columns"""
+type addresses_min_fields {
+  address_details: String
+  address_id: bigint
+}
+
+"""
+order by min() on columns of table "addresses"
+"""
+input addresses_min_order_by {
+  address_details: order_by
+  address_id: order_by
+}
+
+"""
+response of any mutation on the table "addresses"
+"""
+type addresses_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [addresses!]!
+}
+
+"""
+input type for inserting object relation for remote table "addresses"
+"""
+input addresses_obj_rel_insert_input {
+  data: addresses_insert_input!
+  on_conflict: addresses_on_conflict
+}
+
+"""
+on conflict condition type for table "addresses"
+"""
+input addresses_on_conflict {
+  constraint: addresses_constraint!
+  update_columns: [addresses_update_column!]!
+  where: addresses_bool_exp
+}
+
+"""
+ordering options when selecting data from "addresses"
+"""
+input addresses_order_by {
+  address_details: order_by
+  address_id: order_by
+  documents_maileds_aggregate: documents_mailed_aggregate_order_by
+}
+
+"""
+select columns of table "addresses"
+"""
+enum addresses_select_column {
+  """column name"""
+  address_details
+
+  """column name"""
+  address_id
+}
+
+"""
+input type for updating data in table "addresses"
+"""
+input addresses_set_input {
+  address_details: String
+  address_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type addresses_stddev_fields {
+  address_id: Float
+}
+
+"""
+order by stddev() on columns of table "addresses"
+"""
+input addresses_stddev_order_by {
+  address_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type addresses_stddev_pop_fields {
+  address_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "addresses"
+"""
+input addresses_stddev_pop_order_by {
+  address_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type addresses_stddev_samp_fields {
+  address_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "addresses"
+"""
+input addresses_stddev_samp_order_by {
+  address_id: order_by
+}
+
+"""aggregate sum on columns"""
+type addresses_sum_fields {
+  address_id: bigint
+}
+
+"""
+order by sum() on columns of table "addresses"
+"""
+input addresses_sum_order_by {
+  address_id: order_by
+}
+
+"""
+update columns of table "addresses"
+"""
+enum addresses_update_column {
+  """column name"""
+  address_details
+
+  """column name"""
+  address_id
+}
+
+"""aggregate var_pop on columns"""
+type addresses_var_pop_fields {
+  address_id: Float
+}
+
+"""
+order by var_pop() on columns of table "addresses"
+"""
+input addresses_var_pop_order_by {
+  address_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type addresses_var_samp_fields {
+  address_id: Float
+}
+
+"""
+order by var_samp() on columns of table "addresses"
+"""
+input addresses_var_samp_order_by {
+  address_id: order_by
+}
+
+"""aggregate variance on columns"""
+type addresses_variance_fields {
+  address_id: Float
+}
+
+"""
+order by variance() on columns of table "addresses"
+"""
+input addresses_variance_order_by {
+  address_id: order_by
+}
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "circulation_history"
+"""
+type circulation_history {
+  copy_number: bigint!
+
+  """An object relationship"""
+  document: documents!
+  document_id: bigint!
+
+  """An object relationship"""
+  draft_copy: draft_copies
+  draft_number: bigint!
+
+  """An object relationship"""
+  employee: employees!
+  employee_id: bigint!
+}
+
+"""
+aggregated selection of "circulation_history"
+"""
+type circulation_history_aggregate {
+  aggregate: circulation_history_aggregate_fields
+  nodes: [circulation_history!]!
+}
+
+"""
+aggregate fields of "circulation_history"
+"""
+type circulation_history_aggregate_fields {
+  avg: circulation_history_avg_fields
+  count(columns: [circulation_history_select_column!], distinct: Boolean): Int
+  max: circulation_history_max_fields
+  min: circulation_history_min_fields
+  stddev: circulation_history_stddev_fields
+  stddev_pop: circulation_history_stddev_pop_fields
+  stddev_samp: circulation_history_stddev_samp_fields
+  sum: circulation_history_sum_fields
+  var_pop: circulation_history_var_pop_fields
+  var_samp: circulation_history_var_samp_fields
+  variance: circulation_history_variance_fields
+}
+
+"""
+order by aggregate values of table "circulation_history"
+"""
+input circulation_history_aggregate_order_by {
+  avg: circulation_history_avg_order_by
+  count: order_by
+  max: circulation_history_max_order_by
+  min: circulation_history_min_order_by
+  stddev: circulation_history_stddev_order_by
+  stddev_pop: circulation_history_stddev_pop_order_by
+  stddev_samp: circulation_history_stddev_samp_order_by
+  sum: circulation_history_sum_order_by
+  var_pop: circulation_history_var_pop_order_by
+  var_samp: circulation_history_var_samp_order_by
+  variance: circulation_history_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "circulation_history"
+"""
+input circulation_history_arr_rel_insert_input {
+  data: [circulation_history_insert_input!]!
+  on_conflict: circulation_history_on_conflict
+}
+
+"""aggregate avg on columns"""
+type circulation_history_avg_fields {
+  copy_number: Float
+  document_id: Float
+  draft_number: Float
+  employee_id: Float
+}
+
+"""
+order by avg() on columns of table "circulation_history"
+"""
+input circulation_history_avg_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+  employee_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "circulation_history". All fields are combined with a logical 'AND'.
+"""
+input circulation_history_bool_exp {
+  _and: [circulation_history_bool_exp]
+  _not: circulation_history_bool_exp
+  _or: [circulation_history_bool_exp]
+  copy_number: bigint_comparison_exp
+  document: documents_bool_exp
+  document_id: bigint_comparison_exp
+  draft_copy: draft_copies_bool_exp
+  draft_number: bigint_comparison_exp
+  employee: employees_bool_exp
+  employee_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "circulation_history"
+"""
+enum circulation_history_constraint {
+  """unique or primary key constraint"""
+  idx_20146_sqlite_autoindex_circulation_history_1
+}
+
+"""
+input type for incrementing integer columne in table "circulation_history"
+"""
+input circulation_history_inc_input {
+  copy_number: bigint
+  document_id: bigint
+  draft_number: bigint
+  employee_id: bigint
+}
+
+"""
+input type for inserting data into table "circulation_history"
+"""
+input circulation_history_insert_input {
+  copy_number: bigint
+  document: documents_obj_rel_insert_input
+  document_id: bigint
+  draft_copy: draft_copies_obj_rel_insert_input
+  draft_number: bigint
+  employee: employees_obj_rel_insert_input
+  employee_id: bigint
+}
+
+"""aggregate max on columns"""
+type circulation_history_max_fields {
+  copy_number: bigint
+  document_id: bigint
+  draft_number: bigint
+  employee_id: bigint
+}
+
+"""
+order by max() on columns of table "circulation_history"
+"""
+input circulation_history_max_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+  employee_id: order_by
+}
+
+"""aggregate min on columns"""
+type circulation_history_min_fields {
+  copy_number: bigint
+  document_id: bigint
+  draft_number: bigint
+  employee_id: bigint
+}
+
+"""
+order by min() on columns of table "circulation_history"
+"""
+input circulation_history_min_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+  employee_id: order_by
+}
+
+"""
+response of any mutation on the table "circulation_history"
+"""
+type circulation_history_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [circulation_history!]!
+}
+
+"""
+input type for inserting object relation for remote table "circulation_history"
+"""
+input circulation_history_obj_rel_insert_input {
+  data: circulation_history_insert_input!
+  on_conflict: circulation_history_on_conflict
+}
+
+"""
+on conflict condition type for table "circulation_history"
+"""
+input circulation_history_on_conflict {
+  constraint: circulation_history_constraint!
+  update_columns: [circulation_history_update_column!]!
+  where: circulation_history_bool_exp
+}
+
+"""
+ordering options when selecting data from "circulation_history"
+"""
+input circulation_history_order_by {
+  copy_number: order_by
+  document: documents_order_by
+  document_id: order_by
+  draft_copy: draft_copies_order_by
+  draft_number: order_by
+  employee: employees_order_by
+  employee_id: order_by
+}
+
+"""
+select columns of table "circulation_history"
+"""
+enum circulation_history_select_column {
+  """column name"""
+  copy_number
+
+  """column name"""
+  document_id
+
+  """column name"""
+  draft_number
+
+  """column name"""
+  employee_id
+}
+
+"""
+input type for updating data in table "circulation_history"
+"""
+input circulation_history_set_input {
+  copy_number: bigint
+  document_id: bigint
+  draft_number: bigint
+  employee_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type circulation_history_stddev_fields {
+  copy_number: Float
+  document_id: Float
+  draft_number: Float
+  employee_id: Float
+}
+
+"""
+order by stddev() on columns of table "circulation_history"
+"""
+input circulation_history_stddev_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+  employee_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type circulation_history_stddev_pop_fields {
+  copy_number: Float
+  document_id: Float
+  draft_number: Float
+  employee_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "circulation_history"
+"""
+input circulation_history_stddev_pop_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+  employee_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type circulation_history_stddev_samp_fields {
+  copy_number: Float
+  document_id: Float
+  draft_number: Float
+  employee_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "circulation_history"
+"""
+input circulation_history_stddev_samp_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+  employee_id: order_by
+}
+
+"""aggregate sum on columns"""
+type circulation_history_sum_fields {
+  copy_number: bigint
+  document_id: bigint
+  draft_number: bigint
+  employee_id: bigint
+}
+
+"""
+order by sum() on columns of table "circulation_history"
+"""
+input circulation_history_sum_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+  employee_id: order_by
+}
+
+"""
+update columns of table "circulation_history"
+"""
+enum circulation_history_update_column {
+  """column name"""
+  copy_number
+
+  """column name"""
+  document_id
+
+  """column name"""
+  draft_number
+
+  """column name"""
+  employee_id
+}
+
+"""aggregate var_pop on columns"""
+type circulation_history_var_pop_fields {
+  copy_number: Float
+  document_id: Float
+  draft_number: Float
+  employee_id: Float
+}
+
+"""
+order by var_pop() on columns of table "circulation_history"
+"""
+input circulation_history_var_pop_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+  employee_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type circulation_history_var_samp_fields {
+  copy_number: Float
+  document_id: Float
+  draft_number: Float
+  employee_id: Float
+}
+
+"""
+order by var_samp() on columns of table "circulation_history"
+"""
+input circulation_history_var_samp_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+  employee_id: order_by
+}
+
+"""aggregate variance on columns"""
+type circulation_history_variance_fields {
+  copy_number: Float
+  document_id: Float
+  draft_number: Float
+  employee_id: Float
+}
+
+"""
+order by variance() on columns of table "circulation_history"
+"""
+input circulation_history_variance_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+  employee_id: order_by
+}
+
+"""
+columns and relationships of "document_drafts"
+"""
+type document_drafts {
+  """An object relationship"""
+  document: documents!
+  document_id: bigint!
+
+  """An array relationship"""
+  draft_copies(
+    """distinct select on columns"""
+    distinct_on: [draft_copies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [draft_copies_order_by!]
+
+    """filter the rows returned"""
+    where: draft_copies_bool_exp
+  ): [draft_copies!]!
+
+  """An aggregated array relationship"""
+  draft_copies_aggregate(
+    """distinct select on columns"""
+    distinct_on: [draft_copies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [draft_copies_order_by!]
+
+    """filter the rows returned"""
+    where: draft_copies_bool_exp
+  ): draft_copies_aggregate!
+  draft_details: String
+  draft_number: bigint!
+}
+
+"""
+aggregated selection of "document_drafts"
+"""
+type document_drafts_aggregate {
+  aggregate: document_drafts_aggregate_fields
+  nodes: [document_drafts!]!
+}
+
+"""
+aggregate fields of "document_drafts"
+"""
+type document_drafts_aggregate_fields {
+  avg: document_drafts_avg_fields
+  count(columns: [document_drafts_select_column!], distinct: Boolean): Int
+  max: document_drafts_max_fields
+  min: document_drafts_min_fields
+  stddev: document_drafts_stddev_fields
+  stddev_pop: document_drafts_stddev_pop_fields
+  stddev_samp: document_drafts_stddev_samp_fields
+  sum: document_drafts_sum_fields
+  var_pop: document_drafts_var_pop_fields
+  var_samp: document_drafts_var_samp_fields
+  variance: document_drafts_variance_fields
+}
+
+"""
+order by aggregate values of table "document_drafts"
+"""
+input document_drafts_aggregate_order_by {
+  avg: document_drafts_avg_order_by
+  count: order_by
+  max: document_drafts_max_order_by
+  min: document_drafts_min_order_by
+  stddev: document_drafts_stddev_order_by
+  stddev_pop: document_drafts_stddev_pop_order_by
+  stddev_samp: document_drafts_stddev_samp_order_by
+  sum: document_drafts_sum_order_by
+  var_pop: document_drafts_var_pop_order_by
+  var_samp: document_drafts_var_samp_order_by
+  variance: document_drafts_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "document_drafts"
+"""
+input document_drafts_arr_rel_insert_input {
+  data: [document_drafts_insert_input!]!
+  on_conflict: document_drafts_on_conflict
+}
+
+"""aggregate avg on columns"""
+type document_drafts_avg_fields {
+  document_id: Float
+  draft_number: Float
+}
+
+"""
+order by avg() on columns of table "document_drafts"
+"""
+input document_drafts_avg_order_by {
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "document_drafts". All fields are combined with a logical 'AND'.
+"""
+input document_drafts_bool_exp {
+  _and: [document_drafts_bool_exp]
+  _not: document_drafts_bool_exp
+  _or: [document_drafts_bool_exp]
+  document: documents_bool_exp
+  document_id: bigint_comparison_exp
+  draft_copies: draft_copies_bool_exp
+  draft_details: String_comparison_exp
+  draft_number: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "document_drafts"
+"""
+enum document_drafts_constraint {
+  """unique or primary key constraint"""
+  idx_20137_sqlite_autoindex_document_drafts_1
+}
+
+"""
+input type for incrementing integer columne in table "document_drafts"
+"""
+input document_drafts_inc_input {
+  document_id: bigint
+  draft_number: bigint
+}
+
+"""
+input type for inserting data into table "document_drafts"
+"""
+input document_drafts_insert_input {
+  document: documents_obj_rel_insert_input
+  document_id: bigint
+  draft_copies: draft_copies_arr_rel_insert_input
+  draft_details: String
+  draft_number: bigint
+}
+
+"""aggregate max on columns"""
+type document_drafts_max_fields {
+  document_id: bigint
+  draft_details: String
+  draft_number: bigint
+}
+
+"""
+order by max() on columns of table "document_drafts"
+"""
+input document_drafts_max_order_by {
+  document_id: order_by
+  draft_details: order_by
+  draft_number: order_by
+}
+
+"""aggregate min on columns"""
+type document_drafts_min_fields {
+  document_id: bigint
+  draft_details: String
+  draft_number: bigint
+}
+
+"""
+order by min() on columns of table "document_drafts"
+"""
+input document_drafts_min_order_by {
+  document_id: order_by
+  draft_details: order_by
+  draft_number: order_by
+}
+
+"""
+response of any mutation on the table "document_drafts"
+"""
+type document_drafts_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [document_drafts!]!
+}
+
+"""
+input type for inserting object relation for remote table "document_drafts"
+"""
+input document_drafts_obj_rel_insert_input {
+  data: document_drafts_insert_input!
+  on_conflict: document_drafts_on_conflict
+}
+
+"""
+on conflict condition type for table "document_drafts"
+"""
+input document_drafts_on_conflict {
+  constraint: document_drafts_constraint!
+  update_columns: [document_drafts_update_column!]!
+  where: document_drafts_bool_exp
+}
+
+"""
+ordering options when selecting data from "document_drafts"
+"""
+input document_drafts_order_by {
+  document: documents_order_by
+  document_id: order_by
+  draft_copies_aggregate: draft_copies_aggregate_order_by
+  draft_details: order_by
+  draft_number: order_by
+}
+
+"""
+select columns of table "document_drafts"
+"""
+enum document_drafts_select_column {
+  """column name"""
+  document_id
+
+  """column name"""
+  draft_details
+
+  """column name"""
+  draft_number
+}
+
+"""
+input type for updating data in table "document_drafts"
+"""
+input document_drafts_set_input {
+  document_id: bigint
+  draft_details: String
+  draft_number: bigint
+}
+
+"""aggregate stddev on columns"""
+type document_drafts_stddev_fields {
+  document_id: Float
+  draft_number: Float
+}
+
+"""
+order by stddev() on columns of table "document_drafts"
+"""
+input document_drafts_stddev_order_by {
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type document_drafts_stddev_pop_fields {
+  document_id: Float
+  draft_number: Float
+}
+
+"""
+order by stddev_pop() on columns of table "document_drafts"
+"""
+input document_drafts_stddev_pop_order_by {
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type document_drafts_stddev_samp_fields {
+  document_id: Float
+  draft_number: Float
+}
+
+"""
+order by stddev_samp() on columns of table "document_drafts"
+"""
+input document_drafts_stddev_samp_order_by {
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""aggregate sum on columns"""
+type document_drafts_sum_fields {
+  document_id: bigint
+  draft_number: bigint
+}
+
+"""
+order by sum() on columns of table "document_drafts"
+"""
+input document_drafts_sum_order_by {
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""
+update columns of table "document_drafts"
+"""
+enum document_drafts_update_column {
+  """column name"""
+  document_id
+
+  """column name"""
+  draft_details
+
+  """column name"""
+  draft_number
+}
+
+"""aggregate var_pop on columns"""
+type document_drafts_var_pop_fields {
+  document_id: Float
+  draft_number: Float
+}
+
+"""
+order by var_pop() on columns of table "document_drafts"
+"""
+input document_drafts_var_pop_order_by {
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""aggregate var_samp on columns"""
+type document_drafts_var_samp_fields {
+  document_id: Float
+  draft_number: Float
+}
+
+"""
+order by var_samp() on columns of table "document_drafts"
+"""
+input document_drafts_var_samp_order_by {
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""aggregate variance on columns"""
+type document_drafts_variance_fields {
+  document_id: Float
+  draft_number: Float
+}
+
+"""
+order by variance() on columns of table "document_drafts"
+"""
+input document_drafts_variance_order_by {
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""
+columns and relationships of "documents"
+"""
+type documents {
+  """An array relationship"""
+  circulation_histories(
+    """distinct select on columns"""
+    distinct_on: [circulation_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [circulation_history_order_by!]
+
+    """filter the rows returned"""
+    where: circulation_history_bool_exp
+  ): [circulation_history!]!
+
+  """An aggregated array relationship"""
+  circulation_histories_aggregate(
+    """distinct select on columns"""
+    distinct_on: [circulation_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [circulation_history_order_by!]
+
+    """filter the rows returned"""
+    where: circulation_history_bool_exp
+  ): circulation_history_aggregate!
+
+  """An array relationship"""
+  document_drafts(
+    """distinct select on columns"""
+    distinct_on: [document_drafts_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [document_drafts_order_by!]
+
+    """filter the rows returned"""
+    where: document_drafts_bool_exp
+  ): [document_drafts!]!
+
+  """An aggregated array relationship"""
+  document_drafts_aggregate(
+    """distinct select on columns"""
+    distinct_on: [document_drafts_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [document_drafts_order_by!]
+
+    """filter the rows returned"""
+    where: document_drafts_bool_exp
+  ): document_drafts_aggregate!
+  document_id: bigint!
+  document_status_code: String
+  document_type_code: String
+
+  """An array relationship"""
+  documents_maileds(
+    """distinct select on columns"""
+    distinct_on: [documents_mailed_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_mailed_order_by!]
+
+    """filter the rows returned"""
+    where: documents_mailed_bool_exp
+  ): [documents_mailed!]!
+
+  """An aggregated array relationship"""
+  documents_maileds_aggregate(
+    """distinct select on columns"""
+    distinct_on: [documents_mailed_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_mailed_order_by!]
+
+    """filter the rows returned"""
+    where: documents_mailed_bool_exp
+  ): documents_mailed_aggregate!
+  other_details: String
+  receipt_date: timestamptz
+  receipt_number: String
+
+  """An object relationship"""
+  ref_document_status: ref_document_status
+
+  """An object relationship"""
+  ref_document_type: ref_document_types
+
+  """An object relationship"""
+  ref_shipping_agent: ref_shipping_agents
+  shipping_agent_code: String
+}
+
+"""
+aggregated selection of "documents"
+"""
+type documents_aggregate {
+  aggregate: documents_aggregate_fields
+  nodes: [documents!]!
+}
+
+"""
+aggregate fields of "documents"
+"""
+type documents_aggregate_fields {
+  avg: documents_avg_fields
+  count(columns: [documents_select_column!], distinct: Boolean): Int
+  max: documents_max_fields
+  min: documents_min_fields
+  stddev: documents_stddev_fields
+  stddev_pop: documents_stddev_pop_fields
+  stddev_samp: documents_stddev_samp_fields
+  sum: documents_sum_fields
+  var_pop: documents_var_pop_fields
+  var_samp: documents_var_samp_fields
+  variance: documents_variance_fields
+}
+
+"""
+order by aggregate values of table "documents"
+"""
+input documents_aggregate_order_by {
+  avg: documents_avg_order_by
+  count: order_by
+  max: documents_max_order_by
+  min: documents_min_order_by
+  stddev: documents_stddev_order_by
+  stddev_pop: documents_stddev_pop_order_by
+  stddev_samp: documents_stddev_samp_order_by
+  sum: documents_sum_order_by
+  var_pop: documents_var_pop_order_by
+  var_samp: documents_var_samp_order_by
+  variance: documents_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "documents"
+"""
+input documents_arr_rel_insert_input {
+  data: [documents_insert_input!]!
+  on_conflict: documents_on_conflict
+}
+
+"""aggregate avg on columns"""
+type documents_avg_fields {
+  document_id: Float
+}
+
+"""
+order by avg() on columns of table "documents"
+"""
+input documents_avg_order_by {
+  document_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "documents". All fields are combined with a logical 'AND'.
+"""
+input documents_bool_exp {
+  _and: [documents_bool_exp]
+  _not: documents_bool_exp
+  _or: [documents_bool_exp]
+  circulation_histories: circulation_history_bool_exp
+  document_drafts: document_drafts_bool_exp
+  document_id: bigint_comparison_exp
+  document_status_code: String_comparison_exp
+  document_type_code: String_comparison_exp
+  documents_maileds: documents_mailed_bool_exp
+  other_details: String_comparison_exp
+  receipt_date: timestamptz_comparison_exp
+  receipt_number: String_comparison_exp
+  ref_document_status: ref_document_status_bool_exp
+  ref_document_type: ref_document_types_bool_exp
+  ref_shipping_agent: ref_shipping_agents_bool_exp
+  shipping_agent_code: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "documents"
+"""
+enum documents_constraint {
+  """unique or primary key constraint"""
+  idx_20125_documents_pkey
+}
+
+"""
+input type for incrementing integer columne in table "documents"
+"""
+input documents_inc_input {
+  document_id: bigint
+}
+
+"""
+input type for inserting data into table "documents"
+"""
+input documents_insert_input {
+  circulation_histories: circulation_history_arr_rel_insert_input
+  document_drafts: document_drafts_arr_rel_insert_input
+  document_id: bigint
+  document_status_code: String
+  document_type_code: String
+  documents_maileds: documents_mailed_arr_rel_insert_input
+  other_details: String
+  receipt_date: timestamptz
+  receipt_number: String
+  ref_document_status: ref_document_status_obj_rel_insert_input
+  ref_document_type: ref_document_types_obj_rel_insert_input
+  ref_shipping_agent: ref_shipping_agents_obj_rel_insert_input
+  shipping_agent_code: String
+}
+
+"""
+columns and relationships of "documents_mailed"
+"""
+type documents_mailed {
+  """An object relationship"""
+  address: addresses!
+
+  """An object relationship"""
+  document: documents!
+  document_id: bigint!
+  mailed_to_address_id: bigint!
+  mailing_date: timestamptz
+}
+
+"""
+aggregated selection of "documents_mailed"
+"""
+type documents_mailed_aggregate {
+  aggregate: documents_mailed_aggregate_fields
+  nodes: [documents_mailed!]!
+}
+
+"""
+aggregate fields of "documents_mailed"
+"""
+type documents_mailed_aggregate_fields {
+  avg: documents_mailed_avg_fields
+  count(columns: [documents_mailed_select_column!], distinct: Boolean): Int
+  max: documents_mailed_max_fields
+  min: documents_mailed_min_fields
+  stddev: documents_mailed_stddev_fields
+  stddev_pop: documents_mailed_stddev_pop_fields
+  stddev_samp: documents_mailed_stddev_samp_fields
+  sum: documents_mailed_sum_fields
+  var_pop: documents_mailed_var_pop_fields
+  var_samp: documents_mailed_var_samp_fields
+  variance: documents_mailed_variance_fields
+}
+
+"""
+order by aggregate values of table "documents_mailed"
+"""
+input documents_mailed_aggregate_order_by {
+  avg: documents_mailed_avg_order_by
+  count: order_by
+  max: documents_mailed_max_order_by
+  min: documents_mailed_min_order_by
+  stddev: documents_mailed_stddev_order_by
+  stddev_pop: documents_mailed_stddev_pop_order_by
+  stddev_samp: documents_mailed_stddev_samp_order_by
+  sum: documents_mailed_sum_order_by
+  var_pop: documents_mailed_var_pop_order_by
+  var_samp: documents_mailed_var_samp_order_by
+  variance: documents_mailed_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "documents_mailed"
+"""
+input documents_mailed_arr_rel_insert_input {
+  data: [documents_mailed_insert_input!]!
+  on_conflict: documents_mailed_on_conflict
+}
+
+"""aggregate avg on columns"""
+type documents_mailed_avg_fields {
+  document_id: Float
+  mailed_to_address_id: Float
+}
+
+"""
+order by avg() on columns of table "documents_mailed"
+"""
+input documents_mailed_avg_order_by {
+  document_id: order_by
+  mailed_to_address_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "documents_mailed". All fields are combined with a logical 'AND'.
+"""
+input documents_mailed_bool_exp {
+  _and: [documents_mailed_bool_exp]
+  _not: documents_mailed_bool_exp
+  _or: [documents_mailed_bool_exp]
+  address: addresses_bool_exp
+  document: documents_bool_exp
+  document_id: bigint_comparison_exp
+  mailed_to_address_id: bigint_comparison_exp
+  mailing_date: timestamptz_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "documents_mailed"
+"""
+enum documents_mailed_constraint {
+  """unique or primary key constraint"""
+  idx_20149_sqlite_autoindex_documents_mailed_1
+}
+
+"""
+input type for incrementing integer columne in table "documents_mailed"
+"""
+input documents_mailed_inc_input {
+  document_id: bigint
+  mailed_to_address_id: bigint
+}
+
+"""
+input type for inserting data into table "documents_mailed"
+"""
+input documents_mailed_insert_input {
+  address: addresses_obj_rel_insert_input
+  document: documents_obj_rel_insert_input
+  document_id: bigint
+  mailed_to_address_id: bigint
+  mailing_date: timestamptz
+}
+
+"""aggregate max on columns"""
+type documents_mailed_max_fields {
+  document_id: bigint
+  mailed_to_address_id: bigint
+  mailing_date: timestamptz
+}
+
+"""
+order by max() on columns of table "documents_mailed"
+"""
+input documents_mailed_max_order_by {
+  document_id: order_by
+  mailed_to_address_id: order_by
+  mailing_date: order_by
+}
+
+"""aggregate min on columns"""
+type documents_mailed_min_fields {
+  document_id: bigint
+  mailed_to_address_id: bigint
+  mailing_date: timestamptz
+}
+
+"""
+order by min() on columns of table "documents_mailed"
+"""
+input documents_mailed_min_order_by {
+  document_id: order_by
+  mailed_to_address_id: order_by
+  mailing_date: order_by
+}
+
+"""
+response of any mutation on the table "documents_mailed"
+"""
+type documents_mailed_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [documents_mailed!]!
+}
+
+"""
+input type for inserting object relation for remote table "documents_mailed"
+"""
+input documents_mailed_obj_rel_insert_input {
+  data: documents_mailed_insert_input!
+  on_conflict: documents_mailed_on_conflict
+}
+
+"""
+on conflict condition type for table "documents_mailed"
+"""
+input documents_mailed_on_conflict {
+  constraint: documents_mailed_constraint!
+  update_columns: [documents_mailed_update_column!]!
+  where: documents_mailed_bool_exp
+}
+
+"""
+ordering options when selecting data from "documents_mailed"
+"""
+input documents_mailed_order_by {
+  address: addresses_order_by
+  document: documents_order_by
+  document_id: order_by
+  mailed_to_address_id: order_by
+  mailing_date: order_by
+}
+
+"""
+select columns of table "documents_mailed"
+"""
+enum documents_mailed_select_column {
+  """column name"""
+  document_id
+
+  """column name"""
+  mailed_to_address_id
+
+  """column name"""
+  mailing_date
+}
+
+"""
+input type for updating data in table "documents_mailed"
+"""
+input documents_mailed_set_input {
+  document_id: bigint
+  mailed_to_address_id: bigint
+  mailing_date: timestamptz
+}
+
+"""aggregate stddev on columns"""
+type documents_mailed_stddev_fields {
+  document_id: Float
+  mailed_to_address_id: Float
+}
+
+"""
+order by stddev() on columns of table "documents_mailed"
+"""
+input documents_mailed_stddev_order_by {
+  document_id: order_by
+  mailed_to_address_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type documents_mailed_stddev_pop_fields {
+  document_id: Float
+  mailed_to_address_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "documents_mailed"
+"""
+input documents_mailed_stddev_pop_order_by {
+  document_id: order_by
+  mailed_to_address_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type documents_mailed_stddev_samp_fields {
+  document_id: Float
+  mailed_to_address_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "documents_mailed"
+"""
+input documents_mailed_stddev_samp_order_by {
+  document_id: order_by
+  mailed_to_address_id: order_by
+}
+
+"""aggregate sum on columns"""
+type documents_mailed_sum_fields {
+  document_id: bigint
+  mailed_to_address_id: bigint
+}
+
+"""
+order by sum() on columns of table "documents_mailed"
+"""
+input documents_mailed_sum_order_by {
+  document_id: order_by
+  mailed_to_address_id: order_by
+}
+
+"""
+update columns of table "documents_mailed"
+"""
+enum documents_mailed_update_column {
+  """column name"""
+  document_id
+
+  """column name"""
+  mailed_to_address_id
+
+  """column name"""
+  mailing_date
+}
+
+"""aggregate var_pop on columns"""
+type documents_mailed_var_pop_fields {
+  document_id: Float
+  mailed_to_address_id: Float
+}
+
+"""
+order by var_pop() on columns of table "documents_mailed"
+"""
+input documents_mailed_var_pop_order_by {
+  document_id: order_by
+  mailed_to_address_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type documents_mailed_var_samp_fields {
+  document_id: Float
+  mailed_to_address_id: Float
+}
+
+"""
+order by var_samp() on columns of table "documents_mailed"
+"""
+input documents_mailed_var_samp_order_by {
+  document_id: order_by
+  mailed_to_address_id: order_by
+}
+
+"""aggregate variance on columns"""
+type documents_mailed_variance_fields {
+  document_id: Float
+  mailed_to_address_id: Float
+}
+
+"""
+order by variance() on columns of table "documents_mailed"
+"""
+input documents_mailed_variance_order_by {
+  document_id: order_by
+  mailed_to_address_id: order_by
+}
+
+"""aggregate max on columns"""
+type documents_max_fields {
+  document_id: bigint
+  document_status_code: String
+  document_type_code: String
+  other_details: String
+  receipt_date: timestamptz
+  receipt_number: String
+  shipping_agent_code: String
+}
+
+"""
+order by max() on columns of table "documents"
+"""
+input documents_max_order_by {
+  document_id: order_by
+  document_status_code: order_by
+  document_type_code: order_by
+  other_details: order_by
+  receipt_date: order_by
+  receipt_number: order_by
+  shipping_agent_code: order_by
+}
+
+"""aggregate min on columns"""
+type documents_min_fields {
+  document_id: bigint
+  document_status_code: String
+  document_type_code: String
+  other_details: String
+  receipt_date: timestamptz
+  receipt_number: String
+  shipping_agent_code: String
+}
+
+"""
+order by min() on columns of table "documents"
+"""
+input documents_min_order_by {
+  document_id: order_by
+  document_status_code: order_by
+  document_type_code: order_by
+  other_details: order_by
+  receipt_date: order_by
+  receipt_number: order_by
+  shipping_agent_code: order_by
+}
+
+"""
+response of any mutation on the table "documents"
+"""
+type documents_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [documents!]!
+}
+
+"""
+input type for inserting object relation for remote table "documents"
+"""
+input documents_obj_rel_insert_input {
+  data: documents_insert_input!
+  on_conflict: documents_on_conflict
+}
+
+"""
+on conflict condition type for table "documents"
+"""
+input documents_on_conflict {
+  constraint: documents_constraint!
+  update_columns: [documents_update_column!]!
+  where: documents_bool_exp
+}
+
+"""
+ordering options when selecting data from "documents"
+"""
+input documents_order_by {
+  circulation_histories_aggregate: circulation_history_aggregate_order_by
+  document_drafts_aggregate: document_drafts_aggregate_order_by
+  document_id: order_by
+  document_status_code: order_by
+  document_type_code: order_by
+  documents_maileds_aggregate: documents_mailed_aggregate_order_by
+  other_details: order_by
+  receipt_date: order_by
+  receipt_number: order_by
+  ref_document_status: ref_document_status_order_by
+  ref_document_type: ref_document_types_order_by
+  ref_shipping_agent: ref_shipping_agents_order_by
+  shipping_agent_code: order_by
+}
+
+"""
+select columns of table "documents"
+"""
+enum documents_select_column {
+  """column name"""
+  document_id
+
+  """column name"""
+  document_status_code
+
+  """column name"""
+  document_type_code
+
+  """column name"""
+  other_details
+
+  """column name"""
+  receipt_date
+
+  """column name"""
+  receipt_number
+
+  """column name"""
+  shipping_agent_code
+}
+
+"""
+input type for updating data in table "documents"
+"""
+input documents_set_input {
+  document_id: bigint
+  document_status_code: String
+  document_type_code: String
+  other_details: String
+  receipt_date: timestamptz
+  receipt_number: String
+  shipping_agent_code: String
+}
+
+"""aggregate stddev on columns"""
+type documents_stddev_fields {
+  document_id: Float
+}
+
+"""
+order by stddev() on columns of table "documents"
+"""
+input documents_stddev_order_by {
+  document_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type documents_stddev_pop_fields {
+  document_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "documents"
+"""
+input documents_stddev_pop_order_by {
+  document_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type documents_stddev_samp_fields {
+  document_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "documents"
+"""
+input documents_stddev_samp_order_by {
+  document_id: order_by
+}
+
+"""aggregate sum on columns"""
+type documents_sum_fields {
+  document_id: bigint
+}
+
+"""
+order by sum() on columns of table "documents"
+"""
+input documents_sum_order_by {
+  document_id: order_by
+}
+
+"""
+update columns of table "documents"
+"""
+enum documents_update_column {
+  """column name"""
+  document_id
+
+  """column name"""
+  document_status_code
+
+  """column name"""
+  document_type_code
+
+  """column name"""
+  other_details
+
+  """column name"""
+  receipt_date
+
+  """column name"""
+  receipt_number
+
+  """column name"""
+  shipping_agent_code
+}
+
+"""aggregate var_pop on columns"""
+type documents_var_pop_fields {
+  document_id: Float
+}
+
+"""
+order by var_pop() on columns of table "documents"
+"""
+input documents_var_pop_order_by {
+  document_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type documents_var_samp_fields {
+  document_id: Float
+}
+
+"""
+order by var_samp() on columns of table "documents"
+"""
+input documents_var_samp_order_by {
+  document_id: order_by
+}
+
+"""aggregate variance on columns"""
+type documents_variance_fields {
+  document_id: Float
+}
+
+"""
+order by variance() on columns of table "documents"
+"""
+input documents_variance_order_by {
+  document_id: order_by
+}
+
+"""
+columns and relationships of "draft_copies"
+"""
+type draft_copies {
+  """An array relationship"""
+  circulation_histories(
+    """distinct select on columns"""
+    distinct_on: [circulation_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [circulation_history_order_by!]
+
+    """filter the rows returned"""
+    where: circulation_history_bool_exp
+  ): [circulation_history!]!
+
+  """An aggregated array relationship"""
+  circulation_histories_aggregate(
+    """distinct select on columns"""
+    distinct_on: [circulation_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [circulation_history_order_by!]
+
+    """filter the rows returned"""
+    where: circulation_history_bool_exp
+  ): circulation_history_aggregate!
+  copy_number: bigint!
+
+  """An object relationship"""
+  document_draft: document_drafts
+  document_id: bigint!
+  draft_number: bigint!
+}
+
+"""
+aggregated selection of "draft_copies"
+"""
+type draft_copies_aggregate {
+  aggregate: draft_copies_aggregate_fields
+  nodes: [draft_copies!]!
+}
+
+"""
+aggregate fields of "draft_copies"
+"""
+type draft_copies_aggregate_fields {
+  avg: draft_copies_avg_fields
+  count(columns: [draft_copies_select_column!], distinct: Boolean): Int
+  max: draft_copies_max_fields
+  min: draft_copies_min_fields
+  stddev: draft_copies_stddev_fields
+  stddev_pop: draft_copies_stddev_pop_fields
+  stddev_samp: draft_copies_stddev_samp_fields
+  sum: draft_copies_sum_fields
+  var_pop: draft_copies_var_pop_fields
+  var_samp: draft_copies_var_samp_fields
+  variance: draft_copies_variance_fields
+}
+
+"""
+order by aggregate values of table "draft_copies"
+"""
+input draft_copies_aggregate_order_by {
+  avg: draft_copies_avg_order_by
+  count: order_by
+  max: draft_copies_max_order_by
+  min: draft_copies_min_order_by
+  stddev: draft_copies_stddev_order_by
+  stddev_pop: draft_copies_stddev_pop_order_by
+  stddev_samp: draft_copies_stddev_samp_order_by
+  sum: draft_copies_sum_order_by
+  var_pop: draft_copies_var_pop_order_by
+  var_samp: draft_copies_var_samp_order_by
+  variance: draft_copies_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "draft_copies"
+"""
+input draft_copies_arr_rel_insert_input {
+  data: [draft_copies_insert_input!]!
+  on_conflict: draft_copies_on_conflict
+}
+
+"""aggregate avg on columns"""
+type draft_copies_avg_fields {
+  copy_number: Float
+  document_id: Float
+  draft_number: Float
+}
+
+"""
+order by avg() on columns of table "draft_copies"
+"""
+input draft_copies_avg_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "draft_copies". All fields are combined with a logical 'AND'.
+"""
+input draft_copies_bool_exp {
+  _and: [draft_copies_bool_exp]
+  _not: draft_copies_bool_exp
+  _or: [draft_copies_bool_exp]
+  circulation_histories: circulation_history_bool_exp
+  copy_number: bigint_comparison_exp
+  document_draft: document_drafts_bool_exp
+  document_id: bigint_comparison_exp
+  draft_number: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "draft_copies"
+"""
+enum draft_copies_constraint {
+  """unique or primary key constraint"""
+  idx_20143_sqlite_autoindex_draft_copies_1
+}
+
+"""
+input type for incrementing integer columne in table "draft_copies"
+"""
+input draft_copies_inc_input {
+  copy_number: bigint
+  document_id: bigint
+  draft_number: bigint
+}
+
+"""
+input type for inserting data into table "draft_copies"
+"""
+input draft_copies_insert_input {
+  circulation_histories: circulation_history_arr_rel_insert_input
+  copy_number: bigint
+  document_draft: document_drafts_obj_rel_insert_input
+  document_id: bigint
+  draft_number: bigint
+}
+
+"""aggregate max on columns"""
+type draft_copies_max_fields {
+  copy_number: bigint
+  document_id: bigint
+  draft_number: bigint
+}
+
+"""
+order by max() on columns of table "draft_copies"
+"""
+input draft_copies_max_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""aggregate min on columns"""
+type draft_copies_min_fields {
+  copy_number: bigint
+  document_id: bigint
+  draft_number: bigint
+}
+
+"""
+order by min() on columns of table "draft_copies"
+"""
+input draft_copies_min_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""
+response of any mutation on the table "draft_copies"
+"""
+type draft_copies_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [draft_copies!]!
+}
+
+"""
+input type for inserting object relation for remote table "draft_copies"
+"""
+input draft_copies_obj_rel_insert_input {
+  data: draft_copies_insert_input!
+  on_conflict: draft_copies_on_conflict
+}
+
+"""
+on conflict condition type for table "draft_copies"
+"""
+input draft_copies_on_conflict {
+  constraint: draft_copies_constraint!
+  update_columns: [draft_copies_update_column!]!
+  where: draft_copies_bool_exp
+}
+
+"""
+ordering options when selecting data from "draft_copies"
+"""
+input draft_copies_order_by {
+  circulation_histories_aggregate: circulation_history_aggregate_order_by
+  copy_number: order_by
+  document_draft: document_drafts_order_by
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""
+select columns of table "draft_copies"
+"""
+enum draft_copies_select_column {
+  """column name"""
+  copy_number
+
+  """column name"""
+  document_id
+
+  """column name"""
+  draft_number
+}
+
+"""
+input type for updating data in table "draft_copies"
+"""
+input draft_copies_set_input {
+  copy_number: bigint
+  document_id: bigint
+  draft_number: bigint
+}
+
+"""aggregate stddev on columns"""
+type draft_copies_stddev_fields {
+  copy_number: Float
+  document_id: Float
+  draft_number: Float
+}
+
+"""
+order by stddev() on columns of table "draft_copies"
+"""
+input draft_copies_stddev_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type draft_copies_stddev_pop_fields {
+  copy_number: Float
+  document_id: Float
+  draft_number: Float
+}
+
+"""
+order by stddev_pop() on columns of table "draft_copies"
+"""
+input draft_copies_stddev_pop_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type draft_copies_stddev_samp_fields {
+  copy_number: Float
+  document_id: Float
+  draft_number: Float
+}
+
+"""
+order by stddev_samp() on columns of table "draft_copies"
+"""
+input draft_copies_stddev_samp_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""aggregate sum on columns"""
+type draft_copies_sum_fields {
+  copy_number: bigint
+  document_id: bigint
+  draft_number: bigint
+}
+
+"""
+order by sum() on columns of table "draft_copies"
+"""
+input draft_copies_sum_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""
+update columns of table "draft_copies"
+"""
+enum draft_copies_update_column {
+  """column name"""
+  copy_number
+
+  """column name"""
+  document_id
+
+  """column name"""
+  draft_number
+}
+
+"""aggregate var_pop on columns"""
+type draft_copies_var_pop_fields {
+  copy_number: Float
+  document_id: Float
+  draft_number: Float
+}
+
+"""
+order by var_pop() on columns of table "draft_copies"
+"""
+input draft_copies_var_pop_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""aggregate var_samp on columns"""
+type draft_copies_var_samp_fields {
+  copy_number: Float
+  document_id: Float
+  draft_number: Float
+}
+
+"""
+order by var_samp() on columns of table "draft_copies"
+"""
+input draft_copies_var_samp_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""aggregate variance on columns"""
+type draft_copies_variance_fields {
+  copy_number: Float
+  document_id: Float
+  draft_number: Float
+}
+
+"""
+order by variance() on columns of table "draft_copies"
+"""
+input draft_copies_variance_order_by {
+  copy_number: order_by
+  document_id: order_by
+  draft_number: order_by
+}
+
+"""
+columns and relationships of "employees"
+"""
+type employees {
+  """An array relationship"""
+  circulation_histories(
+    """distinct select on columns"""
+    distinct_on: [circulation_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [circulation_history_order_by!]
+
+    """filter the rows returned"""
+    where: circulation_history_bool_exp
+  ): [circulation_history!]!
+
+  """An aggregated array relationship"""
+  circulation_histories_aggregate(
+    """distinct select on columns"""
+    distinct_on: [circulation_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [circulation_history_order_by!]
+
+    """filter the rows returned"""
+    where: circulation_history_bool_exp
+  ): circulation_history_aggregate!
+  employee_id: bigint!
+  employee_name: String
+  other_details: String
+
+  """An object relationship"""
+  role: roles
+  role_code: String
+}
+
+"""
+aggregated selection of "employees"
+"""
+type employees_aggregate {
+  aggregate: employees_aggregate_fields
+  nodes: [employees!]!
+}
+
+"""
+aggregate fields of "employees"
+"""
+type employees_aggregate_fields {
+  avg: employees_avg_fields
+  count(columns: [employees_select_column!], distinct: Boolean): Int
+  max: employees_max_fields
+  min: employees_min_fields
+  stddev: employees_stddev_fields
+  stddev_pop: employees_stddev_pop_fields
+  stddev_samp: employees_stddev_samp_fields
+  sum: employees_sum_fields
+  var_pop: employees_var_pop_fields
+  var_samp: employees_var_samp_fields
+  variance: employees_variance_fields
+}
+
+"""
+order by aggregate values of table "employees"
+"""
+input employees_aggregate_order_by {
+  avg: employees_avg_order_by
+  count: order_by
+  max: employees_max_order_by
+  min: employees_min_order_by
+  stddev: employees_stddev_order_by
+  stddev_pop: employees_stddev_pop_order_by
+  stddev_samp: employees_stddev_samp_order_by
+  sum: employees_sum_order_by
+  var_pop: employees_var_pop_order_by
+  var_samp: employees_var_samp_order_by
+  variance: employees_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "employees"
+"""
+input employees_arr_rel_insert_input {
+  data: [employees_insert_input!]!
+  on_conflict: employees_on_conflict
+}
+
+"""aggregate avg on columns"""
+type employees_avg_fields {
+  employee_id: Float
+}
+
+"""
+order by avg() on columns of table "employees"
+"""
+input employees_avg_order_by {
+  employee_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "employees". All fields are combined with a logical 'AND'.
+"""
+input employees_bool_exp {
+  _and: [employees_bool_exp]
+  _not: employees_bool_exp
+  _or: [employees_bool_exp]
+  circulation_histories: circulation_history_bool_exp
+  employee_id: bigint_comparison_exp
+  employee_name: String_comparison_exp
+  other_details: String_comparison_exp
+  role: roles_bool_exp
+  role_code: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "employees"
+"""
+enum employees_constraint {
+  """unique or primary key constraint"""
+  idx_20131_employees_pkey
+}
+
+"""
+input type for incrementing integer columne in table "employees"
+"""
+input employees_inc_input {
+  employee_id: bigint
+}
+
+"""
+input type for inserting data into table "employees"
+"""
+input employees_insert_input {
+  circulation_histories: circulation_history_arr_rel_insert_input
+  employee_id: bigint
+  employee_name: String
+  other_details: String
+  role: roles_obj_rel_insert_input
+  role_code: String
+}
+
+"""aggregate max on columns"""
+type employees_max_fields {
+  employee_id: bigint
+  employee_name: String
+  other_details: String
+  role_code: String
+}
+
+"""
+order by max() on columns of table "employees"
+"""
+input employees_max_order_by {
+  employee_id: order_by
+  employee_name: order_by
+  other_details: order_by
+  role_code: order_by
+}
+
+"""aggregate min on columns"""
+type employees_min_fields {
+  employee_id: bigint
+  employee_name: String
+  other_details: String
+  role_code: String
+}
+
+"""
+order by min() on columns of table "employees"
+"""
+input employees_min_order_by {
+  employee_id: order_by
+  employee_name: order_by
+  other_details: order_by
+  role_code: order_by
+}
+
+"""
+response of any mutation on the table "employees"
+"""
+type employees_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [employees!]!
+}
+
+"""
+input type for inserting object relation for remote table "employees"
+"""
+input employees_obj_rel_insert_input {
+  data: employees_insert_input!
+  on_conflict: employees_on_conflict
+}
+
+"""
+on conflict condition type for table "employees"
+"""
+input employees_on_conflict {
+  constraint: employees_constraint!
+  update_columns: [employees_update_column!]!
+  where: employees_bool_exp
+}
+
+"""
+ordering options when selecting data from "employees"
+"""
+input employees_order_by {
+  circulation_histories_aggregate: circulation_history_aggregate_order_by
+  employee_id: order_by
+  employee_name: order_by
+  other_details: order_by
+  role: roles_order_by
+  role_code: order_by
+}
+
+"""
+select columns of table "employees"
+"""
+enum employees_select_column {
+  """column name"""
+  employee_id
+
+  """column name"""
+  employee_name
+
+  """column name"""
+  other_details
+
+  """column name"""
+  role_code
+}
+
+"""
+input type for updating data in table "employees"
+"""
+input employees_set_input {
+  employee_id: bigint
+  employee_name: String
+  other_details: String
+  role_code: String
+}
+
+"""aggregate stddev on columns"""
+type employees_stddev_fields {
+  employee_id: Float
+}
+
+"""
+order by stddev() on columns of table "employees"
+"""
+input employees_stddev_order_by {
+  employee_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type employees_stddev_pop_fields {
+  employee_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "employees"
+"""
+input employees_stddev_pop_order_by {
+  employee_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type employees_stddev_samp_fields {
+  employee_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "employees"
+"""
+input employees_stddev_samp_order_by {
+  employee_id: order_by
+}
+
+"""aggregate sum on columns"""
+type employees_sum_fields {
+  employee_id: bigint
+}
+
+"""
+order by sum() on columns of table "employees"
+"""
+input employees_sum_order_by {
+  employee_id: order_by
+}
+
+"""
+update columns of table "employees"
+"""
+enum employees_update_column {
+  """column name"""
+  employee_id
+
+  """column name"""
+  employee_name
+
+  """column name"""
+  other_details
+
+  """column name"""
+  role_code
+}
+
+"""aggregate var_pop on columns"""
+type employees_var_pop_fields {
+  employee_id: Float
+}
+
+"""
+order by var_pop() on columns of table "employees"
+"""
+input employees_var_pop_order_by {
+  employee_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type employees_var_samp_fields {
+  employee_id: Float
+}
+
+"""
+order by var_samp() on columns of table "employees"
+"""
+input employees_var_samp_order_by {
+  employee_id: order_by
+}
+
+"""aggregate variance on columns"""
+type employees_variance_fields {
+  employee_id: Float
+}
+
+"""
+order by variance() on columns of table "employees"
+"""
+input employees_variance_order_by {
+  employee_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "addresses"
+  """
+  delete_addresses(
+    """filter the rows which have to be deleted"""
+    where: addresses_bool_exp!
+  ): addresses_mutation_response
+
+  """
+  delete data from the table: "circulation_history"
+  """
+  delete_circulation_history(
+    """filter the rows which have to be deleted"""
+    where: circulation_history_bool_exp!
+  ): circulation_history_mutation_response
+
+  """
+  delete data from the table: "document_drafts"
+  """
+  delete_document_drafts(
+    """filter the rows which have to be deleted"""
+    where: document_drafts_bool_exp!
+  ): document_drafts_mutation_response
+
+  """
+  delete data from the table: "documents"
+  """
+  delete_documents(
+    """filter the rows which have to be deleted"""
+    where: documents_bool_exp!
+  ): documents_mutation_response
+
+  """
+  delete data from the table: "documents_mailed"
+  """
+  delete_documents_mailed(
+    """filter the rows which have to be deleted"""
+    where: documents_mailed_bool_exp!
+  ): documents_mailed_mutation_response
+
+  """
+  delete data from the table: "draft_copies"
+  """
+  delete_draft_copies(
+    """filter the rows which have to be deleted"""
+    where: draft_copies_bool_exp!
+  ): draft_copies_mutation_response
+
+  """
+  delete data from the table: "employees"
+  """
+  delete_employees(
+    """filter the rows which have to be deleted"""
+    where: employees_bool_exp!
+  ): employees_mutation_response
+
+  """
+  delete data from the table: "ref_document_status"
+  """
+  delete_ref_document_status(
+    """filter the rows which have to be deleted"""
+    where: ref_document_status_bool_exp!
+  ): ref_document_status_mutation_response
+
+  """
+  delete data from the table: "ref_document_types"
+  """
+  delete_ref_document_types(
+    """filter the rows which have to be deleted"""
+    where: ref_document_types_bool_exp!
+  ): ref_document_types_mutation_response
+
+  """
+  delete data from the table: "ref_shipping_agents"
+  """
+  delete_ref_shipping_agents(
+    """filter the rows which have to be deleted"""
+    where: ref_shipping_agents_bool_exp!
+  ): ref_shipping_agents_mutation_response
+
+  """
+  delete data from the table: "roles"
+  """
+  delete_roles(
+    """filter the rows which have to be deleted"""
+    where: roles_bool_exp!
+  ): roles_mutation_response
+
+  """
+  insert data into the table: "addresses"
+  """
+  insert_addresses(
+    """the rows to be inserted"""
+    objects: [addresses_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: addresses_on_conflict
+  ): addresses_mutation_response
+
+  """
+  insert data into the table: "circulation_history"
+  """
+  insert_circulation_history(
+    """the rows to be inserted"""
+    objects: [circulation_history_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: circulation_history_on_conflict
+  ): circulation_history_mutation_response
+
+  """
+  insert data into the table: "document_drafts"
+  """
+  insert_document_drafts(
+    """the rows to be inserted"""
+    objects: [document_drafts_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: document_drafts_on_conflict
+  ): document_drafts_mutation_response
+
+  """
+  insert data into the table: "documents"
+  """
+  insert_documents(
+    """the rows to be inserted"""
+    objects: [documents_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: documents_on_conflict
+  ): documents_mutation_response
+
+  """
+  insert data into the table: "documents_mailed"
+  """
+  insert_documents_mailed(
+    """the rows to be inserted"""
+    objects: [documents_mailed_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: documents_mailed_on_conflict
+  ): documents_mailed_mutation_response
+
+  """
+  insert data into the table: "draft_copies"
+  """
+  insert_draft_copies(
+    """the rows to be inserted"""
+    objects: [draft_copies_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: draft_copies_on_conflict
+  ): draft_copies_mutation_response
+
+  """
+  insert data into the table: "employees"
+  """
+  insert_employees(
+    """the rows to be inserted"""
+    objects: [employees_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: employees_on_conflict
+  ): employees_mutation_response
+
+  """
+  insert data into the table: "ref_document_status"
+  """
+  insert_ref_document_status(
+    """the rows to be inserted"""
+    objects: [ref_document_status_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: ref_document_status_on_conflict
+  ): ref_document_status_mutation_response
+
+  """
+  insert data into the table: "ref_document_types"
+  """
+  insert_ref_document_types(
+    """the rows to be inserted"""
+    objects: [ref_document_types_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: ref_document_types_on_conflict
+  ): ref_document_types_mutation_response
+
+  """
+  insert data into the table: "ref_shipping_agents"
+  """
+  insert_ref_shipping_agents(
+    """the rows to be inserted"""
+    objects: [ref_shipping_agents_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: ref_shipping_agents_on_conflict
+  ): ref_shipping_agents_mutation_response
+
+  """
+  insert data into the table: "roles"
+  """
+  insert_roles(
+    """the rows to be inserted"""
+    objects: [roles_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: roles_on_conflict
+  ): roles_mutation_response
+
+  """
+  update data of the table: "addresses"
+  """
+  update_addresses(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: addresses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: addresses_set_input
+
+    """filter the rows which have to be updated"""
+    where: addresses_bool_exp!
+  ): addresses_mutation_response
+
+  """
+  update data of the table: "circulation_history"
+  """
+  update_circulation_history(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: circulation_history_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: circulation_history_set_input
+
+    """filter the rows which have to be updated"""
+    where: circulation_history_bool_exp!
+  ): circulation_history_mutation_response
+
+  """
+  update data of the table: "document_drafts"
+  """
+  update_document_drafts(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: document_drafts_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: document_drafts_set_input
+
+    """filter the rows which have to be updated"""
+    where: document_drafts_bool_exp!
+  ): document_drafts_mutation_response
+
+  """
+  update data of the table: "documents"
+  """
+  update_documents(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: documents_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: documents_set_input
+
+    """filter the rows which have to be updated"""
+    where: documents_bool_exp!
+  ): documents_mutation_response
+
+  """
+  update data of the table: "documents_mailed"
+  """
+  update_documents_mailed(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: documents_mailed_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: documents_mailed_set_input
+
+    """filter the rows which have to be updated"""
+    where: documents_mailed_bool_exp!
+  ): documents_mailed_mutation_response
+
+  """
+  update data of the table: "draft_copies"
+  """
+  update_draft_copies(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: draft_copies_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: draft_copies_set_input
+
+    """filter the rows which have to be updated"""
+    where: draft_copies_bool_exp!
+  ): draft_copies_mutation_response
+
+  """
+  update data of the table: "employees"
+  """
+  update_employees(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: employees_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: employees_set_input
+
+    """filter the rows which have to be updated"""
+    where: employees_bool_exp!
+  ): employees_mutation_response
+
+  """
+  update data of the table: "ref_document_status"
+  """
+  update_ref_document_status(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ref_document_status_set_input
+
+    """filter the rows which have to be updated"""
+    where: ref_document_status_bool_exp!
+  ): ref_document_status_mutation_response
+
+  """
+  update data of the table: "ref_document_types"
+  """
+  update_ref_document_types(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ref_document_types_set_input
+
+    """filter the rows which have to be updated"""
+    where: ref_document_types_bool_exp!
+  ): ref_document_types_mutation_response
+
+  """
+  update data of the table: "ref_shipping_agents"
+  """
+  update_ref_shipping_agents(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ref_shipping_agents_set_input
+
+    """filter the rows which have to be updated"""
+    where: ref_shipping_agents_bool_exp!
+  ): ref_shipping_agents_mutation_response
+
+  """
+  update data of the table: "roles"
+  """
+  update_roles(
+    """sets the columns of the filtered rows to the given values"""
+    _set: roles_set_input
+
+    """filter the rows which have to be updated"""
+    where: roles_bool_exp!
+  ): roles_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "addresses"
+  """
+  addresses(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): [addresses!]!
+
+  """
+  fetch aggregated fields from the table: "addresses"
+  """
+  addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): addresses_aggregate!
+
+  """fetch data from the table: "addresses" using primary key columns"""
+  addresses_by_pk(address_id: bigint!): addresses
+
+  """
+  fetch data from the table: "circulation_history"
+  """
+  circulation_history(
+    """distinct select on columns"""
+    distinct_on: [circulation_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [circulation_history_order_by!]
+
+    """filter the rows returned"""
+    where: circulation_history_bool_exp
+  ): [circulation_history!]!
+
+  """
+  fetch aggregated fields from the table: "circulation_history"
+  """
+  circulation_history_aggregate(
+    """distinct select on columns"""
+    distinct_on: [circulation_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [circulation_history_order_by!]
+
+    """filter the rows returned"""
+    where: circulation_history_bool_exp
+  ): circulation_history_aggregate!
+
+  """
+  fetch data from the table: "circulation_history" using primary key columns
+  """
+  circulation_history_by_pk(copy_number: bigint!, document_id: bigint!, draft_number: bigint!, employee_id: bigint!): circulation_history
+
+  """
+  fetch data from the table: "document_drafts"
+  """
+  document_drafts(
+    """distinct select on columns"""
+    distinct_on: [document_drafts_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [document_drafts_order_by!]
+
+    """filter the rows returned"""
+    where: document_drafts_bool_exp
+  ): [document_drafts!]!
+
+  """
+  fetch aggregated fields from the table: "document_drafts"
+  """
+  document_drafts_aggregate(
+    """distinct select on columns"""
+    distinct_on: [document_drafts_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [document_drafts_order_by!]
+
+    """filter the rows returned"""
+    where: document_drafts_bool_exp
+  ): document_drafts_aggregate!
+
+  """fetch data from the table: "document_drafts" using primary key columns"""
+  document_drafts_by_pk(document_id: bigint!, draft_number: bigint!): document_drafts
+
+  """
+  fetch data from the table: "documents"
+  """
+  documents(
+    """distinct select on columns"""
+    distinct_on: [documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_order_by!]
+
+    """filter the rows returned"""
+    where: documents_bool_exp
+  ): [documents!]!
+
+  """
+  fetch aggregated fields from the table: "documents"
+  """
+  documents_aggregate(
+    """distinct select on columns"""
+    distinct_on: [documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_order_by!]
+
+    """filter the rows returned"""
+    where: documents_bool_exp
+  ): documents_aggregate!
+
+  """fetch data from the table: "documents" using primary key columns"""
+  documents_by_pk(document_id: bigint!): documents
+
+  """
+  fetch data from the table: "documents_mailed"
+  """
+  documents_mailed(
+    """distinct select on columns"""
+    distinct_on: [documents_mailed_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_mailed_order_by!]
+
+    """filter the rows returned"""
+    where: documents_mailed_bool_exp
+  ): [documents_mailed!]!
+
+  """
+  fetch aggregated fields from the table: "documents_mailed"
+  """
+  documents_mailed_aggregate(
+    """distinct select on columns"""
+    distinct_on: [documents_mailed_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_mailed_order_by!]
+
+    """filter the rows returned"""
+    where: documents_mailed_bool_exp
+  ): documents_mailed_aggregate!
+
+  """
+  fetch data from the table: "documents_mailed" using primary key columns
+  """
+  documents_mailed_by_pk(document_id: bigint!, mailed_to_address_id: bigint!): documents_mailed
+
+  """
+  fetch data from the table: "draft_copies"
+  """
+  draft_copies(
+    """distinct select on columns"""
+    distinct_on: [draft_copies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [draft_copies_order_by!]
+
+    """filter the rows returned"""
+    where: draft_copies_bool_exp
+  ): [draft_copies!]!
+
+  """
+  fetch aggregated fields from the table: "draft_copies"
+  """
+  draft_copies_aggregate(
+    """distinct select on columns"""
+    distinct_on: [draft_copies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [draft_copies_order_by!]
+
+    """filter the rows returned"""
+    where: draft_copies_bool_exp
+  ): draft_copies_aggregate!
+
+  """fetch data from the table: "draft_copies" using primary key columns"""
+  draft_copies_by_pk(copy_number: bigint!, document_id: bigint!, draft_number: bigint!): draft_copies
+
+  """
+  fetch data from the table: "employees"
+  """
+  employees(
+    """distinct select on columns"""
+    distinct_on: [employees_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employees_order_by!]
+
+    """filter the rows returned"""
+    where: employees_bool_exp
+  ): [employees!]!
+
+  """
+  fetch aggregated fields from the table: "employees"
+  """
+  employees_aggregate(
+    """distinct select on columns"""
+    distinct_on: [employees_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employees_order_by!]
+
+    """filter the rows returned"""
+    where: employees_bool_exp
+  ): employees_aggregate!
+
+  """fetch data from the table: "employees" using primary key columns"""
+  employees_by_pk(employee_id: bigint!): employees
+
+  """
+  fetch data from the table: "ref_document_status"
+  """
+  ref_document_status(
+    """distinct select on columns"""
+    distinct_on: [ref_document_status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_document_status_order_by!]
+
+    """filter the rows returned"""
+    where: ref_document_status_bool_exp
+  ): [ref_document_status!]!
+
+  """
+  fetch aggregated fields from the table: "ref_document_status"
+  """
+  ref_document_status_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_document_status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_document_status_order_by!]
+
+    """filter the rows returned"""
+    where: ref_document_status_bool_exp
+  ): ref_document_status_aggregate!
+
+  """
+  fetch data from the table: "ref_document_status" using primary key columns
+  """
+  ref_document_status_by_pk(document_status_code: String!): ref_document_status
+
+  """
+  fetch data from the table: "ref_document_types"
+  """
+  ref_document_types(
+    """distinct select on columns"""
+    distinct_on: [ref_document_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_document_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_document_types_bool_exp
+  ): [ref_document_types!]!
+
+  """
+  fetch aggregated fields from the table: "ref_document_types"
+  """
+  ref_document_types_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_document_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_document_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_document_types_bool_exp
+  ): ref_document_types_aggregate!
+
+  """
+  fetch data from the table: "ref_document_types" using primary key columns
+  """
+  ref_document_types_by_pk(document_type_code: String!): ref_document_types
+
+  """
+  fetch data from the table: "ref_shipping_agents"
+  """
+  ref_shipping_agents(
+    """distinct select on columns"""
+    distinct_on: [ref_shipping_agents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_shipping_agents_order_by!]
+
+    """filter the rows returned"""
+    where: ref_shipping_agents_bool_exp
+  ): [ref_shipping_agents!]!
+
+  """
+  fetch aggregated fields from the table: "ref_shipping_agents"
+  """
+  ref_shipping_agents_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_shipping_agents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_shipping_agents_order_by!]
+
+    """filter the rows returned"""
+    where: ref_shipping_agents_bool_exp
+  ): ref_shipping_agents_aggregate!
+
+  """
+  fetch data from the table: "ref_shipping_agents" using primary key columns
+  """
+  ref_shipping_agents_by_pk(shipping_agent_code: String!): ref_shipping_agents
+
+  """
+  fetch data from the table: "roles"
+  """
+  roles(
+    """distinct select on columns"""
+    distinct_on: [roles_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [roles_order_by!]
+
+    """filter the rows returned"""
+    where: roles_bool_exp
+  ): [roles!]!
+
+  """
+  fetch aggregated fields from the table: "roles"
+  """
+  roles_aggregate(
+    """distinct select on columns"""
+    distinct_on: [roles_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [roles_order_by!]
+
+    """filter the rows returned"""
+    where: roles_bool_exp
+  ): roles_aggregate!
+
+  """fetch data from the table: "roles" using primary key columns"""
+  roles_by_pk(role_code: String!): roles
+}
+
+"""
+columns and relationships of "ref_document_status"
+"""
+type ref_document_status {
+  document_status_code: String!
+  document_status_description: String
+
+  """An array relationship"""
+  documents(
+    """distinct select on columns"""
+    distinct_on: [documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_order_by!]
+
+    """filter the rows returned"""
+    where: documents_bool_exp
+  ): [documents!]!
+
+  """An aggregated array relationship"""
+  documents_aggregate(
+    """distinct select on columns"""
+    distinct_on: [documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_order_by!]
+
+    """filter the rows returned"""
+    where: documents_bool_exp
+  ): documents_aggregate!
+}
+
+"""
+aggregated selection of "ref_document_status"
+"""
+type ref_document_status_aggregate {
+  aggregate: ref_document_status_aggregate_fields
+  nodes: [ref_document_status!]!
+}
+
+"""
+aggregate fields of "ref_document_status"
+"""
+type ref_document_status_aggregate_fields {
+  count(columns: [ref_document_status_select_column!], distinct: Boolean): Int
+  max: ref_document_status_max_fields
+  min: ref_document_status_min_fields
+}
+
+"""
+order by aggregate values of table "ref_document_status"
+"""
+input ref_document_status_aggregate_order_by {
+  count: order_by
+  max: ref_document_status_max_order_by
+  min: ref_document_status_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "ref_document_status"
+"""
+input ref_document_status_arr_rel_insert_input {
+  data: [ref_document_status_insert_input!]!
+  on_conflict: ref_document_status_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "ref_document_status". All fields are combined with a logical 'AND'.
+"""
+input ref_document_status_bool_exp {
+  _and: [ref_document_status_bool_exp]
+  _not: ref_document_status_bool_exp
+  _or: [ref_document_status_bool_exp]
+  document_status_code: String_comparison_exp
+  document_status_description: String_comparison_exp
+  documents: documents_bool_exp
+}
+
+"""
+unique or primary key constraints on table "ref_document_status"
+"""
+enum ref_document_status_constraint {
+  """unique or primary key constraint"""
+  idx_20113_sqlite_autoindex_ref_document_status_1
+}
+
+"""
+input type for inserting data into table "ref_document_status"
+"""
+input ref_document_status_insert_input {
+  document_status_code: String
+  document_status_description: String
+  documents: documents_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type ref_document_status_max_fields {
+  document_status_code: String
+  document_status_description: String
+}
+
+"""
+order by max() on columns of table "ref_document_status"
+"""
+input ref_document_status_max_order_by {
+  document_status_code: order_by
+  document_status_description: order_by
+}
+
+"""aggregate min on columns"""
+type ref_document_status_min_fields {
+  document_status_code: String
+  document_status_description: String
+}
+
+"""
+order by min() on columns of table "ref_document_status"
+"""
+input ref_document_status_min_order_by {
+  document_status_code: order_by
+  document_status_description: order_by
+}
+
+"""
+response of any mutation on the table "ref_document_status"
+"""
+type ref_document_status_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [ref_document_status!]!
+}
+
+"""
+input type for inserting object relation for remote table "ref_document_status"
+"""
+input ref_document_status_obj_rel_insert_input {
+  data: ref_document_status_insert_input!
+  on_conflict: ref_document_status_on_conflict
+}
+
+"""
+on conflict condition type for table "ref_document_status"
+"""
+input ref_document_status_on_conflict {
+  constraint: ref_document_status_constraint!
+  update_columns: [ref_document_status_update_column!]!
+  where: ref_document_status_bool_exp
+}
+
+"""
+ordering options when selecting data from "ref_document_status"
+"""
+input ref_document_status_order_by {
+  document_status_code: order_by
+  document_status_description: order_by
+  documents_aggregate: documents_aggregate_order_by
+}
+
+"""
+select columns of table "ref_document_status"
+"""
+enum ref_document_status_select_column {
+  """column name"""
+  document_status_code
+
+  """column name"""
+  document_status_description
+}
+
+"""
+input type for updating data in table "ref_document_status"
+"""
+input ref_document_status_set_input {
+  document_status_code: String
+  document_status_description: String
+}
+
+"""
+update columns of table "ref_document_status"
+"""
+enum ref_document_status_update_column {
+  """column name"""
+  document_status_code
+
+  """column name"""
+  document_status_description
+}
+
+"""
+columns and relationships of "ref_document_types"
+"""
+type ref_document_types {
+  document_type_code: String!
+  document_type_description: String
+
+  """An array relationship"""
+  documents(
+    """distinct select on columns"""
+    distinct_on: [documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_order_by!]
+
+    """filter the rows returned"""
+    where: documents_bool_exp
+  ): [documents!]!
+
+  """An aggregated array relationship"""
+  documents_aggregate(
+    """distinct select on columns"""
+    distinct_on: [documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_order_by!]
+
+    """filter the rows returned"""
+    where: documents_bool_exp
+  ): documents_aggregate!
+}
+
+"""
+aggregated selection of "ref_document_types"
+"""
+type ref_document_types_aggregate {
+  aggregate: ref_document_types_aggregate_fields
+  nodes: [ref_document_types!]!
+}
+
+"""
+aggregate fields of "ref_document_types"
+"""
+type ref_document_types_aggregate_fields {
+  count(columns: [ref_document_types_select_column!], distinct: Boolean): Int
+  max: ref_document_types_max_fields
+  min: ref_document_types_min_fields
+}
+
+"""
+order by aggregate values of table "ref_document_types"
+"""
+input ref_document_types_aggregate_order_by {
+  count: order_by
+  max: ref_document_types_max_order_by
+  min: ref_document_types_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "ref_document_types"
+"""
+input ref_document_types_arr_rel_insert_input {
+  data: [ref_document_types_insert_input!]!
+  on_conflict: ref_document_types_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "ref_document_types". All fields are combined with a logical 'AND'.
+"""
+input ref_document_types_bool_exp {
+  _and: [ref_document_types_bool_exp]
+  _not: ref_document_types_bool_exp
+  _or: [ref_document_types_bool_exp]
+  document_type_code: String_comparison_exp
+  document_type_description: String_comparison_exp
+  documents: documents_bool_exp
+}
+
+"""
+unique or primary key constraints on table "ref_document_types"
+"""
+enum ref_document_types_constraint {
+  """unique or primary key constraint"""
+  idx_20095_sqlite_autoindex_ref_document_types_1
+}
+
+"""
+input type for inserting data into table "ref_document_types"
+"""
+input ref_document_types_insert_input {
+  document_type_code: String
+  document_type_description: String
+  documents: documents_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type ref_document_types_max_fields {
+  document_type_code: String
+  document_type_description: String
+}
+
+"""
+order by max() on columns of table "ref_document_types"
+"""
+input ref_document_types_max_order_by {
+  document_type_code: order_by
+  document_type_description: order_by
+}
+
+"""aggregate min on columns"""
+type ref_document_types_min_fields {
+  document_type_code: String
+  document_type_description: String
+}
+
+"""
+order by min() on columns of table "ref_document_types"
+"""
+input ref_document_types_min_order_by {
+  document_type_code: order_by
+  document_type_description: order_by
+}
+
+"""
+response of any mutation on the table "ref_document_types"
+"""
+type ref_document_types_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [ref_document_types!]!
+}
+
+"""
+input type for inserting object relation for remote table "ref_document_types"
+"""
+input ref_document_types_obj_rel_insert_input {
+  data: ref_document_types_insert_input!
+  on_conflict: ref_document_types_on_conflict
+}
+
+"""
+on conflict condition type for table "ref_document_types"
+"""
+input ref_document_types_on_conflict {
+  constraint: ref_document_types_constraint!
+  update_columns: [ref_document_types_update_column!]!
+  where: ref_document_types_bool_exp
+}
+
+"""
+ordering options when selecting data from "ref_document_types"
+"""
+input ref_document_types_order_by {
+  document_type_code: order_by
+  document_type_description: order_by
+  documents_aggregate: documents_aggregate_order_by
+}
+
+"""
+select columns of table "ref_document_types"
+"""
+enum ref_document_types_select_column {
+  """column name"""
+  document_type_code
+
+  """column name"""
+  document_type_description
+}
+
+"""
+input type for updating data in table "ref_document_types"
+"""
+input ref_document_types_set_input {
+  document_type_code: String
+  document_type_description: String
+}
+
+"""
+update columns of table "ref_document_types"
+"""
+enum ref_document_types_update_column {
+  """column name"""
+  document_type_code
+
+  """column name"""
+  document_type_description
+}
+
+"""
+columns and relationships of "ref_shipping_agents"
+"""
+type ref_shipping_agents {
+  """An array relationship"""
+  documents(
+    """distinct select on columns"""
+    distinct_on: [documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_order_by!]
+
+    """filter the rows returned"""
+    where: documents_bool_exp
+  ): [documents!]!
+
+  """An aggregated array relationship"""
+  documents_aggregate(
+    """distinct select on columns"""
+    distinct_on: [documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_order_by!]
+
+    """filter the rows returned"""
+    where: documents_bool_exp
+  ): documents_aggregate!
+  shipping_agent_code: String!
+  shipping_agent_description: String
+  shipping_agent_name: String
+}
+
+"""
+aggregated selection of "ref_shipping_agents"
+"""
+type ref_shipping_agents_aggregate {
+  aggregate: ref_shipping_agents_aggregate_fields
+  nodes: [ref_shipping_agents!]!
+}
+
+"""
+aggregate fields of "ref_shipping_agents"
+"""
+type ref_shipping_agents_aggregate_fields {
+  count(columns: [ref_shipping_agents_select_column!], distinct: Boolean): Int
+  max: ref_shipping_agents_max_fields
+  min: ref_shipping_agents_min_fields
+}
+
+"""
+order by aggregate values of table "ref_shipping_agents"
+"""
+input ref_shipping_agents_aggregate_order_by {
+  count: order_by
+  max: ref_shipping_agents_max_order_by
+  min: ref_shipping_agents_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "ref_shipping_agents"
+"""
+input ref_shipping_agents_arr_rel_insert_input {
+  data: [ref_shipping_agents_insert_input!]!
+  on_conflict: ref_shipping_agents_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "ref_shipping_agents". All fields are combined with a logical 'AND'.
+"""
+input ref_shipping_agents_bool_exp {
+  _and: [ref_shipping_agents_bool_exp]
+  _not: ref_shipping_agents_bool_exp
+  _or: [ref_shipping_agents_bool_exp]
+  documents: documents_bool_exp
+  shipping_agent_code: String_comparison_exp
+  shipping_agent_description: String_comparison_exp
+  shipping_agent_name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "ref_shipping_agents"
+"""
+enum ref_shipping_agents_constraint {
+  """unique or primary key constraint"""
+  idx_20119_sqlite_autoindex_ref_shipping_agents_1
+}
+
+"""
+input type for inserting data into table "ref_shipping_agents"
+"""
+input ref_shipping_agents_insert_input {
+  documents: documents_arr_rel_insert_input
+  shipping_agent_code: String
+  shipping_agent_description: String
+  shipping_agent_name: String
+}
+
+"""aggregate max on columns"""
+type ref_shipping_agents_max_fields {
+  shipping_agent_code: String
+  shipping_agent_description: String
+  shipping_agent_name: String
+}
+
+"""
+order by max() on columns of table "ref_shipping_agents"
+"""
+input ref_shipping_agents_max_order_by {
+  shipping_agent_code: order_by
+  shipping_agent_description: order_by
+  shipping_agent_name: order_by
+}
+
+"""aggregate min on columns"""
+type ref_shipping_agents_min_fields {
+  shipping_agent_code: String
+  shipping_agent_description: String
+  shipping_agent_name: String
+}
+
+"""
+order by min() on columns of table "ref_shipping_agents"
+"""
+input ref_shipping_agents_min_order_by {
+  shipping_agent_code: order_by
+  shipping_agent_description: order_by
+  shipping_agent_name: order_by
+}
+
+"""
+response of any mutation on the table "ref_shipping_agents"
+"""
+type ref_shipping_agents_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [ref_shipping_agents!]!
+}
+
+"""
+input type for inserting object relation for remote table "ref_shipping_agents"
+"""
+input ref_shipping_agents_obj_rel_insert_input {
+  data: ref_shipping_agents_insert_input!
+  on_conflict: ref_shipping_agents_on_conflict
+}
+
+"""
+on conflict condition type for table "ref_shipping_agents"
+"""
+input ref_shipping_agents_on_conflict {
+  constraint: ref_shipping_agents_constraint!
+  update_columns: [ref_shipping_agents_update_column!]!
+  where: ref_shipping_agents_bool_exp
+}
+
+"""
+ordering options when selecting data from "ref_shipping_agents"
+"""
+input ref_shipping_agents_order_by {
+  documents_aggregate: documents_aggregate_order_by
+  shipping_agent_code: order_by
+  shipping_agent_description: order_by
+  shipping_agent_name: order_by
+}
+
+"""
+select columns of table "ref_shipping_agents"
+"""
+enum ref_shipping_agents_select_column {
+  """column name"""
+  shipping_agent_code
+
+  """column name"""
+  shipping_agent_description
+
+  """column name"""
+  shipping_agent_name
+}
+
+"""
+input type for updating data in table "ref_shipping_agents"
+"""
+input ref_shipping_agents_set_input {
+  shipping_agent_code: String
+  shipping_agent_description: String
+  shipping_agent_name: String
+}
+
+"""
+update columns of table "ref_shipping_agents"
+"""
+enum ref_shipping_agents_update_column {
+  """column name"""
+  shipping_agent_code
+
+  """column name"""
+  shipping_agent_description
+
+  """column name"""
+  shipping_agent_name
+}
+
+"""
+columns and relationships of "roles"
+"""
+type roles {
+  """An array relationship"""
+  employees(
+    """distinct select on columns"""
+    distinct_on: [employees_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employees_order_by!]
+
+    """filter the rows returned"""
+    where: employees_bool_exp
+  ): [employees!]!
+
+  """An aggregated array relationship"""
+  employees_aggregate(
+    """distinct select on columns"""
+    distinct_on: [employees_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employees_order_by!]
+
+    """filter the rows returned"""
+    where: employees_bool_exp
+  ): employees_aggregate!
+  role_code: String!
+  role_description: String
+}
+
+"""
+aggregated selection of "roles"
+"""
+type roles_aggregate {
+  aggregate: roles_aggregate_fields
+  nodes: [roles!]!
+}
+
+"""
+aggregate fields of "roles"
+"""
+type roles_aggregate_fields {
+  count(columns: [roles_select_column!], distinct: Boolean): Int
+  max: roles_max_fields
+  min: roles_min_fields
+}
+
+"""
+order by aggregate values of table "roles"
+"""
+input roles_aggregate_order_by {
+  count: order_by
+  max: roles_max_order_by
+  min: roles_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "roles"
+"""
+input roles_arr_rel_insert_input {
+  data: [roles_insert_input!]!
+  on_conflict: roles_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "roles". All fields are combined with a logical 'AND'.
+"""
+input roles_bool_exp {
+  _and: [roles_bool_exp]
+  _not: roles_bool_exp
+  _or: [roles_bool_exp]
+  employees: employees_bool_exp
+  role_code: String_comparison_exp
+  role_description: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "roles"
+"""
+enum roles_constraint {
+  """unique or primary key constraint"""
+  idx_20101_sqlite_autoindex_roles_1
+}
+
+"""
+input type for inserting data into table "roles"
+"""
+input roles_insert_input {
+  employees: employees_arr_rel_insert_input
+  role_code: String
+  role_description: String
+}
+
+"""aggregate max on columns"""
+type roles_max_fields {
+  role_code: String
+  role_description: String
+}
+
+"""
+order by max() on columns of table "roles"
+"""
+input roles_max_order_by {
+  role_code: order_by
+  role_description: order_by
+}
+
+"""aggregate min on columns"""
+type roles_min_fields {
+  role_code: String
+  role_description: String
+}
+
+"""
+order by min() on columns of table "roles"
+"""
+input roles_min_order_by {
+  role_code: order_by
+  role_description: order_by
+}
+
+"""
+response of any mutation on the table "roles"
+"""
+type roles_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [roles!]!
+}
+
+"""
+input type for inserting object relation for remote table "roles"
+"""
+input roles_obj_rel_insert_input {
+  data: roles_insert_input!
+  on_conflict: roles_on_conflict
+}
+
+"""
+on conflict condition type for table "roles"
+"""
+input roles_on_conflict {
+  constraint: roles_constraint!
+  update_columns: [roles_update_column!]!
+  where: roles_bool_exp
+}
+
+"""
+ordering options when selecting data from "roles"
+"""
+input roles_order_by {
+  employees_aggregate: employees_aggregate_order_by
+  role_code: order_by
+  role_description: order_by
+}
+
+"""
+select columns of table "roles"
+"""
+enum roles_select_column {
+  """column name"""
+  role_code
+
+  """column name"""
+  role_description
+}
+
+"""
+input type for updating data in table "roles"
+"""
+input roles_set_input {
+  role_code: String
+  role_description: String
+}
+
+"""
+update columns of table "roles"
+"""
+enum roles_update_column {
+  """column name"""
+  role_code
+
+  """column name"""
+  role_description
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "addresses"
+  """
+  addresses(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): [addresses!]!
+
+  """
+  fetch aggregated fields from the table: "addresses"
+  """
+  addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): addresses_aggregate!
+
+  """fetch data from the table: "addresses" using primary key columns"""
+  addresses_by_pk(address_id: bigint!): addresses
+
+  """
+  fetch data from the table: "circulation_history"
+  """
+  circulation_history(
+    """distinct select on columns"""
+    distinct_on: [circulation_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [circulation_history_order_by!]
+
+    """filter the rows returned"""
+    where: circulation_history_bool_exp
+  ): [circulation_history!]!
+
+  """
+  fetch aggregated fields from the table: "circulation_history"
+  """
+  circulation_history_aggregate(
+    """distinct select on columns"""
+    distinct_on: [circulation_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [circulation_history_order_by!]
+
+    """filter the rows returned"""
+    where: circulation_history_bool_exp
+  ): circulation_history_aggregate!
+
+  """
+  fetch data from the table: "circulation_history" using primary key columns
+  """
+  circulation_history_by_pk(copy_number: bigint!, document_id: bigint!, draft_number: bigint!, employee_id: bigint!): circulation_history
+
+  """
+  fetch data from the table: "document_drafts"
+  """
+  document_drafts(
+    """distinct select on columns"""
+    distinct_on: [document_drafts_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [document_drafts_order_by!]
+
+    """filter the rows returned"""
+    where: document_drafts_bool_exp
+  ): [document_drafts!]!
+
+  """
+  fetch aggregated fields from the table: "document_drafts"
+  """
+  document_drafts_aggregate(
+    """distinct select on columns"""
+    distinct_on: [document_drafts_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [document_drafts_order_by!]
+
+    """filter the rows returned"""
+    where: document_drafts_bool_exp
+  ): document_drafts_aggregate!
+
+  """fetch data from the table: "document_drafts" using primary key columns"""
+  document_drafts_by_pk(document_id: bigint!, draft_number: bigint!): document_drafts
+
+  """
+  fetch data from the table: "documents"
+  """
+  documents(
+    """distinct select on columns"""
+    distinct_on: [documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_order_by!]
+
+    """filter the rows returned"""
+    where: documents_bool_exp
+  ): [documents!]!
+
+  """
+  fetch aggregated fields from the table: "documents"
+  """
+  documents_aggregate(
+    """distinct select on columns"""
+    distinct_on: [documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_order_by!]
+
+    """filter the rows returned"""
+    where: documents_bool_exp
+  ): documents_aggregate!
+
+  """fetch data from the table: "documents" using primary key columns"""
+  documents_by_pk(document_id: bigint!): documents
+
+  """
+  fetch data from the table: "documents_mailed"
+  """
+  documents_mailed(
+    """distinct select on columns"""
+    distinct_on: [documents_mailed_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_mailed_order_by!]
+
+    """filter the rows returned"""
+    where: documents_mailed_bool_exp
+  ): [documents_mailed!]!
+
+  """
+  fetch aggregated fields from the table: "documents_mailed"
+  """
+  documents_mailed_aggregate(
+    """distinct select on columns"""
+    distinct_on: [documents_mailed_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_mailed_order_by!]
+
+    """filter the rows returned"""
+    where: documents_mailed_bool_exp
+  ): documents_mailed_aggregate!
+
+  """
+  fetch data from the table: "documents_mailed" using primary key columns
+  """
+  documents_mailed_by_pk(document_id: bigint!, mailed_to_address_id: bigint!): documents_mailed
+
+  """
+  fetch data from the table: "draft_copies"
+  """
+  draft_copies(
+    """distinct select on columns"""
+    distinct_on: [draft_copies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [draft_copies_order_by!]
+
+    """filter the rows returned"""
+    where: draft_copies_bool_exp
+  ): [draft_copies!]!
+
+  """
+  fetch aggregated fields from the table: "draft_copies"
+  """
+  draft_copies_aggregate(
+    """distinct select on columns"""
+    distinct_on: [draft_copies_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [draft_copies_order_by!]
+
+    """filter the rows returned"""
+    where: draft_copies_bool_exp
+  ): draft_copies_aggregate!
+
+  """fetch data from the table: "draft_copies" using primary key columns"""
+  draft_copies_by_pk(copy_number: bigint!, document_id: bigint!, draft_number: bigint!): draft_copies
+
+  """
+  fetch data from the table: "employees"
+  """
+  employees(
+    """distinct select on columns"""
+    distinct_on: [employees_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employees_order_by!]
+
+    """filter the rows returned"""
+    where: employees_bool_exp
+  ): [employees!]!
+
+  """
+  fetch aggregated fields from the table: "employees"
+  """
+  employees_aggregate(
+    """distinct select on columns"""
+    distinct_on: [employees_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employees_order_by!]
+
+    """filter the rows returned"""
+    where: employees_bool_exp
+  ): employees_aggregate!
+
+  """fetch data from the table: "employees" using primary key columns"""
+  employees_by_pk(employee_id: bigint!): employees
+
+  """
+  fetch data from the table: "ref_document_status"
+  """
+  ref_document_status(
+    """distinct select on columns"""
+    distinct_on: [ref_document_status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_document_status_order_by!]
+
+    """filter the rows returned"""
+    where: ref_document_status_bool_exp
+  ): [ref_document_status!]!
+
+  """
+  fetch aggregated fields from the table: "ref_document_status"
+  """
+  ref_document_status_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_document_status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_document_status_order_by!]
+
+    """filter the rows returned"""
+    where: ref_document_status_bool_exp
+  ): ref_document_status_aggregate!
+
+  """
+  fetch data from the table: "ref_document_status" using primary key columns
+  """
+  ref_document_status_by_pk(document_status_code: String!): ref_document_status
+
+  """
+  fetch data from the table: "ref_document_types"
+  """
+  ref_document_types(
+    """distinct select on columns"""
+    distinct_on: [ref_document_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_document_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_document_types_bool_exp
+  ): [ref_document_types!]!
+
+  """
+  fetch aggregated fields from the table: "ref_document_types"
+  """
+  ref_document_types_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_document_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_document_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_document_types_bool_exp
+  ): ref_document_types_aggregate!
+
+  """
+  fetch data from the table: "ref_document_types" using primary key columns
+  """
+  ref_document_types_by_pk(document_type_code: String!): ref_document_types
+
+  """
+  fetch data from the table: "ref_shipping_agents"
+  """
+  ref_shipping_agents(
+    """distinct select on columns"""
+    distinct_on: [ref_shipping_agents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_shipping_agents_order_by!]
+
+    """filter the rows returned"""
+    where: ref_shipping_agents_bool_exp
+  ): [ref_shipping_agents!]!
+
+  """
+  fetch aggregated fields from the table: "ref_shipping_agents"
+  """
+  ref_shipping_agents_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_shipping_agents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_shipping_agents_order_by!]
+
+    """filter the rows returned"""
+    where: ref_shipping_agents_bool_exp
+  ): ref_shipping_agents_aggregate!
+
+  """
+  fetch data from the table: "ref_shipping_agents" using primary key columns
+  """
+  ref_shipping_agents_by_pk(shipping_agent_code: String!): ref_shipping_agents
+
+  """
+  fetch data from the table: "roles"
+  """
+  roles(
+    """distinct select on columns"""
+    distinct_on: [roles_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [roles_order_by!]
+
+    """filter the rows returned"""
+    where: roles_bool_exp
+  ): [roles!]!
+
+  """
+  fetch aggregated fields from the table: "roles"
+  """
+  roles_aggregate(
+    """distinct select on columns"""
+    distinct_on: [roles_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [roles_order_by!]
+
+    """filter the rows returned"""
+    where: roles_bool_exp
+  ): roles_aggregate!
+
+  """fetch data from the table: "roles" using primary key columns"""
+  roles_by_pk(role_code: String!): roles
+}
+
+scalar timestamptz
+
+"""
+expression to compare columns of type timestamptz. All fields are combined with logical 'AND'.
+"""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}

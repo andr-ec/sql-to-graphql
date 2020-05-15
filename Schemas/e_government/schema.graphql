@@ -1,0 +1,5045 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "addresses"
+"""
+type addresses {
+  address_id: bigint!
+  country: String
+  line_1_number_building: String
+
+  """An array relationship"""
+  party_addresses(
+    """distinct select on columns"""
+    distinct_on: [party_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: party_addresses_bool_exp
+  ): [party_addresses!]!
+
+  """An aggregated array relationship"""
+  party_addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: party_addresses_bool_exp
+  ): party_addresses_aggregate!
+  state_province_county: String
+  town_city: String
+  zip_postcode: String
+}
+
+"""
+aggregated selection of "addresses"
+"""
+type addresses_aggregate {
+  aggregate: addresses_aggregate_fields
+  nodes: [addresses!]!
+}
+
+"""
+aggregate fields of "addresses"
+"""
+type addresses_aggregate_fields {
+  avg: addresses_avg_fields
+  count(columns: [addresses_select_column!], distinct: Boolean): Int
+  max: addresses_max_fields
+  min: addresses_min_fields
+  stddev: addresses_stddev_fields
+  stddev_pop: addresses_stddev_pop_fields
+  stddev_samp: addresses_stddev_samp_fields
+  sum: addresses_sum_fields
+  var_pop: addresses_var_pop_fields
+  var_samp: addresses_var_samp_fields
+  variance: addresses_variance_fields
+}
+
+"""
+order by aggregate values of table "addresses"
+"""
+input addresses_aggregate_order_by {
+  avg: addresses_avg_order_by
+  count: order_by
+  max: addresses_max_order_by
+  min: addresses_min_order_by
+  stddev: addresses_stddev_order_by
+  stddev_pop: addresses_stddev_pop_order_by
+  stddev_samp: addresses_stddev_samp_order_by
+  sum: addresses_sum_order_by
+  var_pop: addresses_var_pop_order_by
+  var_samp: addresses_var_samp_order_by
+  variance: addresses_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "addresses"
+"""
+input addresses_arr_rel_insert_input {
+  data: [addresses_insert_input!]!
+  on_conflict: addresses_on_conflict
+}
+
+"""aggregate avg on columns"""
+type addresses_avg_fields {
+  address_id: Float
+}
+
+"""
+order by avg() on columns of table "addresses"
+"""
+input addresses_avg_order_by {
+  address_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "addresses". All fields are combined with a logical 'AND'.
+"""
+input addresses_bool_exp {
+  _and: [addresses_bool_exp]
+  _not: addresses_bool_exp
+  _or: [addresses_bool_exp]
+  address_id: bigint_comparison_exp
+  country: String_comparison_exp
+  line_1_number_building: String_comparison_exp
+  party_addresses: party_addresses_bool_exp
+  state_province_county: String_comparison_exp
+  town_city: String_comparison_exp
+  zip_postcode: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "addresses"
+"""
+enum addresses_constraint {
+  """unique or primary key constraint"""
+  idx_26471_addresses_pkey
+}
+
+"""
+input type for incrementing integer columne in table "addresses"
+"""
+input addresses_inc_input {
+  address_id: bigint
+}
+
+"""
+input type for inserting data into table "addresses"
+"""
+input addresses_insert_input {
+  address_id: bigint
+  country: String
+  line_1_number_building: String
+  party_addresses: party_addresses_arr_rel_insert_input
+  state_province_county: String
+  town_city: String
+  zip_postcode: String
+}
+
+"""aggregate max on columns"""
+type addresses_max_fields {
+  address_id: bigint
+  country: String
+  line_1_number_building: String
+  state_province_county: String
+  town_city: String
+  zip_postcode: String
+}
+
+"""
+order by max() on columns of table "addresses"
+"""
+input addresses_max_order_by {
+  address_id: order_by
+  country: order_by
+  line_1_number_building: order_by
+  state_province_county: order_by
+  town_city: order_by
+  zip_postcode: order_by
+}
+
+"""aggregate min on columns"""
+type addresses_min_fields {
+  address_id: bigint
+  country: String
+  line_1_number_building: String
+  state_province_county: String
+  town_city: String
+  zip_postcode: String
+}
+
+"""
+order by min() on columns of table "addresses"
+"""
+input addresses_min_order_by {
+  address_id: order_by
+  country: order_by
+  line_1_number_building: order_by
+  state_province_county: order_by
+  town_city: order_by
+  zip_postcode: order_by
+}
+
+"""
+response of any mutation on the table "addresses"
+"""
+type addresses_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [addresses!]!
+}
+
+"""
+input type for inserting object relation for remote table "addresses"
+"""
+input addresses_obj_rel_insert_input {
+  data: addresses_insert_input!
+  on_conflict: addresses_on_conflict
+}
+
+"""
+on conflict condition type for table "addresses"
+"""
+input addresses_on_conflict {
+  constraint: addresses_constraint!
+  update_columns: [addresses_update_column!]!
+  where: addresses_bool_exp
+}
+
+"""
+ordering options when selecting data from "addresses"
+"""
+input addresses_order_by {
+  address_id: order_by
+  country: order_by
+  line_1_number_building: order_by
+  party_addresses_aggregate: party_addresses_aggregate_order_by
+  state_province_county: order_by
+  town_city: order_by
+  zip_postcode: order_by
+}
+
+"""
+select columns of table "addresses"
+"""
+enum addresses_select_column {
+  """column name"""
+  address_id
+
+  """column name"""
+  country
+
+  """column name"""
+  line_1_number_building
+
+  """column name"""
+  state_province_county
+
+  """column name"""
+  town_city
+
+  """column name"""
+  zip_postcode
+}
+
+"""
+input type for updating data in table "addresses"
+"""
+input addresses_set_input {
+  address_id: bigint
+  country: String
+  line_1_number_building: String
+  state_province_county: String
+  town_city: String
+  zip_postcode: String
+}
+
+"""aggregate stddev on columns"""
+type addresses_stddev_fields {
+  address_id: Float
+}
+
+"""
+order by stddev() on columns of table "addresses"
+"""
+input addresses_stddev_order_by {
+  address_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type addresses_stddev_pop_fields {
+  address_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "addresses"
+"""
+input addresses_stddev_pop_order_by {
+  address_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type addresses_stddev_samp_fields {
+  address_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "addresses"
+"""
+input addresses_stddev_samp_order_by {
+  address_id: order_by
+}
+
+"""aggregate sum on columns"""
+type addresses_sum_fields {
+  address_id: bigint
+}
+
+"""
+order by sum() on columns of table "addresses"
+"""
+input addresses_sum_order_by {
+  address_id: order_by
+}
+
+"""
+update columns of table "addresses"
+"""
+enum addresses_update_column {
+  """column name"""
+  address_id
+
+  """column name"""
+  country
+
+  """column name"""
+  line_1_number_building
+
+  """column name"""
+  state_province_county
+
+  """column name"""
+  town_city
+
+  """column name"""
+  zip_postcode
+}
+
+"""aggregate var_pop on columns"""
+type addresses_var_pop_fields {
+  address_id: Float
+}
+
+"""
+order by var_pop() on columns of table "addresses"
+"""
+input addresses_var_pop_order_by {
+  address_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type addresses_var_samp_fields {
+  address_id: Float
+}
+
+"""
+order by var_samp() on columns of table "addresses"
+"""
+input addresses_var_samp_order_by {
+  address_id: order_by
+}
+
+"""aggregate variance on columns"""
+type addresses_variance_fields {
+  address_id: Float
+}
+
+"""
+order by variance() on columns of table "addresses"
+"""
+input addresses_variance_order_by {
+  address_id: order_by
+}
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "forms"
+"""
+type forms {
+  form_description: String
+  form_id: bigint!
+  form_name: String
+  form_number: String
+  form_type_code: String
+
+  """An array relationship"""
+  party_forms(
+    """distinct select on columns"""
+    distinct_on: [party_forms_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_forms_order_by!]
+
+    """filter the rows returned"""
+    where: party_forms_bool_exp
+  ): [party_forms!]!
+
+  """An aggregated array relationship"""
+  party_forms_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_forms_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_forms_order_by!]
+
+    """filter the rows returned"""
+    where: party_forms_bool_exp
+  ): party_forms_aggregate!
+
+  """An object relationship"""
+  service: services
+  service_id: bigint
+}
+
+"""
+aggregated selection of "forms"
+"""
+type forms_aggregate {
+  aggregate: forms_aggregate_fields
+  nodes: [forms!]!
+}
+
+"""
+aggregate fields of "forms"
+"""
+type forms_aggregate_fields {
+  avg: forms_avg_fields
+  count(columns: [forms_select_column!], distinct: Boolean): Int
+  max: forms_max_fields
+  min: forms_min_fields
+  stddev: forms_stddev_fields
+  stddev_pop: forms_stddev_pop_fields
+  stddev_samp: forms_stddev_samp_fields
+  sum: forms_sum_fields
+  var_pop: forms_var_pop_fields
+  var_samp: forms_var_samp_fields
+  variance: forms_variance_fields
+}
+
+"""
+order by aggregate values of table "forms"
+"""
+input forms_aggregate_order_by {
+  avg: forms_avg_order_by
+  count: order_by
+  max: forms_max_order_by
+  min: forms_min_order_by
+  stddev: forms_stddev_order_by
+  stddev_pop: forms_stddev_pop_order_by
+  stddev_samp: forms_stddev_samp_order_by
+  sum: forms_sum_order_by
+  var_pop: forms_var_pop_order_by
+  var_samp: forms_var_samp_order_by
+  variance: forms_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "forms"
+"""
+input forms_arr_rel_insert_input {
+  data: [forms_insert_input!]!
+  on_conflict: forms_on_conflict
+}
+
+"""aggregate avg on columns"""
+type forms_avg_fields {
+  form_id: Float
+  service_id: Float
+}
+
+"""
+order by avg() on columns of table "forms"
+"""
+input forms_avg_order_by {
+  form_id: order_by
+  service_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "forms". All fields are combined with a logical 'AND'.
+"""
+input forms_bool_exp {
+  _and: [forms_bool_exp]
+  _not: forms_bool_exp
+  _or: [forms_bool_exp]
+  form_description: String_comparison_exp
+  form_id: bigint_comparison_exp
+  form_name: String_comparison_exp
+  form_number: String_comparison_exp
+  form_type_code: String_comparison_exp
+  party_forms: party_forms_bool_exp
+  service: services_bool_exp
+  service_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "forms"
+"""
+enum forms_constraint {
+  """unique or primary key constraint"""
+  idx_26483_forms_pkey
+}
+
+"""
+input type for incrementing integer columne in table "forms"
+"""
+input forms_inc_input {
+  form_id: bigint
+  service_id: bigint
+}
+
+"""
+input type for inserting data into table "forms"
+"""
+input forms_insert_input {
+  form_description: String
+  form_id: bigint
+  form_name: String
+  form_number: String
+  form_type_code: String
+  party_forms: party_forms_arr_rel_insert_input
+  service: services_obj_rel_insert_input
+  service_id: bigint
+}
+
+"""aggregate max on columns"""
+type forms_max_fields {
+  form_description: String
+  form_id: bigint
+  form_name: String
+  form_number: String
+  form_type_code: String
+  service_id: bigint
+}
+
+"""
+order by max() on columns of table "forms"
+"""
+input forms_max_order_by {
+  form_description: order_by
+  form_id: order_by
+  form_name: order_by
+  form_number: order_by
+  form_type_code: order_by
+  service_id: order_by
+}
+
+"""aggregate min on columns"""
+type forms_min_fields {
+  form_description: String
+  form_id: bigint
+  form_name: String
+  form_number: String
+  form_type_code: String
+  service_id: bigint
+}
+
+"""
+order by min() on columns of table "forms"
+"""
+input forms_min_order_by {
+  form_description: order_by
+  form_id: order_by
+  form_name: order_by
+  form_number: order_by
+  form_type_code: order_by
+  service_id: order_by
+}
+
+"""
+response of any mutation on the table "forms"
+"""
+type forms_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [forms!]!
+}
+
+"""
+input type for inserting object relation for remote table "forms"
+"""
+input forms_obj_rel_insert_input {
+  data: forms_insert_input!
+  on_conflict: forms_on_conflict
+}
+
+"""
+on conflict condition type for table "forms"
+"""
+input forms_on_conflict {
+  constraint: forms_constraint!
+  update_columns: [forms_update_column!]!
+  where: forms_bool_exp
+}
+
+"""
+ordering options when selecting data from "forms"
+"""
+input forms_order_by {
+  form_description: order_by
+  form_id: order_by
+  form_name: order_by
+  form_number: order_by
+  form_type_code: order_by
+  party_forms_aggregate: party_forms_aggregate_order_by
+  service: services_order_by
+  service_id: order_by
+}
+
+"""
+select columns of table "forms"
+"""
+enum forms_select_column {
+  """column name"""
+  form_description
+
+  """column name"""
+  form_id
+
+  """column name"""
+  form_name
+
+  """column name"""
+  form_number
+
+  """column name"""
+  form_type_code
+
+  """column name"""
+  service_id
+}
+
+"""
+input type for updating data in table "forms"
+"""
+input forms_set_input {
+  form_description: String
+  form_id: bigint
+  form_name: String
+  form_number: String
+  form_type_code: String
+  service_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type forms_stddev_fields {
+  form_id: Float
+  service_id: Float
+}
+
+"""
+order by stddev() on columns of table "forms"
+"""
+input forms_stddev_order_by {
+  form_id: order_by
+  service_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type forms_stddev_pop_fields {
+  form_id: Float
+  service_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "forms"
+"""
+input forms_stddev_pop_order_by {
+  form_id: order_by
+  service_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type forms_stddev_samp_fields {
+  form_id: Float
+  service_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "forms"
+"""
+input forms_stddev_samp_order_by {
+  form_id: order_by
+  service_id: order_by
+}
+
+"""aggregate sum on columns"""
+type forms_sum_fields {
+  form_id: bigint
+  service_id: bigint
+}
+
+"""
+order by sum() on columns of table "forms"
+"""
+input forms_sum_order_by {
+  form_id: order_by
+  service_id: order_by
+}
+
+"""
+update columns of table "forms"
+"""
+enum forms_update_column {
+  """column name"""
+  form_description
+
+  """column name"""
+  form_id
+
+  """column name"""
+  form_name
+
+  """column name"""
+  form_number
+
+  """column name"""
+  form_type_code
+
+  """column name"""
+  service_id
+}
+
+"""aggregate var_pop on columns"""
+type forms_var_pop_fields {
+  form_id: Float
+  service_id: Float
+}
+
+"""
+order by var_pop() on columns of table "forms"
+"""
+input forms_var_pop_order_by {
+  form_id: order_by
+  service_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type forms_var_samp_fields {
+  form_id: Float
+  service_id: Float
+}
+
+"""
+order by var_samp() on columns of table "forms"
+"""
+input forms_var_samp_order_by {
+  form_id: order_by
+  service_id: order_by
+}
+
+"""aggregate variance on columns"""
+type forms_variance_fields {
+  form_id: Float
+  service_id: Float
+}
+
+"""
+order by variance() on columns of table "forms"
+"""
+input forms_variance_order_by {
+  form_id: order_by
+  service_id: order_by
+}
+
+"""
+columns and relationships of "individuals"
+"""
+type individuals {
+  individual_address: String
+  individual_email: String
+  individual_first_name: String
+  individual_id: bigint!
+  individual_last_name: String
+  individual_middle_name: String
+  inidividual_phone: String
+
+  """An array relationship"""
+  organization_contact_individuals(
+    """distinct select on columns"""
+    distinct_on: [organization_contact_individuals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [organization_contact_individuals_order_by!]
+
+    """filter the rows returned"""
+    where: organization_contact_individuals_bool_exp
+  ): [organization_contact_individuals!]!
+
+  """An aggregated array relationship"""
+  organization_contact_individuals_aggregate(
+    """distinct select on columns"""
+    distinct_on: [organization_contact_individuals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [organization_contact_individuals_order_by!]
+
+    """filter the rows returned"""
+    where: organization_contact_individuals_bool_exp
+  ): organization_contact_individuals_aggregate!
+}
+
+"""
+aggregated selection of "individuals"
+"""
+type individuals_aggregate {
+  aggregate: individuals_aggregate_fields
+  nodes: [individuals!]!
+}
+
+"""
+aggregate fields of "individuals"
+"""
+type individuals_aggregate_fields {
+  avg: individuals_avg_fields
+  count(columns: [individuals_select_column!], distinct: Boolean): Int
+  max: individuals_max_fields
+  min: individuals_min_fields
+  stddev: individuals_stddev_fields
+  stddev_pop: individuals_stddev_pop_fields
+  stddev_samp: individuals_stddev_samp_fields
+  sum: individuals_sum_fields
+  var_pop: individuals_var_pop_fields
+  var_samp: individuals_var_samp_fields
+  variance: individuals_variance_fields
+}
+
+"""
+order by aggregate values of table "individuals"
+"""
+input individuals_aggregate_order_by {
+  avg: individuals_avg_order_by
+  count: order_by
+  max: individuals_max_order_by
+  min: individuals_min_order_by
+  stddev: individuals_stddev_order_by
+  stddev_pop: individuals_stddev_pop_order_by
+  stddev_samp: individuals_stddev_samp_order_by
+  sum: individuals_sum_order_by
+  var_pop: individuals_var_pop_order_by
+  var_samp: individuals_var_samp_order_by
+  variance: individuals_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "individuals"
+"""
+input individuals_arr_rel_insert_input {
+  data: [individuals_insert_input!]!
+  on_conflict: individuals_on_conflict
+}
+
+"""aggregate avg on columns"""
+type individuals_avg_fields {
+  individual_id: Float
+}
+
+"""
+order by avg() on columns of table "individuals"
+"""
+input individuals_avg_order_by {
+  individual_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "individuals". All fields are combined with a logical 'AND'.
+"""
+input individuals_bool_exp {
+  _and: [individuals_bool_exp]
+  _not: individuals_bool_exp
+  _or: [individuals_bool_exp]
+  individual_address: String_comparison_exp
+  individual_email: String_comparison_exp
+  individual_first_name: String_comparison_exp
+  individual_id: bigint_comparison_exp
+  individual_last_name: String_comparison_exp
+  individual_middle_name: String_comparison_exp
+  inidividual_phone: String_comparison_exp
+  organization_contact_individuals: organization_contact_individuals_bool_exp
+}
+
+"""
+unique or primary key constraints on table "individuals"
+"""
+enum individuals_constraint {
+  """unique or primary key constraint"""
+  idx_26489_individuals_pkey
+}
+
+"""
+input type for incrementing integer columne in table "individuals"
+"""
+input individuals_inc_input {
+  individual_id: bigint
+}
+
+"""
+input type for inserting data into table "individuals"
+"""
+input individuals_insert_input {
+  individual_address: String
+  individual_email: String
+  individual_first_name: String
+  individual_id: bigint
+  individual_last_name: String
+  individual_middle_name: String
+  inidividual_phone: String
+  organization_contact_individuals: organization_contact_individuals_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type individuals_max_fields {
+  individual_address: String
+  individual_email: String
+  individual_first_name: String
+  individual_id: bigint
+  individual_last_name: String
+  individual_middle_name: String
+  inidividual_phone: String
+}
+
+"""
+order by max() on columns of table "individuals"
+"""
+input individuals_max_order_by {
+  individual_address: order_by
+  individual_email: order_by
+  individual_first_name: order_by
+  individual_id: order_by
+  individual_last_name: order_by
+  individual_middle_name: order_by
+  inidividual_phone: order_by
+}
+
+"""aggregate min on columns"""
+type individuals_min_fields {
+  individual_address: String
+  individual_email: String
+  individual_first_name: String
+  individual_id: bigint
+  individual_last_name: String
+  individual_middle_name: String
+  inidividual_phone: String
+}
+
+"""
+order by min() on columns of table "individuals"
+"""
+input individuals_min_order_by {
+  individual_address: order_by
+  individual_email: order_by
+  individual_first_name: order_by
+  individual_id: order_by
+  individual_last_name: order_by
+  individual_middle_name: order_by
+  inidividual_phone: order_by
+}
+
+"""
+response of any mutation on the table "individuals"
+"""
+type individuals_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [individuals!]!
+}
+
+"""
+input type for inserting object relation for remote table "individuals"
+"""
+input individuals_obj_rel_insert_input {
+  data: individuals_insert_input!
+  on_conflict: individuals_on_conflict
+}
+
+"""
+on conflict condition type for table "individuals"
+"""
+input individuals_on_conflict {
+  constraint: individuals_constraint!
+  update_columns: [individuals_update_column!]!
+  where: individuals_bool_exp
+}
+
+"""
+ordering options when selecting data from "individuals"
+"""
+input individuals_order_by {
+  individual_address: order_by
+  individual_email: order_by
+  individual_first_name: order_by
+  individual_id: order_by
+  individual_last_name: order_by
+  individual_middle_name: order_by
+  inidividual_phone: order_by
+  organization_contact_individuals_aggregate: organization_contact_individuals_aggregate_order_by
+}
+
+"""
+select columns of table "individuals"
+"""
+enum individuals_select_column {
+  """column name"""
+  individual_address
+
+  """column name"""
+  individual_email
+
+  """column name"""
+  individual_first_name
+
+  """column name"""
+  individual_id
+
+  """column name"""
+  individual_last_name
+
+  """column name"""
+  individual_middle_name
+
+  """column name"""
+  inidividual_phone
+}
+
+"""
+input type for updating data in table "individuals"
+"""
+input individuals_set_input {
+  individual_address: String
+  individual_email: String
+  individual_first_name: String
+  individual_id: bigint
+  individual_last_name: String
+  individual_middle_name: String
+  inidividual_phone: String
+}
+
+"""aggregate stddev on columns"""
+type individuals_stddev_fields {
+  individual_id: Float
+}
+
+"""
+order by stddev() on columns of table "individuals"
+"""
+input individuals_stddev_order_by {
+  individual_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type individuals_stddev_pop_fields {
+  individual_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "individuals"
+"""
+input individuals_stddev_pop_order_by {
+  individual_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type individuals_stddev_samp_fields {
+  individual_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "individuals"
+"""
+input individuals_stddev_samp_order_by {
+  individual_id: order_by
+}
+
+"""aggregate sum on columns"""
+type individuals_sum_fields {
+  individual_id: bigint
+}
+
+"""
+order by sum() on columns of table "individuals"
+"""
+input individuals_sum_order_by {
+  individual_id: order_by
+}
+
+"""
+update columns of table "individuals"
+"""
+enum individuals_update_column {
+  """column name"""
+  individual_address
+
+  """column name"""
+  individual_email
+
+  """column name"""
+  individual_first_name
+
+  """column name"""
+  individual_id
+
+  """column name"""
+  individual_last_name
+
+  """column name"""
+  individual_middle_name
+
+  """column name"""
+  inidividual_phone
+}
+
+"""aggregate var_pop on columns"""
+type individuals_var_pop_fields {
+  individual_id: Float
+}
+
+"""
+order by var_pop() on columns of table "individuals"
+"""
+input individuals_var_pop_order_by {
+  individual_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type individuals_var_samp_fields {
+  individual_id: Float
+}
+
+"""
+order by var_samp() on columns of table "individuals"
+"""
+input individuals_var_samp_order_by {
+  individual_id: order_by
+}
+
+"""aggregate variance on columns"""
+type individuals_variance_fields {
+  individual_id: Float
+}
+
+"""
+order by variance() on columns of table "individuals"
+"""
+input individuals_variance_order_by {
+  individual_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "addresses"
+  """
+  delete_addresses(
+    """filter the rows which have to be deleted"""
+    where: addresses_bool_exp!
+  ): addresses_mutation_response
+
+  """
+  delete data from the table: "forms"
+  """
+  delete_forms(
+    """filter the rows which have to be deleted"""
+    where: forms_bool_exp!
+  ): forms_mutation_response
+
+  """
+  delete data from the table: "individuals"
+  """
+  delete_individuals(
+    """filter the rows which have to be deleted"""
+    where: individuals_bool_exp!
+  ): individuals_mutation_response
+
+  """
+  delete data from the table: "organization_contact_individuals"
+  """
+  delete_organization_contact_individuals(
+    """filter the rows which have to be deleted"""
+    where: organization_contact_individuals_bool_exp!
+  ): organization_contact_individuals_mutation_response
+
+  """
+  delete data from the table: "organizations"
+  """
+  delete_organizations(
+    """filter the rows which have to be deleted"""
+    where: organizations_bool_exp!
+  ): organizations_mutation_response
+
+  """
+  delete data from the table: "parties"
+  """
+  delete_parties(
+    """filter the rows which have to be deleted"""
+    where: parties_bool_exp!
+  ): parties_mutation_response
+
+  """
+  delete data from the table: "party_addresses"
+  """
+  delete_party_addresses(
+    """filter the rows which have to be deleted"""
+    where: party_addresses_bool_exp!
+  ): party_addresses_mutation_response
+
+  """
+  delete data from the table: "party_forms"
+  """
+  delete_party_forms(
+    """filter the rows which have to be deleted"""
+    where: party_forms_bool_exp!
+  ): party_forms_mutation_response
+
+  """
+  delete data from the table: "party_services"
+  """
+  delete_party_services(
+    """filter the rows which have to be deleted"""
+    where: party_services_bool_exp!
+  ): party_services_mutation_response
+
+  """
+  delete data from the table: "services"
+  """
+  delete_services(
+    """filter the rows which have to be deleted"""
+    where: services_bool_exp!
+  ): services_mutation_response
+
+  """
+  insert data into the table: "addresses"
+  """
+  insert_addresses(
+    """the rows to be inserted"""
+    objects: [addresses_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: addresses_on_conflict
+  ): addresses_mutation_response
+
+  """
+  insert data into the table: "forms"
+  """
+  insert_forms(
+    """the rows to be inserted"""
+    objects: [forms_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: forms_on_conflict
+  ): forms_mutation_response
+
+  """
+  insert data into the table: "individuals"
+  """
+  insert_individuals(
+    """the rows to be inserted"""
+    objects: [individuals_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: individuals_on_conflict
+  ): individuals_mutation_response
+
+  """
+  insert data into the table: "organization_contact_individuals"
+  """
+  insert_organization_contact_individuals(
+    """the rows to be inserted"""
+    objects: [organization_contact_individuals_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: organization_contact_individuals_on_conflict
+  ): organization_contact_individuals_mutation_response
+
+  """
+  insert data into the table: "organizations"
+  """
+  insert_organizations(
+    """the rows to be inserted"""
+    objects: [organizations_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: organizations_on_conflict
+  ): organizations_mutation_response
+
+  """
+  insert data into the table: "parties"
+  """
+  insert_parties(
+    """the rows to be inserted"""
+    objects: [parties_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: parties_on_conflict
+  ): parties_mutation_response
+
+  """
+  insert data into the table: "party_addresses"
+  """
+  insert_party_addresses(
+    """the rows to be inserted"""
+    objects: [party_addresses_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: party_addresses_on_conflict
+  ): party_addresses_mutation_response
+
+  """
+  insert data into the table: "party_forms"
+  """
+  insert_party_forms(
+    """the rows to be inserted"""
+    objects: [party_forms_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: party_forms_on_conflict
+  ): party_forms_mutation_response
+
+  """
+  insert data into the table: "party_services"
+  """
+  insert_party_services(
+    """the rows to be inserted"""
+    objects: [party_services_insert_input!]!
+  ): party_services_mutation_response
+
+  """
+  insert data into the table: "services"
+  """
+  insert_services(
+    """the rows to be inserted"""
+    objects: [services_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: services_on_conflict
+  ): services_mutation_response
+
+  """
+  update data of the table: "addresses"
+  """
+  update_addresses(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: addresses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: addresses_set_input
+
+    """filter the rows which have to be updated"""
+    where: addresses_bool_exp!
+  ): addresses_mutation_response
+
+  """
+  update data of the table: "forms"
+  """
+  update_forms(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: forms_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: forms_set_input
+
+    """filter the rows which have to be updated"""
+    where: forms_bool_exp!
+  ): forms_mutation_response
+
+  """
+  update data of the table: "individuals"
+  """
+  update_individuals(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: individuals_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: individuals_set_input
+
+    """filter the rows which have to be updated"""
+    where: individuals_bool_exp!
+  ): individuals_mutation_response
+
+  """
+  update data of the table: "organization_contact_individuals"
+  """
+  update_organization_contact_individuals(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: organization_contact_individuals_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: organization_contact_individuals_set_input
+
+    """filter the rows which have to be updated"""
+    where: organization_contact_individuals_bool_exp!
+  ): organization_contact_individuals_mutation_response
+
+  """
+  update data of the table: "organizations"
+  """
+  update_organizations(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: organizations_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: organizations_set_input
+
+    """filter the rows which have to be updated"""
+    where: organizations_bool_exp!
+  ): organizations_mutation_response
+
+  """
+  update data of the table: "parties"
+  """
+  update_parties(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: parties_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: parties_set_input
+
+    """filter the rows which have to be updated"""
+    where: parties_bool_exp!
+  ): parties_mutation_response
+
+  """
+  update data of the table: "party_addresses"
+  """
+  update_party_addresses(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: party_addresses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: party_addresses_set_input
+
+    """filter the rows which have to be updated"""
+    where: party_addresses_bool_exp!
+  ): party_addresses_mutation_response
+
+  """
+  update data of the table: "party_forms"
+  """
+  update_party_forms(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: party_forms_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: party_forms_set_input
+
+    """filter the rows which have to be updated"""
+    where: party_forms_bool_exp!
+  ): party_forms_mutation_response
+
+  """
+  update data of the table: "party_services"
+  """
+  update_party_services(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: party_services_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: party_services_set_input
+
+    """filter the rows which have to be updated"""
+    where: party_services_bool_exp!
+  ): party_services_mutation_response
+
+  """
+  update data of the table: "services"
+  """
+  update_services(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: services_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: services_set_input
+
+    """filter the rows which have to be updated"""
+    where: services_bool_exp!
+  ): services_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "organization_contact_individuals"
+"""
+type organization_contact_individuals {
+  date_contact_from: timestamptz
+  date_contact_to: timestamptz
+
+  """An object relationship"""
+  individual: individuals!
+  individual_id: bigint!
+
+  """An object relationship"""
+  organization: organizations!
+  organization_id: bigint!
+}
+
+"""
+aggregated selection of "organization_contact_individuals"
+"""
+type organization_contact_individuals_aggregate {
+  aggregate: organization_contact_individuals_aggregate_fields
+  nodes: [organization_contact_individuals!]!
+}
+
+"""
+aggregate fields of "organization_contact_individuals"
+"""
+type organization_contact_individuals_aggregate_fields {
+  avg: organization_contact_individuals_avg_fields
+  count(columns: [organization_contact_individuals_select_column!], distinct: Boolean): Int
+  max: organization_contact_individuals_max_fields
+  min: organization_contact_individuals_min_fields
+  stddev: organization_contact_individuals_stddev_fields
+  stddev_pop: organization_contact_individuals_stddev_pop_fields
+  stddev_samp: organization_contact_individuals_stddev_samp_fields
+  sum: organization_contact_individuals_sum_fields
+  var_pop: organization_contact_individuals_var_pop_fields
+  var_samp: organization_contact_individuals_var_samp_fields
+  variance: organization_contact_individuals_variance_fields
+}
+
+"""
+order by aggregate values of table "organization_contact_individuals"
+"""
+input organization_contact_individuals_aggregate_order_by {
+  avg: organization_contact_individuals_avg_order_by
+  count: order_by
+  max: organization_contact_individuals_max_order_by
+  min: organization_contact_individuals_min_order_by
+  stddev: organization_contact_individuals_stddev_order_by
+  stddev_pop: organization_contact_individuals_stddev_pop_order_by
+  stddev_samp: organization_contact_individuals_stddev_samp_order_by
+  sum: organization_contact_individuals_sum_order_by
+  var_pop: organization_contact_individuals_var_pop_order_by
+  var_samp: organization_contact_individuals_var_samp_order_by
+  variance: organization_contact_individuals_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "organization_contact_individuals"
+"""
+input organization_contact_individuals_arr_rel_insert_input {
+  data: [organization_contact_individuals_insert_input!]!
+  on_conflict: organization_contact_individuals_on_conflict
+}
+
+"""aggregate avg on columns"""
+type organization_contact_individuals_avg_fields {
+  individual_id: Float
+  organization_id: Float
+}
+
+"""
+order by avg() on columns of table "organization_contact_individuals"
+"""
+input organization_contact_individuals_avg_order_by {
+  individual_id: order_by
+  organization_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table
+"organization_contact_individuals". All fields are combined with a logical 'AND'.
+"""
+input organization_contact_individuals_bool_exp {
+  _and: [organization_contact_individuals_bool_exp]
+  _not: organization_contact_individuals_bool_exp
+  _or: [organization_contact_individuals_bool_exp]
+  date_contact_from: timestamptz_comparison_exp
+  date_contact_to: timestamptz_comparison_exp
+  individual: individuals_bool_exp
+  individual_id: bigint_comparison_exp
+  organization: organizations_bool_exp
+  organization_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "organization_contact_individuals"
+"""
+enum organization_contact_individuals_constraint {
+  """unique or primary key constraint"""
+  idx_26507_sqlite_autoindex_organization_contact_individuals_1
+}
+
+"""
+input type for incrementing integer columne in table "organization_contact_individuals"
+"""
+input organization_contact_individuals_inc_input {
+  individual_id: bigint
+  organization_id: bigint
+}
+
+"""
+input type for inserting data into table "organization_contact_individuals"
+"""
+input organization_contact_individuals_insert_input {
+  date_contact_from: timestamptz
+  date_contact_to: timestamptz
+  individual: individuals_obj_rel_insert_input
+  individual_id: bigint
+  organization: organizations_obj_rel_insert_input
+  organization_id: bigint
+}
+
+"""aggregate max on columns"""
+type organization_contact_individuals_max_fields {
+  date_contact_from: timestamptz
+  date_contact_to: timestamptz
+  individual_id: bigint
+  organization_id: bigint
+}
+
+"""
+order by max() on columns of table "organization_contact_individuals"
+"""
+input organization_contact_individuals_max_order_by {
+  date_contact_from: order_by
+  date_contact_to: order_by
+  individual_id: order_by
+  organization_id: order_by
+}
+
+"""aggregate min on columns"""
+type organization_contact_individuals_min_fields {
+  date_contact_from: timestamptz
+  date_contact_to: timestamptz
+  individual_id: bigint
+  organization_id: bigint
+}
+
+"""
+order by min() on columns of table "organization_contact_individuals"
+"""
+input organization_contact_individuals_min_order_by {
+  date_contact_from: order_by
+  date_contact_to: order_by
+  individual_id: order_by
+  organization_id: order_by
+}
+
+"""
+response of any mutation on the table "organization_contact_individuals"
+"""
+type organization_contact_individuals_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [organization_contact_individuals!]!
+}
+
+"""
+input type for inserting object relation for remote table "organization_contact_individuals"
+"""
+input organization_contact_individuals_obj_rel_insert_input {
+  data: organization_contact_individuals_insert_input!
+  on_conflict: organization_contact_individuals_on_conflict
+}
+
+"""
+on conflict condition type for table "organization_contact_individuals"
+"""
+input organization_contact_individuals_on_conflict {
+  constraint: organization_contact_individuals_constraint!
+  update_columns: [organization_contact_individuals_update_column!]!
+  where: organization_contact_individuals_bool_exp
+}
+
+"""
+ordering options when selecting data from "organization_contact_individuals"
+"""
+input organization_contact_individuals_order_by {
+  date_contact_from: order_by
+  date_contact_to: order_by
+  individual: individuals_order_by
+  individual_id: order_by
+  organization: organizations_order_by
+  organization_id: order_by
+}
+
+"""
+select columns of table "organization_contact_individuals"
+"""
+enum organization_contact_individuals_select_column {
+  """column name"""
+  date_contact_from
+
+  """column name"""
+  date_contact_to
+
+  """column name"""
+  individual_id
+
+  """column name"""
+  organization_id
+}
+
+"""
+input type for updating data in table "organization_contact_individuals"
+"""
+input organization_contact_individuals_set_input {
+  date_contact_from: timestamptz
+  date_contact_to: timestamptz
+  individual_id: bigint
+  organization_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type organization_contact_individuals_stddev_fields {
+  individual_id: Float
+  organization_id: Float
+}
+
+"""
+order by stddev() on columns of table "organization_contact_individuals"
+"""
+input organization_contact_individuals_stddev_order_by {
+  individual_id: order_by
+  organization_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type organization_contact_individuals_stddev_pop_fields {
+  individual_id: Float
+  organization_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "organization_contact_individuals"
+"""
+input organization_contact_individuals_stddev_pop_order_by {
+  individual_id: order_by
+  organization_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type organization_contact_individuals_stddev_samp_fields {
+  individual_id: Float
+  organization_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "organization_contact_individuals"
+"""
+input organization_contact_individuals_stddev_samp_order_by {
+  individual_id: order_by
+  organization_id: order_by
+}
+
+"""aggregate sum on columns"""
+type organization_contact_individuals_sum_fields {
+  individual_id: bigint
+  organization_id: bigint
+}
+
+"""
+order by sum() on columns of table "organization_contact_individuals"
+"""
+input organization_contact_individuals_sum_order_by {
+  individual_id: order_by
+  organization_id: order_by
+}
+
+"""
+update columns of table "organization_contact_individuals"
+"""
+enum organization_contact_individuals_update_column {
+  """column name"""
+  date_contact_from
+
+  """column name"""
+  date_contact_to
+
+  """column name"""
+  individual_id
+
+  """column name"""
+  organization_id
+}
+
+"""aggregate var_pop on columns"""
+type organization_contact_individuals_var_pop_fields {
+  individual_id: Float
+  organization_id: Float
+}
+
+"""
+order by var_pop() on columns of table "organization_contact_individuals"
+"""
+input organization_contact_individuals_var_pop_order_by {
+  individual_id: order_by
+  organization_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type organization_contact_individuals_var_samp_fields {
+  individual_id: Float
+  organization_id: Float
+}
+
+"""
+order by var_samp() on columns of table "organization_contact_individuals"
+"""
+input organization_contact_individuals_var_samp_order_by {
+  individual_id: order_by
+  organization_id: order_by
+}
+
+"""aggregate variance on columns"""
+type organization_contact_individuals_variance_fields {
+  individual_id: Float
+  organization_id: Float
+}
+
+"""
+order by variance() on columns of table "organization_contact_individuals"
+"""
+input organization_contact_individuals_variance_order_by {
+  individual_id: order_by
+  organization_id: order_by
+}
+
+"""
+columns and relationships of "organizations"
+"""
+type organizations {
+  date_formed: timestamptz
+
+  """An array relationship"""
+  organization_contact_individuals(
+    """distinct select on columns"""
+    distinct_on: [organization_contact_individuals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [organization_contact_individuals_order_by!]
+
+    """filter the rows returned"""
+    where: organization_contact_individuals_bool_exp
+  ): [organization_contact_individuals!]!
+
+  """An aggregated array relationship"""
+  organization_contact_individuals_aggregate(
+    """distinct select on columns"""
+    distinct_on: [organization_contact_individuals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [organization_contact_individuals_order_by!]
+
+    """filter the rows returned"""
+    where: organization_contact_individuals_bool_exp
+  ): organization_contact_individuals_aggregate!
+  organization_id: bigint!
+  organization_name: String
+  uk_vat_number: String
+}
+
+"""
+aggregated selection of "organizations"
+"""
+type organizations_aggregate {
+  aggregate: organizations_aggregate_fields
+  nodes: [organizations!]!
+}
+
+"""
+aggregate fields of "organizations"
+"""
+type organizations_aggregate_fields {
+  avg: organizations_avg_fields
+  count(columns: [organizations_select_column!], distinct: Boolean): Int
+  max: organizations_max_fields
+  min: organizations_min_fields
+  stddev: organizations_stddev_fields
+  stddev_pop: organizations_stddev_pop_fields
+  stddev_samp: organizations_stddev_samp_fields
+  sum: organizations_sum_fields
+  var_pop: organizations_var_pop_fields
+  var_samp: organizations_var_samp_fields
+  variance: organizations_variance_fields
+}
+
+"""
+order by aggregate values of table "organizations"
+"""
+input organizations_aggregate_order_by {
+  avg: organizations_avg_order_by
+  count: order_by
+  max: organizations_max_order_by
+  min: organizations_min_order_by
+  stddev: organizations_stddev_order_by
+  stddev_pop: organizations_stddev_pop_order_by
+  stddev_samp: organizations_stddev_samp_order_by
+  sum: organizations_sum_order_by
+  var_pop: organizations_var_pop_order_by
+  var_samp: organizations_var_samp_order_by
+  variance: organizations_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "organizations"
+"""
+input organizations_arr_rel_insert_input {
+  data: [organizations_insert_input!]!
+  on_conflict: organizations_on_conflict
+}
+
+"""aggregate avg on columns"""
+type organizations_avg_fields {
+  organization_id: Float
+}
+
+"""
+order by avg() on columns of table "organizations"
+"""
+input organizations_avg_order_by {
+  organization_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "organizations". All fields are combined with a logical 'AND'.
+"""
+input organizations_bool_exp {
+  _and: [organizations_bool_exp]
+  _not: organizations_bool_exp
+  _or: [organizations_bool_exp]
+  date_formed: timestamptz_comparison_exp
+  organization_contact_individuals: organization_contact_individuals_bool_exp
+  organization_id: bigint_comparison_exp
+  organization_name: String_comparison_exp
+  uk_vat_number: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "organizations"
+"""
+enum organizations_constraint {
+  """unique or primary key constraint"""
+  idx_26495_organizations_pkey
+}
+
+"""
+input type for incrementing integer columne in table "organizations"
+"""
+input organizations_inc_input {
+  organization_id: bigint
+}
+
+"""
+input type for inserting data into table "organizations"
+"""
+input organizations_insert_input {
+  date_formed: timestamptz
+  organization_contact_individuals: organization_contact_individuals_arr_rel_insert_input
+  organization_id: bigint
+  organization_name: String
+  uk_vat_number: String
+}
+
+"""aggregate max on columns"""
+type organizations_max_fields {
+  date_formed: timestamptz
+  organization_id: bigint
+  organization_name: String
+  uk_vat_number: String
+}
+
+"""
+order by max() on columns of table "organizations"
+"""
+input organizations_max_order_by {
+  date_formed: order_by
+  organization_id: order_by
+  organization_name: order_by
+  uk_vat_number: order_by
+}
+
+"""aggregate min on columns"""
+type organizations_min_fields {
+  date_formed: timestamptz
+  organization_id: bigint
+  organization_name: String
+  uk_vat_number: String
+}
+
+"""
+order by min() on columns of table "organizations"
+"""
+input organizations_min_order_by {
+  date_formed: order_by
+  organization_id: order_by
+  organization_name: order_by
+  uk_vat_number: order_by
+}
+
+"""
+response of any mutation on the table "organizations"
+"""
+type organizations_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [organizations!]!
+}
+
+"""
+input type for inserting object relation for remote table "organizations"
+"""
+input organizations_obj_rel_insert_input {
+  data: organizations_insert_input!
+  on_conflict: organizations_on_conflict
+}
+
+"""
+on conflict condition type for table "organizations"
+"""
+input organizations_on_conflict {
+  constraint: organizations_constraint!
+  update_columns: [organizations_update_column!]!
+  where: organizations_bool_exp
+}
+
+"""
+ordering options when selecting data from "organizations"
+"""
+input organizations_order_by {
+  date_formed: order_by
+  organization_contact_individuals_aggregate: organization_contact_individuals_aggregate_order_by
+  organization_id: order_by
+  organization_name: order_by
+  uk_vat_number: order_by
+}
+
+"""
+select columns of table "organizations"
+"""
+enum organizations_select_column {
+  """column name"""
+  date_formed
+
+  """column name"""
+  organization_id
+
+  """column name"""
+  organization_name
+
+  """column name"""
+  uk_vat_number
+}
+
+"""
+input type for updating data in table "organizations"
+"""
+input organizations_set_input {
+  date_formed: timestamptz
+  organization_id: bigint
+  organization_name: String
+  uk_vat_number: String
+}
+
+"""aggregate stddev on columns"""
+type organizations_stddev_fields {
+  organization_id: Float
+}
+
+"""
+order by stddev() on columns of table "organizations"
+"""
+input organizations_stddev_order_by {
+  organization_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type organizations_stddev_pop_fields {
+  organization_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "organizations"
+"""
+input organizations_stddev_pop_order_by {
+  organization_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type organizations_stddev_samp_fields {
+  organization_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "organizations"
+"""
+input organizations_stddev_samp_order_by {
+  organization_id: order_by
+}
+
+"""aggregate sum on columns"""
+type organizations_sum_fields {
+  organization_id: bigint
+}
+
+"""
+order by sum() on columns of table "organizations"
+"""
+input organizations_sum_order_by {
+  organization_id: order_by
+}
+
+"""
+update columns of table "organizations"
+"""
+enum organizations_update_column {
+  """column name"""
+  date_formed
+
+  """column name"""
+  organization_id
+
+  """column name"""
+  organization_name
+
+  """column name"""
+  uk_vat_number
+}
+
+"""aggregate var_pop on columns"""
+type organizations_var_pop_fields {
+  organization_id: Float
+}
+
+"""
+order by var_pop() on columns of table "organizations"
+"""
+input organizations_var_pop_order_by {
+  organization_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type organizations_var_samp_fields {
+  organization_id: Float
+}
+
+"""
+order by var_samp() on columns of table "organizations"
+"""
+input organizations_var_samp_order_by {
+  organization_id: order_by
+}
+
+"""aggregate variance on columns"""
+type organizations_variance_fields {
+  organization_id: Float
+}
+
+"""
+order by variance() on columns of table "organizations"
+"""
+input organizations_variance_order_by {
+  organization_id: order_by
+}
+
+"""
+columns and relationships of "parties"
+"""
+type parties {
+  """An array relationship"""
+  party_addresses(
+    """distinct select on columns"""
+    distinct_on: [party_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: party_addresses_bool_exp
+  ): [party_addresses!]!
+
+  """An aggregated array relationship"""
+  party_addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: party_addresses_bool_exp
+  ): party_addresses_aggregate!
+  party_email: String
+
+  """An array relationship"""
+  party_forms(
+    """distinct select on columns"""
+    distinct_on: [party_forms_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_forms_order_by!]
+
+    """filter the rows returned"""
+    where: party_forms_bool_exp
+  ): [party_forms!]!
+
+  """An aggregated array relationship"""
+  party_forms_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_forms_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_forms_order_by!]
+
+    """filter the rows returned"""
+    where: party_forms_bool_exp
+  ): party_forms_aggregate!
+  party_id: bigint!
+  party_phone: String
+
+  """An array relationship"""
+  party_services(
+    """distinct select on columns"""
+    distinct_on: [party_services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_services_order_by!]
+
+    """filter the rows returned"""
+    where: party_services_bool_exp
+  ): [party_services!]!
+
+  """An aggregated array relationship"""
+  party_services_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_services_order_by!]
+
+    """filter the rows returned"""
+    where: party_services_bool_exp
+  ): party_services_aggregate!
+  payment_method_code: String
+}
+
+"""
+aggregated selection of "parties"
+"""
+type parties_aggregate {
+  aggregate: parties_aggregate_fields
+  nodes: [parties!]!
+}
+
+"""
+aggregate fields of "parties"
+"""
+type parties_aggregate_fields {
+  avg: parties_avg_fields
+  count(columns: [parties_select_column!], distinct: Boolean): Int
+  max: parties_max_fields
+  min: parties_min_fields
+  stddev: parties_stddev_fields
+  stddev_pop: parties_stddev_pop_fields
+  stddev_samp: parties_stddev_samp_fields
+  sum: parties_sum_fields
+  var_pop: parties_var_pop_fields
+  var_samp: parties_var_samp_fields
+  variance: parties_variance_fields
+}
+
+"""
+order by aggregate values of table "parties"
+"""
+input parties_aggregate_order_by {
+  avg: parties_avg_order_by
+  count: order_by
+  max: parties_max_order_by
+  min: parties_min_order_by
+  stddev: parties_stddev_order_by
+  stddev_pop: parties_stddev_pop_order_by
+  stddev_samp: parties_stddev_samp_order_by
+  sum: parties_sum_order_by
+  var_pop: parties_var_pop_order_by
+  var_samp: parties_var_samp_order_by
+  variance: parties_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "parties"
+"""
+input parties_arr_rel_insert_input {
+  data: [parties_insert_input!]!
+  on_conflict: parties_on_conflict
+}
+
+"""aggregate avg on columns"""
+type parties_avg_fields {
+  party_id: Float
+}
+
+"""
+order by avg() on columns of table "parties"
+"""
+input parties_avg_order_by {
+  party_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "parties". All fields are combined with a logical 'AND'.
+"""
+input parties_bool_exp {
+  _and: [parties_bool_exp]
+  _not: parties_bool_exp
+  _or: [parties_bool_exp]
+  party_addresses: party_addresses_bool_exp
+  party_email: String_comparison_exp
+  party_forms: party_forms_bool_exp
+  party_id: bigint_comparison_exp
+  party_phone: String_comparison_exp
+  party_services: party_services_bool_exp
+  payment_method_code: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "parties"
+"""
+enum parties_constraint {
+  """unique or primary key constraint"""
+  idx_26501_parties_pkey
+}
+
+"""
+input type for incrementing integer columne in table "parties"
+"""
+input parties_inc_input {
+  party_id: bigint
+}
+
+"""
+input type for inserting data into table "parties"
+"""
+input parties_insert_input {
+  party_addresses: party_addresses_arr_rel_insert_input
+  party_email: String
+  party_forms: party_forms_arr_rel_insert_input
+  party_id: bigint
+  party_phone: String
+  party_services: party_services_arr_rel_insert_input
+  payment_method_code: String
+}
+
+"""aggregate max on columns"""
+type parties_max_fields {
+  party_email: String
+  party_id: bigint
+  party_phone: String
+  payment_method_code: String
+}
+
+"""
+order by max() on columns of table "parties"
+"""
+input parties_max_order_by {
+  party_email: order_by
+  party_id: order_by
+  party_phone: order_by
+  payment_method_code: order_by
+}
+
+"""aggregate min on columns"""
+type parties_min_fields {
+  party_email: String
+  party_id: bigint
+  party_phone: String
+  payment_method_code: String
+}
+
+"""
+order by min() on columns of table "parties"
+"""
+input parties_min_order_by {
+  party_email: order_by
+  party_id: order_by
+  party_phone: order_by
+  payment_method_code: order_by
+}
+
+"""
+response of any mutation on the table "parties"
+"""
+type parties_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [parties!]!
+}
+
+"""
+input type for inserting object relation for remote table "parties"
+"""
+input parties_obj_rel_insert_input {
+  data: parties_insert_input!
+  on_conflict: parties_on_conflict
+}
+
+"""
+on conflict condition type for table "parties"
+"""
+input parties_on_conflict {
+  constraint: parties_constraint!
+  update_columns: [parties_update_column!]!
+  where: parties_bool_exp
+}
+
+"""
+ordering options when selecting data from "parties"
+"""
+input parties_order_by {
+  party_addresses_aggregate: party_addresses_aggregate_order_by
+  party_email: order_by
+  party_forms_aggregate: party_forms_aggregate_order_by
+  party_id: order_by
+  party_phone: order_by
+  party_services_aggregate: party_services_aggregate_order_by
+  payment_method_code: order_by
+}
+
+"""
+select columns of table "parties"
+"""
+enum parties_select_column {
+  """column name"""
+  party_email
+
+  """column name"""
+  party_id
+
+  """column name"""
+  party_phone
+
+  """column name"""
+  payment_method_code
+}
+
+"""
+input type for updating data in table "parties"
+"""
+input parties_set_input {
+  party_email: String
+  party_id: bigint
+  party_phone: String
+  payment_method_code: String
+}
+
+"""aggregate stddev on columns"""
+type parties_stddev_fields {
+  party_id: Float
+}
+
+"""
+order by stddev() on columns of table "parties"
+"""
+input parties_stddev_order_by {
+  party_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type parties_stddev_pop_fields {
+  party_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "parties"
+"""
+input parties_stddev_pop_order_by {
+  party_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type parties_stddev_samp_fields {
+  party_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "parties"
+"""
+input parties_stddev_samp_order_by {
+  party_id: order_by
+}
+
+"""aggregate sum on columns"""
+type parties_sum_fields {
+  party_id: bigint
+}
+
+"""
+order by sum() on columns of table "parties"
+"""
+input parties_sum_order_by {
+  party_id: order_by
+}
+
+"""
+update columns of table "parties"
+"""
+enum parties_update_column {
+  """column name"""
+  party_email
+
+  """column name"""
+  party_id
+
+  """column name"""
+  party_phone
+
+  """column name"""
+  payment_method_code
+}
+
+"""aggregate var_pop on columns"""
+type parties_var_pop_fields {
+  party_id: Float
+}
+
+"""
+order by var_pop() on columns of table "parties"
+"""
+input parties_var_pop_order_by {
+  party_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type parties_var_samp_fields {
+  party_id: Float
+}
+
+"""
+order by var_samp() on columns of table "parties"
+"""
+input parties_var_samp_order_by {
+  party_id: order_by
+}
+
+"""aggregate variance on columns"""
+type parties_variance_fields {
+  party_id: Float
+}
+
+"""
+order by variance() on columns of table "parties"
+"""
+input parties_variance_order_by {
+  party_id: order_by
+}
+
+"""
+columns and relationships of "party_addresses"
+"""
+type party_addresses {
+  """An object relationship"""
+  address: addresses!
+  address_id: bigint!
+  address_type_code: String
+  date_address_from: timestamptz
+  date_address_to: timestamptz
+
+  """An object relationship"""
+  party: parties!
+  party_id: bigint!
+}
+
+"""
+aggregated selection of "party_addresses"
+"""
+type party_addresses_aggregate {
+  aggregate: party_addresses_aggregate_fields
+  nodes: [party_addresses!]!
+}
+
+"""
+aggregate fields of "party_addresses"
+"""
+type party_addresses_aggregate_fields {
+  avg: party_addresses_avg_fields
+  count(columns: [party_addresses_select_column!], distinct: Boolean): Int
+  max: party_addresses_max_fields
+  min: party_addresses_min_fields
+  stddev: party_addresses_stddev_fields
+  stddev_pop: party_addresses_stddev_pop_fields
+  stddev_samp: party_addresses_stddev_samp_fields
+  sum: party_addresses_sum_fields
+  var_pop: party_addresses_var_pop_fields
+  var_samp: party_addresses_var_samp_fields
+  variance: party_addresses_variance_fields
+}
+
+"""
+order by aggregate values of table "party_addresses"
+"""
+input party_addresses_aggregate_order_by {
+  avg: party_addresses_avg_order_by
+  count: order_by
+  max: party_addresses_max_order_by
+  min: party_addresses_min_order_by
+  stddev: party_addresses_stddev_order_by
+  stddev_pop: party_addresses_stddev_pop_order_by
+  stddev_samp: party_addresses_stddev_samp_order_by
+  sum: party_addresses_sum_order_by
+  var_pop: party_addresses_var_pop_order_by
+  var_samp: party_addresses_var_samp_order_by
+  variance: party_addresses_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "party_addresses"
+"""
+input party_addresses_arr_rel_insert_input {
+  data: [party_addresses_insert_input!]!
+  on_conflict: party_addresses_on_conflict
+}
+
+"""aggregate avg on columns"""
+type party_addresses_avg_fields {
+  address_id: Float
+  party_id: Float
+}
+
+"""
+order by avg() on columns of table "party_addresses"
+"""
+input party_addresses_avg_order_by {
+  address_id: order_by
+  party_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "party_addresses". All fields are combined with a logical 'AND'.
+"""
+input party_addresses_bool_exp {
+  _and: [party_addresses_bool_exp]
+  _not: party_addresses_bool_exp
+  _or: [party_addresses_bool_exp]
+  address: addresses_bool_exp
+  address_id: bigint_comparison_exp
+  address_type_code: String_comparison_exp
+  date_address_from: timestamptz_comparison_exp
+  date_address_to: timestamptz_comparison_exp
+  party: parties_bool_exp
+  party_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "party_addresses"
+"""
+enum party_addresses_constraint {
+  """unique or primary key constraint"""
+  idx_26510_sqlite_autoindex_party_addresses_1
+}
+
+"""
+input type for incrementing integer columne in table "party_addresses"
+"""
+input party_addresses_inc_input {
+  address_id: bigint
+  party_id: bigint
+}
+
+"""
+input type for inserting data into table "party_addresses"
+"""
+input party_addresses_insert_input {
+  address: addresses_obj_rel_insert_input
+  address_id: bigint
+  address_type_code: String
+  date_address_from: timestamptz
+  date_address_to: timestamptz
+  party: parties_obj_rel_insert_input
+  party_id: bigint
+}
+
+"""aggregate max on columns"""
+type party_addresses_max_fields {
+  address_id: bigint
+  address_type_code: String
+  date_address_from: timestamptz
+  date_address_to: timestamptz
+  party_id: bigint
+}
+
+"""
+order by max() on columns of table "party_addresses"
+"""
+input party_addresses_max_order_by {
+  address_id: order_by
+  address_type_code: order_by
+  date_address_from: order_by
+  date_address_to: order_by
+  party_id: order_by
+}
+
+"""aggregate min on columns"""
+type party_addresses_min_fields {
+  address_id: bigint
+  address_type_code: String
+  date_address_from: timestamptz
+  date_address_to: timestamptz
+  party_id: bigint
+}
+
+"""
+order by min() on columns of table "party_addresses"
+"""
+input party_addresses_min_order_by {
+  address_id: order_by
+  address_type_code: order_by
+  date_address_from: order_by
+  date_address_to: order_by
+  party_id: order_by
+}
+
+"""
+response of any mutation on the table "party_addresses"
+"""
+type party_addresses_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [party_addresses!]!
+}
+
+"""
+input type for inserting object relation for remote table "party_addresses"
+"""
+input party_addresses_obj_rel_insert_input {
+  data: party_addresses_insert_input!
+  on_conflict: party_addresses_on_conflict
+}
+
+"""
+on conflict condition type for table "party_addresses"
+"""
+input party_addresses_on_conflict {
+  constraint: party_addresses_constraint!
+  update_columns: [party_addresses_update_column!]!
+  where: party_addresses_bool_exp
+}
+
+"""
+ordering options when selecting data from "party_addresses"
+"""
+input party_addresses_order_by {
+  address: addresses_order_by
+  address_id: order_by
+  address_type_code: order_by
+  date_address_from: order_by
+  date_address_to: order_by
+  party: parties_order_by
+  party_id: order_by
+}
+
+"""
+select columns of table "party_addresses"
+"""
+enum party_addresses_select_column {
+  """column name"""
+  address_id
+
+  """column name"""
+  address_type_code
+
+  """column name"""
+  date_address_from
+
+  """column name"""
+  date_address_to
+
+  """column name"""
+  party_id
+}
+
+"""
+input type for updating data in table "party_addresses"
+"""
+input party_addresses_set_input {
+  address_id: bigint
+  address_type_code: String
+  date_address_from: timestamptz
+  date_address_to: timestamptz
+  party_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type party_addresses_stddev_fields {
+  address_id: Float
+  party_id: Float
+}
+
+"""
+order by stddev() on columns of table "party_addresses"
+"""
+input party_addresses_stddev_order_by {
+  address_id: order_by
+  party_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type party_addresses_stddev_pop_fields {
+  address_id: Float
+  party_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "party_addresses"
+"""
+input party_addresses_stddev_pop_order_by {
+  address_id: order_by
+  party_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type party_addresses_stddev_samp_fields {
+  address_id: Float
+  party_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "party_addresses"
+"""
+input party_addresses_stddev_samp_order_by {
+  address_id: order_by
+  party_id: order_by
+}
+
+"""aggregate sum on columns"""
+type party_addresses_sum_fields {
+  address_id: bigint
+  party_id: bigint
+}
+
+"""
+order by sum() on columns of table "party_addresses"
+"""
+input party_addresses_sum_order_by {
+  address_id: order_by
+  party_id: order_by
+}
+
+"""
+update columns of table "party_addresses"
+"""
+enum party_addresses_update_column {
+  """column name"""
+  address_id
+
+  """column name"""
+  address_type_code
+
+  """column name"""
+  date_address_from
+
+  """column name"""
+  date_address_to
+
+  """column name"""
+  party_id
+}
+
+"""aggregate var_pop on columns"""
+type party_addresses_var_pop_fields {
+  address_id: Float
+  party_id: Float
+}
+
+"""
+order by var_pop() on columns of table "party_addresses"
+"""
+input party_addresses_var_pop_order_by {
+  address_id: order_by
+  party_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type party_addresses_var_samp_fields {
+  address_id: Float
+  party_id: Float
+}
+
+"""
+order by var_samp() on columns of table "party_addresses"
+"""
+input party_addresses_var_samp_order_by {
+  address_id: order_by
+  party_id: order_by
+}
+
+"""aggregate variance on columns"""
+type party_addresses_variance_fields {
+  address_id: Float
+  party_id: Float
+}
+
+"""
+order by variance() on columns of table "party_addresses"
+"""
+input party_addresses_variance_order_by {
+  address_id: order_by
+  party_id: order_by
+}
+
+"""
+columns and relationships of "party_forms"
+"""
+type party_forms {
+  date_completion_started: timestamptz
+  date_fully_completed: timestamptz
+
+  """An object relationship"""
+  form: forms!
+  form_id: bigint!
+  form_status_code: String
+
+  """An object relationship"""
+  party: parties!
+  party_id: bigint!
+}
+
+"""
+aggregated selection of "party_forms"
+"""
+type party_forms_aggregate {
+  aggregate: party_forms_aggregate_fields
+  nodes: [party_forms!]!
+}
+
+"""
+aggregate fields of "party_forms"
+"""
+type party_forms_aggregate_fields {
+  avg: party_forms_avg_fields
+  count(columns: [party_forms_select_column!], distinct: Boolean): Int
+  max: party_forms_max_fields
+  min: party_forms_min_fields
+  stddev: party_forms_stddev_fields
+  stddev_pop: party_forms_stddev_pop_fields
+  stddev_samp: party_forms_stddev_samp_fields
+  sum: party_forms_sum_fields
+  var_pop: party_forms_var_pop_fields
+  var_samp: party_forms_var_samp_fields
+  variance: party_forms_variance_fields
+}
+
+"""
+order by aggregate values of table "party_forms"
+"""
+input party_forms_aggregate_order_by {
+  avg: party_forms_avg_order_by
+  count: order_by
+  max: party_forms_max_order_by
+  min: party_forms_min_order_by
+  stddev: party_forms_stddev_order_by
+  stddev_pop: party_forms_stddev_pop_order_by
+  stddev_samp: party_forms_stddev_samp_order_by
+  sum: party_forms_sum_order_by
+  var_pop: party_forms_var_pop_order_by
+  var_samp: party_forms_var_samp_order_by
+  variance: party_forms_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "party_forms"
+"""
+input party_forms_arr_rel_insert_input {
+  data: [party_forms_insert_input!]!
+  on_conflict: party_forms_on_conflict
+}
+
+"""aggregate avg on columns"""
+type party_forms_avg_fields {
+  form_id: Float
+  party_id: Float
+}
+
+"""
+order by avg() on columns of table "party_forms"
+"""
+input party_forms_avg_order_by {
+  form_id: order_by
+  party_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "party_forms". All fields are combined with a logical 'AND'.
+"""
+input party_forms_bool_exp {
+  _and: [party_forms_bool_exp]
+  _not: party_forms_bool_exp
+  _or: [party_forms_bool_exp]
+  date_completion_started: timestamptz_comparison_exp
+  date_fully_completed: timestamptz_comparison_exp
+  form: forms_bool_exp
+  form_id: bigint_comparison_exp
+  form_status_code: String_comparison_exp
+  party: parties_bool_exp
+  party_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "party_forms"
+"""
+enum party_forms_constraint {
+  """unique or primary key constraint"""
+  idx_26516_sqlite_autoindex_party_forms_1
+}
+
+"""
+input type for incrementing integer columne in table "party_forms"
+"""
+input party_forms_inc_input {
+  form_id: bigint
+  party_id: bigint
+}
+
+"""
+input type for inserting data into table "party_forms"
+"""
+input party_forms_insert_input {
+  date_completion_started: timestamptz
+  date_fully_completed: timestamptz
+  form: forms_obj_rel_insert_input
+  form_id: bigint
+  form_status_code: String
+  party: parties_obj_rel_insert_input
+  party_id: bigint
+}
+
+"""aggregate max on columns"""
+type party_forms_max_fields {
+  date_completion_started: timestamptz
+  date_fully_completed: timestamptz
+  form_id: bigint
+  form_status_code: String
+  party_id: bigint
+}
+
+"""
+order by max() on columns of table "party_forms"
+"""
+input party_forms_max_order_by {
+  date_completion_started: order_by
+  date_fully_completed: order_by
+  form_id: order_by
+  form_status_code: order_by
+  party_id: order_by
+}
+
+"""aggregate min on columns"""
+type party_forms_min_fields {
+  date_completion_started: timestamptz
+  date_fully_completed: timestamptz
+  form_id: bigint
+  form_status_code: String
+  party_id: bigint
+}
+
+"""
+order by min() on columns of table "party_forms"
+"""
+input party_forms_min_order_by {
+  date_completion_started: order_by
+  date_fully_completed: order_by
+  form_id: order_by
+  form_status_code: order_by
+  party_id: order_by
+}
+
+"""
+response of any mutation on the table "party_forms"
+"""
+type party_forms_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [party_forms!]!
+}
+
+"""
+input type for inserting object relation for remote table "party_forms"
+"""
+input party_forms_obj_rel_insert_input {
+  data: party_forms_insert_input!
+  on_conflict: party_forms_on_conflict
+}
+
+"""
+on conflict condition type for table "party_forms"
+"""
+input party_forms_on_conflict {
+  constraint: party_forms_constraint!
+  update_columns: [party_forms_update_column!]!
+  where: party_forms_bool_exp
+}
+
+"""
+ordering options when selecting data from "party_forms"
+"""
+input party_forms_order_by {
+  date_completion_started: order_by
+  date_fully_completed: order_by
+  form: forms_order_by
+  form_id: order_by
+  form_status_code: order_by
+  party: parties_order_by
+  party_id: order_by
+}
+
+"""
+select columns of table "party_forms"
+"""
+enum party_forms_select_column {
+  """column name"""
+  date_completion_started
+
+  """column name"""
+  date_fully_completed
+
+  """column name"""
+  form_id
+
+  """column name"""
+  form_status_code
+
+  """column name"""
+  party_id
+}
+
+"""
+input type for updating data in table "party_forms"
+"""
+input party_forms_set_input {
+  date_completion_started: timestamptz
+  date_fully_completed: timestamptz
+  form_id: bigint
+  form_status_code: String
+  party_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type party_forms_stddev_fields {
+  form_id: Float
+  party_id: Float
+}
+
+"""
+order by stddev() on columns of table "party_forms"
+"""
+input party_forms_stddev_order_by {
+  form_id: order_by
+  party_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type party_forms_stddev_pop_fields {
+  form_id: Float
+  party_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "party_forms"
+"""
+input party_forms_stddev_pop_order_by {
+  form_id: order_by
+  party_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type party_forms_stddev_samp_fields {
+  form_id: Float
+  party_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "party_forms"
+"""
+input party_forms_stddev_samp_order_by {
+  form_id: order_by
+  party_id: order_by
+}
+
+"""aggregate sum on columns"""
+type party_forms_sum_fields {
+  form_id: bigint
+  party_id: bigint
+}
+
+"""
+order by sum() on columns of table "party_forms"
+"""
+input party_forms_sum_order_by {
+  form_id: order_by
+  party_id: order_by
+}
+
+"""
+update columns of table "party_forms"
+"""
+enum party_forms_update_column {
+  """column name"""
+  date_completion_started
+
+  """column name"""
+  date_fully_completed
+
+  """column name"""
+  form_id
+
+  """column name"""
+  form_status_code
+
+  """column name"""
+  party_id
+}
+
+"""aggregate var_pop on columns"""
+type party_forms_var_pop_fields {
+  form_id: Float
+  party_id: Float
+}
+
+"""
+order by var_pop() on columns of table "party_forms"
+"""
+input party_forms_var_pop_order_by {
+  form_id: order_by
+  party_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type party_forms_var_samp_fields {
+  form_id: Float
+  party_id: Float
+}
+
+"""
+order by var_samp() on columns of table "party_forms"
+"""
+input party_forms_var_samp_order_by {
+  form_id: order_by
+  party_id: order_by
+}
+
+"""aggregate variance on columns"""
+type party_forms_variance_fields {
+  form_id: Float
+  party_id: Float
+}
+
+"""
+order by variance() on columns of table "party_forms"
+"""
+input party_forms_variance_order_by {
+  form_id: order_by
+  party_id: order_by
+}
+
+"""
+columns and relationships of "party_services"
+"""
+type party_services {
+  booking_id: bigint
+  booking_made_date: timestamptz
+  customer_id: bigint
+
+  """An object relationship"""
+  party: parties
+
+  """An object relationship"""
+  service: services
+  service_datetime: timestamptz
+  service_id: bigint
+}
+
+"""
+aggregated selection of "party_services"
+"""
+type party_services_aggregate {
+  aggregate: party_services_aggregate_fields
+  nodes: [party_services!]!
+}
+
+"""
+aggregate fields of "party_services"
+"""
+type party_services_aggregate_fields {
+  avg: party_services_avg_fields
+  count(columns: [party_services_select_column!], distinct: Boolean): Int
+  max: party_services_max_fields
+  min: party_services_min_fields
+  stddev: party_services_stddev_fields
+  stddev_pop: party_services_stddev_pop_fields
+  stddev_samp: party_services_stddev_samp_fields
+  sum: party_services_sum_fields
+  var_pop: party_services_var_pop_fields
+  var_samp: party_services_var_samp_fields
+  variance: party_services_variance_fields
+}
+
+"""
+order by aggregate values of table "party_services"
+"""
+input party_services_aggregate_order_by {
+  avg: party_services_avg_order_by
+  count: order_by
+  max: party_services_max_order_by
+  min: party_services_min_order_by
+  stddev: party_services_stddev_order_by
+  stddev_pop: party_services_stddev_pop_order_by
+  stddev_samp: party_services_stddev_samp_order_by
+  sum: party_services_sum_order_by
+  var_pop: party_services_var_pop_order_by
+  var_samp: party_services_var_samp_order_by
+  variance: party_services_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "party_services"
+"""
+input party_services_arr_rel_insert_input {
+  data: [party_services_insert_input!]!
+}
+
+"""aggregate avg on columns"""
+type party_services_avg_fields {
+  booking_id: Float
+  customer_id: Float
+  service_id: Float
+}
+
+"""
+order by avg() on columns of table "party_services"
+"""
+input party_services_avg_order_by {
+  booking_id: order_by
+  customer_id: order_by
+  service_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "party_services". All fields are combined with a logical 'AND'.
+"""
+input party_services_bool_exp {
+  _and: [party_services_bool_exp]
+  _not: party_services_bool_exp
+  _or: [party_services_bool_exp]
+  booking_id: bigint_comparison_exp
+  booking_made_date: timestamptz_comparison_exp
+  customer_id: bigint_comparison_exp
+  party: parties_bool_exp
+  service: services_bool_exp
+  service_datetime: timestamptz_comparison_exp
+  service_id: bigint_comparison_exp
+}
+
+"""
+input type for incrementing integer columne in table "party_services"
+"""
+input party_services_inc_input {
+  booking_id: bigint
+  customer_id: bigint
+  service_id: bigint
+}
+
+"""
+input type for inserting data into table "party_services"
+"""
+input party_services_insert_input {
+  booking_id: bigint
+  booking_made_date: timestamptz
+  customer_id: bigint
+  party: parties_obj_rel_insert_input
+  service: services_obj_rel_insert_input
+  service_datetime: timestamptz
+  service_id: bigint
+}
+
+"""aggregate max on columns"""
+type party_services_max_fields {
+  booking_id: bigint
+  booking_made_date: timestamptz
+  customer_id: bigint
+  service_datetime: timestamptz
+  service_id: bigint
+}
+
+"""
+order by max() on columns of table "party_services"
+"""
+input party_services_max_order_by {
+  booking_id: order_by
+  booking_made_date: order_by
+  customer_id: order_by
+  service_datetime: order_by
+  service_id: order_by
+}
+
+"""aggregate min on columns"""
+type party_services_min_fields {
+  booking_id: bigint
+  booking_made_date: timestamptz
+  customer_id: bigint
+  service_datetime: timestamptz
+  service_id: bigint
+}
+
+"""
+order by min() on columns of table "party_services"
+"""
+input party_services_min_order_by {
+  booking_id: order_by
+  booking_made_date: order_by
+  customer_id: order_by
+  service_datetime: order_by
+  service_id: order_by
+}
+
+"""
+response of any mutation on the table "party_services"
+"""
+type party_services_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [party_services!]!
+}
+
+"""
+input type for inserting object relation for remote table "party_services"
+"""
+input party_services_obj_rel_insert_input {
+  data: party_services_insert_input!
+}
+
+"""
+ordering options when selecting data from "party_services"
+"""
+input party_services_order_by {
+  booking_id: order_by
+  booking_made_date: order_by
+  customer_id: order_by
+  party: parties_order_by
+  service: services_order_by
+  service_datetime: order_by
+  service_id: order_by
+}
+
+"""
+select columns of table "party_services"
+"""
+enum party_services_select_column {
+  """column name"""
+  booking_id
+
+  """column name"""
+  booking_made_date
+
+  """column name"""
+  customer_id
+
+  """column name"""
+  service_datetime
+
+  """column name"""
+  service_id
+}
+
+"""
+input type for updating data in table "party_services"
+"""
+input party_services_set_input {
+  booking_id: bigint
+  booking_made_date: timestamptz
+  customer_id: bigint
+  service_datetime: timestamptz
+  service_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type party_services_stddev_fields {
+  booking_id: Float
+  customer_id: Float
+  service_id: Float
+}
+
+"""
+order by stddev() on columns of table "party_services"
+"""
+input party_services_stddev_order_by {
+  booking_id: order_by
+  customer_id: order_by
+  service_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type party_services_stddev_pop_fields {
+  booking_id: Float
+  customer_id: Float
+  service_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "party_services"
+"""
+input party_services_stddev_pop_order_by {
+  booking_id: order_by
+  customer_id: order_by
+  service_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type party_services_stddev_samp_fields {
+  booking_id: Float
+  customer_id: Float
+  service_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "party_services"
+"""
+input party_services_stddev_samp_order_by {
+  booking_id: order_by
+  customer_id: order_by
+  service_id: order_by
+}
+
+"""aggregate sum on columns"""
+type party_services_sum_fields {
+  booking_id: bigint
+  customer_id: bigint
+  service_id: bigint
+}
+
+"""
+order by sum() on columns of table "party_services"
+"""
+input party_services_sum_order_by {
+  booking_id: order_by
+  customer_id: order_by
+  service_id: order_by
+}
+
+"""aggregate var_pop on columns"""
+type party_services_var_pop_fields {
+  booking_id: Float
+  customer_id: Float
+  service_id: Float
+}
+
+"""
+order by var_pop() on columns of table "party_services"
+"""
+input party_services_var_pop_order_by {
+  booking_id: order_by
+  customer_id: order_by
+  service_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type party_services_var_samp_fields {
+  booking_id: Float
+  customer_id: Float
+  service_id: Float
+}
+
+"""
+order by var_samp() on columns of table "party_services"
+"""
+input party_services_var_samp_order_by {
+  booking_id: order_by
+  customer_id: order_by
+  service_id: order_by
+}
+
+"""aggregate variance on columns"""
+type party_services_variance_fields {
+  booking_id: Float
+  customer_id: Float
+  service_id: Float
+}
+
+"""
+order by variance() on columns of table "party_services"
+"""
+input party_services_variance_order_by {
+  booking_id: order_by
+  customer_id: order_by
+  service_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "addresses"
+  """
+  addresses(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): [addresses!]!
+
+  """
+  fetch aggregated fields from the table: "addresses"
+  """
+  addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): addresses_aggregate!
+
+  """fetch data from the table: "addresses" using primary key columns"""
+  addresses_by_pk(address_id: bigint!): addresses
+
+  """
+  fetch data from the table: "forms"
+  """
+  forms(
+    """distinct select on columns"""
+    distinct_on: [forms_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [forms_order_by!]
+
+    """filter the rows returned"""
+    where: forms_bool_exp
+  ): [forms!]!
+
+  """
+  fetch aggregated fields from the table: "forms"
+  """
+  forms_aggregate(
+    """distinct select on columns"""
+    distinct_on: [forms_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [forms_order_by!]
+
+    """filter the rows returned"""
+    where: forms_bool_exp
+  ): forms_aggregate!
+
+  """fetch data from the table: "forms" using primary key columns"""
+  forms_by_pk(form_id: bigint!): forms
+
+  """
+  fetch data from the table: "individuals"
+  """
+  individuals(
+    """distinct select on columns"""
+    distinct_on: [individuals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [individuals_order_by!]
+
+    """filter the rows returned"""
+    where: individuals_bool_exp
+  ): [individuals!]!
+
+  """
+  fetch aggregated fields from the table: "individuals"
+  """
+  individuals_aggregate(
+    """distinct select on columns"""
+    distinct_on: [individuals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [individuals_order_by!]
+
+    """filter the rows returned"""
+    where: individuals_bool_exp
+  ): individuals_aggregate!
+
+  """fetch data from the table: "individuals" using primary key columns"""
+  individuals_by_pk(individual_id: bigint!): individuals
+
+  """
+  fetch data from the table: "organization_contact_individuals"
+  """
+  organization_contact_individuals(
+    """distinct select on columns"""
+    distinct_on: [organization_contact_individuals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [organization_contact_individuals_order_by!]
+
+    """filter the rows returned"""
+    where: organization_contact_individuals_bool_exp
+  ): [organization_contact_individuals!]!
+
+  """
+  fetch aggregated fields from the table: "organization_contact_individuals"
+  """
+  organization_contact_individuals_aggregate(
+    """distinct select on columns"""
+    distinct_on: [organization_contact_individuals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [organization_contact_individuals_order_by!]
+
+    """filter the rows returned"""
+    where: organization_contact_individuals_bool_exp
+  ): organization_contact_individuals_aggregate!
+
+  """
+  fetch data from the table: "organization_contact_individuals" using primary key columns
+  """
+  organization_contact_individuals_by_pk(individual_id: bigint!, organization_id: bigint!): organization_contact_individuals
+
+  """
+  fetch data from the table: "organizations"
+  """
+  organizations(
+    """distinct select on columns"""
+    distinct_on: [organizations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [organizations_order_by!]
+
+    """filter the rows returned"""
+    where: organizations_bool_exp
+  ): [organizations!]!
+
+  """
+  fetch aggregated fields from the table: "organizations"
+  """
+  organizations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [organizations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [organizations_order_by!]
+
+    """filter the rows returned"""
+    where: organizations_bool_exp
+  ): organizations_aggregate!
+
+  """fetch data from the table: "organizations" using primary key columns"""
+  organizations_by_pk(organization_id: bigint!): organizations
+
+  """
+  fetch data from the table: "parties"
+  """
+  parties(
+    """distinct select on columns"""
+    distinct_on: [parties_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [parties_order_by!]
+
+    """filter the rows returned"""
+    where: parties_bool_exp
+  ): [parties!]!
+
+  """
+  fetch aggregated fields from the table: "parties"
+  """
+  parties_aggregate(
+    """distinct select on columns"""
+    distinct_on: [parties_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [parties_order_by!]
+
+    """filter the rows returned"""
+    where: parties_bool_exp
+  ): parties_aggregate!
+
+  """fetch data from the table: "parties" using primary key columns"""
+  parties_by_pk(party_id: bigint!): parties
+
+  """
+  fetch data from the table: "party_addresses"
+  """
+  party_addresses(
+    """distinct select on columns"""
+    distinct_on: [party_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: party_addresses_bool_exp
+  ): [party_addresses!]!
+
+  """
+  fetch aggregated fields from the table: "party_addresses"
+  """
+  party_addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: party_addresses_bool_exp
+  ): party_addresses_aggregate!
+
+  """fetch data from the table: "party_addresses" using primary key columns"""
+  party_addresses_by_pk(address_id: bigint!, party_id: bigint!): party_addresses
+
+  """
+  fetch data from the table: "party_forms"
+  """
+  party_forms(
+    """distinct select on columns"""
+    distinct_on: [party_forms_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_forms_order_by!]
+
+    """filter the rows returned"""
+    where: party_forms_bool_exp
+  ): [party_forms!]!
+
+  """
+  fetch aggregated fields from the table: "party_forms"
+  """
+  party_forms_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_forms_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_forms_order_by!]
+
+    """filter the rows returned"""
+    where: party_forms_bool_exp
+  ): party_forms_aggregate!
+
+  """fetch data from the table: "party_forms" using primary key columns"""
+  party_forms_by_pk(form_id: bigint!, party_id: bigint!): party_forms
+
+  """
+  fetch data from the table: "party_services"
+  """
+  party_services(
+    """distinct select on columns"""
+    distinct_on: [party_services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_services_order_by!]
+
+    """filter the rows returned"""
+    where: party_services_bool_exp
+  ): [party_services!]!
+
+  """
+  fetch aggregated fields from the table: "party_services"
+  """
+  party_services_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_services_order_by!]
+
+    """filter the rows returned"""
+    where: party_services_bool_exp
+  ): party_services_aggregate!
+
+  """
+  fetch data from the table: "services"
+  """
+  services(
+    """distinct select on columns"""
+    distinct_on: [services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [services_order_by!]
+
+    """filter the rows returned"""
+    where: services_bool_exp
+  ): [services!]!
+
+  """
+  fetch aggregated fields from the table: "services"
+  """
+  services_aggregate(
+    """distinct select on columns"""
+    distinct_on: [services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [services_order_by!]
+
+    """filter the rows returned"""
+    where: services_bool_exp
+  ): services_aggregate!
+
+  """fetch data from the table: "services" using primary key columns"""
+  services_by_pk(service_id: bigint!): services
+}
+
+"""
+columns and relationships of "services"
+"""
+type services {
+  """An array relationship"""
+  forms(
+    """distinct select on columns"""
+    distinct_on: [forms_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [forms_order_by!]
+
+    """filter the rows returned"""
+    where: forms_bool_exp
+  ): [forms!]!
+
+  """An aggregated array relationship"""
+  forms_aggregate(
+    """distinct select on columns"""
+    distinct_on: [forms_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [forms_order_by!]
+
+    """filter the rows returned"""
+    where: forms_bool_exp
+  ): forms_aggregate!
+
+  """An array relationship"""
+  party_services(
+    """distinct select on columns"""
+    distinct_on: [party_services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_services_order_by!]
+
+    """filter the rows returned"""
+    where: party_services_bool_exp
+  ): [party_services!]!
+
+  """An aggregated array relationship"""
+  party_services_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_services_order_by!]
+
+    """filter the rows returned"""
+    where: party_services_bool_exp
+  ): party_services_aggregate!
+  service_descriptio: String
+  service_id: bigint!
+  service_name: String
+  service_type_code: String
+}
+
+"""
+aggregated selection of "services"
+"""
+type services_aggregate {
+  aggregate: services_aggregate_fields
+  nodes: [services!]!
+}
+
+"""
+aggregate fields of "services"
+"""
+type services_aggregate_fields {
+  avg: services_avg_fields
+  count(columns: [services_select_column!], distinct: Boolean): Int
+  max: services_max_fields
+  min: services_min_fields
+  stddev: services_stddev_fields
+  stddev_pop: services_stddev_pop_fields
+  stddev_samp: services_stddev_samp_fields
+  sum: services_sum_fields
+  var_pop: services_var_pop_fields
+  var_samp: services_var_samp_fields
+  variance: services_variance_fields
+}
+
+"""
+order by aggregate values of table "services"
+"""
+input services_aggregate_order_by {
+  avg: services_avg_order_by
+  count: order_by
+  max: services_max_order_by
+  min: services_min_order_by
+  stddev: services_stddev_order_by
+  stddev_pop: services_stddev_pop_order_by
+  stddev_samp: services_stddev_samp_order_by
+  sum: services_sum_order_by
+  var_pop: services_var_pop_order_by
+  var_samp: services_var_samp_order_by
+  variance: services_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "services"
+"""
+input services_arr_rel_insert_input {
+  data: [services_insert_input!]!
+  on_conflict: services_on_conflict
+}
+
+"""aggregate avg on columns"""
+type services_avg_fields {
+  service_id: Float
+}
+
+"""
+order by avg() on columns of table "services"
+"""
+input services_avg_order_by {
+  service_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "services". All fields are combined with a logical 'AND'.
+"""
+input services_bool_exp {
+  _and: [services_bool_exp]
+  _not: services_bool_exp
+  _or: [services_bool_exp]
+  forms: forms_bool_exp
+  party_services: party_services_bool_exp
+  service_descriptio: String_comparison_exp
+  service_id: bigint_comparison_exp
+  service_name: String_comparison_exp
+  service_type_code: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "services"
+"""
+enum services_constraint {
+  """unique or primary key constraint"""
+  idx_26477_services_pkey
+}
+
+"""
+input type for incrementing integer columne in table "services"
+"""
+input services_inc_input {
+  service_id: bigint
+}
+
+"""
+input type for inserting data into table "services"
+"""
+input services_insert_input {
+  forms: forms_arr_rel_insert_input
+  party_services: party_services_arr_rel_insert_input
+  service_descriptio: String
+  service_id: bigint
+  service_name: String
+  service_type_code: String
+}
+
+"""aggregate max on columns"""
+type services_max_fields {
+  service_descriptio: String
+  service_id: bigint
+  service_name: String
+  service_type_code: String
+}
+
+"""
+order by max() on columns of table "services"
+"""
+input services_max_order_by {
+  service_descriptio: order_by
+  service_id: order_by
+  service_name: order_by
+  service_type_code: order_by
+}
+
+"""aggregate min on columns"""
+type services_min_fields {
+  service_descriptio: String
+  service_id: bigint
+  service_name: String
+  service_type_code: String
+}
+
+"""
+order by min() on columns of table "services"
+"""
+input services_min_order_by {
+  service_descriptio: order_by
+  service_id: order_by
+  service_name: order_by
+  service_type_code: order_by
+}
+
+"""
+response of any mutation on the table "services"
+"""
+type services_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [services!]!
+}
+
+"""
+input type for inserting object relation for remote table "services"
+"""
+input services_obj_rel_insert_input {
+  data: services_insert_input!
+  on_conflict: services_on_conflict
+}
+
+"""
+on conflict condition type for table "services"
+"""
+input services_on_conflict {
+  constraint: services_constraint!
+  update_columns: [services_update_column!]!
+  where: services_bool_exp
+}
+
+"""
+ordering options when selecting data from "services"
+"""
+input services_order_by {
+  forms_aggregate: forms_aggregate_order_by
+  party_services_aggregate: party_services_aggregate_order_by
+  service_descriptio: order_by
+  service_id: order_by
+  service_name: order_by
+  service_type_code: order_by
+}
+
+"""
+select columns of table "services"
+"""
+enum services_select_column {
+  """column name"""
+  service_descriptio
+
+  """column name"""
+  service_id
+
+  """column name"""
+  service_name
+
+  """column name"""
+  service_type_code
+}
+
+"""
+input type for updating data in table "services"
+"""
+input services_set_input {
+  service_descriptio: String
+  service_id: bigint
+  service_name: String
+  service_type_code: String
+}
+
+"""aggregate stddev on columns"""
+type services_stddev_fields {
+  service_id: Float
+}
+
+"""
+order by stddev() on columns of table "services"
+"""
+input services_stddev_order_by {
+  service_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type services_stddev_pop_fields {
+  service_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "services"
+"""
+input services_stddev_pop_order_by {
+  service_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type services_stddev_samp_fields {
+  service_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "services"
+"""
+input services_stddev_samp_order_by {
+  service_id: order_by
+}
+
+"""aggregate sum on columns"""
+type services_sum_fields {
+  service_id: bigint
+}
+
+"""
+order by sum() on columns of table "services"
+"""
+input services_sum_order_by {
+  service_id: order_by
+}
+
+"""
+update columns of table "services"
+"""
+enum services_update_column {
+  """column name"""
+  service_descriptio
+
+  """column name"""
+  service_id
+
+  """column name"""
+  service_name
+
+  """column name"""
+  service_type_code
+}
+
+"""aggregate var_pop on columns"""
+type services_var_pop_fields {
+  service_id: Float
+}
+
+"""
+order by var_pop() on columns of table "services"
+"""
+input services_var_pop_order_by {
+  service_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type services_var_samp_fields {
+  service_id: Float
+}
+
+"""
+order by var_samp() on columns of table "services"
+"""
+input services_var_samp_order_by {
+  service_id: order_by
+}
+
+"""aggregate variance on columns"""
+type services_variance_fields {
+  service_id: Float
+}
+
+"""
+order by variance() on columns of table "services"
+"""
+input services_variance_order_by {
+  service_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "addresses"
+  """
+  addresses(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): [addresses!]!
+
+  """
+  fetch aggregated fields from the table: "addresses"
+  """
+  addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [addresses_order_by!]
+
+    """filter the rows returned"""
+    where: addresses_bool_exp
+  ): addresses_aggregate!
+
+  """fetch data from the table: "addresses" using primary key columns"""
+  addresses_by_pk(address_id: bigint!): addresses
+
+  """
+  fetch data from the table: "forms"
+  """
+  forms(
+    """distinct select on columns"""
+    distinct_on: [forms_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [forms_order_by!]
+
+    """filter the rows returned"""
+    where: forms_bool_exp
+  ): [forms!]!
+
+  """
+  fetch aggregated fields from the table: "forms"
+  """
+  forms_aggregate(
+    """distinct select on columns"""
+    distinct_on: [forms_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [forms_order_by!]
+
+    """filter the rows returned"""
+    where: forms_bool_exp
+  ): forms_aggregate!
+
+  """fetch data from the table: "forms" using primary key columns"""
+  forms_by_pk(form_id: bigint!): forms
+
+  """
+  fetch data from the table: "individuals"
+  """
+  individuals(
+    """distinct select on columns"""
+    distinct_on: [individuals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [individuals_order_by!]
+
+    """filter the rows returned"""
+    where: individuals_bool_exp
+  ): [individuals!]!
+
+  """
+  fetch aggregated fields from the table: "individuals"
+  """
+  individuals_aggregate(
+    """distinct select on columns"""
+    distinct_on: [individuals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [individuals_order_by!]
+
+    """filter the rows returned"""
+    where: individuals_bool_exp
+  ): individuals_aggregate!
+
+  """fetch data from the table: "individuals" using primary key columns"""
+  individuals_by_pk(individual_id: bigint!): individuals
+
+  """
+  fetch data from the table: "organization_contact_individuals"
+  """
+  organization_contact_individuals(
+    """distinct select on columns"""
+    distinct_on: [organization_contact_individuals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [organization_contact_individuals_order_by!]
+
+    """filter the rows returned"""
+    where: organization_contact_individuals_bool_exp
+  ): [organization_contact_individuals!]!
+
+  """
+  fetch aggregated fields from the table: "organization_contact_individuals"
+  """
+  organization_contact_individuals_aggregate(
+    """distinct select on columns"""
+    distinct_on: [organization_contact_individuals_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [organization_contact_individuals_order_by!]
+
+    """filter the rows returned"""
+    where: organization_contact_individuals_bool_exp
+  ): organization_contact_individuals_aggregate!
+
+  """
+  fetch data from the table: "organization_contact_individuals" using primary key columns
+  """
+  organization_contact_individuals_by_pk(individual_id: bigint!, organization_id: bigint!): organization_contact_individuals
+
+  """
+  fetch data from the table: "organizations"
+  """
+  organizations(
+    """distinct select on columns"""
+    distinct_on: [organizations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [organizations_order_by!]
+
+    """filter the rows returned"""
+    where: organizations_bool_exp
+  ): [organizations!]!
+
+  """
+  fetch aggregated fields from the table: "organizations"
+  """
+  organizations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [organizations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [organizations_order_by!]
+
+    """filter the rows returned"""
+    where: organizations_bool_exp
+  ): organizations_aggregate!
+
+  """fetch data from the table: "organizations" using primary key columns"""
+  organizations_by_pk(organization_id: bigint!): organizations
+
+  """
+  fetch data from the table: "parties"
+  """
+  parties(
+    """distinct select on columns"""
+    distinct_on: [parties_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [parties_order_by!]
+
+    """filter the rows returned"""
+    where: parties_bool_exp
+  ): [parties!]!
+
+  """
+  fetch aggregated fields from the table: "parties"
+  """
+  parties_aggregate(
+    """distinct select on columns"""
+    distinct_on: [parties_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [parties_order_by!]
+
+    """filter the rows returned"""
+    where: parties_bool_exp
+  ): parties_aggregate!
+
+  """fetch data from the table: "parties" using primary key columns"""
+  parties_by_pk(party_id: bigint!): parties
+
+  """
+  fetch data from the table: "party_addresses"
+  """
+  party_addresses(
+    """distinct select on columns"""
+    distinct_on: [party_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: party_addresses_bool_exp
+  ): [party_addresses!]!
+
+  """
+  fetch aggregated fields from the table: "party_addresses"
+  """
+  party_addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_addresses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_addresses_order_by!]
+
+    """filter the rows returned"""
+    where: party_addresses_bool_exp
+  ): party_addresses_aggregate!
+
+  """fetch data from the table: "party_addresses" using primary key columns"""
+  party_addresses_by_pk(address_id: bigint!, party_id: bigint!): party_addresses
+
+  """
+  fetch data from the table: "party_forms"
+  """
+  party_forms(
+    """distinct select on columns"""
+    distinct_on: [party_forms_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_forms_order_by!]
+
+    """filter the rows returned"""
+    where: party_forms_bool_exp
+  ): [party_forms!]!
+
+  """
+  fetch aggregated fields from the table: "party_forms"
+  """
+  party_forms_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_forms_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_forms_order_by!]
+
+    """filter the rows returned"""
+    where: party_forms_bool_exp
+  ): party_forms_aggregate!
+
+  """fetch data from the table: "party_forms" using primary key columns"""
+  party_forms_by_pk(form_id: bigint!, party_id: bigint!): party_forms
+
+  """
+  fetch data from the table: "party_services"
+  """
+  party_services(
+    """distinct select on columns"""
+    distinct_on: [party_services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_services_order_by!]
+
+    """filter the rows returned"""
+    where: party_services_bool_exp
+  ): [party_services!]!
+
+  """
+  fetch aggregated fields from the table: "party_services"
+  """
+  party_services_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_services_order_by!]
+
+    """filter the rows returned"""
+    where: party_services_bool_exp
+  ): party_services_aggregate!
+
+  """
+  fetch data from the table: "services"
+  """
+  services(
+    """distinct select on columns"""
+    distinct_on: [services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [services_order_by!]
+
+    """filter the rows returned"""
+    where: services_bool_exp
+  ): [services!]!
+
+  """
+  fetch aggregated fields from the table: "services"
+  """
+  services_aggregate(
+    """distinct select on columns"""
+    distinct_on: [services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [services_order_by!]
+
+    """filter the rows returned"""
+    where: services_bool_exp
+  ): services_aggregate!
+
+  """fetch data from the table: "services" using primary key columns"""
+  services_by_pk(service_id: bigint!): services
+}
+
+scalar timestamptz
+
+"""
+expression to compare columns of type timestamptz. All fields are combined with logical 'AND'.
+"""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}

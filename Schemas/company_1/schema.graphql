@@ -1,0 +1,3188 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "department"
+"""
+type department {
+  """An array relationship"""
+  dept_locations(
+    """distinct select on columns"""
+    distinct_on: [dept_locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dept_locations_order_by!]
+
+    """filter the rows returned"""
+    where: dept_locations_bool_exp
+  ): [dept_locations!]!
+
+  """An aggregated array relationship"""
+  dept_locations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [dept_locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dept_locations_order_by!]
+
+    """filter the rows returned"""
+    where: dept_locations_bool_exp
+  ): dept_locations_aggregate!
+  dname: String
+  dnumber: bigint!
+
+  """An object relationship"""
+  employee: employee
+
+  """An array relationship"""
+  employees(
+    """distinct select on columns"""
+    distinct_on: [employee_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employee_order_by!]
+
+    """filter the rows returned"""
+    where: employee_bool_exp
+  ): [employee!]!
+
+  """An aggregated array relationship"""
+  employees_aggregate(
+    """distinct select on columns"""
+    distinct_on: [employee_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employee_order_by!]
+
+    """filter the rows returned"""
+    where: employee_bool_exp
+  ): employee_aggregate!
+  mgr_ssn: bigint
+  mgr_start_date: String
+
+  """An array relationship"""
+  projects(
+    """distinct select on columns"""
+    distinct_on: [project_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [project_order_by!]
+
+    """filter the rows returned"""
+    where: project_bool_exp
+  ): [project!]!
+
+  """An aggregated array relationship"""
+  projects_aggregate(
+    """distinct select on columns"""
+    distinct_on: [project_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [project_order_by!]
+
+    """filter the rows returned"""
+    where: project_bool_exp
+  ): project_aggregate!
+}
+
+"""
+aggregated selection of "department"
+"""
+type department_aggregate {
+  aggregate: department_aggregate_fields
+  nodes: [department!]!
+}
+
+"""
+aggregate fields of "department"
+"""
+type department_aggregate_fields {
+  avg: department_avg_fields
+  count(columns: [department_select_column!], distinct: Boolean): Int
+  max: department_max_fields
+  min: department_min_fields
+  stddev: department_stddev_fields
+  stddev_pop: department_stddev_pop_fields
+  stddev_samp: department_stddev_samp_fields
+  sum: department_sum_fields
+  var_pop: department_var_pop_fields
+  var_samp: department_var_samp_fields
+  variance: department_variance_fields
+}
+
+"""
+order by aggregate values of table "department"
+"""
+input department_aggregate_order_by {
+  avg: department_avg_order_by
+  count: order_by
+  max: department_max_order_by
+  min: department_min_order_by
+  stddev: department_stddev_order_by
+  stddev_pop: department_stddev_pop_order_by
+  stddev_samp: department_stddev_samp_order_by
+  sum: department_sum_order_by
+  var_pop: department_var_pop_order_by
+  var_samp: department_var_samp_order_by
+  variance: department_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "department"
+"""
+input department_arr_rel_insert_input {
+  data: [department_insert_input!]!
+  on_conflict: department_on_conflict
+}
+
+"""aggregate avg on columns"""
+type department_avg_fields {
+  dnumber: Float
+  mgr_ssn: Float
+}
+
+"""
+order by avg() on columns of table "department"
+"""
+input department_avg_order_by {
+  dnumber: order_by
+  mgr_ssn: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "department". All fields are combined with a logical 'AND'.
+"""
+input department_bool_exp {
+  _and: [department_bool_exp]
+  _not: department_bool_exp
+  _or: [department_bool_exp]
+  dept_locations: dept_locations_bool_exp
+  dname: String_comparison_exp
+  dnumber: bigint_comparison_exp
+  employee: employee_bool_exp
+  employees: employee_bool_exp
+  mgr_ssn: bigint_comparison_exp
+  mgr_start_date: String_comparison_exp
+  projects: project_bool_exp
+}
+
+"""
+unique or primary key constraints on table "department"
+"""
+enum department_constraint {
+  """unique or primary key constraint"""
+  idx_22871_department_pkey
+}
+
+"""
+input type for incrementing integer columne in table "department"
+"""
+input department_inc_input {
+  dnumber: bigint
+  mgr_ssn: bigint
+}
+
+"""
+input type for inserting data into table "department"
+"""
+input department_insert_input {
+  dept_locations: dept_locations_arr_rel_insert_input
+  dname: String
+  dnumber: bigint
+  employee: employee_obj_rel_insert_input
+  employees: employee_arr_rel_insert_input
+  mgr_ssn: bigint
+  mgr_start_date: String
+  projects: project_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type department_max_fields {
+  dname: String
+  dnumber: bigint
+  mgr_ssn: bigint
+  mgr_start_date: String
+}
+
+"""
+order by max() on columns of table "department"
+"""
+input department_max_order_by {
+  dname: order_by
+  dnumber: order_by
+  mgr_ssn: order_by
+  mgr_start_date: order_by
+}
+
+"""aggregate min on columns"""
+type department_min_fields {
+  dname: String
+  dnumber: bigint
+  mgr_ssn: bigint
+  mgr_start_date: String
+}
+
+"""
+order by min() on columns of table "department"
+"""
+input department_min_order_by {
+  dname: order_by
+  dnumber: order_by
+  mgr_ssn: order_by
+  mgr_start_date: order_by
+}
+
+"""
+response of any mutation on the table "department"
+"""
+type department_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [department!]!
+}
+
+"""
+input type for inserting object relation for remote table "department"
+"""
+input department_obj_rel_insert_input {
+  data: department_insert_input!
+  on_conflict: department_on_conflict
+}
+
+"""
+on conflict condition type for table "department"
+"""
+input department_on_conflict {
+  constraint: department_constraint!
+  update_columns: [department_update_column!]!
+  where: department_bool_exp
+}
+
+"""
+ordering options when selecting data from "department"
+"""
+input department_order_by {
+  dept_locations_aggregate: dept_locations_aggregate_order_by
+  dname: order_by
+  dnumber: order_by
+  employee: employee_order_by
+  employees_aggregate: employee_aggregate_order_by
+  mgr_ssn: order_by
+  mgr_start_date: order_by
+  projects_aggregate: project_aggregate_order_by
+}
+
+"""
+select columns of table "department"
+"""
+enum department_select_column {
+  """column name"""
+  dname
+
+  """column name"""
+  dnumber
+
+  """column name"""
+  mgr_ssn
+
+  """column name"""
+  mgr_start_date
+}
+
+"""
+input type for updating data in table "department"
+"""
+input department_set_input {
+  dname: String
+  dnumber: bigint
+  mgr_ssn: bigint
+  mgr_start_date: String
+}
+
+"""aggregate stddev on columns"""
+type department_stddev_fields {
+  dnumber: Float
+  mgr_ssn: Float
+}
+
+"""
+order by stddev() on columns of table "department"
+"""
+input department_stddev_order_by {
+  dnumber: order_by
+  mgr_ssn: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type department_stddev_pop_fields {
+  dnumber: Float
+  mgr_ssn: Float
+}
+
+"""
+order by stddev_pop() on columns of table "department"
+"""
+input department_stddev_pop_order_by {
+  dnumber: order_by
+  mgr_ssn: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type department_stddev_samp_fields {
+  dnumber: Float
+  mgr_ssn: Float
+}
+
+"""
+order by stddev_samp() on columns of table "department"
+"""
+input department_stddev_samp_order_by {
+  dnumber: order_by
+  mgr_ssn: order_by
+}
+
+"""aggregate sum on columns"""
+type department_sum_fields {
+  dnumber: bigint
+  mgr_ssn: bigint
+}
+
+"""
+order by sum() on columns of table "department"
+"""
+input department_sum_order_by {
+  dnumber: order_by
+  mgr_ssn: order_by
+}
+
+"""
+update columns of table "department"
+"""
+enum department_update_column {
+  """column name"""
+  dname
+
+  """column name"""
+  dnumber
+
+  """column name"""
+  mgr_ssn
+
+  """column name"""
+  mgr_start_date
+}
+
+"""aggregate var_pop on columns"""
+type department_var_pop_fields {
+  dnumber: Float
+  mgr_ssn: Float
+}
+
+"""
+order by var_pop() on columns of table "department"
+"""
+input department_var_pop_order_by {
+  dnumber: order_by
+  mgr_ssn: order_by
+}
+
+"""aggregate var_samp on columns"""
+type department_var_samp_fields {
+  dnumber: Float
+  mgr_ssn: Float
+}
+
+"""
+order by var_samp() on columns of table "department"
+"""
+input department_var_samp_order_by {
+  dnumber: order_by
+  mgr_ssn: order_by
+}
+
+"""aggregate variance on columns"""
+type department_variance_fields {
+  dnumber: Float
+  mgr_ssn: Float
+}
+
+"""
+order by variance() on columns of table "department"
+"""
+input department_variance_order_by {
+  dnumber: order_by
+  mgr_ssn: order_by
+}
+
+"""
+columns and relationships of "dependent"
+"""
+type dependent {
+  bdate: String
+  dependent_name: String
+
+  """An object relationship"""
+  employee: employee
+  essn: bigint
+  relationship: String
+  sex: String
+}
+
+"""
+aggregated selection of "dependent"
+"""
+type dependent_aggregate {
+  aggregate: dependent_aggregate_fields
+  nodes: [dependent!]!
+}
+
+"""
+aggregate fields of "dependent"
+"""
+type dependent_aggregate_fields {
+  avg: dependent_avg_fields
+  count(columns: [dependent_select_column!], distinct: Boolean): Int
+  max: dependent_max_fields
+  min: dependent_min_fields
+  stddev: dependent_stddev_fields
+  stddev_pop: dependent_stddev_pop_fields
+  stddev_samp: dependent_stddev_samp_fields
+  sum: dependent_sum_fields
+  var_pop: dependent_var_pop_fields
+  var_samp: dependent_var_samp_fields
+  variance: dependent_variance_fields
+}
+
+"""
+order by aggregate values of table "dependent"
+"""
+input dependent_aggregate_order_by {
+  avg: dependent_avg_order_by
+  count: order_by
+  max: dependent_max_order_by
+  min: dependent_min_order_by
+  stddev: dependent_stddev_order_by
+  stddev_pop: dependent_stddev_pop_order_by
+  stddev_samp: dependent_stddev_samp_order_by
+  sum: dependent_sum_order_by
+  var_pop: dependent_var_pop_order_by
+  var_samp: dependent_var_samp_order_by
+  variance: dependent_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "dependent"
+"""
+input dependent_arr_rel_insert_input {
+  data: [dependent_insert_input!]!
+  on_conflict: dependent_on_conflict
+}
+
+"""aggregate avg on columns"""
+type dependent_avg_fields {
+  essn: Float
+}
+
+"""
+order by avg() on columns of table "dependent"
+"""
+input dependent_avg_order_by {
+  essn: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "dependent". All fields are combined with a logical 'AND'.
+"""
+input dependent_bool_exp {
+  _and: [dependent_bool_exp]
+  _not: dependent_bool_exp
+  _or: [dependent_bool_exp]
+  bdate: String_comparison_exp
+  dependent_name: String_comparison_exp
+  employee: employee_bool_exp
+  essn: bigint_comparison_exp
+  relationship: String_comparison_exp
+  sex: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "dependent"
+"""
+enum dependent_constraint {
+  """unique or primary key constraint"""
+  idx_22883_sqlite_autoindex_dependent_1
+}
+
+"""
+input type for incrementing integer columne in table "dependent"
+"""
+input dependent_inc_input {
+  essn: bigint
+}
+
+"""
+input type for inserting data into table "dependent"
+"""
+input dependent_insert_input {
+  bdate: String
+  dependent_name: String
+  employee: employee_obj_rel_insert_input
+  essn: bigint
+  relationship: String
+  sex: String
+}
+
+"""aggregate max on columns"""
+type dependent_max_fields {
+  bdate: String
+  dependent_name: String
+  essn: bigint
+  relationship: String
+  sex: String
+}
+
+"""
+order by max() on columns of table "dependent"
+"""
+input dependent_max_order_by {
+  bdate: order_by
+  dependent_name: order_by
+  essn: order_by
+  relationship: order_by
+  sex: order_by
+}
+
+"""aggregate min on columns"""
+type dependent_min_fields {
+  bdate: String
+  dependent_name: String
+  essn: bigint
+  relationship: String
+  sex: String
+}
+
+"""
+order by min() on columns of table "dependent"
+"""
+input dependent_min_order_by {
+  bdate: order_by
+  dependent_name: order_by
+  essn: order_by
+  relationship: order_by
+  sex: order_by
+}
+
+"""
+response of any mutation on the table "dependent"
+"""
+type dependent_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [dependent!]!
+}
+
+"""
+input type for inserting object relation for remote table "dependent"
+"""
+input dependent_obj_rel_insert_input {
+  data: dependent_insert_input!
+  on_conflict: dependent_on_conflict
+}
+
+"""
+on conflict condition type for table "dependent"
+"""
+input dependent_on_conflict {
+  constraint: dependent_constraint!
+  update_columns: [dependent_update_column!]!
+  where: dependent_bool_exp
+}
+
+"""
+ordering options when selecting data from "dependent"
+"""
+input dependent_order_by {
+  bdate: order_by
+  dependent_name: order_by
+  employee: employee_order_by
+  essn: order_by
+  relationship: order_by
+  sex: order_by
+}
+
+"""
+select columns of table "dependent"
+"""
+enum dependent_select_column {
+  """column name"""
+  bdate
+
+  """column name"""
+  dependent_name
+
+  """column name"""
+  essn
+
+  """column name"""
+  relationship
+
+  """column name"""
+  sex
+}
+
+"""
+input type for updating data in table "dependent"
+"""
+input dependent_set_input {
+  bdate: String
+  dependent_name: String
+  essn: bigint
+  relationship: String
+  sex: String
+}
+
+"""aggregate stddev on columns"""
+type dependent_stddev_fields {
+  essn: Float
+}
+
+"""
+order by stddev() on columns of table "dependent"
+"""
+input dependent_stddev_order_by {
+  essn: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type dependent_stddev_pop_fields {
+  essn: Float
+}
+
+"""
+order by stddev_pop() on columns of table "dependent"
+"""
+input dependent_stddev_pop_order_by {
+  essn: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type dependent_stddev_samp_fields {
+  essn: Float
+}
+
+"""
+order by stddev_samp() on columns of table "dependent"
+"""
+input dependent_stddev_samp_order_by {
+  essn: order_by
+}
+
+"""aggregate sum on columns"""
+type dependent_sum_fields {
+  essn: bigint
+}
+
+"""
+order by sum() on columns of table "dependent"
+"""
+input dependent_sum_order_by {
+  essn: order_by
+}
+
+"""
+update columns of table "dependent"
+"""
+enum dependent_update_column {
+  """column name"""
+  bdate
+
+  """column name"""
+  dependent_name
+
+  """column name"""
+  essn
+
+  """column name"""
+  relationship
+
+  """column name"""
+  sex
+}
+
+"""aggregate var_pop on columns"""
+type dependent_var_pop_fields {
+  essn: Float
+}
+
+"""
+order by var_pop() on columns of table "dependent"
+"""
+input dependent_var_pop_order_by {
+  essn: order_by
+}
+
+"""aggregate var_samp on columns"""
+type dependent_var_samp_fields {
+  essn: Float
+}
+
+"""
+order by var_samp() on columns of table "dependent"
+"""
+input dependent_var_samp_order_by {
+  essn: order_by
+}
+
+"""aggregate variance on columns"""
+type dependent_variance_fields {
+  essn: Float
+}
+
+"""
+order by variance() on columns of table "dependent"
+"""
+input dependent_variance_order_by {
+  essn: order_by
+}
+
+"""
+columns and relationships of "dept_locations"
+"""
+type dept_locations {
+  """An object relationship"""
+  department: department
+  dlocation: String
+  dnumber: bigint
+}
+
+"""
+aggregated selection of "dept_locations"
+"""
+type dept_locations_aggregate {
+  aggregate: dept_locations_aggregate_fields
+  nodes: [dept_locations!]!
+}
+
+"""
+aggregate fields of "dept_locations"
+"""
+type dept_locations_aggregate_fields {
+  avg: dept_locations_avg_fields
+  count(columns: [dept_locations_select_column!], distinct: Boolean): Int
+  max: dept_locations_max_fields
+  min: dept_locations_min_fields
+  stddev: dept_locations_stddev_fields
+  stddev_pop: dept_locations_stddev_pop_fields
+  stddev_samp: dept_locations_stddev_samp_fields
+  sum: dept_locations_sum_fields
+  var_pop: dept_locations_var_pop_fields
+  var_samp: dept_locations_var_samp_fields
+  variance: dept_locations_variance_fields
+}
+
+"""
+order by aggregate values of table "dept_locations"
+"""
+input dept_locations_aggregate_order_by {
+  avg: dept_locations_avg_order_by
+  count: order_by
+  max: dept_locations_max_order_by
+  min: dept_locations_min_order_by
+  stddev: dept_locations_stddev_order_by
+  stddev_pop: dept_locations_stddev_pop_order_by
+  stddev_samp: dept_locations_stddev_samp_order_by
+  sum: dept_locations_sum_order_by
+  var_pop: dept_locations_var_pop_order_by
+  var_samp: dept_locations_var_samp_order_by
+  variance: dept_locations_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "dept_locations"
+"""
+input dept_locations_arr_rel_insert_input {
+  data: [dept_locations_insert_input!]!
+  on_conflict: dept_locations_on_conflict
+}
+
+"""aggregate avg on columns"""
+type dept_locations_avg_fields {
+  dnumber: Float
+}
+
+"""
+order by avg() on columns of table "dept_locations"
+"""
+input dept_locations_avg_order_by {
+  dnumber: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "dept_locations". All fields are combined with a logical 'AND'.
+"""
+input dept_locations_bool_exp {
+  _and: [dept_locations_bool_exp]
+  _not: dept_locations_bool_exp
+  _or: [dept_locations_bool_exp]
+  department: department_bool_exp
+  dlocation: String_comparison_exp
+  dnumber: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "dept_locations"
+"""
+enum dept_locations_constraint {
+  """unique or primary key constraint"""
+  idx_22889_sqlite_autoindex_dept_locations_1
+}
+
+"""
+input type for incrementing integer columne in table "dept_locations"
+"""
+input dept_locations_inc_input {
+  dnumber: bigint
+}
+
+"""
+input type for inserting data into table "dept_locations"
+"""
+input dept_locations_insert_input {
+  department: department_obj_rel_insert_input
+  dlocation: String
+  dnumber: bigint
+}
+
+"""aggregate max on columns"""
+type dept_locations_max_fields {
+  dlocation: String
+  dnumber: bigint
+}
+
+"""
+order by max() on columns of table "dept_locations"
+"""
+input dept_locations_max_order_by {
+  dlocation: order_by
+  dnumber: order_by
+}
+
+"""aggregate min on columns"""
+type dept_locations_min_fields {
+  dlocation: String
+  dnumber: bigint
+}
+
+"""
+order by min() on columns of table "dept_locations"
+"""
+input dept_locations_min_order_by {
+  dlocation: order_by
+  dnumber: order_by
+}
+
+"""
+response of any mutation on the table "dept_locations"
+"""
+type dept_locations_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [dept_locations!]!
+}
+
+"""
+input type for inserting object relation for remote table "dept_locations"
+"""
+input dept_locations_obj_rel_insert_input {
+  data: dept_locations_insert_input!
+  on_conflict: dept_locations_on_conflict
+}
+
+"""
+on conflict condition type for table "dept_locations"
+"""
+input dept_locations_on_conflict {
+  constraint: dept_locations_constraint!
+  update_columns: [dept_locations_update_column!]!
+  where: dept_locations_bool_exp
+}
+
+"""
+ordering options when selecting data from "dept_locations"
+"""
+input dept_locations_order_by {
+  department: department_order_by
+  dlocation: order_by
+  dnumber: order_by
+}
+
+"""
+select columns of table "dept_locations"
+"""
+enum dept_locations_select_column {
+  """column name"""
+  dlocation
+
+  """column name"""
+  dnumber
+}
+
+"""
+input type for updating data in table "dept_locations"
+"""
+input dept_locations_set_input {
+  dlocation: String
+  dnumber: bigint
+}
+
+"""aggregate stddev on columns"""
+type dept_locations_stddev_fields {
+  dnumber: Float
+}
+
+"""
+order by stddev() on columns of table "dept_locations"
+"""
+input dept_locations_stddev_order_by {
+  dnumber: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type dept_locations_stddev_pop_fields {
+  dnumber: Float
+}
+
+"""
+order by stddev_pop() on columns of table "dept_locations"
+"""
+input dept_locations_stddev_pop_order_by {
+  dnumber: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type dept_locations_stddev_samp_fields {
+  dnumber: Float
+}
+
+"""
+order by stddev_samp() on columns of table "dept_locations"
+"""
+input dept_locations_stddev_samp_order_by {
+  dnumber: order_by
+}
+
+"""aggregate sum on columns"""
+type dept_locations_sum_fields {
+  dnumber: bigint
+}
+
+"""
+order by sum() on columns of table "dept_locations"
+"""
+input dept_locations_sum_order_by {
+  dnumber: order_by
+}
+
+"""
+update columns of table "dept_locations"
+"""
+enum dept_locations_update_column {
+  """column name"""
+  dlocation
+
+  """column name"""
+  dnumber
+}
+
+"""aggregate var_pop on columns"""
+type dept_locations_var_pop_fields {
+  dnumber: Float
+}
+
+"""
+order by var_pop() on columns of table "dept_locations"
+"""
+input dept_locations_var_pop_order_by {
+  dnumber: order_by
+}
+
+"""aggregate var_samp on columns"""
+type dept_locations_var_samp_fields {
+  dnumber: Float
+}
+
+"""
+order by var_samp() on columns of table "dept_locations"
+"""
+input dept_locations_var_samp_order_by {
+  dnumber: order_by
+}
+
+"""aggregate variance on columns"""
+type dept_locations_variance_fields {
+  dnumber: Float
+}
+
+"""
+order by variance() on columns of table "dept_locations"
+"""
+input dept_locations_variance_order_by {
+  dnumber: order_by
+}
+
+"""
+columns and relationships of "employee"
+"""
+type employee {
+  address: String
+  bdate: String
+
+  """An object relationship"""
+  department: department
+
+  """An array relationship"""
+  departments(
+    """distinct select on columns"""
+    distinct_on: [department_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [department_order_by!]
+
+    """filter the rows returned"""
+    where: department_bool_exp
+  ): [department!]!
+
+  """An aggregated array relationship"""
+  departments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [department_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [department_order_by!]
+
+    """filter the rows returned"""
+    where: department_bool_exp
+  ): department_aggregate!
+
+  """An array relationship"""
+  dependents(
+    """distinct select on columns"""
+    distinct_on: [dependent_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dependent_order_by!]
+
+    """filter the rows returned"""
+    where: dependent_bool_exp
+  ): [dependent!]!
+
+  """An aggregated array relationship"""
+  dependents_aggregate(
+    """distinct select on columns"""
+    distinct_on: [dependent_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dependent_order_by!]
+
+    """filter the rows returned"""
+    where: dependent_bool_exp
+  ): dependent_aggregate!
+  dno: bigint
+  fname: String
+  lname: String
+  minit: String
+  salary: bigint
+  sex: String
+  ssn: bigint!
+  super_ssn: bigint
+
+  """An array relationship"""
+  works_ons(
+    """distinct select on columns"""
+    distinct_on: [works_on_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [works_on_order_by!]
+
+    """filter the rows returned"""
+    where: works_on_bool_exp
+  ): [works_on!]!
+
+  """An aggregated array relationship"""
+  works_ons_aggregate(
+    """distinct select on columns"""
+    distinct_on: [works_on_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [works_on_order_by!]
+
+    """filter the rows returned"""
+    where: works_on_bool_exp
+  ): works_on_aggregate!
+}
+
+"""
+aggregated selection of "employee"
+"""
+type employee_aggregate {
+  aggregate: employee_aggregate_fields
+  nodes: [employee!]!
+}
+
+"""
+aggregate fields of "employee"
+"""
+type employee_aggregate_fields {
+  avg: employee_avg_fields
+  count(columns: [employee_select_column!], distinct: Boolean): Int
+  max: employee_max_fields
+  min: employee_min_fields
+  stddev: employee_stddev_fields
+  stddev_pop: employee_stddev_pop_fields
+  stddev_samp: employee_stddev_samp_fields
+  sum: employee_sum_fields
+  var_pop: employee_var_pop_fields
+  var_samp: employee_var_samp_fields
+  variance: employee_variance_fields
+}
+
+"""
+order by aggregate values of table "employee"
+"""
+input employee_aggregate_order_by {
+  avg: employee_avg_order_by
+  count: order_by
+  max: employee_max_order_by
+  min: employee_min_order_by
+  stddev: employee_stddev_order_by
+  stddev_pop: employee_stddev_pop_order_by
+  stddev_samp: employee_stddev_samp_order_by
+  sum: employee_sum_order_by
+  var_pop: employee_var_pop_order_by
+  var_samp: employee_var_samp_order_by
+  variance: employee_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "employee"
+"""
+input employee_arr_rel_insert_input {
+  data: [employee_insert_input!]!
+  on_conflict: employee_on_conflict
+}
+
+"""aggregate avg on columns"""
+type employee_avg_fields {
+  dno: Float
+  salary: Float
+  ssn: Float
+  super_ssn: Float
+}
+
+"""
+order by avg() on columns of table "employee"
+"""
+input employee_avg_order_by {
+  dno: order_by
+  salary: order_by
+  ssn: order_by
+  super_ssn: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "employee". All fields are combined with a logical 'AND'.
+"""
+input employee_bool_exp {
+  _and: [employee_bool_exp]
+  _not: employee_bool_exp
+  _or: [employee_bool_exp]
+  address: String_comparison_exp
+  bdate: String_comparison_exp
+  department: department_bool_exp
+  departments: department_bool_exp
+  dependents: dependent_bool_exp
+  dno: bigint_comparison_exp
+  fname: String_comparison_exp
+  lname: String_comparison_exp
+  minit: String_comparison_exp
+  salary: bigint_comparison_exp
+  sex: String_comparison_exp
+  ssn: bigint_comparison_exp
+  super_ssn: bigint_comparison_exp
+  works_ons: works_on_bool_exp
+}
+
+"""
+unique or primary key constraints on table "employee"
+"""
+enum employee_constraint {
+  """unique or primary key constraint"""
+  idx_22865_employee_pkey
+}
+
+"""
+input type for incrementing integer columne in table "employee"
+"""
+input employee_inc_input {
+  dno: bigint
+  salary: bigint
+  ssn: bigint
+  super_ssn: bigint
+}
+
+"""
+input type for inserting data into table "employee"
+"""
+input employee_insert_input {
+  address: String
+  bdate: String
+  department: department_obj_rel_insert_input
+  departments: department_arr_rel_insert_input
+  dependents: dependent_arr_rel_insert_input
+  dno: bigint
+  fname: String
+  lname: String
+  minit: String
+  salary: bigint
+  sex: String
+  ssn: bigint
+  super_ssn: bigint
+  works_ons: works_on_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type employee_max_fields {
+  address: String
+  bdate: String
+  dno: bigint
+  fname: String
+  lname: String
+  minit: String
+  salary: bigint
+  sex: String
+  ssn: bigint
+  super_ssn: bigint
+}
+
+"""
+order by max() on columns of table "employee"
+"""
+input employee_max_order_by {
+  address: order_by
+  bdate: order_by
+  dno: order_by
+  fname: order_by
+  lname: order_by
+  minit: order_by
+  salary: order_by
+  sex: order_by
+  ssn: order_by
+  super_ssn: order_by
+}
+
+"""aggregate min on columns"""
+type employee_min_fields {
+  address: String
+  bdate: String
+  dno: bigint
+  fname: String
+  lname: String
+  minit: String
+  salary: bigint
+  sex: String
+  ssn: bigint
+  super_ssn: bigint
+}
+
+"""
+order by min() on columns of table "employee"
+"""
+input employee_min_order_by {
+  address: order_by
+  bdate: order_by
+  dno: order_by
+  fname: order_by
+  lname: order_by
+  minit: order_by
+  salary: order_by
+  sex: order_by
+  ssn: order_by
+  super_ssn: order_by
+}
+
+"""
+response of any mutation on the table "employee"
+"""
+type employee_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [employee!]!
+}
+
+"""
+input type for inserting object relation for remote table "employee"
+"""
+input employee_obj_rel_insert_input {
+  data: employee_insert_input!
+  on_conflict: employee_on_conflict
+}
+
+"""
+on conflict condition type for table "employee"
+"""
+input employee_on_conflict {
+  constraint: employee_constraint!
+  update_columns: [employee_update_column!]!
+  where: employee_bool_exp
+}
+
+"""
+ordering options when selecting data from "employee"
+"""
+input employee_order_by {
+  address: order_by
+  bdate: order_by
+  department: department_order_by
+  departments_aggregate: department_aggregate_order_by
+  dependents_aggregate: dependent_aggregate_order_by
+  dno: order_by
+  fname: order_by
+  lname: order_by
+  minit: order_by
+  salary: order_by
+  sex: order_by
+  ssn: order_by
+  super_ssn: order_by
+  works_ons_aggregate: works_on_aggregate_order_by
+}
+
+"""
+select columns of table "employee"
+"""
+enum employee_select_column {
+  """column name"""
+  address
+
+  """column name"""
+  bdate
+
+  """column name"""
+  dno
+
+  """column name"""
+  fname
+
+  """column name"""
+  lname
+
+  """column name"""
+  minit
+
+  """column name"""
+  salary
+
+  """column name"""
+  sex
+
+  """column name"""
+  ssn
+
+  """column name"""
+  super_ssn
+}
+
+"""
+input type for updating data in table "employee"
+"""
+input employee_set_input {
+  address: String
+  bdate: String
+  dno: bigint
+  fname: String
+  lname: String
+  minit: String
+  salary: bigint
+  sex: String
+  ssn: bigint
+  super_ssn: bigint
+}
+
+"""aggregate stddev on columns"""
+type employee_stddev_fields {
+  dno: Float
+  salary: Float
+  ssn: Float
+  super_ssn: Float
+}
+
+"""
+order by stddev() on columns of table "employee"
+"""
+input employee_stddev_order_by {
+  dno: order_by
+  salary: order_by
+  ssn: order_by
+  super_ssn: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type employee_stddev_pop_fields {
+  dno: Float
+  salary: Float
+  ssn: Float
+  super_ssn: Float
+}
+
+"""
+order by stddev_pop() on columns of table "employee"
+"""
+input employee_stddev_pop_order_by {
+  dno: order_by
+  salary: order_by
+  ssn: order_by
+  super_ssn: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type employee_stddev_samp_fields {
+  dno: Float
+  salary: Float
+  ssn: Float
+  super_ssn: Float
+}
+
+"""
+order by stddev_samp() on columns of table "employee"
+"""
+input employee_stddev_samp_order_by {
+  dno: order_by
+  salary: order_by
+  ssn: order_by
+  super_ssn: order_by
+}
+
+"""aggregate sum on columns"""
+type employee_sum_fields {
+  dno: bigint
+  salary: bigint
+  ssn: bigint
+  super_ssn: bigint
+}
+
+"""
+order by sum() on columns of table "employee"
+"""
+input employee_sum_order_by {
+  dno: order_by
+  salary: order_by
+  ssn: order_by
+  super_ssn: order_by
+}
+
+"""
+update columns of table "employee"
+"""
+enum employee_update_column {
+  """column name"""
+  address
+
+  """column name"""
+  bdate
+
+  """column name"""
+  dno
+
+  """column name"""
+  fname
+
+  """column name"""
+  lname
+
+  """column name"""
+  minit
+
+  """column name"""
+  salary
+
+  """column name"""
+  sex
+
+  """column name"""
+  ssn
+
+  """column name"""
+  super_ssn
+}
+
+"""aggregate var_pop on columns"""
+type employee_var_pop_fields {
+  dno: Float
+  salary: Float
+  ssn: Float
+  super_ssn: Float
+}
+
+"""
+order by var_pop() on columns of table "employee"
+"""
+input employee_var_pop_order_by {
+  dno: order_by
+  salary: order_by
+  ssn: order_by
+  super_ssn: order_by
+}
+
+"""aggregate var_samp on columns"""
+type employee_var_samp_fields {
+  dno: Float
+  salary: Float
+  ssn: Float
+  super_ssn: Float
+}
+
+"""
+order by var_samp() on columns of table "employee"
+"""
+input employee_var_samp_order_by {
+  dno: order_by
+  salary: order_by
+  ssn: order_by
+  super_ssn: order_by
+}
+
+"""aggregate variance on columns"""
+type employee_variance_fields {
+  dno: Float
+  salary: Float
+  ssn: Float
+  super_ssn: Float
+}
+
+"""
+order by variance() on columns of table "employee"
+"""
+input employee_variance_order_by {
+  dno: order_by
+  salary: order_by
+  ssn: order_by
+  super_ssn: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "department"
+  """
+  delete_department(
+    """filter the rows which have to be deleted"""
+    where: department_bool_exp!
+  ): department_mutation_response
+
+  """
+  delete data from the table: "dependent"
+  """
+  delete_dependent(
+    """filter the rows which have to be deleted"""
+    where: dependent_bool_exp!
+  ): dependent_mutation_response
+
+  """
+  delete data from the table: "dept_locations"
+  """
+  delete_dept_locations(
+    """filter the rows which have to be deleted"""
+    where: dept_locations_bool_exp!
+  ): dept_locations_mutation_response
+
+  """
+  delete data from the table: "employee"
+  """
+  delete_employee(
+    """filter the rows which have to be deleted"""
+    where: employee_bool_exp!
+  ): employee_mutation_response
+
+  """
+  delete data from the table: "project"
+  """
+  delete_project(
+    """filter the rows which have to be deleted"""
+    where: project_bool_exp!
+  ): project_mutation_response
+
+  """
+  delete data from the table: "works_on"
+  """
+  delete_works_on(
+    """filter the rows which have to be deleted"""
+    where: works_on_bool_exp!
+  ): works_on_mutation_response
+
+  """
+  insert data into the table: "department"
+  """
+  insert_department(
+    """the rows to be inserted"""
+    objects: [department_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: department_on_conflict
+  ): department_mutation_response
+
+  """
+  insert data into the table: "dependent"
+  """
+  insert_dependent(
+    """the rows to be inserted"""
+    objects: [dependent_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: dependent_on_conflict
+  ): dependent_mutation_response
+
+  """
+  insert data into the table: "dept_locations"
+  """
+  insert_dept_locations(
+    """the rows to be inserted"""
+    objects: [dept_locations_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: dept_locations_on_conflict
+  ): dept_locations_mutation_response
+
+  """
+  insert data into the table: "employee"
+  """
+  insert_employee(
+    """the rows to be inserted"""
+    objects: [employee_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: employee_on_conflict
+  ): employee_mutation_response
+
+  """
+  insert data into the table: "project"
+  """
+  insert_project(
+    """the rows to be inserted"""
+    objects: [project_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: project_on_conflict
+  ): project_mutation_response
+
+  """
+  insert data into the table: "works_on"
+  """
+  insert_works_on(
+    """the rows to be inserted"""
+    objects: [works_on_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: works_on_on_conflict
+  ): works_on_mutation_response
+
+  """
+  update data of the table: "department"
+  """
+  update_department(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: department_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: department_set_input
+
+    """filter the rows which have to be updated"""
+    where: department_bool_exp!
+  ): department_mutation_response
+
+  """
+  update data of the table: "dependent"
+  """
+  update_dependent(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: dependent_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: dependent_set_input
+
+    """filter the rows which have to be updated"""
+    where: dependent_bool_exp!
+  ): dependent_mutation_response
+
+  """
+  update data of the table: "dept_locations"
+  """
+  update_dept_locations(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: dept_locations_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: dept_locations_set_input
+
+    """filter the rows which have to be updated"""
+    where: dept_locations_bool_exp!
+  ): dept_locations_mutation_response
+
+  """
+  update data of the table: "employee"
+  """
+  update_employee(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: employee_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: employee_set_input
+
+    """filter the rows which have to be updated"""
+    where: employee_bool_exp!
+  ): employee_mutation_response
+
+  """
+  update data of the table: "project"
+  """
+  update_project(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: project_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: project_set_input
+
+    """filter the rows which have to be updated"""
+    where: project_bool_exp!
+  ): project_mutation_response
+
+  """
+  update data of the table: "works_on"
+  """
+  update_works_on(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: works_on_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: works_on_set_input
+
+    """filter the rows which have to be updated"""
+    where: works_on_bool_exp!
+  ): works_on_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "project"
+"""
+type project {
+  """An object relationship"""
+  department: department
+  dnum: bigint
+  plocation: String
+  pname: String
+  pnumber: bigint!
+
+  """An array relationship"""
+  works_ons(
+    """distinct select on columns"""
+    distinct_on: [works_on_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [works_on_order_by!]
+
+    """filter the rows returned"""
+    where: works_on_bool_exp
+  ): [works_on!]!
+
+  """An aggregated array relationship"""
+  works_ons_aggregate(
+    """distinct select on columns"""
+    distinct_on: [works_on_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [works_on_order_by!]
+
+    """filter the rows returned"""
+    where: works_on_bool_exp
+  ): works_on_aggregate!
+}
+
+"""
+aggregated selection of "project"
+"""
+type project_aggregate {
+  aggregate: project_aggregate_fields
+  nodes: [project!]!
+}
+
+"""
+aggregate fields of "project"
+"""
+type project_aggregate_fields {
+  avg: project_avg_fields
+  count(columns: [project_select_column!], distinct: Boolean): Int
+  max: project_max_fields
+  min: project_min_fields
+  stddev: project_stddev_fields
+  stddev_pop: project_stddev_pop_fields
+  stddev_samp: project_stddev_samp_fields
+  sum: project_sum_fields
+  var_pop: project_var_pop_fields
+  var_samp: project_var_samp_fields
+  variance: project_variance_fields
+}
+
+"""
+order by aggregate values of table "project"
+"""
+input project_aggregate_order_by {
+  avg: project_avg_order_by
+  count: order_by
+  max: project_max_order_by
+  min: project_min_order_by
+  stddev: project_stddev_order_by
+  stddev_pop: project_stddev_pop_order_by
+  stddev_samp: project_stddev_samp_order_by
+  sum: project_sum_order_by
+  var_pop: project_var_pop_order_by
+  var_samp: project_var_samp_order_by
+  variance: project_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "project"
+"""
+input project_arr_rel_insert_input {
+  data: [project_insert_input!]!
+  on_conflict: project_on_conflict
+}
+
+"""aggregate avg on columns"""
+type project_avg_fields {
+  dnum: Float
+  pnumber: Float
+}
+
+"""
+order by avg() on columns of table "project"
+"""
+input project_avg_order_by {
+  dnum: order_by
+  pnumber: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "project". All fields are combined with a logical 'AND'.
+"""
+input project_bool_exp {
+  _and: [project_bool_exp]
+  _not: project_bool_exp
+  _or: [project_bool_exp]
+  department: department_bool_exp
+  dnum: bigint_comparison_exp
+  plocation: String_comparison_exp
+  pname: String_comparison_exp
+  pnumber: bigint_comparison_exp
+  works_ons: works_on_bool_exp
+}
+
+"""
+unique or primary key constraints on table "project"
+"""
+enum project_constraint {
+  """unique or primary key constraint"""
+  idx_22877_project_pkey
+}
+
+"""
+input type for incrementing integer columne in table "project"
+"""
+input project_inc_input {
+  dnum: bigint
+  pnumber: bigint
+}
+
+"""
+input type for inserting data into table "project"
+"""
+input project_insert_input {
+  department: department_obj_rel_insert_input
+  dnum: bigint
+  plocation: String
+  pname: String
+  pnumber: bigint
+  works_ons: works_on_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type project_max_fields {
+  dnum: bigint
+  plocation: String
+  pname: String
+  pnumber: bigint
+}
+
+"""
+order by max() on columns of table "project"
+"""
+input project_max_order_by {
+  dnum: order_by
+  plocation: order_by
+  pname: order_by
+  pnumber: order_by
+}
+
+"""aggregate min on columns"""
+type project_min_fields {
+  dnum: bigint
+  plocation: String
+  pname: String
+  pnumber: bigint
+}
+
+"""
+order by min() on columns of table "project"
+"""
+input project_min_order_by {
+  dnum: order_by
+  plocation: order_by
+  pname: order_by
+  pnumber: order_by
+}
+
+"""
+response of any mutation on the table "project"
+"""
+type project_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [project!]!
+}
+
+"""
+input type for inserting object relation for remote table "project"
+"""
+input project_obj_rel_insert_input {
+  data: project_insert_input!
+  on_conflict: project_on_conflict
+}
+
+"""
+on conflict condition type for table "project"
+"""
+input project_on_conflict {
+  constraint: project_constraint!
+  update_columns: [project_update_column!]!
+  where: project_bool_exp
+}
+
+"""
+ordering options when selecting data from "project"
+"""
+input project_order_by {
+  department: department_order_by
+  dnum: order_by
+  plocation: order_by
+  pname: order_by
+  pnumber: order_by
+  works_ons_aggregate: works_on_aggregate_order_by
+}
+
+"""
+select columns of table "project"
+"""
+enum project_select_column {
+  """column name"""
+  dnum
+
+  """column name"""
+  plocation
+
+  """column name"""
+  pname
+
+  """column name"""
+  pnumber
+}
+
+"""
+input type for updating data in table "project"
+"""
+input project_set_input {
+  dnum: bigint
+  plocation: String
+  pname: String
+  pnumber: bigint
+}
+
+"""aggregate stddev on columns"""
+type project_stddev_fields {
+  dnum: Float
+  pnumber: Float
+}
+
+"""
+order by stddev() on columns of table "project"
+"""
+input project_stddev_order_by {
+  dnum: order_by
+  pnumber: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type project_stddev_pop_fields {
+  dnum: Float
+  pnumber: Float
+}
+
+"""
+order by stddev_pop() on columns of table "project"
+"""
+input project_stddev_pop_order_by {
+  dnum: order_by
+  pnumber: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type project_stddev_samp_fields {
+  dnum: Float
+  pnumber: Float
+}
+
+"""
+order by stddev_samp() on columns of table "project"
+"""
+input project_stddev_samp_order_by {
+  dnum: order_by
+  pnumber: order_by
+}
+
+"""aggregate sum on columns"""
+type project_sum_fields {
+  dnum: bigint
+  pnumber: bigint
+}
+
+"""
+order by sum() on columns of table "project"
+"""
+input project_sum_order_by {
+  dnum: order_by
+  pnumber: order_by
+}
+
+"""
+update columns of table "project"
+"""
+enum project_update_column {
+  """column name"""
+  dnum
+
+  """column name"""
+  plocation
+
+  """column name"""
+  pname
+
+  """column name"""
+  pnumber
+}
+
+"""aggregate var_pop on columns"""
+type project_var_pop_fields {
+  dnum: Float
+  pnumber: Float
+}
+
+"""
+order by var_pop() on columns of table "project"
+"""
+input project_var_pop_order_by {
+  dnum: order_by
+  pnumber: order_by
+}
+
+"""aggregate var_samp on columns"""
+type project_var_samp_fields {
+  dnum: Float
+  pnumber: Float
+}
+
+"""
+order by var_samp() on columns of table "project"
+"""
+input project_var_samp_order_by {
+  dnum: order_by
+  pnumber: order_by
+}
+
+"""aggregate variance on columns"""
+type project_variance_fields {
+  dnum: Float
+  pnumber: Float
+}
+
+"""
+order by variance() on columns of table "project"
+"""
+input project_variance_order_by {
+  dnum: order_by
+  pnumber: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "department"
+  """
+  department(
+    """distinct select on columns"""
+    distinct_on: [department_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [department_order_by!]
+
+    """filter the rows returned"""
+    where: department_bool_exp
+  ): [department!]!
+
+  """
+  fetch aggregated fields from the table: "department"
+  """
+  department_aggregate(
+    """distinct select on columns"""
+    distinct_on: [department_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [department_order_by!]
+
+    """filter the rows returned"""
+    where: department_bool_exp
+  ): department_aggregate!
+
+  """fetch data from the table: "department" using primary key columns"""
+  department_by_pk(dnumber: bigint!): department
+
+  """
+  fetch data from the table: "dependent"
+  """
+  dependent(
+    """distinct select on columns"""
+    distinct_on: [dependent_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dependent_order_by!]
+
+    """filter the rows returned"""
+    where: dependent_bool_exp
+  ): [dependent!]!
+
+  """
+  fetch aggregated fields from the table: "dependent"
+  """
+  dependent_aggregate(
+    """distinct select on columns"""
+    distinct_on: [dependent_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dependent_order_by!]
+
+    """filter the rows returned"""
+    where: dependent_bool_exp
+  ): dependent_aggregate!
+
+  """
+  fetch data from the table: "dept_locations"
+  """
+  dept_locations(
+    """distinct select on columns"""
+    distinct_on: [dept_locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dept_locations_order_by!]
+
+    """filter the rows returned"""
+    where: dept_locations_bool_exp
+  ): [dept_locations!]!
+
+  """
+  fetch aggregated fields from the table: "dept_locations"
+  """
+  dept_locations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [dept_locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dept_locations_order_by!]
+
+    """filter the rows returned"""
+    where: dept_locations_bool_exp
+  ): dept_locations_aggregate!
+
+  """
+  fetch data from the table: "employee"
+  """
+  employee(
+    """distinct select on columns"""
+    distinct_on: [employee_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employee_order_by!]
+
+    """filter the rows returned"""
+    where: employee_bool_exp
+  ): [employee!]!
+
+  """
+  fetch aggregated fields from the table: "employee"
+  """
+  employee_aggregate(
+    """distinct select on columns"""
+    distinct_on: [employee_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employee_order_by!]
+
+    """filter the rows returned"""
+    where: employee_bool_exp
+  ): employee_aggregate!
+
+  """fetch data from the table: "employee" using primary key columns"""
+  employee_by_pk(ssn: bigint!): employee
+
+  """
+  fetch data from the table: "project"
+  """
+  project(
+    """distinct select on columns"""
+    distinct_on: [project_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [project_order_by!]
+
+    """filter the rows returned"""
+    where: project_bool_exp
+  ): [project!]!
+
+  """
+  fetch aggregated fields from the table: "project"
+  """
+  project_aggregate(
+    """distinct select on columns"""
+    distinct_on: [project_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [project_order_by!]
+
+    """filter the rows returned"""
+    where: project_bool_exp
+  ): project_aggregate!
+
+  """fetch data from the table: "project" using primary key columns"""
+  project_by_pk(pnumber: bigint!): project
+
+  """
+  fetch data from the table: "works_on"
+  """
+  works_on(
+    """distinct select on columns"""
+    distinct_on: [works_on_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [works_on_order_by!]
+
+    """filter the rows returned"""
+    where: works_on_bool_exp
+  ): [works_on!]!
+
+  """
+  fetch aggregated fields from the table: "works_on"
+  """
+  works_on_aggregate(
+    """distinct select on columns"""
+    distinct_on: [works_on_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [works_on_order_by!]
+
+    """filter the rows returned"""
+    where: works_on_bool_exp
+  ): works_on_aggregate!
+
+  """fetch data from the table: "works_on" using primary key columns"""
+  works_on_by_pk(essn: bigint!, pno: bigint!): works_on
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "department"
+  """
+  department(
+    """distinct select on columns"""
+    distinct_on: [department_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [department_order_by!]
+
+    """filter the rows returned"""
+    where: department_bool_exp
+  ): [department!]!
+
+  """
+  fetch aggregated fields from the table: "department"
+  """
+  department_aggregate(
+    """distinct select on columns"""
+    distinct_on: [department_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [department_order_by!]
+
+    """filter the rows returned"""
+    where: department_bool_exp
+  ): department_aggregate!
+
+  """fetch data from the table: "department" using primary key columns"""
+  department_by_pk(dnumber: bigint!): department
+
+  """
+  fetch data from the table: "dependent"
+  """
+  dependent(
+    """distinct select on columns"""
+    distinct_on: [dependent_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dependent_order_by!]
+
+    """filter the rows returned"""
+    where: dependent_bool_exp
+  ): [dependent!]!
+
+  """
+  fetch aggregated fields from the table: "dependent"
+  """
+  dependent_aggregate(
+    """distinct select on columns"""
+    distinct_on: [dependent_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dependent_order_by!]
+
+    """filter the rows returned"""
+    where: dependent_bool_exp
+  ): dependent_aggregate!
+
+  """
+  fetch data from the table: "dept_locations"
+  """
+  dept_locations(
+    """distinct select on columns"""
+    distinct_on: [dept_locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dept_locations_order_by!]
+
+    """filter the rows returned"""
+    where: dept_locations_bool_exp
+  ): [dept_locations!]!
+
+  """
+  fetch aggregated fields from the table: "dept_locations"
+  """
+  dept_locations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [dept_locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dept_locations_order_by!]
+
+    """filter the rows returned"""
+    where: dept_locations_bool_exp
+  ): dept_locations_aggregate!
+
+  """
+  fetch data from the table: "employee"
+  """
+  employee(
+    """distinct select on columns"""
+    distinct_on: [employee_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employee_order_by!]
+
+    """filter the rows returned"""
+    where: employee_bool_exp
+  ): [employee!]!
+
+  """
+  fetch aggregated fields from the table: "employee"
+  """
+  employee_aggregate(
+    """distinct select on columns"""
+    distinct_on: [employee_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employee_order_by!]
+
+    """filter the rows returned"""
+    where: employee_bool_exp
+  ): employee_aggregate!
+
+  """fetch data from the table: "employee" using primary key columns"""
+  employee_by_pk(ssn: bigint!): employee
+
+  """
+  fetch data from the table: "project"
+  """
+  project(
+    """distinct select on columns"""
+    distinct_on: [project_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [project_order_by!]
+
+    """filter the rows returned"""
+    where: project_bool_exp
+  ): [project!]!
+
+  """
+  fetch aggregated fields from the table: "project"
+  """
+  project_aggregate(
+    """distinct select on columns"""
+    distinct_on: [project_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [project_order_by!]
+
+    """filter the rows returned"""
+    where: project_bool_exp
+  ): project_aggregate!
+
+  """fetch data from the table: "project" using primary key columns"""
+  project_by_pk(pnumber: bigint!): project
+
+  """
+  fetch data from the table: "works_on"
+  """
+  works_on(
+    """distinct select on columns"""
+    distinct_on: [works_on_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [works_on_order_by!]
+
+    """filter the rows returned"""
+    where: works_on_bool_exp
+  ): [works_on!]!
+
+  """
+  fetch aggregated fields from the table: "works_on"
+  """
+  works_on_aggregate(
+    """distinct select on columns"""
+    distinct_on: [works_on_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [works_on_order_by!]
+
+    """filter the rows returned"""
+    where: works_on_bool_exp
+  ): works_on_aggregate!
+
+  """fetch data from the table: "works_on" using primary key columns"""
+  works_on_by_pk(essn: bigint!, pno: bigint!): works_on
+}
+
+"""
+columns and relationships of "works_on"
+"""
+type works_on {
+  """An object relationship"""
+  employee: employee!
+  essn: bigint!
+  hours: Float
+  pno: bigint!
+
+  """An object relationship"""
+  project: project!
+}
+
+"""
+aggregated selection of "works_on"
+"""
+type works_on_aggregate {
+  aggregate: works_on_aggregate_fields
+  nodes: [works_on!]!
+}
+
+"""
+aggregate fields of "works_on"
+"""
+type works_on_aggregate_fields {
+  avg: works_on_avg_fields
+  count(columns: [works_on_select_column!], distinct: Boolean): Int
+  max: works_on_max_fields
+  min: works_on_min_fields
+  stddev: works_on_stddev_fields
+  stddev_pop: works_on_stddev_pop_fields
+  stddev_samp: works_on_stddev_samp_fields
+  sum: works_on_sum_fields
+  var_pop: works_on_var_pop_fields
+  var_samp: works_on_var_samp_fields
+  variance: works_on_variance_fields
+}
+
+"""
+order by aggregate values of table "works_on"
+"""
+input works_on_aggregate_order_by {
+  avg: works_on_avg_order_by
+  count: order_by
+  max: works_on_max_order_by
+  min: works_on_min_order_by
+  stddev: works_on_stddev_order_by
+  stddev_pop: works_on_stddev_pop_order_by
+  stddev_samp: works_on_stddev_samp_order_by
+  sum: works_on_sum_order_by
+  var_pop: works_on_var_pop_order_by
+  var_samp: works_on_var_samp_order_by
+  variance: works_on_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "works_on"
+"""
+input works_on_arr_rel_insert_input {
+  data: [works_on_insert_input!]!
+  on_conflict: works_on_on_conflict
+}
+
+"""aggregate avg on columns"""
+type works_on_avg_fields {
+  essn: Float
+  hours: Float
+  pno: Float
+}
+
+"""
+order by avg() on columns of table "works_on"
+"""
+input works_on_avg_order_by {
+  essn: order_by
+  hours: order_by
+  pno: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "works_on". All fields are combined with a logical 'AND'.
+"""
+input works_on_bool_exp {
+  _and: [works_on_bool_exp]
+  _not: works_on_bool_exp
+  _or: [works_on_bool_exp]
+  employee: employee_bool_exp
+  essn: bigint_comparison_exp
+  hours: Float_comparison_exp
+  pno: bigint_comparison_exp
+  project: project_bool_exp
+}
+
+"""
+unique or primary key constraints on table "works_on"
+"""
+enum works_on_constraint {
+  """unique or primary key constraint"""
+  idx_22862_sqlite_autoindex_works_on_1
+
+  """unique or primary key constraint"""
+  idx_22862_works_on_pkey
+}
+
+"""
+input type for incrementing integer columne in table "works_on"
+"""
+input works_on_inc_input {
+  essn: bigint
+  pno: bigint
+}
+
+"""
+input type for inserting data into table "works_on"
+"""
+input works_on_insert_input {
+  employee: employee_obj_rel_insert_input
+  essn: bigint
+  hours: Float
+  pno: bigint
+  project: project_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type works_on_max_fields {
+  essn: bigint
+  hours: Float
+  pno: bigint
+}
+
+"""
+order by max() on columns of table "works_on"
+"""
+input works_on_max_order_by {
+  essn: order_by
+  hours: order_by
+  pno: order_by
+}
+
+"""aggregate min on columns"""
+type works_on_min_fields {
+  essn: bigint
+  hours: Float
+  pno: bigint
+}
+
+"""
+order by min() on columns of table "works_on"
+"""
+input works_on_min_order_by {
+  essn: order_by
+  hours: order_by
+  pno: order_by
+}
+
+"""
+response of any mutation on the table "works_on"
+"""
+type works_on_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [works_on!]!
+}
+
+"""
+input type for inserting object relation for remote table "works_on"
+"""
+input works_on_obj_rel_insert_input {
+  data: works_on_insert_input!
+  on_conflict: works_on_on_conflict
+}
+
+"""
+on conflict condition type for table "works_on"
+"""
+input works_on_on_conflict {
+  constraint: works_on_constraint!
+  update_columns: [works_on_update_column!]!
+  where: works_on_bool_exp
+}
+
+"""
+ordering options when selecting data from "works_on"
+"""
+input works_on_order_by {
+  employee: employee_order_by
+  essn: order_by
+  hours: order_by
+  pno: order_by
+  project: project_order_by
+}
+
+"""
+select columns of table "works_on"
+"""
+enum works_on_select_column {
+  """column name"""
+  essn
+
+  """column name"""
+  hours
+
+  """column name"""
+  pno
+}
+
+"""
+input type for updating data in table "works_on"
+"""
+input works_on_set_input {
+  essn: bigint
+  hours: Float
+  pno: bigint
+}
+
+"""aggregate stddev on columns"""
+type works_on_stddev_fields {
+  essn: Float
+  hours: Float
+  pno: Float
+}
+
+"""
+order by stddev() on columns of table "works_on"
+"""
+input works_on_stddev_order_by {
+  essn: order_by
+  hours: order_by
+  pno: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type works_on_stddev_pop_fields {
+  essn: Float
+  hours: Float
+  pno: Float
+}
+
+"""
+order by stddev_pop() on columns of table "works_on"
+"""
+input works_on_stddev_pop_order_by {
+  essn: order_by
+  hours: order_by
+  pno: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type works_on_stddev_samp_fields {
+  essn: Float
+  hours: Float
+  pno: Float
+}
+
+"""
+order by stddev_samp() on columns of table "works_on"
+"""
+input works_on_stddev_samp_order_by {
+  essn: order_by
+  hours: order_by
+  pno: order_by
+}
+
+"""aggregate sum on columns"""
+type works_on_sum_fields {
+  essn: bigint
+  hours: Float
+  pno: bigint
+}
+
+"""
+order by sum() on columns of table "works_on"
+"""
+input works_on_sum_order_by {
+  essn: order_by
+  hours: order_by
+  pno: order_by
+}
+
+"""
+update columns of table "works_on"
+"""
+enum works_on_update_column {
+  """column name"""
+  essn
+
+  """column name"""
+  hours
+
+  """column name"""
+  pno
+}
+
+"""aggregate var_pop on columns"""
+type works_on_var_pop_fields {
+  essn: Float
+  hours: Float
+  pno: Float
+}
+
+"""
+order by var_pop() on columns of table "works_on"
+"""
+input works_on_var_pop_order_by {
+  essn: order_by
+  hours: order_by
+  pno: order_by
+}
+
+"""aggregate var_samp on columns"""
+type works_on_var_samp_fields {
+  essn: Float
+  hours: Float
+  pno: Float
+}
+
+"""
+order by var_samp() on columns of table "works_on"
+"""
+input works_on_var_samp_order_by {
+  essn: order_by
+  hours: order_by
+  pno: order_by
+}
+
+"""aggregate variance on columns"""
+type works_on_variance_fields {
+  essn: Float
+  hours: Float
+  pno: Float
+}
+
+"""
+order by variance() on columns of table "works_on"
+"""
+input works_on_variance_order_by {
+  essn: order_by
+  hours: order_by
+  pno: order_by
+}

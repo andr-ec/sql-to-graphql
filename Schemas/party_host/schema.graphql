@@ -1,0 +1,1529 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Boolean. All fields are combined with logical 'AND'.
+"""
+input Boolean_comparison_exp {
+  _eq: Boolean
+  _gt: Boolean
+  _gte: Boolean
+  _in: [Boolean!]
+  _is_null: Boolean
+  _lt: Boolean
+  _lte: Boolean
+  _neq: Boolean
+  _nin: [Boolean!]
+}
+
+"""
+columns and relationships of "host"
+"""
+type host {
+  age: String
+  host_id: Int
+  name: String
+  nationality: String
+
+  """An array relationship"""
+  party_hosts(
+    """distinct select on columns"""
+    distinct_on: [party_host_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_host_order_by!]
+
+    """filter the rows returned"""
+    where: party_host_bool_exp
+  ): [party_host!]!
+
+  """An aggregated array relationship"""
+  party_hosts_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_host_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_host_order_by!]
+
+    """filter the rows returned"""
+    where: party_host_bool_exp
+  ): party_host_aggregate!
+}
+
+"""
+aggregated selection of "host"
+"""
+type host_aggregate {
+  aggregate: host_aggregate_fields
+  nodes: [host!]!
+}
+
+"""
+aggregate fields of "host"
+"""
+type host_aggregate_fields {
+  avg: host_avg_fields
+  count(columns: [host_select_column!], distinct: Boolean): Int
+  max: host_max_fields
+  min: host_min_fields
+  stddev: host_stddev_fields
+  stddev_pop: host_stddev_pop_fields
+  stddev_samp: host_stddev_samp_fields
+  sum: host_sum_fields
+  var_pop: host_var_pop_fields
+  var_samp: host_var_samp_fields
+  variance: host_variance_fields
+}
+
+"""
+order by aggregate values of table "host"
+"""
+input host_aggregate_order_by {
+  avg: host_avg_order_by
+  count: order_by
+  max: host_max_order_by
+  min: host_min_order_by
+  stddev: host_stddev_order_by
+  stddev_pop: host_stddev_pop_order_by
+  stddev_samp: host_stddev_samp_order_by
+  sum: host_sum_order_by
+  var_pop: host_var_pop_order_by
+  var_samp: host_var_samp_order_by
+  variance: host_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "host"
+"""
+input host_arr_rel_insert_input {
+  data: [host_insert_input!]!
+  on_conflict: host_on_conflict
+}
+
+"""aggregate avg on columns"""
+type host_avg_fields {
+  host_id: Float
+}
+
+"""
+order by avg() on columns of table "host"
+"""
+input host_avg_order_by {
+  host_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "host". All fields are combined with a logical 'AND'.
+"""
+input host_bool_exp {
+  _and: [host_bool_exp]
+  _not: host_bool_exp
+  _or: [host_bool_exp]
+  age: String_comparison_exp
+  host_id: Int_comparison_exp
+  name: String_comparison_exp
+  nationality: String_comparison_exp
+  party_hosts: party_host_bool_exp
+}
+
+"""
+unique or primary key constraints on table "host"
+"""
+enum host_constraint {
+  """unique or primary key constraint"""
+  idx_18267_sqlite_autoindex_host_1
+}
+
+"""
+input type for incrementing integer columne in table "host"
+"""
+input host_inc_input {
+  host_id: Int
+}
+
+"""
+input type for inserting data into table "host"
+"""
+input host_insert_input {
+  age: String
+  host_id: Int
+  name: String
+  nationality: String
+  party_hosts: party_host_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type host_max_fields {
+  age: String
+  host_id: Int
+  name: String
+  nationality: String
+}
+
+"""
+order by max() on columns of table "host"
+"""
+input host_max_order_by {
+  age: order_by
+  host_id: order_by
+  name: order_by
+  nationality: order_by
+}
+
+"""aggregate min on columns"""
+type host_min_fields {
+  age: String
+  host_id: Int
+  name: String
+  nationality: String
+}
+
+"""
+order by min() on columns of table "host"
+"""
+input host_min_order_by {
+  age: order_by
+  host_id: order_by
+  name: order_by
+  nationality: order_by
+}
+
+"""
+response of any mutation on the table "host"
+"""
+type host_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [host!]!
+}
+
+"""
+input type for inserting object relation for remote table "host"
+"""
+input host_obj_rel_insert_input {
+  data: host_insert_input!
+  on_conflict: host_on_conflict
+}
+
+"""
+on conflict condition type for table "host"
+"""
+input host_on_conflict {
+  constraint: host_constraint!
+  update_columns: [host_update_column!]!
+  where: host_bool_exp
+}
+
+"""
+ordering options when selecting data from "host"
+"""
+input host_order_by {
+  age: order_by
+  host_id: order_by
+  name: order_by
+  nationality: order_by
+  party_hosts_aggregate: party_host_aggregate_order_by
+}
+
+"""
+select columns of table "host"
+"""
+enum host_select_column {
+  """column name"""
+  age
+
+  """column name"""
+  host_id
+
+  """column name"""
+  name
+
+  """column name"""
+  nationality
+}
+
+"""
+input type for updating data in table "host"
+"""
+input host_set_input {
+  age: String
+  host_id: Int
+  name: String
+  nationality: String
+}
+
+"""aggregate stddev on columns"""
+type host_stddev_fields {
+  host_id: Float
+}
+
+"""
+order by stddev() on columns of table "host"
+"""
+input host_stddev_order_by {
+  host_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type host_stddev_pop_fields {
+  host_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "host"
+"""
+input host_stddev_pop_order_by {
+  host_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type host_stddev_samp_fields {
+  host_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "host"
+"""
+input host_stddev_samp_order_by {
+  host_id: order_by
+}
+
+"""aggregate sum on columns"""
+type host_sum_fields {
+  host_id: Int
+}
+
+"""
+order by sum() on columns of table "host"
+"""
+input host_sum_order_by {
+  host_id: order_by
+}
+
+"""
+update columns of table "host"
+"""
+enum host_update_column {
+  """column name"""
+  age
+
+  """column name"""
+  host_id
+
+  """column name"""
+  name
+
+  """column name"""
+  nationality
+}
+
+"""aggregate var_pop on columns"""
+type host_var_pop_fields {
+  host_id: Float
+}
+
+"""
+order by var_pop() on columns of table "host"
+"""
+input host_var_pop_order_by {
+  host_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type host_var_samp_fields {
+  host_id: Float
+}
+
+"""
+order by var_samp() on columns of table "host"
+"""
+input host_var_samp_order_by {
+  host_id: order_by
+}
+
+"""aggregate variance on columns"""
+type host_variance_fields {
+  host_id: Float
+}
+
+"""
+order by variance() on columns of table "host"
+"""
+input host_variance_order_by {
+  host_id: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "host"
+  """
+  delete_host(
+    """filter the rows which have to be deleted"""
+    where: host_bool_exp!
+  ): host_mutation_response
+
+  """
+  delete data from the table: "party"
+  """
+  delete_party(
+    """filter the rows which have to be deleted"""
+    where: party_bool_exp!
+  ): party_mutation_response
+
+  """
+  delete data from the table: "party_host"
+  """
+  delete_party_host(
+    """filter the rows which have to be deleted"""
+    where: party_host_bool_exp!
+  ): party_host_mutation_response
+
+  """
+  insert data into the table: "host"
+  """
+  insert_host(
+    """the rows to be inserted"""
+    objects: [host_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: host_on_conflict
+  ): host_mutation_response
+
+  """
+  insert data into the table: "party"
+  """
+  insert_party(
+    """the rows to be inserted"""
+    objects: [party_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: party_on_conflict
+  ): party_mutation_response
+
+  """
+  insert data into the table: "party_host"
+  """
+  insert_party_host(
+    """the rows to be inserted"""
+    objects: [party_host_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: party_host_on_conflict
+  ): party_host_mutation_response
+
+  """
+  update data of the table: "host"
+  """
+  update_host(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: host_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: host_set_input
+
+    """filter the rows which have to be updated"""
+    where: host_bool_exp!
+  ): host_mutation_response
+
+  """
+  update data of the table: "party"
+  """
+  update_party(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: party_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: party_set_input
+
+    """filter the rows which have to be updated"""
+    where: party_bool_exp!
+  ): party_mutation_response
+
+  """
+  update data of the table: "party_host"
+  """
+  update_party_host(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: party_host_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: party_host_set_input
+
+    """filter the rows which have to be updated"""
+    where: party_host_bool_exp!
+  ): party_host_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "party"
+"""
+type party {
+  first_year: String
+  last_year: String
+  location: String
+  number_of_hosts: Int
+
+  """An array relationship"""
+  party_hosts(
+    """distinct select on columns"""
+    distinct_on: [party_host_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_host_order_by!]
+
+    """filter the rows returned"""
+    where: party_host_bool_exp
+  ): [party_host!]!
+
+  """An aggregated array relationship"""
+  party_hosts_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_host_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_host_order_by!]
+
+    """filter the rows returned"""
+    where: party_host_bool_exp
+  ): party_host_aggregate!
+  party_id: Int
+  party_theme: String
+}
+
+"""
+aggregated selection of "party"
+"""
+type party_aggregate {
+  aggregate: party_aggregate_fields
+  nodes: [party!]!
+}
+
+"""
+aggregate fields of "party"
+"""
+type party_aggregate_fields {
+  avg: party_avg_fields
+  count(columns: [party_select_column!], distinct: Boolean): Int
+  max: party_max_fields
+  min: party_min_fields
+  stddev: party_stddev_fields
+  stddev_pop: party_stddev_pop_fields
+  stddev_samp: party_stddev_samp_fields
+  sum: party_sum_fields
+  var_pop: party_var_pop_fields
+  var_samp: party_var_samp_fields
+  variance: party_variance_fields
+}
+
+"""
+order by aggregate values of table "party"
+"""
+input party_aggregate_order_by {
+  avg: party_avg_order_by
+  count: order_by
+  max: party_max_order_by
+  min: party_min_order_by
+  stddev: party_stddev_order_by
+  stddev_pop: party_stddev_pop_order_by
+  stddev_samp: party_stddev_samp_order_by
+  sum: party_sum_order_by
+  var_pop: party_var_pop_order_by
+  var_samp: party_var_samp_order_by
+  variance: party_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "party"
+"""
+input party_arr_rel_insert_input {
+  data: [party_insert_input!]!
+  on_conflict: party_on_conflict
+}
+
+"""aggregate avg on columns"""
+type party_avg_fields {
+  number_of_hosts: Float
+  party_id: Float
+}
+
+"""
+order by avg() on columns of table "party"
+"""
+input party_avg_order_by {
+  number_of_hosts: order_by
+  party_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "party". All fields are combined with a logical 'AND'.
+"""
+input party_bool_exp {
+  _and: [party_bool_exp]
+  _not: party_bool_exp
+  _or: [party_bool_exp]
+  first_year: String_comparison_exp
+  last_year: String_comparison_exp
+  location: String_comparison_exp
+  number_of_hosts: Int_comparison_exp
+  party_hosts: party_host_bool_exp
+  party_id: Int_comparison_exp
+  party_theme: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "party"
+"""
+enum party_constraint {
+  """unique or primary key constraint"""
+  idx_18261_sqlite_autoindex_party_1
+}
+
+"""
+columns and relationships of "party_host"
+"""
+type party_host {
+  """An object relationship"""
+  host: host
+  host_id: Int
+  is_main_in_charge: Boolean
+
+  """An object relationship"""
+  party: party
+  party_id: Int
+}
+
+"""
+aggregated selection of "party_host"
+"""
+type party_host_aggregate {
+  aggregate: party_host_aggregate_fields
+  nodes: [party_host!]!
+}
+
+"""
+aggregate fields of "party_host"
+"""
+type party_host_aggregate_fields {
+  avg: party_host_avg_fields
+  count(columns: [party_host_select_column!], distinct: Boolean): Int
+  max: party_host_max_fields
+  min: party_host_min_fields
+  stddev: party_host_stddev_fields
+  stddev_pop: party_host_stddev_pop_fields
+  stddev_samp: party_host_stddev_samp_fields
+  sum: party_host_sum_fields
+  var_pop: party_host_var_pop_fields
+  var_samp: party_host_var_samp_fields
+  variance: party_host_variance_fields
+}
+
+"""
+order by aggregate values of table "party_host"
+"""
+input party_host_aggregate_order_by {
+  avg: party_host_avg_order_by
+  count: order_by
+  max: party_host_max_order_by
+  min: party_host_min_order_by
+  stddev: party_host_stddev_order_by
+  stddev_pop: party_host_stddev_pop_order_by
+  stddev_samp: party_host_stddev_samp_order_by
+  sum: party_host_sum_order_by
+  var_pop: party_host_var_pop_order_by
+  var_samp: party_host_var_samp_order_by
+  variance: party_host_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "party_host"
+"""
+input party_host_arr_rel_insert_input {
+  data: [party_host_insert_input!]!
+  on_conflict: party_host_on_conflict
+}
+
+"""aggregate avg on columns"""
+type party_host_avg_fields {
+  host_id: Float
+  party_id: Float
+}
+
+"""
+order by avg() on columns of table "party_host"
+"""
+input party_host_avg_order_by {
+  host_id: order_by
+  party_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "party_host". All fields are combined with a logical 'AND'.
+"""
+input party_host_bool_exp {
+  _and: [party_host_bool_exp]
+  _not: party_host_bool_exp
+  _or: [party_host_bool_exp]
+  host: host_bool_exp
+  host_id: Int_comparison_exp
+  is_main_in_charge: Boolean_comparison_exp
+  party: party_bool_exp
+  party_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "party_host"
+"""
+enum party_host_constraint {
+  """unique or primary key constraint"""
+  idx_18273_sqlite_autoindex_party_host_1
+}
+
+"""
+input type for incrementing integer columne in table "party_host"
+"""
+input party_host_inc_input {
+  host_id: Int
+  party_id: Int
+}
+
+"""
+input type for inserting data into table "party_host"
+"""
+input party_host_insert_input {
+  host: host_obj_rel_insert_input
+  host_id: Int
+  is_main_in_charge: Boolean
+  party: party_obj_rel_insert_input
+  party_id: Int
+}
+
+"""aggregate max on columns"""
+type party_host_max_fields {
+  host_id: Int
+  party_id: Int
+}
+
+"""
+order by max() on columns of table "party_host"
+"""
+input party_host_max_order_by {
+  host_id: order_by
+  party_id: order_by
+}
+
+"""aggregate min on columns"""
+type party_host_min_fields {
+  host_id: Int
+  party_id: Int
+}
+
+"""
+order by min() on columns of table "party_host"
+"""
+input party_host_min_order_by {
+  host_id: order_by
+  party_id: order_by
+}
+
+"""
+response of any mutation on the table "party_host"
+"""
+type party_host_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [party_host!]!
+}
+
+"""
+input type for inserting object relation for remote table "party_host"
+"""
+input party_host_obj_rel_insert_input {
+  data: party_host_insert_input!
+  on_conflict: party_host_on_conflict
+}
+
+"""
+on conflict condition type for table "party_host"
+"""
+input party_host_on_conflict {
+  constraint: party_host_constraint!
+  update_columns: [party_host_update_column!]!
+  where: party_host_bool_exp
+}
+
+"""
+ordering options when selecting data from "party_host"
+"""
+input party_host_order_by {
+  host: host_order_by
+  host_id: order_by
+  is_main_in_charge: order_by
+  party: party_order_by
+  party_id: order_by
+}
+
+"""
+select columns of table "party_host"
+"""
+enum party_host_select_column {
+  """column name"""
+  host_id
+
+  """column name"""
+  is_main_in_charge
+
+  """column name"""
+  party_id
+}
+
+"""
+input type for updating data in table "party_host"
+"""
+input party_host_set_input {
+  host_id: Int
+  is_main_in_charge: Boolean
+  party_id: Int
+}
+
+"""aggregate stddev on columns"""
+type party_host_stddev_fields {
+  host_id: Float
+  party_id: Float
+}
+
+"""
+order by stddev() on columns of table "party_host"
+"""
+input party_host_stddev_order_by {
+  host_id: order_by
+  party_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type party_host_stddev_pop_fields {
+  host_id: Float
+  party_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "party_host"
+"""
+input party_host_stddev_pop_order_by {
+  host_id: order_by
+  party_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type party_host_stddev_samp_fields {
+  host_id: Float
+  party_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "party_host"
+"""
+input party_host_stddev_samp_order_by {
+  host_id: order_by
+  party_id: order_by
+}
+
+"""aggregate sum on columns"""
+type party_host_sum_fields {
+  host_id: Int
+  party_id: Int
+}
+
+"""
+order by sum() on columns of table "party_host"
+"""
+input party_host_sum_order_by {
+  host_id: order_by
+  party_id: order_by
+}
+
+"""
+update columns of table "party_host"
+"""
+enum party_host_update_column {
+  """column name"""
+  host_id
+
+  """column name"""
+  is_main_in_charge
+
+  """column name"""
+  party_id
+}
+
+"""aggregate var_pop on columns"""
+type party_host_var_pop_fields {
+  host_id: Float
+  party_id: Float
+}
+
+"""
+order by var_pop() on columns of table "party_host"
+"""
+input party_host_var_pop_order_by {
+  host_id: order_by
+  party_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type party_host_var_samp_fields {
+  host_id: Float
+  party_id: Float
+}
+
+"""
+order by var_samp() on columns of table "party_host"
+"""
+input party_host_var_samp_order_by {
+  host_id: order_by
+  party_id: order_by
+}
+
+"""aggregate variance on columns"""
+type party_host_variance_fields {
+  host_id: Float
+  party_id: Float
+}
+
+"""
+order by variance() on columns of table "party_host"
+"""
+input party_host_variance_order_by {
+  host_id: order_by
+  party_id: order_by
+}
+
+"""
+input type for incrementing integer columne in table "party"
+"""
+input party_inc_input {
+  number_of_hosts: Int
+  party_id: Int
+}
+
+"""
+input type for inserting data into table "party"
+"""
+input party_insert_input {
+  first_year: String
+  last_year: String
+  location: String
+  number_of_hosts: Int
+  party_hosts: party_host_arr_rel_insert_input
+  party_id: Int
+  party_theme: String
+}
+
+"""aggregate max on columns"""
+type party_max_fields {
+  first_year: String
+  last_year: String
+  location: String
+  number_of_hosts: Int
+  party_id: Int
+  party_theme: String
+}
+
+"""
+order by max() on columns of table "party"
+"""
+input party_max_order_by {
+  first_year: order_by
+  last_year: order_by
+  location: order_by
+  number_of_hosts: order_by
+  party_id: order_by
+  party_theme: order_by
+}
+
+"""aggregate min on columns"""
+type party_min_fields {
+  first_year: String
+  last_year: String
+  location: String
+  number_of_hosts: Int
+  party_id: Int
+  party_theme: String
+}
+
+"""
+order by min() on columns of table "party"
+"""
+input party_min_order_by {
+  first_year: order_by
+  last_year: order_by
+  location: order_by
+  number_of_hosts: order_by
+  party_id: order_by
+  party_theme: order_by
+}
+
+"""
+response of any mutation on the table "party"
+"""
+type party_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [party!]!
+}
+
+"""
+input type for inserting object relation for remote table "party"
+"""
+input party_obj_rel_insert_input {
+  data: party_insert_input!
+  on_conflict: party_on_conflict
+}
+
+"""
+on conflict condition type for table "party"
+"""
+input party_on_conflict {
+  constraint: party_constraint!
+  update_columns: [party_update_column!]!
+  where: party_bool_exp
+}
+
+"""
+ordering options when selecting data from "party"
+"""
+input party_order_by {
+  first_year: order_by
+  last_year: order_by
+  location: order_by
+  number_of_hosts: order_by
+  party_hosts_aggregate: party_host_aggregate_order_by
+  party_id: order_by
+  party_theme: order_by
+}
+
+"""
+select columns of table "party"
+"""
+enum party_select_column {
+  """column name"""
+  first_year
+
+  """column name"""
+  last_year
+
+  """column name"""
+  location
+
+  """column name"""
+  number_of_hosts
+
+  """column name"""
+  party_id
+
+  """column name"""
+  party_theme
+}
+
+"""
+input type for updating data in table "party"
+"""
+input party_set_input {
+  first_year: String
+  last_year: String
+  location: String
+  number_of_hosts: Int
+  party_id: Int
+  party_theme: String
+}
+
+"""aggregate stddev on columns"""
+type party_stddev_fields {
+  number_of_hosts: Float
+  party_id: Float
+}
+
+"""
+order by stddev() on columns of table "party"
+"""
+input party_stddev_order_by {
+  number_of_hosts: order_by
+  party_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type party_stddev_pop_fields {
+  number_of_hosts: Float
+  party_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "party"
+"""
+input party_stddev_pop_order_by {
+  number_of_hosts: order_by
+  party_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type party_stddev_samp_fields {
+  number_of_hosts: Float
+  party_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "party"
+"""
+input party_stddev_samp_order_by {
+  number_of_hosts: order_by
+  party_id: order_by
+}
+
+"""aggregate sum on columns"""
+type party_sum_fields {
+  number_of_hosts: Int
+  party_id: Int
+}
+
+"""
+order by sum() on columns of table "party"
+"""
+input party_sum_order_by {
+  number_of_hosts: order_by
+  party_id: order_by
+}
+
+"""
+update columns of table "party"
+"""
+enum party_update_column {
+  """column name"""
+  first_year
+
+  """column name"""
+  last_year
+
+  """column name"""
+  location
+
+  """column name"""
+  number_of_hosts
+
+  """column name"""
+  party_id
+
+  """column name"""
+  party_theme
+}
+
+"""aggregate var_pop on columns"""
+type party_var_pop_fields {
+  number_of_hosts: Float
+  party_id: Float
+}
+
+"""
+order by var_pop() on columns of table "party"
+"""
+input party_var_pop_order_by {
+  number_of_hosts: order_by
+  party_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type party_var_samp_fields {
+  number_of_hosts: Float
+  party_id: Float
+}
+
+"""
+order by var_samp() on columns of table "party"
+"""
+input party_var_samp_order_by {
+  number_of_hosts: order_by
+  party_id: order_by
+}
+
+"""aggregate variance on columns"""
+type party_variance_fields {
+  number_of_hosts: Float
+  party_id: Float
+}
+
+"""
+order by variance() on columns of table "party"
+"""
+input party_variance_order_by {
+  number_of_hosts: order_by
+  party_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "host"
+  """
+  host(
+    """distinct select on columns"""
+    distinct_on: [host_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [host_order_by!]
+
+    """filter the rows returned"""
+    where: host_bool_exp
+  ): [host!]!
+
+  """
+  fetch aggregated fields from the table: "host"
+  """
+  host_aggregate(
+    """distinct select on columns"""
+    distinct_on: [host_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [host_order_by!]
+
+    """filter the rows returned"""
+    where: host_bool_exp
+  ): host_aggregate!
+
+  """
+  fetch data from the table: "party"
+  """
+  party(
+    """distinct select on columns"""
+    distinct_on: [party_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_order_by!]
+
+    """filter the rows returned"""
+    where: party_bool_exp
+  ): [party!]!
+
+  """
+  fetch aggregated fields from the table: "party"
+  """
+  party_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_order_by!]
+
+    """filter the rows returned"""
+    where: party_bool_exp
+  ): party_aggregate!
+
+  """
+  fetch data from the table: "party_host"
+  """
+  party_host(
+    """distinct select on columns"""
+    distinct_on: [party_host_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_host_order_by!]
+
+    """filter the rows returned"""
+    where: party_host_bool_exp
+  ): [party_host!]!
+
+  """
+  fetch aggregated fields from the table: "party_host"
+  """
+  party_host_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_host_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_host_order_by!]
+
+    """filter the rows returned"""
+    where: party_host_bool_exp
+  ): party_host_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "host"
+  """
+  host(
+    """distinct select on columns"""
+    distinct_on: [host_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [host_order_by!]
+
+    """filter the rows returned"""
+    where: host_bool_exp
+  ): [host!]!
+
+  """
+  fetch aggregated fields from the table: "host"
+  """
+  host_aggregate(
+    """distinct select on columns"""
+    distinct_on: [host_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [host_order_by!]
+
+    """filter the rows returned"""
+    where: host_bool_exp
+  ): host_aggregate!
+
+  """
+  fetch data from the table: "party"
+  """
+  party(
+    """distinct select on columns"""
+    distinct_on: [party_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_order_by!]
+
+    """filter the rows returned"""
+    where: party_bool_exp
+  ): [party!]!
+
+  """
+  fetch aggregated fields from the table: "party"
+  """
+  party_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_order_by!]
+
+    """filter the rows returned"""
+    where: party_bool_exp
+  ): party_aggregate!
+
+  """
+  fetch data from the table: "party_host"
+  """
+  party_host(
+    """distinct select on columns"""
+    distinct_on: [party_host_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_host_order_by!]
+
+    """filter the rows returned"""
+    where: party_host_bool_exp
+  ): [party_host!]!
+
+  """
+  fetch aggregated fields from the table: "party_host"
+  """
+  party_host_aggregate(
+    """distinct select on columns"""
+    distinct_on: [party_host_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [party_host_order_by!]
+
+    """filter the rows returned"""
+    where: party_host_bool_exp
+  ): party_host_aggregate!
+}

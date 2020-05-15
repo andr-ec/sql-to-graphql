@@ -1,0 +1,7369 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "features"
+"""
+type features {
+  feature_details: String
+  feature_id: bigint!
+
+  """An array relationship"""
+  tourist_attraction_features(
+    """distinct select on columns"""
+    distinct_on: [tourist_attraction_features_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tourist_attraction_features_order_by!]
+
+    """filter the rows returned"""
+    where: tourist_attraction_features_bool_exp
+  ): [tourist_attraction_features!]!
+
+  """An aggregated array relationship"""
+  tourist_attraction_features_aggregate(
+    """distinct select on columns"""
+    distinct_on: [tourist_attraction_features_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tourist_attraction_features_order_by!]
+
+    """filter the rows returned"""
+    where: tourist_attraction_features_bool_exp
+  ): tourist_attraction_features_aggregate!
+}
+
+"""
+aggregated selection of "features"
+"""
+type features_aggregate {
+  aggregate: features_aggregate_fields
+  nodes: [features!]!
+}
+
+"""
+aggregate fields of "features"
+"""
+type features_aggregate_fields {
+  avg: features_avg_fields
+  count(columns: [features_select_column!], distinct: Boolean): Int
+  max: features_max_fields
+  min: features_min_fields
+  stddev: features_stddev_fields
+  stddev_pop: features_stddev_pop_fields
+  stddev_samp: features_stddev_samp_fields
+  sum: features_sum_fields
+  var_pop: features_var_pop_fields
+  var_samp: features_var_samp_fields
+  variance: features_variance_fields
+}
+
+"""
+order by aggregate values of table "features"
+"""
+input features_aggregate_order_by {
+  avg: features_avg_order_by
+  count: order_by
+  max: features_max_order_by
+  min: features_min_order_by
+  stddev: features_stddev_order_by
+  stddev_pop: features_stddev_pop_order_by
+  stddev_samp: features_stddev_samp_order_by
+  sum: features_sum_order_by
+  var_pop: features_var_pop_order_by
+  var_samp: features_var_samp_order_by
+  variance: features_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "features"
+"""
+input features_arr_rel_insert_input {
+  data: [features_insert_input!]!
+  on_conflict: features_on_conflict
+}
+
+"""aggregate avg on columns"""
+type features_avg_fields {
+  feature_id: Float
+}
+
+"""
+order by avg() on columns of table "features"
+"""
+input features_avg_order_by {
+  feature_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "features". All fields are combined with a logical 'AND'.
+"""
+input features_bool_exp {
+  _and: [features_bool_exp]
+  _not: features_bool_exp
+  _or: [features_bool_exp]
+  feature_details: String_comparison_exp
+  feature_id: bigint_comparison_exp
+  tourist_attraction_features: tourist_attraction_features_bool_exp
+}
+
+"""
+unique or primary key constraints on table "features"
+"""
+enum features_constraint {
+  """unique or primary key constraint"""
+  idx_17632_features_pkey
+}
+
+"""
+input type for incrementing integer columne in table "features"
+"""
+input features_inc_input {
+  feature_id: bigint
+}
+
+"""
+input type for inserting data into table "features"
+"""
+input features_insert_input {
+  feature_details: String
+  feature_id: bigint
+  tourist_attraction_features: tourist_attraction_features_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type features_max_fields {
+  feature_details: String
+  feature_id: bigint
+}
+
+"""
+order by max() on columns of table "features"
+"""
+input features_max_order_by {
+  feature_details: order_by
+  feature_id: order_by
+}
+
+"""aggregate min on columns"""
+type features_min_fields {
+  feature_details: String
+  feature_id: bigint
+}
+
+"""
+order by min() on columns of table "features"
+"""
+input features_min_order_by {
+  feature_details: order_by
+  feature_id: order_by
+}
+
+"""
+response of any mutation on the table "features"
+"""
+type features_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [features!]!
+}
+
+"""
+input type for inserting object relation for remote table "features"
+"""
+input features_obj_rel_insert_input {
+  data: features_insert_input!
+  on_conflict: features_on_conflict
+}
+
+"""
+on conflict condition type for table "features"
+"""
+input features_on_conflict {
+  constraint: features_constraint!
+  update_columns: [features_update_column!]!
+  where: features_bool_exp
+}
+
+"""
+ordering options when selecting data from "features"
+"""
+input features_order_by {
+  feature_details: order_by
+  feature_id: order_by
+  tourist_attraction_features_aggregate: tourist_attraction_features_aggregate_order_by
+}
+
+"""
+select columns of table "features"
+"""
+enum features_select_column {
+  """column name"""
+  feature_details
+
+  """column name"""
+  feature_id
+}
+
+"""
+input type for updating data in table "features"
+"""
+input features_set_input {
+  feature_details: String
+  feature_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type features_stddev_fields {
+  feature_id: Float
+}
+
+"""
+order by stddev() on columns of table "features"
+"""
+input features_stddev_order_by {
+  feature_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type features_stddev_pop_fields {
+  feature_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "features"
+"""
+input features_stddev_pop_order_by {
+  feature_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type features_stddev_samp_fields {
+  feature_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "features"
+"""
+input features_stddev_samp_order_by {
+  feature_id: order_by
+}
+
+"""aggregate sum on columns"""
+type features_sum_fields {
+  feature_id: bigint
+}
+
+"""
+order by sum() on columns of table "features"
+"""
+input features_sum_order_by {
+  feature_id: order_by
+}
+
+"""
+update columns of table "features"
+"""
+enum features_update_column {
+  """column name"""
+  feature_details
+
+  """column name"""
+  feature_id
+}
+
+"""aggregate var_pop on columns"""
+type features_var_pop_fields {
+  feature_id: Float
+}
+
+"""
+order by var_pop() on columns of table "features"
+"""
+input features_var_pop_order_by {
+  feature_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type features_var_samp_fields {
+  feature_id: Float
+}
+
+"""
+order by var_samp() on columns of table "features"
+"""
+input features_var_samp_order_by {
+  feature_id: order_by
+}
+
+"""aggregate variance on columns"""
+type features_variance_fields {
+  feature_id: Float
+}
+
+"""
+order by variance() on columns of table "features"
+"""
+input features_variance_order_by {
+  feature_id: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+columns and relationships of "hotels"
+"""
+type hotels {
+  hotel_id: bigint!
+  other_hotel_details: String
+  pets_allowed_yn: String
+  price_range: Float
+
+  """An object relationship"""
+  ref_hotel_star_rating: ref_hotel_star_ratings
+  star_rating_code: String
+}
+
+"""
+aggregated selection of "hotels"
+"""
+type hotels_aggregate {
+  aggregate: hotels_aggregate_fields
+  nodes: [hotels!]!
+}
+
+"""
+aggregate fields of "hotels"
+"""
+type hotels_aggregate_fields {
+  avg: hotels_avg_fields
+  count(columns: [hotels_select_column!], distinct: Boolean): Int
+  max: hotels_max_fields
+  min: hotels_min_fields
+  stddev: hotels_stddev_fields
+  stddev_pop: hotels_stddev_pop_fields
+  stddev_samp: hotels_stddev_samp_fields
+  sum: hotels_sum_fields
+  var_pop: hotels_var_pop_fields
+  var_samp: hotels_var_samp_fields
+  variance: hotels_variance_fields
+}
+
+"""
+order by aggregate values of table "hotels"
+"""
+input hotels_aggregate_order_by {
+  avg: hotels_avg_order_by
+  count: order_by
+  max: hotels_max_order_by
+  min: hotels_min_order_by
+  stddev: hotels_stddev_order_by
+  stddev_pop: hotels_stddev_pop_order_by
+  stddev_samp: hotels_stddev_samp_order_by
+  sum: hotels_sum_order_by
+  var_pop: hotels_var_pop_order_by
+  var_samp: hotels_var_samp_order_by
+  variance: hotels_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "hotels"
+"""
+input hotels_arr_rel_insert_input {
+  data: [hotels_insert_input!]!
+  on_conflict: hotels_on_conflict
+}
+
+"""aggregate avg on columns"""
+type hotels_avg_fields {
+  hotel_id: Float
+  price_range: Float
+}
+
+"""
+order by avg() on columns of table "hotels"
+"""
+input hotels_avg_order_by {
+  hotel_id: order_by
+  price_range: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "hotels". All fields are combined with a logical 'AND'.
+"""
+input hotels_bool_exp {
+  _and: [hotels_bool_exp]
+  _not: hotels_bool_exp
+  _or: [hotels_bool_exp]
+  hotel_id: bigint_comparison_exp
+  other_hotel_details: String_comparison_exp
+  pets_allowed_yn: String_comparison_exp
+  price_range: Float_comparison_exp
+  ref_hotel_star_rating: ref_hotel_star_ratings_bool_exp
+  star_rating_code: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "hotels"
+"""
+enum hotels_constraint {
+  """unique or primary key constraint"""
+  idx_17638_hotels_pkey
+}
+
+"""
+input type for incrementing integer columne in table "hotels"
+"""
+input hotels_inc_input {
+  hotel_id: bigint
+}
+
+"""
+input type for inserting data into table "hotels"
+"""
+input hotels_insert_input {
+  hotel_id: bigint
+  other_hotel_details: String
+  pets_allowed_yn: String
+  price_range: Float
+  ref_hotel_star_rating: ref_hotel_star_ratings_obj_rel_insert_input
+  star_rating_code: String
+}
+
+"""aggregate max on columns"""
+type hotels_max_fields {
+  hotel_id: bigint
+  other_hotel_details: String
+  pets_allowed_yn: String
+  price_range: Float
+  star_rating_code: String
+}
+
+"""
+order by max() on columns of table "hotels"
+"""
+input hotels_max_order_by {
+  hotel_id: order_by
+  other_hotel_details: order_by
+  pets_allowed_yn: order_by
+  price_range: order_by
+  star_rating_code: order_by
+}
+
+"""aggregate min on columns"""
+type hotels_min_fields {
+  hotel_id: bigint
+  other_hotel_details: String
+  pets_allowed_yn: String
+  price_range: Float
+  star_rating_code: String
+}
+
+"""
+order by min() on columns of table "hotels"
+"""
+input hotels_min_order_by {
+  hotel_id: order_by
+  other_hotel_details: order_by
+  pets_allowed_yn: order_by
+  price_range: order_by
+  star_rating_code: order_by
+}
+
+"""
+response of any mutation on the table "hotels"
+"""
+type hotels_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [hotels!]!
+}
+
+"""
+input type for inserting object relation for remote table "hotels"
+"""
+input hotels_obj_rel_insert_input {
+  data: hotels_insert_input!
+  on_conflict: hotels_on_conflict
+}
+
+"""
+on conflict condition type for table "hotels"
+"""
+input hotels_on_conflict {
+  constraint: hotels_constraint!
+  update_columns: [hotels_update_column!]!
+  where: hotels_bool_exp
+}
+
+"""
+ordering options when selecting data from "hotels"
+"""
+input hotels_order_by {
+  hotel_id: order_by
+  other_hotel_details: order_by
+  pets_allowed_yn: order_by
+  price_range: order_by
+  ref_hotel_star_rating: ref_hotel_star_ratings_order_by
+  star_rating_code: order_by
+}
+
+"""
+select columns of table "hotels"
+"""
+enum hotels_select_column {
+  """column name"""
+  hotel_id
+
+  """column name"""
+  other_hotel_details
+
+  """column name"""
+  pets_allowed_yn
+
+  """column name"""
+  price_range
+
+  """column name"""
+  star_rating_code
+}
+
+"""
+input type for updating data in table "hotels"
+"""
+input hotels_set_input {
+  hotel_id: bigint
+  other_hotel_details: String
+  pets_allowed_yn: String
+  price_range: Float
+  star_rating_code: String
+}
+
+"""aggregate stddev on columns"""
+type hotels_stddev_fields {
+  hotel_id: Float
+  price_range: Float
+}
+
+"""
+order by stddev() on columns of table "hotels"
+"""
+input hotels_stddev_order_by {
+  hotel_id: order_by
+  price_range: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type hotels_stddev_pop_fields {
+  hotel_id: Float
+  price_range: Float
+}
+
+"""
+order by stddev_pop() on columns of table "hotels"
+"""
+input hotels_stddev_pop_order_by {
+  hotel_id: order_by
+  price_range: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type hotels_stddev_samp_fields {
+  hotel_id: Float
+  price_range: Float
+}
+
+"""
+order by stddev_samp() on columns of table "hotels"
+"""
+input hotels_stddev_samp_order_by {
+  hotel_id: order_by
+  price_range: order_by
+}
+
+"""aggregate sum on columns"""
+type hotels_sum_fields {
+  hotel_id: bigint
+  price_range: Float
+}
+
+"""
+order by sum() on columns of table "hotels"
+"""
+input hotels_sum_order_by {
+  hotel_id: order_by
+  price_range: order_by
+}
+
+"""
+update columns of table "hotels"
+"""
+enum hotels_update_column {
+  """column name"""
+  hotel_id
+
+  """column name"""
+  other_hotel_details
+
+  """column name"""
+  pets_allowed_yn
+
+  """column name"""
+  price_range
+
+  """column name"""
+  star_rating_code
+}
+
+"""aggregate var_pop on columns"""
+type hotels_var_pop_fields {
+  hotel_id: Float
+  price_range: Float
+}
+
+"""
+order by var_pop() on columns of table "hotels"
+"""
+input hotels_var_pop_order_by {
+  hotel_id: order_by
+  price_range: order_by
+}
+
+"""aggregate var_samp on columns"""
+type hotels_var_samp_fields {
+  hotel_id: Float
+  price_range: Float
+}
+
+"""
+order by var_samp() on columns of table "hotels"
+"""
+input hotels_var_samp_order_by {
+  hotel_id: order_by
+  price_range: order_by
+}
+
+"""aggregate variance on columns"""
+type hotels_variance_fields {
+  hotel_id: Float
+  price_range: Float
+}
+
+"""
+order by variance() on columns of table "hotels"
+"""
+input hotels_variance_order_by {
+  hotel_id: order_by
+  price_range: order_by
+}
+
+"""
+columns and relationships of "locations"
+"""
+type locations {
+  address: String
+  location_id: bigint!
+  location_name: String
+  other_details: String
+
+  """An array relationship"""
+  tourist_attractions(
+    """distinct select on columns"""
+    distinct_on: [tourist_attractions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tourist_attractions_order_by!]
+
+    """filter the rows returned"""
+    where: tourist_attractions_bool_exp
+  ): [tourist_attractions!]!
+
+  """An aggregated array relationship"""
+  tourist_attractions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [tourist_attractions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tourist_attractions_order_by!]
+
+    """filter the rows returned"""
+    where: tourist_attractions_bool_exp
+  ): tourist_attractions_aggregate!
+}
+
+"""
+aggregated selection of "locations"
+"""
+type locations_aggregate {
+  aggregate: locations_aggregate_fields
+  nodes: [locations!]!
+}
+
+"""
+aggregate fields of "locations"
+"""
+type locations_aggregate_fields {
+  avg: locations_avg_fields
+  count(columns: [locations_select_column!], distinct: Boolean): Int
+  max: locations_max_fields
+  min: locations_min_fields
+  stddev: locations_stddev_fields
+  stddev_pop: locations_stddev_pop_fields
+  stddev_samp: locations_stddev_samp_fields
+  sum: locations_sum_fields
+  var_pop: locations_var_pop_fields
+  var_samp: locations_var_samp_fields
+  variance: locations_variance_fields
+}
+
+"""
+order by aggregate values of table "locations"
+"""
+input locations_aggregate_order_by {
+  avg: locations_avg_order_by
+  count: order_by
+  max: locations_max_order_by
+  min: locations_min_order_by
+  stddev: locations_stddev_order_by
+  stddev_pop: locations_stddev_pop_order_by
+  stddev_samp: locations_stddev_samp_order_by
+  sum: locations_sum_order_by
+  var_pop: locations_var_pop_order_by
+  var_samp: locations_var_samp_order_by
+  variance: locations_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "locations"
+"""
+input locations_arr_rel_insert_input {
+  data: [locations_insert_input!]!
+  on_conflict: locations_on_conflict
+}
+
+"""aggregate avg on columns"""
+type locations_avg_fields {
+  location_id: Float
+}
+
+"""
+order by avg() on columns of table "locations"
+"""
+input locations_avg_order_by {
+  location_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "locations". All fields are combined with a logical 'AND'.
+"""
+input locations_bool_exp {
+  _and: [locations_bool_exp]
+  _not: locations_bool_exp
+  _or: [locations_bool_exp]
+  address: String_comparison_exp
+  location_id: bigint_comparison_exp
+  location_name: String_comparison_exp
+  other_details: String_comparison_exp
+  tourist_attractions: tourist_attractions_bool_exp
+}
+
+"""
+unique or primary key constraints on table "locations"
+"""
+enum locations_constraint {
+  """unique or primary key constraint"""
+  idx_17614_locations_pkey
+}
+
+"""
+input type for incrementing integer columne in table "locations"
+"""
+input locations_inc_input {
+  location_id: bigint
+}
+
+"""
+input type for inserting data into table "locations"
+"""
+input locations_insert_input {
+  address: String
+  location_id: bigint
+  location_name: String
+  other_details: String
+  tourist_attractions: tourist_attractions_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type locations_max_fields {
+  address: String
+  location_id: bigint
+  location_name: String
+  other_details: String
+}
+
+"""
+order by max() on columns of table "locations"
+"""
+input locations_max_order_by {
+  address: order_by
+  location_id: order_by
+  location_name: order_by
+  other_details: order_by
+}
+
+"""aggregate min on columns"""
+type locations_min_fields {
+  address: String
+  location_id: bigint
+  location_name: String
+  other_details: String
+}
+
+"""
+order by min() on columns of table "locations"
+"""
+input locations_min_order_by {
+  address: order_by
+  location_id: order_by
+  location_name: order_by
+  other_details: order_by
+}
+
+"""
+response of any mutation on the table "locations"
+"""
+type locations_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [locations!]!
+}
+
+"""
+input type for inserting object relation for remote table "locations"
+"""
+input locations_obj_rel_insert_input {
+  data: locations_insert_input!
+  on_conflict: locations_on_conflict
+}
+
+"""
+on conflict condition type for table "locations"
+"""
+input locations_on_conflict {
+  constraint: locations_constraint!
+  update_columns: [locations_update_column!]!
+  where: locations_bool_exp
+}
+
+"""
+ordering options when selecting data from "locations"
+"""
+input locations_order_by {
+  address: order_by
+  location_id: order_by
+  location_name: order_by
+  other_details: order_by
+  tourist_attractions_aggregate: tourist_attractions_aggregate_order_by
+}
+
+"""
+select columns of table "locations"
+"""
+enum locations_select_column {
+  """column name"""
+  address
+
+  """column name"""
+  location_id
+
+  """column name"""
+  location_name
+
+  """column name"""
+  other_details
+}
+
+"""
+input type for updating data in table "locations"
+"""
+input locations_set_input {
+  address: String
+  location_id: bigint
+  location_name: String
+  other_details: String
+}
+
+"""aggregate stddev on columns"""
+type locations_stddev_fields {
+  location_id: Float
+}
+
+"""
+order by stddev() on columns of table "locations"
+"""
+input locations_stddev_order_by {
+  location_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type locations_stddev_pop_fields {
+  location_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "locations"
+"""
+input locations_stddev_pop_order_by {
+  location_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type locations_stddev_samp_fields {
+  location_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "locations"
+"""
+input locations_stddev_samp_order_by {
+  location_id: order_by
+}
+
+"""aggregate sum on columns"""
+type locations_sum_fields {
+  location_id: bigint
+}
+
+"""
+order by sum() on columns of table "locations"
+"""
+input locations_sum_order_by {
+  location_id: order_by
+}
+
+"""
+update columns of table "locations"
+"""
+enum locations_update_column {
+  """column name"""
+  address
+
+  """column name"""
+  location_id
+
+  """column name"""
+  location_name
+
+  """column name"""
+  other_details
+}
+
+"""aggregate var_pop on columns"""
+type locations_var_pop_fields {
+  location_id: Float
+}
+
+"""
+order by var_pop() on columns of table "locations"
+"""
+input locations_var_pop_order_by {
+  location_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type locations_var_samp_fields {
+  location_id: Float
+}
+
+"""
+order by var_samp() on columns of table "locations"
+"""
+input locations_var_samp_order_by {
+  location_id: order_by
+}
+
+"""aggregate variance on columns"""
+type locations_variance_fields {
+  location_id: Float
+}
+
+"""
+order by variance() on columns of table "locations"
+"""
+input locations_variance_order_by {
+  location_id: order_by
+}
+
+"""
+columns and relationships of "museums"
+"""
+type museums {
+  museum_details: String
+  museum_id: bigint!
+
+  """An object relationship"""
+  tourist_attraction: tourist_attractions!
+}
+
+"""
+aggregated selection of "museums"
+"""
+type museums_aggregate {
+  aggregate: museums_aggregate_fields
+  nodes: [museums!]!
+}
+
+"""
+aggregate fields of "museums"
+"""
+type museums_aggregate_fields {
+  avg: museums_avg_fields
+  count(columns: [museums_select_column!], distinct: Boolean): Int
+  max: museums_max_fields
+  min: museums_min_fields
+  stddev: museums_stddev_fields
+  stddev_pop: museums_stddev_pop_fields
+  stddev_samp: museums_stddev_samp_fields
+  sum: museums_sum_fields
+  var_pop: museums_var_pop_fields
+  var_samp: museums_var_samp_fields
+  variance: museums_variance_fields
+}
+
+"""
+order by aggregate values of table "museums"
+"""
+input museums_aggregate_order_by {
+  avg: museums_avg_order_by
+  count: order_by
+  max: museums_max_order_by
+  min: museums_min_order_by
+  stddev: museums_stddev_order_by
+  stddev_pop: museums_stddev_pop_order_by
+  stddev_samp: museums_stddev_samp_order_by
+  sum: museums_sum_order_by
+  var_pop: museums_var_pop_order_by
+  var_samp: museums_var_samp_order_by
+  variance: museums_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "museums"
+"""
+input museums_arr_rel_insert_input {
+  data: [museums_insert_input!]!
+  on_conflict: museums_on_conflict
+}
+
+"""aggregate avg on columns"""
+type museums_avg_fields {
+  museum_id: Float
+}
+
+"""
+order by avg() on columns of table "museums"
+"""
+input museums_avg_order_by {
+  museum_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "museums". All fields are combined with a logical 'AND'.
+"""
+input museums_bool_exp {
+  _and: [museums_bool_exp]
+  _not: museums_bool_exp
+  _or: [museums_bool_exp]
+  museum_details: String_comparison_exp
+  museum_id: bigint_comparison_exp
+  tourist_attraction: tourist_attractions_bool_exp
+}
+
+"""
+unique or primary key constraints on table "museums"
+"""
+enum museums_constraint {
+  """unique or primary key constraint"""
+  idx_17662_museums_pkey
+}
+
+"""
+input type for incrementing integer columne in table "museums"
+"""
+input museums_inc_input {
+  museum_id: bigint
+}
+
+"""
+input type for inserting data into table "museums"
+"""
+input museums_insert_input {
+  museum_details: String
+  museum_id: bigint
+  tourist_attraction: tourist_attractions_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type museums_max_fields {
+  museum_details: String
+  museum_id: bigint
+}
+
+"""
+order by max() on columns of table "museums"
+"""
+input museums_max_order_by {
+  museum_details: order_by
+  museum_id: order_by
+}
+
+"""aggregate min on columns"""
+type museums_min_fields {
+  museum_details: String
+  museum_id: bigint
+}
+
+"""
+order by min() on columns of table "museums"
+"""
+input museums_min_order_by {
+  museum_details: order_by
+  museum_id: order_by
+}
+
+"""
+response of any mutation on the table "museums"
+"""
+type museums_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [museums!]!
+}
+
+"""
+input type for inserting object relation for remote table "museums"
+"""
+input museums_obj_rel_insert_input {
+  data: museums_insert_input!
+  on_conflict: museums_on_conflict
+}
+
+"""
+on conflict condition type for table "museums"
+"""
+input museums_on_conflict {
+  constraint: museums_constraint!
+  update_columns: [museums_update_column!]!
+  where: museums_bool_exp
+}
+
+"""
+ordering options when selecting data from "museums"
+"""
+input museums_order_by {
+  museum_details: order_by
+  museum_id: order_by
+  tourist_attraction: tourist_attractions_order_by
+}
+
+"""
+select columns of table "museums"
+"""
+enum museums_select_column {
+  """column name"""
+  museum_details
+
+  """column name"""
+  museum_id
+}
+
+"""
+input type for updating data in table "museums"
+"""
+input museums_set_input {
+  museum_details: String
+  museum_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type museums_stddev_fields {
+  museum_id: Float
+}
+
+"""
+order by stddev() on columns of table "museums"
+"""
+input museums_stddev_order_by {
+  museum_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type museums_stddev_pop_fields {
+  museum_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "museums"
+"""
+input museums_stddev_pop_order_by {
+  museum_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type museums_stddev_samp_fields {
+  museum_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "museums"
+"""
+input museums_stddev_samp_order_by {
+  museum_id: order_by
+}
+
+"""aggregate sum on columns"""
+type museums_sum_fields {
+  museum_id: bigint
+}
+
+"""
+order by sum() on columns of table "museums"
+"""
+input museums_sum_order_by {
+  museum_id: order_by
+}
+
+"""
+update columns of table "museums"
+"""
+enum museums_update_column {
+  """column name"""
+  museum_details
+
+  """column name"""
+  museum_id
+}
+
+"""aggregate var_pop on columns"""
+type museums_var_pop_fields {
+  museum_id: Float
+}
+
+"""
+order by var_pop() on columns of table "museums"
+"""
+input museums_var_pop_order_by {
+  museum_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type museums_var_samp_fields {
+  museum_id: Float
+}
+
+"""
+order by var_samp() on columns of table "museums"
+"""
+input museums_var_samp_order_by {
+  museum_id: order_by
+}
+
+"""aggregate variance on columns"""
+type museums_variance_fields {
+  museum_id: Float
+}
+
+"""
+order by variance() on columns of table "museums"
+"""
+input museums_variance_order_by {
+  museum_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "features"
+  """
+  delete_features(
+    """filter the rows which have to be deleted"""
+    where: features_bool_exp!
+  ): features_mutation_response
+
+  """
+  delete data from the table: "hotels"
+  """
+  delete_hotels(
+    """filter the rows which have to be deleted"""
+    where: hotels_bool_exp!
+  ): hotels_mutation_response
+
+  """
+  delete data from the table: "locations"
+  """
+  delete_locations(
+    """filter the rows which have to be deleted"""
+    where: locations_bool_exp!
+  ): locations_mutation_response
+
+  """
+  delete data from the table: "museums"
+  """
+  delete_museums(
+    """filter the rows which have to be deleted"""
+    where: museums_bool_exp!
+  ): museums_mutation_response
+
+  """
+  delete data from the table: "photos"
+  """
+  delete_photos(
+    """filter the rows which have to be deleted"""
+    where: photos_bool_exp!
+  ): photos_mutation_response
+
+  """
+  delete data from the table: "ref_attraction_types"
+  """
+  delete_ref_attraction_types(
+    """filter the rows which have to be deleted"""
+    where: ref_attraction_types_bool_exp!
+  ): ref_attraction_types_mutation_response
+
+  """
+  delete data from the table: "ref_hotel_star_ratings"
+  """
+  delete_ref_hotel_star_ratings(
+    """filter the rows which have to be deleted"""
+    where: ref_hotel_star_ratings_bool_exp!
+  ): ref_hotel_star_ratings_mutation_response
+
+  """
+  delete data from the table: "royal_family"
+  """
+  delete_royal_family(
+    """filter the rows which have to be deleted"""
+    where: royal_family_bool_exp!
+  ): royal_family_mutation_response
+
+  """
+  delete data from the table: "shops"
+  """
+  delete_shops(
+    """filter the rows which have to be deleted"""
+    where: shops_bool_exp!
+  ): shops_mutation_response
+
+  """
+  delete data from the table: "staff"
+  """
+  delete_staff(
+    """filter the rows which have to be deleted"""
+    where: staff_bool_exp!
+  ): staff_mutation_response
+
+  """
+  delete data from the table: "street_markets"
+  """
+  delete_street_markets(
+    """filter the rows which have to be deleted"""
+    where: street_markets_bool_exp!
+  ): street_markets_mutation_response
+
+  """
+  delete data from the table: "theme_parks"
+  """
+  delete_theme_parks(
+    """filter the rows which have to be deleted"""
+    where: theme_parks_bool_exp!
+  ): theme_parks_mutation_response
+
+  """
+  delete data from the table: "tourist_attraction_features"
+  """
+  delete_tourist_attraction_features(
+    """filter the rows which have to be deleted"""
+    where: tourist_attraction_features_bool_exp!
+  ): tourist_attraction_features_mutation_response
+
+  """
+  delete data from the table: "tourist_attractions"
+  """
+  delete_tourist_attractions(
+    """filter the rows which have to be deleted"""
+    where: tourist_attractions_bool_exp!
+  ): tourist_attractions_mutation_response
+
+  """
+  delete data from the table: "visitors"
+  """
+  delete_visitors(
+    """filter the rows which have to be deleted"""
+    where: visitors_bool_exp!
+  ): visitors_mutation_response
+
+  """
+  delete data from the table: "visits"
+  """
+  delete_visits(
+    """filter the rows which have to be deleted"""
+    where: visits_bool_exp!
+  ): visits_mutation_response
+
+  """
+  insert data into the table: "features"
+  """
+  insert_features(
+    """the rows to be inserted"""
+    objects: [features_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: features_on_conflict
+  ): features_mutation_response
+
+  """
+  insert data into the table: "hotels"
+  """
+  insert_hotels(
+    """the rows to be inserted"""
+    objects: [hotels_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: hotels_on_conflict
+  ): hotels_mutation_response
+
+  """
+  insert data into the table: "locations"
+  """
+  insert_locations(
+    """the rows to be inserted"""
+    objects: [locations_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: locations_on_conflict
+  ): locations_mutation_response
+
+  """
+  insert data into the table: "museums"
+  """
+  insert_museums(
+    """the rows to be inserted"""
+    objects: [museums_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: museums_on_conflict
+  ): museums_mutation_response
+
+  """
+  insert data into the table: "photos"
+  """
+  insert_photos(
+    """the rows to be inserted"""
+    objects: [photos_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: photos_on_conflict
+  ): photos_mutation_response
+
+  """
+  insert data into the table: "ref_attraction_types"
+  """
+  insert_ref_attraction_types(
+    """the rows to be inserted"""
+    objects: [ref_attraction_types_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: ref_attraction_types_on_conflict
+  ): ref_attraction_types_mutation_response
+
+  """
+  insert data into the table: "ref_hotel_star_ratings"
+  """
+  insert_ref_hotel_star_ratings(
+    """the rows to be inserted"""
+    objects: [ref_hotel_star_ratings_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: ref_hotel_star_ratings_on_conflict
+  ): ref_hotel_star_ratings_mutation_response
+
+  """
+  insert data into the table: "royal_family"
+  """
+  insert_royal_family(
+    """the rows to be inserted"""
+    objects: [royal_family_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: royal_family_on_conflict
+  ): royal_family_mutation_response
+
+  """
+  insert data into the table: "shops"
+  """
+  insert_shops(
+    """the rows to be inserted"""
+    objects: [shops_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: shops_on_conflict
+  ): shops_mutation_response
+
+  """
+  insert data into the table: "staff"
+  """
+  insert_staff(
+    """the rows to be inserted"""
+    objects: [staff_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: staff_on_conflict
+  ): staff_mutation_response
+
+  """
+  insert data into the table: "street_markets"
+  """
+  insert_street_markets(
+    """the rows to be inserted"""
+    objects: [street_markets_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: street_markets_on_conflict
+  ): street_markets_mutation_response
+
+  """
+  insert data into the table: "theme_parks"
+  """
+  insert_theme_parks(
+    """the rows to be inserted"""
+    objects: [theme_parks_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: theme_parks_on_conflict
+  ): theme_parks_mutation_response
+
+  """
+  insert data into the table: "tourist_attraction_features"
+  """
+  insert_tourist_attraction_features(
+    """the rows to be inserted"""
+    objects: [tourist_attraction_features_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: tourist_attraction_features_on_conflict
+  ): tourist_attraction_features_mutation_response
+
+  """
+  insert data into the table: "tourist_attractions"
+  """
+  insert_tourist_attractions(
+    """the rows to be inserted"""
+    objects: [tourist_attractions_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: tourist_attractions_on_conflict
+  ): tourist_attractions_mutation_response
+
+  """
+  insert data into the table: "visitors"
+  """
+  insert_visitors(
+    """the rows to be inserted"""
+    objects: [visitors_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: visitors_on_conflict
+  ): visitors_mutation_response
+
+  """
+  insert data into the table: "visits"
+  """
+  insert_visits(
+    """the rows to be inserted"""
+    objects: [visits_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: visits_on_conflict
+  ): visits_mutation_response
+
+  """
+  update data of the table: "features"
+  """
+  update_features(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: features_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: features_set_input
+
+    """filter the rows which have to be updated"""
+    where: features_bool_exp!
+  ): features_mutation_response
+
+  """
+  update data of the table: "hotels"
+  """
+  update_hotels(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: hotels_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: hotels_set_input
+
+    """filter the rows which have to be updated"""
+    where: hotels_bool_exp!
+  ): hotels_mutation_response
+
+  """
+  update data of the table: "locations"
+  """
+  update_locations(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: locations_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: locations_set_input
+
+    """filter the rows which have to be updated"""
+    where: locations_bool_exp!
+  ): locations_mutation_response
+
+  """
+  update data of the table: "museums"
+  """
+  update_museums(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: museums_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: museums_set_input
+
+    """filter the rows which have to be updated"""
+    where: museums_bool_exp!
+  ): museums_mutation_response
+
+  """
+  update data of the table: "photos"
+  """
+  update_photos(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: photos_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: photos_set_input
+
+    """filter the rows which have to be updated"""
+    where: photos_bool_exp!
+  ): photos_mutation_response
+
+  """
+  update data of the table: "ref_attraction_types"
+  """
+  update_ref_attraction_types(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ref_attraction_types_set_input
+
+    """filter the rows which have to be updated"""
+    where: ref_attraction_types_bool_exp!
+  ): ref_attraction_types_mutation_response
+
+  """
+  update data of the table: "ref_hotel_star_ratings"
+  """
+  update_ref_hotel_star_ratings(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ref_hotel_star_ratings_set_input
+
+    """filter the rows which have to be updated"""
+    where: ref_hotel_star_ratings_bool_exp!
+  ): ref_hotel_star_ratings_mutation_response
+
+  """
+  update data of the table: "royal_family"
+  """
+  update_royal_family(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: royal_family_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: royal_family_set_input
+
+    """filter the rows which have to be updated"""
+    where: royal_family_bool_exp!
+  ): royal_family_mutation_response
+
+  """
+  update data of the table: "shops"
+  """
+  update_shops(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: shops_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: shops_set_input
+
+    """filter the rows which have to be updated"""
+    where: shops_bool_exp!
+  ): shops_mutation_response
+
+  """
+  update data of the table: "staff"
+  """
+  update_staff(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: staff_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: staff_set_input
+
+    """filter the rows which have to be updated"""
+    where: staff_bool_exp!
+  ): staff_mutation_response
+
+  """
+  update data of the table: "street_markets"
+  """
+  update_street_markets(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: street_markets_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: street_markets_set_input
+
+    """filter the rows which have to be updated"""
+    where: street_markets_bool_exp!
+  ): street_markets_mutation_response
+
+  """
+  update data of the table: "theme_parks"
+  """
+  update_theme_parks(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: theme_parks_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: theme_parks_set_input
+
+    """filter the rows which have to be updated"""
+    where: theme_parks_bool_exp!
+  ): theme_parks_mutation_response
+
+  """
+  update data of the table: "tourist_attraction_features"
+  """
+  update_tourist_attraction_features(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: tourist_attraction_features_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: tourist_attraction_features_set_input
+
+    """filter the rows which have to be updated"""
+    where: tourist_attraction_features_bool_exp!
+  ): tourist_attraction_features_mutation_response
+
+  """
+  update data of the table: "tourist_attractions"
+  """
+  update_tourist_attractions(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: tourist_attractions_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: tourist_attractions_set_input
+
+    """filter the rows which have to be updated"""
+    where: tourist_attractions_bool_exp!
+  ): tourist_attractions_mutation_response
+
+  """
+  update data of the table: "visitors"
+  """
+  update_visitors(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: visitors_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: visitors_set_input
+
+    """filter the rows which have to be updated"""
+    where: visitors_bool_exp!
+  ): visitors_mutation_response
+
+  """
+  update data of the table: "visits"
+  """
+  update_visits(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: visits_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: visits_set_input
+
+    """filter the rows which have to be updated"""
+    where: visits_bool_exp!
+  ): visits_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "photos"
+"""
+type photos {
+  description: String
+  filename: String
+  name: String
+  other_details: String
+  photo_id: bigint!
+
+  """An object relationship"""
+  tourist_attraction: tourist_attractions
+  tourist_attraction_id: bigint
+}
+
+"""
+aggregated selection of "photos"
+"""
+type photos_aggregate {
+  aggregate: photos_aggregate_fields
+  nodes: [photos!]!
+}
+
+"""
+aggregate fields of "photos"
+"""
+type photos_aggregate_fields {
+  avg: photos_avg_fields
+  count(columns: [photos_select_column!], distinct: Boolean): Int
+  max: photos_max_fields
+  min: photos_min_fields
+  stddev: photos_stddev_fields
+  stddev_pop: photos_stddev_pop_fields
+  stddev_samp: photos_stddev_samp_fields
+  sum: photos_sum_fields
+  var_pop: photos_var_pop_fields
+  var_samp: photos_var_samp_fields
+  variance: photos_variance_fields
+}
+
+"""
+order by aggregate values of table "photos"
+"""
+input photos_aggregate_order_by {
+  avg: photos_avg_order_by
+  count: order_by
+  max: photos_max_order_by
+  min: photos_min_order_by
+  stddev: photos_stddev_order_by
+  stddev_pop: photos_stddev_pop_order_by
+  stddev_samp: photos_stddev_samp_order_by
+  sum: photos_sum_order_by
+  var_pop: photos_var_pop_order_by
+  var_samp: photos_var_samp_order_by
+  variance: photos_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "photos"
+"""
+input photos_arr_rel_insert_input {
+  data: [photos_insert_input!]!
+  on_conflict: photos_on_conflict
+}
+
+"""aggregate avg on columns"""
+type photos_avg_fields {
+  photo_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by avg() on columns of table "photos"
+"""
+input photos_avg_order_by {
+  photo_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "photos". All fields are combined with a logical 'AND'.
+"""
+input photos_bool_exp {
+  _and: [photos_bool_exp]
+  _not: photos_bool_exp
+  _or: [photos_bool_exp]
+  description: String_comparison_exp
+  filename: String_comparison_exp
+  name: String_comparison_exp
+  other_details: String_comparison_exp
+  photo_id: bigint_comparison_exp
+  tourist_attraction: tourist_attractions_bool_exp
+  tourist_attraction_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "photos"
+"""
+enum photos_constraint {
+  """unique or primary key constraint"""
+  idx_17686_photos_pkey
+}
+
+"""
+input type for incrementing integer columne in table "photos"
+"""
+input photos_inc_input {
+  photo_id: bigint
+  tourist_attraction_id: bigint
+}
+
+"""
+input type for inserting data into table "photos"
+"""
+input photos_insert_input {
+  description: String
+  filename: String
+  name: String
+  other_details: String
+  photo_id: bigint
+  tourist_attraction: tourist_attractions_obj_rel_insert_input
+  tourist_attraction_id: bigint
+}
+
+"""aggregate max on columns"""
+type photos_max_fields {
+  description: String
+  filename: String
+  name: String
+  other_details: String
+  photo_id: bigint
+  tourist_attraction_id: bigint
+}
+
+"""
+order by max() on columns of table "photos"
+"""
+input photos_max_order_by {
+  description: order_by
+  filename: order_by
+  name: order_by
+  other_details: order_by
+  photo_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate min on columns"""
+type photos_min_fields {
+  description: String
+  filename: String
+  name: String
+  other_details: String
+  photo_id: bigint
+  tourist_attraction_id: bigint
+}
+
+"""
+order by min() on columns of table "photos"
+"""
+input photos_min_order_by {
+  description: order_by
+  filename: order_by
+  name: order_by
+  other_details: order_by
+  photo_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""
+response of any mutation on the table "photos"
+"""
+type photos_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [photos!]!
+}
+
+"""
+input type for inserting object relation for remote table "photos"
+"""
+input photos_obj_rel_insert_input {
+  data: photos_insert_input!
+  on_conflict: photos_on_conflict
+}
+
+"""
+on conflict condition type for table "photos"
+"""
+input photos_on_conflict {
+  constraint: photos_constraint!
+  update_columns: [photos_update_column!]!
+  where: photos_bool_exp
+}
+
+"""
+ordering options when selecting data from "photos"
+"""
+input photos_order_by {
+  description: order_by
+  filename: order_by
+  name: order_by
+  other_details: order_by
+  photo_id: order_by
+  tourist_attraction: tourist_attractions_order_by
+  tourist_attraction_id: order_by
+}
+
+"""
+select columns of table "photos"
+"""
+enum photos_select_column {
+  """column name"""
+  description
+
+  """column name"""
+  filename
+
+  """column name"""
+  name
+
+  """column name"""
+  other_details
+
+  """column name"""
+  photo_id
+
+  """column name"""
+  tourist_attraction_id
+}
+
+"""
+input type for updating data in table "photos"
+"""
+input photos_set_input {
+  description: String
+  filename: String
+  name: String
+  other_details: String
+  photo_id: bigint
+  tourist_attraction_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type photos_stddev_fields {
+  photo_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by stddev() on columns of table "photos"
+"""
+input photos_stddev_order_by {
+  photo_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type photos_stddev_pop_fields {
+  photo_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "photos"
+"""
+input photos_stddev_pop_order_by {
+  photo_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type photos_stddev_samp_fields {
+  photo_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "photos"
+"""
+input photos_stddev_samp_order_by {
+  photo_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate sum on columns"""
+type photos_sum_fields {
+  photo_id: bigint
+  tourist_attraction_id: bigint
+}
+
+"""
+order by sum() on columns of table "photos"
+"""
+input photos_sum_order_by {
+  photo_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""
+update columns of table "photos"
+"""
+enum photos_update_column {
+  """column name"""
+  description
+
+  """column name"""
+  filename
+
+  """column name"""
+  name
+
+  """column name"""
+  other_details
+
+  """column name"""
+  photo_id
+
+  """column name"""
+  tourist_attraction_id
+}
+
+"""aggregate var_pop on columns"""
+type photos_var_pop_fields {
+  photo_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by var_pop() on columns of table "photos"
+"""
+input photos_var_pop_order_by {
+  photo_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type photos_var_samp_fields {
+  photo_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by var_samp() on columns of table "photos"
+"""
+input photos_var_samp_order_by {
+  photo_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate variance on columns"""
+type photos_variance_fields {
+  photo_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by variance() on columns of table "photos"
+"""
+input photos_variance_order_by {
+  photo_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "features"
+  """
+  features(
+    """distinct select on columns"""
+    distinct_on: [features_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [features_order_by!]
+
+    """filter the rows returned"""
+    where: features_bool_exp
+  ): [features!]!
+
+  """
+  fetch aggregated fields from the table: "features"
+  """
+  features_aggregate(
+    """distinct select on columns"""
+    distinct_on: [features_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [features_order_by!]
+
+    """filter the rows returned"""
+    where: features_bool_exp
+  ): features_aggregate!
+
+  """fetch data from the table: "features" using primary key columns"""
+  features_by_pk(feature_id: bigint!): features
+
+  """
+  fetch data from the table: "hotels"
+  """
+  hotels(
+    """distinct select on columns"""
+    distinct_on: [hotels_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hotels_order_by!]
+
+    """filter the rows returned"""
+    where: hotels_bool_exp
+  ): [hotels!]!
+
+  """
+  fetch aggregated fields from the table: "hotels"
+  """
+  hotels_aggregate(
+    """distinct select on columns"""
+    distinct_on: [hotels_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hotels_order_by!]
+
+    """filter the rows returned"""
+    where: hotels_bool_exp
+  ): hotels_aggregate!
+
+  """fetch data from the table: "hotels" using primary key columns"""
+  hotels_by_pk(hotel_id: bigint!): hotels
+
+  """
+  fetch data from the table: "locations"
+  """
+  locations(
+    """distinct select on columns"""
+    distinct_on: [locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [locations_order_by!]
+
+    """filter the rows returned"""
+    where: locations_bool_exp
+  ): [locations!]!
+
+  """
+  fetch aggregated fields from the table: "locations"
+  """
+  locations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [locations_order_by!]
+
+    """filter the rows returned"""
+    where: locations_bool_exp
+  ): locations_aggregate!
+
+  """fetch data from the table: "locations" using primary key columns"""
+  locations_by_pk(location_id: bigint!): locations
+
+  """
+  fetch data from the table: "museums"
+  """
+  museums(
+    """distinct select on columns"""
+    distinct_on: [museums_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [museums_order_by!]
+
+    """filter the rows returned"""
+    where: museums_bool_exp
+  ): [museums!]!
+
+  """
+  fetch aggregated fields from the table: "museums"
+  """
+  museums_aggregate(
+    """distinct select on columns"""
+    distinct_on: [museums_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [museums_order_by!]
+
+    """filter the rows returned"""
+    where: museums_bool_exp
+  ): museums_aggregate!
+
+  """fetch data from the table: "museums" using primary key columns"""
+  museums_by_pk(museum_id: bigint!): museums
+
+  """
+  fetch data from the table: "photos"
+  """
+  photos(
+    """distinct select on columns"""
+    distinct_on: [photos_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [photos_order_by!]
+
+    """filter the rows returned"""
+    where: photos_bool_exp
+  ): [photos!]!
+
+  """
+  fetch aggregated fields from the table: "photos"
+  """
+  photos_aggregate(
+    """distinct select on columns"""
+    distinct_on: [photos_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [photos_order_by!]
+
+    """filter the rows returned"""
+    where: photos_bool_exp
+  ): photos_aggregate!
+
+  """fetch data from the table: "photos" using primary key columns"""
+  photos_by_pk(photo_id: bigint!): photos
+
+  """
+  fetch data from the table: "ref_attraction_types"
+  """
+  ref_attraction_types(
+    """distinct select on columns"""
+    distinct_on: [ref_attraction_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_attraction_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_attraction_types_bool_exp
+  ): [ref_attraction_types!]!
+
+  """
+  fetch aggregated fields from the table: "ref_attraction_types"
+  """
+  ref_attraction_types_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_attraction_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_attraction_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_attraction_types_bool_exp
+  ): ref_attraction_types_aggregate!
+
+  """
+  fetch data from the table: "ref_hotel_star_ratings"
+  """
+  ref_hotel_star_ratings(
+    """distinct select on columns"""
+    distinct_on: [ref_hotel_star_ratings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_hotel_star_ratings_order_by!]
+
+    """filter the rows returned"""
+    where: ref_hotel_star_ratings_bool_exp
+  ): [ref_hotel_star_ratings!]!
+
+  """
+  fetch aggregated fields from the table: "ref_hotel_star_ratings"
+  """
+  ref_hotel_star_ratings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_hotel_star_ratings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_hotel_star_ratings_order_by!]
+
+    """filter the rows returned"""
+    where: ref_hotel_star_ratings_bool_exp
+  ): ref_hotel_star_ratings_aggregate!
+
+  """
+  fetch data from the table: "ref_hotel_star_ratings" using primary key columns
+  """
+  ref_hotel_star_ratings_by_pk(star_rating_code: String!): ref_hotel_star_ratings
+
+  """
+  fetch data from the table: "royal_family"
+  """
+  royal_family(
+    """distinct select on columns"""
+    distinct_on: [royal_family_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [royal_family_order_by!]
+
+    """filter the rows returned"""
+    where: royal_family_bool_exp
+  ): [royal_family!]!
+
+  """
+  fetch aggregated fields from the table: "royal_family"
+  """
+  royal_family_aggregate(
+    """distinct select on columns"""
+    distinct_on: [royal_family_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [royal_family_order_by!]
+
+    """filter the rows returned"""
+    where: royal_family_bool_exp
+  ): royal_family_aggregate!
+
+  """fetch data from the table: "royal_family" using primary key columns"""
+  royal_family_by_pk(royal_family_id: bigint!): royal_family
+
+  """
+  fetch data from the table: "shops"
+  """
+  shops(
+    """distinct select on columns"""
+    distinct_on: [shops_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [shops_order_by!]
+
+    """filter the rows returned"""
+    where: shops_bool_exp
+  ): [shops!]!
+
+  """
+  fetch aggregated fields from the table: "shops"
+  """
+  shops_aggregate(
+    """distinct select on columns"""
+    distinct_on: [shops_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [shops_order_by!]
+
+    """filter the rows returned"""
+    where: shops_bool_exp
+  ): shops_aggregate!
+
+  """fetch data from the table: "shops" using primary key columns"""
+  shops_by_pk(shop_id: bigint!): shops
+
+  """
+  fetch data from the table: "staff"
+  """
+  staff(
+    """distinct select on columns"""
+    distinct_on: [staff_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [staff_order_by!]
+
+    """filter the rows returned"""
+    where: staff_bool_exp
+  ): [staff!]!
+
+  """
+  fetch aggregated fields from the table: "staff"
+  """
+  staff_aggregate(
+    """distinct select on columns"""
+    distinct_on: [staff_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [staff_order_by!]
+
+    """filter the rows returned"""
+    where: staff_bool_exp
+  ): staff_aggregate!
+
+  """fetch data from the table: "staff" using primary key columns"""
+  staff_by_pk(staff_id: bigint!): staff
+
+  """
+  fetch data from the table: "street_markets"
+  """
+  street_markets(
+    """distinct select on columns"""
+    distinct_on: [street_markets_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [street_markets_order_by!]
+
+    """filter the rows returned"""
+    where: street_markets_bool_exp
+  ): [street_markets!]!
+
+  """
+  fetch aggregated fields from the table: "street_markets"
+  """
+  street_markets_aggregate(
+    """distinct select on columns"""
+    distinct_on: [street_markets_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [street_markets_order_by!]
+
+    """filter the rows returned"""
+    where: street_markets_bool_exp
+  ): street_markets_aggregate!
+
+  """fetch data from the table: "street_markets" using primary key columns"""
+  street_markets_by_pk(market_id: bigint!): street_markets
+
+  """
+  fetch data from the table: "theme_parks"
+  """
+  theme_parks(
+    """distinct select on columns"""
+    distinct_on: [theme_parks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [theme_parks_order_by!]
+
+    """filter the rows returned"""
+    where: theme_parks_bool_exp
+  ): [theme_parks!]!
+
+  """
+  fetch aggregated fields from the table: "theme_parks"
+  """
+  theme_parks_aggregate(
+    """distinct select on columns"""
+    distinct_on: [theme_parks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [theme_parks_order_by!]
+
+    """filter the rows returned"""
+    where: theme_parks_bool_exp
+  ): theme_parks_aggregate!
+
+  """fetch data from the table: "theme_parks" using primary key columns"""
+  theme_parks_by_pk(theme_park_id: bigint!): theme_parks
+
+  """
+  fetch data from the table: "tourist_attraction_features"
+  """
+  tourist_attraction_features(
+    """distinct select on columns"""
+    distinct_on: [tourist_attraction_features_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tourist_attraction_features_order_by!]
+
+    """filter the rows returned"""
+    where: tourist_attraction_features_bool_exp
+  ): [tourist_attraction_features!]!
+
+  """
+  fetch aggregated fields from the table: "tourist_attraction_features"
+  """
+  tourist_attraction_features_aggregate(
+    """distinct select on columns"""
+    distinct_on: [tourist_attraction_features_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tourist_attraction_features_order_by!]
+
+    """filter the rows returned"""
+    where: tourist_attraction_features_bool_exp
+  ): tourist_attraction_features_aggregate!
+
+  """
+  fetch data from the table: "tourist_attraction_features" using primary key columns
+  """
+  tourist_attraction_features_by_pk(feature_id: bigint!, tourist_attraction_id: bigint!): tourist_attraction_features
+
+  """
+  fetch data from the table: "tourist_attractions"
+  """
+  tourist_attractions(
+    """distinct select on columns"""
+    distinct_on: [tourist_attractions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tourist_attractions_order_by!]
+
+    """filter the rows returned"""
+    where: tourist_attractions_bool_exp
+  ): [tourist_attractions!]!
+
+  """
+  fetch aggregated fields from the table: "tourist_attractions"
+  """
+  tourist_attractions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [tourist_attractions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tourist_attractions_order_by!]
+
+    """filter the rows returned"""
+    where: tourist_attractions_bool_exp
+  ): tourist_attractions_aggregate!
+
+  """
+  fetch data from the table: "tourist_attractions" using primary key columns
+  """
+  tourist_attractions_by_pk(tourist_attraction_id: bigint!): tourist_attractions
+
+  """
+  fetch data from the table: "visitors"
+  """
+  visitors(
+    """distinct select on columns"""
+    distinct_on: [visitors_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visitors_order_by!]
+
+    """filter the rows returned"""
+    where: visitors_bool_exp
+  ): [visitors!]!
+
+  """
+  fetch aggregated fields from the table: "visitors"
+  """
+  visitors_aggregate(
+    """distinct select on columns"""
+    distinct_on: [visitors_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visitors_order_by!]
+
+    """filter the rows returned"""
+    where: visitors_bool_exp
+  ): visitors_aggregate!
+
+  """fetch data from the table: "visitors" using primary key columns"""
+  visitors_by_pk(tourist_id: bigint!): visitors
+
+  """
+  fetch data from the table: "visits"
+  """
+  visits(
+    """distinct select on columns"""
+    distinct_on: [visits_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visits_order_by!]
+
+    """filter the rows returned"""
+    where: visits_bool_exp
+  ): [visits!]!
+
+  """
+  fetch aggregated fields from the table: "visits"
+  """
+  visits_aggregate(
+    """distinct select on columns"""
+    distinct_on: [visits_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visits_order_by!]
+
+    """filter the rows returned"""
+    where: visits_bool_exp
+  ): visits_aggregate!
+
+  """fetch data from the table: "visits" using primary key columns"""
+  visits_by_pk(visit_id: bigint!): visits
+}
+
+"""
+columns and relationships of "ref_attraction_types"
+"""
+type ref_attraction_types {
+  attraction_type_code: String
+  attraction_type_description: String
+
+  """An array relationship"""
+  tourist_attractions(
+    """distinct select on columns"""
+    distinct_on: [tourist_attractions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tourist_attractions_order_by!]
+
+    """filter the rows returned"""
+    where: tourist_attractions_bool_exp
+  ): [tourist_attractions!]!
+
+  """An aggregated array relationship"""
+  tourist_attractions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [tourist_attractions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tourist_attractions_order_by!]
+
+    """filter the rows returned"""
+    where: tourist_attractions_bool_exp
+  ): tourist_attractions_aggregate!
+}
+
+"""
+aggregated selection of "ref_attraction_types"
+"""
+type ref_attraction_types_aggregate {
+  aggregate: ref_attraction_types_aggregate_fields
+  nodes: [ref_attraction_types!]!
+}
+
+"""
+aggregate fields of "ref_attraction_types"
+"""
+type ref_attraction_types_aggregate_fields {
+  count(columns: [ref_attraction_types_select_column!], distinct: Boolean): Int
+  max: ref_attraction_types_max_fields
+  min: ref_attraction_types_min_fields
+}
+
+"""
+order by aggregate values of table "ref_attraction_types"
+"""
+input ref_attraction_types_aggregate_order_by {
+  count: order_by
+  max: ref_attraction_types_max_order_by
+  min: ref_attraction_types_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "ref_attraction_types"
+"""
+input ref_attraction_types_arr_rel_insert_input {
+  data: [ref_attraction_types_insert_input!]!
+  on_conflict: ref_attraction_types_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "ref_attraction_types". All fields are combined with a logical 'AND'.
+"""
+input ref_attraction_types_bool_exp {
+  _and: [ref_attraction_types_bool_exp]
+  _not: ref_attraction_types_bool_exp
+  _or: [ref_attraction_types_bool_exp]
+  attraction_type_code: String_comparison_exp
+  attraction_type_description: String_comparison_exp
+  tourist_attractions: tourist_attractions_bool_exp
+}
+
+"""
+unique or primary key constraints on table "ref_attraction_types"
+"""
+enum ref_attraction_types_constraint {
+  """unique or primary key constraint"""
+  idx_17620_sqlite_autoindex_ref_attraction_types_1
+}
+
+"""
+input type for inserting data into table "ref_attraction_types"
+"""
+input ref_attraction_types_insert_input {
+  attraction_type_code: String
+  attraction_type_description: String
+  tourist_attractions: tourist_attractions_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type ref_attraction_types_max_fields {
+  attraction_type_code: String
+  attraction_type_description: String
+}
+
+"""
+order by max() on columns of table "ref_attraction_types"
+"""
+input ref_attraction_types_max_order_by {
+  attraction_type_code: order_by
+  attraction_type_description: order_by
+}
+
+"""aggregate min on columns"""
+type ref_attraction_types_min_fields {
+  attraction_type_code: String
+  attraction_type_description: String
+}
+
+"""
+order by min() on columns of table "ref_attraction_types"
+"""
+input ref_attraction_types_min_order_by {
+  attraction_type_code: order_by
+  attraction_type_description: order_by
+}
+
+"""
+response of any mutation on the table "ref_attraction_types"
+"""
+type ref_attraction_types_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [ref_attraction_types!]!
+}
+
+"""
+input type for inserting object relation for remote table "ref_attraction_types"
+"""
+input ref_attraction_types_obj_rel_insert_input {
+  data: ref_attraction_types_insert_input!
+  on_conflict: ref_attraction_types_on_conflict
+}
+
+"""
+on conflict condition type for table "ref_attraction_types"
+"""
+input ref_attraction_types_on_conflict {
+  constraint: ref_attraction_types_constraint!
+  update_columns: [ref_attraction_types_update_column!]!
+  where: ref_attraction_types_bool_exp
+}
+
+"""
+ordering options when selecting data from "ref_attraction_types"
+"""
+input ref_attraction_types_order_by {
+  attraction_type_code: order_by
+  attraction_type_description: order_by
+  tourist_attractions_aggregate: tourist_attractions_aggregate_order_by
+}
+
+"""
+select columns of table "ref_attraction_types"
+"""
+enum ref_attraction_types_select_column {
+  """column name"""
+  attraction_type_code
+
+  """column name"""
+  attraction_type_description
+}
+
+"""
+input type for updating data in table "ref_attraction_types"
+"""
+input ref_attraction_types_set_input {
+  attraction_type_code: String
+  attraction_type_description: String
+}
+
+"""
+update columns of table "ref_attraction_types"
+"""
+enum ref_attraction_types_update_column {
+  """column name"""
+  attraction_type_code
+
+  """column name"""
+  attraction_type_description
+}
+
+"""
+columns and relationships of "ref_hotel_star_ratings"
+"""
+type ref_hotel_star_ratings {
+  """An array relationship"""
+  hotels(
+    """distinct select on columns"""
+    distinct_on: [hotels_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hotels_order_by!]
+
+    """filter the rows returned"""
+    where: hotels_bool_exp
+  ): [hotels!]!
+
+  """An aggregated array relationship"""
+  hotels_aggregate(
+    """distinct select on columns"""
+    distinct_on: [hotels_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hotels_order_by!]
+
+    """filter the rows returned"""
+    where: hotels_bool_exp
+  ): hotels_aggregate!
+  star_rating_code: String!
+  star_rating_description: String
+}
+
+"""
+aggregated selection of "ref_hotel_star_ratings"
+"""
+type ref_hotel_star_ratings_aggregate {
+  aggregate: ref_hotel_star_ratings_aggregate_fields
+  nodes: [ref_hotel_star_ratings!]!
+}
+
+"""
+aggregate fields of "ref_hotel_star_ratings"
+"""
+type ref_hotel_star_ratings_aggregate_fields {
+  count(columns: [ref_hotel_star_ratings_select_column!], distinct: Boolean): Int
+  max: ref_hotel_star_ratings_max_fields
+  min: ref_hotel_star_ratings_min_fields
+}
+
+"""
+order by aggregate values of table "ref_hotel_star_ratings"
+"""
+input ref_hotel_star_ratings_aggregate_order_by {
+  count: order_by
+  max: ref_hotel_star_ratings_max_order_by
+  min: ref_hotel_star_ratings_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "ref_hotel_star_ratings"
+"""
+input ref_hotel_star_ratings_arr_rel_insert_input {
+  data: [ref_hotel_star_ratings_insert_input!]!
+  on_conflict: ref_hotel_star_ratings_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "ref_hotel_star_ratings". All fields are combined with a logical 'AND'.
+"""
+input ref_hotel_star_ratings_bool_exp {
+  _and: [ref_hotel_star_ratings_bool_exp]
+  _not: ref_hotel_star_ratings_bool_exp
+  _or: [ref_hotel_star_ratings_bool_exp]
+  hotels: hotels_bool_exp
+  star_rating_code: String_comparison_exp
+  star_rating_description: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "ref_hotel_star_ratings"
+"""
+enum ref_hotel_star_ratings_constraint {
+  """unique or primary key constraint"""
+  idx_17608_sqlite_autoindex_ref_hotel_star_ratings_1
+}
+
+"""
+input type for inserting data into table "ref_hotel_star_ratings"
+"""
+input ref_hotel_star_ratings_insert_input {
+  hotels: hotels_arr_rel_insert_input
+  star_rating_code: String
+  star_rating_description: String
+}
+
+"""aggregate max on columns"""
+type ref_hotel_star_ratings_max_fields {
+  star_rating_code: String
+  star_rating_description: String
+}
+
+"""
+order by max() on columns of table "ref_hotel_star_ratings"
+"""
+input ref_hotel_star_ratings_max_order_by {
+  star_rating_code: order_by
+  star_rating_description: order_by
+}
+
+"""aggregate min on columns"""
+type ref_hotel_star_ratings_min_fields {
+  star_rating_code: String
+  star_rating_description: String
+}
+
+"""
+order by min() on columns of table "ref_hotel_star_ratings"
+"""
+input ref_hotel_star_ratings_min_order_by {
+  star_rating_code: order_by
+  star_rating_description: order_by
+}
+
+"""
+response of any mutation on the table "ref_hotel_star_ratings"
+"""
+type ref_hotel_star_ratings_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [ref_hotel_star_ratings!]!
+}
+
+"""
+input type for inserting object relation for remote table "ref_hotel_star_ratings"
+"""
+input ref_hotel_star_ratings_obj_rel_insert_input {
+  data: ref_hotel_star_ratings_insert_input!
+  on_conflict: ref_hotel_star_ratings_on_conflict
+}
+
+"""
+on conflict condition type for table "ref_hotel_star_ratings"
+"""
+input ref_hotel_star_ratings_on_conflict {
+  constraint: ref_hotel_star_ratings_constraint!
+  update_columns: [ref_hotel_star_ratings_update_column!]!
+  where: ref_hotel_star_ratings_bool_exp
+}
+
+"""
+ordering options when selecting data from "ref_hotel_star_ratings"
+"""
+input ref_hotel_star_ratings_order_by {
+  hotels_aggregate: hotels_aggregate_order_by
+  star_rating_code: order_by
+  star_rating_description: order_by
+}
+
+"""
+select columns of table "ref_hotel_star_ratings"
+"""
+enum ref_hotel_star_ratings_select_column {
+  """column name"""
+  star_rating_code
+
+  """column name"""
+  star_rating_description
+}
+
+"""
+input type for updating data in table "ref_hotel_star_ratings"
+"""
+input ref_hotel_star_ratings_set_input {
+  star_rating_code: String
+  star_rating_description: String
+}
+
+"""
+update columns of table "ref_hotel_star_ratings"
+"""
+enum ref_hotel_star_ratings_update_column {
+  """column name"""
+  star_rating_code
+
+  """column name"""
+  star_rating_description
+}
+
+"""
+columns and relationships of "royal_family"
+"""
+type royal_family {
+  royal_family_details: String
+  royal_family_id: bigint!
+
+  """An object relationship"""
+  tourist_attraction: tourist_attractions!
+}
+
+"""
+aggregated selection of "royal_family"
+"""
+type royal_family_aggregate {
+  aggregate: royal_family_aggregate_fields
+  nodes: [royal_family!]!
+}
+
+"""
+aggregate fields of "royal_family"
+"""
+type royal_family_aggregate_fields {
+  avg: royal_family_avg_fields
+  count(columns: [royal_family_select_column!], distinct: Boolean): Int
+  max: royal_family_max_fields
+  min: royal_family_min_fields
+  stddev: royal_family_stddev_fields
+  stddev_pop: royal_family_stddev_pop_fields
+  stddev_samp: royal_family_stddev_samp_fields
+  sum: royal_family_sum_fields
+  var_pop: royal_family_var_pop_fields
+  var_samp: royal_family_var_samp_fields
+  variance: royal_family_variance_fields
+}
+
+"""
+order by aggregate values of table "royal_family"
+"""
+input royal_family_aggregate_order_by {
+  avg: royal_family_avg_order_by
+  count: order_by
+  max: royal_family_max_order_by
+  min: royal_family_min_order_by
+  stddev: royal_family_stddev_order_by
+  stddev_pop: royal_family_stddev_pop_order_by
+  stddev_samp: royal_family_stddev_samp_order_by
+  sum: royal_family_sum_order_by
+  var_pop: royal_family_var_pop_order_by
+  var_samp: royal_family_var_samp_order_by
+  variance: royal_family_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "royal_family"
+"""
+input royal_family_arr_rel_insert_input {
+  data: [royal_family_insert_input!]!
+  on_conflict: royal_family_on_conflict
+}
+
+"""aggregate avg on columns"""
+type royal_family_avg_fields {
+  royal_family_id: Float
+}
+
+"""
+order by avg() on columns of table "royal_family"
+"""
+input royal_family_avg_order_by {
+  royal_family_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "royal_family". All fields are combined with a logical 'AND'.
+"""
+input royal_family_bool_exp {
+  _and: [royal_family_bool_exp]
+  _not: royal_family_bool_exp
+  _or: [royal_family_bool_exp]
+  royal_family_details: String_comparison_exp
+  royal_family_id: bigint_comparison_exp
+  tourist_attraction: tourist_attractions_bool_exp
+}
+
+"""
+unique or primary key constraints on table "royal_family"
+"""
+enum royal_family_constraint {
+  """unique or primary key constraint"""
+  idx_17668_royal_family_pkey
+}
+
+"""
+input type for incrementing integer columne in table "royal_family"
+"""
+input royal_family_inc_input {
+  royal_family_id: bigint
+}
+
+"""
+input type for inserting data into table "royal_family"
+"""
+input royal_family_insert_input {
+  royal_family_details: String
+  royal_family_id: bigint
+  tourist_attraction: tourist_attractions_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type royal_family_max_fields {
+  royal_family_details: String
+  royal_family_id: bigint
+}
+
+"""
+order by max() on columns of table "royal_family"
+"""
+input royal_family_max_order_by {
+  royal_family_details: order_by
+  royal_family_id: order_by
+}
+
+"""aggregate min on columns"""
+type royal_family_min_fields {
+  royal_family_details: String
+  royal_family_id: bigint
+}
+
+"""
+order by min() on columns of table "royal_family"
+"""
+input royal_family_min_order_by {
+  royal_family_details: order_by
+  royal_family_id: order_by
+}
+
+"""
+response of any mutation on the table "royal_family"
+"""
+type royal_family_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [royal_family!]!
+}
+
+"""
+input type for inserting object relation for remote table "royal_family"
+"""
+input royal_family_obj_rel_insert_input {
+  data: royal_family_insert_input!
+  on_conflict: royal_family_on_conflict
+}
+
+"""
+on conflict condition type for table "royal_family"
+"""
+input royal_family_on_conflict {
+  constraint: royal_family_constraint!
+  update_columns: [royal_family_update_column!]!
+  where: royal_family_bool_exp
+}
+
+"""
+ordering options when selecting data from "royal_family"
+"""
+input royal_family_order_by {
+  royal_family_details: order_by
+  royal_family_id: order_by
+  tourist_attraction: tourist_attractions_order_by
+}
+
+"""
+select columns of table "royal_family"
+"""
+enum royal_family_select_column {
+  """column name"""
+  royal_family_details
+
+  """column name"""
+  royal_family_id
+}
+
+"""
+input type for updating data in table "royal_family"
+"""
+input royal_family_set_input {
+  royal_family_details: String
+  royal_family_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type royal_family_stddev_fields {
+  royal_family_id: Float
+}
+
+"""
+order by stddev() on columns of table "royal_family"
+"""
+input royal_family_stddev_order_by {
+  royal_family_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type royal_family_stddev_pop_fields {
+  royal_family_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "royal_family"
+"""
+input royal_family_stddev_pop_order_by {
+  royal_family_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type royal_family_stddev_samp_fields {
+  royal_family_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "royal_family"
+"""
+input royal_family_stddev_samp_order_by {
+  royal_family_id: order_by
+}
+
+"""aggregate sum on columns"""
+type royal_family_sum_fields {
+  royal_family_id: bigint
+}
+
+"""
+order by sum() on columns of table "royal_family"
+"""
+input royal_family_sum_order_by {
+  royal_family_id: order_by
+}
+
+"""
+update columns of table "royal_family"
+"""
+enum royal_family_update_column {
+  """column name"""
+  royal_family_details
+
+  """column name"""
+  royal_family_id
+}
+
+"""aggregate var_pop on columns"""
+type royal_family_var_pop_fields {
+  royal_family_id: Float
+}
+
+"""
+order by var_pop() on columns of table "royal_family"
+"""
+input royal_family_var_pop_order_by {
+  royal_family_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type royal_family_var_samp_fields {
+  royal_family_id: Float
+}
+
+"""
+order by var_samp() on columns of table "royal_family"
+"""
+input royal_family_var_samp_order_by {
+  royal_family_id: order_by
+}
+
+"""aggregate variance on columns"""
+type royal_family_variance_fields {
+  royal_family_id: Float
+}
+
+"""
+order by variance() on columns of table "royal_family"
+"""
+input royal_family_variance_order_by {
+  royal_family_id: order_by
+}
+
+"""
+columns and relationships of "shops"
+"""
+type shops {
+  shop_details: String
+  shop_id: bigint!
+
+  """An object relationship"""
+  tourist_attraction: tourist_attractions!
+}
+
+"""
+aggregated selection of "shops"
+"""
+type shops_aggregate {
+  aggregate: shops_aggregate_fields
+  nodes: [shops!]!
+}
+
+"""
+aggregate fields of "shops"
+"""
+type shops_aggregate_fields {
+  avg: shops_avg_fields
+  count(columns: [shops_select_column!], distinct: Boolean): Int
+  max: shops_max_fields
+  min: shops_min_fields
+  stddev: shops_stddev_fields
+  stddev_pop: shops_stddev_pop_fields
+  stddev_samp: shops_stddev_samp_fields
+  sum: shops_sum_fields
+  var_pop: shops_var_pop_fields
+  var_samp: shops_var_samp_fields
+  variance: shops_variance_fields
+}
+
+"""
+order by aggregate values of table "shops"
+"""
+input shops_aggregate_order_by {
+  avg: shops_avg_order_by
+  count: order_by
+  max: shops_max_order_by
+  min: shops_min_order_by
+  stddev: shops_stddev_order_by
+  stddev_pop: shops_stddev_pop_order_by
+  stddev_samp: shops_stddev_samp_order_by
+  sum: shops_sum_order_by
+  var_pop: shops_var_pop_order_by
+  var_samp: shops_var_samp_order_by
+  variance: shops_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "shops"
+"""
+input shops_arr_rel_insert_input {
+  data: [shops_insert_input!]!
+  on_conflict: shops_on_conflict
+}
+
+"""aggregate avg on columns"""
+type shops_avg_fields {
+  shop_id: Float
+}
+
+"""
+order by avg() on columns of table "shops"
+"""
+input shops_avg_order_by {
+  shop_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "shops". All fields are combined with a logical 'AND'.
+"""
+input shops_bool_exp {
+  _and: [shops_bool_exp]
+  _not: shops_bool_exp
+  _or: [shops_bool_exp]
+  shop_details: String_comparison_exp
+  shop_id: bigint_comparison_exp
+  tourist_attraction: tourist_attractions_bool_exp
+}
+
+"""
+unique or primary key constraints on table "shops"
+"""
+enum shops_constraint {
+  """unique or primary key constraint"""
+  idx_17656_shops_pkey
+}
+
+"""
+input type for incrementing integer columne in table "shops"
+"""
+input shops_inc_input {
+  shop_id: bigint
+}
+
+"""
+input type for inserting data into table "shops"
+"""
+input shops_insert_input {
+  shop_details: String
+  shop_id: bigint
+  tourist_attraction: tourist_attractions_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type shops_max_fields {
+  shop_details: String
+  shop_id: bigint
+}
+
+"""
+order by max() on columns of table "shops"
+"""
+input shops_max_order_by {
+  shop_details: order_by
+  shop_id: order_by
+}
+
+"""aggregate min on columns"""
+type shops_min_fields {
+  shop_details: String
+  shop_id: bigint
+}
+
+"""
+order by min() on columns of table "shops"
+"""
+input shops_min_order_by {
+  shop_details: order_by
+  shop_id: order_by
+}
+
+"""
+response of any mutation on the table "shops"
+"""
+type shops_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [shops!]!
+}
+
+"""
+input type for inserting object relation for remote table "shops"
+"""
+input shops_obj_rel_insert_input {
+  data: shops_insert_input!
+  on_conflict: shops_on_conflict
+}
+
+"""
+on conflict condition type for table "shops"
+"""
+input shops_on_conflict {
+  constraint: shops_constraint!
+  update_columns: [shops_update_column!]!
+  where: shops_bool_exp
+}
+
+"""
+ordering options when selecting data from "shops"
+"""
+input shops_order_by {
+  shop_details: order_by
+  shop_id: order_by
+  tourist_attraction: tourist_attractions_order_by
+}
+
+"""
+select columns of table "shops"
+"""
+enum shops_select_column {
+  """column name"""
+  shop_details
+
+  """column name"""
+  shop_id
+}
+
+"""
+input type for updating data in table "shops"
+"""
+input shops_set_input {
+  shop_details: String
+  shop_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type shops_stddev_fields {
+  shop_id: Float
+}
+
+"""
+order by stddev() on columns of table "shops"
+"""
+input shops_stddev_order_by {
+  shop_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type shops_stddev_pop_fields {
+  shop_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "shops"
+"""
+input shops_stddev_pop_order_by {
+  shop_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type shops_stddev_samp_fields {
+  shop_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "shops"
+"""
+input shops_stddev_samp_order_by {
+  shop_id: order_by
+}
+
+"""aggregate sum on columns"""
+type shops_sum_fields {
+  shop_id: bigint
+}
+
+"""
+order by sum() on columns of table "shops"
+"""
+input shops_sum_order_by {
+  shop_id: order_by
+}
+
+"""
+update columns of table "shops"
+"""
+enum shops_update_column {
+  """column name"""
+  shop_details
+
+  """column name"""
+  shop_id
+}
+
+"""aggregate var_pop on columns"""
+type shops_var_pop_fields {
+  shop_id: Float
+}
+
+"""
+order by var_pop() on columns of table "shops"
+"""
+input shops_var_pop_order_by {
+  shop_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type shops_var_samp_fields {
+  shop_id: Float
+}
+
+"""
+order by var_samp() on columns of table "shops"
+"""
+input shops_var_samp_order_by {
+  shop_id: order_by
+}
+
+"""aggregate variance on columns"""
+type shops_variance_fields {
+  shop_id: Float
+}
+
+"""
+order by variance() on columns of table "shops"
+"""
+input shops_variance_order_by {
+  shop_id: order_by
+}
+
+"""
+columns and relationships of "staff"
+"""
+type staff {
+  name: String
+  other_details: String
+  staff_id: bigint!
+
+  """An object relationship"""
+  tourist_attraction: tourist_attractions
+  tourist_attraction_id: bigint
+}
+
+"""
+aggregated selection of "staff"
+"""
+type staff_aggregate {
+  aggregate: staff_aggregate_fields
+  nodes: [staff!]!
+}
+
+"""
+aggregate fields of "staff"
+"""
+type staff_aggregate_fields {
+  avg: staff_avg_fields
+  count(columns: [staff_select_column!], distinct: Boolean): Int
+  max: staff_max_fields
+  min: staff_min_fields
+  stddev: staff_stddev_fields
+  stddev_pop: staff_stddev_pop_fields
+  stddev_samp: staff_stddev_samp_fields
+  sum: staff_sum_fields
+  var_pop: staff_var_pop_fields
+  var_samp: staff_var_samp_fields
+  variance: staff_variance_fields
+}
+
+"""
+order by aggregate values of table "staff"
+"""
+input staff_aggregate_order_by {
+  avg: staff_avg_order_by
+  count: order_by
+  max: staff_max_order_by
+  min: staff_min_order_by
+  stddev: staff_stddev_order_by
+  stddev_pop: staff_stddev_pop_order_by
+  stddev_samp: staff_stddev_samp_order_by
+  sum: staff_sum_order_by
+  var_pop: staff_var_pop_order_by
+  var_samp: staff_var_samp_order_by
+  variance: staff_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "staff"
+"""
+input staff_arr_rel_insert_input {
+  data: [staff_insert_input!]!
+  on_conflict: staff_on_conflict
+}
+
+"""aggregate avg on columns"""
+type staff_avg_fields {
+  staff_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by avg() on columns of table "staff"
+"""
+input staff_avg_order_by {
+  staff_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "staff". All fields are combined with a logical 'AND'.
+"""
+input staff_bool_exp {
+  _and: [staff_bool_exp]
+  _not: staff_bool_exp
+  _or: [staff_bool_exp]
+  name: String_comparison_exp
+  other_details: String_comparison_exp
+  staff_id: bigint_comparison_exp
+  tourist_attraction: tourist_attractions_bool_exp
+  tourist_attraction_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "staff"
+"""
+enum staff_constraint {
+  """unique or primary key constraint"""
+  idx_17692_staff_pkey
+}
+
+"""
+input type for incrementing integer columne in table "staff"
+"""
+input staff_inc_input {
+  staff_id: bigint
+  tourist_attraction_id: bigint
+}
+
+"""
+input type for inserting data into table "staff"
+"""
+input staff_insert_input {
+  name: String
+  other_details: String
+  staff_id: bigint
+  tourist_attraction: tourist_attractions_obj_rel_insert_input
+  tourist_attraction_id: bigint
+}
+
+"""aggregate max on columns"""
+type staff_max_fields {
+  name: String
+  other_details: String
+  staff_id: bigint
+  tourist_attraction_id: bigint
+}
+
+"""
+order by max() on columns of table "staff"
+"""
+input staff_max_order_by {
+  name: order_by
+  other_details: order_by
+  staff_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate min on columns"""
+type staff_min_fields {
+  name: String
+  other_details: String
+  staff_id: bigint
+  tourist_attraction_id: bigint
+}
+
+"""
+order by min() on columns of table "staff"
+"""
+input staff_min_order_by {
+  name: order_by
+  other_details: order_by
+  staff_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""
+response of any mutation on the table "staff"
+"""
+type staff_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [staff!]!
+}
+
+"""
+input type for inserting object relation for remote table "staff"
+"""
+input staff_obj_rel_insert_input {
+  data: staff_insert_input!
+  on_conflict: staff_on_conflict
+}
+
+"""
+on conflict condition type for table "staff"
+"""
+input staff_on_conflict {
+  constraint: staff_constraint!
+  update_columns: [staff_update_column!]!
+  where: staff_bool_exp
+}
+
+"""
+ordering options when selecting data from "staff"
+"""
+input staff_order_by {
+  name: order_by
+  other_details: order_by
+  staff_id: order_by
+  tourist_attraction: tourist_attractions_order_by
+  tourist_attraction_id: order_by
+}
+
+"""
+select columns of table "staff"
+"""
+enum staff_select_column {
+  """column name"""
+  name
+
+  """column name"""
+  other_details
+
+  """column name"""
+  staff_id
+
+  """column name"""
+  tourist_attraction_id
+}
+
+"""
+input type for updating data in table "staff"
+"""
+input staff_set_input {
+  name: String
+  other_details: String
+  staff_id: bigint
+  tourist_attraction_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type staff_stddev_fields {
+  staff_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by stddev() on columns of table "staff"
+"""
+input staff_stddev_order_by {
+  staff_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type staff_stddev_pop_fields {
+  staff_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "staff"
+"""
+input staff_stddev_pop_order_by {
+  staff_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type staff_stddev_samp_fields {
+  staff_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "staff"
+"""
+input staff_stddev_samp_order_by {
+  staff_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate sum on columns"""
+type staff_sum_fields {
+  staff_id: bigint
+  tourist_attraction_id: bigint
+}
+
+"""
+order by sum() on columns of table "staff"
+"""
+input staff_sum_order_by {
+  staff_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""
+update columns of table "staff"
+"""
+enum staff_update_column {
+  """column name"""
+  name
+
+  """column name"""
+  other_details
+
+  """column name"""
+  staff_id
+
+  """column name"""
+  tourist_attraction_id
+}
+
+"""aggregate var_pop on columns"""
+type staff_var_pop_fields {
+  staff_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by var_pop() on columns of table "staff"
+"""
+input staff_var_pop_order_by {
+  staff_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type staff_var_samp_fields {
+  staff_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by var_samp() on columns of table "staff"
+"""
+input staff_var_samp_order_by {
+  staff_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate variance on columns"""
+type staff_variance_fields {
+  staff_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by variance() on columns of table "staff"
+"""
+input staff_variance_order_by {
+  staff_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""
+columns and relationships of "street_markets"
+"""
+type street_markets {
+  market_details: String
+  market_id: bigint!
+
+  """An object relationship"""
+  tourist_attraction: tourist_attractions!
+}
+
+"""
+aggregated selection of "street_markets"
+"""
+type street_markets_aggregate {
+  aggregate: street_markets_aggregate_fields
+  nodes: [street_markets!]!
+}
+
+"""
+aggregate fields of "street_markets"
+"""
+type street_markets_aggregate_fields {
+  avg: street_markets_avg_fields
+  count(columns: [street_markets_select_column!], distinct: Boolean): Int
+  max: street_markets_max_fields
+  min: street_markets_min_fields
+  stddev: street_markets_stddev_fields
+  stddev_pop: street_markets_stddev_pop_fields
+  stddev_samp: street_markets_stddev_samp_fields
+  sum: street_markets_sum_fields
+  var_pop: street_markets_var_pop_fields
+  var_samp: street_markets_var_samp_fields
+  variance: street_markets_variance_fields
+}
+
+"""
+order by aggregate values of table "street_markets"
+"""
+input street_markets_aggregate_order_by {
+  avg: street_markets_avg_order_by
+  count: order_by
+  max: street_markets_max_order_by
+  min: street_markets_min_order_by
+  stddev: street_markets_stddev_order_by
+  stddev_pop: street_markets_stddev_pop_order_by
+  stddev_samp: street_markets_stddev_samp_order_by
+  sum: street_markets_sum_order_by
+  var_pop: street_markets_var_pop_order_by
+  var_samp: street_markets_var_samp_order_by
+  variance: street_markets_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "street_markets"
+"""
+input street_markets_arr_rel_insert_input {
+  data: [street_markets_insert_input!]!
+  on_conflict: street_markets_on_conflict
+}
+
+"""aggregate avg on columns"""
+type street_markets_avg_fields {
+  market_id: Float
+}
+
+"""
+order by avg() on columns of table "street_markets"
+"""
+input street_markets_avg_order_by {
+  market_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "street_markets". All fields are combined with a logical 'AND'.
+"""
+input street_markets_bool_exp {
+  _and: [street_markets_bool_exp]
+  _not: street_markets_bool_exp
+  _or: [street_markets_bool_exp]
+  market_details: String_comparison_exp
+  market_id: bigint_comparison_exp
+  tourist_attraction: tourist_attractions_bool_exp
+}
+
+"""
+unique or primary key constraints on table "street_markets"
+"""
+enum street_markets_constraint {
+  """unique or primary key constraint"""
+  idx_17650_street_markets_pkey
+}
+
+"""
+input type for incrementing integer columne in table "street_markets"
+"""
+input street_markets_inc_input {
+  market_id: bigint
+}
+
+"""
+input type for inserting data into table "street_markets"
+"""
+input street_markets_insert_input {
+  market_details: String
+  market_id: bigint
+  tourist_attraction: tourist_attractions_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type street_markets_max_fields {
+  market_details: String
+  market_id: bigint
+}
+
+"""
+order by max() on columns of table "street_markets"
+"""
+input street_markets_max_order_by {
+  market_details: order_by
+  market_id: order_by
+}
+
+"""aggregate min on columns"""
+type street_markets_min_fields {
+  market_details: String
+  market_id: bigint
+}
+
+"""
+order by min() on columns of table "street_markets"
+"""
+input street_markets_min_order_by {
+  market_details: order_by
+  market_id: order_by
+}
+
+"""
+response of any mutation on the table "street_markets"
+"""
+type street_markets_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [street_markets!]!
+}
+
+"""
+input type for inserting object relation for remote table "street_markets"
+"""
+input street_markets_obj_rel_insert_input {
+  data: street_markets_insert_input!
+  on_conflict: street_markets_on_conflict
+}
+
+"""
+on conflict condition type for table "street_markets"
+"""
+input street_markets_on_conflict {
+  constraint: street_markets_constraint!
+  update_columns: [street_markets_update_column!]!
+  where: street_markets_bool_exp
+}
+
+"""
+ordering options when selecting data from "street_markets"
+"""
+input street_markets_order_by {
+  market_details: order_by
+  market_id: order_by
+  tourist_attraction: tourist_attractions_order_by
+}
+
+"""
+select columns of table "street_markets"
+"""
+enum street_markets_select_column {
+  """column name"""
+  market_details
+
+  """column name"""
+  market_id
+}
+
+"""
+input type for updating data in table "street_markets"
+"""
+input street_markets_set_input {
+  market_details: String
+  market_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type street_markets_stddev_fields {
+  market_id: Float
+}
+
+"""
+order by stddev() on columns of table "street_markets"
+"""
+input street_markets_stddev_order_by {
+  market_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type street_markets_stddev_pop_fields {
+  market_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "street_markets"
+"""
+input street_markets_stddev_pop_order_by {
+  market_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type street_markets_stddev_samp_fields {
+  market_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "street_markets"
+"""
+input street_markets_stddev_samp_order_by {
+  market_id: order_by
+}
+
+"""aggregate sum on columns"""
+type street_markets_sum_fields {
+  market_id: bigint
+}
+
+"""
+order by sum() on columns of table "street_markets"
+"""
+input street_markets_sum_order_by {
+  market_id: order_by
+}
+
+"""
+update columns of table "street_markets"
+"""
+enum street_markets_update_column {
+  """column name"""
+  market_details
+
+  """column name"""
+  market_id
+}
+
+"""aggregate var_pop on columns"""
+type street_markets_var_pop_fields {
+  market_id: Float
+}
+
+"""
+order by var_pop() on columns of table "street_markets"
+"""
+input street_markets_var_pop_order_by {
+  market_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type street_markets_var_samp_fields {
+  market_id: Float
+}
+
+"""
+order by var_samp() on columns of table "street_markets"
+"""
+input street_markets_var_samp_order_by {
+  market_id: order_by
+}
+
+"""aggregate variance on columns"""
+type street_markets_variance_fields {
+  market_id: Float
+}
+
+"""
+order by variance() on columns of table "street_markets"
+"""
+input street_markets_variance_order_by {
+  market_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "features"
+  """
+  features(
+    """distinct select on columns"""
+    distinct_on: [features_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [features_order_by!]
+
+    """filter the rows returned"""
+    where: features_bool_exp
+  ): [features!]!
+
+  """
+  fetch aggregated fields from the table: "features"
+  """
+  features_aggregate(
+    """distinct select on columns"""
+    distinct_on: [features_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [features_order_by!]
+
+    """filter the rows returned"""
+    where: features_bool_exp
+  ): features_aggregate!
+
+  """fetch data from the table: "features" using primary key columns"""
+  features_by_pk(feature_id: bigint!): features
+
+  """
+  fetch data from the table: "hotels"
+  """
+  hotels(
+    """distinct select on columns"""
+    distinct_on: [hotels_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hotels_order_by!]
+
+    """filter the rows returned"""
+    where: hotels_bool_exp
+  ): [hotels!]!
+
+  """
+  fetch aggregated fields from the table: "hotels"
+  """
+  hotels_aggregate(
+    """distinct select on columns"""
+    distinct_on: [hotels_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hotels_order_by!]
+
+    """filter the rows returned"""
+    where: hotels_bool_exp
+  ): hotels_aggregate!
+
+  """fetch data from the table: "hotels" using primary key columns"""
+  hotels_by_pk(hotel_id: bigint!): hotels
+
+  """
+  fetch data from the table: "locations"
+  """
+  locations(
+    """distinct select on columns"""
+    distinct_on: [locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [locations_order_by!]
+
+    """filter the rows returned"""
+    where: locations_bool_exp
+  ): [locations!]!
+
+  """
+  fetch aggregated fields from the table: "locations"
+  """
+  locations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [locations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [locations_order_by!]
+
+    """filter the rows returned"""
+    where: locations_bool_exp
+  ): locations_aggregate!
+
+  """fetch data from the table: "locations" using primary key columns"""
+  locations_by_pk(location_id: bigint!): locations
+
+  """
+  fetch data from the table: "museums"
+  """
+  museums(
+    """distinct select on columns"""
+    distinct_on: [museums_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [museums_order_by!]
+
+    """filter the rows returned"""
+    where: museums_bool_exp
+  ): [museums!]!
+
+  """
+  fetch aggregated fields from the table: "museums"
+  """
+  museums_aggregate(
+    """distinct select on columns"""
+    distinct_on: [museums_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [museums_order_by!]
+
+    """filter the rows returned"""
+    where: museums_bool_exp
+  ): museums_aggregate!
+
+  """fetch data from the table: "museums" using primary key columns"""
+  museums_by_pk(museum_id: bigint!): museums
+
+  """
+  fetch data from the table: "photos"
+  """
+  photos(
+    """distinct select on columns"""
+    distinct_on: [photos_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [photos_order_by!]
+
+    """filter the rows returned"""
+    where: photos_bool_exp
+  ): [photos!]!
+
+  """
+  fetch aggregated fields from the table: "photos"
+  """
+  photos_aggregate(
+    """distinct select on columns"""
+    distinct_on: [photos_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [photos_order_by!]
+
+    """filter the rows returned"""
+    where: photos_bool_exp
+  ): photos_aggregate!
+
+  """fetch data from the table: "photos" using primary key columns"""
+  photos_by_pk(photo_id: bigint!): photos
+
+  """
+  fetch data from the table: "ref_attraction_types"
+  """
+  ref_attraction_types(
+    """distinct select on columns"""
+    distinct_on: [ref_attraction_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_attraction_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_attraction_types_bool_exp
+  ): [ref_attraction_types!]!
+
+  """
+  fetch aggregated fields from the table: "ref_attraction_types"
+  """
+  ref_attraction_types_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_attraction_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_attraction_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_attraction_types_bool_exp
+  ): ref_attraction_types_aggregate!
+
+  """
+  fetch data from the table: "ref_hotel_star_ratings"
+  """
+  ref_hotel_star_ratings(
+    """distinct select on columns"""
+    distinct_on: [ref_hotel_star_ratings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_hotel_star_ratings_order_by!]
+
+    """filter the rows returned"""
+    where: ref_hotel_star_ratings_bool_exp
+  ): [ref_hotel_star_ratings!]!
+
+  """
+  fetch aggregated fields from the table: "ref_hotel_star_ratings"
+  """
+  ref_hotel_star_ratings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_hotel_star_ratings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_hotel_star_ratings_order_by!]
+
+    """filter the rows returned"""
+    where: ref_hotel_star_ratings_bool_exp
+  ): ref_hotel_star_ratings_aggregate!
+
+  """
+  fetch data from the table: "ref_hotel_star_ratings" using primary key columns
+  """
+  ref_hotel_star_ratings_by_pk(star_rating_code: String!): ref_hotel_star_ratings
+
+  """
+  fetch data from the table: "royal_family"
+  """
+  royal_family(
+    """distinct select on columns"""
+    distinct_on: [royal_family_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [royal_family_order_by!]
+
+    """filter the rows returned"""
+    where: royal_family_bool_exp
+  ): [royal_family!]!
+
+  """
+  fetch aggregated fields from the table: "royal_family"
+  """
+  royal_family_aggregate(
+    """distinct select on columns"""
+    distinct_on: [royal_family_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [royal_family_order_by!]
+
+    """filter the rows returned"""
+    where: royal_family_bool_exp
+  ): royal_family_aggregate!
+
+  """fetch data from the table: "royal_family" using primary key columns"""
+  royal_family_by_pk(royal_family_id: bigint!): royal_family
+
+  """
+  fetch data from the table: "shops"
+  """
+  shops(
+    """distinct select on columns"""
+    distinct_on: [shops_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [shops_order_by!]
+
+    """filter the rows returned"""
+    where: shops_bool_exp
+  ): [shops!]!
+
+  """
+  fetch aggregated fields from the table: "shops"
+  """
+  shops_aggregate(
+    """distinct select on columns"""
+    distinct_on: [shops_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [shops_order_by!]
+
+    """filter the rows returned"""
+    where: shops_bool_exp
+  ): shops_aggregate!
+
+  """fetch data from the table: "shops" using primary key columns"""
+  shops_by_pk(shop_id: bigint!): shops
+
+  """
+  fetch data from the table: "staff"
+  """
+  staff(
+    """distinct select on columns"""
+    distinct_on: [staff_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [staff_order_by!]
+
+    """filter the rows returned"""
+    where: staff_bool_exp
+  ): [staff!]!
+
+  """
+  fetch aggregated fields from the table: "staff"
+  """
+  staff_aggregate(
+    """distinct select on columns"""
+    distinct_on: [staff_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [staff_order_by!]
+
+    """filter the rows returned"""
+    where: staff_bool_exp
+  ): staff_aggregate!
+
+  """fetch data from the table: "staff" using primary key columns"""
+  staff_by_pk(staff_id: bigint!): staff
+
+  """
+  fetch data from the table: "street_markets"
+  """
+  street_markets(
+    """distinct select on columns"""
+    distinct_on: [street_markets_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [street_markets_order_by!]
+
+    """filter the rows returned"""
+    where: street_markets_bool_exp
+  ): [street_markets!]!
+
+  """
+  fetch aggregated fields from the table: "street_markets"
+  """
+  street_markets_aggregate(
+    """distinct select on columns"""
+    distinct_on: [street_markets_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [street_markets_order_by!]
+
+    """filter the rows returned"""
+    where: street_markets_bool_exp
+  ): street_markets_aggregate!
+
+  """fetch data from the table: "street_markets" using primary key columns"""
+  street_markets_by_pk(market_id: bigint!): street_markets
+
+  """
+  fetch data from the table: "theme_parks"
+  """
+  theme_parks(
+    """distinct select on columns"""
+    distinct_on: [theme_parks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [theme_parks_order_by!]
+
+    """filter the rows returned"""
+    where: theme_parks_bool_exp
+  ): [theme_parks!]!
+
+  """
+  fetch aggregated fields from the table: "theme_parks"
+  """
+  theme_parks_aggregate(
+    """distinct select on columns"""
+    distinct_on: [theme_parks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [theme_parks_order_by!]
+
+    """filter the rows returned"""
+    where: theme_parks_bool_exp
+  ): theme_parks_aggregate!
+
+  """fetch data from the table: "theme_parks" using primary key columns"""
+  theme_parks_by_pk(theme_park_id: bigint!): theme_parks
+
+  """
+  fetch data from the table: "tourist_attraction_features"
+  """
+  tourist_attraction_features(
+    """distinct select on columns"""
+    distinct_on: [tourist_attraction_features_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tourist_attraction_features_order_by!]
+
+    """filter the rows returned"""
+    where: tourist_attraction_features_bool_exp
+  ): [tourist_attraction_features!]!
+
+  """
+  fetch aggregated fields from the table: "tourist_attraction_features"
+  """
+  tourist_attraction_features_aggregate(
+    """distinct select on columns"""
+    distinct_on: [tourist_attraction_features_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tourist_attraction_features_order_by!]
+
+    """filter the rows returned"""
+    where: tourist_attraction_features_bool_exp
+  ): tourist_attraction_features_aggregate!
+
+  """
+  fetch data from the table: "tourist_attraction_features" using primary key columns
+  """
+  tourist_attraction_features_by_pk(feature_id: bigint!, tourist_attraction_id: bigint!): tourist_attraction_features
+
+  """
+  fetch data from the table: "tourist_attractions"
+  """
+  tourist_attractions(
+    """distinct select on columns"""
+    distinct_on: [tourist_attractions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tourist_attractions_order_by!]
+
+    """filter the rows returned"""
+    where: tourist_attractions_bool_exp
+  ): [tourist_attractions!]!
+
+  """
+  fetch aggregated fields from the table: "tourist_attractions"
+  """
+  tourist_attractions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [tourist_attractions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tourist_attractions_order_by!]
+
+    """filter the rows returned"""
+    where: tourist_attractions_bool_exp
+  ): tourist_attractions_aggregate!
+
+  """
+  fetch data from the table: "tourist_attractions" using primary key columns
+  """
+  tourist_attractions_by_pk(tourist_attraction_id: bigint!): tourist_attractions
+
+  """
+  fetch data from the table: "visitors"
+  """
+  visitors(
+    """distinct select on columns"""
+    distinct_on: [visitors_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visitors_order_by!]
+
+    """filter the rows returned"""
+    where: visitors_bool_exp
+  ): [visitors!]!
+
+  """
+  fetch aggregated fields from the table: "visitors"
+  """
+  visitors_aggregate(
+    """distinct select on columns"""
+    distinct_on: [visitors_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visitors_order_by!]
+
+    """filter the rows returned"""
+    where: visitors_bool_exp
+  ): visitors_aggregate!
+
+  """fetch data from the table: "visitors" using primary key columns"""
+  visitors_by_pk(tourist_id: bigint!): visitors
+
+  """
+  fetch data from the table: "visits"
+  """
+  visits(
+    """distinct select on columns"""
+    distinct_on: [visits_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visits_order_by!]
+
+    """filter the rows returned"""
+    where: visits_bool_exp
+  ): [visits!]!
+
+  """
+  fetch aggregated fields from the table: "visits"
+  """
+  visits_aggregate(
+    """distinct select on columns"""
+    distinct_on: [visits_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visits_order_by!]
+
+    """filter the rows returned"""
+    where: visits_bool_exp
+  ): visits_aggregate!
+
+  """fetch data from the table: "visits" using primary key columns"""
+  visits_by_pk(visit_id: bigint!): visits
+}
+
+"""
+columns and relationships of "theme_parks"
+"""
+type theme_parks {
+  theme_park_details: String
+  theme_park_id: bigint!
+
+  """An object relationship"""
+  tourist_attraction: tourist_attractions!
+}
+
+"""
+aggregated selection of "theme_parks"
+"""
+type theme_parks_aggregate {
+  aggregate: theme_parks_aggregate_fields
+  nodes: [theme_parks!]!
+}
+
+"""
+aggregate fields of "theme_parks"
+"""
+type theme_parks_aggregate_fields {
+  avg: theme_parks_avg_fields
+  count(columns: [theme_parks_select_column!], distinct: Boolean): Int
+  max: theme_parks_max_fields
+  min: theme_parks_min_fields
+  stddev: theme_parks_stddev_fields
+  stddev_pop: theme_parks_stddev_pop_fields
+  stddev_samp: theme_parks_stddev_samp_fields
+  sum: theme_parks_sum_fields
+  var_pop: theme_parks_var_pop_fields
+  var_samp: theme_parks_var_samp_fields
+  variance: theme_parks_variance_fields
+}
+
+"""
+order by aggregate values of table "theme_parks"
+"""
+input theme_parks_aggregate_order_by {
+  avg: theme_parks_avg_order_by
+  count: order_by
+  max: theme_parks_max_order_by
+  min: theme_parks_min_order_by
+  stddev: theme_parks_stddev_order_by
+  stddev_pop: theme_parks_stddev_pop_order_by
+  stddev_samp: theme_parks_stddev_samp_order_by
+  sum: theme_parks_sum_order_by
+  var_pop: theme_parks_var_pop_order_by
+  var_samp: theme_parks_var_samp_order_by
+  variance: theme_parks_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "theme_parks"
+"""
+input theme_parks_arr_rel_insert_input {
+  data: [theme_parks_insert_input!]!
+  on_conflict: theme_parks_on_conflict
+}
+
+"""aggregate avg on columns"""
+type theme_parks_avg_fields {
+  theme_park_id: Float
+}
+
+"""
+order by avg() on columns of table "theme_parks"
+"""
+input theme_parks_avg_order_by {
+  theme_park_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "theme_parks". All fields are combined with a logical 'AND'.
+"""
+input theme_parks_bool_exp {
+  _and: [theme_parks_bool_exp]
+  _not: theme_parks_bool_exp
+  _or: [theme_parks_bool_exp]
+  theme_park_details: String_comparison_exp
+  theme_park_id: bigint_comparison_exp
+  tourist_attraction: tourist_attractions_bool_exp
+}
+
+"""
+unique or primary key constraints on table "theme_parks"
+"""
+enum theme_parks_constraint {
+  """unique or primary key constraint"""
+  idx_17674_theme_parks_pkey
+}
+
+"""
+input type for incrementing integer columne in table "theme_parks"
+"""
+input theme_parks_inc_input {
+  theme_park_id: bigint
+}
+
+"""
+input type for inserting data into table "theme_parks"
+"""
+input theme_parks_insert_input {
+  theme_park_details: String
+  theme_park_id: bigint
+  tourist_attraction: tourist_attractions_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type theme_parks_max_fields {
+  theme_park_details: String
+  theme_park_id: bigint
+}
+
+"""
+order by max() on columns of table "theme_parks"
+"""
+input theme_parks_max_order_by {
+  theme_park_details: order_by
+  theme_park_id: order_by
+}
+
+"""aggregate min on columns"""
+type theme_parks_min_fields {
+  theme_park_details: String
+  theme_park_id: bigint
+}
+
+"""
+order by min() on columns of table "theme_parks"
+"""
+input theme_parks_min_order_by {
+  theme_park_details: order_by
+  theme_park_id: order_by
+}
+
+"""
+response of any mutation on the table "theme_parks"
+"""
+type theme_parks_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [theme_parks!]!
+}
+
+"""
+input type for inserting object relation for remote table "theme_parks"
+"""
+input theme_parks_obj_rel_insert_input {
+  data: theme_parks_insert_input!
+  on_conflict: theme_parks_on_conflict
+}
+
+"""
+on conflict condition type for table "theme_parks"
+"""
+input theme_parks_on_conflict {
+  constraint: theme_parks_constraint!
+  update_columns: [theme_parks_update_column!]!
+  where: theme_parks_bool_exp
+}
+
+"""
+ordering options when selecting data from "theme_parks"
+"""
+input theme_parks_order_by {
+  theme_park_details: order_by
+  theme_park_id: order_by
+  tourist_attraction: tourist_attractions_order_by
+}
+
+"""
+select columns of table "theme_parks"
+"""
+enum theme_parks_select_column {
+  """column name"""
+  theme_park_details
+
+  """column name"""
+  theme_park_id
+}
+
+"""
+input type for updating data in table "theme_parks"
+"""
+input theme_parks_set_input {
+  theme_park_details: String
+  theme_park_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type theme_parks_stddev_fields {
+  theme_park_id: Float
+}
+
+"""
+order by stddev() on columns of table "theme_parks"
+"""
+input theme_parks_stddev_order_by {
+  theme_park_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type theme_parks_stddev_pop_fields {
+  theme_park_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "theme_parks"
+"""
+input theme_parks_stddev_pop_order_by {
+  theme_park_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type theme_parks_stddev_samp_fields {
+  theme_park_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "theme_parks"
+"""
+input theme_parks_stddev_samp_order_by {
+  theme_park_id: order_by
+}
+
+"""aggregate sum on columns"""
+type theme_parks_sum_fields {
+  theme_park_id: bigint
+}
+
+"""
+order by sum() on columns of table "theme_parks"
+"""
+input theme_parks_sum_order_by {
+  theme_park_id: order_by
+}
+
+"""
+update columns of table "theme_parks"
+"""
+enum theme_parks_update_column {
+  """column name"""
+  theme_park_details
+
+  """column name"""
+  theme_park_id
+}
+
+"""aggregate var_pop on columns"""
+type theme_parks_var_pop_fields {
+  theme_park_id: Float
+}
+
+"""
+order by var_pop() on columns of table "theme_parks"
+"""
+input theme_parks_var_pop_order_by {
+  theme_park_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type theme_parks_var_samp_fields {
+  theme_park_id: Float
+}
+
+"""
+order by var_samp() on columns of table "theme_parks"
+"""
+input theme_parks_var_samp_order_by {
+  theme_park_id: order_by
+}
+
+"""aggregate variance on columns"""
+type theme_parks_variance_fields {
+  theme_park_id: Float
+}
+
+"""
+order by variance() on columns of table "theme_parks"
+"""
+input theme_parks_variance_order_by {
+  theme_park_id: order_by
+}
+
+scalar timestamptz
+
+"""
+expression to compare columns of type timestamptz. All fields are combined with logical 'AND'.
+"""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}
+
+"""
+columns and relationships of "tourist_attraction_features"
+"""
+type tourist_attraction_features {
+  """An object relationship"""
+  feature: features!
+  feature_id: bigint!
+
+  """An object relationship"""
+  tourist_attraction: tourist_attractions!
+  tourist_attraction_id: bigint!
+}
+
+"""
+aggregated selection of "tourist_attraction_features"
+"""
+type tourist_attraction_features_aggregate {
+  aggregate: tourist_attraction_features_aggregate_fields
+  nodes: [tourist_attraction_features!]!
+}
+
+"""
+aggregate fields of "tourist_attraction_features"
+"""
+type tourist_attraction_features_aggregate_fields {
+  avg: tourist_attraction_features_avg_fields
+  count(columns: [tourist_attraction_features_select_column!], distinct: Boolean): Int
+  max: tourist_attraction_features_max_fields
+  min: tourist_attraction_features_min_fields
+  stddev: tourist_attraction_features_stddev_fields
+  stddev_pop: tourist_attraction_features_stddev_pop_fields
+  stddev_samp: tourist_attraction_features_stddev_samp_fields
+  sum: tourist_attraction_features_sum_fields
+  var_pop: tourist_attraction_features_var_pop_fields
+  var_samp: tourist_attraction_features_var_samp_fields
+  variance: tourist_attraction_features_variance_fields
+}
+
+"""
+order by aggregate values of table "tourist_attraction_features"
+"""
+input tourist_attraction_features_aggregate_order_by {
+  avg: tourist_attraction_features_avg_order_by
+  count: order_by
+  max: tourist_attraction_features_max_order_by
+  min: tourist_attraction_features_min_order_by
+  stddev: tourist_attraction_features_stddev_order_by
+  stddev_pop: tourist_attraction_features_stddev_pop_order_by
+  stddev_samp: tourist_attraction_features_stddev_samp_order_by
+  sum: tourist_attraction_features_sum_order_by
+  var_pop: tourist_attraction_features_var_pop_order_by
+  var_samp: tourist_attraction_features_var_samp_order_by
+  variance: tourist_attraction_features_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "tourist_attraction_features"
+"""
+input tourist_attraction_features_arr_rel_insert_input {
+  data: [tourist_attraction_features_insert_input!]!
+  on_conflict: tourist_attraction_features_on_conflict
+}
+
+"""aggregate avg on columns"""
+type tourist_attraction_features_avg_fields {
+  feature_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by avg() on columns of table "tourist_attraction_features"
+"""
+input tourist_attraction_features_avg_order_by {
+  feature_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "tourist_attraction_features".
+All fields are combined with a logical 'AND'.
+"""
+input tourist_attraction_features_bool_exp {
+  _and: [tourist_attraction_features_bool_exp]
+  _not: tourist_attraction_features_bool_exp
+  _or: [tourist_attraction_features_bool_exp]
+  feature: features_bool_exp
+  feature_id: bigint_comparison_exp
+  tourist_attraction: tourist_attractions_bool_exp
+  tourist_attraction_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "tourist_attraction_features"
+"""
+enum tourist_attraction_features_constraint {
+  """unique or primary key constraint"""
+  idx_17698_sqlite_autoindex_tourist_attraction_features_1
+
+  """unique or primary key constraint"""
+  idx_17698_tourist_attraction_features_pkey
+}
+
+"""
+input type for incrementing integer columne in table "tourist_attraction_features"
+"""
+input tourist_attraction_features_inc_input {
+  feature_id: bigint
+  tourist_attraction_id: bigint
+}
+
+"""
+input type for inserting data into table "tourist_attraction_features"
+"""
+input tourist_attraction_features_insert_input {
+  feature: features_obj_rel_insert_input
+  feature_id: bigint
+  tourist_attraction: tourist_attractions_obj_rel_insert_input
+  tourist_attraction_id: bigint
+}
+
+"""aggregate max on columns"""
+type tourist_attraction_features_max_fields {
+  feature_id: bigint
+  tourist_attraction_id: bigint
+}
+
+"""
+order by max() on columns of table "tourist_attraction_features"
+"""
+input tourist_attraction_features_max_order_by {
+  feature_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate min on columns"""
+type tourist_attraction_features_min_fields {
+  feature_id: bigint
+  tourist_attraction_id: bigint
+}
+
+"""
+order by min() on columns of table "tourist_attraction_features"
+"""
+input tourist_attraction_features_min_order_by {
+  feature_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""
+response of any mutation on the table "tourist_attraction_features"
+"""
+type tourist_attraction_features_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [tourist_attraction_features!]!
+}
+
+"""
+input type for inserting object relation for remote table "tourist_attraction_features"
+"""
+input tourist_attraction_features_obj_rel_insert_input {
+  data: tourist_attraction_features_insert_input!
+  on_conflict: tourist_attraction_features_on_conflict
+}
+
+"""
+on conflict condition type for table "tourist_attraction_features"
+"""
+input tourist_attraction_features_on_conflict {
+  constraint: tourist_attraction_features_constraint!
+  update_columns: [tourist_attraction_features_update_column!]!
+  where: tourist_attraction_features_bool_exp
+}
+
+"""
+ordering options when selecting data from "tourist_attraction_features"
+"""
+input tourist_attraction_features_order_by {
+  feature: features_order_by
+  feature_id: order_by
+  tourist_attraction: tourist_attractions_order_by
+  tourist_attraction_id: order_by
+}
+
+"""
+select columns of table "tourist_attraction_features"
+"""
+enum tourist_attraction_features_select_column {
+  """column name"""
+  feature_id
+
+  """column name"""
+  tourist_attraction_id
+}
+
+"""
+input type for updating data in table "tourist_attraction_features"
+"""
+input tourist_attraction_features_set_input {
+  feature_id: bigint
+  tourist_attraction_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type tourist_attraction_features_stddev_fields {
+  feature_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by stddev() on columns of table "tourist_attraction_features"
+"""
+input tourist_attraction_features_stddev_order_by {
+  feature_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type tourist_attraction_features_stddev_pop_fields {
+  feature_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "tourist_attraction_features"
+"""
+input tourist_attraction_features_stddev_pop_order_by {
+  feature_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type tourist_attraction_features_stddev_samp_fields {
+  feature_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "tourist_attraction_features"
+"""
+input tourist_attraction_features_stddev_samp_order_by {
+  feature_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate sum on columns"""
+type tourist_attraction_features_sum_fields {
+  feature_id: bigint
+  tourist_attraction_id: bigint
+}
+
+"""
+order by sum() on columns of table "tourist_attraction_features"
+"""
+input tourist_attraction_features_sum_order_by {
+  feature_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""
+update columns of table "tourist_attraction_features"
+"""
+enum tourist_attraction_features_update_column {
+  """column name"""
+  feature_id
+
+  """column name"""
+  tourist_attraction_id
+}
+
+"""aggregate var_pop on columns"""
+type tourist_attraction_features_var_pop_fields {
+  feature_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by var_pop() on columns of table "tourist_attraction_features"
+"""
+input tourist_attraction_features_var_pop_order_by {
+  feature_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type tourist_attraction_features_var_samp_fields {
+  feature_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by var_samp() on columns of table "tourist_attraction_features"
+"""
+input tourist_attraction_features_var_samp_order_by {
+  feature_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate variance on columns"""
+type tourist_attraction_features_variance_fields {
+  feature_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by variance() on columns of table "tourist_attraction_features"
+"""
+input tourist_attraction_features_variance_order_by {
+  feature_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""
+columns and relationships of "tourist_attractions"
+"""
+type tourist_attractions {
+  attraction_type_code: String
+  description: String
+  how_to_get_there: String
+
+  """An object relationship"""
+  location: locations
+  location_id: bigint
+
+  """An array relationship"""
+  museums(
+    """distinct select on columns"""
+    distinct_on: [museums_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [museums_order_by!]
+
+    """filter the rows returned"""
+    where: museums_bool_exp
+  ): [museums!]!
+
+  """An aggregated array relationship"""
+  museums_aggregate(
+    """distinct select on columns"""
+    distinct_on: [museums_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [museums_order_by!]
+
+    """filter the rows returned"""
+    where: museums_bool_exp
+  ): museums_aggregate!
+  name: String
+  opening_hours: String
+  other_details: String
+
+  """An array relationship"""
+  photos(
+    """distinct select on columns"""
+    distinct_on: [photos_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [photos_order_by!]
+
+    """filter the rows returned"""
+    where: photos_bool_exp
+  ): [photos!]!
+
+  """An aggregated array relationship"""
+  photos_aggregate(
+    """distinct select on columns"""
+    distinct_on: [photos_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [photos_order_by!]
+
+    """filter the rows returned"""
+    where: photos_bool_exp
+  ): photos_aggregate!
+
+  """An object relationship"""
+  ref_attraction_type: ref_attraction_types
+
+  """An array relationship"""
+  royal_families(
+    """distinct select on columns"""
+    distinct_on: [royal_family_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [royal_family_order_by!]
+
+    """filter the rows returned"""
+    where: royal_family_bool_exp
+  ): [royal_family!]!
+
+  """An aggregated array relationship"""
+  royal_families_aggregate(
+    """distinct select on columns"""
+    distinct_on: [royal_family_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [royal_family_order_by!]
+
+    """filter the rows returned"""
+    where: royal_family_bool_exp
+  ): royal_family_aggregate!
+
+  """An array relationship"""
+  shops(
+    """distinct select on columns"""
+    distinct_on: [shops_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [shops_order_by!]
+
+    """filter the rows returned"""
+    where: shops_bool_exp
+  ): [shops!]!
+
+  """An aggregated array relationship"""
+  shops_aggregate(
+    """distinct select on columns"""
+    distinct_on: [shops_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [shops_order_by!]
+
+    """filter the rows returned"""
+    where: shops_bool_exp
+  ): shops_aggregate!
+
+  """An array relationship"""
+  staffs(
+    """distinct select on columns"""
+    distinct_on: [staff_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [staff_order_by!]
+
+    """filter the rows returned"""
+    where: staff_bool_exp
+  ): [staff!]!
+
+  """An aggregated array relationship"""
+  staffs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [staff_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [staff_order_by!]
+
+    """filter the rows returned"""
+    where: staff_bool_exp
+  ): staff_aggregate!
+
+  """An array relationship"""
+  street_markets(
+    """distinct select on columns"""
+    distinct_on: [street_markets_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [street_markets_order_by!]
+
+    """filter the rows returned"""
+    where: street_markets_bool_exp
+  ): [street_markets!]!
+
+  """An aggregated array relationship"""
+  street_markets_aggregate(
+    """distinct select on columns"""
+    distinct_on: [street_markets_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [street_markets_order_by!]
+
+    """filter the rows returned"""
+    where: street_markets_bool_exp
+  ): street_markets_aggregate!
+
+  """An array relationship"""
+  theme_parks(
+    """distinct select on columns"""
+    distinct_on: [theme_parks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [theme_parks_order_by!]
+
+    """filter the rows returned"""
+    where: theme_parks_bool_exp
+  ): [theme_parks!]!
+
+  """An aggregated array relationship"""
+  theme_parks_aggregate(
+    """distinct select on columns"""
+    distinct_on: [theme_parks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [theme_parks_order_by!]
+
+    """filter the rows returned"""
+    where: theme_parks_bool_exp
+  ): theme_parks_aggregate!
+
+  """An array relationship"""
+  tourist_attraction_features(
+    """distinct select on columns"""
+    distinct_on: [tourist_attraction_features_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tourist_attraction_features_order_by!]
+
+    """filter the rows returned"""
+    where: tourist_attraction_features_bool_exp
+  ): [tourist_attraction_features!]!
+
+  """An aggregated array relationship"""
+  tourist_attraction_features_aggregate(
+    """distinct select on columns"""
+    distinct_on: [tourist_attraction_features_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tourist_attraction_features_order_by!]
+
+    """filter the rows returned"""
+    where: tourist_attraction_features_bool_exp
+  ): tourist_attraction_features_aggregate!
+  tourist_attraction_id: bigint!
+
+  """An array relationship"""
+  visits(
+    """distinct select on columns"""
+    distinct_on: [visits_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visits_order_by!]
+
+    """filter the rows returned"""
+    where: visits_bool_exp
+  ): [visits!]!
+
+  """An aggregated array relationship"""
+  visits_aggregate(
+    """distinct select on columns"""
+    distinct_on: [visits_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visits_order_by!]
+
+    """filter the rows returned"""
+    where: visits_bool_exp
+  ): visits_aggregate!
+}
+
+"""
+aggregated selection of "tourist_attractions"
+"""
+type tourist_attractions_aggregate {
+  aggregate: tourist_attractions_aggregate_fields
+  nodes: [tourist_attractions!]!
+}
+
+"""
+aggregate fields of "tourist_attractions"
+"""
+type tourist_attractions_aggregate_fields {
+  avg: tourist_attractions_avg_fields
+  count(columns: [tourist_attractions_select_column!], distinct: Boolean): Int
+  max: tourist_attractions_max_fields
+  min: tourist_attractions_min_fields
+  stddev: tourist_attractions_stddev_fields
+  stddev_pop: tourist_attractions_stddev_pop_fields
+  stddev_samp: tourist_attractions_stddev_samp_fields
+  sum: tourist_attractions_sum_fields
+  var_pop: tourist_attractions_var_pop_fields
+  var_samp: tourist_attractions_var_samp_fields
+  variance: tourist_attractions_variance_fields
+}
+
+"""
+order by aggregate values of table "tourist_attractions"
+"""
+input tourist_attractions_aggregate_order_by {
+  avg: tourist_attractions_avg_order_by
+  count: order_by
+  max: tourist_attractions_max_order_by
+  min: tourist_attractions_min_order_by
+  stddev: tourist_attractions_stddev_order_by
+  stddev_pop: tourist_attractions_stddev_pop_order_by
+  stddev_samp: tourist_attractions_stddev_samp_order_by
+  sum: tourist_attractions_sum_order_by
+  var_pop: tourist_attractions_var_pop_order_by
+  var_samp: tourist_attractions_var_samp_order_by
+  variance: tourist_attractions_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "tourist_attractions"
+"""
+input tourist_attractions_arr_rel_insert_input {
+  data: [tourist_attractions_insert_input!]!
+  on_conflict: tourist_attractions_on_conflict
+}
+
+"""aggregate avg on columns"""
+type tourist_attractions_avg_fields {
+  location_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by avg() on columns of table "tourist_attractions"
+"""
+input tourist_attractions_avg_order_by {
+  location_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "tourist_attractions". All fields are combined with a logical 'AND'.
+"""
+input tourist_attractions_bool_exp {
+  _and: [tourist_attractions_bool_exp]
+  _not: tourist_attractions_bool_exp
+  _or: [tourist_attractions_bool_exp]
+  attraction_type_code: String_comparison_exp
+  description: String_comparison_exp
+  how_to_get_there: String_comparison_exp
+  location: locations_bool_exp
+  location_id: bigint_comparison_exp
+  museums: museums_bool_exp
+  name: String_comparison_exp
+  opening_hours: String_comparison_exp
+  other_details: String_comparison_exp
+  photos: photos_bool_exp
+  ref_attraction_type: ref_attraction_types_bool_exp
+  royal_families: royal_family_bool_exp
+  shops: shops_bool_exp
+  staffs: staff_bool_exp
+  street_markets: street_markets_bool_exp
+  theme_parks: theme_parks_bool_exp
+  tourist_attraction_features: tourist_attraction_features_bool_exp
+  tourist_attraction_id: bigint_comparison_exp
+  visits: visits_bool_exp
+}
+
+"""
+unique or primary key constraints on table "tourist_attractions"
+"""
+enum tourist_attractions_constraint {
+  """unique or primary key constraint"""
+  idx_17644_tourist_attractions_pkey
+}
+
+"""
+input type for incrementing integer columne in table "tourist_attractions"
+"""
+input tourist_attractions_inc_input {
+  location_id: bigint
+  tourist_attraction_id: bigint
+}
+
+"""
+input type for inserting data into table "tourist_attractions"
+"""
+input tourist_attractions_insert_input {
+  attraction_type_code: String
+  description: String
+  how_to_get_there: String
+  location: locations_obj_rel_insert_input
+  location_id: bigint
+  museums: museums_arr_rel_insert_input
+  name: String
+  opening_hours: String
+  other_details: String
+  photos: photos_arr_rel_insert_input
+  ref_attraction_type: ref_attraction_types_obj_rel_insert_input
+  royal_families: royal_family_arr_rel_insert_input
+  shops: shops_arr_rel_insert_input
+  staffs: staff_arr_rel_insert_input
+  street_markets: street_markets_arr_rel_insert_input
+  theme_parks: theme_parks_arr_rel_insert_input
+  tourist_attraction_features: tourist_attraction_features_arr_rel_insert_input
+  tourist_attraction_id: bigint
+  visits: visits_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type tourist_attractions_max_fields {
+  attraction_type_code: String
+  description: String
+  how_to_get_there: String
+  location_id: bigint
+  name: String
+  opening_hours: String
+  other_details: String
+  tourist_attraction_id: bigint
+}
+
+"""
+order by max() on columns of table "tourist_attractions"
+"""
+input tourist_attractions_max_order_by {
+  attraction_type_code: order_by
+  description: order_by
+  how_to_get_there: order_by
+  location_id: order_by
+  name: order_by
+  opening_hours: order_by
+  other_details: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate min on columns"""
+type tourist_attractions_min_fields {
+  attraction_type_code: String
+  description: String
+  how_to_get_there: String
+  location_id: bigint
+  name: String
+  opening_hours: String
+  other_details: String
+  tourist_attraction_id: bigint
+}
+
+"""
+order by min() on columns of table "tourist_attractions"
+"""
+input tourist_attractions_min_order_by {
+  attraction_type_code: order_by
+  description: order_by
+  how_to_get_there: order_by
+  location_id: order_by
+  name: order_by
+  opening_hours: order_by
+  other_details: order_by
+  tourist_attraction_id: order_by
+}
+
+"""
+response of any mutation on the table "tourist_attractions"
+"""
+type tourist_attractions_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [tourist_attractions!]!
+}
+
+"""
+input type for inserting object relation for remote table "tourist_attractions"
+"""
+input tourist_attractions_obj_rel_insert_input {
+  data: tourist_attractions_insert_input!
+  on_conflict: tourist_attractions_on_conflict
+}
+
+"""
+on conflict condition type for table "tourist_attractions"
+"""
+input tourist_attractions_on_conflict {
+  constraint: tourist_attractions_constraint!
+  update_columns: [tourist_attractions_update_column!]!
+  where: tourist_attractions_bool_exp
+}
+
+"""
+ordering options when selecting data from "tourist_attractions"
+"""
+input tourist_attractions_order_by {
+  attraction_type_code: order_by
+  description: order_by
+  how_to_get_there: order_by
+  location: locations_order_by
+  location_id: order_by
+  museums_aggregate: museums_aggregate_order_by
+  name: order_by
+  opening_hours: order_by
+  other_details: order_by
+  photos_aggregate: photos_aggregate_order_by
+  ref_attraction_type: ref_attraction_types_order_by
+  royal_families_aggregate: royal_family_aggregate_order_by
+  shops_aggregate: shops_aggregate_order_by
+  staffs_aggregate: staff_aggregate_order_by
+  street_markets_aggregate: street_markets_aggregate_order_by
+  theme_parks_aggregate: theme_parks_aggregate_order_by
+  tourist_attraction_features_aggregate: tourist_attraction_features_aggregate_order_by
+  tourist_attraction_id: order_by
+  visits_aggregate: visits_aggregate_order_by
+}
+
+"""
+select columns of table "tourist_attractions"
+"""
+enum tourist_attractions_select_column {
+  """column name"""
+  attraction_type_code
+
+  """column name"""
+  description
+
+  """column name"""
+  how_to_get_there
+
+  """column name"""
+  location_id
+
+  """column name"""
+  name
+
+  """column name"""
+  opening_hours
+
+  """column name"""
+  other_details
+
+  """column name"""
+  tourist_attraction_id
+}
+
+"""
+input type for updating data in table "tourist_attractions"
+"""
+input tourist_attractions_set_input {
+  attraction_type_code: String
+  description: String
+  how_to_get_there: String
+  location_id: bigint
+  name: String
+  opening_hours: String
+  other_details: String
+  tourist_attraction_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type tourist_attractions_stddev_fields {
+  location_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by stddev() on columns of table "tourist_attractions"
+"""
+input tourist_attractions_stddev_order_by {
+  location_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type tourist_attractions_stddev_pop_fields {
+  location_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "tourist_attractions"
+"""
+input tourist_attractions_stddev_pop_order_by {
+  location_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type tourist_attractions_stddev_samp_fields {
+  location_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "tourist_attractions"
+"""
+input tourist_attractions_stddev_samp_order_by {
+  location_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate sum on columns"""
+type tourist_attractions_sum_fields {
+  location_id: bigint
+  tourist_attraction_id: bigint
+}
+
+"""
+order by sum() on columns of table "tourist_attractions"
+"""
+input tourist_attractions_sum_order_by {
+  location_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""
+update columns of table "tourist_attractions"
+"""
+enum tourist_attractions_update_column {
+  """column name"""
+  attraction_type_code
+
+  """column name"""
+  description
+
+  """column name"""
+  how_to_get_there
+
+  """column name"""
+  location_id
+
+  """column name"""
+  name
+
+  """column name"""
+  opening_hours
+
+  """column name"""
+  other_details
+
+  """column name"""
+  tourist_attraction_id
+}
+
+"""aggregate var_pop on columns"""
+type tourist_attractions_var_pop_fields {
+  location_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by var_pop() on columns of table "tourist_attractions"
+"""
+input tourist_attractions_var_pop_order_by {
+  location_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type tourist_attractions_var_samp_fields {
+  location_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by var_samp() on columns of table "tourist_attractions"
+"""
+input tourist_attractions_var_samp_order_by {
+  location_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""aggregate variance on columns"""
+type tourist_attractions_variance_fields {
+  location_id: Float
+  tourist_attraction_id: Float
+}
+
+"""
+order by variance() on columns of table "tourist_attractions"
+"""
+input tourist_attractions_variance_order_by {
+  location_id: order_by
+  tourist_attraction_id: order_by
+}
+
+"""
+columns and relationships of "visitors"
+"""
+type visitors {
+  tourist_details: String
+  tourist_id: bigint!
+
+  """An array relationship"""
+  visits(
+    """distinct select on columns"""
+    distinct_on: [visits_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visits_order_by!]
+
+    """filter the rows returned"""
+    where: visits_bool_exp
+  ): [visits!]!
+
+  """An aggregated array relationship"""
+  visits_aggregate(
+    """distinct select on columns"""
+    distinct_on: [visits_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [visits_order_by!]
+
+    """filter the rows returned"""
+    where: visits_bool_exp
+  ): visits_aggregate!
+}
+
+"""
+aggregated selection of "visitors"
+"""
+type visitors_aggregate {
+  aggregate: visitors_aggregate_fields
+  nodes: [visitors!]!
+}
+
+"""
+aggregate fields of "visitors"
+"""
+type visitors_aggregate_fields {
+  avg: visitors_avg_fields
+  count(columns: [visitors_select_column!], distinct: Boolean): Int
+  max: visitors_max_fields
+  min: visitors_min_fields
+  stddev: visitors_stddev_fields
+  stddev_pop: visitors_stddev_pop_fields
+  stddev_samp: visitors_stddev_samp_fields
+  sum: visitors_sum_fields
+  var_pop: visitors_var_pop_fields
+  var_samp: visitors_var_samp_fields
+  variance: visitors_variance_fields
+}
+
+"""
+order by aggregate values of table "visitors"
+"""
+input visitors_aggregate_order_by {
+  avg: visitors_avg_order_by
+  count: order_by
+  max: visitors_max_order_by
+  min: visitors_min_order_by
+  stddev: visitors_stddev_order_by
+  stddev_pop: visitors_stddev_pop_order_by
+  stddev_samp: visitors_stddev_samp_order_by
+  sum: visitors_sum_order_by
+  var_pop: visitors_var_pop_order_by
+  var_samp: visitors_var_samp_order_by
+  variance: visitors_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "visitors"
+"""
+input visitors_arr_rel_insert_input {
+  data: [visitors_insert_input!]!
+  on_conflict: visitors_on_conflict
+}
+
+"""aggregate avg on columns"""
+type visitors_avg_fields {
+  tourist_id: Float
+}
+
+"""
+order by avg() on columns of table "visitors"
+"""
+input visitors_avg_order_by {
+  tourist_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "visitors". All fields are combined with a logical 'AND'.
+"""
+input visitors_bool_exp {
+  _and: [visitors_bool_exp]
+  _not: visitors_bool_exp
+  _or: [visitors_bool_exp]
+  tourist_details: String_comparison_exp
+  tourist_id: bigint_comparison_exp
+  visits: visits_bool_exp
+}
+
+"""
+unique or primary key constraints on table "visitors"
+"""
+enum visitors_constraint {
+  """unique or primary key constraint"""
+  idx_17626_sqlite_autoindex_visitors_1
+
+  """unique or primary key constraint"""
+  idx_17626_visitors_pkey
+}
+
+"""
+input type for incrementing integer columne in table "visitors"
+"""
+input visitors_inc_input {
+  tourist_id: bigint
+}
+
+"""
+input type for inserting data into table "visitors"
+"""
+input visitors_insert_input {
+  tourist_details: String
+  tourist_id: bigint
+  visits: visits_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type visitors_max_fields {
+  tourist_details: String
+  tourist_id: bigint
+}
+
+"""
+order by max() on columns of table "visitors"
+"""
+input visitors_max_order_by {
+  tourist_details: order_by
+  tourist_id: order_by
+}
+
+"""aggregate min on columns"""
+type visitors_min_fields {
+  tourist_details: String
+  tourist_id: bigint
+}
+
+"""
+order by min() on columns of table "visitors"
+"""
+input visitors_min_order_by {
+  tourist_details: order_by
+  tourist_id: order_by
+}
+
+"""
+response of any mutation on the table "visitors"
+"""
+type visitors_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [visitors!]!
+}
+
+"""
+input type for inserting object relation for remote table "visitors"
+"""
+input visitors_obj_rel_insert_input {
+  data: visitors_insert_input!
+  on_conflict: visitors_on_conflict
+}
+
+"""
+on conflict condition type for table "visitors"
+"""
+input visitors_on_conflict {
+  constraint: visitors_constraint!
+  update_columns: [visitors_update_column!]!
+  where: visitors_bool_exp
+}
+
+"""
+ordering options when selecting data from "visitors"
+"""
+input visitors_order_by {
+  tourist_details: order_by
+  tourist_id: order_by
+  visits_aggregate: visits_aggregate_order_by
+}
+
+"""
+select columns of table "visitors"
+"""
+enum visitors_select_column {
+  """column name"""
+  tourist_details
+
+  """column name"""
+  tourist_id
+}
+
+"""
+input type for updating data in table "visitors"
+"""
+input visitors_set_input {
+  tourist_details: String
+  tourist_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type visitors_stddev_fields {
+  tourist_id: Float
+}
+
+"""
+order by stddev() on columns of table "visitors"
+"""
+input visitors_stddev_order_by {
+  tourist_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type visitors_stddev_pop_fields {
+  tourist_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "visitors"
+"""
+input visitors_stddev_pop_order_by {
+  tourist_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type visitors_stddev_samp_fields {
+  tourist_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "visitors"
+"""
+input visitors_stddev_samp_order_by {
+  tourist_id: order_by
+}
+
+"""aggregate sum on columns"""
+type visitors_sum_fields {
+  tourist_id: bigint
+}
+
+"""
+order by sum() on columns of table "visitors"
+"""
+input visitors_sum_order_by {
+  tourist_id: order_by
+}
+
+"""
+update columns of table "visitors"
+"""
+enum visitors_update_column {
+  """column name"""
+  tourist_details
+
+  """column name"""
+  tourist_id
+}
+
+"""aggregate var_pop on columns"""
+type visitors_var_pop_fields {
+  tourist_id: Float
+}
+
+"""
+order by var_pop() on columns of table "visitors"
+"""
+input visitors_var_pop_order_by {
+  tourist_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type visitors_var_samp_fields {
+  tourist_id: Float
+}
+
+"""
+order by var_samp() on columns of table "visitors"
+"""
+input visitors_var_samp_order_by {
+  tourist_id: order_by
+}
+
+"""aggregate variance on columns"""
+type visitors_variance_fields {
+  tourist_id: Float
+}
+
+"""
+order by variance() on columns of table "visitors"
+"""
+input visitors_variance_order_by {
+  tourist_id: order_by
+}
+
+"""
+columns and relationships of "visits"
+"""
+type visits {
+  """An object relationship"""
+  tourist_attraction: tourist_attractions
+  tourist_attraction_id: bigint
+  tourist_id: bigint
+  visit_date: timestamptz
+  visit_details: String
+  visit_id: bigint!
+
+  """An object relationship"""
+  visitor: visitors
+}
+
+"""
+aggregated selection of "visits"
+"""
+type visits_aggregate {
+  aggregate: visits_aggregate_fields
+  nodes: [visits!]!
+}
+
+"""
+aggregate fields of "visits"
+"""
+type visits_aggregate_fields {
+  avg: visits_avg_fields
+  count(columns: [visits_select_column!], distinct: Boolean): Int
+  max: visits_max_fields
+  min: visits_min_fields
+  stddev: visits_stddev_fields
+  stddev_pop: visits_stddev_pop_fields
+  stddev_samp: visits_stddev_samp_fields
+  sum: visits_sum_fields
+  var_pop: visits_var_pop_fields
+  var_samp: visits_var_samp_fields
+  variance: visits_variance_fields
+}
+
+"""
+order by aggregate values of table "visits"
+"""
+input visits_aggregate_order_by {
+  avg: visits_avg_order_by
+  count: order_by
+  max: visits_max_order_by
+  min: visits_min_order_by
+  stddev: visits_stddev_order_by
+  stddev_pop: visits_stddev_pop_order_by
+  stddev_samp: visits_stddev_samp_order_by
+  sum: visits_sum_order_by
+  var_pop: visits_var_pop_order_by
+  var_samp: visits_var_samp_order_by
+  variance: visits_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "visits"
+"""
+input visits_arr_rel_insert_input {
+  data: [visits_insert_input!]!
+  on_conflict: visits_on_conflict
+}
+
+"""aggregate avg on columns"""
+type visits_avg_fields {
+  tourist_attraction_id: Float
+  tourist_id: Float
+  visit_id: Float
+}
+
+"""
+order by avg() on columns of table "visits"
+"""
+input visits_avg_order_by {
+  tourist_attraction_id: order_by
+  tourist_id: order_by
+  visit_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "visits". All fields are combined with a logical 'AND'.
+"""
+input visits_bool_exp {
+  _and: [visits_bool_exp]
+  _not: visits_bool_exp
+  _or: [visits_bool_exp]
+  tourist_attraction: tourist_attractions_bool_exp
+  tourist_attraction_id: bigint_comparison_exp
+  tourist_id: bigint_comparison_exp
+  visit_date: timestamptz_comparison_exp
+  visit_details: String_comparison_exp
+  visit_id: bigint_comparison_exp
+  visitor: visitors_bool_exp
+}
+
+"""
+unique or primary key constraints on table "visits"
+"""
+enum visits_constraint {
+  """unique or primary key constraint"""
+  idx_17680_visits_pkey
+}
+
+"""
+input type for incrementing integer columne in table "visits"
+"""
+input visits_inc_input {
+  tourist_attraction_id: bigint
+  tourist_id: bigint
+  visit_id: bigint
+}
+
+"""
+input type for inserting data into table "visits"
+"""
+input visits_insert_input {
+  tourist_attraction: tourist_attractions_obj_rel_insert_input
+  tourist_attraction_id: bigint
+  tourist_id: bigint
+  visit_date: timestamptz
+  visit_details: String
+  visit_id: bigint
+  visitor: visitors_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type visits_max_fields {
+  tourist_attraction_id: bigint
+  tourist_id: bigint
+  visit_date: timestamptz
+  visit_details: String
+  visit_id: bigint
+}
+
+"""
+order by max() on columns of table "visits"
+"""
+input visits_max_order_by {
+  tourist_attraction_id: order_by
+  tourist_id: order_by
+  visit_date: order_by
+  visit_details: order_by
+  visit_id: order_by
+}
+
+"""aggregate min on columns"""
+type visits_min_fields {
+  tourist_attraction_id: bigint
+  tourist_id: bigint
+  visit_date: timestamptz
+  visit_details: String
+  visit_id: bigint
+}
+
+"""
+order by min() on columns of table "visits"
+"""
+input visits_min_order_by {
+  tourist_attraction_id: order_by
+  tourist_id: order_by
+  visit_date: order_by
+  visit_details: order_by
+  visit_id: order_by
+}
+
+"""
+response of any mutation on the table "visits"
+"""
+type visits_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [visits!]!
+}
+
+"""
+input type for inserting object relation for remote table "visits"
+"""
+input visits_obj_rel_insert_input {
+  data: visits_insert_input!
+  on_conflict: visits_on_conflict
+}
+
+"""
+on conflict condition type for table "visits"
+"""
+input visits_on_conflict {
+  constraint: visits_constraint!
+  update_columns: [visits_update_column!]!
+  where: visits_bool_exp
+}
+
+"""
+ordering options when selecting data from "visits"
+"""
+input visits_order_by {
+  tourist_attraction: tourist_attractions_order_by
+  tourist_attraction_id: order_by
+  tourist_id: order_by
+  visit_date: order_by
+  visit_details: order_by
+  visit_id: order_by
+  visitor: visitors_order_by
+}
+
+"""
+select columns of table "visits"
+"""
+enum visits_select_column {
+  """column name"""
+  tourist_attraction_id
+
+  """column name"""
+  tourist_id
+
+  """column name"""
+  visit_date
+
+  """column name"""
+  visit_details
+
+  """column name"""
+  visit_id
+}
+
+"""
+input type for updating data in table "visits"
+"""
+input visits_set_input {
+  tourist_attraction_id: bigint
+  tourist_id: bigint
+  visit_date: timestamptz
+  visit_details: String
+  visit_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type visits_stddev_fields {
+  tourist_attraction_id: Float
+  tourist_id: Float
+  visit_id: Float
+}
+
+"""
+order by stddev() on columns of table "visits"
+"""
+input visits_stddev_order_by {
+  tourist_attraction_id: order_by
+  tourist_id: order_by
+  visit_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type visits_stddev_pop_fields {
+  tourist_attraction_id: Float
+  tourist_id: Float
+  visit_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "visits"
+"""
+input visits_stddev_pop_order_by {
+  tourist_attraction_id: order_by
+  tourist_id: order_by
+  visit_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type visits_stddev_samp_fields {
+  tourist_attraction_id: Float
+  tourist_id: Float
+  visit_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "visits"
+"""
+input visits_stddev_samp_order_by {
+  tourist_attraction_id: order_by
+  tourist_id: order_by
+  visit_id: order_by
+}
+
+"""aggregate sum on columns"""
+type visits_sum_fields {
+  tourist_attraction_id: bigint
+  tourist_id: bigint
+  visit_id: bigint
+}
+
+"""
+order by sum() on columns of table "visits"
+"""
+input visits_sum_order_by {
+  tourist_attraction_id: order_by
+  tourist_id: order_by
+  visit_id: order_by
+}
+
+"""
+update columns of table "visits"
+"""
+enum visits_update_column {
+  """column name"""
+  tourist_attraction_id
+
+  """column name"""
+  tourist_id
+
+  """column name"""
+  visit_date
+
+  """column name"""
+  visit_details
+
+  """column name"""
+  visit_id
+}
+
+"""aggregate var_pop on columns"""
+type visits_var_pop_fields {
+  tourist_attraction_id: Float
+  tourist_id: Float
+  visit_id: Float
+}
+
+"""
+order by var_pop() on columns of table "visits"
+"""
+input visits_var_pop_order_by {
+  tourist_attraction_id: order_by
+  tourist_id: order_by
+  visit_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type visits_var_samp_fields {
+  tourist_attraction_id: Float
+  tourist_id: Float
+  visit_id: Float
+}
+
+"""
+order by var_samp() on columns of table "visits"
+"""
+input visits_var_samp_order_by {
+  tourist_attraction_id: order_by
+  tourist_id: order_by
+  visit_id: order_by
+}
+
+"""aggregate variance on columns"""
+type visits_variance_fields {
+  tourist_attraction_id: Float
+  tourist_id: Float
+  visit_id: Float
+}
+
+"""
+order by variance() on columns of table "visits"
+"""
+input visits_variance_order_by {
+  tourist_attraction_id: order_by
+  tourist_id: order_by
+  visit_id: order_by
+}

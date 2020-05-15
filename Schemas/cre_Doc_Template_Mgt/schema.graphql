@@ -1,0 +1,1920 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "documents"
+"""
+type documents {
+  document_description: String
+  document_id: bigint!
+  document_name: String
+  other_details: String
+
+  """An array relationship"""
+  paragraphs(
+    """distinct select on columns"""
+    distinct_on: [paragraphs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paragraphs_order_by!]
+
+    """filter the rows returned"""
+    where: paragraphs_bool_exp
+  ): [paragraphs!]!
+
+  """An aggregated array relationship"""
+  paragraphs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [paragraphs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paragraphs_order_by!]
+
+    """filter the rows returned"""
+    where: paragraphs_bool_exp
+  ): paragraphs_aggregate!
+
+  """An object relationship"""
+  template: templates
+  template_id: bigint
+}
+
+"""
+aggregated selection of "documents"
+"""
+type documents_aggregate {
+  aggregate: documents_aggregate_fields
+  nodes: [documents!]!
+}
+
+"""
+aggregate fields of "documents"
+"""
+type documents_aggregate_fields {
+  avg: documents_avg_fields
+  count(columns: [documents_select_column!], distinct: Boolean): Int
+  max: documents_max_fields
+  min: documents_min_fields
+  stddev: documents_stddev_fields
+  stddev_pop: documents_stddev_pop_fields
+  stddev_samp: documents_stddev_samp_fields
+  sum: documents_sum_fields
+  var_pop: documents_var_pop_fields
+  var_samp: documents_var_samp_fields
+  variance: documents_variance_fields
+}
+
+"""
+order by aggregate values of table "documents"
+"""
+input documents_aggregate_order_by {
+  avg: documents_avg_order_by
+  count: order_by
+  max: documents_max_order_by
+  min: documents_min_order_by
+  stddev: documents_stddev_order_by
+  stddev_pop: documents_stddev_pop_order_by
+  stddev_samp: documents_stddev_samp_order_by
+  sum: documents_sum_order_by
+  var_pop: documents_var_pop_order_by
+  var_samp: documents_var_samp_order_by
+  variance: documents_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "documents"
+"""
+input documents_arr_rel_insert_input {
+  data: [documents_insert_input!]!
+  on_conflict: documents_on_conflict
+}
+
+"""aggregate avg on columns"""
+type documents_avg_fields {
+  document_id: Float
+  template_id: Float
+}
+
+"""
+order by avg() on columns of table "documents"
+"""
+input documents_avg_order_by {
+  document_id: order_by
+  template_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "documents". All fields are combined with a logical 'AND'.
+"""
+input documents_bool_exp {
+  _and: [documents_bool_exp]
+  _not: documents_bool_exp
+  _or: [documents_bool_exp]
+  document_description: String_comparison_exp
+  document_id: bigint_comparison_exp
+  document_name: String_comparison_exp
+  other_details: String_comparison_exp
+  paragraphs: paragraphs_bool_exp
+  template: templates_bool_exp
+  template_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "documents"
+"""
+enum documents_constraint {
+  """unique or primary key constraint"""
+  idx_19757_documents_pkey
+}
+
+"""
+input type for incrementing integer columne in table "documents"
+"""
+input documents_inc_input {
+  document_id: bigint
+  template_id: bigint
+}
+
+"""
+input type for inserting data into table "documents"
+"""
+input documents_insert_input {
+  document_description: String
+  document_id: bigint
+  document_name: String
+  other_details: String
+  paragraphs: paragraphs_arr_rel_insert_input
+  template: templates_obj_rel_insert_input
+  template_id: bigint
+}
+
+"""aggregate max on columns"""
+type documents_max_fields {
+  document_description: String
+  document_id: bigint
+  document_name: String
+  other_details: String
+  template_id: bigint
+}
+
+"""
+order by max() on columns of table "documents"
+"""
+input documents_max_order_by {
+  document_description: order_by
+  document_id: order_by
+  document_name: order_by
+  other_details: order_by
+  template_id: order_by
+}
+
+"""aggregate min on columns"""
+type documents_min_fields {
+  document_description: String
+  document_id: bigint
+  document_name: String
+  other_details: String
+  template_id: bigint
+}
+
+"""
+order by min() on columns of table "documents"
+"""
+input documents_min_order_by {
+  document_description: order_by
+  document_id: order_by
+  document_name: order_by
+  other_details: order_by
+  template_id: order_by
+}
+
+"""
+response of any mutation on the table "documents"
+"""
+type documents_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [documents!]!
+}
+
+"""
+input type for inserting object relation for remote table "documents"
+"""
+input documents_obj_rel_insert_input {
+  data: documents_insert_input!
+  on_conflict: documents_on_conflict
+}
+
+"""
+on conflict condition type for table "documents"
+"""
+input documents_on_conflict {
+  constraint: documents_constraint!
+  update_columns: [documents_update_column!]!
+  where: documents_bool_exp
+}
+
+"""
+ordering options when selecting data from "documents"
+"""
+input documents_order_by {
+  document_description: order_by
+  document_id: order_by
+  document_name: order_by
+  other_details: order_by
+  paragraphs_aggregate: paragraphs_aggregate_order_by
+  template: templates_order_by
+  template_id: order_by
+}
+
+"""
+select columns of table "documents"
+"""
+enum documents_select_column {
+  """column name"""
+  document_description
+
+  """column name"""
+  document_id
+
+  """column name"""
+  document_name
+
+  """column name"""
+  other_details
+
+  """column name"""
+  template_id
+}
+
+"""
+input type for updating data in table "documents"
+"""
+input documents_set_input {
+  document_description: String
+  document_id: bigint
+  document_name: String
+  other_details: String
+  template_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type documents_stddev_fields {
+  document_id: Float
+  template_id: Float
+}
+
+"""
+order by stddev() on columns of table "documents"
+"""
+input documents_stddev_order_by {
+  document_id: order_by
+  template_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type documents_stddev_pop_fields {
+  document_id: Float
+  template_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "documents"
+"""
+input documents_stddev_pop_order_by {
+  document_id: order_by
+  template_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type documents_stddev_samp_fields {
+  document_id: Float
+  template_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "documents"
+"""
+input documents_stddev_samp_order_by {
+  document_id: order_by
+  template_id: order_by
+}
+
+"""aggregate sum on columns"""
+type documents_sum_fields {
+  document_id: bigint
+  template_id: bigint
+}
+
+"""
+order by sum() on columns of table "documents"
+"""
+input documents_sum_order_by {
+  document_id: order_by
+  template_id: order_by
+}
+
+"""
+update columns of table "documents"
+"""
+enum documents_update_column {
+  """column name"""
+  document_description
+
+  """column name"""
+  document_id
+
+  """column name"""
+  document_name
+
+  """column name"""
+  other_details
+
+  """column name"""
+  template_id
+}
+
+"""aggregate var_pop on columns"""
+type documents_var_pop_fields {
+  document_id: Float
+  template_id: Float
+}
+
+"""
+order by var_pop() on columns of table "documents"
+"""
+input documents_var_pop_order_by {
+  document_id: order_by
+  template_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type documents_var_samp_fields {
+  document_id: Float
+  template_id: Float
+}
+
+"""
+order by var_samp() on columns of table "documents"
+"""
+input documents_var_samp_order_by {
+  document_id: order_by
+  template_id: order_by
+}
+
+"""aggregate variance on columns"""
+type documents_variance_fields {
+  document_id: Float
+  template_id: Float
+}
+
+"""
+order by variance() on columns of table "documents"
+"""
+input documents_variance_order_by {
+  document_id: order_by
+  template_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "documents"
+  """
+  delete_documents(
+    """filter the rows which have to be deleted"""
+    where: documents_bool_exp!
+  ): documents_mutation_response
+
+  """
+  delete data from the table: "paragraphs"
+  """
+  delete_paragraphs(
+    """filter the rows which have to be deleted"""
+    where: paragraphs_bool_exp!
+  ): paragraphs_mutation_response
+
+  """
+  delete data from the table: "ref_template_types"
+  """
+  delete_ref_template_types(
+    """filter the rows which have to be deleted"""
+    where: ref_template_types_bool_exp!
+  ): ref_template_types_mutation_response
+
+  """
+  delete data from the table: "templates"
+  """
+  delete_templates(
+    """filter the rows which have to be deleted"""
+    where: templates_bool_exp!
+  ): templates_mutation_response
+
+  """
+  insert data into the table: "documents"
+  """
+  insert_documents(
+    """the rows to be inserted"""
+    objects: [documents_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: documents_on_conflict
+  ): documents_mutation_response
+
+  """
+  insert data into the table: "paragraphs"
+  """
+  insert_paragraphs(
+    """the rows to be inserted"""
+    objects: [paragraphs_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: paragraphs_on_conflict
+  ): paragraphs_mutation_response
+
+  """
+  insert data into the table: "ref_template_types"
+  """
+  insert_ref_template_types(
+    """the rows to be inserted"""
+    objects: [ref_template_types_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: ref_template_types_on_conflict
+  ): ref_template_types_mutation_response
+
+  """
+  insert data into the table: "templates"
+  """
+  insert_templates(
+    """the rows to be inserted"""
+    objects: [templates_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: templates_on_conflict
+  ): templates_mutation_response
+
+  """
+  update data of the table: "documents"
+  """
+  update_documents(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: documents_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: documents_set_input
+
+    """filter the rows which have to be updated"""
+    where: documents_bool_exp!
+  ): documents_mutation_response
+
+  """
+  update data of the table: "paragraphs"
+  """
+  update_paragraphs(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: paragraphs_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: paragraphs_set_input
+
+    """filter the rows which have to be updated"""
+    where: paragraphs_bool_exp!
+  ): paragraphs_mutation_response
+
+  """
+  update data of the table: "ref_template_types"
+  """
+  update_ref_template_types(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ref_template_types_set_input
+
+    """filter the rows which have to be updated"""
+    where: ref_template_types_bool_exp!
+  ): ref_template_types_mutation_response
+
+  """
+  update data of the table: "templates"
+  """
+  update_templates(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: templates_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: templates_set_input
+
+    """filter the rows which have to be updated"""
+    where: templates_bool_exp!
+  ): templates_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "paragraphs"
+"""
+type paragraphs {
+  """An object relationship"""
+  document: documents
+  document_id: bigint
+  other_details: String
+  paragraph_id: bigint!
+  paragraph_text: String
+}
+
+"""
+aggregated selection of "paragraphs"
+"""
+type paragraphs_aggregate {
+  aggregate: paragraphs_aggregate_fields
+  nodes: [paragraphs!]!
+}
+
+"""
+aggregate fields of "paragraphs"
+"""
+type paragraphs_aggregate_fields {
+  avg: paragraphs_avg_fields
+  count(columns: [paragraphs_select_column!], distinct: Boolean): Int
+  max: paragraphs_max_fields
+  min: paragraphs_min_fields
+  stddev: paragraphs_stddev_fields
+  stddev_pop: paragraphs_stddev_pop_fields
+  stddev_samp: paragraphs_stddev_samp_fields
+  sum: paragraphs_sum_fields
+  var_pop: paragraphs_var_pop_fields
+  var_samp: paragraphs_var_samp_fields
+  variance: paragraphs_variance_fields
+}
+
+"""
+order by aggregate values of table "paragraphs"
+"""
+input paragraphs_aggregate_order_by {
+  avg: paragraphs_avg_order_by
+  count: order_by
+  max: paragraphs_max_order_by
+  min: paragraphs_min_order_by
+  stddev: paragraphs_stddev_order_by
+  stddev_pop: paragraphs_stddev_pop_order_by
+  stddev_samp: paragraphs_stddev_samp_order_by
+  sum: paragraphs_sum_order_by
+  var_pop: paragraphs_var_pop_order_by
+  var_samp: paragraphs_var_samp_order_by
+  variance: paragraphs_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "paragraphs"
+"""
+input paragraphs_arr_rel_insert_input {
+  data: [paragraphs_insert_input!]!
+  on_conflict: paragraphs_on_conflict
+}
+
+"""aggregate avg on columns"""
+type paragraphs_avg_fields {
+  document_id: Float
+  paragraph_id: Float
+}
+
+"""
+order by avg() on columns of table "paragraphs"
+"""
+input paragraphs_avg_order_by {
+  document_id: order_by
+  paragraph_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "paragraphs". All fields are combined with a logical 'AND'.
+"""
+input paragraphs_bool_exp {
+  _and: [paragraphs_bool_exp]
+  _not: paragraphs_bool_exp
+  _or: [paragraphs_bool_exp]
+  document: documents_bool_exp
+  document_id: bigint_comparison_exp
+  other_details: String_comparison_exp
+  paragraph_id: bigint_comparison_exp
+  paragraph_text: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "paragraphs"
+"""
+enum paragraphs_constraint {
+  """unique or primary key constraint"""
+  idx_19763_paragraphs_pkey
+}
+
+"""
+input type for incrementing integer columne in table "paragraphs"
+"""
+input paragraphs_inc_input {
+  document_id: bigint
+  paragraph_id: bigint
+}
+
+"""
+input type for inserting data into table "paragraphs"
+"""
+input paragraphs_insert_input {
+  document: documents_obj_rel_insert_input
+  document_id: bigint
+  other_details: String
+  paragraph_id: bigint
+  paragraph_text: String
+}
+
+"""aggregate max on columns"""
+type paragraphs_max_fields {
+  document_id: bigint
+  other_details: String
+  paragraph_id: bigint
+  paragraph_text: String
+}
+
+"""
+order by max() on columns of table "paragraphs"
+"""
+input paragraphs_max_order_by {
+  document_id: order_by
+  other_details: order_by
+  paragraph_id: order_by
+  paragraph_text: order_by
+}
+
+"""aggregate min on columns"""
+type paragraphs_min_fields {
+  document_id: bigint
+  other_details: String
+  paragraph_id: bigint
+  paragraph_text: String
+}
+
+"""
+order by min() on columns of table "paragraphs"
+"""
+input paragraphs_min_order_by {
+  document_id: order_by
+  other_details: order_by
+  paragraph_id: order_by
+  paragraph_text: order_by
+}
+
+"""
+response of any mutation on the table "paragraphs"
+"""
+type paragraphs_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [paragraphs!]!
+}
+
+"""
+input type for inserting object relation for remote table "paragraphs"
+"""
+input paragraphs_obj_rel_insert_input {
+  data: paragraphs_insert_input!
+  on_conflict: paragraphs_on_conflict
+}
+
+"""
+on conflict condition type for table "paragraphs"
+"""
+input paragraphs_on_conflict {
+  constraint: paragraphs_constraint!
+  update_columns: [paragraphs_update_column!]!
+  where: paragraphs_bool_exp
+}
+
+"""
+ordering options when selecting data from "paragraphs"
+"""
+input paragraphs_order_by {
+  document: documents_order_by
+  document_id: order_by
+  other_details: order_by
+  paragraph_id: order_by
+  paragraph_text: order_by
+}
+
+"""
+select columns of table "paragraphs"
+"""
+enum paragraphs_select_column {
+  """column name"""
+  document_id
+
+  """column name"""
+  other_details
+
+  """column name"""
+  paragraph_id
+
+  """column name"""
+  paragraph_text
+}
+
+"""
+input type for updating data in table "paragraphs"
+"""
+input paragraphs_set_input {
+  document_id: bigint
+  other_details: String
+  paragraph_id: bigint
+  paragraph_text: String
+}
+
+"""aggregate stddev on columns"""
+type paragraphs_stddev_fields {
+  document_id: Float
+  paragraph_id: Float
+}
+
+"""
+order by stddev() on columns of table "paragraphs"
+"""
+input paragraphs_stddev_order_by {
+  document_id: order_by
+  paragraph_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type paragraphs_stddev_pop_fields {
+  document_id: Float
+  paragraph_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "paragraphs"
+"""
+input paragraphs_stddev_pop_order_by {
+  document_id: order_by
+  paragraph_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type paragraphs_stddev_samp_fields {
+  document_id: Float
+  paragraph_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "paragraphs"
+"""
+input paragraphs_stddev_samp_order_by {
+  document_id: order_by
+  paragraph_id: order_by
+}
+
+"""aggregate sum on columns"""
+type paragraphs_sum_fields {
+  document_id: bigint
+  paragraph_id: bigint
+}
+
+"""
+order by sum() on columns of table "paragraphs"
+"""
+input paragraphs_sum_order_by {
+  document_id: order_by
+  paragraph_id: order_by
+}
+
+"""
+update columns of table "paragraphs"
+"""
+enum paragraphs_update_column {
+  """column name"""
+  document_id
+
+  """column name"""
+  other_details
+
+  """column name"""
+  paragraph_id
+
+  """column name"""
+  paragraph_text
+}
+
+"""aggregate var_pop on columns"""
+type paragraphs_var_pop_fields {
+  document_id: Float
+  paragraph_id: Float
+}
+
+"""
+order by var_pop() on columns of table "paragraphs"
+"""
+input paragraphs_var_pop_order_by {
+  document_id: order_by
+  paragraph_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type paragraphs_var_samp_fields {
+  document_id: Float
+  paragraph_id: Float
+}
+
+"""
+order by var_samp() on columns of table "paragraphs"
+"""
+input paragraphs_var_samp_order_by {
+  document_id: order_by
+  paragraph_id: order_by
+}
+
+"""aggregate variance on columns"""
+type paragraphs_variance_fields {
+  document_id: Float
+  paragraph_id: Float
+}
+
+"""
+order by variance() on columns of table "paragraphs"
+"""
+input paragraphs_variance_order_by {
+  document_id: order_by
+  paragraph_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "documents"
+  """
+  documents(
+    """distinct select on columns"""
+    distinct_on: [documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_order_by!]
+
+    """filter the rows returned"""
+    where: documents_bool_exp
+  ): [documents!]!
+
+  """
+  fetch aggregated fields from the table: "documents"
+  """
+  documents_aggregate(
+    """distinct select on columns"""
+    distinct_on: [documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_order_by!]
+
+    """filter the rows returned"""
+    where: documents_bool_exp
+  ): documents_aggregate!
+
+  """fetch data from the table: "documents" using primary key columns"""
+  documents_by_pk(document_id: bigint!): documents
+
+  """
+  fetch data from the table: "paragraphs"
+  """
+  paragraphs(
+    """distinct select on columns"""
+    distinct_on: [paragraphs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paragraphs_order_by!]
+
+    """filter the rows returned"""
+    where: paragraphs_bool_exp
+  ): [paragraphs!]!
+
+  """
+  fetch aggregated fields from the table: "paragraphs"
+  """
+  paragraphs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [paragraphs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paragraphs_order_by!]
+
+    """filter the rows returned"""
+    where: paragraphs_bool_exp
+  ): paragraphs_aggregate!
+
+  """fetch data from the table: "paragraphs" using primary key columns"""
+  paragraphs_by_pk(paragraph_id: bigint!): paragraphs
+
+  """
+  fetch data from the table: "ref_template_types"
+  """
+  ref_template_types(
+    """distinct select on columns"""
+    distinct_on: [ref_template_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_template_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_template_types_bool_exp
+  ): [ref_template_types!]!
+
+  """
+  fetch aggregated fields from the table: "ref_template_types"
+  """
+  ref_template_types_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_template_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_template_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_template_types_bool_exp
+  ): ref_template_types_aggregate!
+
+  """
+  fetch data from the table: "templates"
+  """
+  templates(
+    """distinct select on columns"""
+    distinct_on: [templates_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [templates_order_by!]
+
+    """filter the rows returned"""
+    where: templates_bool_exp
+  ): [templates!]!
+
+  """
+  fetch aggregated fields from the table: "templates"
+  """
+  templates_aggregate(
+    """distinct select on columns"""
+    distinct_on: [templates_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [templates_order_by!]
+
+    """filter the rows returned"""
+    where: templates_bool_exp
+  ): templates_aggregate!
+
+  """fetch data from the table: "templates" using primary key columns"""
+  templates_by_pk(template_id: bigint!): templates
+}
+
+"""
+columns and relationships of "ref_template_types"
+"""
+type ref_template_types {
+  template_type_code: String
+  template_type_description: String
+
+  """An array relationship"""
+  templates(
+    """distinct select on columns"""
+    distinct_on: [templates_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [templates_order_by!]
+
+    """filter the rows returned"""
+    where: templates_bool_exp
+  ): [templates!]!
+
+  """An aggregated array relationship"""
+  templates_aggregate(
+    """distinct select on columns"""
+    distinct_on: [templates_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [templates_order_by!]
+
+    """filter the rows returned"""
+    where: templates_bool_exp
+  ): templates_aggregate!
+}
+
+"""
+aggregated selection of "ref_template_types"
+"""
+type ref_template_types_aggregate {
+  aggregate: ref_template_types_aggregate_fields
+  nodes: [ref_template_types!]!
+}
+
+"""
+aggregate fields of "ref_template_types"
+"""
+type ref_template_types_aggregate_fields {
+  count(columns: [ref_template_types_select_column!], distinct: Boolean): Int
+  max: ref_template_types_max_fields
+  min: ref_template_types_min_fields
+}
+
+"""
+order by aggregate values of table "ref_template_types"
+"""
+input ref_template_types_aggregate_order_by {
+  count: order_by
+  max: ref_template_types_max_order_by
+  min: ref_template_types_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "ref_template_types"
+"""
+input ref_template_types_arr_rel_insert_input {
+  data: [ref_template_types_insert_input!]!
+  on_conflict: ref_template_types_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "ref_template_types". All fields are combined with a logical 'AND'.
+"""
+input ref_template_types_bool_exp {
+  _and: [ref_template_types_bool_exp]
+  _not: ref_template_types_bool_exp
+  _or: [ref_template_types_bool_exp]
+  template_type_code: String_comparison_exp
+  template_type_description: String_comparison_exp
+  templates: templates_bool_exp
+}
+
+"""
+unique or primary key constraints on table "ref_template_types"
+"""
+enum ref_template_types_constraint {
+  """unique or primary key constraint"""
+  idx_19745_sqlite_autoindex_ref_template_types_1
+}
+
+"""
+input type for inserting data into table "ref_template_types"
+"""
+input ref_template_types_insert_input {
+  template_type_code: String
+  template_type_description: String
+  templates: templates_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type ref_template_types_max_fields {
+  template_type_code: String
+  template_type_description: String
+}
+
+"""
+order by max() on columns of table "ref_template_types"
+"""
+input ref_template_types_max_order_by {
+  template_type_code: order_by
+  template_type_description: order_by
+}
+
+"""aggregate min on columns"""
+type ref_template_types_min_fields {
+  template_type_code: String
+  template_type_description: String
+}
+
+"""
+order by min() on columns of table "ref_template_types"
+"""
+input ref_template_types_min_order_by {
+  template_type_code: order_by
+  template_type_description: order_by
+}
+
+"""
+response of any mutation on the table "ref_template_types"
+"""
+type ref_template_types_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [ref_template_types!]!
+}
+
+"""
+input type for inserting object relation for remote table "ref_template_types"
+"""
+input ref_template_types_obj_rel_insert_input {
+  data: ref_template_types_insert_input!
+  on_conflict: ref_template_types_on_conflict
+}
+
+"""
+on conflict condition type for table "ref_template_types"
+"""
+input ref_template_types_on_conflict {
+  constraint: ref_template_types_constraint!
+  update_columns: [ref_template_types_update_column!]!
+  where: ref_template_types_bool_exp
+}
+
+"""
+ordering options when selecting data from "ref_template_types"
+"""
+input ref_template_types_order_by {
+  template_type_code: order_by
+  template_type_description: order_by
+  templates_aggregate: templates_aggregate_order_by
+}
+
+"""
+select columns of table "ref_template_types"
+"""
+enum ref_template_types_select_column {
+  """column name"""
+  template_type_code
+
+  """column name"""
+  template_type_description
+}
+
+"""
+input type for updating data in table "ref_template_types"
+"""
+input ref_template_types_set_input {
+  template_type_code: String
+  template_type_description: String
+}
+
+"""
+update columns of table "ref_template_types"
+"""
+enum ref_template_types_update_column {
+  """column name"""
+  template_type_code
+
+  """column name"""
+  template_type_description
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "documents"
+  """
+  documents(
+    """distinct select on columns"""
+    distinct_on: [documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_order_by!]
+
+    """filter the rows returned"""
+    where: documents_bool_exp
+  ): [documents!]!
+
+  """
+  fetch aggregated fields from the table: "documents"
+  """
+  documents_aggregate(
+    """distinct select on columns"""
+    distinct_on: [documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_order_by!]
+
+    """filter the rows returned"""
+    where: documents_bool_exp
+  ): documents_aggregate!
+
+  """fetch data from the table: "documents" using primary key columns"""
+  documents_by_pk(document_id: bigint!): documents
+
+  """
+  fetch data from the table: "paragraphs"
+  """
+  paragraphs(
+    """distinct select on columns"""
+    distinct_on: [paragraphs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paragraphs_order_by!]
+
+    """filter the rows returned"""
+    where: paragraphs_bool_exp
+  ): [paragraphs!]!
+
+  """
+  fetch aggregated fields from the table: "paragraphs"
+  """
+  paragraphs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [paragraphs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [paragraphs_order_by!]
+
+    """filter the rows returned"""
+    where: paragraphs_bool_exp
+  ): paragraphs_aggregate!
+
+  """fetch data from the table: "paragraphs" using primary key columns"""
+  paragraphs_by_pk(paragraph_id: bigint!): paragraphs
+
+  """
+  fetch data from the table: "ref_template_types"
+  """
+  ref_template_types(
+    """distinct select on columns"""
+    distinct_on: [ref_template_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_template_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_template_types_bool_exp
+  ): [ref_template_types!]!
+
+  """
+  fetch aggregated fields from the table: "ref_template_types"
+  """
+  ref_template_types_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ref_template_types_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ref_template_types_order_by!]
+
+    """filter the rows returned"""
+    where: ref_template_types_bool_exp
+  ): ref_template_types_aggregate!
+
+  """
+  fetch data from the table: "templates"
+  """
+  templates(
+    """distinct select on columns"""
+    distinct_on: [templates_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [templates_order_by!]
+
+    """filter the rows returned"""
+    where: templates_bool_exp
+  ): [templates!]!
+
+  """
+  fetch aggregated fields from the table: "templates"
+  """
+  templates_aggregate(
+    """distinct select on columns"""
+    distinct_on: [templates_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [templates_order_by!]
+
+    """filter the rows returned"""
+    where: templates_bool_exp
+  ): templates_aggregate!
+
+  """fetch data from the table: "templates" using primary key columns"""
+  templates_by_pk(template_id: bigint!): templates
+}
+
+"""
+columns and relationships of "templates"
+"""
+type templates {
+  date_effective_from: timestamptz
+  date_effective_to: timestamptz
+
+  """An array relationship"""
+  documents(
+    """distinct select on columns"""
+    distinct_on: [documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_order_by!]
+
+    """filter the rows returned"""
+    where: documents_bool_exp
+  ): [documents!]!
+
+  """An aggregated array relationship"""
+  documents_aggregate(
+    """distinct select on columns"""
+    distinct_on: [documents_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [documents_order_by!]
+
+    """filter the rows returned"""
+    where: documents_bool_exp
+  ): documents_aggregate!
+
+  """An object relationship"""
+  ref_template_type: ref_template_types
+  template_details: String
+  template_id: bigint!
+  template_type_code: String
+  version_number: bigint
+}
+
+"""
+aggregated selection of "templates"
+"""
+type templates_aggregate {
+  aggregate: templates_aggregate_fields
+  nodes: [templates!]!
+}
+
+"""
+aggregate fields of "templates"
+"""
+type templates_aggregate_fields {
+  avg: templates_avg_fields
+  count(columns: [templates_select_column!], distinct: Boolean): Int
+  max: templates_max_fields
+  min: templates_min_fields
+  stddev: templates_stddev_fields
+  stddev_pop: templates_stddev_pop_fields
+  stddev_samp: templates_stddev_samp_fields
+  sum: templates_sum_fields
+  var_pop: templates_var_pop_fields
+  var_samp: templates_var_samp_fields
+  variance: templates_variance_fields
+}
+
+"""
+order by aggregate values of table "templates"
+"""
+input templates_aggregate_order_by {
+  avg: templates_avg_order_by
+  count: order_by
+  max: templates_max_order_by
+  min: templates_min_order_by
+  stddev: templates_stddev_order_by
+  stddev_pop: templates_stddev_pop_order_by
+  stddev_samp: templates_stddev_samp_order_by
+  sum: templates_sum_order_by
+  var_pop: templates_var_pop_order_by
+  var_samp: templates_var_samp_order_by
+  variance: templates_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "templates"
+"""
+input templates_arr_rel_insert_input {
+  data: [templates_insert_input!]!
+  on_conflict: templates_on_conflict
+}
+
+"""aggregate avg on columns"""
+type templates_avg_fields {
+  template_id: Float
+  version_number: Float
+}
+
+"""
+order by avg() on columns of table "templates"
+"""
+input templates_avg_order_by {
+  template_id: order_by
+  version_number: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "templates". All fields are combined with a logical 'AND'.
+"""
+input templates_bool_exp {
+  _and: [templates_bool_exp]
+  _not: templates_bool_exp
+  _or: [templates_bool_exp]
+  date_effective_from: timestamptz_comparison_exp
+  date_effective_to: timestamptz_comparison_exp
+  documents: documents_bool_exp
+  ref_template_type: ref_template_types_bool_exp
+  template_details: String_comparison_exp
+  template_id: bigint_comparison_exp
+  template_type_code: String_comparison_exp
+  version_number: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "templates"
+"""
+enum templates_constraint {
+  """unique or primary key constraint"""
+  idx_19751_templates_pkey
+}
+
+"""
+input type for incrementing integer columne in table "templates"
+"""
+input templates_inc_input {
+  template_id: bigint
+  version_number: bigint
+}
+
+"""
+input type for inserting data into table "templates"
+"""
+input templates_insert_input {
+  date_effective_from: timestamptz
+  date_effective_to: timestamptz
+  documents: documents_arr_rel_insert_input
+  ref_template_type: ref_template_types_obj_rel_insert_input
+  template_details: String
+  template_id: bigint
+  template_type_code: String
+  version_number: bigint
+}
+
+"""aggregate max on columns"""
+type templates_max_fields {
+  date_effective_from: timestamptz
+  date_effective_to: timestamptz
+  template_details: String
+  template_id: bigint
+  template_type_code: String
+  version_number: bigint
+}
+
+"""
+order by max() on columns of table "templates"
+"""
+input templates_max_order_by {
+  date_effective_from: order_by
+  date_effective_to: order_by
+  template_details: order_by
+  template_id: order_by
+  template_type_code: order_by
+  version_number: order_by
+}
+
+"""aggregate min on columns"""
+type templates_min_fields {
+  date_effective_from: timestamptz
+  date_effective_to: timestamptz
+  template_details: String
+  template_id: bigint
+  template_type_code: String
+  version_number: bigint
+}
+
+"""
+order by min() on columns of table "templates"
+"""
+input templates_min_order_by {
+  date_effective_from: order_by
+  date_effective_to: order_by
+  template_details: order_by
+  template_id: order_by
+  template_type_code: order_by
+  version_number: order_by
+}
+
+"""
+response of any mutation on the table "templates"
+"""
+type templates_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [templates!]!
+}
+
+"""
+input type for inserting object relation for remote table "templates"
+"""
+input templates_obj_rel_insert_input {
+  data: templates_insert_input!
+  on_conflict: templates_on_conflict
+}
+
+"""
+on conflict condition type for table "templates"
+"""
+input templates_on_conflict {
+  constraint: templates_constraint!
+  update_columns: [templates_update_column!]!
+  where: templates_bool_exp
+}
+
+"""
+ordering options when selecting data from "templates"
+"""
+input templates_order_by {
+  date_effective_from: order_by
+  date_effective_to: order_by
+  documents_aggregate: documents_aggregate_order_by
+  ref_template_type: ref_template_types_order_by
+  template_details: order_by
+  template_id: order_by
+  template_type_code: order_by
+  version_number: order_by
+}
+
+"""
+select columns of table "templates"
+"""
+enum templates_select_column {
+  """column name"""
+  date_effective_from
+
+  """column name"""
+  date_effective_to
+
+  """column name"""
+  template_details
+
+  """column name"""
+  template_id
+
+  """column name"""
+  template_type_code
+
+  """column name"""
+  version_number
+}
+
+"""
+input type for updating data in table "templates"
+"""
+input templates_set_input {
+  date_effective_from: timestamptz
+  date_effective_to: timestamptz
+  template_details: String
+  template_id: bigint
+  template_type_code: String
+  version_number: bigint
+}
+
+"""aggregate stddev on columns"""
+type templates_stddev_fields {
+  template_id: Float
+  version_number: Float
+}
+
+"""
+order by stddev() on columns of table "templates"
+"""
+input templates_stddev_order_by {
+  template_id: order_by
+  version_number: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type templates_stddev_pop_fields {
+  template_id: Float
+  version_number: Float
+}
+
+"""
+order by stddev_pop() on columns of table "templates"
+"""
+input templates_stddev_pop_order_by {
+  template_id: order_by
+  version_number: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type templates_stddev_samp_fields {
+  template_id: Float
+  version_number: Float
+}
+
+"""
+order by stddev_samp() on columns of table "templates"
+"""
+input templates_stddev_samp_order_by {
+  template_id: order_by
+  version_number: order_by
+}
+
+"""aggregate sum on columns"""
+type templates_sum_fields {
+  template_id: bigint
+  version_number: bigint
+}
+
+"""
+order by sum() on columns of table "templates"
+"""
+input templates_sum_order_by {
+  template_id: order_by
+  version_number: order_by
+}
+
+"""
+update columns of table "templates"
+"""
+enum templates_update_column {
+  """column name"""
+  date_effective_from
+
+  """column name"""
+  date_effective_to
+
+  """column name"""
+  template_details
+
+  """column name"""
+  template_id
+
+  """column name"""
+  template_type_code
+
+  """column name"""
+  version_number
+}
+
+"""aggregate var_pop on columns"""
+type templates_var_pop_fields {
+  template_id: Float
+  version_number: Float
+}
+
+"""
+order by var_pop() on columns of table "templates"
+"""
+input templates_var_pop_order_by {
+  template_id: order_by
+  version_number: order_by
+}
+
+"""aggregate var_samp on columns"""
+type templates_var_samp_fields {
+  template_id: Float
+  version_number: Float
+}
+
+"""
+order by var_samp() on columns of table "templates"
+"""
+input templates_var_samp_order_by {
+  template_id: order_by
+  version_number: order_by
+}
+
+"""aggregate variance on columns"""
+type templates_variance_fields {
+  template_id: Float
+  version_number: Float
+}
+
+"""
+order by variance() on columns of table "templates"
+"""
+input templates_variance_order_by {
+  template_id: order_by
+  version_number: order_by
+}
+
+scalar timestamptz
+
+"""
+expression to compare columns of type timestamptz. All fields are combined with logical 'AND'.
+"""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}

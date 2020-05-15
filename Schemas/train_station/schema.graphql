@@ -1,0 +1,1596 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "station"
+  """
+  delete_station(
+    """filter the rows which have to be deleted"""
+    where: station_bool_exp!
+  ): station_mutation_response
+
+  """
+  delete data from the table: "train"
+  """
+  delete_train(
+    """filter the rows which have to be deleted"""
+    where: train_bool_exp!
+  ): train_mutation_response
+
+  """
+  delete data from the table: "train_station"
+  """
+  delete_train_station(
+    """filter the rows which have to be deleted"""
+    where: train_station_bool_exp!
+  ): train_station_mutation_response
+
+  """
+  insert data into the table: "station"
+  """
+  insert_station(
+    """the rows to be inserted"""
+    objects: [station_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: station_on_conflict
+  ): station_mutation_response
+
+  """
+  insert data into the table: "train"
+  """
+  insert_train(
+    """the rows to be inserted"""
+    objects: [train_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: train_on_conflict
+  ): train_mutation_response
+
+  """
+  insert data into the table: "train_station"
+  """
+  insert_train_station(
+    """the rows to be inserted"""
+    objects: [train_station_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: train_station_on_conflict
+  ): train_station_mutation_response
+
+  """
+  update data of the table: "station"
+  """
+  update_station(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: station_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: station_set_input
+
+    """filter the rows which have to be updated"""
+    where: station_bool_exp!
+  ): station_mutation_response
+
+  """
+  update data of the table: "train"
+  """
+  update_train(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: train_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: train_set_input
+
+    """filter the rows which have to be updated"""
+    where: train_bool_exp!
+  ): train_mutation_response
+
+  """
+  update data of the table: "train_station"
+  """
+  update_train_station(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: train_station_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: train_station_set_input
+
+    """filter the rows which have to be updated"""
+    where: train_station_bool_exp!
+  ): train_station_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "station"
+  """
+  station(
+    """distinct select on columns"""
+    distinct_on: [station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_order_by!]
+
+    """filter the rows returned"""
+    where: station_bool_exp
+  ): [station!]!
+
+  """
+  fetch aggregated fields from the table: "station"
+  """
+  station_aggregate(
+    """distinct select on columns"""
+    distinct_on: [station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_order_by!]
+
+    """filter the rows returned"""
+    where: station_bool_exp
+  ): station_aggregate!
+
+  """
+  fetch data from the table: "train"
+  """
+  train(
+    """distinct select on columns"""
+    distinct_on: [train_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_order_by!]
+
+    """filter the rows returned"""
+    where: train_bool_exp
+  ): [train!]!
+
+  """
+  fetch aggregated fields from the table: "train"
+  """
+  train_aggregate(
+    """distinct select on columns"""
+    distinct_on: [train_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_order_by!]
+
+    """filter the rows returned"""
+    where: train_bool_exp
+  ): train_aggregate!
+
+  """
+  fetch data from the table: "train_station"
+  """
+  train_station(
+    """distinct select on columns"""
+    distinct_on: [train_station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_station_order_by!]
+
+    """filter the rows returned"""
+    where: train_station_bool_exp
+  ): [train_station!]!
+
+  """
+  fetch aggregated fields from the table: "train_station"
+  """
+  train_station_aggregate(
+    """distinct select on columns"""
+    distinct_on: [train_station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_station_order_by!]
+
+    """filter the rows returned"""
+    where: train_station_bool_exp
+  ): train_station_aggregate!
+}
+
+"""
+columns and relationships of "station"
+"""
+type station {
+  annual_entry_exit: Float
+  annual_interchanges: Float
+  location: String
+  main_services: String
+  name: String
+  number_of_platforms: Int
+  station_id: Int
+  total_passengers: Float
+
+  """An array relationship"""
+  train_stations(
+    """distinct select on columns"""
+    distinct_on: [train_station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_station_order_by!]
+
+    """filter the rows returned"""
+    where: train_station_bool_exp
+  ): [train_station!]!
+
+  """An aggregated array relationship"""
+  train_stations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [train_station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_station_order_by!]
+
+    """filter the rows returned"""
+    where: train_station_bool_exp
+  ): train_station_aggregate!
+}
+
+"""
+aggregated selection of "station"
+"""
+type station_aggregate {
+  aggregate: station_aggregate_fields
+  nodes: [station!]!
+}
+
+"""
+aggregate fields of "station"
+"""
+type station_aggregate_fields {
+  avg: station_avg_fields
+  count(columns: [station_select_column!], distinct: Boolean): Int
+  max: station_max_fields
+  min: station_min_fields
+  stddev: station_stddev_fields
+  stddev_pop: station_stddev_pop_fields
+  stddev_samp: station_stddev_samp_fields
+  sum: station_sum_fields
+  var_pop: station_var_pop_fields
+  var_samp: station_var_samp_fields
+  variance: station_variance_fields
+}
+
+"""
+order by aggregate values of table "station"
+"""
+input station_aggregate_order_by {
+  avg: station_avg_order_by
+  count: order_by
+  max: station_max_order_by
+  min: station_min_order_by
+  stddev: station_stddev_order_by
+  stddev_pop: station_stddev_pop_order_by
+  stddev_samp: station_stddev_samp_order_by
+  sum: station_sum_order_by
+  var_pop: station_var_pop_order_by
+  var_samp: station_var_samp_order_by
+  variance: station_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "station"
+"""
+input station_arr_rel_insert_input {
+  data: [station_insert_input!]!
+  on_conflict: station_on_conflict
+}
+
+"""aggregate avg on columns"""
+type station_avg_fields {
+  annual_entry_exit: Float
+  annual_interchanges: Float
+  number_of_platforms: Float
+  station_id: Float
+  total_passengers: Float
+}
+
+"""
+order by avg() on columns of table "station"
+"""
+input station_avg_order_by {
+  annual_entry_exit: order_by
+  annual_interchanges: order_by
+  number_of_platforms: order_by
+  station_id: order_by
+  total_passengers: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "station". All fields are combined with a logical 'AND'.
+"""
+input station_bool_exp {
+  _and: [station_bool_exp]
+  _not: station_bool_exp
+  _or: [station_bool_exp]
+  annual_entry_exit: Float_comparison_exp
+  annual_interchanges: Float_comparison_exp
+  location: String_comparison_exp
+  main_services: String_comparison_exp
+  name: String_comparison_exp
+  number_of_platforms: Int_comparison_exp
+  station_id: Int_comparison_exp
+  total_passengers: Float_comparison_exp
+  train_stations: train_station_bool_exp
+}
+
+"""
+unique or primary key constraints on table "station"
+"""
+enum station_constraint {
+  """unique or primary key constraint"""
+  idx_22425_sqlite_autoindex_station_1
+}
+
+"""
+input type for incrementing integer columne in table "station"
+"""
+input station_inc_input {
+  number_of_platforms: Int
+  station_id: Int
+}
+
+"""
+input type for inserting data into table "station"
+"""
+input station_insert_input {
+  annual_entry_exit: Float
+  annual_interchanges: Float
+  location: String
+  main_services: String
+  name: String
+  number_of_platforms: Int
+  station_id: Int
+  total_passengers: Float
+  train_stations: train_station_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type station_max_fields {
+  annual_entry_exit: Float
+  annual_interchanges: Float
+  location: String
+  main_services: String
+  name: String
+  number_of_platforms: Int
+  station_id: Int
+  total_passengers: Float
+}
+
+"""
+order by max() on columns of table "station"
+"""
+input station_max_order_by {
+  annual_entry_exit: order_by
+  annual_interchanges: order_by
+  location: order_by
+  main_services: order_by
+  name: order_by
+  number_of_platforms: order_by
+  station_id: order_by
+  total_passengers: order_by
+}
+
+"""aggregate min on columns"""
+type station_min_fields {
+  annual_entry_exit: Float
+  annual_interchanges: Float
+  location: String
+  main_services: String
+  name: String
+  number_of_platforms: Int
+  station_id: Int
+  total_passengers: Float
+}
+
+"""
+order by min() on columns of table "station"
+"""
+input station_min_order_by {
+  annual_entry_exit: order_by
+  annual_interchanges: order_by
+  location: order_by
+  main_services: order_by
+  name: order_by
+  number_of_platforms: order_by
+  station_id: order_by
+  total_passengers: order_by
+}
+
+"""
+response of any mutation on the table "station"
+"""
+type station_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [station!]!
+}
+
+"""
+input type for inserting object relation for remote table "station"
+"""
+input station_obj_rel_insert_input {
+  data: station_insert_input!
+  on_conflict: station_on_conflict
+}
+
+"""
+on conflict condition type for table "station"
+"""
+input station_on_conflict {
+  constraint: station_constraint!
+  update_columns: [station_update_column!]!
+  where: station_bool_exp
+}
+
+"""
+ordering options when selecting data from "station"
+"""
+input station_order_by {
+  annual_entry_exit: order_by
+  annual_interchanges: order_by
+  location: order_by
+  main_services: order_by
+  name: order_by
+  number_of_platforms: order_by
+  station_id: order_by
+  total_passengers: order_by
+  train_stations_aggregate: train_station_aggregate_order_by
+}
+
+"""
+select columns of table "station"
+"""
+enum station_select_column {
+  """column name"""
+  annual_entry_exit
+
+  """column name"""
+  annual_interchanges
+
+  """column name"""
+  location
+
+  """column name"""
+  main_services
+
+  """column name"""
+  name
+
+  """column name"""
+  number_of_platforms
+
+  """column name"""
+  station_id
+
+  """column name"""
+  total_passengers
+}
+
+"""
+input type for updating data in table "station"
+"""
+input station_set_input {
+  annual_entry_exit: Float
+  annual_interchanges: Float
+  location: String
+  main_services: String
+  name: String
+  number_of_platforms: Int
+  station_id: Int
+  total_passengers: Float
+}
+
+"""aggregate stddev on columns"""
+type station_stddev_fields {
+  annual_entry_exit: Float
+  annual_interchanges: Float
+  number_of_platforms: Float
+  station_id: Float
+  total_passengers: Float
+}
+
+"""
+order by stddev() on columns of table "station"
+"""
+input station_stddev_order_by {
+  annual_entry_exit: order_by
+  annual_interchanges: order_by
+  number_of_platforms: order_by
+  station_id: order_by
+  total_passengers: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type station_stddev_pop_fields {
+  annual_entry_exit: Float
+  annual_interchanges: Float
+  number_of_platforms: Float
+  station_id: Float
+  total_passengers: Float
+}
+
+"""
+order by stddev_pop() on columns of table "station"
+"""
+input station_stddev_pop_order_by {
+  annual_entry_exit: order_by
+  annual_interchanges: order_by
+  number_of_platforms: order_by
+  station_id: order_by
+  total_passengers: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type station_stddev_samp_fields {
+  annual_entry_exit: Float
+  annual_interchanges: Float
+  number_of_platforms: Float
+  station_id: Float
+  total_passengers: Float
+}
+
+"""
+order by stddev_samp() on columns of table "station"
+"""
+input station_stddev_samp_order_by {
+  annual_entry_exit: order_by
+  annual_interchanges: order_by
+  number_of_platforms: order_by
+  station_id: order_by
+  total_passengers: order_by
+}
+
+"""aggregate sum on columns"""
+type station_sum_fields {
+  annual_entry_exit: Float
+  annual_interchanges: Float
+  number_of_platforms: Int
+  station_id: Int
+  total_passengers: Float
+}
+
+"""
+order by sum() on columns of table "station"
+"""
+input station_sum_order_by {
+  annual_entry_exit: order_by
+  annual_interchanges: order_by
+  number_of_platforms: order_by
+  station_id: order_by
+  total_passengers: order_by
+}
+
+"""
+update columns of table "station"
+"""
+enum station_update_column {
+  """column name"""
+  annual_entry_exit
+
+  """column name"""
+  annual_interchanges
+
+  """column name"""
+  location
+
+  """column name"""
+  main_services
+
+  """column name"""
+  name
+
+  """column name"""
+  number_of_platforms
+
+  """column name"""
+  station_id
+
+  """column name"""
+  total_passengers
+}
+
+"""aggregate var_pop on columns"""
+type station_var_pop_fields {
+  annual_entry_exit: Float
+  annual_interchanges: Float
+  number_of_platforms: Float
+  station_id: Float
+  total_passengers: Float
+}
+
+"""
+order by var_pop() on columns of table "station"
+"""
+input station_var_pop_order_by {
+  annual_entry_exit: order_by
+  annual_interchanges: order_by
+  number_of_platforms: order_by
+  station_id: order_by
+  total_passengers: order_by
+}
+
+"""aggregate var_samp on columns"""
+type station_var_samp_fields {
+  annual_entry_exit: Float
+  annual_interchanges: Float
+  number_of_platforms: Float
+  station_id: Float
+  total_passengers: Float
+}
+
+"""
+order by var_samp() on columns of table "station"
+"""
+input station_var_samp_order_by {
+  annual_entry_exit: order_by
+  annual_interchanges: order_by
+  number_of_platforms: order_by
+  station_id: order_by
+  total_passengers: order_by
+}
+
+"""aggregate variance on columns"""
+type station_variance_fields {
+  annual_entry_exit: Float
+  annual_interchanges: Float
+  number_of_platforms: Float
+  station_id: Float
+  total_passengers: Float
+}
+
+"""
+order by variance() on columns of table "station"
+"""
+input station_variance_order_by {
+  annual_entry_exit: order_by
+  annual_interchanges: order_by
+  number_of_platforms: order_by
+  station_id: order_by
+  total_passengers: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "station"
+  """
+  station(
+    """distinct select on columns"""
+    distinct_on: [station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_order_by!]
+
+    """filter the rows returned"""
+    where: station_bool_exp
+  ): [station!]!
+
+  """
+  fetch aggregated fields from the table: "station"
+  """
+  station_aggregate(
+    """distinct select on columns"""
+    distinct_on: [station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [station_order_by!]
+
+    """filter the rows returned"""
+    where: station_bool_exp
+  ): station_aggregate!
+
+  """
+  fetch data from the table: "train"
+  """
+  train(
+    """distinct select on columns"""
+    distinct_on: [train_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_order_by!]
+
+    """filter the rows returned"""
+    where: train_bool_exp
+  ): [train!]!
+
+  """
+  fetch aggregated fields from the table: "train"
+  """
+  train_aggregate(
+    """distinct select on columns"""
+    distinct_on: [train_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_order_by!]
+
+    """filter the rows returned"""
+    where: train_bool_exp
+  ): train_aggregate!
+
+  """
+  fetch data from the table: "train_station"
+  """
+  train_station(
+    """distinct select on columns"""
+    distinct_on: [train_station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_station_order_by!]
+
+    """filter the rows returned"""
+    where: train_station_bool_exp
+  ): [train_station!]!
+
+  """
+  fetch aggregated fields from the table: "train_station"
+  """
+  train_station_aggregate(
+    """distinct select on columns"""
+    distinct_on: [train_station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_station_order_by!]
+
+    """filter the rows returned"""
+    where: train_station_bool_exp
+  ): train_station_aggregate!
+}
+
+"""
+columns and relationships of "train"
+"""
+type train {
+  name: String
+  service: String
+  time: String
+  train_id: Int
+
+  """An array relationship"""
+  train_stations(
+    """distinct select on columns"""
+    distinct_on: [train_station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_station_order_by!]
+
+    """filter the rows returned"""
+    where: train_station_bool_exp
+  ): [train_station!]!
+
+  """An aggregated array relationship"""
+  train_stations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [train_station_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [train_station_order_by!]
+
+    """filter the rows returned"""
+    where: train_station_bool_exp
+  ): train_station_aggregate!
+}
+
+"""
+aggregated selection of "train"
+"""
+type train_aggregate {
+  aggregate: train_aggregate_fields
+  nodes: [train!]!
+}
+
+"""
+aggregate fields of "train"
+"""
+type train_aggregate_fields {
+  avg: train_avg_fields
+  count(columns: [train_select_column!], distinct: Boolean): Int
+  max: train_max_fields
+  min: train_min_fields
+  stddev: train_stddev_fields
+  stddev_pop: train_stddev_pop_fields
+  stddev_samp: train_stddev_samp_fields
+  sum: train_sum_fields
+  var_pop: train_var_pop_fields
+  var_samp: train_var_samp_fields
+  variance: train_variance_fields
+}
+
+"""
+order by aggregate values of table "train"
+"""
+input train_aggregate_order_by {
+  avg: train_avg_order_by
+  count: order_by
+  max: train_max_order_by
+  min: train_min_order_by
+  stddev: train_stddev_order_by
+  stddev_pop: train_stddev_pop_order_by
+  stddev_samp: train_stddev_samp_order_by
+  sum: train_sum_order_by
+  var_pop: train_var_pop_order_by
+  var_samp: train_var_samp_order_by
+  variance: train_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "train"
+"""
+input train_arr_rel_insert_input {
+  data: [train_insert_input!]!
+  on_conflict: train_on_conflict
+}
+
+"""aggregate avg on columns"""
+type train_avg_fields {
+  train_id: Float
+}
+
+"""
+order by avg() on columns of table "train"
+"""
+input train_avg_order_by {
+  train_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "train". All fields are combined with a logical 'AND'.
+"""
+input train_bool_exp {
+  _and: [train_bool_exp]
+  _not: train_bool_exp
+  _or: [train_bool_exp]
+  name: String_comparison_exp
+  service: String_comparison_exp
+  time: String_comparison_exp
+  train_id: Int_comparison_exp
+  train_stations: train_station_bool_exp
+}
+
+"""
+unique or primary key constraints on table "train"
+"""
+enum train_constraint {
+  """unique or primary key constraint"""
+  idx_22431_sqlite_autoindex_train_1
+}
+
+"""
+input type for incrementing integer columne in table "train"
+"""
+input train_inc_input {
+  train_id: Int
+}
+
+"""
+input type for inserting data into table "train"
+"""
+input train_insert_input {
+  name: String
+  service: String
+  time: String
+  train_id: Int
+  train_stations: train_station_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type train_max_fields {
+  name: String
+  service: String
+  time: String
+  train_id: Int
+}
+
+"""
+order by max() on columns of table "train"
+"""
+input train_max_order_by {
+  name: order_by
+  service: order_by
+  time: order_by
+  train_id: order_by
+}
+
+"""aggregate min on columns"""
+type train_min_fields {
+  name: String
+  service: String
+  time: String
+  train_id: Int
+}
+
+"""
+order by min() on columns of table "train"
+"""
+input train_min_order_by {
+  name: order_by
+  service: order_by
+  time: order_by
+  train_id: order_by
+}
+
+"""
+response of any mutation on the table "train"
+"""
+type train_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [train!]!
+}
+
+"""
+input type for inserting object relation for remote table "train"
+"""
+input train_obj_rel_insert_input {
+  data: train_insert_input!
+  on_conflict: train_on_conflict
+}
+
+"""
+on conflict condition type for table "train"
+"""
+input train_on_conflict {
+  constraint: train_constraint!
+  update_columns: [train_update_column!]!
+  where: train_bool_exp
+}
+
+"""
+ordering options when selecting data from "train"
+"""
+input train_order_by {
+  name: order_by
+  service: order_by
+  time: order_by
+  train_id: order_by
+  train_stations_aggregate: train_station_aggregate_order_by
+}
+
+"""
+select columns of table "train"
+"""
+enum train_select_column {
+  """column name"""
+  name
+
+  """column name"""
+  service
+
+  """column name"""
+  time
+
+  """column name"""
+  train_id
+}
+
+"""
+input type for updating data in table "train"
+"""
+input train_set_input {
+  name: String
+  service: String
+  time: String
+  train_id: Int
+}
+
+"""
+columns and relationships of "train_station"
+"""
+type train_station {
+  """An object relationship"""
+  station: station
+  station_id: Int
+
+  """An object relationship"""
+  train: train
+  train_id: Int
+}
+
+"""
+aggregated selection of "train_station"
+"""
+type train_station_aggregate {
+  aggregate: train_station_aggregate_fields
+  nodes: [train_station!]!
+}
+
+"""
+aggregate fields of "train_station"
+"""
+type train_station_aggregate_fields {
+  avg: train_station_avg_fields
+  count(columns: [train_station_select_column!], distinct: Boolean): Int
+  max: train_station_max_fields
+  min: train_station_min_fields
+  stddev: train_station_stddev_fields
+  stddev_pop: train_station_stddev_pop_fields
+  stddev_samp: train_station_stddev_samp_fields
+  sum: train_station_sum_fields
+  var_pop: train_station_var_pop_fields
+  var_samp: train_station_var_samp_fields
+  variance: train_station_variance_fields
+}
+
+"""
+order by aggregate values of table "train_station"
+"""
+input train_station_aggregate_order_by {
+  avg: train_station_avg_order_by
+  count: order_by
+  max: train_station_max_order_by
+  min: train_station_min_order_by
+  stddev: train_station_stddev_order_by
+  stddev_pop: train_station_stddev_pop_order_by
+  stddev_samp: train_station_stddev_samp_order_by
+  sum: train_station_sum_order_by
+  var_pop: train_station_var_pop_order_by
+  var_samp: train_station_var_samp_order_by
+  variance: train_station_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "train_station"
+"""
+input train_station_arr_rel_insert_input {
+  data: [train_station_insert_input!]!
+  on_conflict: train_station_on_conflict
+}
+
+"""aggregate avg on columns"""
+type train_station_avg_fields {
+  station_id: Float
+  train_id: Float
+}
+
+"""
+order by avg() on columns of table "train_station"
+"""
+input train_station_avg_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "train_station". All fields are combined with a logical 'AND'.
+"""
+input train_station_bool_exp {
+  _and: [train_station_bool_exp]
+  _not: train_station_bool_exp
+  _or: [train_station_bool_exp]
+  station: station_bool_exp
+  station_id: Int_comparison_exp
+  train: train_bool_exp
+  train_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "train_station"
+"""
+enum train_station_constraint {
+  """unique or primary key constraint"""
+  idx_22437_sqlite_autoindex_train_station_1
+}
+
+"""
+input type for incrementing integer columne in table "train_station"
+"""
+input train_station_inc_input {
+  station_id: Int
+  train_id: Int
+}
+
+"""
+input type for inserting data into table "train_station"
+"""
+input train_station_insert_input {
+  station: station_obj_rel_insert_input
+  station_id: Int
+  train: train_obj_rel_insert_input
+  train_id: Int
+}
+
+"""aggregate max on columns"""
+type train_station_max_fields {
+  station_id: Int
+  train_id: Int
+}
+
+"""
+order by max() on columns of table "train_station"
+"""
+input train_station_max_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""aggregate min on columns"""
+type train_station_min_fields {
+  station_id: Int
+  train_id: Int
+}
+
+"""
+order by min() on columns of table "train_station"
+"""
+input train_station_min_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""
+response of any mutation on the table "train_station"
+"""
+type train_station_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [train_station!]!
+}
+
+"""
+input type for inserting object relation for remote table "train_station"
+"""
+input train_station_obj_rel_insert_input {
+  data: train_station_insert_input!
+  on_conflict: train_station_on_conflict
+}
+
+"""
+on conflict condition type for table "train_station"
+"""
+input train_station_on_conflict {
+  constraint: train_station_constraint!
+  update_columns: [train_station_update_column!]!
+  where: train_station_bool_exp
+}
+
+"""
+ordering options when selecting data from "train_station"
+"""
+input train_station_order_by {
+  station: station_order_by
+  station_id: order_by
+  train: train_order_by
+  train_id: order_by
+}
+
+"""
+select columns of table "train_station"
+"""
+enum train_station_select_column {
+  """column name"""
+  station_id
+
+  """column name"""
+  train_id
+}
+
+"""
+input type for updating data in table "train_station"
+"""
+input train_station_set_input {
+  station_id: Int
+  train_id: Int
+}
+
+"""aggregate stddev on columns"""
+type train_station_stddev_fields {
+  station_id: Float
+  train_id: Float
+}
+
+"""
+order by stddev() on columns of table "train_station"
+"""
+input train_station_stddev_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type train_station_stddev_pop_fields {
+  station_id: Float
+  train_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "train_station"
+"""
+input train_station_stddev_pop_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type train_station_stddev_samp_fields {
+  station_id: Float
+  train_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "train_station"
+"""
+input train_station_stddev_samp_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""aggregate sum on columns"""
+type train_station_sum_fields {
+  station_id: Int
+  train_id: Int
+}
+
+"""
+order by sum() on columns of table "train_station"
+"""
+input train_station_sum_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""
+update columns of table "train_station"
+"""
+enum train_station_update_column {
+  """column name"""
+  station_id
+
+  """column name"""
+  train_id
+}
+
+"""aggregate var_pop on columns"""
+type train_station_var_pop_fields {
+  station_id: Float
+  train_id: Float
+}
+
+"""
+order by var_pop() on columns of table "train_station"
+"""
+input train_station_var_pop_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type train_station_var_samp_fields {
+  station_id: Float
+  train_id: Float
+}
+
+"""
+order by var_samp() on columns of table "train_station"
+"""
+input train_station_var_samp_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""aggregate variance on columns"""
+type train_station_variance_fields {
+  station_id: Float
+  train_id: Float
+}
+
+"""
+order by variance() on columns of table "train_station"
+"""
+input train_station_variance_order_by {
+  station_id: order_by
+  train_id: order_by
+}
+
+"""aggregate stddev on columns"""
+type train_stddev_fields {
+  train_id: Float
+}
+
+"""
+order by stddev() on columns of table "train"
+"""
+input train_stddev_order_by {
+  train_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type train_stddev_pop_fields {
+  train_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "train"
+"""
+input train_stddev_pop_order_by {
+  train_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type train_stddev_samp_fields {
+  train_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "train"
+"""
+input train_stddev_samp_order_by {
+  train_id: order_by
+}
+
+"""aggregate sum on columns"""
+type train_sum_fields {
+  train_id: Int
+}
+
+"""
+order by sum() on columns of table "train"
+"""
+input train_sum_order_by {
+  train_id: order_by
+}
+
+"""
+update columns of table "train"
+"""
+enum train_update_column {
+  """column name"""
+  name
+
+  """column name"""
+  service
+
+  """column name"""
+  time
+
+  """column name"""
+  train_id
+}
+
+"""aggregate var_pop on columns"""
+type train_var_pop_fields {
+  train_id: Float
+}
+
+"""
+order by var_pop() on columns of table "train"
+"""
+input train_var_pop_order_by {
+  train_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type train_var_samp_fields {
+  train_id: Float
+}
+
+"""
+order by var_samp() on columns of table "train"
+"""
+input train_var_samp_order_by {
+  train_id: order_by
+}
+
+"""aggregate variance on columns"""
+type train_variance_fields {
+  train_id: Float
+}
+
+"""
+order by variance() on columns of table "train"
+"""
+input train_variance_order_by {
+  train_id: order_by
+}

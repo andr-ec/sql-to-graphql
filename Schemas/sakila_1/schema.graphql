@@ -1,0 +1,8480 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "actor"
+"""
+type actor {
+  actor_id: smallint!
+
+  """An array relationship"""
+  film_actors(
+    """distinct select on columns"""
+    distinct_on: [film_actor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_actor_order_by!]
+
+    """filter the rows returned"""
+    where: film_actor_bool_exp
+  ): [film_actor!]!
+
+  """An aggregated array relationship"""
+  film_actors_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_actor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_actor_order_by!]
+
+    """filter the rows returned"""
+    where: film_actor_bool_exp
+  ): film_actor_aggregate!
+  first_name: String!
+  last_name: String!
+  last_update: timestamp!
+}
+
+"""
+aggregated selection of "actor"
+"""
+type actor_aggregate {
+  aggregate: actor_aggregate_fields
+  nodes: [actor!]!
+}
+
+"""
+aggregate fields of "actor"
+"""
+type actor_aggregate_fields {
+  avg: actor_avg_fields
+  count(columns: [actor_select_column!], distinct: Boolean): Int
+  max: actor_max_fields
+  min: actor_min_fields
+  stddev: actor_stddev_fields
+  stddev_pop: actor_stddev_pop_fields
+  stddev_samp: actor_stddev_samp_fields
+  sum: actor_sum_fields
+  var_pop: actor_var_pop_fields
+  var_samp: actor_var_samp_fields
+  variance: actor_variance_fields
+}
+
+"""
+order by aggregate values of table "actor"
+"""
+input actor_aggregate_order_by {
+  avg: actor_avg_order_by
+  count: order_by
+  max: actor_max_order_by
+  min: actor_min_order_by
+  stddev: actor_stddev_order_by
+  stddev_pop: actor_stddev_pop_order_by
+  stddev_samp: actor_stddev_samp_order_by
+  sum: actor_sum_order_by
+  var_pop: actor_var_pop_order_by
+  var_samp: actor_var_samp_order_by
+  variance: actor_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "actor"
+"""
+input actor_arr_rel_insert_input {
+  data: [actor_insert_input!]!
+  on_conflict: actor_on_conflict
+}
+
+"""aggregate avg on columns"""
+type actor_avg_fields {
+  actor_id: Float
+}
+
+"""
+order by avg() on columns of table "actor"
+"""
+input actor_avg_order_by {
+  actor_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "actor". All fields are combined with a logical 'AND'.
+"""
+input actor_bool_exp {
+  _and: [actor_bool_exp]
+  _not: actor_bool_exp
+  _or: [actor_bool_exp]
+  actor_id: smallint_comparison_exp
+  film_actors: film_actor_bool_exp
+  first_name: String_comparison_exp
+  last_name: String_comparison_exp
+  last_update: timestamp_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "actor"
+"""
+enum actor_constraint {
+  """unique or primary key constraint"""
+  actor_pkey
+}
+
+"""
+input type for incrementing integer columne in table "actor"
+"""
+input actor_inc_input {
+  actor_id: smallint
+}
+
+"""
+input type for inserting data into table "actor"
+"""
+input actor_insert_input {
+  actor_id: smallint
+  film_actors: film_actor_arr_rel_insert_input
+  first_name: String
+  last_name: String
+  last_update: timestamp
+}
+
+"""aggregate max on columns"""
+type actor_max_fields {
+  actor_id: smallint
+  first_name: String
+  last_name: String
+}
+
+"""
+order by max() on columns of table "actor"
+"""
+input actor_max_order_by {
+  actor_id: order_by
+  first_name: order_by
+  last_name: order_by
+}
+
+"""aggregate min on columns"""
+type actor_min_fields {
+  actor_id: smallint
+  first_name: String
+  last_name: String
+}
+
+"""
+order by min() on columns of table "actor"
+"""
+input actor_min_order_by {
+  actor_id: order_by
+  first_name: order_by
+  last_name: order_by
+}
+
+"""
+response of any mutation on the table "actor"
+"""
+type actor_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [actor!]!
+}
+
+"""
+input type for inserting object relation for remote table "actor"
+"""
+input actor_obj_rel_insert_input {
+  data: actor_insert_input!
+  on_conflict: actor_on_conflict
+}
+
+"""
+on conflict condition type for table "actor"
+"""
+input actor_on_conflict {
+  constraint: actor_constraint!
+  update_columns: [actor_update_column!]!
+  where: actor_bool_exp
+}
+
+"""
+ordering options when selecting data from "actor"
+"""
+input actor_order_by {
+  actor_id: order_by
+  film_actors_aggregate: film_actor_aggregate_order_by
+  first_name: order_by
+  last_name: order_by
+  last_update: order_by
+}
+
+"""
+select columns of table "actor"
+"""
+enum actor_select_column {
+  """column name"""
+  actor_id
+
+  """column name"""
+  first_name
+
+  """column name"""
+  last_name
+
+  """column name"""
+  last_update
+}
+
+"""
+input type for updating data in table "actor"
+"""
+input actor_set_input {
+  actor_id: smallint
+  first_name: String
+  last_name: String
+  last_update: timestamp
+}
+
+"""aggregate stddev on columns"""
+type actor_stddev_fields {
+  actor_id: Float
+}
+
+"""
+order by stddev() on columns of table "actor"
+"""
+input actor_stddev_order_by {
+  actor_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type actor_stddev_pop_fields {
+  actor_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "actor"
+"""
+input actor_stddev_pop_order_by {
+  actor_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type actor_stddev_samp_fields {
+  actor_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "actor"
+"""
+input actor_stddev_samp_order_by {
+  actor_id: order_by
+}
+
+"""aggregate sum on columns"""
+type actor_sum_fields {
+  actor_id: smallint
+}
+
+"""
+order by sum() on columns of table "actor"
+"""
+input actor_sum_order_by {
+  actor_id: order_by
+}
+
+"""
+update columns of table "actor"
+"""
+enum actor_update_column {
+  """column name"""
+  actor_id
+
+  """column name"""
+  first_name
+
+  """column name"""
+  last_name
+
+  """column name"""
+  last_update
+}
+
+"""aggregate var_pop on columns"""
+type actor_var_pop_fields {
+  actor_id: Float
+}
+
+"""
+order by var_pop() on columns of table "actor"
+"""
+input actor_var_pop_order_by {
+  actor_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type actor_var_samp_fields {
+  actor_id: Float
+}
+
+"""
+order by var_samp() on columns of table "actor"
+"""
+input actor_var_samp_order_by {
+  actor_id: order_by
+}
+
+"""aggregate variance on columns"""
+type actor_variance_fields {
+  actor_id: Float
+}
+
+"""
+order by variance() on columns of table "actor"
+"""
+input actor_variance_order_by {
+  actor_id: order_by
+}
+
+"""
+columns and relationships of "address"
+"""
+type address {
+  address: String!
+  address2: String
+  address_id: smallint!
+
+  """An object relationship"""
+  city: city!
+  city_id: smallint!
+
+  """An array relationship"""
+  customers(
+    """distinct select on columns"""
+    distinct_on: [customer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_order_by!]
+
+    """filter the rows returned"""
+    where: customer_bool_exp
+  ): [customer!]!
+
+  """An aggregated array relationship"""
+  customers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_order_by!]
+
+    """filter the rows returned"""
+    where: customer_bool_exp
+  ): customer_aggregate!
+  district: String!
+  last_update: timestamp!
+  phone: String!
+  postal_code: String
+
+  """An array relationship"""
+  staffs(
+    """distinct select on columns"""
+    distinct_on: [staff_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [staff_order_by!]
+
+    """filter the rows returned"""
+    where: staff_bool_exp
+  ): [staff!]!
+
+  """An aggregated array relationship"""
+  staffs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [staff_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [staff_order_by!]
+
+    """filter the rows returned"""
+    where: staff_bool_exp
+  ): staff_aggregate!
+
+  """An array relationship"""
+  stores(
+    """distinct select on columns"""
+    distinct_on: [store_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [store_order_by!]
+
+    """filter the rows returned"""
+    where: store_bool_exp
+  ): [store!]!
+
+  """An aggregated array relationship"""
+  stores_aggregate(
+    """distinct select on columns"""
+    distinct_on: [store_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [store_order_by!]
+
+    """filter the rows returned"""
+    where: store_bool_exp
+  ): store_aggregate!
+}
+
+"""
+aggregated selection of "address"
+"""
+type address_aggregate {
+  aggregate: address_aggregate_fields
+  nodes: [address!]!
+}
+
+"""
+aggregate fields of "address"
+"""
+type address_aggregate_fields {
+  avg: address_avg_fields
+  count(columns: [address_select_column!], distinct: Boolean): Int
+  max: address_max_fields
+  min: address_min_fields
+  stddev: address_stddev_fields
+  stddev_pop: address_stddev_pop_fields
+  stddev_samp: address_stddev_samp_fields
+  sum: address_sum_fields
+  var_pop: address_var_pop_fields
+  var_samp: address_var_samp_fields
+  variance: address_variance_fields
+}
+
+"""
+order by aggregate values of table "address"
+"""
+input address_aggregate_order_by {
+  avg: address_avg_order_by
+  count: order_by
+  max: address_max_order_by
+  min: address_min_order_by
+  stddev: address_stddev_order_by
+  stddev_pop: address_stddev_pop_order_by
+  stddev_samp: address_stddev_samp_order_by
+  sum: address_sum_order_by
+  var_pop: address_var_pop_order_by
+  var_samp: address_var_samp_order_by
+  variance: address_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "address"
+"""
+input address_arr_rel_insert_input {
+  data: [address_insert_input!]!
+  on_conflict: address_on_conflict
+}
+
+"""aggregate avg on columns"""
+type address_avg_fields {
+  address_id: Float
+  city_id: Float
+}
+
+"""
+order by avg() on columns of table "address"
+"""
+input address_avg_order_by {
+  address_id: order_by
+  city_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "address". All fields are combined with a logical 'AND'.
+"""
+input address_bool_exp {
+  _and: [address_bool_exp]
+  _not: address_bool_exp
+  _or: [address_bool_exp]
+  address: String_comparison_exp
+  address2: String_comparison_exp
+  address_id: smallint_comparison_exp
+  city: city_bool_exp
+  city_id: smallint_comparison_exp
+  customers: customer_bool_exp
+  district: String_comparison_exp
+  last_update: timestamp_comparison_exp
+  phone: String_comparison_exp
+  postal_code: String_comparison_exp
+  staffs: staff_bool_exp
+  stores: store_bool_exp
+}
+
+"""
+unique or primary key constraints on table "address"
+"""
+enum address_constraint {
+  """unique or primary key constraint"""
+  address_pkey
+}
+
+"""
+input type for incrementing integer columne in table "address"
+"""
+input address_inc_input {
+  address_id: smallint
+  city_id: smallint
+}
+
+"""
+input type for inserting data into table "address"
+"""
+input address_insert_input {
+  address: String
+  address2: String
+  address_id: smallint
+  city: city_obj_rel_insert_input
+  city_id: smallint
+  customers: customer_arr_rel_insert_input
+  district: String
+  last_update: timestamp
+  phone: String
+  postal_code: String
+  staffs: staff_arr_rel_insert_input
+  stores: store_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type address_max_fields {
+  address: String
+  address2: String
+  address_id: smallint
+  city_id: smallint
+  district: String
+  phone: String
+  postal_code: String
+}
+
+"""
+order by max() on columns of table "address"
+"""
+input address_max_order_by {
+  address: order_by
+  address2: order_by
+  address_id: order_by
+  city_id: order_by
+  district: order_by
+  phone: order_by
+  postal_code: order_by
+}
+
+"""aggregate min on columns"""
+type address_min_fields {
+  address: String
+  address2: String
+  address_id: smallint
+  city_id: smallint
+  district: String
+  phone: String
+  postal_code: String
+}
+
+"""
+order by min() on columns of table "address"
+"""
+input address_min_order_by {
+  address: order_by
+  address2: order_by
+  address_id: order_by
+  city_id: order_by
+  district: order_by
+  phone: order_by
+  postal_code: order_by
+}
+
+"""
+response of any mutation on the table "address"
+"""
+type address_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [address!]!
+}
+
+"""
+input type for inserting object relation for remote table "address"
+"""
+input address_obj_rel_insert_input {
+  data: address_insert_input!
+  on_conflict: address_on_conflict
+}
+
+"""
+on conflict condition type for table "address"
+"""
+input address_on_conflict {
+  constraint: address_constraint!
+  update_columns: [address_update_column!]!
+  where: address_bool_exp
+}
+
+"""
+ordering options when selecting data from "address"
+"""
+input address_order_by {
+  address: order_by
+  address2: order_by
+  address_id: order_by
+  city: city_order_by
+  city_id: order_by
+  customers_aggregate: customer_aggregate_order_by
+  district: order_by
+  last_update: order_by
+  phone: order_by
+  postal_code: order_by
+  staffs_aggregate: staff_aggregate_order_by
+  stores_aggregate: store_aggregate_order_by
+}
+
+"""
+select columns of table "address"
+"""
+enum address_select_column {
+  """column name"""
+  address
+
+  """column name"""
+  address2
+
+  """column name"""
+  address_id
+
+  """column name"""
+  city_id
+
+  """column name"""
+  district
+
+  """column name"""
+  last_update
+
+  """column name"""
+  phone
+
+  """column name"""
+  postal_code
+}
+
+"""
+input type for updating data in table "address"
+"""
+input address_set_input {
+  address: String
+  address2: String
+  address_id: smallint
+  city_id: smallint
+  district: String
+  last_update: timestamp
+  phone: String
+  postal_code: String
+}
+
+"""aggregate stddev on columns"""
+type address_stddev_fields {
+  address_id: Float
+  city_id: Float
+}
+
+"""
+order by stddev() on columns of table "address"
+"""
+input address_stddev_order_by {
+  address_id: order_by
+  city_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type address_stddev_pop_fields {
+  address_id: Float
+  city_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "address"
+"""
+input address_stddev_pop_order_by {
+  address_id: order_by
+  city_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type address_stddev_samp_fields {
+  address_id: Float
+  city_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "address"
+"""
+input address_stddev_samp_order_by {
+  address_id: order_by
+  city_id: order_by
+}
+
+"""aggregate sum on columns"""
+type address_sum_fields {
+  address_id: smallint
+  city_id: smallint
+}
+
+"""
+order by sum() on columns of table "address"
+"""
+input address_sum_order_by {
+  address_id: order_by
+  city_id: order_by
+}
+
+"""
+update columns of table "address"
+"""
+enum address_update_column {
+  """column name"""
+  address
+
+  """column name"""
+  address2
+
+  """column name"""
+  address_id
+
+  """column name"""
+  city_id
+
+  """column name"""
+  district
+
+  """column name"""
+  last_update
+
+  """column name"""
+  phone
+
+  """column name"""
+  postal_code
+}
+
+"""aggregate var_pop on columns"""
+type address_var_pop_fields {
+  address_id: Float
+  city_id: Float
+}
+
+"""
+order by var_pop() on columns of table "address"
+"""
+input address_var_pop_order_by {
+  address_id: order_by
+  city_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type address_var_samp_fields {
+  address_id: Float
+  city_id: Float
+}
+
+"""
+order by var_samp() on columns of table "address"
+"""
+input address_var_samp_order_by {
+  address_id: order_by
+  city_id: order_by
+}
+
+"""aggregate variance on columns"""
+type address_variance_fields {
+  address_id: Float
+  city_id: Float
+}
+
+"""
+order by variance() on columns of table "address"
+"""
+input address_variance_order_by {
+  address_id: order_by
+  city_id: order_by
+}
+
+"""
+expression to compare columns of type Boolean. All fields are combined with logical 'AND'.
+"""
+input Boolean_comparison_exp {
+  _eq: Boolean
+  _gt: Boolean
+  _gte: Boolean
+  _in: [Boolean!]
+  _is_null: Boolean
+  _lt: Boolean
+  _lte: Boolean
+  _neq: Boolean
+  _nin: [Boolean!]
+}
+
+scalar bpchar
+
+"""
+expression to compare columns of type bpchar. All fields are combined with logical 'AND'.
+"""
+input bpchar_comparison_exp {
+  _eq: bpchar
+  _gt: bpchar
+  _gte: bpchar
+  _in: [bpchar!]
+  _is_null: Boolean
+  _lt: bpchar
+  _lte: bpchar
+  _neq: bpchar
+  _nin: [bpchar!]
+}
+
+scalar bytea
+
+"""
+expression to compare columns of type bytea. All fields are combined with logical 'AND'.
+"""
+input bytea_comparison_exp {
+  _eq: bytea
+  _gt: bytea
+  _gte: bytea
+  _in: [bytea!]
+  _is_null: Boolean
+  _lt: bytea
+  _lte: bytea
+  _neq: bytea
+  _nin: [bytea!]
+}
+
+"""
+columns and relationships of "category"
+"""
+type category {
+  category_id: smallint!
+
+  """An array relationship"""
+  film_categories(
+    """distinct select on columns"""
+    distinct_on: [film_category_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_category_order_by!]
+
+    """filter the rows returned"""
+    where: film_category_bool_exp
+  ): [film_category!]!
+
+  """An aggregated array relationship"""
+  film_categories_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_category_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_category_order_by!]
+
+    """filter the rows returned"""
+    where: film_category_bool_exp
+  ): film_category_aggregate!
+  last_update: timestamp!
+  name: String!
+}
+
+"""
+aggregated selection of "category"
+"""
+type category_aggregate {
+  aggregate: category_aggregate_fields
+  nodes: [category!]!
+}
+
+"""
+aggregate fields of "category"
+"""
+type category_aggregate_fields {
+  avg: category_avg_fields
+  count(columns: [category_select_column!], distinct: Boolean): Int
+  max: category_max_fields
+  min: category_min_fields
+  stddev: category_stddev_fields
+  stddev_pop: category_stddev_pop_fields
+  stddev_samp: category_stddev_samp_fields
+  sum: category_sum_fields
+  var_pop: category_var_pop_fields
+  var_samp: category_var_samp_fields
+  variance: category_variance_fields
+}
+
+"""
+order by aggregate values of table "category"
+"""
+input category_aggregate_order_by {
+  avg: category_avg_order_by
+  count: order_by
+  max: category_max_order_by
+  min: category_min_order_by
+  stddev: category_stddev_order_by
+  stddev_pop: category_stddev_pop_order_by
+  stddev_samp: category_stddev_samp_order_by
+  sum: category_sum_order_by
+  var_pop: category_var_pop_order_by
+  var_samp: category_var_samp_order_by
+  variance: category_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "category"
+"""
+input category_arr_rel_insert_input {
+  data: [category_insert_input!]!
+  on_conflict: category_on_conflict
+}
+
+"""aggregate avg on columns"""
+type category_avg_fields {
+  category_id: Float
+}
+
+"""
+order by avg() on columns of table "category"
+"""
+input category_avg_order_by {
+  category_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "category". All fields are combined with a logical 'AND'.
+"""
+input category_bool_exp {
+  _and: [category_bool_exp]
+  _not: category_bool_exp
+  _or: [category_bool_exp]
+  category_id: smallint_comparison_exp
+  film_categories: film_category_bool_exp
+  last_update: timestamp_comparison_exp
+  name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "category"
+"""
+enum category_constraint {
+  """unique or primary key constraint"""
+  category_pkey
+}
+
+"""
+input type for incrementing integer columne in table "category"
+"""
+input category_inc_input {
+  category_id: smallint
+}
+
+"""
+input type for inserting data into table "category"
+"""
+input category_insert_input {
+  category_id: smallint
+  film_categories: film_category_arr_rel_insert_input
+  last_update: timestamp
+  name: String
+}
+
+"""aggregate max on columns"""
+type category_max_fields {
+  category_id: smallint
+  name: String
+}
+
+"""
+order by max() on columns of table "category"
+"""
+input category_max_order_by {
+  category_id: order_by
+  name: order_by
+}
+
+"""aggregate min on columns"""
+type category_min_fields {
+  category_id: smallint
+  name: String
+}
+
+"""
+order by min() on columns of table "category"
+"""
+input category_min_order_by {
+  category_id: order_by
+  name: order_by
+}
+
+"""
+response of any mutation on the table "category"
+"""
+type category_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [category!]!
+}
+
+"""
+input type for inserting object relation for remote table "category"
+"""
+input category_obj_rel_insert_input {
+  data: category_insert_input!
+  on_conflict: category_on_conflict
+}
+
+"""
+on conflict condition type for table "category"
+"""
+input category_on_conflict {
+  constraint: category_constraint!
+  update_columns: [category_update_column!]!
+  where: category_bool_exp
+}
+
+"""
+ordering options when selecting data from "category"
+"""
+input category_order_by {
+  category_id: order_by
+  film_categories_aggregate: film_category_aggregate_order_by
+  last_update: order_by
+  name: order_by
+}
+
+"""
+select columns of table "category"
+"""
+enum category_select_column {
+  """column name"""
+  category_id
+
+  """column name"""
+  last_update
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "category"
+"""
+input category_set_input {
+  category_id: smallint
+  last_update: timestamp
+  name: String
+}
+
+"""aggregate stddev on columns"""
+type category_stddev_fields {
+  category_id: Float
+}
+
+"""
+order by stddev() on columns of table "category"
+"""
+input category_stddev_order_by {
+  category_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type category_stddev_pop_fields {
+  category_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "category"
+"""
+input category_stddev_pop_order_by {
+  category_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type category_stddev_samp_fields {
+  category_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "category"
+"""
+input category_stddev_samp_order_by {
+  category_id: order_by
+}
+
+"""aggregate sum on columns"""
+type category_sum_fields {
+  category_id: smallint
+}
+
+"""
+order by sum() on columns of table "category"
+"""
+input category_sum_order_by {
+  category_id: order_by
+}
+
+"""
+update columns of table "category"
+"""
+enum category_update_column {
+  """column name"""
+  category_id
+
+  """column name"""
+  last_update
+
+  """column name"""
+  name
+}
+
+"""aggregate var_pop on columns"""
+type category_var_pop_fields {
+  category_id: Float
+}
+
+"""
+order by var_pop() on columns of table "category"
+"""
+input category_var_pop_order_by {
+  category_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type category_var_samp_fields {
+  category_id: Float
+}
+
+"""
+order by var_samp() on columns of table "category"
+"""
+input category_var_samp_order_by {
+  category_id: order_by
+}
+
+"""aggregate variance on columns"""
+type category_variance_fields {
+  category_id: Float
+}
+
+"""
+order by variance() on columns of table "category"
+"""
+input category_variance_order_by {
+  category_id: order_by
+}
+
+"""
+columns and relationships of "city"
+"""
+type city {
+  """An array relationship"""
+  addresses(
+    """distinct select on columns"""
+    distinct_on: [address_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [address_order_by!]
+
+    """filter the rows returned"""
+    where: address_bool_exp
+  ): [address!]!
+
+  """An aggregated array relationship"""
+  addresses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [address_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [address_order_by!]
+
+    """filter the rows returned"""
+    where: address_bool_exp
+  ): address_aggregate!
+  city: String!
+  city_id: smallint!
+
+  """An object relationship"""
+  country: country!
+  country_id: smallint!
+  last_update: timestamp!
+}
+
+"""
+aggregated selection of "city"
+"""
+type city_aggregate {
+  aggregate: city_aggregate_fields
+  nodes: [city!]!
+}
+
+"""
+aggregate fields of "city"
+"""
+type city_aggregate_fields {
+  avg: city_avg_fields
+  count(columns: [city_select_column!], distinct: Boolean): Int
+  max: city_max_fields
+  min: city_min_fields
+  stddev: city_stddev_fields
+  stddev_pop: city_stddev_pop_fields
+  stddev_samp: city_stddev_samp_fields
+  sum: city_sum_fields
+  var_pop: city_var_pop_fields
+  var_samp: city_var_samp_fields
+  variance: city_variance_fields
+}
+
+"""
+order by aggregate values of table "city"
+"""
+input city_aggregate_order_by {
+  avg: city_avg_order_by
+  count: order_by
+  max: city_max_order_by
+  min: city_min_order_by
+  stddev: city_stddev_order_by
+  stddev_pop: city_stddev_pop_order_by
+  stddev_samp: city_stddev_samp_order_by
+  sum: city_sum_order_by
+  var_pop: city_var_pop_order_by
+  var_samp: city_var_samp_order_by
+  variance: city_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "city"
+"""
+input city_arr_rel_insert_input {
+  data: [city_insert_input!]!
+  on_conflict: city_on_conflict
+}
+
+"""aggregate avg on columns"""
+type city_avg_fields {
+  city_id: Float
+  country_id: Float
+}
+
+"""
+order by avg() on columns of table "city"
+"""
+input city_avg_order_by {
+  city_id: order_by
+  country_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "city". All fields are combined with a logical 'AND'.
+"""
+input city_bool_exp {
+  _and: [city_bool_exp]
+  _not: city_bool_exp
+  _or: [city_bool_exp]
+  addresses: address_bool_exp
+  city: String_comparison_exp
+  city_id: smallint_comparison_exp
+  country: country_bool_exp
+  country_id: smallint_comparison_exp
+  last_update: timestamp_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "city"
+"""
+enum city_constraint {
+  """unique or primary key constraint"""
+  city_pkey
+}
+
+"""
+input type for incrementing integer columne in table "city"
+"""
+input city_inc_input {
+  city_id: smallint
+  country_id: smallint
+}
+
+"""
+input type for inserting data into table "city"
+"""
+input city_insert_input {
+  addresses: address_arr_rel_insert_input
+  city: String
+  city_id: smallint
+  country: country_obj_rel_insert_input
+  country_id: smallint
+  last_update: timestamp
+}
+
+"""aggregate max on columns"""
+type city_max_fields {
+  city: String
+  city_id: smallint
+  country_id: smallint
+}
+
+"""
+order by max() on columns of table "city"
+"""
+input city_max_order_by {
+  city: order_by
+  city_id: order_by
+  country_id: order_by
+}
+
+"""aggregate min on columns"""
+type city_min_fields {
+  city: String
+  city_id: smallint
+  country_id: smallint
+}
+
+"""
+order by min() on columns of table "city"
+"""
+input city_min_order_by {
+  city: order_by
+  city_id: order_by
+  country_id: order_by
+}
+
+"""
+response of any mutation on the table "city"
+"""
+type city_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [city!]!
+}
+
+"""
+input type for inserting object relation for remote table "city"
+"""
+input city_obj_rel_insert_input {
+  data: city_insert_input!
+  on_conflict: city_on_conflict
+}
+
+"""
+on conflict condition type for table "city"
+"""
+input city_on_conflict {
+  constraint: city_constraint!
+  update_columns: [city_update_column!]!
+  where: city_bool_exp
+}
+
+"""
+ordering options when selecting data from "city"
+"""
+input city_order_by {
+  addresses_aggregate: address_aggregate_order_by
+  city: order_by
+  city_id: order_by
+  country: country_order_by
+  country_id: order_by
+  last_update: order_by
+}
+
+"""
+select columns of table "city"
+"""
+enum city_select_column {
+  """column name"""
+  city
+
+  """column name"""
+  city_id
+
+  """column name"""
+  country_id
+
+  """column name"""
+  last_update
+}
+
+"""
+input type for updating data in table "city"
+"""
+input city_set_input {
+  city: String
+  city_id: smallint
+  country_id: smallint
+  last_update: timestamp
+}
+
+"""aggregate stddev on columns"""
+type city_stddev_fields {
+  city_id: Float
+  country_id: Float
+}
+
+"""
+order by stddev() on columns of table "city"
+"""
+input city_stddev_order_by {
+  city_id: order_by
+  country_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type city_stddev_pop_fields {
+  city_id: Float
+  country_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "city"
+"""
+input city_stddev_pop_order_by {
+  city_id: order_by
+  country_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type city_stddev_samp_fields {
+  city_id: Float
+  country_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "city"
+"""
+input city_stddev_samp_order_by {
+  city_id: order_by
+  country_id: order_by
+}
+
+"""aggregate sum on columns"""
+type city_sum_fields {
+  city_id: smallint
+  country_id: smallint
+}
+
+"""
+order by sum() on columns of table "city"
+"""
+input city_sum_order_by {
+  city_id: order_by
+  country_id: order_by
+}
+
+"""
+update columns of table "city"
+"""
+enum city_update_column {
+  """column name"""
+  city
+
+  """column name"""
+  city_id
+
+  """column name"""
+  country_id
+
+  """column name"""
+  last_update
+}
+
+"""aggregate var_pop on columns"""
+type city_var_pop_fields {
+  city_id: Float
+  country_id: Float
+}
+
+"""
+order by var_pop() on columns of table "city"
+"""
+input city_var_pop_order_by {
+  city_id: order_by
+  country_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type city_var_samp_fields {
+  city_id: Float
+  country_id: Float
+}
+
+"""
+order by var_samp() on columns of table "city"
+"""
+input city_var_samp_order_by {
+  city_id: order_by
+  country_id: order_by
+}
+
+"""aggregate variance on columns"""
+type city_variance_fields {
+  city_id: Float
+  country_id: Float
+}
+
+"""
+order by variance() on columns of table "city"
+"""
+input city_variance_order_by {
+  city_id: order_by
+  country_id: order_by
+}
+
+"""
+columns and relationships of "country"
+"""
+type country {
+  """An array relationship"""
+  cities(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): [city!]!
+
+  """An aggregated array relationship"""
+  cities_aggregate(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): city_aggregate!
+  country: String!
+  country_id: smallint!
+  last_update: timestamp!
+}
+
+"""
+aggregated selection of "country"
+"""
+type country_aggregate {
+  aggregate: country_aggregate_fields
+  nodes: [country!]!
+}
+
+"""
+aggregate fields of "country"
+"""
+type country_aggregate_fields {
+  avg: country_avg_fields
+  count(columns: [country_select_column!], distinct: Boolean): Int
+  max: country_max_fields
+  min: country_min_fields
+  stddev: country_stddev_fields
+  stddev_pop: country_stddev_pop_fields
+  stddev_samp: country_stddev_samp_fields
+  sum: country_sum_fields
+  var_pop: country_var_pop_fields
+  var_samp: country_var_samp_fields
+  variance: country_variance_fields
+}
+
+"""
+order by aggregate values of table "country"
+"""
+input country_aggregate_order_by {
+  avg: country_avg_order_by
+  count: order_by
+  max: country_max_order_by
+  min: country_min_order_by
+  stddev: country_stddev_order_by
+  stddev_pop: country_stddev_pop_order_by
+  stddev_samp: country_stddev_samp_order_by
+  sum: country_sum_order_by
+  var_pop: country_var_pop_order_by
+  var_samp: country_var_samp_order_by
+  variance: country_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "country"
+"""
+input country_arr_rel_insert_input {
+  data: [country_insert_input!]!
+  on_conflict: country_on_conflict
+}
+
+"""aggregate avg on columns"""
+type country_avg_fields {
+  country_id: Float
+}
+
+"""
+order by avg() on columns of table "country"
+"""
+input country_avg_order_by {
+  country_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "country". All fields are combined with a logical 'AND'.
+"""
+input country_bool_exp {
+  _and: [country_bool_exp]
+  _not: country_bool_exp
+  _or: [country_bool_exp]
+  cities: city_bool_exp
+  country: String_comparison_exp
+  country_id: smallint_comparison_exp
+  last_update: timestamp_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "country"
+"""
+enum country_constraint {
+  """unique or primary key constraint"""
+  country_pkey
+}
+
+"""
+input type for incrementing integer columne in table "country"
+"""
+input country_inc_input {
+  country_id: smallint
+}
+
+"""
+input type for inserting data into table "country"
+"""
+input country_insert_input {
+  cities: city_arr_rel_insert_input
+  country: String
+  country_id: smallint
+  last_update: timestamp
+}
+
+"""aggregate max on columns"""
+type country_max_fields {
+  country: String
+  country_id: smallint
+}
+
+"""
+order by max() on columns of table "country"
+"""
+input country_max_order_by {
+  country: order_by
+  country_id: order_by
+}
+
+"""aggregate min on columns"""
+type country_min_fields {
+  country: String
+  country_id: smallint
+}
+
+"""
+order by min() on columns of table "country"
+"""
+input country_min_order_by {
+  country: order_by
+  country_id: order_by
+}
+
+"""
+response of any mutation on the table "country"
+"""
+type country_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [country!]!
+}
+
+"""
+input type for inserting object relation for remote table "country"
+"""
+input country_obj_rel_insert_input {
+  data: country_insert_input!
+  on_conflict: country_on_conflict
+}
+
+"""
+on conflict condition type for table "country"
+"""
+input country_on_conflict {
+  constraint: country_constraint!
+  update_columns: [country_update_column!]!
+  where: country_bool_exp
+}
+
+"""
+ordering options when selecting data from "country"
+"""
+input country_order_by {
+  cities_aggregate: city_aggregate_order_by
+  country: order_by
+  country_id: order_by
+  last_update: order_by
+}
+
+"""
+select columns of table "country"
+"""
+enum country_select_column {
+  """column name"""
+  country
+
+  """column name"""
+  country_id
+
+  """column name"""
+  last_update
+}
+
+"""
+input type for updating data in table "country"
+"""
+input country_set_input {
+  country: String
+  country_id: smallint
+  last_update: timestamp
+}
+
+"""aggregate stddev on columns"""
+type country_stddev_fields {
+  country_id: Float
+}
+
+"""
+order by stddev() on columns of table "country"
+"""
+input country_stddev_order_by {
+  country_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type country_stddev_pop_fields {
+  country_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "country"
+"""
+input country_stddev_pop_order_by {
+  country_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type country_stddev_samp_fields {
+  country_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "country"
+"""
+input country_stddev_samp_order_by {
+  country_id: order_by
+}
+
+"""aggregate sum on columns"""
+type country_sum_fields {
+  country_id: smallint
+}
+
+"""
+order by sum() on columns of table "country"
+"""
+input country_sum_order_by {
+  country_id: order_by
+}
+
+"""
+update columns of table "country"
+"""
+enum country_update_column {
+  """column name"""
+  country
+
+  """column name"""
+  country_id
+
+  """column name"""
+  last_update
+}
+
+"""aggregate var_pop on columns"""
+type country_var_pop_fields {
+  country_id: Float
+}
+
+"""
+order by var_pop() on columns of table "country"
+"""
+input country_var_pop_order_by {
+  country_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type country_var_samp_fields {
+  country_id: Float
+}
+
+"""
+order by var_samp() on columns of table "country"
+"""
+input country_var_samp_order_by {
+  country_id: order_by
+}
+
+"""aggregate variance on columns"""
+type country_variance_fields {
+  country_id: Float
+}
+
+"""
+order by variance() on columns of table "country"
+"""
+input country_variance_order_by {
+  country_id: order_by
+}
+
+"""
+columns and relationships of "customer"
+"""
+type customer {
+  active: Boolean!
+
+  """An object relationship"""
+  address: address!
+  address_id: smallint!
+  create_date: timestamp!
+  customer_id: smallint!
+  email: String
+  first_name: String!
+  last_name: String!
+  last_update: timestamp
+
+  """An array relationship"""
+  payments(
+    """distinct select on columns"""
+    distinct_on: [payment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payment_order_by!]
+
+    """filter the rows returned"""
+    where: payment_bool_exp
+  ): [payment!]!
+
+  """An aggregated array relationship"""
+  payments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [payment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payment_order_by!]
+
+    """filter the rows returned"""
+    where: payment_bool_exp
+  ): payment_aggregate!
+
+  """An array relationship"""
+  rentals(
+    """distinct select on columns"""
+    distinct_on: [rental_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rental_order_by!]
+
+    """filter the rows returned"""
+    where: rental_bool_exp
+  ): [rental!]!
+
+  """An aggregated array relationship"""
+  rentals_aggregate(
+    """distinct select on columns"""
+    distinct_on: [rental_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rental_order_by!]
+
+    """filter the rows returned"""
+    where: rental_bool_exp
+  ): rental_aggregate!
+  store_id: smallint!
+}
+
+"""
+aggregated selection of "customer"
+"""
+type customer_aggregate {
+  aggregate: customer_aggregate_fields
+  nodes: [customer!]!
+}
+
+"""
+aggregate fields of "customer"
+"""
+type customer_aggregate_fields {
+  avg: customer_avg_fields
+  count(columns: [customer_select_column!], distinct: Boolean): Int
+  max: customer_max_fields
+  min: customer_min_fields
+  stddev: customer_stddev_fields
+  stddev_pop: customer_stddev_pop_fields
+  stddev_samp: customer_stddev_samp_fields
+  sum: customer_sum_fields
+  var_pop: customer_var_pop_fields
+  var_samp: customer_var_samp_fields
+  variance: customer_variance_fields
+}
+
+"""
+order by aggregate values of table "customer"
+"""
+input customer_aggregate_order_by {
+  avg: customer_avg_order_by
+  count: order_by
+  max: customer_max_order_by
+  min: customer_min_order_by
+  stddev: customer_stddev_order_by
+  stddev_pop: customer_stddev_pop_order_by
+  stddev_samp: customer_stddev_samp_order_by
+  sum: customer_sum_order_by
+  var_pop: customer_var_pop_order_by
+  var_samp: customer_var_samp_order_by
+  variance: customer_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "customer"
+"""
+input customer_arr_rel_insert_input {
+  data: [customer_insert_input!]!
+  on_conflict: customer_on_conflict
+}
+
+"""aggregate avg on columns"""
+type customer_avg_fields {
+  address_id: Float
+  customer_id: Float
+  store_id: Float
+}
+
+"""
+order by avg() on columns of table "customer"
+"""
+input customer_avg_order_by {
+  address_id: order_by
+  customer_id: order_by
+  store_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "customer". All fields are combined with a logical 'AND'.
+"""
+input customer_bool_exp {
+  _and: [customer_bool_exp]
+  _not: customer_bool_exp
+  _or: [customer_bool_exp]
+  active: Boolean_comparison_exp
+  address: address_bool_exp
+  address_id: smallint_comparison_exp
+  create_date: timestamp_comparison_exp
+  customer_id: smallint_comparison_exp
+  email: String_comparison_exp
+  first_name: String_comparison_exp
+  last_name: String_comparison_exp
+  last_update: timestamp_comparison_exp
+  payments: payment_bool_exp
+  rentals: rental_bool_exp
+  store_id: smallint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "customer"
+"""
+enum customer_constraint {
+  """unique or primary key constraint"""
+  customer_pkey
+}
+
+"""
+input type for incrementing integer columne in table "customer"
+"""
+input customer_inc_input {
+  address_id: smallint
+  customer_id: smallint
+  store_id: smallint
+}
+
+"""
+input type for inserting data into table "customer"
+"""
+input customer_insert_input {
+  active: Boolean
+  address: address_obj_rel_insert_input
+  address_id: smallint
+  create_date: timestamp
+  customer_id: smallint
+  email: String
+  first_name: String
+  last_name: String
+  last_update: timestamp
+  payments: payment_arr_rel_insert_input
+  rentals: rental_arr_rel_insert_input
+  store_id: smallint
+}
+
+"""aggregate max on columns"""
+type customer_max_fields {
+  address_id: smallint
+  customer_id: smallint
+  email: String
+  first_name: String
+  last_name: String
+  store_id: smallint
+}
+
+"""
+order by max() on columns of table "customer"
+"""
+input customer_max_order_by {
+  address_id: order_by
+  customer_id: order_by
+  email: order_by
+  first_name: order_by
+  last_name: order_by
+  store_id: order_by
+}
+
+"""aggregate min on columns"""
+type customer_min_fields {
+  address_id: smallint
+  customer_id: smallint
+  email: String
+  first_name: String
+  last_name: String
+  store_id: smallint
+}
+
+"""
+order by min() on columns of table "customer"
+"""
+input customer_min_order_by {
+  address_id: order_by
+  customer_id: order_by
+  email: order_by
+  first_name: order_by
+  last_name: order_by
+  store_id: order_by
+}
+
+"""
+response of any mutation on the table "customer"
+"""
+type customer_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [customer!]!
+}
+
+"""
+input type for inserting object relation for remote table "customer"
+"""
+input customer_obj_rel_insert_input {
+  data: customer_insert_input!
+  on_conflict: customer_on_conflict
+}
+
+"""
+on conflict condition type for table "customer"
+"""
+input customer_on_conflict {
+  constraint: customer_constraint!
+  update_columns: [customer_update_column!]!
+  where: customer_bool_exp
+}
+
+"""
+ordering options when selecting data from "customer"
+"""
+input customer_order_by {
+  active: order_by
+  address: address_order_by
+  address_id: order_by
+  create_date: order_by
+  customer_id: order_by
+  email: order_by
+  first_name: order_by
+  last_name: order_by
+  last_update: order_by
+  payments_aggregate: payment_aggregate_order_by
+  rentals_aggregate: rental_aggregate_order_by
+  store_id: order_by
+}
+
+"""
+select columns of table "customer"
+"""
+enum customer_select_column {
+  """column name"""
+  active
+
+  """column name"""
+  address_id
+
+  """column name"""
+  create_date
+
+  """column name"""
+  customer_id
+
+  """column name"""
+  email
+
+  """column name"""
+  first_name
+
+  """column name"""
+  last_name
+
+  """column name"""
+  last_update
+
+  """column name"""
+  store_id
+}
+
+"""
+input type for updating data in table "customer"
+"""
+input customer_set_input {
+  active: Boolean
+  address_id: smallint
+  create_date: timestamp
+  customer_id: smallint
+  email: String
+  first_name: String
+  last_name: String
+  last_update: timestamp
+  store_id: smallint
+}
+
+"""aggregate stddev on columns"""
+type customer_stddev_fields {
+  address_id: Float
+  customer_id: Float
+  store_id: Float
+}
+
+"""
+order by stddev() on columns of table "customer"
+"""
+input customer_stddev_order_by {
+  address_id: order_by
+  customer_id: order_by
+  store_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type customer_stddev_pop_fields {
+  address_id: Float
+  customer_id: Float
+  store_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "customer"
+"""
+input customer_stddev_pop_order_by {
+  address_id: order_by
+  customer_id: order_by
+  store_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type customer_stddev_samp_fields {
+  address_id: Float
+  customer_id: Float
+  store_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "customer"
+"""
+input customer_stddev_samp_order_by {
+  address_id: order_by
+  customer_id: order_by
+  store_id: order_by
+}
+
+"""aggregate sum on columns"""
+type customer_sum_fields {
+  address_id: smallint
+  customer_id: smallint
+  store_id: smallint
+}
+
+"""
+order by sum() on columns of table "customer"
+"""
+input customer_sum_order_by {
+  address_id: order_by
+  customer_id: order_by
+  store_id: order_by
+}
+
+"""
+update columns of table "customer"
+"""
+enum customer_update_column {
+  """column name"""
+  active
+
+  """column name"""
+  address_id
+
+  """column name"""
+  create_date
+
+  """column name"""
+  customer_id
+
+  """column name"""
+  email
+
+  """column name"""
+  first_name
+
+  """column name"""
+  last_name
+
+  """column name"""
+  last_update
+
+  """column name"""
+  store_id
+}
+
+"""aggregate var_pop on columns"""
+type customer_var_pop_fields {
+  address_id: Float
+  customer_id: Float
+  store_id: Float
+}
+
+"""
+order by var_pop() on columns of table "customer"
+"""
+input customer_var_pop_order_by {
+  address_id: order_by
+  customer_id: order_by
+  store_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type customer_var_samp_fields {
+  address_id: Float
+  customer_id: Float
+  store_id: Float
+}
+
+"""
+order by var_samp() on columns of table "customer"
+"""
+input customer_var_samp_order_by {
+  address_id: order_by
+  customer_id: order_by
+  store_id: order_by
+}
+
+"""aggregate variance on columns"""
+type customer_variance_fields {
+  address_id: Float
+  customer_id: Float
+  store_id: Float
+}
+
+"""
+order by variance() on columns of table "customer"
+"""
+input customer_variance_order_by {
+  address_id: order_by
+  customer_id: order_by
+  store_id: order_by
+}
+
+"""
+columns and relationships of "film"
+"""
+type film {
+  description: String
+
+  """An array relationship"""
+  film_actors(
+    """distinct select on columns"""
+    distinct_on: [film_actor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_actor_order_by!]
+
+    """filter the rows returned"""
+    where: film_actor_bool_exp
+  ): [film_actor!]!
+
+  """An aggregated array relationship"""
+  film_actors_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_actor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_actor_order_by!]
+
+    """filter the rows returned"""
+    where: film_actor_bool_exp
+  ): film_actor_aggregate!
+
+  """An array relationship"""
+  film_categories(
+    """distinct select on columns"""
+    distinct_on: [film_category_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_category_order_by!]
+
+    """filter the rows returned"""
+    where: film_category_bool_exp
+  ): [film_category!]!
+
+  """An aggregated array relationship"""
+  film_categories_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_category_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_category_order_by!]
+
+    """filter the rows returned"""
+    where: film_category_bool_exp
+  ): film_category_aggregate!
+  film_id: smallint!
+
+  """An array relationship"""
+  inventories(
+    """distinct select on columns"""
+    distinct_on: [inventory_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [inventory_order_by!]
+
+    """filter the rows returned"""
+    where: inventory_bool_exp
+  ): [inventory!]!
+
+  """An aggregated array relationship"""
+  inventories_aggregate(
+    """distinct select on columns"""
+    distinct_on: [inventory_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [inventory_order_by!]
+
+    """filter the rows returned"""
+    where: inventory_bool_exp
+  ): inventory_aggregate!
+  language_id: smallint!
+  last_update: timestamp!
+  length: smallint
+  original_language_id: smallint
+  rating: String
+  release_year: String
+  rental_duration: smallint!
+  rental_rate: numeric!
+  replacement_cost: numeric!
+  special_features: String
+  title: String!
+}
+
+"""
+columns and relationships of "film_actor"
+"""
+type film_actor {
+  """An object relationship"""
+  actor: actor!
+  actor_id: smallint!
+
+  """An object relationship"""
+  film: film!
+  film_id: smallint!
+  last_update: timestamp!
+}
+
+"""
+aggregated selection of "film_actor"
+"""
+type film_actor_aggregate {
+  aggregate: film_actor_aggregate_fields
+  nodes: [film_actor!]!
+}
+
+"""
+aggregate fields of "film_actor"
+"""
+type film_actor_aggregate_fields {
+  avg: film_actor_avg_fields
+  count(columns: [film_actor_select_column!], distinct: Boolean): Int
+  max: film_actor_max_fields
+  min: film_actor_min_fields
+  stddev: film_actor_stddev_fields
+  stddev_pop: film_actor_stddev_pop_fields
+  stddev_samp: film_actor_stddev_samp_fields
+  sum: film_actor_sum_fields
+  var_pop: film_actor_var_pop_fields
+  var_samp: film_actor_var_samp_fields
+  variance: film_actor_variance_fields
+}
+
+"""
+order by aggregate values of table "film_actor"
+"""
+input film_actor_aggregate_order_by {
+  avg: film_actor_avg_order_by
+  count: order_by
+  max: film_actor_max_order_by
+  min: film_actor_min_order_by
+  stddev: film_actor_stddev_order_by
+  stddev_pop: film_actor_stddev_pop_order_by
+  stddev_samp: film_actor_stddev_samp_order_by
+  sum: film_actor_sum_order_by
+  var_pop: film_actor_var_pop_order_by
+  var_samp: film_actor_var_samp_order_by
+  variance: film_actor_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "film_actor"
+"""
+input film_actor_arr_rel_insert_input {
+  data: [film_actor_insert_input!]!
+  on_conflict: film_actor_on_conflict
+}
+
+"""aggregate avg on columns"""
+type film_actor_avg_fields {
+  actor_id: Float
+  film_id: Float
+}
+
+"""
+order by avg() on columns of table "film_actor"
+"""
+input film_actor_avg_order_by {
+  actor_id: order_by
+  film_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "film_actor". All fields are combined with a logical 'AND'.
+"""
+input film_actor_bool_exp {
+  _and: [film_actor_bool_exp]
+  _not: film_actor_bool_exp
+  _or: [film_actor_bool_exp]
+  actor: actor_bool_exp
+  actor_id: smallint_comparison_exp
+  film: film_bool_exp
+  film_id: smallint_comparison_exp
+  last_update: timestamp_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "film_actor"
+"""
+enum film_actor_constraint {
+  """unique or primary key constraint"""
+  film_actor_pkey
+}
+
+"""
+input type for incrementing integer columne in table "film_actor"
+"""
+input film_actor_inc_input {
+  actor_id: smallint
+  film_id: smallint
+}
+
+"""
+input type for inserting data into table "film_actor"
+"""
+input film_actor_insert_input {
+  actor: actor_obj_rel_insert_input
+  actor_id: smallint
+  film: film_obj_rel_insert_input
+  film_id: smallint
+  last_update: timestamp
+}
+
+"""aggregate max on columns"""
+type film_actor_max_fields {
+  actor_id: smallint
+  film_id: smallint
+}
+
+"""
+order by max() on columns of table "film_actor"
+"""
+input film_actor_max_order_by {
+  actor_id: order_by
+  film_id: order_by
+}
+
+"""aggregate min on columns"""
+type film_actor_min_fields {
+  actor_id: smallint
+  film_id: smallint
+}
+
+"""
+order by min() on columns of table "film_actor"
+"""
+input film_actor_min_order_by {
+  actor_id: order_by
+  film_id: order_by
+}
+
+"""
+response of any mutation on the table "film_actor"
+"""
+type film_actor_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [film_actor!]!
+}
+
+"""
+input type for inserting object relation for remote table "film_actor"
+"""
+input film_actor_obj_rel_insert_input {
+  data: film_actor_insert_input!
+  on_conflict: film_actor_on_conflict
+}
+
+"""
+on conflict condition type for table "film_actor"
+"""
+input film_actor_on_conflict {
+  constraint: film_actor_constraint!
+  update_columns: [film_actor_update_column!]!
+  where: film_actor_bool_exp
+}
+
+"""
+ordering options when selecting data from "film_actor"
+"""
+input film_actor_order_by {
+  actor: actor_order_by
+  actor_id: order_by
+  film: film_order_by
+  film_id: order_by
+  last_update: order_by
+}
+
+"""
+select columns of table "film_actor"
+"""
+enum film_actor_select_column {
+  """column name"""
+  actor_id
+
+  """column name"""
+  film_id
+
+  """column name"""
+  last_update
+}
+
+"""
+input type for updating data in table "film_actor"
+"""
+input film_actor_set_input {
+  actor_id: smallint
+  film_id: smallint
+  last_update: timestamp
+}
+
+"""aggregate stddev on columns"""
+type film_actor_stddev_fields {
+  actor_id: Float
+  film_id: Float
+}
+
+"""
+order by stddev() on columns of table "film_actor"
+"""
+input film_actor_stddev_order_by {
+  actor_id: order_by
+  film_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type film_actor_stddev_pop_fields {
+  actor_id: Float
+  film_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "film_actor"
+"""
+input film_actor_stddev_pop_order_by {
+  actor_id: order_by
+  film_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type film_actor_stddev_samp_fields {
+  actor_id: Float
+  film_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "film_actor"
+"""
+input film_actor_stddev_samp_order_by {
+  actor_id: order_by
+  film_id: order_by
+}
+
+"""aggregate sum on columns"""
+type film_actor_sum_fields {
+  actor_id: smallint
+  film_id: smallint
+}
+
+"""
+order by sum() on columns of table "film_actor"
+"""
+input film_actor_sum_order_by {
+  actor_id: order_by
+  film_id: order_by
+}
+
+"""
+update columns of table "film_actor"
+"""
+enum film_actor_update_column {
+  """column name"""
+  actor_id
+
+  """column name"""
+  film_id
+
+  """column name"""
+  last_update
+}
+
+"""aggregate var_pop on columns"""
+type film_actor_var_pop_fields {
+  actor_id: Float
+  film_id: Float
+}
+
+"""
+order by var_pop() on columns of table "film_actor"
+"""
+input film_actor_var_pop_order_by {
+  actor_id: order_by
+  film_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type film_actor_var_samp_fields {
+  actor_id: Float
+  film_id: Float
+}
+
+"""
+order by var_samp() on columns of table "film_actor"
+"""
+input film_actor_var_samp_order_by {
+  actor_id: order_by
+  film_id: order_by
+}
+
+"""aggregate variance on columns"""
+type film_actor_variance_fields {
+  actor_id: Float
+  film_id: Float
+}
+
+"""
+order by variance() on columns of table "film_actor"
+"""
+input film_actor_variance_order_by {
+  actor_id: order_by
+  film_id: order_by
+}
+
+"""
+aggregated selection of "film"
+"""
+type film_aggregate {
+  aggregate: film_aggregate_fields
+  nodes: [film!]!
+}
+
+"""
+aggregate fields of "film"
+"""
+type film_aggregate_fields {
+  avg: film_avg_fields
+  count(columns: [film_select_column!], distinct: Boolean): Int
+  max: film_max_fields
+  min: film_min_fields
+  stddev: film_stddev_fields
+  stddev_pop: film_stddev_pop_fields
+  stddev_samp: film_stddev_samp_fields
+  sum: film_sum_fields
+  var_pop: film_var_pop_fields
+  var_samp: film_var_samp_fields
+  variance: film_variance_fields
+}
+
+"""
+order by aggregate values of table "film"
+"""
+input film_aggregate_order_by {
+  avg: film_avg_order_by
+  count: order_by
+  max: film_max_order_by
+  min: film_min_order_by
+  stddev: film_stddev_order_by
+  stddev_pop: film_stddev_pop_order_by
+  stddev_samp: film_stddev_samp_order_by
+  sum: film_sum_order_by
+  var_pop: film_var_pop_order_by
+  var_samp: film_var_samp_order_by
+  variance: film_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "film"
+"""
+input film_arr_rel_insert_input {
+  data: [film_insert_input!]!
+  on_conflict: film_on_conflict
+}
+
+"""aggregate avg on columns"""
+type film_avg_fields {
+  film_id: Float
+  language_id: Float
+  length: Float
+  original_language_id: Float
+  rental_duration: Float
+  rental_rate: Float
+  replacement_cost: Float
+}
+
+"""
+order by avg() on columns of table "film"
+"""
+input film_avg_order_by {
+  film_id: order_by
+  language_id: order_by
+  length: order_by
+  original_language_id: order_by
+  rental_duration: order_by
+  rental_rate: order_by
+  replacement_cost: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "film". All fields are combined with a logical 'AND'.
+"""
+input film_bool_exp {
+  _and: [film_bool_exp]
+  _not: film_bool_exp
+  _or: [film_bool_exp]
+  description: String_comparison_exp
+  film_actors: film_actor_bool_exp
+  film_categories: film_category_bool_exp
+  film_id: smallint_comparison_exp
+  inventories: inventory_bool_exp
+  language_id: smallint_comparison_exp
+  last_update: timestamp_comparison_exp
+  length: smallint_comparison_exp
+  original_language_id: smallint_comparison_exp
+  rating: String_comparison_exp
+  release_year: String_comparison_exp
+  rental_duration: smallint_comparison_exp
+  rental_rate: numeric_comparison_exp
+  replacement_cost: numeric_comparison_exp
+  special_features: String_comparison_exp
+  title: String_comparison_exp
+}
+
+"""
+columns and relationships of "film_category"
+"""
+type film_category {
+  """An object relationship"""
+  category: category!
+  category_id: smallint!
+
+  """An object relationship"""
+  film: film!
+  film_id: smallint!
+  last_update: timestamp!
+}
+
+"""
+aggregated selection of "film_category"
+"""
+type film_category_aggregate {
+  aggregate: film_category_aggregate_fields
+  nodes: [film_category!]!
+}
+
+"""
+aggregate fields of "film_category"
+"""
+type film_category_aggregate_fields {
+  avg: film_category_avg_fields
+  count(columns: [film_category_select_column!], distinct: Boolean): Int
+  max: film_category_max_fields
+  min: film_category_min_fields
+  stddev: film_category_stddev_fields
+  stddev_pop: film_category_stddev_pop_fields
+  stddev_samp: film_category_stddev_samp_fields
+  sum: film_category_sum_fields
+  var_pop: film_category_var_pop_fields
+  var_samp: film_category_var_samp_fields
+  variance: film_category_variance_fields
+}
+
+"""
+order by aggregate values of table "film_category"
+"""
+input film_category_aggregate_order_by {
+  avg: film_category_avg_order_by
+  count: order_by
+  max: film_category_max_order_by
+  min: film_category_min_order_by
+  stddev: film_category_stddev_order_by
+  stddev_pop: film_category_stddev_pop_order_by
+  stddev_samp: film_category_stddev_samp_order_by
+  sum: film_category_sum_order_by
+  var_pop: film_category_var_pop_order_by
+  var_samp: film_category_var_samp_order_by
+  variance: film_category_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "film_category"
+"""
+input film_category_arr_rel_insert_input {
+  data: [film_category_insert_input!]!
+  on_conflict: film_category_on_conflict
+}
+
+"""aggregate avg on columns"""
+type film_category_avg_fields {
+  category_id: Float
+  film_id: Float
+}
+
+"""
+order by avg() on columns of table "film_category"
+"""
+input film_category_avg_order_by {
+  category_id: order_by
+  film_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "film_category". All fields are combined with a logical 'AND'.
+"""
+input film_category_bool_exp {
+  _and: [film_category_bool_exp]
+  _not: film_category_bool_exp
+  _or: [film_category_bool_exp]
+  category: category_bool_exp
+  category_id: smallint_comparison_exp
+  film: film_bool_exp
+  film_id: smallint_comparison_exp
+  last_update: timestamp_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "film_category"
+"""
+enum film_category_constraint {
+  """unique or primary key constraint"""
+  film_category_pkey
+}
+
+"""
+input type for incrementing integer columne in table "film_category"
+"""
+input film_category_inc_input {
+  category_id: smallint
+  film_id: smallint
+}
+
+"""
+input type for inserting data into table "film_category"
+"""
+input film_category_insert_input {
+  category: category_obj_rel_insert_input
+  category_id: smallint
+  film: film_obj_rel_insert_input
+  film_id: smallint
+  last_update: timestamp
+}
+
+"""aggregate max on columns"""
+type film_category_max_fields {
+  category_id: smallint
+  film_id: smallint
+}
+
+"""
+order by max() on columns of table "film_category"
+"""
+input film_category_max_order_by {
+  category_id: order_by
+  film_id: order_by
+}
+
+"""aggregate min on columns"""
+type film_category_min_fields {
+  category_id: smallint
+  film_id: smallint
+}
+
+"""
+order by min() on columns of table "film_category"
+"""
+input film_category_min_order_by {
+  category_id: order_by
+  film_id: order_by
+}
+
+"""
+response of any mutation on the table "film_category"
+"""
+type film_category_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [film_category!]!
+}
+
+"""
+input type for inserting object relation for remote table "film_category"
+"""
+input film_category_obj_rel_insert_input {
+  data: film_category_insert_input!
+  on_conflict: film_category_on_conflict
+}
+
+"""
+on conflict condition type for table "film_category"
+"""
+input film_category_on_conflict {
+  constraint: film_category_constraint!
+  update_columns: [film_category_update_column!]!
+  where: film_category_bool_exp
+}
+
+"""
+ordering options when selecting data from "film_category"
+"""
+input film_category_order_by {
+  category: category_order_by
+  category_id: order_by
+  film: film_order_by
+  film_id: order_by
+  last_update: order_by
+}
+
+"""
+select columns of table "film_category"
+"""
+enum film_category_select_column {
+  """column name"""
+  category_id
+
+  """column name"""
+  film_id
+
+  """column name"""
+  last_update
+}
+
+"""
+input type for updating data in table "film_category"
+"""
+input film_category_set_input {
+  category_id: smallint
+  film_id: smallint
+  last_update: timestamp
+}
+
+"""aggregate stddev on columns"""
+type film_category_stddev_fields {
+  category_id: Float
+  film_id: Float
+}
+
+"""
+order by stddev() on columns of table "film_category"
+"""
+input film_category_stddev_order_by {
+  category_id: order_by
+  film_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type film_category_stddev_pop_fields {
+  category_id: Float
+  film_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "film_category"
+"""
+input film_category_stddev_pop_order_by {
+  category_id: order_by
+  film_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type film_category_stddev_samp_fields {
+  category_id: Float
+  film_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "film_category"
+"""
+input film_category_stddev_samp_order_by {
+  category_id: order_by
+  film_id: order_by
+}
+
+"""aggregate sum on columns"""
+type film_category_sum_fields {
+  category_id: smallint
+  film_id: smallint
+}
+
+"""
+order by sum() on columns of table "film_category"
+"""
+input film_category_sum_order_by {
+  category_id: order_by
+  film_id: order_by
+}
+
+"""
+update columns of table "film_category"
+"""
+enum film_category_update_column {
+  """column name"""
+  category_id
+
+  """column name"""
+  film_id
+
+  """column name"""
+  last_update
+}
+
+"""aggregate var_pop on columns"""
+type film_category_var_pop_fields {
+  category_id: Float
+  film_id: Float
+}
+
+"""
+order by var_pop() on columns of table "film_category"
+"""
+input film_category_var_pop_order_by {
+  category_id: order_by
+  film_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type film_category_var_samp_fields {
+  category_id: Float
+  film_id: Float
+}
+
+"""
+order by var_samp() on columns of table "film_category"
+"""
+input film_category_var_samp_order_by {
+  category_id: order_by
+  film_id: order_by
+}
+
+"""aggregate variance on columns"""
+type film_category_variance_fields {
+  category_id: Float
+  film_id: Float
+}
+
+"""
+order by variance() on columns of table "film_category"
+"""
+input film_category_variance_order_by {
+  category_id: order_by
+  film_id: order_by
+}
+
+"""
+unique or primary key constraints on table "film"
+"""
+enum film_constraint {
+  """unique or primary key constraint"""
+  film_pkey
+}
+
+"""
+input type for incrementing integer columne in table "film"
+"""
+input film_inc_input {
+  film_id: smallint
+  language_id: smallint
+  length: smallint
+  original_language_id: smallint
+  rental_duration: smallint
+}
+
+"""
+input type for inserting data into table "film"
+"""
+input film_insert_input {
+  description: String
+  film_actors: film_actor_arr_rel_insert_input
+  film_categories: film_category_arr_rel_insert_input
+  film_id: smallint
+  inventories: inventory_arr_rel_insert_input
+  language_id: smallint
+  last_update: timestamp
+  length: smallint
+  original_language_id: smallint
+  rating: String
+  release_year: String
+  rental_duration: smallint
+  rental_rate: numeric
+  replacement_cost: numeric
+  special_features: String
+  title: String
+}
+
+"""aggregate max on columns"""
+type film_max_fields {
+  description: String
+  film_id: smallint
+  language_id: smallint
+  length: smallint
+  original_language_id: smallint
+  rating: String
+  release_year: String
+  rental_duration: smallint
+  rental_rate: numeric
+  replacement_cost: numeric
+  special_features: String
+  title: String
+}
+
+"""
+order by max() on columns of table "film"
+"""
+input film_max_order_by {
+  description: order_by
+  film_id: order_by
+  language_id: order_by
+  length: order_by
+  original_language_id: order_by
+  rating: order_by
+  release_year: order_by
+  rental_duration: order_by
+  rental_rate: order_by
+  replacement_cost: order_by
+  special_features: order_by
+  title: order_by
+}
+
+"""aggregate min on columns"""
+type film_min_fields {
+  description: String
+  film_id: smallint
+  language_id: smallint
+  length: smallint
+  original_language_id: smallint
+  rating: String
+  release_year: String
+  rental_duration: smallint
+  rental_rate: numeric
+  replacement_cost: numeric
+  special_features: String
+  title: String
+}
+
+"""
+order by min() on columns of table "film"
+"""
+input film_min_order_by {
+  description: order_by
+  film_id: order_by
+  language_id: order_by
+  length: order_by
+  original_language_id: order_by
+  rating: order_by
+  release_year: order_by
+  rental_duration: order_by
+  rental_rate: order_by
+  replacement_cost: order_by
+  special_features: order_by
+  title: order_by
+}
+
+"""
+response of any mutation on the table "film"
+"""
+type film_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [film!]!
+}
+
+"""
+input type for inserting object relation for remote table "film"
+"""
+input film_obj_rel_insert_input {
+  data: film_insert_input!
+  on_conflict: film_on_conflict
+}
+
+"""
+on conflict condition type for table "film"
+"""
+input film_on_conflict {
+  constraint: film_constraint!
+  update_columns: [film_update_column!]!
+  where: film_bool_exp
+}
+
+"""
+ordering options when selecting data from "film"
+"""
+input film_order_by {
+  description: order_by
+  film_actors_aggregate: film_actor_aggregate_order_by
+  film_categories_aggregate: film_category_aggregate_order_by
+  film_id: order_by
+  inventories_aggregate: inventory_aggregate_order_by
+  language_id: order_by
+  last_update: order_by
+  length: order_by
+  original_language_id: order_by
+  rating: order_by
+  release_year: order_by
+  rental_duration: order_by
+  rental_rate: order_by
+  replacement_cost: order_by
+  special_features: order_by
+  title: order_by
+}
+
+"""
+select columns of table "film"
+"""
+enum film_select_column {
+  """column name"""
+  description
+
+  """column name"""
+  film_id
+
+  """column name"""
+  language_id
+
+  """column name"""
+  last_update
+
+  """column name"""
+  length
+
+  """column name"""
+  original_language_id
+
+  """column name"""
+  rating
+
+  """column name"""
+  release_year
+
+  """column name"""
+  rental_duration
+
+  """column name"""
+  rental_rate
+
+  """column name"""
+  replacement_cost
+
+  """column name"""
+  special_features
+
+  """column name"""
+  title
+}
+
+"""
+input type for updating data in table "film"
+"""
+input film_set_input {
+  description: String
+  film_id: smallint
+  language_id: smallint
+  last_update: timestamp
+  length: smallint
+  original_language_id: smallint
+  rating: String
+  release_year: String
+  rental_duration: smallint
+  rental_rate: numeric
+  replacement_cost: numeric
+  special_features: String
+  title: String
+}
+
+"""aggregate stddev on columns"""
+type film_stddev_fields {
+  film_id: Float
+  language_id: Float
+  length: Float
+  original_language_id: Float
+  rental_duration: Float
+  rental_rate: Float
+  replacement_cost: Float
+}
+
+"""
+order by stddev() on columns of table "film"
+"""
+input film_stddev_order_by {
+  film_id: order_by
+  language_id: order_by
+  length: order_by
+  original_language_id: order_by
+  rental_duration: order_by
+  rental_rate: order_by
+  replacement_cost: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type film_stddev_pop_fields {
+  film_id: Float
+  language_id: Float
+  length: Float
+  original_language_id: Float
+  rental_duration: Float
+  rental_rate: Float
+  replacement_cost: Float
+}
+
+"""
+order by stddev_pop() on columns of table "film"
+"""
+input film_stddev_pop_order_by {
+  film_id: order_by
+  language_id: order_by
+  length: order_by
+  original_language_id: order_by
+  rental_duration: order_by
+  rental_rate: order_by
+  replacement_cost: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type film_stddev_samp_fields {
+  film_id: Float
+  language_id: Float
+  length: Float
+  original_language_id: Float
+  rental_duration: Float
+  rental_rate: Float
+  replacement_cost: Float
+}
+
+"""
+order by stddev_samp() on columns of table "film"
+"""
+input film_stddev_samp_order_by {
+  film_id: order_by
+  language_id: order_by
+  length: order_by
+  original_language_id: order_by
+  rental_duration: order_by
+  rental_rate: order_by
+  replacement_cost: order_by
+}
+
+"""aggregate sum on columns"""
+type film_sum_fields {
+  film_id: smallint
+  language_id: smallint
+  length: smallint
+  original_language_id: smallint
+  rental_duration: smallint
+  rental_rate: numeric
+  replacement_cost: numeric
+}
+
+"""
+order by sum() on columns of table "film"
+"""
+input film_sum_order_by {
+  film_id: order_by
+  language_id: order_by
+  length: order_by
+  original_language_id: order_by
+  rental_duration: order_by
+  rental_rate: order_by
+  replacement_cost: order_by
+}
+
+"""
+columns and relationships of "film_text"
+"""
+type film_text {
+  description: String
+  film_id: smallint!
+  title: String!
+}
+
+"""
+aggregated selection of "film_text"
+"""
+type film_text_aggregate {
+  aggregate: film_text_aggregate_fields
+  nodes: [film_text!]!
+}
+
+"""
+aggregate fields of "film_text"
+"""
+type film_text_aggregate_fields {
+  avg: film_text_avg_fields
+  count(columns: [film_text_select_column!], distinct: Boolean): Int
+  max: film_text_max_fields
+  min: film_text_min_fields
+  stddev: film_text_stddev_fields
+  stddev_pop: film_text_stddev_pop_fields
+  stddev_samp: film_text_stddev_samp_fields
+  sum: film_text_sum_fields
+  var_pop: film_text_var_pop_fields
+  var_samp: film_text_var_samp_fields
+  variance: film_text_variance_fields
+}
+
+"""
+order by aggregate values of table "film_text"
+"""
+input film_text_aggregate_order_by {
+  avg: film_text_avg_order_by
+  count: order_by
+  max: film_text_max_order_by
+  min: film_text_min_order_by
+  stddev: film_text_stddev_order_by
+  stddev_pop: film_text_stddev_pop_order_by
+  stddev_samp: film_text_stddev_samp_order_by
+  sum: film_text_sum_order_by
+  var_pop: film_text_var_pop_order_by
+  var_samp: film_text_var_samp_order_by
+  variance: film_text_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "film_text"
+"""
+input film_text_arr_rel_insert_input {
+  data: [film_text_insert_input!]!
+  on_conflict: film_text_on_conflict
+}
+
+"""aggregate avg on columns"""
+type film_text_avg_fields {
+  film_id: Float
+}
+
+"""
+order by avg() on columns of table "film_text"
+"""
+input film_text_avg_order_by {
+  film_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "film_text". All fields are combined with a logical 'AND'.
+"""
+input film_text_bool_exp {
+  _and: [film_text_bool_exp]
+  _not: film_text_bool_exp
+  _or: [film_text_bool_exp]
+  description: String_comparison_exp
+  film_id: smallint_comparison_exp
+  title: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "film_text"
+"""
+enum film_text_constraint {
+  """unique or primary key constraint"""
+  film_text_pkey
+}
+
+"""
+input type for incrementing integer columne in table "film_text"
+"""
+input film_text_inc_input {
+  film_id: smallint
+}
+
+"""
+input type for inserting data into table "film_text"
+"""
+input film_text_insert_input {
+  description: String
+  film_id: smallint
+  title: String
+}
+
+"""aggregate max on columns"""
+type film_text_max_fields {
+  description: String
+  film_id: smallint
+  title: String
+}
+
+"""
+order by max() on columns of table "film_text"
+"""
+input film_text_max_order_by {
+  description: order_by
+  film_id: order_by
+  title: order_by
+}
+
+"""aggregate min on columns"""
+type film_text_min_fields {
+  description: String
+  film_id: smallint
+  title: String
+}
+
+"""
+order by min() on columns of table "film_text"
+"""
+input film_text_min_order_by {
+  description: order_by
+  film_id: order_by
+  title: order_by
+}
+
+"""
+response of any mutation on the table "film_text"
+"""
+type film_text_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [film_text!]!
+}
+
+"""
+input type for inserting object relation for remote table "film_text"
+"""
+input film_text_obj_rel_insert_input {
+  data: film_text_insert_input!
+  on_conflict: film_text_on_conflict
+}
+
+"""
+on conflict condition type for table "film_text"
+"""
+input film_text_on_conflict {
+  constraint: film_text_constraint!
+  update_columns: [film_text_update_column!]!
+  where: film_text_bool_exp
+}
+
+"""
+ordering options when selecting data from "film_text"
+"""
+input film_text_order_by {
+  description: order_by
+  film_id: order_by
+  title: order_by
+}
+
+"""
+select columns of table "film_text"
+"""
+enum film_text_select_column {
+  """column name"""
+  description
+
+  """column name"""
+  film_id
+
+  """column name"""
+  title
+}
+
+"""
+input type for updating data in table "film_text"
+"""
+input film_text_set_input {
+  description: String
+  film_id: smallint
+  title: String
+}
+
+"""aggregate stddev on columns"""
+type film_text_stddev_fields {
+  film_id: Float
+}
+
+"""
+order by stddev() on columns of table "film_text"
+"""
+input film_text_stddev_order_by {
+  film_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type film_text_stddev_pop_fields {
+  film_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "film_text"
+"""
+input film_text_stddev_pop_order_by {
+  film_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type film_text_stddev_samp_fields {
+  film_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "film_text"
+"""
+input film_text_stddev_samp_order_by {
+  film_id: order_by
+}
+
+"""aggregate sum on columns"""
+type film_text_sum_fields {
+  film_id: smallint
+}
+
+"""
+order by sum() on columns of table "film_text"
+"""
+input film_text_sum_order_by {
+  film_id: order_by
+}
+
+"""
+update columns of table "film_text"
+"""
+enum film_text_update_column {
+  """column name"""
+  description
+
+  """column name"""
+  film_id
+
+  """column name"""
+  title
+}
+
+"""aggregate var_pop on columns"""
+type film_text_var_pop_fields {
+  film_id: Float
+}
+
+"""
+order by var_pop() on columns of table "film_text"
+"""
+input film_text_var_pop_order_by {
+  film_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type film_text_var_samp_fields {
+  film_id: Float
+}
+
+"""
+order by var_samp() on columns of table "film_text"
+"""
+input film_text_var_samp_order_by {
+  film_id: order_by
+}
+
+"""aggregate variance on columns"""
+type film_text_variance_fields {
+  film_id: Float
+}
+
+"""
+order by variance() on columns of table "film_text"
+"""
+input film_text_variance_order_by {
+  film_id: order_by
+}
+
+"""
+update columns of table "film"
+"""
+enum film_update_column {
+  """column name"""
+  description
+
+  """column name"""
+  film_id
+
+  """column name"""
+  language_id
+
+  """column name"""
+  last_update
+
+  """column name"""
+  length
+
+  """column name"""
+  original_language_id
+
+  """column name"""
+  rating
+
+  """column name"""
+  release_year
+
+  """column name"""
+  rental_duration
+
+  """column name"""
+  rental_rate
+
+  """column name"""
+  replacement_cost
+
+  """column name"""
+  special_features
+
+  """column name"""
+  title
+}
+
+"""aggregate var_pop on columns"""
+type film_var_pop_fields {
+  film_id: Float
+  language_id: Float
+  length: Float
+  original_language_id: Float
+  rental_duration: Float
+  rental_rate: Float
+  replacement_cost: Float
+}
+
+"""
+order by var_pop() on columns of table "film"
+"""
+input film_var_pop_order_by {
+  film_id: order_by
+  language_id: order_by
+  length: order_by
+  original_language_id: order_by
+  rental_duration: order_by
+  rental_rate: order_by
+  replacement_cost: order_by
+}
+
+"""aggregate var_samp on columns"""
+type film_var_samp_fields {
+  film_id: Float
+  language_id: Float
+  length: Float
+  original_language_id: Float
+  rental_duration: Float
+  rental_rate: Float
+  replacement_cost: Float
+}
+
+"""
+order by var_samp() on columns of table "film"
+"""
+input film_var_samp_order_by {
+  film_id: order_by
+  language_id: order_by
+  length: order_by
+  original_language_id: order_by
+  rental_duration: order_by
+  rental_rate: order_by
+  replacement_cost: order_by
+}
+
+"""aggregate variance on columns"""
+type film_variance_fields {
+  film_id: Float
+  language_id: Float
+  length: Float
+  original_language_id: Float
+  rental_duration: Float
+  rental_rate: Float
+  replacement_cost: Float
+}
+
+"""
+order by variance() on columns of table "film"
+"""
+input film_variance_order_by {
+  film_id: order_by
+  language_id: order_by
+  length: order_by
+  original_language_id: order_by
+  rental_duration: order_by
+  rental_rate: order_by
+  replacement_cost: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "inventory"
+"""
+type inventory {
+  """An object relationship"""
+  film: film!
+  film_id: smallint!
+  inventory_id: Int!
+  last_update: timestamp!
+
+  """An array relationship"""
+  rentals(
+    """distinct select on columns"""
+    distinct_on: [rental_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rental_order_by!]
+
+    """filter the rows returned"""
+    where: rental_bool_exp
+  ): [rental!]!
+
+  """An aggregated array relationship"""
+  rentals_aggregate(
+    """distinct select on columns"""
+    distinct_on: [rental_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rental_order_by!]
+
+    """filter the rows returned"""
+    where: rental_bool_exp
+  ): rental_aggregate!
+  store_id: smallint!
+}
+
+"""
+aggregated selection of "inventory"
+"""
+type inventory_aggregate {
+  aggregate: inventory_aggregate_fields
+  nodes: [inventory!]!
+}
+
+"""
+aggregate fields of "inventory"
+"""
+type inventory_aggregate_fields {
+  avg: inventory_avg_fields
+  count(columns: [inventory_select_column!], distinct: Boolean): Int
+  max: inventory_max_fields
+  min: inventory_min_fields
+  stddev: inventory_stddev_fields
+  stddev_pop: inventory_stddev_pop_fields
+  stddev_samp: inventory_stddev_samp_fields
+  sum: inventory_sum_fields
+  var_pop: inventory_var_pop_fields
+  var_samp: inventory_var_samp_fields
+  variance: inventory_variance_fields
+}
+
+"""
+order by aggregate values of table "inventory"
+"""
+input inventory_aggregate_order_by {
+  avg: inventory_avg_order_by
+  count: order_by
+  max: inventory_max_order_by
+  min: inventory_min_order_by
+  stddev: inventory_stddev_order_by
+  stddev_pop: inventory_stddev_pop_order_by
+  stddev_samp: inventory_stddev_samp_order_by
+  sum: inventory_sum_order_by
+  var_pop: inventory_var_pop_order_by
+  var_samp: inventory_var_samp_order_by
+  variance: inventory_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "inventory"
+"""
+input inventory_arr_rel_insert_input {
+  data: [inventory_insert_input!]!
+  on_conflict: inventory_on_conflict
+}
+
+"""aggregate avg on columns"""
+type inventory_avg_fields {
+  film_id: Float
+  inventory_id: Float
+  store_id: Float
+}
+
+"""
+order by avg() on columns of table "inventory"
+"""
+input inventory_avg_order_by {
+  film_id: order_by
+  inventory_id: order_by
+  store_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "inventory". All fields are combined with a logical 'AND'.
+"""
+input inventory_bool_exp {
+  _and: [inventory_bool_exp]
+  _not: inventory_bool_exp
+  _or: [inventory_bool_exp]
+  film: film_bool_exp
+  film_id: smallint_comparison_exp
+  inventory_id: Int_comparison_exp
+  last_update: timestamp_comparison_exp
+  rentals: rental_bool_exp
+  store_id: smallint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "inventory"
+"""
+enum inventory_constraint {
+  """unique or primary key constraint"""
+  inventory_pkey
+}
+
+"""
+input type for incrementing integer columne in table "inventory"
+"""
+input inventory_inc_input {
+  film_id: smallint
+  inventory_id: Int
+  store_id: smallint
+}
+
+"""
+input type for inserting data into table "inventory"
+"""
+input inventory_insert_input {
+  film: film_obj_rel_insert_input
+  film_id: smallint
+  inventory_id: Int
+  last_update: timestamp
+  rentals: rental_arr_rel_insert_input
+  store_id: smallint
+}
+
+"""aggregate max on columns"""
+type inventory_max_fields {
+  film_id: smallint
+  inventory_id: Int
+  store_id: smallint
+}
+
+"""
+order by max() on columns of table "inventory"
+"""
+input inventory_max_order_by {
+  film_id: order_by
+  inventory_id: order_by
+  store_id: order_by
+}
+
+"""aggregate min on columns"""
+type inventory_min_fields {
+  film_id: smallint
+  inventory_id: Int
+  store_id: smallint
+}
+
+"""
+order by min() on columns of table "inventory"
+"""
+input inventory_min_order_by {
+  film_id: order_by
+  inventory_id: order_by
+  store_id: order_by
+}
+
+"""
+response of any mutation on the table "inventory"
+"""
+type inventory_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [inventory!]!
+}
+
+"""
+input type for inserting object relation for remote table "inventory"
+"""
+input inventory_obj_rel_insert_input {
+  data: inventory_insert_input!
+  on_conflict: inventory_on_conflict
+}
+
+"""
+on conflict condition type for table "inventory"
+"""
+input inventory_on_conflict {
+  constraint: inventory_constraint!
+  update_columns: [inventory_update_column!]!
+  where: inventory_bool_exp
+}
+
+"""
+ordering options when selecting data from "inventory"
+"""
+input inventory_order_by {
+  film: film_order_by
+  film_id: order_by
+  inventory_id: order_by
+  last_update: order_by
+  rentals_aggregate: rental_aggregate_order_by
+  store_id: order_by
+}
+
+"""
+select columns of table "inventory"
+"""
+enum inventory_select_column {
+  """column name"""
+  film_id
+
+  """column name"""
+  inventory_id
+
+  """column name"""
+  last_update
+
+  """column name"""
+  store_id
+}
+
+"""
+input type for updating data in table "inventory"
+"""
+input inventory_set_input {
+  film_id: smallint
+  inventory_id: Int
+  last_update: timestamp
+  store_id: smallint
+}
+
+"""aggregate stddev on columns"""
+type inventory_stddev_fields {
+  film_id: Float
+  inventory_id: Float
+  store_id: Float
+}
+
+"""
+order by stddev() on columns of table "inventory"
+"""
+input inventory_stddev_order_by {
+  film_id: order_by
+  inventory_id: order_by
+  store_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type inventory_stddev_pop_fields {
+  film_id: Float
+  inventory_id: Float
+  store_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "inventory"
+"""
+input inventory_stddev_pop_order_by {
+  film_id: order_by
+  inventory_id: order_by
+  store_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type inventory_stddev_samp_fields {
+  film_id: Float
+  inventory_id: Float
+  store_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "inventory"
+"""
+input inventory_stddev_samp_order_by {
+  film_id: order_by
+  inventory_id: order_by
+  store_id: order_by
+}
+
+"""aggregate sum on columns"""
+type inventory_sum_fields {
+  film_id: smallint
+  inventory_id: Int
+  store_id: smallint
+}
+
+"""
+order by sum() on columns of table "inventory"
+"""
+input inventory_sum_order_by {
+  film_id: order_by
+  inventory_id: order_by
+  store_id: order_by
+}
+
+"""
+update columns of table "inventory"
+"""
+enum inventory_update_column {
+  """column name"""
+  film_id
+
+  """column name"""
+  inventory_id
+
+  """column name"""
+  last_update
+
+  """column name"""
+  store_id
+}
+
+"""aggregate var_pop on columns"""
+type inventory_var_pop_fields {
+  film_id: Float
+  inventory_id: Float
+  store_id: Float
+}
+
+"""
+order by var_pop() on columns of table "inventory"
+"""
+input inventory_var_pop_order_by {
+  film_id: order_by
+  inventory_id: order_by
+  store_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type inventory_var_samp_fields {
+  film_id: Float
+  inventory_id: Float
+  store_id: Float
+}
+
+"""
+order by var_samp() on columns of table "inventory"
+"""
+input inventory_var_samp_order_by {
+  film_id: order_by
+  inventory_id: order_by
+  store_id: order_by
+}
+
+"""aggregate variance on columns"""
+type inventory_variance_fields {
+  film_id: Float
+  inventory_id: Float
+  store_id: Float
+}
+
+"""
+order by variance() on columns of table "inventory"
+"""
+input inventory_variance_order_by {
+  film_id: order_by
+  inventory_id: order_by
+  store_id: order_by
+}
+
+"""
+columns and relationships of "language"
+"""
+type language {
+  language_id: smallint!
+  last_update: timestamp!
+  name: bpchar!
+}
+
+"""
+aggregated selection of "language"
+"""
+type language_aggregate {
+  aggregate: language_aggregate_fields
+  nodes: [language!]!
+}
+
+"""
+aggregate fields of "language"
+"""
+type language_aggregate_fields {
+  avg: language_avg_fields
+  count(columns: [language_select_column!], distinct: Boolean): Int
+  max: language_max_fields
+  min: language_min_fields
+  stddev: language_stddev_fields
+  stddev_pop: language_stddev_pop_fields
+  stddev_samp: language_stddev_samp_fields
+  sum: language_sum_fields
+  var_pop: language_var_pop_fields
+  var_samp: language_var_samp_fields
+  variance: language_variance_fields
+}
+
+"""
+order by aggregate values of table "language"
+"""
+input language_aggregate_order_by {
+  avg: language_avg_order_by
+  count: order_by
+  max: language_max_order_by
+  min: language_min_order_by
+  stddev: language_stddev_order_by
+  stddev_pop: language_stddev_pop_order_by
+  stddev_samp: language_stddev_samp_order_by
+  sum: language_sum_order_by
+  var_pop: language_var_pop_order_by
+  var_samp: language_var_samp_order_by
+  variance: language_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "language"
+"""
+input language_arr_rel_insert_input {
+  data: [language_insert_input!]!
+  on_conflict: language_on_conflict
+}
+
+"""aggregate avg on columns"""
+type language_avg_fields {
+  language_id: Float
+}
+
+"""
+order by avg() on columns of table "language"
+"""
+input language_avg_order_by {
+  language_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "language". All fields are combined with a logical 'AND'.
+"""
+input language_bool_exp {
+  _and: [language_bool_exp]
+  _not: language_bool_exp
+  _or: [language_bool_exp]
+  language_id: smallint_comparison_exp
+  last_update: timestamp_comparison_exp
+  name: bpchar_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "language"
+"""
+enum language_constraint {
+  """unique or primary key constraint"""
+  language_pkey
+}
+
+"""
+input type for incrementing integer columne in table "language"
+"""
+input language_inc_input {
+  language_id: smallint
+}
+
+"""
+input type for inserting data into table "language"
+"""
+input language_insert_input {
+  language_id: smallint
+  last_update: timestamp
+  name: bpchar
+}
+
+"""aggregate max on columns"""
+type language_max_fields {
+  language_id: smallint
+}
+
+"""
+order by max() on columns of table "language"
+"""
+input language_max_order_by {
+  language_id: order_by
+}
+
+"""aggregate min on columns"""
+type language_min_fields {
+  language_id: smallint
+}
+
+"""
+order by min() on columns of table "language"
+"""
+input language_min_order_by {
+  language_id: order_by
+}
+
+"""
+response of any mutation on the table "language"
+"""
+type language_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [language!]!
+}
+
+"""
+input type for inserting object relation for remote table "language"
+"""
+input language_obj_rel_insert_input {
+  data: language_insert_input!
+  on_conflict: language_on_conflict
+}
+
+"""
+on conflict condition type for table "language"
+"""
+input language_on_conflict {
+  constraint: language_constraint!
+  update_columns: [language_update_column!]!
+  where: language_bool_exp
+}
+
+"""
+ordering options when selecting data from "language"
+"""
+input language_order_by {
+  language_id: order_by
+  last_update: order_by
+  name: order_by
+}
+
+"""
+select columns of table "language"
+"""
+enum language_select_column {
+  """column name"""
+  language_id
+
+  """column name"""
+  last_update
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "language"
+"""
+input language_set_input {
+  language_id: smallint
+  last_update: timestamp
+  name: bpchar
+}
+
+"""aggregate stddev on columns"""
+type language_stddev_fields {
+  language_id: Float
+}
+
+"""
+order by stddev() on columns of table "language"
+"""
+input language_stddev_order_by {
+  language_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type language_stddev_pop_fields {
+  language_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "language"
+"""
+input language_stddev_pop_order_by {
+  language_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type language_stddev_samp_fields {
+  language_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "language"
+"""
+input language_stddev_samp_order_by {
+  language_id: order_by
+}
+
+"""aggregate sum on columns"""
+type language_sum_fields {
+  language_id: smallint
+}
+
+"""
+order by sum() on columns of table "language"
+"""
+input language_sum_order_by {
+  language_id: order_by
+}
+
+"""
+update columns of table "language"
+"""
+enum language_update_column {
+  """column name"""
+  language_id
+
+  """column name"""
+  last_update
+
+  """column name"""
+  name
+}
+
+"""aggregate var_pop on columns"""
+type language_var_pop_fields {
+  language_id: Float
+}
+
+"""
+order by var_pop() on columns of table "language"
+"""
+input language_var_pop_order_by {
+  language_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type language_var_samp_fields {
+  language_id: Float
+}
+
+"""
+order by var_samp() on columns of table "language"
+"""
+input language_var_samp_order_by {
+  language_id: order_by
+}
+
+"""aggregate variance on columns"""
+type language_variance_fields {
+  language_id: Float
+}
+
+"""
+order by variance() on columns of table "language"
+"""
+input language_variance_order_by {
+  language_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "actor"
+  """
+  delete_actor(
+    """filter the rows which have to be deleted"""
+    where: actor_bool_exp!
+  ): actor_mutation_response
+
+  """
+  delete data from the table: "address"
+  """
+  delete_address(
+    """filter the rows which have to be deleted"""
+    where: address_bool_exp!
+  ): address_mutation_response
+
+  """
+  delete data from the table: "category"
+  """
+  delete_category(
+    """filter the rows which have to be deleted"""
+    where: category_bool_exp!
+  ): category_mutation_response
+
+  """
+  delete data from the table: "city"
+  """
+  delete_city(
+    """filter the rows which have to be deleted"""
+    where: city_bool_exp!
+  ): city_mutation_response
+
+  """
+  delete data from the table: "country"
+  """
+  delete_country(
+    """filter the rows which have to be deleted"""
+    where: country_bool_exp!
+  ): country_mutation_response
+
+  """
+  delete data from the table: "customer"
+  """
+  delete_customer(
+    """filter the rows which have to be deleted"""
+    where: customer_bool_exp!
+  ): customer_mutation_response
+
+  """
+  delete data from the table: "film"
+  """
+  delete_film(
+    """filter the rows which have to be deleted"""
+    where: film_bool_exp!
+  ): film_mutation_response
+
+  """
+  delete data from the table: "film_actor"
+  """
+  delete_film_actor(
+    """filter the rows which have to be deleted"""
+    where: film_actor_bool_exp!
+  ): film_actor_mutation_response
+
+  """
+  delete data from the table: "film_category"
+  """
+  delete_film_category(
+    """filter the rows which have to be deleted"""
+    where: film_category_bool_exp!
+  ): film_category_mutation_response
+
+  """
+  delete data from the table: "film_text"
+  """
+  delete_film_text(
+    """filter the rows which have to be deleted"""
+    where: film_text_bool_exp!
+  ): film_text_mutation_response
+
+  """
+  delete data from the table: "inventory"
+  """
+  delete_inventory(
+    """filter the rows which have to be deleted"""
+    where: inventory_bool_exp!
+  ): inventory_mutation_response
+
+  """
+  delete data from the table: "language"
+  """
+  delete_language(
+    """filter the rows which have to be deleted"""
+    where: language_bool_exp!
+  ): language_mutation_response
+
+  """
+  delete data from the table: "payment"
+  """
+  delete_payment(
+    """filter the rows which have to be deleted"""
+    where: payment_bool_exp!
+  ): payment_mutation_response
+
+  """
+  delete data from the table: "rental"
+  """
+  delete_rental(
+    """filter the rows which have to be deleted"""
+    where: rental_bool_exp!
+  ): rental_mutation_response
+
+  """
+  delete data from the table: "staff"
+  """
+  delete_staff(
+    """filter the rows which have to be deleted"""
+    where: staff_bool_exp!
+  ): staff_mutation_response
+
+  """
+  delete data from the table: "store"
+  """
+  delete_store(
+    """filter the rows which have to be deleted"""
+    where: store_bool_exp!
+  ): store_mutation_response
+
+  """
+  insert data into the table: "actor"
+  """
+  insert_actor(
+    """the rows to be inserted"""
+    objects: [actor_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: actor_on_conflict
+  ): actor_mutation_response
+
+  """
+  insert data into the table: "address"
+  """
+  insert_address(
+    """the rows to be inserted"""
+    objects: [address_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: address_on_conflict
+  ): address_mutation_response
+
+  """
+  insert data into the table: "category"
+  """
+  insert_category(
+    """the rows to be inserted"""
+    objects: [category_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: category_on_conflict
+  ): category_mutation_response
+
+  """
+  insert data into the table: "city"
+  """
+  insert_city(
+    """the rows to be inserted"""
+    objects: [city_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: city_on_conflict
+  ): city_mutation_response
+
+  """
+  insert data into the table: "country"
+  """
+  insert_country(
+    """the rows to be inserted"""
+    objects: [country_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: country_on_conflict
+  ): country_mutation_response
+
+  """
+  insert data into the table: "customer"
+  """
+  insert_customer(
+    """the rows to be inserted"""
+    objects: [customer_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: customer_on_conflict
+  ): customer_mutation_response
+
+  """
+  insert data into the table: "film"
+  """
+  insert_film(
+    """the rows to be inserted"""
+    objects: [film_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: film_on_conflict
+  ): film_mutation_response
+
+  """
+  insert data into the table: "film_actor"
+  """
+  insert_film_actor(
+    """the rows to be inserted"""
+    objects: [film_actor_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: film_actor_on_conflict
+  ): film_actor_mutation_response
+
+  """
+  insert data into the table: "film_category"
+  """
+  insert_film_category(
+    """the rows to be inserted"""
+    objects: [film_category_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: film_category_on_conflict
+  ): film_category_mutation_response
+
+  """
+  insert data into the table: "film_text"
+  """
+  insert_film_text(
+    """the rows to be inserted"""
+    objects: [film_text_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: film_text_on_conflict
+  ): film_text_mutation_response
+
+  """
+  insert data into the table: "inventory"
+  """
+  insert_inventory(
+    """the rows to be inserted"""
+    objects: [inventory_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: inventory_on_conflict
+  ): inventory_mutation_response
+
+  """
+  insert data into the table: "language"
+  """
+  insert_language(
+    """the rows to be inserted"""
+    objects: [language_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: language_on_conflict
+  ): language_mutation_response
+
+  """
+  insert data into the table: "payment"
+  """
+  insert_payment(
+    """the rows to be inserted"""
+    objects: [payment_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: payment_on_conflict
+  ): payment_mutation_response
+
+  """
+  insert data into the table: "rental"
+  """
+  insert_rental(
+    """the rows to be inserted"""
+    objects: [rental_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: rental_on_conflict
+  ): rental_mutation_response
+
+  """
+  insert data into the table: "staff"
+  """
+  insert_staff(
+    """the rows to be inserted"""
+    objects: [staff_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: staff_on_conflict
+  ): staff_mutation_response
+
+  """
+  insert data into the table: "store"
+  """
+  insert_store(
+    """the rows to be inserted"""
+    objects: [store_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: store_on_conflict
+  ): store_mutation_response
+
+  """
+  update data of the table: "actor"
+  """
+  update_actor(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: actor_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: actor_set_input
+
+    """filter the rows which have to be updated"""
+    where: actor_bool_exp!
+  ): actor_mutation_response
+
+  """
+  update data of the table: "address"
+  """
+  update_address(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: address_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: address_set_input
+
+    """filter the rows which have to be updated"""
+    where: address_bool_exp!
+  ): address_mutation_response
+
+  """
+  update data of the table: "category"
+  """
+  update_category(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: category_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: category_set_input
+
+    """filter the rows which have to be updated"""
+    where: category_bool_exp!
+  ): category_mutation_response
+
+  """
+  update data of the table: "city"
+  """
+  update_city(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: city_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: city_set_input
+
+    """filter the rows which have to be updated"""
+    where: city_bool_exp!
+  ): city_mutation_response
+
+  """
+  update data of the table: "country"
+  """
+  update_country(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: country_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: country_set_input
+
+    """filter the rows which have to be updated"""
+    where: country_bool_exp!
+  ): country_mutation_response
+
+  """
+  update data of the table: "customer"
+  """
+  update_customer(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customer_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customer_set_input
+
+    """filter the rows which have to be updated"""
+    where: customer_bool_exp!
+  ): customer_mutation_response
+
+  """
+  update data of the table: "film"
+  """
+  update_film(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: film_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: film_set_input
+
+    """filter the rows which have to be updated"""
+    where: film_bool_exp!
+  ): film_mutation_response
+
+  """
+  update data of the table: "film_actor"
+  """
+  update_film_actor(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: film_actor_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: film_actor_set_input
+
+    """filter the rows which have to be updated"""
+    where: film_actor_bool_exp!
+  ): film_actor_mutation_response
+
+  """
+  update data of the table: "film_category"
+  """
+  update_film_category(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: film_category_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: film_category_set_input
+
+    """filter the rows which have to be updated"""
+    where: film_category_bool_exp!
+  ): film_category_mutation_response
+
+  """
+  update data of the table: "film_text"
+  """
+  update_film_text(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: film_text_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: film_text_set_input
+
+    """filter the rows which have to be updated"""
+    where: film_text_bool_exp!
+  ): film_text_mutation_response
+
+  """
+  update data of the table: "inventory"
+  """
+  update_inventory(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: inventory_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: inventory_set_input
+
+    """filter the rows which have to be updated"""
+    where: inventory_bool_exp!
+  ): inventory_mutation_response
+
+  """
+  update data of the table: "language"
+  """
+  update_language(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: language_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: language_set_input
+
+    """filter the rows which have to be updated"""
+    where: language_bool_exp!
+  ): language_mutation_response
+
+  """
+  update data of the table: "payment"
+  """
+  update_payment(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: payment_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: payment_set_input
+
+    """filter the rows which have to be updated"""
+    where: payment_bool_exp!
+  ): payment_mutation_response
+
+  """
+  update data of the table: "rental"
+  """
+  update_rental(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: rental_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: rental_set_input
+
+    """filter the rows which have to be updated"""
+    where: rental_bool_exp!
+  ): rental_mutation_response
+
+  """
+  update data of the table: "staff"
+  """
+  update_staff(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: staff_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: staff_set_input
+
+    """filter the rows which have to be updated"""
+    where: staff_bool_exp!
+  ): staff_mutation_response
+
+  """
+  update data of the table: "store"
+  """
+  update_store(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: store_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: store_set_input
+
+    """filter the rows which have to be updated"""
+    where: store_bool_exp!
+  ): store_mutation_response
+}
+
+scalar numeric
+
+"""
+expression to compare columns of type numeric. All fields are combined with logical 'AND'.
+"""
+input numeric_comparison_exp {
+  _eq: numeric
+  _gt: numeric
+  _gte: numeric
+  _in: [numeric!]
+  _is_null: Boolean
+  _lt: numeric
+  _lte: numeric
+  _neq: numeric
+  _nin: [numeric!]
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "payment"
+"""
+type payment {
+  amount: numeric!
+
+  """An object relationship"""
+  customer: customer!
+  customer_id: smallint!
+  last_update: timestamp
+  payment_date: timestamp!
+  payment_id: smallint!
+
+  """An object relationship"""
+  rental: rental
+  rental_id: Int
+  staff_id: smallint!
+}
+
+"""
+aggregated selection of "payment"
+"""
+type payment_aggregate {
+  aggregate: payment_aggregate_fields
+  nodes: [payment!]!
+}
+
+"""
+aggregate fields of "payment"
+"""
+type payment_aggregate_fields {
+  avg: payment_avg_fields
+  count(columns: [payment_select_column!], distinct: Boolean): Int
+  max: payment_max_fields
+  min: payment_min_fields
+  stddev: payment_stddev_fields
+  stddev_pop: payment_stddev_pop_fields
+  stddev_samp: payment_stddev_samp_fields
+  sum: payment_sum_fields
+  var_pop: payment_var_pop_fields
+  var_samp: payment_var_samp_fields
+  variance: payment_variance_fields
+}
+
+"""
+order by aggregate values of table "payment"
+"""
+input payment_aggregate_order_by {
+  avg: payment_avg_order_by
+  count: order_by
+  max: payment_max_order_by
+  min: payment_min_order_by
+  stddev: payment_stddev_order_by
+  stddev_pop: payment_stddev_pop_order_by
+  stddev_samp: payment_stddev_samp_order_by
+  sum: payment_sum_order_by
+  var_pop: payment_var_pop_order_by
+  var_samp: payment_var_samp_order_by
+  variance: payment_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "payment"
+"""
+input payment_arr_rel_insert_input {
+  data: [payment_insert_input!]!
+  on_conflict: payment_on_conflict
+}
+
+"""aggregate avg on columns"""
+type payment_avg_fields {
+  amount: Float
+  customer_id: Float
+  payment_id: Float
+  rental_id: Float
+  staff_id: Float
+}
+
+"""
+order by avg() on columns of table "payment"
+"""
+input payment_avg_order_by {
+  amount: order_by
+  customer_id: order_by
+  payment_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "payment". All fields are combined with a logical 'AND'.
+"""
+input payment_bool_exp {
+  _and: [payment_bool_exp]
+  _not: payment_bool_exp
+  _or: [payment_bool_exp]
+  amount: numeric_comparison_exp
+  customer: customer_bool_exp
+  customer_id: smallint_comparison_exp
+  last_update: timestamp_comparison_exp
+  payment_date: timestamp_comparison_exp
+  payment_id: smallint_comparison_exp
+  rental: rental_bool_exp
+  rental_id: Int_comparison_exp
+  staff_id: smallint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "payment"
+"""
+enum payment_constraint {
+  """unique or primary key constraint"""
+  payment_pkey
+}
+
+"""
+input type for incrementing integer columne in table "payment"
+"""
+input payment_inc_input {
+  customer_id: smallint
+  payment_id: smallint
+  rental_id: Int
+  staff_id: smallint
+}
+
+"""
+input type for inserting data into table "payment"
+"""
+input payment_insert_input {
+  amount: numeric
+  customer: customer_obj_rel_insert_input
+  customer_id: smallint
+  last_update: timestamp
+  payment_date: timestamp
+  payment_id: smallint
+  rental: rental_obj_rel_insert_input
+  rental_id: Int
+  staff_id: smallint
+}
+
+"""aggregate max on columns"""
+type payment_max_fields {
+  amount: numeric
+  customer_id: smallint
+  payment_id: smallint
+  rental_id: Int
+  staff_id: smallint
+}
+
+"""
+order by max() on columns of table "payment"
+"""
+input payment_max_order_by {
+  amount: order_by
+  customer_id: order_by
+  payment_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""aggregate min on columns"""
+type payment_min_fields {
+  amount: numeric
+  customer_id: smallint
+  payment_id: smallint
+  rental_id: Int
+  staff_id: smallint
+}
+
+"""
+order by min() on columns of table "payment"
+"""
+input payment_min_order_by {
+  amount: order_by
+  customer_id: order_by
+  payment_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""
+response of any mutation on the table "payment"
+"""
+type payment_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [payment!]!
+}
+
+"""
+input type for inserting object relation for remote table "payment"
+"""
+input payment_obj_rel_insert_input {
+  data: payment_insert_input!
+  on_conflict: payment_on_conflict
+}
+
+"""
+on conflict condition type for table "payment"
+"""
+input payment_on_conflict {
+  constraint: payment_constraint!
+  update_columns: [payment_update_column!]!
+  where: payment_bool_exp
+}
+
+"""
+ordering options when selecting data from "payment"
+"""
+input payment_order_by {
+  amount: order_by
+  customer: customer_order_by
+  customer_id: order_by
+  last_update: order_by
+  payment_date: order_by
+  payment_id: order_by
+  rental: rental_order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""
+select columns of table "payment"
+"""
+enum payment_select_column {
+  """column name"""
+  amount
+
+  """column name"""
+  customer_id
+
+  """column name"""
+  last_update
+
+  """column name"""
+  payment_date
+
+  """column name"""
+  payment_id
+
+  """column name"""
+  rental_id
+
+  """column name"""
+  staff_id
+}
+
+"""
+input type for updating data in table "payment"
+"""
+input payment_set_input {
+  amount: numeric
+  customer_id: smallint
+  last_update: timestamp
+  payment_date: timestamp
+  payment_id: smallint
+  rental_id: Int
+  staff_id: smallint
+}
+
+"""aggregate stddev on columns"""
+type payment_stddev_fields {
+  amount: Float
+  customer_id: Float
+  payment_id: Float
+  rental_id: Float
+  staff_id: Float
+}
+
+"""
+order by stddev() on columns of table "payment"
+"""
+input payment_stddev_order_by {
+  amount: order_by
+  customer_id: order_by
+  payment_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type payment_stddev_pop_fields {
+  amount: Float
+  customer_id: Float
+  payment_id: Float
+  rental_id: Float
+  staff_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "payment"
+"""
+input payment_stddev_pop_order_by {
+  amount: order_by
+  customer_id: order_by
+  payment_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type payment_stddev_samp_fields {
+  amount: Float
+  customer_id: Float
+  payment_id: Float
+  rental_id: Float
+  staff_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "payment"
+"""
+input payment_stddev_samp_order_by {
+  amount: order_by
+  customer_id: order_by
+  payment_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""aggregate sum on columns"""
+type payment_sum_fields {
+  amount: numeric
+  customer_id: smallint
+  payment_id: smallint
+  rental_id: Int
+  staff_id: smallint
+}
+
+"""
+order by sum() on columns of table "payment"
+"""
+input payment_sum_order_by {
+  amount: order_by
+  customer_id: order_by
+  payment_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""
+update columns of table "payment"
+"""
+enum payment_update_column {
+  """column name"""
+  amount
+
+  """column name"""
+  customer_id
+
+  """column name"""
+  last_update
+
+  """column name"""
+  payment_date
+
+  """column name"""
+  payment_id
+
+  """column name"""
+  rental_id
+
+  """column name"""
+  staff_id
+}
+
+"""aggregate var_pop on columns"""
+type payment_var_pop_fields {
+  amount: Float
+  customer_id: Float
+  payment_id: Float
+  rental_id: Float
+  staff_id: Float
+}
+
+"""
+order by var_pop() on columns of table "payment"
+"""
+input payment_var_pop_order_by {
+  amount: order_by
+  customer_id: order_by
+  payment_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type payment_var_samp_fields {
+  amount: Float
+  customer_id: Float
+  payment_id: Float
+  rental_id: Float
+  staff_id: Float
+}
+
+"""
+order by var_samp() on columns of table "payment"
+"""
+input payment_var_samp_order_by {
+  amount: order_by
+  customer_id: order_by
+  payment_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""aggregate variance on columns"""
+type payment_variance_fields {
+  amount: Float
+  customer_id: Float
+  payment_id: Float
+  rental_id: Float
+  staff_id: Float
+}
+
+"""
+order by variance() on columns of table "payment"
+"""
+input payment_variance_order_by {
+  amount: order_by
+  customer_id: order_by
+  payment_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "actor"
+  """
+  actor(
+    """distinct select on columns"""
+    distinct_on: [actor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [actor_order_by!]
+
+    """filter the rows returned"""
+    where: actor_bool_exp
+  ): [actor!]!
+
+  """
+  fetch aggregated fields from the table: "actor"
+  """
+  actor_aggregate(
+    """distinct select on columns"""
+    distinct_on: [actor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [actor_order_by!]
+
+    """filter the rows returned"""
+    where: actor_bool_exp
+  ): actor_aggregate!
+
+  """fetch data from the table: "actor" using primary key columns"""
+  actor_by_pk(actor_id: smallint!): actor
+
+  """
+  fetch data from the table: "address"
+  """
+  address(
+    """distinct select on columns"""
+    distinct_on: [address_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [address_order_by!]
+
+    """filter the rows returned"""
+    where: address_bool_exp
+  ): [address!]!
+
+  """
+  fetch aggregated fields from the table: "address"
+  """
+  address_aggregate(
+    """distinct select on columns"""
+    distinct_on: [address_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [address_order_by!]
+
+    """filter the rows returned"""
+    where: address_bool_exp
+  ): address_aggregate!
+
+  """fetch data from the table: "address" using primary key columns"""
+  address_by_pk(address_id: smallint!): address
+
+  """
+  fetch data from the table: "category"
+  """
+  category(
+    """distinct select on columns"""
+    distinct_on: [category_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [category_order_by!]
+
+    """filter the rows returned"""
+    where: category_bool_exp
+  ): [category!]!
+
+  """
+  fetch aggregated fields from the table: "category"
+  """
+  category_aggregate(
+    """distinct select on columns"""
+    distinct_on: [category_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [category_order_by!]
+
+    """filter the rows returned"""
+    where: category_bool_exp
+  ): category_aggregate!
+
+  """fetch data from the table: "category" using primary key columns"""
+  category_by_pk(category_id: smallint!): category
+
+  """
+  fetch data from the table: "city"
+  """
+  city(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): [city!]!
+
+  """
+  fetch aggregated fields from the table: "city"
+  """
+  city_aggregate(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): city_aggregate!
+
+  """fetch data from the table: "city" using primary key columns"""
+  city_by_pk(city_id: smallint!): city
+
+  """
+  fetch data from the table: "country"
+  """
+  country(
+    """distinct select on columns"""
+    distinct_on: [country_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [country_order_by!]
+
+    """filter the rows returned"""
+    where: country_bool_exp
+  ): [country!]!
+
+  """
+  fetch aggregated fields from the table: "country"
+  """
+  country_aggregate(
+    """distinct select on columns"""
+    distinct_on: [country_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [country_order_by!]
+
+    """filter the rows returned"""
+    where: country_bool_exp
+  ): country_aggregate!
+
+  """fetch data from the table: "country" using primary key columns"""
+  country_by_pk(country_id: smallint!): country
+
+  """
+  fetch data from the table: "customer"
+  """
+  customer(
+    """distinct select on columns"""
+    distinct_on: [customer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_order_by!]
+
+    """filter the rows returned"""
+    where: customer_bool_exp
+  ): [customer!]!
+
+  """
+  fetch aggregated fields from the table: "customer"
+  """
+  customer_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_order_by!]
+
+    """filter the rows returned"""
+    where: customer_bool_exp
+  ): customer_aggregate!
+
+  """fetch data from the table: "customer" using primary key columns"""
+  customer_by_pk(customer_id: smallint!): customer
+
+  """
+  fetch data from the table: "film"
+  """
+  film(
+    """distinct select on columns"""
+    distinct_on: [film_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_order_by!]
+
+    """filter the rows returned"""
+    where: film_bool_exp
+  ): [film!]!
+
+  """
+  fetch data from the table: "film_actor"
+  """
+  film_actor(
+    """distinct select on columns"""
+    distinct_on: [film_actor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_actor_order_by!]
+
+    """filter the rows returned"""
+    where: film_actor_bool_exp
+  ): [film_actor!]!
+
+  """
+  fetch aggregated fields from the table: "film_actor"
+  """
+  film_actor_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_actor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_actor_order_by!]
+
+    """filter the rows returned"""
+    where: film_actor_bool_exp
+  ): film_actor_aggregate!
+
+  """fetch data from the table: "film_actor" using primary key columns"""
+  film_actor_by_pk(actor_id: smallint!, film_id: smallint!): film_actor
+
+  """
+  fetch aggregated fields from the table: "film"
+  """
+  film_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_order_by!]
+
+    """filter the rows returned"""
+    where: film_bool_exp
+  ): film_aggregate!
+
+  """fetch data from the table: "film" using primary key columns"""
+  film_by_pk(film_id: smallint!): film
+
+  """
+  fetch data from the table: "film_category"
+  """
+  film_category(
+    """distinct select on columns"""
+    distinct_on: [film_category_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_category_order_by!]
+
+    """filter the rows returned"""
+    where: film_category_bool_exp
+  ): [film_category!]!
+
+  """
+  fetch aggregated fields from the table: "film_category"
+  """
+  film_category_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_category_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_category_order_by!]
+
+    """filter the rows returned"""
+    where: film_category_bool_exp
+  ): film_category_aggregate!
+
+  """fetch data from the table: "film_category" using primary key columns"""
+  film_category_by_pk(category_id: smallint!, film_id: smallint!): film_category
+
+  """
+  fetch data from the table: "film_text"
+  """
+  film_text(
+    """distinct select on columns"""
+    distinct_on: [film_text_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_text_order_by!]
+
+    """filter the rows returned"""
+    where: film_text_bool_exp
+  ): [film_text!]!
+
+  """
+  fetch aggregated fields from the table: "film_text"
+  """
+  film_text_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_text_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_text_order_by!]
+
+    """filter the rows returned"""
+    where: film_text_bool_exp
+  ): film_text_aggregate!
+
+  """fetch data from the table: "film_text" using primary key columns"""
+  film_text_by_pk(film_id: smallint!): film_text
+
+  """
+  fetch data from the table: "inventory"
+  """
+  inventory(
+    """distinct select on columns"""
+    distinct_on: [inventory_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [inventory_order_by!]
+
+    """filter the rows returned"""
+    where: inventory_bool_exp
+  ): [inventory!]!
+
+  """
+  fetch aggregated fields from the table: "inventory"
+  """
+  inventory_aggregate(
+    """distinct select on columns"""
+    distinct_on: [inventory_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [inventory_order_by!]
+
+    """filter the rows returned"""
+    where: inventory_bool_exp
+  ): inventory_aggregate!
+
+  """fetch data from the table: "inventory" using primary key columns"""
+  inventory_by_pk(inventory_id: Int!): inventory
+
+  """
+  fetch data from the table: "language"
+  """
+  language(
+    """distinct select on columns"""
+    distinct_on: [language_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [language_order_by!]
+
+    """filter the rows returned"""
+    where: language_bool_exp
+  ): [language!]!
+
+  """
+  fetch aggregated fields from the table: "language"
+  """
+  language_aggregate(
+    """distinct select on columns"""
+    distinct_on: [language_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [language_order_by!]
+
+    """filter the rows returned"""
+    where: language_bool_exp
+  ): language_aggregate!
+
+  """fetch data from the table: "language" using primary key columns"""
+  language_by_pk(language_id: smallint!): language
+
+  """
+  fetch data from the table: "payment"
+  """
+  payment(
+    """distinct select on columns"""
+    distinct_on: [payment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payment_order_by!]
+
+    """filter the rows returned"""
+    where: payment_bool_exp
+  ): [payment!]!
+
+  """
+  fetch aggregated fields from the table: "payment"
+  """
+  payment_aggregate(
+    """distinct select on columns"""
+    distinct_on: [payment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payment_order_by!]
+
+    """filter the rows returned"""
+    where: payment_bool_exp
+  ): payment_aggregate!
+
+  """fetch data from the table: "payment" using primary key columns"""
+  payment_by_pk(payment_id: smallint!): payment
+
+  """
+  fetch data from the table: "rental"
+  """
+  rental(
+    """distinct select on columns"""
+    distinct_on: [rental_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rental_order_by!]
+
+    """filter the rows returned"""
+    where: rental_bool_exp
+  ): [rental!]!
+
+  """
+  fetch aggregated fields from the table: "rental"
+  """
+  rental_aggregate(
+    """distinct select on columns"""
+    distinct_on: [rental_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rental_order_by!]
+
+    """filter the rows returned"""
+    where: rental_bool_exp
+  ): rental_aggregate!
+
+  """fetch data from the table: "rental" using primary key columns"""
+  rental_by_pk(rental_id: Int!): rental
+
+  """
+  fetch data from the table: "staff"
+  """
+  staff(
+    """distinct select on columns"""
+    distinct_on: [staff_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [staff_order_by!]
+
+    """filter the rows returned"""
+    where: staff_bool_exp
+  ): [staff!]!
+
+  """
+  fetch aggregated fields from the table: "staff"
+  """
+  staff_aggregate(
+    """distinct select on columns"""
+    distinct_on: [staff_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [staff_order_by!]
+
+    """filter the rows returned"""
+    where: staff_bool_exp
+  ): staff_aggregate!
+
+  """fetch data from the table: "staff" using primary key columns"""
+  staff_by_pk(staff_id: smallint!): staff
+
+  """
+  fetch data from the table: "store"
+  """
+  store(
+    """distinct select on columns"""
+    distinct_on: [store_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [store_order_by!]
+
+    """filter the rows returned"""
+    where: store_bool_exp
+  ): [store!]!
+
+  """
+  fetch aggregated fields from the table: "store"
+  """
+  store_aggregate(
+    """distinct select on columns"""
+    distinct_on: [store_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [store_order_by!]
+
+    """filter the rows returned"""
+    where: store_bool_exp
+  ): store_aggregate!
+
+  """fetch data from the table: "store" using primary key columns"""
+  store_by_pk(store_id: smallint!): store
+}
+
+"""
+columns and relationships of "rental"
+"""
+type rental {
+  """An object relationship"""
+  customer: customer!
+  customer_id: smallint!
+
+  """An object relationship"""
+  inventory: inventory!
+  inventory_id: Int!
+  last_update: timestamp!
+
+  """An array relationship"""
+  payments(
+    """distinct select on columns"""
+    distinct_on: [payment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payment_order_by!]
+
+    """filter the rows returned"""
+    where: payment_bool_exp
+  ): [payment!]!
+
+  """An aggregated array relationship"""
+  payments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [payment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payment_order_by!]
+
+    """filter the rows returned"""
+    where: payment_bool_exp
+  ): payment_aggregate!
+  rental_date: timestamp!
+  rental_id: Int!
+  return_date: timestamp
+  staff_id: smallint!
+}
+
+"""
+aggregated selection of "rental"
+"""
+type rental_aggregate {
+  aggregate: rental_aggregate_fields
+  nodes: [rental!]!
+}
+
+"""
+aggregate fields of "rental"
+"""
+type rental_aggregate_fields {
+  avg: rental_avg_fields
+  count(columns: [rental_select_column!], distinct: Boolean): Int
+  max: rental_max_fields
+  min: rental_min_fields
+  stddev: rental_stddev_fields
+  stddev_pop: rental_stddev_pop_fields
+  stddev_samp: rental_stddev_samp_fields
+  sum: rental_sum_fields
+  var_pop: rental_var_pop_fields
+  var_samp: rental_var_samp_fields
+  variance: rental_variance_fields
+}
+
+"""
+order by aggregate values of table "rental"
+"""
+input rental_aggregate_order_by {
+  avg: rental_avg_order_by
+  count: order_by
+  max: rental_max_order_by
+  min: rental_min_order_by
+  stddev: rental_stddev_order_by
+  stddev_pop: rental_stddev_pop_order_by
+  stddev_samp: rental_stddev_samp_order_by
+  sum: rental_sum_order_by
+  var_pop: rental_var_pop_order_by
+  var_samp: rental_var_samp_order_by
+  variance: rental_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "rental"
+"""
+input rental_arr_rel_insert_input {
+  data: [rental_insert_input!]!
+  on_conflict: rental_on_conflict
+}
+
+"""aggregate avg on columns"""
+type rental_avg_fields {
+  customer_id: Float
+  inventory_id: Float
+  rental_id: Float
+  staff_id: Float
+}
+
+"""
+order by avg() on columns of table "rental"
+"""
+input rental_avg_order_by {
+  customer_id: order_by
+  inventory_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "rental". All fields are combined with a logical 'AND'.
+"""
+input rental_bool_exp {
+  _and: [rental_bool_exp]
+  _not: rental_bool_exp
+  _or: [rental_bool_exp]
+  customer: customer_bool_exp
+  customer_id: smallint_comparison_exp
+  inventory: inventory_bool_exp
+  inventory_id: Int_comparison_exp
+  last_update: timestamp_comparison_exp
+  payments: payment_bool_exp
+  rental_date: timestamp_comparison_exp
+  rental_id: Int_comparison_exp
+  return_date: timestamp_comparison_exp
+  staff_id: smallint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "rental"
+"""
+enum rental_constraint {
+  """unique or primary key constraint"""
+  rental_pkey
+}
+
+"""
+input type for incrementing integer columne in table "rental"
+"""
+input rental_inc_input {
+  customer_id: smallint
+  inventory_id: Int
+  rental_id: Int
+  staff_id: smallint
+}
+
+"""
+input type for inserting data into table "rental"
+"""
+input rental_insert_input {
+  customer: customer_obj_rel_insert_input
+  customer_id: smallint
+  inventory: inventory_obj_rel_insert_input
+  inventory_id: Int
+  last_update: timestamp
+  payments: payment_arr_rel_insert_input
+  rental_date: timestamp
+  rental_id: Int
+  return_date: timestamp
+  staff_id: smallint
+}
+
+"""aggregate max on columns"""
+type rental_max_fields {
+  customer_id: smallint
+  inventory_id: Int
+  rental_id: Int
+  staff_id: smallint
+}
+
+"""
+order by max() on columns of table "rental"
+"""
+input rental_max_order_by {
+  customer_id: order_by
+  inventory_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""aggregate min on columns"""
+type rental_min_fields {
+  customer_id: smallint
+  inventory_id: Int
+  rental_id: Int
+  staff_id: smallint
+}
+
+"""
+order by min() on columns of table "rental"
+"""
+input rental_min_order_by {
+  customer_id: order_by
+  inventory_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""
+response of any mutation on the table "rental"
+"""
+type rental_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [rental!]!
+}
+
+"""
+input type for inserting object relation for remote table "rental"
+"""
+input rental_obj_rel_insert_input {
+  data: rental_insert_input!
+  on_conflict: rental_on_conflict
+}
+
+"""
+on conflict condition type for table "rental"
+"""
+input rental_on_conflict {
+  constraint: rental_constraint!
+  update_columns: [rental_update_column!]!
+  where: rental_bool_exp
+}
+
+"""
+ordering options when selecting data from "rental"
+"""
+input rental_order_by {
+  customer: customer_order_by
+  customer_id: order_by
+  inventory: inventory_order_by
+  inventory_id: order_by
+  last_update: order_by
+  payments_aggregate: payment_aggregate_order_by
+  rental_date: order_by
+  rental_id: order_by
+  return_date: order_by
+  staff_id: order_by
+}
+
+"""
+select columns of table "rental"
+"""
+enum rental_select_column {
+  """column name"""
+  customer_id
+
+  """column name"""
+  inventory_id
+
+  """column name"""
+  last_update
+
+  """column name"""
+  rental_date
+
+  """column name"""
+  rental_id
+
+  """column name"""
+  return_date
+
+  """column name"""
+  staff_id
+}
+
+"""
+input type for updating data in table "rental"
+"""
+input rental_set_input {
+  customer_id: smallint
+  inventory_id: Int
+  last_update: timestamp
+  rental_date: timestamp
+  rental_id: Int
+  return_date: timestamp
+  staff_id: smallint
+}
+
+"""aggregate stddev on columns"""
+type rental_stddev_fields {
+  customer_id: Float
+  inventory_id: Float
+  rental_id: Float
+  staff_id: Float
+}
+
+"""
+order by stddev() on columns of table "rental"
+"""
+input rental_stddev_order_by {
+  customer_id: order_by
+  inventory_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type rental_stddev_pop_fields {
+  customer_id: Float
+  inventory_id: Float
+  rental_id: Float
+  staff_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "rental"
+"""
+input rental_stddev_pop_order_by {
+  customer_id: order_by
+  inventory_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type rental_stddev_samp_fields {
+  customer_id: Float
+  inventory_id: Float
+  rental_id: Float
+  staff_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "rental"
+"""
+input rental_stddev_samp_order_by {
+  customer_id: order_by
+  inventory_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""aggregate sum on columns"""
+type rental_sum_fields {
+  customer_id: smallint
+  inventory_id: Int
+  rental_id: Int
+  staff_id: smallint
+}
+
+"""
+order by sum() on columns of table "rental"
+"""
+input rental_sum_order_by {
+  customer_id: order_by
+  inventory_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""
+update columns of table "rental"
+"""
+enum rental_update_column {
+  """column name"""
+  customer_id
+
+  """column name"""
+  inventory_id
+
+  """column name"""
+  last_update
+
+  """column name"""
+  rental_date
+
+  """column name"""
+  rental_id
+
+  """column name"""
+  return_date
+
+  """column name"""
+  staff_id
+}
+
+"""aggregate var_pop on columns"""
+type rental_var_pop_fields {
+  customer_id: Float
+  inventory_id: Float
+  rental_id: Float
+  staff_id: Float
+}
+
+"""
+order by var_pop() on columns of table "rental"
+"""
+input rental_var_pop_order_by {
+  customer_id: order_by
+  inventory_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type rental_var_samp_fields {
+  customer_id: Float
+  inventory_id: Float
+  rental_id: Float
+  staff_id: Float
+}
+
+"""
+order by var_samp() on columns of table "rental"
+"""
+input rental_var_samp_order_by {
+  customer_id: order_by
+  inventory_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+"""aggregate variance on columns"""
+type rental_variance_fields {
+  customer_id: Float
+  inventory_id: Float
+  rental_id: Float
+  staff_id: Float
+}
+
+"""
+order by variance() on columns of table "rental"
+"""
+input rental_variance_order_by {
+  customer_id: order_by
+  inventory_id: order_by
+  rental_id: order_by
+  staff_id: order_by
+}
+
+scalar smallint
+
+"""
+expression to compare columns of type smallint. All fields are combined with logical 'AND'.
+"""
+input smallint_comparison_exp {
+  _eq: smallint
+  _gt: smallint
+  _gte: smallint
+  _in: [smallint!]
+  _is_null: Boolean
+  _lt: smallint
+  _lte: smallint
+  _neq: smallint
+  _nin: [smallint!]
+}
+
+"""
+columns and relationships of "staff"
+"""
+type staff {
+  active: Boolean!
+
+  """An object relationship"""
+  address: address!
+  address_id: smallint!
+  email: String
+  first_name: String!
+  last_name: String!
+  last_update: timestamp!
+  password: String
+  picture: bytea
+  staff_id: smallint!
+  store_id: smallint!
+
+  """An array relationship"""
+  stores(
+    """distinct select on columns"""
+    distinct_on: [store_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [store_order_by!]
+
+    """filter the rows returned"""
+    where: store_bool_exp
+  ): [store!]!
+
+  """An aggregated array relationship"""
+  stores_aggregate(
+    """distinct select on columns"""
+    distinct_on: [store_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [store_order_by!]
+
+    """filter the rows returned"""
+    where: store_bool_exp
+  ): store_aggregate!
+  username: String!
+}
+
+"""
+aggregated selection of "staff"
+"""
+type staff_aggregate {
+  aggregate: staff_aggregate_fields
+  nodes: [staff!]!
+}
+
+"""
+aggregate fields of "staff"
+"""
+type staff_aggregate_fields {
+  avg: staff_avg_fields
+  count(columns: [staff_select_column!], distinct: Boolean): Int
+  max: staff_max_fields
+  min: staff_min_fields
+  stddev: staff_stddev_fields
+  stddev_pop: staff_stddev_pop_fields
+  stddev_samp: staff_stddev_samp_fields
+  sum: staff_sum_fields
+  var_pop: staff_var_pop_fields
+  var_samp: staff_var_samp_fields
+  variance: staff_variance_fields
+}
+
+"""
+order by aggregate values of table "staff"
+"""
+input staff_aggregate_order_by {
+  avg: staff_avg_order_by
+  count: order_by
+  max: staff_max_order_by
+  min: staff_min_order_by
+  stddev: staff_stddev_order_by
+  stddev_pop: staff_stddev_pop_order_by
+  stddev_samp: staff_stddev_samp_order_by
+  sum: staff_sum_order_by
+  var_pop: staff_var_pop_order_by
+  var_samp: staff_var_samp_order_by
+  variance: staff_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "staff"
+"""
+input staff_arr_rel_insert_input {
+  data: [staff_insert_input!]!
+  on_conflict: staff_on_conflict
+}
+
+"""aggregate avg on columns"""
+type staff_avg_fields {
+  address_id: Float
+  staff_id: Float
+  store_id: Float
+}
+
+"""
+order by avg() on columns of table "staff"
+"""
+input staff_avg_order_by {
+  address_id: order_by
+  staff_id: order_by
+  store_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "staff". All fields are combined with a logical 'AND'.
+"""
+input staff_bool_exp {
+  _and: [staff_bool_exp]
+  _not: staff_bool_exp
+  _or: [staff_bool_exp]
+  active: Boolean_comparison_exp
+  address: address_bool_exp
+  address_id: smallint_comparison_exp
+  email: String_comparison_exp
+  first_name: String_comparison_exp
+  last_name: String_comparison_exp
+  last_update: timestamp_comparison_exp
+  password: String_comparison_exp
+  picture: bytea_comparison_exp
+  staff_id: smallint_comparison_exp
+  store_id: smallint_comparison_exp
+  stores: store_bool_exp
+  username: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "staff"
+"""
+enum staff_constraint {
+  """unique or primary key constraint"""
+  staff_pkey
+}
+
+"""
+input type for incrementing integer columne in table "staff"
+"""
+input staff_inc_input {
+  address_id: smallint
+  staff_id: smallint
+  store_id: smallint
+}
+
+"""
+input type for inserting data into table "staff"
+"""
+input staff_insert_input {
+  active: Boolean
+  address: address_obj_rel_insert_input
+  address_id: smallint
+  email: String
+  first_name: String
+  last_name: String
+  last_update: timestamp
+  password: String
+  picture: bytea
+  staff_id: smallint
+  store_id: smallint
+  stores: store_arr_rel_insert_input
+  username: String
+}
+
+"""aggregate max on columns"""
+type staff_max_fields {
+  address_id: smallint
+  email: String
+  first_name: String
+  last_name: String
+  password: String
+  staff_id: smallint
+  store_id: smallint
+  username: String
+}
+
+"""
+order by max() on columns of table "staff"
+"""
+input staff_max_order_by {
+  address_id: order_by
+  email: order_by
+  first_name: order_by
+  last_name: order_by
+  password: order_by
+  staff_id: order_by
+  store_id: order_by
+  username: order_by
+}
+
+"""aggregate min on columns"""
+type staff_min_fields {
+  address_id: smallint
+  email: String
+  first_name: String
+  last_name: String
+  password: String
+  staff_id: smallint
+  store_id: smallint
+  username: String
+}
+
+"""
+order by min() on columns of table "staff"
+"""
+input staff_min_order_by {
+  address_id: order_by
+  email: order_by
+  first_name: order_by
+  last_name: order_by
+  password: order_by
+  staff_id: order_by
+  store_id: order_by
+  username: order_by
+}
+
+"""
+response of any mutation on the table "staff"
+"""
+type staff_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [staff!]!
+}
+
+"""
+input type for inserting object relation for remote table "staff"
+"""
+input staff_obj_rel_insert_input {
+  data: staff_insert_input!
+  on_conflict: staff_on_conflict
+}
+
+"""
+on conflict condition type for table "staff"
+"""
+input staff_on_conflict {
+  constraint: staff_constraint!
+  update_columns: [staff_update_column!]!
+  where: staff_bool_exp
+}
+
+"""
+ordering options when selecting data from "staff"
+"""
+input staff_order_by {
+  active: order_by
+  address: address_order_by
+  address_id: order_by
+  email: order_by
+  first_name: order_by
+  last_name: order_by
+  last_update: order_by
+  password: order_by
+  picture: order_by
+  staff_id: order_by
+  store_id: order_by
+  stores_aggregate: store_aggregate_order_by
+  username: order_by
+}
+
+"""
+select columns of table "staff"
+"""
+enum staff_select_column {
+  """column name"""
+  active
+
+  """column name"""
+  address_id
+
+  """column name"""
+  email
+
+  """column name"""
+  first_name
+
+  """column name"""
+  last_name
+
+  """column name"""
+  last_update
+
+  """column name"""
+  password
+
+  """column name"""
+  picture
+
+  """column name"""
+  staff_id
+
+  """column name"""
+  store_id
+
+  """column name"""
+  username
+}
+
+"""
+input type for updating data in table "staff"
+"""
+input staff_set_input {
+  active: Boolean
+  address_id: smallint
+  email: String
+  first_name: String
+  last_name: String
+  last_update: timestamp
+  password: String
+  picture: bytea
+  staff_id: smallint
+  store_id: smallint
+  username: String
+}
+
+"""aggregate stddev on columns"""
+type staff_stddev_fields {
+  address_id: Float
+  staff_id: Float
+  store_id: Float
+}
+
+"""
+order by stddev() on columns of table "staff"
+"""
+input staff_stddev_order_by {
+  address_id: order_by
+  staff_id: order_by
+  store_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type staff_stddev_pop_fields {
+  address_id: Float
+  staff_id: Float
+  store_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "staff"
+"""
+input staff_stddev_pop_order_by {
+  address_id: order_by
+  staff_id: order_by
+  store_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type staff_stddev_samp_fields {
+  address_id: Float
+  staff_id: Float
+  store_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "staff"
+"""
+input staff_stddev_samp_order_by {
+  address_id: order_by
+  staff_id: order_by
+  store_id: order_by
+}
+
+"""aggregate sum on columns"""
+type staff_sum_fields {
+  address_id: smallint
+  staff_id: smallint
+  store_id: smallint
+}
+
+"""
+order by sum() on columns of table "staff"
+"""
+input staff_sum_order_by {
+  address_id: order_by
+  staff_id: order_by
+  store_id: order_by
+}
+
+"""
+update columns of table "staff"
+"""
+enum staff_update_column {
+  """column name"""
+  active
+
+  """column name"""
+  address_id
+
+  """column name"""
+  email
+
+  """column name"""
+  first_name
+
+  """column name"""
+  last_name
+
+  """column name"""
+  last_update
+
+  """column name"""
+  password
+
+  """column name"""
+  picture
+
+  """column name"""
+  staff_id
+
+  """column name"""
+  store_id
+
+  """column name"""
+  username
+}
+
+"""aggregate var_pop on columns"""
+type staff_var_pop_fields {
+  address_id: Float
+  staff_id: Float
+  store_id: Float
+}
+
+"""
+order by var_pop() on columns of table "staff"
+"""
+input staff_var_pop_order_by {
+  address_id: order_by
+  staff_id: order_by
+  store_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type staff_var_samp_fields {
+  address_id: Float
+  staff_id: Float
+  store_id: Float
+}
+
+"""
+order by var_samp() on columns of table "staff"
+"""
+input staff_var_samp_order_by {
+  address_id: order_by
+  staff_id: order_by
+  store_id: order_by
+}
+
+"""aggregate variance on columns"""
+type staff_variance_fields {
+  address_id: Float
+  staff_id: Float
+  store_id: Float
+}
+
+"""
+order by variance() on columns of table "staff"
+"""
+input staff_variance_order_by {
+  address_id: order_by
+  staff_id: order_by
+  store_id: order_by
+}
+
+"""
+columns and relationships of "store"
+"""
+type store {
+  """An object relationship"""
+  address: address!
+  address_id: smallint!
+  last_update: timestamp!
+  manager_staff_id: smallint!
+
+  """An object relationship"""
+  staff: staff!
+
+  """An object relationship"""
+  store: store
+  store_id: smallint!
+}
+
+"""
+aggregated selection of "store"
+"""
+type store_aggregate {
+  aggregate: store_aggregate_fields
+  nodes: [store!]!
+}
+
+"""
+aggregate fields of "store"
+"""
+type store_aggregate_fields {
+  avg: store_avg_fields
+  count(columns: [store_select_column!], distinct: Boolean): Int
+  max: store_max_fields
+  min: store_min_fields
+  stddev: store_stddev_fields
+  stddev_pop: store_stddev_pop_fields
+  stddev_samp: store_stddev_samp_fields
+  sum: store_sum_fields
+  var_pop: store_var_pop_fields
+  var_samp: store_var_samp_fields
+  variance: store_variance_fields
+}
+
+"""
+order by aggregate values of table "store"
+"""
+input store_aggregate_order_by {
+  avg: store_avg_order_by
+  count: order_by
+  max: store_max_order_by
+  min: store_min_order_by
+  stddev: store_stddev_order_by
+  stddev_pop: store_stddev_pop_order_by
+  stddev_samp: store_stddev_samp_order_by
+  sum: store_sum_order_by
+  var_pop: store_var_pop_order_by
+  var_samp: store_var_samp_order_by
+  variance: store_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "store"
+"""
+input store_arr_rel_insert_input {
+  data: [store_insert_input!]!
+  on_conflict: store_on_conflict
+}
+
+"""aggregate avg on columns"""
+type store_avg_fields {
+  address_id: Float
+  manager_staff_id: Float
+  store_id: Float
+}
+
+"""
+order by avg() on columns of table "store"
+"""
+input store_avg_order_by {
+  address_id: order_by
+  manager_staff_id: order_by
+  store_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "store". All fields are combined with a logical 'AND'.
+"""
+input store_bool_exp {
+  _and: [store_bool_exp]
+  _not: store_bool_exp
+  _or: [store_bool_exp]
+  address: address_bool_exp
+  address_id: smallint_comparison_exp
+  last_update: timestamp_comparison_exp
+  manager_staff_id: smallint_comparison_exp
+  staff: staff_bool_exp
+  store: store_bool_exp
+  store_id: smallint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "store"
+"""
+enum store_constraint {
+  """unique or primary key constraint"""
+  store_pkey
+}
+
+"""
+input type for incrementing integer columne in table "store"
+"""
+input store_inc_input {
+  address_id: smallint
+  manager_staff_id: smallint
+  store_id: smallint
+}
+
+"""
+input type for inserting data into table "store"
+"""
+input store_insert_input {
+  address: address_obj_rel_insert_input
+  address_id: smallint
+  last_update: timestamp
+  manager_staff_id: smallint
+  staff: staff_obj_rel_insert_input
+  store: store_obj_rel_insert_input
+  store_id: smallint
+}
+
+"""aggregate max on columns"""
+type store_max_fields {
+  address_id: smallint
+  manager_staff_id: smallint
+  store_id: smallint
+}
+
+"""
+order by max() on columns of table "store"
+"""
+input store_max_order_by {
+  address_id: order_by
+  manager_staff_id: order_by
+  store_id: order_by
+}
+
+"""aggregate min on columns"""
+type store_min_fields {
+  address_id: smallint
+  manager_staff_id: smallint
+  store_id: smallint
+}
+
+"""
+order by min() on columns of table "store"
+"""
+input store_min_order_by {
+  address_id: order_by
+  manager_staff_id: order_by
+  store_id: order_by
+}
+
+"""
+response of any mutation on the table "store"
+"""
+type store_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [store!]!
+}
+
+"""
+input type for inserting object relation for remote table "store"
+"""
+input store_obj_rel_insert_input {
+  data: store_insert_input!
+  on_conflict: store_on_conflict
+}
+
+"""
+on conflict condition type for table "store"
+"""
+input store_on_conflict {
+  constraint: store_constraint!
+  update_columns: [store_update_column!]!
+  where: store_bool_exp
+}
+
+"""
+ordering options when selecting data from "store"
+"""
+input store_order_by {
+  address: address_order_by
+  address_id: order_by
+  last_update: order_by
+  manager_staff_id: order_by
+  staff: staff_order_by
+  store: store_order_by
+  store_id: order_by
+}
+
+"""
+select columns of table "store"
+"""
+enum store_select_column {
+  """column name"""
+  address_id
+
+  """column name"""
+  last_update
+
+  """column name"""
+  manager_staff_id
+
+  """column name"""
+  store_id
+}
+
+"""
+input type for updating data in table "store"
+"""
+input store_set_input {
+  address_id: smallint
+  last_update: timestamp
+  manager_staff_id: smallint
+  store_id: smallint
+}
+
+"""aggregate stddev on columns"""
+type store_stddev_fields {
+  address_id: Float
+  manager_staff_id: Float
+  store_id: Float
+}
+
+"""
+order by stddev() on columns of table "store"
+"""
+input store_stddev_order_by {
+  address_id: order_by
+  manager_staff_id: order_by
+  store_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type store_stddev_pop_fields {
+  address_id: Float
+  manager_staff_id: Float
+  store_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "store"
+"""
+input store_stddev_pop_order_by {
+  address_id: order_by
+  manager_staff_id: order_by
+  store_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type store_stddev_samp_fields {
+  address_id: Float
+  manager_staff_id: Float
+  store_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "store"
+"""
+input store_stddev_samp_order_by {
+  address_id: order_by
+  manager_staff_id: order_by
+  store_id: order_by
+}
+
+"""aggregate sum on columns"""
+type store_sum_fields {
+  address_id: smallint
+  manager_staff_id: smallint
+  store_id: smallint
+}
+
+"""
+order by sum() on columns of table "store"
+"""
+input store_sum_order_by {
+  address_id: order_by
+  manager_staff_id: order_by
+  store_id: order_by
+}
+
+"""
+update columns of table "store"
+"""
+enum store_update_column {
+  """column name"""
+  address_id
+
+  """column name"""
+  last_update
+
+  """column name"""
+  manager_staff_id
+
+  """column name"""
+  store_id
+}
+
+"""aggregate var_pop on columns"""
+type store_var_pop_fields {
+  address_id: Float
+  manager_staff_id: Float
+  store_id: Float
+}
+
+"""
+order by var_pop() on columns of table "store"
+"""
+input store_var_pop_order_by {
+  address_id: order_by
+  manager_staff_id: order_by
+  store_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type store_var_samp_fields {
+  address_id: Float
+  manager_staff_id: Float
+  store_id: Float
+}
+
+"""
+order by var_samp() on columns of table "store"
+"""
+input store_var_samp_order_by {
+  address_id: order_by
+  manager_staff_id: order_by
+  store_id: order_by
+}
+
+"""aggregate variance on columns"""
+type store_variance_fields {
+  address_id: Float
+  manager_staff_id: Float
+  store_id: Float
+}
+
+"""
+order by variance() on columns of table "store"
+"""
+input store_variance_order_by {
+  address_id: order_by
+  manager_staff_id: order_by
+  store_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "actor"
+  """
+  actor(
+    """distinct select on columns"""
+    distinct_on: [actor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [actor_order_by!]
+
+    """filter the rows returned"""
+    where: actor_bool_exp
+  ): [actor!]!
+
+  """
+  fetch aggregated fields from the table: "actor"
+  """
+  actor_aggregate(
+    """distinct select on columns"""
+    distinct_on: [actor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [actor_order_by!]
+
+    """filter the rows returned"""
+    where: actor_bool_exp
+  ): actor_aggregate!
+
+  """fetch data from the table: "actor" using primary key columns"""
+  actor_by_pk(actor_id: smallint!): actor
+
+  """
+  fetch data from the table: "address"
+  """
+  address(
+    """distinct select on columns"""
+    distinct_on: [address_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [address_order_by!]
+
+    """filter the rows returned"""
+    where: address_bool_exp
+  ): [address!]!
+
+  """
+  fetch aggregated fields from the table: "address"
+  """
+  address_aggregate(
+    """distinct select on columns"""
+    distinct_on: [address_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [address_order_by!]
+
+    """filter the rows returned"""
+    where: address_bool_exp
+  ): address_aggregate!
+
+  """fetch data from the table: "address" using primary key columns"""
+  address_by_pk(address_id: smallint!): address
+
+  """
+  fetch data from the table: "category"
+  """
+  category(
+    """distinct select on columns"""
+    distinct_on: [category_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [category_order_by!]
+
+    """filter the rows returned"""
+    where: category_bool_exp
+  ): [category!]!
+
+  """
+  fetch aggregated fields from the table: "category"
+  """
+  category_aggregate(
+    """distinct select on columns"""
+    distinct_on: [category_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [category_order_by!]
+
+    """filter the rows returned"""
+    where: category_bool_exp
+  ): category_aggregate!
+
+  """fetch data from the table: "category" using primary key columns"""
+  category_by_pk(category_id: smallint!): category
+
+  """
+  fetch data from the table: "city"
+  """
+  city(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): [city!]!
+
+  """
+  fetch aggregated fields from the table: "city"
+  """
+  city_aggregate(
+    """distinct select on columns"""
+    distinct_on: [city_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [city_order_by!]
+
+    """filter the rows returned"""
+    where: city_bool_exp
+  ): city_aggregate!
+
+  """fetch data from the table: "city" using primary key columns"""
+  city_by_pk(city_id: smallint!): city
+
+  """
+  fetch data from the table: "country"
+  """
+  country(
+    """distinct select on columns"""
+    distinct_on: [country_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [country_order_by!]
+
+    """filter the rows returned"""
+    where: country_bool_exp
+  ): [country!]!
+
+  """
+  fetch aggregated fields from the table: "country"
+  """
+  country_aggregate(
+    """distinct select on columns"""
+    distinct_on: [country_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [country_order_by!]
+
+    """filter the rows returned"""
+    where: country_bool_exp
+  ): country_aggregate!
+
+  """fetch data from the table: "country" using primary key columns"""
+  country_by_pk(country_id: smallint!): country
+
+  """
+  fetch data from the table: "customer"
+  """
+  customer(
+    """distinct select on columns"""
+    distinct_on: [customer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_order_by!]
+
+    """filter the rows returned"""
+    where: customer_bool_exp
+  ): [customer!]!
+
+  """
+  fetch aggregated fields from the table: "customer"
+  """
+  customer_aggregate(
+    """distinct select on columns"""
+    distinct_on: [customer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [customer_order_by!]
+
+    """filter the rows returned"""
+    where: customer_bool_exp
+  ): customer_aggregate!
+
+  """fetch data from the table: "customer" using primary key columns"""
+  customer_by_pk(customer_id: smallint!): customer
+
+  """
+  fetch data from the table: "film"
+  """
+  film(
+    """distinct select on columns"""
+    distinct_on: [film_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_order_by!]
+
+    """filter the rows returned"""
+    where: film_bool_exp
+  ): [film!]!
+
+  """
+  fetch data from the table: "film_actor"
+  """
+  film_actor(
+    """distinct select on columns"""
+    distinct_on: [film_actor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_actor_order_by!]
+
+    """filter the rows returned"""
+    where: film_actor_bool_exp
+  ): [film_actor!]!
+
+  """
+  fetch aggregated fields from the table: "film_actor"
+  """
+  film_actor_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_actor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_actor_order_by!]
+
+    """filter the rows returned"""
+    where: film_actor_bool_exp
+  ): film_actor_aggregate!
+
+  """fetch data from the table: "film_actor" using primary key columns"""
+  film_actor_by_pk(actor_id: smallint!, film_id: smallint!): film_actor
+
+  """
+  fetch aggregated fields from the table: "film"
+  """
+  film_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_order_by!]
+
+    """filter the rows returned"""
+    where: film_bool_exp
+  ): film_aggregate!
+
+  """fetch data from the table: "film" using primary key columns"""
+  film_by_pk(film_id: smallint!): film
+
+  """
+  fetch data from the table: "film_category"
+  """
+  film_category(
+    """distinct select on columns"""
+    distinct_on: [film_category_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_category_order_by!]
+
+    """filter the rows returned"""
+    where: film_category_bool_exp
+  ): [film_category!]!
+
+  """
+  fetch aggregated fields from the table: "film_category"
+  """
+  film_category_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_category_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_category_order_by!]
+
+    """filter the rows returned"""
+    where: film_category_bool_exp
+  ): film_category_aggregate!
+
+  """fetch data from the table: "film_category" using primary key columns"""
+  film_category_by_pk(category_id: smallint!, film_id: smallint!): film_category
+
+  """
+  fetch data from the table: "film_text"
+  """
+  film_text(
+    """distinct select on columns"""
+    distinct_on: [film_text_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_text_order_by!]
+
+    """filter the rows returned"""
+    where: film_text_bool_exp
+  ): [film_text!]!
+
+  """
+  fetch aggregated fields from the table: "film_text"
+  """
+  film_text_aggregate(
+    """distinct select on columns"""
+    distinct_on: [film_text_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [film_text_order_by!]
+
+    """filter the rows returned"""
+    where: film_text_bool_exp
+  ): film_text_aggregate!
+
+  """fetch data from the table: "film_text" using primary key columns"""
+  film_text_by_pk(film_id: smallint!): film_text
+
+  """
+  fetch data from the table: "inventory"
+  """
+  inventory(
+    """distinct select on columns"""
+    distinct_on: [inventory_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [inventory_order_by!]
+
+    """filter the rows returned"""
+    where: inventory_bool_exp
+  ): [inventory!]!
+
+  """
+  fetch aggregated fields from the table: "inventory"
+  """
+  inventory_aggregate(
+    """distinct select on columns"""
+    distinct_on: [inventory_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [inventory_order_by!]
+
+    """filter the rows returned"""
+    where: inventory_bool_exp
+  ): inventory_aggregate!
+
+  """fetch data from the table: "inventory" using primary key columns"""
+  inventory_by_pk(inventory_id: Int!): inventory
+
+  """
+  fetch data from the table: "language"
+  """
+  language(
+    """distinct select on columns"""
+    distinct_on: [language_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [language_order_by!]
+
+    """filter the rows returned"""
+    where: language_bool_exp
+  ): [language!]!
+
+  """
+  fetch aggregated fields from the table: "language"
+  """
+  language_aggregate(
+    """distinct select on columns"""
+    distinct_on: [language_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [language_order_by!]
+
+    """filter the rows returned"""
+    where: language_bool_exp
+  ): language_aggregate!
+
+  """fetch data from the table: "language" using primary key columns"""
+  language_by_pk(language_id: smallint!): language
+
+  """
+  fetch data from the table: "payment"
+  """
+  payment(
+    """distinct select on columns"""
+    distinct_on: [payment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payment_order_by!]
+
+    """filter the rows returned"""
+    where: payment_bool_exp
+  ): [payment!]!
+
+  """
+  fetch aggregated fields from the table: "payment"
+  """
+  payment_aggregate(
+    """distinct select on columns"""
+    distinct_on: [payment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [payment_order_by!]
+
+    """filter the rows returned"""
+    where: payment_bool_exp
+  ): payment_aggregate!
+
+  """fetch data from the table: "payment" using primary key columns"""
+  payment_by_pk(payment_id: smallint!): payment
+
+  """
+  fetch data from the table: "rental"
+  """
+  rental(
+    """distinct select on columns"""
+    distinct_on: [rental_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rental_order_by!]
+
+    """filter the rows returned"""
+    where: rental_bool_exp
+  ): [rental!]!
+
+  """
+  fetch aggregated fields from the table: "rental"
+  """
+  rental_aggregate(
+    """distinct select on columns"""
+    distinct_on: [rental_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [rental_order_by!]
+
+    """filter the rows returned"""
+    where: rental_bool_exp
+  ): rental_aggregate!
+
+  """fetch data from the table: "rental" using primary key columns"""
+  rental_by_pk(rental_id: Int!): rental
+
+  """
+  fetch data from the table: "staff"
+  """
+  staff(
+    """distinct select on columns"""
+    distinct_on: [staff_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [staff_order_by!]
+
+    """filter the rows returned"""
+    where: staff_bool_exp
+  ): [staff!]!
+
+  """
+  fetch aggregated fields from the table: "staff"
+  """
+  staff_aggregate(
+    """distinct select on columns"""
+    distinct_on: [staff_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [staff_order_by!]
+
+    """filter the rows returned"""
+    where: staff_bool_exp
+  ): staff_aggregate!
+
+  """fetch data from the table: "staff" using primary key columns"""
+  staff_by_pk(staff_id: smallint!): staff
+
+  """
+  fetch data from the table: "store"
+  """
+  store(
+    """distinct select on columns"""
+    distinct_on: [store_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [store_order_by!]
+
+    """filter the rows returned"""
+    where: store_bool_exp
+  ): [store!]!
+
+  """
+  fetch aggregated fields from the table: "store"
+  """
+  store_aggregate(
+    """distinct select on columns"""
+    distinct_on: [store_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [store_order_by!]
+
+    """filter the rows returned"""
+    where: store_bool_exp
+  ): store_aggregate!
+
+  """fetch data from the table: "store" using primary key columns"""
+  store_by_pk(store_id: smallint!): store
+}
+
+scalar timestamp
+
+"""
+expression to compare columns of type timestamp. All fields are combined with logical 'AND'.
+"""
+input timestamp_comparison_exp {
+  _eq: timestamp
+  _gt: timestamp
+  _gte: timestamp
+  _in: [timestamp!]
+  _is_null: Boolean
+  _lt: timestamp
+  _lte: timestamp
+  _neq: timestamp
+  _nin: [timestamp!]
+}

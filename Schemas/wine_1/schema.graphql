@@ -1,0 +1,1618 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "appellations"
+"""
+type appellations {
+  appelation: String
+  area: String
+  county: String
+  isava: String
+  no: bigint!
+  state: String
+
+  """An array relationship"""
+  wines(
+    """distinct select on columns"""
+    distinct_on: [wine_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [wine_order_by!]
+
+    """filter the rows returned"""
+    where: wine_bool_exp
+  ): [wine!]!
+
+  """An aggregated array relationship"""
+  wines_aggregate(
+    """distinct select on columns"""
+    distinct_on: [wine_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [wine_order_by!]
+
+    """filter the rows returned"""
+    where: wine_bool_exp
+  ): wine_aggregate!
+}
+
+"""
+aggregated selection of "appellations"
+"""
+type appellations_aggregate {
+  aggregate: appellations_aggregate_fields
+  nodes: [appellations!]!
+}
+
+"""
+aggregate fields of "appellations"
+"""
+type appellations_aggregate_fields {
+  avg: appellations_avg_fields
+  count(columns: [appellations_select_column!], distinct: Boolean): Int
+  max: appellations_max_fields
+  min: appellations_min_fields
+  stddev: appellations_stddev_fields
+  stddev_pop: appellations_stddev_pop_fields
+  stddev_samp: appellations_stddev_samp_fields
+  sum: appellations_sum_fields
+  var_pop: appellations_var_pop_fields
+  var_samp: appellations_var_samp_fields
+  variance: appellations_variance_fields
+}
+
+"""
+order by aggregate values of table "appellations"
+"""
+input appellations_aggregate_order_by {
+  avg: appellations_avg_order_by
+  count: order_by
+  max: appellations_max_order_by
+  min: appellations_min_order_by
+  stddev: appellations_stddev_order_by
+  stddev_pop: appellations_stddev_pop_order_by
+  stddev_samp: appellations_stddev_samp_order_by
+  sum: appellations_sum_order_by
+  var_pop: appellations_var_pop_order_by
+  var_samp: appellations_var_samp_order_by
+  variance: appellations_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "appellations"
+"""
+input appellations_arr_rel_insert_input {
+  data: [appellations_insert_input!]!
+  on_conflict: appellations_on_conflict
+}
+
+"""aggregate avg on columns"""
+type appellations_avg_fields {
+  no: Float
+}
+
+"""
+order by avg() on columns of table "appellations"
+"""
+input appellations_avg_order_by {
+  no: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "appellations". All fields are combined with a logical 'AND'.
+"""
+input appellations_bool_exp {
+  _and: [appellations_bool_exp]
+  _not: appellations_bool_exp
+  _or: [appellations_bool_exp]
+  appelation: String_comparison_exp
+  area: String_comparison_exp
+  county: String_comparison_exp
+  isava: String_comparison_exp
+  no: bigint_comparison_exp
+  state: String_comparison_exp
+  wines: wine_bool_exp
+}
+
+"""
+unique or primary key constraints on table "appellations"
+"""
+enum appellations_constraint {
+  """unique or primary key constraint"""
+  idx_19091_appellations_pkey
+
+  """unique or primary key constraint"""
+  idx_19091_sqlite_autoindex_appellations_1
+}
+
+"""
+input type for incrementing integer columne in table "appellations"
+"""
+input appellations_inc_input {
+  no: bigint
+}
+
+"""
+input type for inserting data into table "appellations"
+"""
+input appellations_insert_input {
+  appelation: String
+  area: String
+  county: String
+  isava: String
+  no: bigint
+  state: String
+  wines: wine_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type appellations_max_fields {
+  appelation: String
+  area: String
+  county: String
+  isava: String
+  no: bigint
+  state: String
+}
+
+"""
+order by max() on columns of table "appellations"
+"""
+input appellations_max_order_by {
+  appelation: order_by
+  area: order_by
+  county: order_by
+  isava: order_by
+  no: order_by
+  state: order_by
+}
+
+"""aggregate min on columns"""
+type appellations_min_fields {
+  appelation: String
+  area: String
+  county: String
+  isava: String
+  no: bigint
+  state: String
+}
+
+"""
+order by min() on columns of table "appellations"
+"""
+input appellations_min_order_by {
+  appelation: order_by
+  area: order_by
+  county: order_by
+  isava: order_by
+  no: order_by
+  state: order_by
+}
+
+"""
+response of any mutation on the table "appellations"
+"""
+type appellations_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [appellations!]!
+}
+
+"""
+input type for inserting object relation for remote table "appellations"
+"""
+input appellations_obj_rel_insert_input {
+  data: appellations_insert_input!
+  on_conflict: appellations_on_conflict
+}
+
+"""
+on conflict condition type for table "appellations"
+"""
+input appellations_on_conflict {
+  constraint: appellations_constraint!
+  update_columns: [appellations_update_column!]!
+  where: appellations_bool_exp
+}
+
+"""
+ordering options when selecting data from "appellations"
+"""
+input appellations_order_by {
+  appelation: order_by
+  area: order_by
+  county: order_by
+  isava: order_by
+  no: order_by
+  state: order_by
+  wines_aggregate: wine_aggregate_order_by
+}
+
+"""
+select columns of table "appellations"
+"""
+enum appellations_select_column {
+  """column name"""
+  appelation
+
+  """column name"""
+  area
+
+  """column name"""
+  county
+
+  """column name"""
+  isava
+
+  """column name"""
+  no
+
+  """column name"""
+  state
+}
+
+"""
+input type for updating data in table "appellations"
+"""
+input appellations_set_input {
+  appelation: String
+  area: String
+  county: String
+  isava: String
+  no: bigint
+  state: String
+}
+
+"""aggregate stddev on columns"""
+type appellations_stddev_fields {
+  no: Float
+}
+
+"""
+order by stddev() on columns of table "appellations"
+"""
+input appellations_stddev_order_by {
+  no: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type appellations_stddev_pop_fields {
+  no: Float
+}
+
+"""
+order by stddev_pop() on columns of table "appellations"
+"""
+input appellations_stddev_pop_order_by {
+  no: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type appellations_stddev_samp_fields {
+  no: Float
+}
+
+"""
+order by stddev_samp() on columns of table "appellations"
+"""
+input appellations_stddev_samp_order_by {
+  no: order_by
+}
+
+"""aggregate sum on columns"""
+type appellations_sum_fields {
+  no: bigint
+}
+
+"""
+order by sum() on columns of table "appellations"
+"""
+input appellations_sum_order_by {
+  no: order_by
+}
+
+"""
+update columns of table "appellations"
+"""
+enum appellations_update_column {
+  """column name"""
+  appelation
+
+  """column name"""
+  area
+
+  """column name"""
+  county
+
+  """column name"""
+  isava
+
+  """column name"""
+  no
+
+  """column name"""
+  state
+}
+
+"""aggregate var_pop on columns"""
+type appellations_var_pop_fields {
+  no: Float
+}
+
+"""
+order by var_pop() on columns of table "appellations"
+"""
+input appellations_var_pop_order_by {
+  no: order_by
+}
+
+"""aggregate var_samp on columns"""
+type appellations_var_samp_fields {
+  no: Float
+}
+
+"""
+order by var_samp() on columns of table "appellations"
+"""
+input appellations_var_samp_order_by {
+  no: order_by
+}
+
+"""aggregate variance on columns"""
+type appellations_variance_fields {
+  no: Float
+}
+
+"""
+order by variance() on columns of table "appellations"
+"""
+input appellations_variance_order_by {
+  no: order_by
+}
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "grapes"
+"""
+type grapes {
+  color: String
+  grape: String
+  id: bigint!
+
+  """An array relationship"""
+  wines(
+    """distinct select on columns"""
+    distinct_on: [wine_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [wine_order_by!]
+
+    """filter the rows returned"""
+    where: wine_bool_exp
+  ): [wine!]!
+
+  """An aggregated array relationship"""
+  wines_aggregate(
+    """distinct select on columns"""
+    distinct_on: [wine_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [wine_order_by!]
+
+    """filter the rows returned"""
+    where: wine_bool_exp
+  ): wine_aggregate!
+}
+
+"""
+aggregated selection of "grapes"
+"""
+type grapes_aggregate {
+  aggregate: grapes_aggregate_fields
+  nodes: [grapes!]!
+}
+
+"""
+aggregate fields of "grapes"
+"""
+type grapes_aggregate_fields {
+  avg: grapes_avg_fields
+  count(columns: [grapes_select_column!], distinct: Boolean): Int
+  max: grapes_max_fields
+  min: grapes_min_fields
+  stddev: grapes_stddev_fields
+  stddev_pop: grapes_stddev_pop_fields
+  stddev_samp: grapes_stddev_samp_fields
+  sum: grapes_sum_fields
+  var_pop: grapes_var_pop_fields
+  var_samp: grapes_var_samp_fields
+  variance: grapes_variance_fields
+}
+
+"""
+order by aggregate values of table "grapes"
+"""
+input grapes_aggregate_order_by {
+  avg: grapes_avg_order_by
+  count: order_by
+  max: grapes_max_order_by
+  min: grapes_min_order_by
+  stddev: grapes_stddev_order_by
+  stddev_pop: grapes_stddev_pop_order_by
+  stddev_samp: grapes_stddev_samp_order_by
+  sum: grapes_sum_order_by
+  var_pop: grapes_var_pop_order_by
+  var_samp: grapes_var_samp_order_by
+  variance: grapes_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "grapes"
+"""
+input grapes_arr_rel_insert_input {
+  data: [grapes_insert_input!]!
+  on_conflict: grapes_on_conflict
+}
+
+"""aggregate avg on columns"""
+type grapes_avg_fields {
+  id: Float
+}
+
+"""
+order by avg() on columns of table "grapes"
+"""
+input grapes_avg_order_by {
+  id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "grapes". All fields are combined with a logical 'AND'.
+"""
+input grapes_bool_exp {
+  _and: [grapes_bool_exp]
+  _not: grapes_bool_exp
+  _or: [grapes_bool_exp]
+  color: String_comparison_exp
+  grape: String_comparison_exp
+  id: bigint_comparison_exp
+  wines: wine_bool_exp
+}
+
+"""
+unique or primary key constraints on table "grapes"
+"""
+enum grapes_constraint {
+  """unique or primary key constraint"""
+  idx_19085_grapes_pkey
+
+  """unique or primary key constraint"""
+  idx_19085_sqlite_autoindex_grapes_1
+}
+
+"""
+input type for incrementing integer columne in table "grapes"
+"""
+input grapes_inc_input {
+  id: bigint
+}
+
+"""
+input type for inserting data into table "grapes"
+"""
+input grapes_insert_input {
+  color: String
+  grape: String
+  id: bigint
+  wines: wine_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type grapes_max_fields {
+  color: String
+  grape: String
+  id: bigint
+}
+
+"""
+order by max() on columns of table "grapes"
+"""
+input grapes_max_order_by {
+  color: order_by
+  grape: order_by
+  id: order_by
+}
+
+"""aggregate min on columns"""
+type grapes_min_fields {
+  color: String
+  grape: String
+  id: bigint
+}
+
+"""
+order by min() on columns of table "grapes"
+"""
+input grapes_min_order_by {
+  color: order_by
+  grape: order_by
+  id: order_by
+}
+
+"""
+response of any mutation on the table "grapes"
+"""
+type grapes_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [grapes!]!
+}
+
+"""
+input type for inserting object relation for remote table "grapes"
+"""
+input grapes_obj_rel_insert_input {
+  data: grapes_insert_input!
+  on_conflict: grapes_on_conflict
+}
+
+"""
+on conflict condition type for table "grapes"
+"""
+input grapes_on_conflict {
+  constraint: grapes_constraint!
+  update_columns: [grapes_update_column!]!
+  where: grapes_bool_exp
+}
+
+"""
+ordering options when selecting data from "grapes"
+"""
+input grapes_order_by {
+  color: order_by
+  grape: order_by
+  id: order_by
+  wines_aggregate: wine_aggregate_order_by
+}
+
+"""
+select columns of table "grapes"
+"""
+enum grapes_select_column {
+  """column name"""
+  color
+
+  """column name"""
+  grape
+
+  """column name"""
+  id
+}
+
+"""
+input type for updating data in table "grapes"
+"""
+input grapes_set_input {
+  color: String
+  grape: String
+  id: bigint
+}
+
+"""aggregate stddev on columns"""
+type grapes_stddev_fields {
+  id: Float
+}
+
+"""
+order by stddev() on columns of table "grapes"
+"""
+input grapes_stddev_order_by {
+  id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type grapes_stddev_pop_fields {
+  id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "grapes"
+"""
+input grapes_stddev_pop_order_by {
+  id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type grapes_stddev_samp_fields {
+  id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "grapes"
+"""
+input grapes_stddev_samp_order_by {
+  id: order_by
+}
+
+"""aggregate sum on columns"""
+type grapes_sum_fields {
+  id: bigint
+}
+
+"""
+order by sum() on columns of table "grapes"
+"""
+input grapes_sum_order_by {
+  id: order_by
+}
+
+"""
+update columns of table "grapes"
+"""
+enum grapes_update_column {
+  """column name"""
+  color
+
+  """column name"""
+  grape
+
+  """column name"""
+  id
+}
+
+"""aggregate var_pop on columns"""
+type grapes_var_pop_fields {
+  id: Float
+}
+
+"""
+order by var_pop() on columns of table "grapes"
+"""
+input grapes_var_pop_order_by {
+  id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type grapes_var_samp_fields {
+  id: Float
+}
+
+"""
+order by var_samp() on columns of table "grapes"
+"""
+input grapes_var_samp_order_by {
+  id: order_by
+}
+
+"""aggregate variance on columns"""
+type grapes_variance_fields {
+  id: Float
+}
+
+"""
+order by variance() on columns of table "grapes"
+"""
+input grapes_variance_order_by {
+  id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "appellations"
+  """
+  delete_appellations(
+    """filter the rows which have to be deleted"""
+    where: appellations_bool_exp!
+  ): appellations_mutation_response
+
+  """
+  delete data from the table: "grapes"
+  """
+  delete_grapes(
+    """filter the rows which have to be deleted"""
+    where: grapes_bool_exp!
+  ): grapes_mutation_response
+
+  """
+  delete data from the table: "wine"
+  """
+  delete_wine(
+    """filter the rows which have to be deleted"""
+    where: wine_bool_exp!
+  ): wine_mutation_response
+
+  """
+  insert data into the table: "appellations"
+  """
+  insert_appellations(
+    """the rows to be inserted"""
+    objects: [appellations_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: appellations_on_conflict
+  ): appellations_mutation_response
+
+  """
+  insert data into the table: "grapes"
+  """
+  insert_grapes(
+    """the rows to be inserted"""
+    objects: [grapes_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: grapes_on_conflict
+  ): grapes_mutation_response
+
+  """
+  insert data into the table: "wine"
+  """
+  insert_wine(
+    """the rows to be inserted"""
+    objects: [wine_insert_input!]!
+  ): wine_mutation_response
+
+  """
+  update data of the table: "appellations"
+  """
+  update_appellations(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: appellations_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: appellations_set_input
+
+    """filter the rows which have to be updated"""
+    where: appellations_bool_exp!
+  ): appellations_mutation_response
+
+  """
+  update data of the table: "grapes"
+  """
+  update_grapes(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: grapes_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: grapes_set_input
+
+    """filter the rows which have to be updated"""
+    where: grapes_bool_exp!
+  ): grapes_mutation_response
+
+  """
+  update data of the table: "wine"
+  """
+  update_wine(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: wine_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: wine_set_input
+
+    """filter the rows which have to be updated"""
+    where: wine_bool_exp!
+  ): wine_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "appellations"
+  """
+  appellations(
+    """distinct select on columns"""
+    distinct_on: [appellations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [appellations_order_by!]
+
+    """filter the rows returned"""
+    where: appellations_bool_exp
+  ): [appellations!]!
+
+  """
+  fetch aggregated fields from the table: "appellations"
+  """
+  appellations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [appellations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [appellations_order_by!]
+
+    """filter the rows returned"""
+    where: appellations_bool_exp
+  ): appellations_aggregate!
+
+  """fetch data from the table: "appellations" using primary key columns"""
+  appellations_by_pk(no: bigint!): appellations
+
+  """
+  fetch data from the table: "grapes"
+  """
+  grapes(
+    """distinct select on columns"""
+    distinct_on: [grapes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [grapes_order_by!]
+
+    """filter the rows returned"""
+    where: grapes_bool_exp
+  ): [grapes!]!
+
+  """
+  fetch aggregated fields from the table: "grapes"
+  """
+  grapes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [grapes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [grapes_order_by!]
+
+    """filter the rows returned"""
+    where: grapes_bool_exp
+  ): grapes_aggregate!
+
+  """fetch data from the table: "grapes" using primary key columns"""
+  grapes_by_pk(id: bigint!): grapes
+
+  """
+  fetch data from the table: "wine"
+  """
+  wine(
+    """distinct select on columns"""
+    distinct_on: [wine_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [wine_order_by!]
+
+    """filter the rows returned"""
+    where: wine_bool_exp
+  ): [wine!]!
+
+  """
+  fetch aggregated fields from the table: "wine"
+  """
+  wine_aggregate(
+    """distinct select on columns"""
+    distinct_on: [wine_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [wine_order_by!]
+
+    """filter the rows returned"""
+    where: wine_bool_exp
+  ): wine_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "appellations"
+  """
+  appellations(
+    """distinct select on columns"""
+    distinct_on: [appellations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [appellations_order_by!]
+
+    """filter the rows returned"""
+    where: appellations_bool_exp
+  ): [appellations!]!
+
+  """
+  fetch aggregated fields from the table: "appellations"
+  """
+  appellations_aggregate(
+    """distinct select on columns"""
+    distinct_on: [appellations_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [appellations_order_by!]
+
+    """filter the rows returned"""
+    where: appellations_bool_exp
+  ): appellations_aggregate!
+
+  """fetch data from the table: "appellations" using primary key columns"""
+  appellations_by_pk(no: bigint!): appellations
+
+  """
+  fetch data from the table: "grapes"
+  """
+  grapes(
+    """distinct select on columns"""
+    distinct_on: [grapes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [grapes_order_by!]
+
+    """filter the rows returned"""
+    where: grapes_bool_exp
+  ): [grapes!]!
+
+  """
+  fetch aggregated fields from the table: "grapes"
+  """
+  grapes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [grapes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [grapes_order_by!]
+
+    """filter the rows returned"""
+    where: grapes_bool_exp
+  ): grapes_aggregate!
+
+  """fetch data from the table: "grapes" using primary key columns"""
+  grapes_by_pk(id: bigint!): grapes
+
+  """
+  fetch data from the table: "wine"
+  """
+  wine(
+    """distinct select on columns"""
+    distinct_on: [wine_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [wine_order_by!]
+
+    """filter the rows returned"""
+    where: wine_bool_exp
+  ): [wine!]!
+
+  """
+  fetch aggregated fields from the table: "wine"
+  """
+  wine_aggregate(
+    """distinct select on columns"""
+    distinct_on: [wine_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [wine_order_by!]
+
+    """filter the rows returned"""
+    where: wine_bool_exp
+  ): wine_aggregate!
+}
+
+"""
+columns and relationships of "wine"
+"""
+type wine {
+  appelation: String
+
+  """An object relationship"""
+  appellation: appellations
+  cases: bigint
+  drink: String
+  grape: String
+
+  """An object relationship"""
+  grapeByGrape: grapes
+  name: String
+  no: bigint
+  price: bigint
+  score: bigint
+  state: String
+  winery: String
+  year: bigint
+}
+
+"""
+aggregated selection of "wine"
+"""
+type wine_aggregate {
+  aggregate: wine_aggregate_fields
+  nodes: [wine!]!
+}
+
+"""
+aggregate fields of "wine"
+"""
+type wine_aggregate_fields {
+  avg: wine_avg_fields
+  count(columns: [wine_select_column!], distinct: Boolean): Int
+  max: wine_max_fields
+  min: wine_min_fields
+  stddev: wine_stddev_fields
+  stddev_pop: wine_stddev_pop_fields
+  stddev_samp: wine_stddev_samp_fields
+  sum: wine_sum_fields
+  var_pop: wine_var_pop_fields
+  var_samp: wine_var_samp_fields
+  variance: wine_variance_fields
+}
+
+"""
+order by aggregate values of table "wine"
+"""
+input wine_aggregate_order_by {
+  avg: wine_avg_order_by
+  count: order_by
+  max: wine_max_order_by
+  min: wine_min_order_by
+  stddev: wine_stddev_order_by
+  stddev_pop: wine_stddev_pop_order_by
+  stddev_samp: wine_stddev_samp_order_by
+  sum: wine_sum_order_by
+  var_pop: wine_var_pop_order_by
+  var_samp: wine_var_samp_order_by
+  variance: wine_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "wine"
+"""
+input wine_arr_rel_insert_input {
+  data: [wine_insert_input!]!
+}
+
+"""aggregate avg on columns"""
+type wine_avg_fields {
+  cases: Float
+  no: Float
+  price: Float
+  score: Float
+  year: Float
+}
+
+"""
+order by avg() on columns of table "wine"
+"""
+input wine_avg_order_by {
+  cases: order_by
+  no: order_by
+  price: order_by
+  score: order_by
+  year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "wine". All fields are combined with a logical 'AND'.
+"""
+input wine_bool_exp {
+  _and: [wine_bool_exp]
+  _not: wine_bool_exp
+  _or: [wine_bool_exp]
+  appelation: String_comparison_exp
+  appellation: appellations_bool_exp
+  cases: bigint_comparison_exp
+  drink: String_comparison_exp
+  grape: String_comparison_exp
+  grapeByGrape: grapes_bool_exp
+  name: String_comparison_exp
+  no: bigint_comparison_exp
+  price: bigint_comparison_exp
+  score: bigint_comparison_exp
+  state: String_comparison_exp
+  winery: String_comparison_exp
+  year: bigint_comparison_exp
+}
+
+"""
+input type for incrementing integer columne in table "wine"
+"""
+input wine_inc_input {
+  cases: bigint
+  no: bigint
+  price: bigint
+  score: bigint
+  year: bigint
+}
+
+"""
+input type for inserting data into table "wine"
+"""
+input wine_insert_input {
+  appelation: String
+  appellation: appellations_obj_rel_insert_input
+  cases: bigint
+  drink: String
+  grape: String
+  grapeByGrape: grapes_obj_rel_insert_input
+  name: String
+  no: bigint
+  price: bigint
+  score: bigint
+  state: String
+  winery: String
+  year: bigint
+}
+
+"""aggregate max on columns"""
+type wine_max_fields {
+  appelation: String
+  cases: bigint
+  drink: String
+  grape: String
+  name: String
+  no: bigint
+  price: bigint
+  score: bigint
+  state: String
+  winery: String
+  year: bigint
+}
+
+"""
+order by max() on columns of table "wine"
+"""
+input wine_max_order_by {
+  appelation: order_by
+  cases: order_by
+  drink: order_by
+  grape: order_by
+  name: order_by
+  no: order_by
+  price: order_by
+  score: order_by
+  state: order_by
+  winery: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type wine_min_fields {
+  appelation: String
+  cases: bigint
+  drink: String
+  grape: String
+  name: String
+  no: bigint
+  price: bigint
+  score: bigint
+  state: String
+  winery: String
+  year: bigint
+}
+
+"""
+order by min() on columns of table "wine"
+"""
+input wine_min_order_by {
+  appelation: order_by
+  cases: order_by
+  drink: order_by
+  grape: order_by
+  name: order_by
+  no: order_by
+  price: order_by
+  score: order_by
+  state: order_by
+  winery: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "wine"
+"""
+type wine_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [wine!]!
+}
+
+"""
+input type for inserting object relation for remote table "wine"
+"""
+input wine_obj_rel_insert_input {
+  data: wine_insert_input!
+}
+
+"""
+ordering options when selecting data from "wine"
+"""
+input wine_order_by {
+  appelation: order_by
+  appellation: appellations_order_by
+  cases: order_by
+  drink: order_by
+  grape: order_by
+  grapeByGrape: grapes_order_by
+  name: order_by
+  no: order_by
+  price: order_by
+  score: order_by
+  state: order_by
+  winery: order_by
+  year: order_by
+}
+
+"""
+select columns of table "wine"
+"""
+enum wine_select_column {
+  """column name"""
+  appelation
+
+  """column name"""
+  cases
+
+  """column name"""
+  drink
+
+  """column name"""
+  grape
+
+  """column name"""
+  name
+
+  """column name"""
+  no
+
+  """column name"""
+  price
+
+  """column name"""
+  score
+
+  """column name"""
+  state
+
+  """column name"""
+  winery
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "wine"
+"""
+input wine_set_input {
+  appelation: String
+  cases: bigint
+  drink: String
+  grape: String
+  name: String
+  no: bigint
+  price: bigint
+  score: bigint
+  state: String
+  winery: String
+  year: bigint
+}
+
+"""aggregate stddev on columns"""
+type wine_stddev_fields {
+  cases: Float
+  no: Float
+  price: Float
+  score: Float
+  year: Float
+}
+
+"""
+order by stddev() on columns of table "wine"
+"""
+input wine_stddev_order_by {
+  cases: order_by
+  no: order_by
+  price: order_by
+  score: order_by
+  year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type wine_stddev_pop_fields {
+  cases: Float
+  no: Float
+  price: Float
+  score: Float
+  year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "wine"
+"""
+input wine_stddev_pop_order_by {
+  cases: order_by
+  no: order_by
+  price: order_by
+  score: order_by
+  year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type wine_stddev_samp_fields {
+  cases: Float
+  no: Float
+  price: Float
+  score: Float
+  year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "wine"
+"""
+input wine_stddev_samp_order_by {
+  cases: order_by
+  no: order_by
+  price: order_by
+  score: order_by
+  year: order_by
+}
+
+"""aggregate sum on columns"""
+type wine_sum_fields {
+  cases: bigint
+  no: bigint
+  price: bigint
+  score: bigint
+  year: bigint
+}
+
+"""
+order by sum() on columns of table "wine"
+"""
+input wine_sum_order_by {
+  cases: order_by
+  no: order_by
+  price: order_by
+  score: order_by
+  year: order_by
+}
+
+"""aggregate var_pop on columns"""
+type wine_var_pop_fields {
+  cases: Float
+  no: Float
+  price: Float
+  score: Float
+  year: Float
+}
+
+"""
+order by var_pop() on columns of table "wine"
+"""
+input wine_var_pop_order_by {
+  cases: order_by
+  no: order_by
+  price: order_by
+  score: order_by
+  year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type wine_var_samp_fields {
+  cases: Float
+  no: Float
+  price: Float
+  score: Float
+  year: Float
+}
+
+"""
+order by var_samp() on columns of table "wine"
+"""
+input wine_var_samp_order_by {
+  cases: order_by
+  no: order_by
+  price: order_by
+  score: order_by
+  year: order_by
+}
+
+"""aggregate variance on columns"""
+type wine_variance_fields {
+  cases: Float
+  no: Float
+  price: Float
+  score: Float
+  year: Float
+}
+
+"""
+order by variance() on columns of table "wine"
+"""
+input wine_variance_order_by {
+  cases: order_by
+  no: order_by
+  price: order_by
+  score: order_by
+  year: order_by
+}

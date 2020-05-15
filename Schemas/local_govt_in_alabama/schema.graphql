@@ -1,0 +1,1915 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "events"
+"""
+type events {
+  event_details: String
+  event_id: bigint!
+
+  """An array relationship"""
+  participants_in_events(
+    """distinct select on columns"""
+    distinct_on: [participants_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [participants_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: participants_in_events_bool_exp
+  ): [participants_in_events!]!
+
+  """An aggregated array relationship"""
+  participants_in_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [participants_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [participants_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: participants_in_events_bool_exp
+  ): participants_in_events_aggregate!
+
+  """An object relationship"""
+  service: services
+  service_id: bigint
+}
+
+"""
+aggregated selection of "events"
+"""
+type events_aggregate {
+  aggregate: events_aggregate_fields
+  nodes: [events!]!
+}
+
+"""
+aggregate fields of "events"
+"""
+type events_aggregate_fields {
+  avg: events_avg_fields
+  count(columns: [events_select_column!], distinct: Boolean): Int
+  max: events_max_fields
+  min: events_min_fields
+  stddev: events_stddev_fields
+  stddev_pop: events_stddev_pop_fields
+  stddev_samp: events_stddev_samp_fields
+  sum: events_sum_fields
+  var_pop: events_var_pop_fields
+  var_samp: events_var_samp_fields
+  variance: events_variance_fields
+}
+
+"""
+order by aggregate values of table "events"
+"""
+input events_aggregate_order_by {
+  avg: events_avg_order_by
+  count: order_by
+  max: events_max_order_by
+  min: events_min_order_by
+  stddev: events_stddev_order_by
+  stddev_pop: events_stddev_pop_order_by
+  stddev_samp: events_stddev_samp_order_by
+  sum: events_sum_order_by
+  var_pop: events_var_pop_order_by
+  var_samp: events_var_samp_order_by
+  variance: events_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "events"
+"""
+input events_arr_rel_insert_input {
+  data: [events_insert_input!]!
+  on_conflict: events_on_conflict
+}
+
+"""aggregate avg on columns"""
+type events_avg_fields {
+  event_id: Float
+  service_id: Float
+}
+
+"""
+order by avg() on columns of table "events"
+"""
+input events_avg_order_by {
+  event_id: order_by
+  service_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "events". All fields are combined with a logical 'AND'.
+"""
+input events_bool_exp {
+  _and: [events_bool_exp]
+  _not: events_bool_exp
+  _or: [events_bool_exp]
+  event_details: String_comparison_exp
+  event_id: bigint_comparison_exp
+  participants_in_events: participants_in_events_bool_exp
+  service: services_bool_exp
+  service_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "events"
+"""
+enum events_constraint {
+  """unique or primary key constraint"""
+  idx_24304_events_pkey
+}
+
+"""
+input type for incrementing integer columne in table "events"
+"""
+input events_inc_input {
+  event_id: bigint
+  service_id: bigint
+}
+
+"""
+input type for inserting data into table "events"
+"""
+input events_insert_input {
+  event_details: String
+  event_id: bigint
+  participants_in_events: participants_in_events_arr_rel_insert_input
+  service: services_obj_rel_insert_input
+  service_id: bigint
+}
+
+"""aggregate max on columns"""
+type events_max_fields {
+  event_details: String
+  event_id: bigint
+  service_id: bigint
+}
+
+"""
+order by max() on columns of table "events"
+"""
+input events_max_order_by {
+  event_details: order_by
+  event_id: order_by
+  service_id: order_by
+}
+
+"""aggregate min on columns"""
+type events_min_fields {
+  event_details: String
+  event_id: bigint
+  service_id: bigint
+}
+
+"""
+order by min() on columns of table "events"
+"""
+input events_min_order_by {
+  event_details: order_by
+  event_id: order_by
+  service_id: order_by
+}
+
+"""
+response of any mutation on the table "events"
+"""
+type events_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [events!]!
+}
+
+"""
+input type for inserting object relation for remote table "events"
+"""
+input events_obj_rel_insert_input {
+  data: events_insert_input!
+  on_conflict: events_on_conflict
+}
+
+"""
+on conflict condition type for table "events"
+"""
+input events_on_conflict {
+  constraint: events_constraint!
+  update_columns: [events_update_column!]!
+  where: events_bool_exp
+}
+
+"""
+ordering options when selecting data from "events"
+"""
+input events_order_by {
+  event_details: order_by
+  event_id: order_by
+  participants_in_events_aggregate: participants_in_events_aggregate_order_by
+  service: services_order_by
+  service_id: order_by
+}
+
+"""
+select columns of table "events"
+"""
+enum events_select_column {
+  """column name"""
+  event_details
+
+  """column name"""
+  event_id
+
+  """column name"""
+  service_id
+}
+
+"""
+input type for updating data in table "events"
+"""
+input events_set_input {
+  event_details: String
+  event_id: bigint
+  service_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type events_stddev_fields {
+  event_id: Float
+  service_id: Float
+}
+
+"""
+order by stddev() on columns of table "events"
+"""
+input events_stddev_order_by {
+  event_id: order_by
+  service_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type events_stddev_pop_fields {
+  event_id: Float
+  service_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "events"
+"""
+input events_stddev_pop_order_by {
+  event_id: order_by
+  service_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type events_stddev_samp_fields {
+  event_id: Float
+  service_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "events"
+"""
+input events_stddev_samp_order_by {
+  event_id: order_by
+  service_id: order_by
+}
+
+"""aggregate sum on columns"""
+type events_sum_fields {
+  event_id: bigint
+  service_id: bigint
+}
+
+"""
+order by sum() on columns of table "events"
+"""
+input events_sum_order_by {
+  event_id: order_by
+  service_id: order_by
+}
+
+"""
+update columns of table "events"
+"""
+enum events_update_column {
+  """column name"""
+  event_details
+
+  """column name"""
+  event_id
+
+  """column name"""
+  service_id
+}
+
+"""aggregate var_pop on columns"""
+type events_var_pop_fields {
+  event_id: Float
+  service_id: Float
+}
+
+"""
+order by var_pop() on columns of table "events"
+"""
+input events_var_pop_order_by {
+  event_id: order_by
+  service_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type events_var_samp_fields {
+  event_id: Float
+  service_id: Float
+}
+
+"""
+order by var_samp() on columns of table "events"
+"""
+input events_var_samp_order_by {
+  event_id: order_by
+  service_id: order_by
+}
+
+"""aggregate variance on columns"""
+type events_variance_fields {
+  event_id: Float
+  service_id: Float
+}
+
+"""
+order by variance() on columns of table "events"
+"""
+input events_variance_order_by {
+  event_id: order_by
+  service_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "events"
+  """
+  delete_events(
+    """filter the rows which have to be deleted"""
+    where: events_bool_exp!
+  ): events_mutation_response
+
+  """
+  delete data from the table: "participants"
+  """
+  delete_participants(
+    """filter the rows which have to be deleted"""
+    where: participants_bool_exp!
+  ): participants_mutation_response
+
+  """
+  delete data from the table: "participants_in_events"
+  """
+  delete_participants_in_events(
+    """filter the rows which have to be deleted"""
+    where: participants_in_events_bool_exp!
+  ): participants_in_events_mutation_response
+
+  """
+  delete data from the table: "services"
+  """
+  delete_services(
+    """filter the rows which have to be deleted"""
+    where: services_bool_exp!
+  ): services_mutation_response
+
+  """
+  insert data into the table: "events"
+  """
+  insert_events(
+    """the rows to be inserted"""
+    objects: [events_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: events_on_conflict
+  ): events_mutation_response
+
+  """
+  insert data into the table: "participants"
+  """
+  insert_participants(
+    """the rows to be inserted"""
+    objects: [participants_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: participants_on_conflict
+  ): participants_mutation_response
+
+  """
+  insert data into the table: "participants_in_events"
+  """
+  insert_participants_in_events(
+    """the rows to be inserted"""
+    objects: [participants_in_events_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: participants_in_events_on_conflict
+  ): participants_in_events_mutation_response
+
+  """
+  insert data into the table: "services"
+  """
+  insert_services(
+    """the rows to be inserted"""
+    objects: [services_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: services_on_conflict
+  ): services_mutation_response
+
+  """
+  update data of the table: "events"
+  """
+  update_events(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: events_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: events_set_input
+
+    """filter the rows which have to be updated"""
+    where: events_bool_exp!
+  ): events_mutation_response
+
+  """
+  update data of the table: "participants"
+  """
+  update_participants(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: participants_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: participants_set_input
+
+    """filter the rows which have to be updated"""
+    where: participants_bool_exp!
+  ): participants_mutation_response
+
+  """
+  update data of the table: "participants_in_events"
+  """
+  update_participants_in_events(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: participants_in_events_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: participants_in_events_set_input
+
+    """filter the rows which have to be updated"""
+    where: participants_in_events_bool_exp!
+  ): participants_in_events_mutation_response
+
+  """
+  update data of the table: "services"
+  """
+  update_services(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: services_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: services_set_input
+
+    """filter the rows which have to be updated"""
+    where: services_bool_exp!
+  ): services_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "participants"
+"""
+type participants {
+  participant_details: String
+  participant_id: bigint!
+  participant_type_code: String
+
+  """An array relationship"""
+  participants_in_events(
+    """distinct select on columns"""
+    distinct_on: [participants_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [participants_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: participants_in_events_bool_exp
+  ): [participants_in_events!]!
+
+  """An aggregated array relationship"""
+  participants_in_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [participants_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [participants_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: participants_in_events_bool_exp
+  ): participants_in_events_aggregate!
+}
+
+"""
+aggregated selection of "participants"
+"""
+type participants_aggregate {
+  aggregate: participants_aggregate_fields
+  nodes: [participants!]!
+}
+
+"""
+aggregate fields of "participants"
+"""
+type participants_aggregate_fields {
+  avg: participants_avg_fields
+  count(columns: [participants_select_column!], distinct: Boolean): Int
+  max: participants_max_fields
+  min: participants_min_fields
+  stddev: participants_stddev_fields
+  stddev_pop: participants_stddev_pop_fields
+  stddev_samp: participants_stddev_samp_fields
+  sum: participants_sum_fields
+  var_pop: participants_var_pop_fields
+  var_samp: participants_var_samp_fields
+  variance: participants_variance_fields
+}
+
+"""
+order by aggregate values of table "participants"
+"""
+input participants_aggregate_order_by {
+  avg: participants_avg_order_by
+  count: order_by
+  max: participants_max_order_by
+  min: participants_min_order_by
+  stddev: participants_stddev_order_by
+  stddev_pop: participants_stddev_pop_order_by
+  stddev_samp: participants_stddev_samp_order_by
+  sum: participants_sum_order_by
+  var_pop: participants_var_pop_order_by
+  var_samp: participants_var_samp_order_by
+  variance: participants_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "participants"
+"""
+input participants_arr_rel_insert_input {
+  data: [participants_insert_input!]!
+  on_conflict: participants_on_conflict
+}
+
+"""aggregate avg on columns"""
+type participants_avg_fields {
+  participant_id: Float
+}
+
+"""
+order by avg() on columns of table "participants"
+"""
+input participants_avg_order_by {
+  participant_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "participants". All fields are combined with a logical 'AND'.
+"""
+input participants_bool_exp {
+  _and: [participants_bool_exp]
+  _not: participants_bool_exp
+  _or: [participants_bool_exp]
+  participant_details: String_comparison_exp
+  participant_id: bigint_comparison_exp
+  participant_type_code: String_comparison_exp
+  participants_in_events: participants_in_events_bool_exp
+}
+
+"""
+unique or primary key constraints on table "participants"
+"""
+enum participants_constraint {
+  """unique or primary key constraint"""
+  idx_24298_participants_pkey
+}
+
+"""
+columns and relationships of "participants_in_events"
+"""
+type participants_in_events {
+  """An object relationship"""
+  event: events!
+  event_id: bigint!
+
+  """An object relationship"""
+  participant: participants!
+  participant_id: bigint!
+}
+
+"""
+aggregated selection of "participants_in_events"
+"""
+type participants_in_events_aggregate {
+  aggregate: participants_in_events_aggregate_fields
+  nodes: [participants_in_events!]!
+}
+
+"""
+aggregate fields of "participants_in_events"
+"""
+type participants_in_events_aggregate_fields {
+  avg: participants_in_events_avg_fields
+  count(columns: [participants_in_events_select_column!], distinct: Boolean): Int
+  max: participants_in_events_max_fields
+  min: participants_in_events_min_fields
+  stddev: participants_in_events_stddev_fields
+  stddev_pop: participants_in_events_stddev_pop_fields
+  stddev_samp: participants_in_events_stddev_samp_fields
+  sum: participants_in_events_sum_fields
+  var_pop: participants_in_events_var_pop_fields
+  var_samp: participants_in_events_var_samp_fields
+  variance: participants_in_events_variance_fields
+}
+
+"""
+order by aggregate values of table "participants_in_events"
+"""
+input participants_in_events_aggregate_order_by {
+  avg: participants_in_events_avg_order_by
+  count: order_by
+  max: participants_in_events_max_order_by
+  min: participants_in_events_min_order_by
+  stddev: participants_in_events_stddev_order_by
+  stddev_pop: participants_in_events_stddev_pop_order_by
+  stddev_samp: participants_in_events_stddev_samp_order_by
+  sum: participants_in_events_sum_order_by
+  var_pop: participants_in_events_var_pop_order_by
+  var_samp: participants_in_events_var_samp_order_by
+  variance: participants_in_events_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "participants_in_events"
+"""
+input participants_in_events_arr_rel_insert_input {
+  data: [participants_in_events_insert_input!]!
+  on_conflict: participants_in_events_on_conflict
+}
+
+"""aggregate avg on columns"""
+type participants_in_events_avg_fields {
+  event_id: Float
+  participant_id: Float
+}
+
+"""
+order by avg() on columns of table "participants_in_events"
+"""
+input participants_in_events_avg_order_by {
+  event_id: order_by
+  participant_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "participants_in_events". All fields are combined with a logical 'AND'.
+"""
+input participants_in_events_bool_exp {
+  _and: [participants_in_events_bool_exp]
+  _not: participants_in_events_bool_exp
+  _or: [participants_in_events_bool_exp]
+  event: events_bool_exp
+  event_id: bigint_comparison_exp
+  participant: participants_bool_exp
+  participant_id: bigint_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "participants_in_events"
+"""
+enum participants_in_events_constraint {
+  """unique or primary key constraint"""
+  idx_24310_participants_in_events_pkey
+
+  """unique or primary key constraint"""
+  idx_24310_sqlite_autoindex_participants_in_events_1
+}
+
+"""
+input type for incrementing integer columne in table "participants_in_events"
+"""
+input participants_in_events_inc_input {
+  event_id: bigint
+  participant_id: bigint
+}
+
+"""
+input type for inserting data into table "participants_in_events"
+"""
+input participants_in_events_insert_input {
+  event: events_obj_rel_insert_input
+  event_id: bigint
+  participant: participants_obj_rel_insert_input
+  participant_id: bigint
+}
+
+"""aggregate max on columns"""
+type participants_in_events_max_fields {
+  event_id: bigint
+  participant_id: bigint
+}
+
+"""
+order by max() on columns of table "participants_in_events"
+"""
+input participants_in_events_max_order_by {
+  event_id: order_by
+  participant_id: order_by
+}
+
+"""aggregate min on columns"""
+type participants_in_events_min_fields {
+  event_id: bigint
+  participant_id: bigint
+}
+
+"""
+order by min() on columns of table "participants_in_events"
+"""
+input participants_in_events_min_order_by {
+  event_id: order_by
+  participant_id: order_by
+}
+
+"""
+response of any mutation on the table "participants_in_events"
+"""
+type participants_in_events_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [participants_in_events!]!
+}
+
+"""
+input type for inserting object relation for remote table "participants_in_events"
+"""
+input participants_in_events_obj_rel_insert_input {
+  data: participants_in_events_insert_input!
+  on_conflict: participants_in_events_on_conflict
+}
+
+"""
+on conflict condition type for table "participants_in_events"
+"""
+input participants_in_events_on_conflict {
+  constraint: participants_in_events_constraint!
+  update_columns: [participants_in_events_update_column!]!
+  where: participants_in_events_bool_exp
+}
+
+"""
+ordering options when selecting data from "participants_in_events"
+"""
+input participants_in_events_order_by {
+  event: events_order_by
+  event_id: order_by
+  participant: participants_order_by
+  participant_id: order_by
+}
+
+"""
+select columns of table "participants_in_events"
+"""
+enum participants_in_events_select_column {
+  """column name"""
+  event_id
+
+  """column name"""
+  participant_id
+}
+
+"""
+input type for updating data in table "participants_in_events"
+"""
+input participants_in_events_set_input {
+  event_id: bigint
+  participant_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type participants_in_events_stddev_fields {
+  event_id: Float
+  participant_id: Float
+}
+
+"""
+order by stddev() on columns of table "participants_in_events"
+"""
+input participants_in_events_stddev_order_by {
+  event_id: order_by
+  participant_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type participants_in_events_stddev_pop_fields {
+  event_id: Float
+  participant_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "participants_in_events"
+"""
+input participants_in_events_stddev_pop_order_by {
+  event_id: order_by
+  participant_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type participants_in_events_stddev_samp_fields {
+  event_id: Float
+  participant_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "participants_in_events"
+"""
+input participants_in_events_stddev_samp_order_by {
+  event_id: order_by
+  participant_id: order_by
+}
+
+"""aggregate sum on columns"""
+type participants_in_events_sum_fields {
+  event_id: bigint
+  participant_id: bigint
+}
+
+"""
+order by sum() on columns of table "participants_in_events"
+"""
+input participants_in_events_sum_order_by {
+  event_id: order_by
+  participant_id: order_by
+}
+
+"""
+update columns of table "participants_in_events"
+"""
+enum participants_in_events_update_column {
+  """column name"""
+  event_id
+
+  """column name"""
+  participant_id
+}
+
+"""aggregate var_pop on columns"""
+type participants_in_events_var_pop_fields {
+  event_id: Float
+  participant_id: Float
+}
+
+"""
+order by var_pop() on columns of table "participants_in_events"
+"""
+input participants_in_events_var_pop_order_by {
+  event_id: order_by
+  participant_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type participants_in_events_var_samp_fields {
+  event_id: Float
+  participant_id: Float
+}
+
+"""
+order by var_samp() on columns of table "participants_in_events"
+"""
+input participants_in_events_var_samp_order_by {
+  event_id: order_by
+  participant_id: order_by
+}
+
+"""aggregate variance on columns"""
+type participants_in_events_variance_fields {
+  event_id: Float
+  participant_id: Float
+}
+
+"""
+order by variance() on columns of table "participants_in_events"
+"""
+input participants_in_events_variance_order_by {
+  event_id: order_by
+  participant_id: order_by
+}
+
+"""
+input type for incrementing integer columne in table "participants"
+"""
+input participants_inc_input {
+  participant_id: bigint
+}
+
+"""
+input type for inserting data into table "participants"
+"""
+input participants_insert_input {
+  participant_details: String
+  participant_id: bigint
+  participant_type_code: String
+  participants_in_events: participants_in_events_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type participants_max_fields {
+  participant_details: String
+  participant_id: bigint
+  participant_type_code: String
+}
+
+"""
+order by max() on columns of table "participants"
+"""
+input participants_max_order_by {
+  participant_details: order_by
+  participant_id: order_by
+  participant_type_code: order_by
+}
+
+"""aggregate min on columns"""
+type participants_min_fields {
+  participant_details: String
+  participant_id: bigint
+  participant_type_code: String
+}
+
+"""
+order by min() on columns of table "participants"
+"""
+input participants_min_order_by {
+  participant_details: order_by
+  participant_id: order_by
+  participant_type_code: order_by
+}
+
+"""
+response of any mutation on the table "participants"
+"""
+type participants_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [participants!]!
+}
+
+"""
+input type for inserting object relation for remote table "participants"
+"""
+input participants_obj_rel_insert_input {
+  data: participants_insert_input!
+  on_conflict: participants_on_conflict
+}
+
+"""
+on conflict condition type for table "participants"
+"""
+input participants_on_conflict {
+  constraint: participants_constraint!
+  update_columns: [participants_update_column!]!
+  where: participants_bool_exp
+}
+
+"""
+ordering options when selecting data from "participants"
+"""
+input participants_order_by {
+  participant_details: order_by
+  participant_id: order_by
+  participant_type_code: order_by
+  participants_in_events_aggregate: participants_in_events_aggregate_order_by
+}
+
+"""
+select columns of table "participants"
+"""
+enum participants_select_column {
+  """column name"""
+  participant_details
+
+  """column name"""
+  participant_id
+
+  """column name"""
+  participant_type_code
+}
+
+"""
+input type for updating data in table "participants"
+"""
+input participants_set_input {
+  participant_details: String
+  participant_id: bigint
+  participant_type_code: String
+}
+
+"""aggregate stddev on columns"""
+type participants_stddev_fields {
+  participant_id: Float
+}
+
+"""
+order by stddev() on columns of table "participants"
+"""
+input participants_stddev_order_by {
+  participant_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type participants_stddev_pop_fields {
+  participant_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "participants"
+"""
+input participants_stddev_pop_order_by {
+  participant_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type participants_stddev_samp_fields {
+  participant_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "participants"
+"""
+input participants_stddev_samp_order_by {
+  participant_id: order_by
+}
+
+"""aggregate sum on columns"""
+type participants_sum_fields {
+  participant_id: bigint
+}
+
+"""
+order by sum() on columns of table "participants"
+"""
+input participants_sum_order_by {
+  participant_id: order_by
+}
+
+"""
+update columns of table "participants"
+"""
+enum participants_update_column {
+  """column name"""
+  participant_details
+
+  """column name"""
+  participant_id
+
+  """column name"""
+  participant_type_code
+}
+
+"""aggregate var_pop on columns"""
+type participants_var_pop_fields {
+  participant_id: Float
+}
+
+"""
+order by var_pop() on columns of table "participants"
+"""
+input participants_var_pop_order_by {
+  participant_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type participants_var_samp_fields {
+  participant_id: Float
+}
+
+"""
+order by var_samp() on columns of table "participants"
+"""
+input participants_var_samp_order_by {
+  participant_id: order_by
+}
+
+"""aggregate variance on columns"""
+type participants_variance_fields {
+  participant_id: Float
+}
+
+"""
+order by variance() on columns of table "participants"
+"""
+input participants_variance_order_by {
+  participant_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "events"
+  """
+  events(
+    """distinct select on columns"""
+    distinct_on: [events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [events_order_by!]
+
+    """filter the rows returned"""
+    where: events_bool_exp
+  ): [events!]!
+
+  """
+  fetch aggregated fields from the table: "events"
+  """
+  events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [events_order_by!]
+
+    """filter the rows returned"""
+    where: events_bool_exp
+  ): events_aggregate!
+
+  """fetch data from the table: "events" using primary key columns"""
+  events_by_pk(event_id: bigint!): events
+
+  """
+  fetch data from the table: "participants"
+  """
+  participants(
+    """distinct select on columns"""
+    distinct_on: [participants_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [participants_order_by!]
+
+    """filter the rows returned"""
+    where: participants_bool_exp
+  ): [participants!]!
+
+  """
+  fetch aggregated fields from the table: "participants"
+  """
+  participants_aggregate(
+    """distinct select on columns"""
+    distinct_on: [participants_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [participants_order_by!]
+
+    """filter the rows returned"""
+    where: participants_bool_exp
+  ): participants_aggregate!
+
+  """fetch data from the table: "participants" using primary key columns"""
+  participants_by_pk(participant_id: bigint!): participants
+
+  """
+  fetch data from the table: "participants_in_events"
+  """
+  participants_in_events(
+    """distinct select on columns"""
+    distinct_on: [participants_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [participants_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: participants_in_events_bool_exp
+  ): [participants_in_events!]!
+
+  """
+  fetch aggregated fields from the table: "participants_in_events"
+  """
+  participants_in_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [participants_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [participants_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: participants_in_events_bool_exp
+  ): participants_in_events_aggregate!
+
+  """
+  fetch data from the table: "participants_in_events" using primary key columns
+  """
+  participants_in_events_by_pk(event_id: bigint!, participant_id: bigint!): participants_in_events
+
+  """
+  fetch data from the table: "services"
+  """
+  services(
+    """distinct select on columns"""
+    distinct_on: [services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [services_order_by!]
+
+    """filter the rows returned"""
+    where: services_bool_exp
+  ): [services!]!
+
+  """
+  fetch aggregated fields from the table: "services"
+  """
+  services_aggregate(
+    """distinct select on columns"""
+    distinct_on: [services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [services_order_by!]
+
+    """filter the rows returned"""
+    where: services_bool_exp
+  ): services_aggregate!
+
+  """fetch data from the table: "services" using primary key columns"""
+  services_by_pk(service_id: bigint!): services
+}
+
+"""
+columns and relationships of "services"
+"""
+type services {
+  """An array relationship"""
+  events(
+    """distinct select on columns"""
+    distinct_on: [events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [events_order_by!]
+
+    """filter the rows returned"""
+    where: events_bool_exp
+  ): [events!]!
+
+  """An aggregated array relationship"""
+  events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [events_order_by!]
+
+    """filter the rows returned"""
+    where: events_bool_exp
+  ): events_aggregate!
+  service_id: bigint!
+  service_type_code: String
+}
+
+"""
+aggregated selection of "services"
+"""
+type services_aggregate {
+  aggregate: services_aggregate_fields
+  nodes: [services!]!
+}
+
+"""
+aggregate fields of "services"
+"""
+type services_aggregate_fields {
+  avg: services_avg_fields
+  count(columns: [services_select_column!], distinct: Boolean): Int
+  max: services_max_fields
+  min: services_min_fields
+  stddev: services_stddev_fields
+  stddev_pop: services_stddev_pop_fields
+  stddev_samp: services_stddev_samp_fields
+  sum: services_sum_fields
+  var_pop: services_var_pop_fields
+  var_samp: services_var_samp_fields
+  variance: services_variance_fields
+}
+
+"""
+order by aggregate values of table "services"
+"""
+input services_aggregate_order_by {
+  avg: services_avg_order_by
+  count: order_by
+  max: services_max_order_by
+  min: services_min_order_by
+  stddev: services_stddev_order_by
+  stddev_pop: services_stddev_pop_order_by
+  stddev_samp: services_stddev_samp_order_by
+  sum: services_sum_order_by
+  var_pop: services_var_pop_order_by
+  var_samp: services_var_samp_order_by
+  variance: services_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "services"
+"""
+input services_arr_rel_insert_input {
+  data: [services_insert_input!]!
+  on_conflict: services_on_conflict
+}
+
+"""aggregate avg on columns"""
+type services_avg_fields {
+  service_id: Float
+}
+
+"""
+order by avg() on columns of table "services"
+"""
+input services_avg_order_by {
+  service_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "services". All fields are combined with a logical 'AND'.
+"""
+input services_bool_exp {
+  _and: [services_bool_exp]
+  _not: services_bool_exp
+  _or: [services_bool_exp]
+  events: events_bool_exp
+  service_id: bigint_comparison_exp
+  service_type_code: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "services"
+"""
+enum services_constraint {
+  """unique or primary key constraint"""
+  idx_24292_services_pkey
+}
+
+"""
+input type for incrementing integer columne in table "services"
+"""
+input services_inc_input {
+  service_id: bigint
+}
+
+"""
+input type for inserting data into table "services"
+"""
+input services_insert_input {
+  events: events_arr_rel_insert_input
+  service_id: bigint
+  service_type_code: String
+}
+
+"""aggregate max on columns"""
+type services_max_fields {
+  service_id: bigint
+  service_type_code: String
+}
+
+"""
+order by max() on columns of table "services"
+"""
+input services_max_order_by {
+  service_id: order_by
+  service_type_code: order_by
+}
+
+"""aggregate min on columns"""
+type services_min_fields {
+  service_id: bigint
+  service_type_code: String
+}
+
+"""
+order by min() on columns of table "services"
+"""
+input services_min_order_by {
+  service_id: order_by
+  service_type_code: order_by
+}
+
+"""
+response of any mutation on the table "services"
+"""
+type services_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [services!]!
+}
+
+"""
+input type for inserting object relation for remote table "services"
+"""
+input services_obj_rel_insert_input {
+  data: services_insert_input!
+  on_conflict: services_on_conflict
+}
+
+"""
+on conflict condition type for table "services"
+"""
+input services_on_conflict {
+  constraint: services_constraint!
+  update_columns: [services_update_column!]!
+  where: services_bool_exp
+}
+
+"""
+ordering options when selecting data from "services"
+"""
+input services_order_by {
+  events_aggregate: events_aggregate_order_by
+  service_id: order_by
+  service_type_code: order_by
+}
+
+"""
+select columns of table "services"
+"""
+enum services_select_column {
+  """column name"""
+  service_id
+
+  """column name"""
+  service_type_code
+}
+
+"""
+input type for updating data in table "services"
+"""
+input services_set_input {
+  service_id: bigint
+  service_type_code: String
+}
+
+"""aggregate stddev on columns"""
+type services_stddev_fields {
+  service_id: Float
+}
+
+"""
+order by stddev() on columns of table "services"
+"""
+input services_stddev_order_by {
+  service_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type services_stddev_pop_fields {
+  service_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "services"
+"""
+input services_stddev_pop_order_by {
+  service_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type services_stddev_samp_fields {
+  service_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "services"
+"""
+input services_stddev_samp_order_by {
+  service_id: order_by
+}
+
+"""aggregate sum on columns"""
+type services_sum_fields {
+  service_id: bigint
+}
+
+"""
+order by sum() on columns of table "services"
+"""
+input services_sum_order_by {
+  service_id: order_by
+}
+
+"""
+update columns of table "services"
+"""
+enum services_update_column {
+  """column name"""
+  service_id
+
+  """column name"""
+  service_type_code
+}
+
+"""aggregate var_pop on columns"""
+type services_var_pop_fields {
+  service_id: Float
+}
+
+"""
+order by var_pop() on columns of table "services"
+"""
+input services_var_pop_order_by {
+  service_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type services_var_samp_fields {
+  service_id: Float
+}
+
+"""
+order by var_samp() on columns of table "services"
+"""
+input services_var_samp_order_by {
+  service_id: order_by
+}
+
+"""aggregate variance on columns"""
+type services_variance_fields {
+  service_id: Float
+}
+
+"""
+order by variance() on columns of table "services"
+"""
+input services_variance_order_by {
+  service_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "events"
+  """
+  events(
+    """distinct select on columns"""
+    distinct_on: [events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [events_order_by!]
+
+    """filter the rows returned"""
+    where: events_bool_exp
+  ): [events!]!
+
+  """
+  fetch aggregated fields from the table: "events"
+  """
+  events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [events_order_by!]
+
+    """filter the rows returned"""
+    where: events_bool_exp
+  ): events_aggregate!
+
+  """fetch data from the table: "events" using primary key columns"""
+  events_by_pk(event_id: bigint!): events
+
+  """
+  fetch data from the table: "participants"
+  """
+  participants(
+    """distinct select on columns"""
+    distinct_on: [participants_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [participants_order_by!]
+
+    """filter the rows returned"""
+    where: participants_bool_exp
+  ): [participants!]!
+
+  """
+  fetch aggregated fields from the table: "participants"
+  """
+  participants_aggregate(
+    """distinct select on columns"""
+    distinct_on: [participants_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [participants_order_by!]
+
+    """filter the rows returned"""
+    where: participants_bool_exp
+  ): participants_aggregate!
+
+  """fetch data from the table: "participants" using primary key columns"""
+  participants_by_pk(participant_id: bigint!): participants
+
+  """
+  fetch data from the table: "participants_in_events"
+  """
+  participants_in_events(
+    """distinct select on columns"""
+    distinct_on: [participants_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [participants_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: participants_in_events_bool_exp
+  ): [participants_in_events!]!
+
+  """
+  fetch aggregated fields from the table: "participants_in_events"
+  """
+  participants_in_events_aggregate(
+    """distinct select on columns"""
+    distinct_on: [participants_in_events_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [participants_in_events_order_by!]
+
+    """filter the rows returned"""
+    where: participants_in_events_bool_exp
+  ): participants_in_events_aggregate!
+
+  """
+  fetch data from the table: "participants_in_events" using primary key columns
+  """
+  participants_in_events_by_pk(event_id: bigint!, participant_id: bigint!): participants_in_events
+
+  """
+  fetch data from the table: "services"
+  """
+  services(
+    """distinct select on columns"""
+    distinct_on: [services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [services_order_by!]
+
+    """filter the rows returned"""
+    where: services_bool_exp
+  ): [services!]!
+
+  """
+  fetch aggregated fields from the table: "services"
+  """
+  services_aggregate(
+    """distinct select on columns"""
+    distinct_on: [services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [services_order_by!]
+
+    """filter the rows returned"""
+    where: services_bool_exp
+  ): services_aggregate!
+
+  """fetch data from the table: "services" using primary key columns"""
+  services_by_pk(service_id: bigint!): services
+}

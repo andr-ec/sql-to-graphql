@@ -1,0 +1,1533 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "member"
+"""
+type member {
+  """An array relationship"""
+  member_attendances(
+    """distinct select on columns"""
+    distinct_on: [member_attendance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_attendance_order_by!]
+
+    """filter the rows returned"""
+    where: member_attendance_bool_exp
+  ): [member_attendance!]!
+
+  """An aggregated array relationship"""
+  member_attendances_aggregate(
+    """distinct select on columns"""
+    distinct_on: [member_attendance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_attendance_order_by!]
+
+    """filter the rows returned"""
+    where: member_attendance_bool_exp
+  ): member_attendance_aggregate!
+  member_id: Int
+  name: String
+  nationality: String
+  role: String
+}
+
+"""
+aggregated selection of "member"
+"""
+type member_aggregate {
+  aggregate: member_aggregate_fields
+  nodes: [member!]!
+}
+
+"""
+aggregate fields of "member"
+"""
+type member_aggregate_fields {
+  avg: member_avg_fields
+  count(columns: [member_select_column!], distinct: Boolean): Int
+  max: member_max_fields
+  min: member_min_fields
+  stddev: member_stddev_fields
+  stddev_pop: member_stddev_pop_fields
+  stddev_samp: member_stddev_samp_fields
+  sum: member_sum_fields
+  var_pop: member_var_pop_fields
+  var_samp: member_var_samp_fields
+  variance: member_variance_fields
+}
+
+"""
+order by aggregate values of table "member"
+"""
+input member_aggregate_order_by {
+  avg: member_avg_order_by
+  count: order_by
+  max: member_max_order_by
+  min: member_min_order_by
+  stddev: member_stddev_order_by
+  stddev_pop: member_stddev_pop_order_by
+  stddev_samp: member_stddev_samp_order_by
+  sum: member_sum_order_by
+  var_pop: member_var_pop_order_by
+  var_samp: member_var_samp_order_by
+  variance: member_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "member"
+"""
+input member_arr_rel_insert_input {
+  data: [member_insert_input!]!
+  on_conflict: member_on_conflict
+}
+
+"""
+columns and relationships of "member_attendance"
+"""
+type member_attendance {
+  """An object relationship"""
+  member: member
+  member_id: Int
+  num_of_pieces: Int
+
+  """An object relationship"""
+  performance: performance
+  performance_id: Int
+}
+
+"""
+aggregated selection of "member_attendance"
+"""
+type member_attendance_aggregate {
+  aggregate: member_attendance_aggregate_fields
+  nodes: [member_attendance!]!
+}
+
+"""
+aggregate fields of "member_attendance"
+"""
+type member_attendance_aggregate_fields {
+  avg: member_attendance_avg_fields
+  count(columns: [member_attendance_select_column!], distinct: Boolean): Int
+  max: member_attendance_max_fields
+  min: member_attendance_min_fields
+  stddev: member_attendance_stddev_fields
+  stddev_pop: member_attendance_stddev_pop_fields
+  stddev_samp: member_attendance_stddev_samp_fields
+  sum: member_attendance_sum_fields
+  var_pop: member_attendance_var_pop_fields
+  var_samp: member_attendance_var_samp_fields
+  variance: member_attendance_variance_fields
+}
+
+"""
+order by aggregate values of table "member_attendance"
+"""
+input member_attendance_aggregate_order_by {
+  avg: member_attendance_avg_order_by
+  count: order_by
+  max: member_attendance_max_order_by
+  min: member_attendance_min_order_by
+  stddev: member_attendance_stddev_order_by
+  stddev_pop: member_attendance_stddev_pop_order_by
+  stddev_samp: member_attendance_stddev_samp_order_by
+  sum: member_attendance_sum_order_by
+  var_pop: member_attendance_var_pop_order_by
+  var_samp: member_attendance_var_samp_order_by
+  variance: member_attendance_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "member_attendance"
+"""
+input member_attendance_arr_rel_insert_input {
+  data: [member_attendance_insert_input!]!
+  on_conflict: member_attendance_on_conflict
+}
+
+"""aggregate avg on columns"""
+type member_attendance_avg_fields {
+  member_id: Float
+  num_of_pieces: Float
+  performance_id: Float
+}
+
+"""
+order by avg() on columns of table "member_attendance"
+"""
+input member_attendance_avg_order_by {
+  member_id: order_by
+  num_of_pieces: order_by
+  performance_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "member_attendance". All fields are combined with a logical 'AND'.
+"""
+input member_attendance_bool_exp {
+  _and: [member_attendance_bool_exp]
+  _not: member_attendance_bool_exp
+  _or: [member_attendance_bool_exp]
+  member: member_bool_exp
+  member_id: Int_comparison_exp
+  num_of_pieces: Int_comparison_exp
+  performance: performance_bool_exp
+  performance_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "member_attendance"
+"""
+enum member_attendance_constraint {
+  """unique or primary key constraint"""
+  idx_21112_sqlite_autoindex_member_attendance_1
+}
+
+"""
+input type for incrementing integer columne in table "member_attendance"
+"""
+input member_attendance_inc_input {
+  member_id: Int
+  num_of_pieces: Int
+  performance_id: Int
+}
+
+"""
+input type for inserting data into table "member_attendance"
+"""
+input member_attendance_insert_input {
+  member: member_obj_rel_insert_input
+  member_id: Int
+  num_of_pieces: Int
+  performance: performance_obj_rel_insert_input
+  performance_id: Int
+}
+
+"""aggregate max on columns"""
+type member_attendance_max_fields {
+  member_id: Int
+  num_of_pieces: Int
+  performance_id: Int
+}
+
+"""
+order by max() on columns of table "member_attendance"
+"""
+input member_attendance_max_order_by {
+  member_id: order_by
+  num_of_pieces: order_by
+  performance_id: order_by
+}
+
+"""aggregate min on columns"""
+type member_attendance_min_fields {
+  member_id: Int
+  num_of_pieces: Int
+  performance_id: Int
+}
+
+"""
+order by min() on columns of table "member_attendance"
+"""
+input member_attendance_min_order_by {
+  member_id: order_by
+  num_of_pieces: order_by
+  performance_id: order_by
+}
+
+"""
+response of any mutation on the table "member_attendance"
+"""
+type member_attendance_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [member_attendance!]!
+}
+
+"""
+input type for inserting object relation for remote table "member_attendance"
+"""
+input member_attendance_obj_rel_insert_input {
+  data: member_attendance_insert_input!
+  on_conflict: member_attendance_on_conflict
+}
+
+"""
+on conflict condition type for table "member_attendance"
+"""
+input member_attendance_on_conflict {
+  constraint: member_attendance_constraint!
+  update_columns: [member_attendance_update_column!]!
+  where: member_attendance_bool_exp
+}
+
+"""
+ordering options when selecting data from "member_attendance"
+"""
+input member_attendance_order_by {
+  member: member_order_by
+  member_id: order_by
+  num_of_pieces: order_by
+  performance: performance_order_by
+  performance_id: order_by
+}
+
+"""
+select columns of table "member_attendance"
+"""
+enum member_attendance_select_column {
+  """column name"""
+  member_id
+
+  """column name"""
+  num_of_pieces
+
+  """column name"""
+  performance_id
+}
+
+"""
+input type for updating data in table "member_attendance"
+"""
+input member_attendance_set_input {
+  member_id: Int
+  num_of_pieces: Int
+  performance_id: Int
+}
+
+"""aggregate stddev on columns"""
+type member_attendance_stddev_fields {
+  member_id: Float
+  num_of_pieces: Float
+  performance_id: Float
+}
+
+"""
+order by stddev() on columns of table "member_attendance"
+"""
+input member_attendance_stddev_order_by {
+  member_id: order_by
+  num_of_pieces: order_by
+  performance_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type member_attendance_stddev_pop_fields {
+  member_id: Float
+  num_of_pieces: Float
+  performance_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "member_attendance"
+"""
+input member_attendance_stddev_pop_order_by {
+  member_id: order_by
+  num_of_pieces: order_by
+  performance_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type member_attendance_stddev_samp_fields {
+  member_id: Float
+  num_of_pieces: Float
+  performance_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "member_attendance"
+"""
+input member_attendance_stddev_samp_order_by {
+  member_id: order_by
+  num_of_pieces: order_by
+  performance_id: order_by
+}
+
+"""aggregate sum on columns"""
+type member_attendance_sum_fields {
+  member_id: Int
+  num_of_pieces: Int
+  performance_id: Int
+}
+
+"""
+order by sum() on columns of table "member_attendance"
+"""
+input member_attendance_sum_order_by {
+  member_id: order_by
+  num_of_pieces: order_by
+  performance_id: order_by
+}
+
+"""
+update columns of table "member_attendance"
+"""
+enum member_attendance_update_column {
+  """column name"""
+  member_id
+
+  """column name"""
+  num_of_pieces
+
+  """column name"""
+  performance_id
+}
+
+"""aggregate var_pop on columns"""
+type member_attendance_var_pop_fields {
+  member_id: Float
+  num_of_pieces: Float
+  performance_id: Float
+}
+
+"""
+order by var_pop() on columns of table "member_attendance"
+"""
+input member_attendance_var_pop_order_by {
+  member_id: order_by
+  num_of_pieces: order_by
+  performance_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type member_attendance_var_samp_fields {
+  member_id: Float
+  num_of_pieces: Float
+  performance_id: Float
+}
+
+"""
+order by var_samp() on columns of table "member_attendance"
+"""
+input member_attendance_var_samp_order_by {
+  member_id: order_by
+  num_of_pieces: order_by
+  performance_id: order_by
+}
+
+"""aggregate variance on columns"""
+type member_attendance_variance_fields {
+  member_id: Float
+  num_of_pieces: Float
+  performance_id: Float
+}
+
+"""
+order by variance() on columns of table "member_attendance"
+"""
+input member_attendance_variance_order_by {
+  member_id: order_by
+  num_of_pieces: order_by
+  performance_id: order_by
+}
+
+"""aggregate avg on columns"""
+type member_avg_fields {
+  member_id: Float
+}
+
+"""
+order by avg() on columns of table "member"
+"""
+input member_avg_order_by {
+  member_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "member". All fields are combined with a logical 'AND'.
+"""
+input member_bool_exp {
+  _and: [member_bool_exp]
+  _not: member_bool_exp
+  _or: [member_bool_exp]
+  member_attendances: member_attendance_bool_exp
+  member_id: Int_comparison_exp
+  name: String_comparison_exp
+  nationality: String_comparison_exp
+  role: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "member"
+"""
+enum member_constraint {
+  """unique or primary key constraint"""
+  idx_21100_sqlite_autoindex_member_1
+}
+
+"""
+input type for incrementing integer columne in table "member"
+"""
+input member_inc_input {
+  member_id: Int
+}
+
+"""
+input type for inserting data into table "member"
+"""
+input member_insert_input {
+  member_attendances: member_attendance_arr_rel_insert_input
+  member_id: Int
+  name: String
+  nationality: String
+  role: String
+}
+
+"""aggregate max on columns"""
+type member_max_fields {
+  member_id: Int
+  name: String
+  nationality: String
+  role: String
+}
+
+"""
+order by max() on columns of table "member"
+"""
+input member_max_order_by {
+  member_id: order_by
+  name: order_by
+  nationality: order_by
+  role: order_by
+}
+
+"""aggregate min on columns"""
+type member_min_fields {
+  member_id: Int
+  name: String
+  nationality: String
+  role: String
+}
+
+"""
+order by min() on columns of table "member"
+"""
+input member_min_order_by {
+  member_id: order_by
+  name: order_by
+  nationality: order_by
+  role: order_by
+}
+
+"""
+response of any mutation on the table "member"
+"""
+type member_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [member!]!
+}
+
+"""
+input type for inserting object relation for remote table "member"
+"""
+input member_obj_rel_insert_input {
+  data: member_insert_input!
+  on_conflict: member_on_conflict
+}
+
+"""
+on conflict condition type for table "member"
+"""
+input member_on_conflict {
+  constraint: member_constraint!
+  update_columns: [member_update_column!]!
+  where: member_bool_exp
+}
+
+"""
+ordering options when selecting data from "member"
+"""
+input member_order_by {
+  member_attendances_aggregate: member_attendance_aggregate_order_by
+  member_id: order_by
+  name: order_by
+  nationality: order_by
+  role: order_by
+}
+
+"""
+select columns of table "member"
+"""
+enum member_select_column {
+  """column name"""
+  member_id
+
+  """column name"""
+  name
+
+  """column name"""
+  nationality
+
+  """column name"""
+  role
+}
+
+"""
+input type for updating data in table "member"
+"""
+input member_set_input {
+  member_id: Int
+  name: String
+  nationality: String
+  role: String
+}
+
+"""aggregate stddev on columns"""
+type member_stddev_fields {
+  member_id: Float
+}
+
+"""
+order by stddev() on columns of table "member"
+"""
+input member_stddev_order_by {
+  member_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type member_stddev_pop_fields {
+  member_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "member"
+"""
+input member_stddev_pop_order_by {
+  member_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type member_stddev_samp_fields {
+  member_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "member"
+"""
+input member_stddev_samp_order_by {
+  member_id: order_by
+}
+
+"""aggregate sum on columns"""
+type member_sum_fields {
+  member_id: Int
+}
+
+"""
+order by sum() on columns of table "member"
+"""
+input member_sum_order_by {
+  member_id: order_by
+}
+
+"""
+update columns of table "member"
+"""
+enum member_update_column {
+  """column name"""
+  member_id
+
+  """column name"""
+  name
+
+  """column name"""
+  nationality
+
+  """column name"""
+  role
+}
+
+"""aggregate var_pop on columns"""
+type member_var_pop_fields {
+  member_id: Float
+}
+
+"""
+order by var_pop() on columns of table "member"
+"""
+input member_var_pop_order_by {
+  member_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type member_var_samp_fields {
+  member_id: Float
+}
+
+"""
+order by var_samp() on columns of table "member"
+"""
+input member_var_samp_order_by {
+  member_id: order_by
+}
+
+"""aggregate variance on columns"""
+type member_variance_fields {
+  member_id: Float
+}
+
+"""
+order by variance() on columns of table "member"
+"""
+input member_variance_order_by {
+  member_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "member"
+  """
+  delete_member(
+    """filter the rows which have to be deleted"""
+    where: member_bool_exp!
+  ): member_mutation_response
+
+  """
+  delete data from the table: "member_attendance"
+  """
+  delete_member_attendance(
+    """filter the rows which have to be deleted"""
+    where: member_attendance_bool_exp!
+  ): member_attendance_mutation_response
+
+  """
+  delete data from the table: "performance"
+  """
+  delete_performance(
+    """filter the rows which have to be deleted"""
+    where: performance_bool_exp!
+  ): performance_mutation_response
+
+  """
+  insert data into the table: "member"
+  """
+  insert_member(
+    """the rows to be inserted"""
+    objects: [member_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: member_on_conflict
+  ): member_mutation_response
+
+  """
+  insert data into the table: "member_attendance"
+  """
+  insert_member_attendance(
+    """the rows to be inserted"""
+    objects: [member_attendance_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: member_attendance_on_conflict
+  ): member_attendance_mutation_response
+
+  """
+  insert data into the table: "performance"
+  """
+  insert_performance(
+    """the rows to be inserted"""
+    objects: [performance_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: performance_on_conflict
+  ): performance_mutation_response
+
+  """
+  update data of the table: "member"
+  """
+  update_member(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: member_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: member_set_input
+
+    """filter the rows which have to be updated"""
+    where: member_bool_exp!
+  ): member_mutation_response
+
+  """
+  update data of the table: "member_attendance"
+  """
+  update_member_attendance(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: member_attendance_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: member_attendance_set_input
+
+    """filter the rows which have to be updated"""
+    where: member_attendance_bool_exp!
+  ): member_attendance_mutation_response
+
+  """
+  update data of the table: "performance"
+  """
+  update_performance(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: performance_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: performance_set_input
+
+    """filter the rows which have to be updated"""
+    where: performance_bool_exp!
+  ): performance_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "performance"
+"""
+type performance {
+  attendance: Int
+  date: String
+  host: String
+  location: String
+
+  """An array relationship"""
+  member_attendances(
+    """distinct select on columns"""
+    distinct_on: [member_attendance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_attendance_order_by!]
+
+    """filter the rows returned"""
+    where: member_attendance_bool_exp
+  ): [member_attendance!]!
+
+  """An aggregated array relationship"""
+  member_attendances_aggregate(
+    """distinct select on columns"""
+    distinct_on: [member_attendance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_attendance_order_by!]
+
+    """filter the rows returned"""
+    where: member_attendance_bool_exp
+  ): member_attendance_aggregate!
+  performance_id: Float
+}
+
+"""
+aggregated selection of "performance"
+"""
+type performance_aggregate {
+  aggregate: performance_aggregate_fields
+  nodes: [performance!]!
+}
+
+"""
+aggregate fields of "performance"
+"""
+type performance_aggregate_fields {
+  avg: performance_avg_fields
+  count(columns: [performance_select_column!], distinct: Boolean): Int
+  max: performance_max_fields
+  min: performance_min_fields
+  stddev: performance_stddev_fields
+  stddev_pop: performance_stddev_pop_fields
+  stddev_samp: performance_stddev_samp_fields
+  sum: performance_sum_fields
+  var_pop: performance_var_pop_fields
+  var_samp: performance_var_samp_fields
+  variance: performance_variance_fields
+}
+
+"""
+order by aggregate values of table "performance"
+"""
+input performance_aggregate_order_by {
+  avg: performance_avg_order_by
+  count: order_by
+  max: performance_max_order_by
+  min: performance_min_order_by
+  stddev: performance_stddev_order_by
+  stddev_pop: performance_stddev_pop_order_by
+  stddev_samp: performance_stddev_samp_order_by
+  sum: performance_sum_order_by
+  var_pop: performance_var_pop_order_by
+  var_samp: performance_var_samp_order_by
+  variance: performance_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "performance"
+"""
+input performance_arr_rel_insert_input {
+  data: [performance_insert_input!]!
+  on_conflict: performance_on_conflict
+}
+
+"""aggregate avg on columns"""
+type performance_avg_fields {
+  attendance: Float
+  performance_id: Float
+}
+
+"""
+order by avg() on columns of table "performance"
+"""
+input performance_avg_order_by {
+  attendance: order_by
+  performance_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "performance". All fields are combined with a logical 'AND'.
+"""
+input performance_bool_exp {
+  _and: [performance_bool_exp]
+  _not: performance_bool_exp
+  _or: [performance_bool_exp]
+  attendance: Int_comparison_exp
+  date: String_comparison_exp
+  host: String_comparison_exp
+  location: String_comparison_exp
+  member_attendances: member_attendance_bool_exp
+  performance_id: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "performance"
+"""
+enum performance_constraint {
+  """unique or primary key constraint"""
+  idx_21106_sqlite_autoindex_performance_1
+}
+
+"""
+input type for incrementing integer columne in table "performance"
+"""
+input performance_inc_input {
+  attendance: Int
+}
+
+"""
+input type for inserting data into table "performance"
+"""
+input performance_insert_input {
+  attendance: Int
+  date: String
+  host: String
+  location: String
+  member_attendances: member_attendance_arr_rel_insert_input
+  performance_id: Float
+}
+
+"""aggregate max on columns"""
+type performance_max_fields {
+  attendance: Int
+  date: String
+  host: String
+  location: String
+  performance_id: Float
+}
+
+"""
+order by max() on columns of table "performance"
+"""
+input performance_max_order_by {
+  attendance: order_by
+  date: order_by
+  host: order_by
+  location: order_by
+  performance_id: order_by
+}
+
+"""aggregate min on columns"""
+type performance_min_fields {
+  attendance: Int
+  date: String
+  host: String
+  location: String
+  performance_id: Float
+}
+
+"""
+order by min() on columns of table "performance"
+"""
+input performance_min_order_by {
+  attendance: order_by
+  date: order_by
+  host: order_by
+  location: order_by
+  performance_id: order_by
+}
+
+"""
+response of any mutation on the table "performance"
+"""
+type performance_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [performance!]!
+}
+
+"""
+input type for inserting object relation for remote table "performance"
+"""
+input performance_obj_rel_insert_input {
+  data: performance_insert_input!
+  on_conflict: performance_on_conflict
+}
+
+"""
+on conflict condition type for table "performance"
+"""
+input performance_on_conflict {
+  constraint: performance_constraint!
+  update_columns: [performance_update_column!]!
+  where: performance_bool_exp
+}
+
+"""
+ordering options when selecting data from "performance"
+"""
+input performance_order_by {
+  attendance: order_by
+  date: order_by
+  host: order_by
+  location: order_by
+  member_attendances_aggregate: member_attendance_aggregate_order_by
+  performance_id: order_by
+}
+
+"""
+select columns of table "performance"
+"""
+enum performance_select_column {
+  """column name"""
+  attendance
+
+  """column name"""
+  date
+
+  """column name"""
+  host
+
+  """column name"""
+  location
+
+  """column name"""
+  performance_id
+}
+
+"""
+input type for updating data in table "performance"
+"""
+input performance_set_input {
+  attendance: Int
+  date: String
+  host: String
+  location: String
+  performance_id: Float
+}
+
+"""aggregate stddev on columns"""
+type performance_stddev_fields {
+  attendance: Float
+  performance_id: Float
+}
+
+"""
+order by stddev() on columns of table "performance"
+"""
+input performance_stddev_order_by {
+  attendance: order_by
+  performance_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type performance_stddev_pop_fields {
+  attendance: Float
+  performance_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "performance"
+"""
+input performance_stddev_pop_order_by {
+  attendance: order_by
+  performance_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type performance_stddev_samp_fields {
+  attendance: Float
+  performance_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "performance"
+"""
+input performance_stddev_samp_order_by {
+  attendance: order_by
+  performance_id: order_by
+}
+
+"""aggregate sum on columns"""
+type performance_sum_fields {
+  attendance: Int
+  performance_id: Float
+}
+
+"""
+order by sum() on columns of table "performance"
+"""
+input performance_sum_order_by {
+  attendance: order_by
+  performance_id: order_by
+}
+
+"""
+update columns of table "performance"
+"""
+enum performance_update_column {
+  """column name"""
+  attendance
+
+  """column name"""
+  date
+
+  """column name"""
+  host
+
+  """column name"""
+  location
+
+  """column name"""
+  performance_id
+}
+
+"""aggregate var_pop on columns"""
+type performance_var_pop_fields {
+  attendance: Float
+  performance_id: Float
+}
+
+"""
+order by var_pop() on columns of table "performance"
+"""
+input performance_var_pop_order_by {
+  attendance: order_by
+  performance_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type performance_var_samp_fields {
+  attendance: Float
+  performance_id: Float
+}
+
+"""
+order by var_samp() on columns of table "performance"
+"""
+input performance_var_samp_order_by {
+  attendance: order_by
+  performance_id: order_by
+}
+
+"""aggregate variance on columns"""
+type performance_variance_fields {
+  attendance: Float
+  performance_id: Float
+}
+
+"""
+order by variance() on columns of table "performance"
+"""
+input performance_variance_order_by {
+  attendance: order_by
+  performance_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "member"
+  """
+  member(
+    """distinct select on columns"""
+    distinct_on: [member_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_order_by!]
+
+    """filter the rows returned"""
+    where: member_bool_exp
+  ): [member!]!
+
+  """
+  fetch aggregated fields from the table: "member"
+  """
+  member_aggregate(
+    """distinct select on columns"""
+    distinct_on: [member_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_order_by!]
+
+    """filter the rows returned"""
+    where: member_bool_exp
+  ): member_aggregate!
+
+  """
+  fetch data from the table: "member_attendance"
+  """
+  member_attendance(
+    """distinct select on columns"""
+    distinct_on: [member_attendance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_attendance_order_by!]
+
+    """filter the rows returned"""
+    where: member_attendance_bool_exp
+  ): [member_attendance!]!
+
+  """
+  fetch aggregated fields from the table: "member_attendance"
+  """
+  member_attendance_aggregate(
+    """distinct select on columns"""
+    distinct_on: [member_attendance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_attendance_order_by!]
+
+    """filter the rows returned"""
+    where: member_attendance_bool_exp
+  ): member_attendance_aggregate!
+
+  """
+  fetch data from the table: "performance"
+  """
+  performance(
+    """distinct select on columns"""
+    distinct_on: [performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [performance_order_by!]
+
+    """filter the rows returned"""
+    where: performance_bool_exp
+  ): [performance!]!
+
+  """
+  fetch aggregated fields from the table: "performance"
+  """
+  performance_aggregate(
+    """distinct select on columns"""
+    distinct_on: [performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [performance_order_by!]
+
+    """filter the rows returned"""
+    where: performance_bool_exp
+  ): performance_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "member"
+  """
+  member(
+    """distinct select on columns"""
+    distinct_on: [member_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_order_by!]
+
+    """filter the rows returned"""
+    where: member_bool_exp
+  ): [member!]!
+
+  """
+  fetch aggregated fields from the table: "member"
+  """
+  member_aggregate(
+    """distinct select on columns"""
+    distinct_on: [member_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_order_by!]
+
+    """filter the rows returned"""
+    where: member_bool_exp
+  ): member_aggregate!
+
+  """
+  fetch data from the table: "member_attendance"
+  """
+  member_attendance(
+    """distinct select on columns"""
+    distinct_on: [member_attendance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_attendance_order_by!]
+
+    """filter the rows returned"""
+    where: member_attendance_bool_exp
+  ): [member_attendance!]!
+
+  """
+  fetch aggregated fields from the table: "member_attendance"
+  """
+  member_attendance_aggregate(
+    """distinct select on columns"""
+    distinct_on: [member_attendance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [member_attendance_order_by!]
+
+    """filter the rows returned"""
+    where: member_attendance_bool_exp
+  ): member_attendance_aggregate!
+
+  """
+  fetch data from the table: "performance"
+  """
+  performance(
+    """distinct select on columns"""
+    distinct_on: [performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [performance_order_by!]
+
+    """filter the rows returned"""
+    where: performance_bool_exp
+  ): [performance!]!
+
+  """
+  fetch aggregated fields from the table: "performance"
+  """
+  performance_aggregate(
+    """distinct select on columns"""
+    distinct_on: [performance_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [performance_order_by!]
+
+    """filter the rows returned"""
+    where: performance_bool_exp
+  ): performance_aggregate!
+}

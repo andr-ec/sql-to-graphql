@@ -1,0 +1,1110 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+columns and relationships of "manufacturers"
+"""
+type manufacturers {
+  code: bigint!
+  founder: String
+  headquarter: String
+  name: String
+
+  """An array relationship"""
+  products(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): [products!]!
+
+  """An aggregated array relationship"""
+  products_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): products_aggregate!
+  revenue: Float
+}
+
+"""
+aggregated selection of "manufacturers"
+"""
+type manufacturers_aggregate {
+  aggregate: manufacturers_aggregate_fields
+  nodes: [manufacturers!]!
+}
+
+"""
+aggregate fields of "manufacturers"
+"""
+type manufacturers_aggregate_fields {
+  avg: manufacturers_avg_fields
+  count(columns: [manufacturers_select_column!], distinct: Boolean): Int
+  max: manufacturers_max_fields
+  min: manufacturers_min_fields
+  stddev: manufacturers_stddev_fields
+  stddev_pop: manufacturers_stddev_pop_fields
+  stddev_samp: manufacturers_stddev_samp_fields
+  sum: manufacturers_sum_fields
+  var_pop: manufacturers_var_pop_fields
+  var_samp: manufacturers_var_samp_fields
+  variance: manufacturers_variance_fields
+}
+
+"""
+order by aggregate values of table "manufacturers"
+"""
+input manufacturers_aggregate_order_by {
+  avg: manufacturers_avg_order_by
+  count: order_by
+  max: manufacturers_max_order_by
+  min: manufacturers_min_order_by
+  stddev: manufacturers_stddev_order_by
+  stddev_pop: manufacturers_stddev_pop_order_by
+  stddev_samp: manufacturers_stddev_samp_order_by
+  sum: manufacturers_sum_order_by
+  var_pop: manufacturers_var_pop_order_by
+  var_samp: manufacturers_var_samp_order_by
+  variance: manufacturers_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "manufacturers"
+"""
+input manufacturers_arr_rel_insert_input {
+  data: [manufacturers_insert_input!]!
+  on_conflict: manufacturers_on_conflict
+}
+
+"""aggregate avg on columns"""
+type manufacturers_avg_fields {
+  code: Float
+  revenue: Float
+}
+
+"""
+order by avg() on columns of table "manufacturers"
+"""
+input manufacturers_avg_order_by {
+  code: order_by
+  revenue: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "manufacturers". All fields are combined with a logical 'AND'.
+"""
+input manufacturers_bool_exp {
+  _and: [manufacturers_bool_exp]
+  _not: manufacturers_bool_exp
+  _or: [manufacturers_bool_exp]
+  code: bigint_comparison_exp
+  founder: String_comparison_exp
+  headquarter: String_comparison_exp
+  name: String_comparison_exp
+  products: products_bool_exp
+  revenue: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "manufacturers"
+"""
+enum manufacturers_constraint {
+  """unique or primary key constraint"""
+  idx_17582_manufacturers_pkey
+}
+
+"""
+input type for incrementing integer columne in table "manufacturers"
+"""
+input manufacturers_inc_input {
+  code: bigint
+}
+
+"""
+input type for inserting data into table "manufacturers"
+"""
+input manufacturers_insert_input {
+  code: bigint
+  founder: String
+  headquarter: String
+  name: String
+  products: products_arr_rel_insert_input
+  revenue: Float
+}
+
+"""aggregate max on columns"""
+type manufacturers_max_fields {
+  code: bigint
+  founder: String
+  headquarter: String
+  name: String
+  revenue: Float
+}
+
+"""
+order by max() on columns of table "manufacturers"
+"""
+input manufacturers_max_order_by {
+  code: order_by
+  founder: order_by
+  headquarter: order_by
+  name: order_by
+  revenue: order_by
+}
+
+"""aggregate min on columns"""
+type manufacturers_min_fields {
+  code: bigint
+  founder: String
+  headquarter: String
+  name: String
+  revenue: Float
+}
+
+"""
+order by min() on columns of table "manufacturers"
+"""
+input manufacturers_min_order_by {
+  code: order_by
+  founder: order_by
+  headquarter: order_by
+  name: order_by
+  revenue: order_by
+}
+
+"""
+response of any mutation on the table "manufacturers"
+"""
+type manufacturers_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [manufacturers!]!
+}
+
+"""
+input type for inserting object relation for remote table "manufacturers"
+"""
+input manufacturers_obj_rel_insert_input {
+  data: manufacturers_insert_input!
+  on_conflict: manufacturers_on_conflict
+}
+
+"""
+on conflict condition type for table "manufacturers"
+"""
+input manufacturers_on_conflict {
+  constraint: manufacturers_constraint!
+  update_columns: [manufacturers_update_column!]!
+  where: manufacturers_bool_exp
+}
+
+"""
+ordering options when selecting data from "manufacturers"
+"""
+input manufacturers_order_by {
+  code: order_by
+  founder: order_by
+  headquarter: order_by
+  name: order_by
+  products_aggregate: products_aggregate_order_by
+  revenue: order_by
+}
+
+"""
+select columns of table "manufacturers"
+"""
+enum manufacturers_select_column {
+  """column name"""
+  code
+
+  """column name"""
+  founder
+
+  """column name"""
+  headquarter
+
+  """column name"""
+  name
+
+  """column name"""
+  revenue
+}
+
+"""
+input type for updating data in table "manufacturers"
+"""
+input manufacturers_set_input {
+  code: bigint
+  founder: String
+  headquarter: String
+  name: String
+  revenue: Float
+}
+
+"""aggregate stddev on columns"""
+type manufacturers_stddev_fields {
+  code: Float
+  revenue: Float
+}
+
+"""
+order by stddev() on columns of table "manufacturers"
+"""
+input manufacturers_stddev_order_by {
+  code: order_by
+  revenue: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type manufacturers_stddev_pop_fields {
+  code: Float
+  revenue: Float
+}
+
+"""
+order by stddev_pop() on columns of table "manufacturers"
+"""
+input manufacturers_stddev_pop_order_by {
+  code: order_by
+  revenue: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type manufacturers_stddev_samp_fields {
+  code: Float
+  revenue: Float
+}
+
+"""
+order by stddev_samp() on columns of table "manufacturers"
+"""
+input manufacturers_stddev_samp_order_by {
+  code: order_by
+  revenue: order_by
+}
+
+"""aggregate sum on columns"""
+type manufacturers_sum_fields {
+  code: bigint
+  revenue: Float
+}
+
+"""
+order by sum() on columns of table "manufacturers"
+"""
+input manufacturers_sum_order_by {
+  code: order_by
+  revenue: order_by
+}
+
+"""
+update columns of table "manufacturers"
+"""
+enum manufacturers_update_column {
+  """column name"""
+  code
+
+  """column name"""
+  founder
+
+  """column name"""
+  headquarter
+
+  """column name"""
+  name
+
+  """column name"""
+  revenue
+}
+
+"""aggregate var_pop on columns"""
+type manufacturers_var_pop_fields {
+  code: Float
+  revenue: Float
+}
+
+"""
+order by var_pop() on columns of table "manufacturers"
+"""
+input manufacturers_var_pop_order_by {
+  code: order_by
+  revenue: order_by
+}
+
+"""aggregate var_samp on columns"""
+type manufacturers_var_samp_fields {
+  code: Float
+  revenue: Float
+}
+
+"""
+order by var_samp() on columns of table "manufacturers"
+"""
+input manufacturers_var_samp_order_by {
+  code: order_by
+  revenue: order_by
+}
+
+"""aggregate variance on columns"""
+type manufacturers_variance_fields {
+  code: Float
+  revenue: Float
+}
+
+"""
+order by variance() on columns of table "manufacturers"
+"""
+input manufacturers_variance_order_by {
+  code: order_by
+  revenue: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "manufacturers"
+  """
+  delete_manufacturers(
+    """filter the rows which have to be deleted"""
+    where: manufacturers_bool_exp!
+  ): manufacturers_mutation_response
+
+  """
+  delete data from the table: "products"
+  """
+  delete_products(
+    """filter the rows which have to be deleted"""
+    where: products_bool_exp!
+  ): products_mutation_response
+
+  """
+  insert data into the table: "manufacturers"
+  """
+  insert_manufacturers(
+    """the rows to be inserted"""
+    objects: [manufacturers_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: manufacturers_on_conflict
+  ): manufacturers_mutation_response
+
+  """
+  insert data into the table: "products"
+  """
+  insert_products(
+    """the rows to be inserted"""
+    objects: [products_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: products_on_conflict
+  ): products_mutation_response
+
+  """
+  update data of the table: "manufacturers"
+  """
+  update_manufacturers(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: manufacturers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: manufacturers_set_input
+
+    """filter the rows which have to be updated"""
+    where: manufacturers_bool_exp!
+  ): manufacturers_mutation_response
+
+  """
+  update data of the table: "products"
+  """
+  update_products(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: products_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: products_set_input
+
+    """filter the rows which have to be updated"""
+    where: products_bool_exp!
+  ): products_mutation_response
+}
+
+scalar numeric
+
+"""
+expression to compare columns of type numeric. All fields are combined with logical 'AND'.
+"""
+input numeric_comparison_exp {
+  _eq: numeric
+  _gt: numeric
+  _gte: numeric
+  _in: [numeric!]
+  _is_null: Boolean
+  _lt: numeric
+  _lte: numeric
+  _neq: numeric
+  _nin: [numeric!]
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "products"
+"""
+type products {
+  code: bigint!
+  manufacturer: bigint
+
+  """An object relationship"""
+  manufacturerByManufacturer: manufacturers
+  name: String
+  price: numeric
+}
+
+"""
+aggregated selection of "products"
+"""
+type products_aggregate {
+  aggregate: products_aggregate_fields
+  nodes: [products!]!
+}
+
+"""
+aggregate fields of "products"
+"""
+type products_aggregate_fields {
+  avg: products_avg_fields
+  count(columns: [products_select_column!], distinct: Boolean): Int
+  max: products_max_fields
+  min: products_min_fields
+  stddev: products_stddev_fields
+  stddev_pop: products_stddev_pop_fields
+  stddev_samp: products_stddev_samp_fields
+  sum: products_sum_fields
+  var_pop: products_var_pop_fields
+  var_samp: products_var_samp_fields
+  variance: products_variance_fields
+}
+
+"""
+order by aggregate values of table "products"
+"""
+input products_aggregate_order_by {
+  avg: products_avg_order_by
+  count: order_by
+  max: products_max_order_by
+  min: products_min_order_by
+  stddev: products_stddev_order_by
+  stddev_pop: products_stddev_pop_order_by
+  stddev_samp: products_stddev_samp_order_by
+  sum: products_sum_order_by
+  var_pop: products_var_pop_order_by
+  var_samp: products_var_samp_order_by
+  variance: products_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "products"
+"""
+input products_arr_rel_insert_input {
+  data: [products_insert_input!]!
+  on_conflict: products_on_conflict
+}
+
+"""aggregate avg on columns"""
+type products_avg_fields {
+  code: Float
+  manufacturer: Float
+  price: Float
+}
+
+"""
+order by avg() on columns of table "products"
+"""
+input products_avg_order_by {
+  code: order_by
+  manufacturer: order_by
+  price: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "products". All fields are combined with a logical 'AND'.
+"""
+input products_bool_exp {
+  _and: [products_bool_exp]
+  _not: products_bool_exp
+  _or: [products_bool_exp]
+  code: bigint_comparison_exp
+  manufacturer: bigint_comparison_exp
+  manufacturerByManufacturer: manufacturers_bool_exp
+  name: String_comparison_exp
+  price: numeric_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "products"
+"""
+enum products_constraint {
+  """unique or primary key constraint"""
+  idx_17588_products_pkey
+}
+
+"""
+input type for incrementing integer columne in table "products"
+"""
+input products_inc_input {
+  code: bigint
+  manufacturer: bigint
+}
+
+"""
+input type for inserting data into table "products"
+"""
+input products_insert_input {
+  code: bigint
+  manufacturer: bigint
+  manufacturerByManufacturer: manufacturers_obj_rel_insert_input
+  name: String
+  price: numeric
+}
+
+"""aggregate max on columns"""
+type products_max_fields {
+  code: bigint
+  manufacturer: bigint
+  name: String
+  price: numeric
+}
+
+"""
+order by max() on columns of table "products"
+"""
+input products_max_order_by {
+  code: order_by
+  manufacturer: order_by
+  name: order_by
+  price: order_by
+}
+
+"""aggregate min on columns"""
+type products_min_fields {
+  code: bigint
+  manufacturer: bigint
+  name: String
+  price: numeric
+}
+
+"""
+order by min() on columns of table "products"
+"""
+input products_min_order_by {
+  code: order_by
+  manufacturer: order_by
+  name: order_by
+  price: order_by
+}
+
+"""
+response of any mutation on the table "products"
+"""
+type products_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [products!]!
+}
+
+"""
+input type for inserting object relation for remote table "products"
+"""
+input products_obj_rel_insert_input {
+  data: products_insert_input!
+  on_conflict: products_on_conflict
+}
+
+"""
+on conflict condition type for table "products"
+"""
+input products_on_conflict {
+  constraint: products_constraint!
+  update_columns: [products_update_column!]!
+  where: products_bool_exp
+}
+
+"""
+ordering options when selecting data from "products"
+"""
+input products_order_by {
+  code: order_by
+  manufacturer: order_by
+  manufacturerByManufacturer: manufacturers_order_by
+  name: order_by
+  price: order_by
+}
+
+"""
+select columns of table "products"
+"""
+enum products_select_column {
+  """column name"""
+  code
+
+  """column name"""
+  manufacturer
+
+  """column name"""
+  name
+
+  """column name"""
+  price
+}
+
+"""
+input type for updating data in table "products"
+"""
+input products_set_input {
+  code: bigint
+  manufacturer: bigint
+  name: String
+  price: numeric
+}
+
+"""aggregate stddev on columns"""
+type products_stddev_fields {
+  code: Float
+  manufacturer: Float
+  price: Float
+}
+
+"""
+order by stddev() on columns of table "products"
+"""
+input products_stddev_order_by {
+  code: order_by
+  manufacturer: order_by
+  price: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type products_stddev_pop_fields {
+  code: Float
+  manufacturer: Float
+  price: Float
+}
+
+"""
+order by stddev_pop() on columns of table "products"
+"""
+input products_stddev_pop_order_by {
+  code: order_by
+  manufacturer: order_by
+  price: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type products_stddev_samp_fields {
+  code: Float
+  manufacturer: Float
+  price: Float
+}
+
+"""
+order by stddev_samp() on columns of table "products"
+"""
+input products_stddev_samp_order_by {
+  code: order_by
+  manufacturer: order_by
+  price: order_by
+}
+
+"""aggregate sum on columns"""
+type products_sum_fields {
+  code: bigint
+  manufacturer: bigint
+  price: numeric
+}
+
+"""
+order by sum() on columns of table "products"
+"""
+input products_sum_order_by {
+  code: order_by
+  manufacturer: order_by
+  price: order_by
+}
+
+"""
+update columns of table "products"
+"""
+enum products_update_column {
+  """column name"""
+  code
+
+  """column name"""
+  manufacturer
+
+  """column name"""
+  name
+
+  """column name"""
+  price
+}
+
+"""aggregate var_pop on columns"""
+type products_var_pop_fields {
+  code: Float
+  manufacturer: Float
+  price: Float
+}
+
+"""
+order by var_pop() on columns of table "products"
+"""
+input products_var_pop_order_by {
+  code: order_by
+  manufacturer: order_by
+  price: order_by
+}
+
+"""aggregate var_samp on columns"""
+type products_var_samp_fields {
+  code: Float
+  manufacturer: Float
+  price: Float
+}
+
+"""
+order by var_samp() on columns of table "products"
+"""
+input products_var_samp_order_by {
+  code: order_by
+  manufacturer: order_by
+  price: order_by
+}
+
+"""aggregate variance on columns"""
+type products_variance_fields {
+  code: Float
+  manufacturer: Float
+  price: Float
+}
+
+"""
+order by variance() on columns of table "products"
+"""
+input products_variance_order_by {
+  code: order_by
+  manufacturer: order_by
+  price: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "manufacturers"
+  """
+  manufacturers(
+    """distinct select on columns"""
+    distinct_on: [manufacturers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [manufacturers_order_by!]
+
+    """filter the rows returned"""
+    where: manufacturers_bool_exp
+  ): [manufacturers!]!
+
+  """
+  fetch aggregated fields from the table: "manufacturers"
+  """
+  manufacturers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [manufacturers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [manufacturers_order_by!]
+
+    """filter the rows returned"""
+    where: manufacturers_bool_exp
+  ): manufacturers_aggregate!
+
+  """fetch data from the table: "manufacturers" using primary key columns"""
+  manufacturers_by_pk(code: bigint!): manufacturers
+
+  """
+  fetch data from the table: "products"
+  """
+  products(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): [products!]!
+
+  """
+  fetch aggregated fields from the table: "products"
+  """
+  products_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): products_aggregate!
+
+  """fetch data from the table: "products" using primary key columns"""
+  products_by_pk(code: bigint!): products
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "manufacturers"
+  """
+  manufacturers(
+    """distinct select on columns"""
+    distinct_on: [manufacturers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [manufacturers_order_by!]
+
+    """filter the rows returned"""
+    where: manufacturers_bool_exp
+  ): [manufacturers!]!
+
+  """
+  fetch aggregated fields from the table: "manufacturers"
+  """
+  manufacturers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [manufacturers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [manufacturers_order_by!]
+
+    """filter the rows returned"""
+    where: manufacturers_bool_exp
+  ): manufacturers_aggregate!
+
+  """fetch data from the table: "manufacturers" using primary key columns"""
+  manufacturers_by_pk(code: bigint!): manufacturers
+
+  """
+  fetch data from the table: "products"
+  """
+  products(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): [products!]!
+
+  """
+  fetch aggregated fields from the table: "products"
+  """
+  products_aggregate(
+    """distinct select on columns"""
+    distinct_on: [products_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [products_order_by!]
+
+    """filter the rows returned"""
+    where: products_bool_exp
+  ): products_aggregate!
+
+  """fetch data from the table: "products" using primary key columns"""
+  products_by_pk(code: bigint!): products
+}

@@ -1,0 +1,2144 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Boolean. All fields are combined with logical 'AND'.
+"""
+input Boolean_comparison_exp {
+  _eq: Boolean
+  _gt: Boolean
+  _gte: Boolean
+  _in: [Boolean!]
+  _is_null: Boolean
+  _lt: Boolean
+  _lte: Boolean
+  _neq: Boolean
+  _nin: [Boolean!]
+}
+
+"""
+columns and relationships of "concert"
+"""
+type concert {
+  concert_id: Int
+  concert_name: String
+
+  """An array relationship"""
+  singer_in_concerts(
+    """distinct select on columns"""
+    distinct_on: [singer_in_concert_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [singer_in_concert_order_by!]
+
+    """filter the rows returned"""
+    where: singer_in_concert_bool_exp
+  ): [singer_in_concert!]!
+
+  """An aggregated array relationship"""
+  singer_in_concerts_aggregate(
+    """distinct select on columns"""
+    distinct_on: [singer_in_concert_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [singer_in_concert_order_by!]
+
+    """filter the rows returned"""
+    where: singer_in_concert_bool_exp
+  ): singer_in_concert_aggregate!
+
+  """An object relationship"""
+  stadium: stadium
+  stadium_id: Int
+  theme: String
+  year: String
+}
+
+"""
+aggregated selection of "concert"
+"""
+type concert_aggregate {
+  aggregate: concert_aggregate_fields
+  nodes: [concert!]!
+}
+
+"""
+aggregate fields of "concert"
+"""
+type concert_aggregate_fields {
+  avg: concert_avg_fields
+  count(columns: [concert_select_column!], distinct: Boolean): Int
+  max: concert_max_fields
+  min: concert_min_fields
+  stddev: concert_stddev_fields
+  stddev_pop: concert_stddev_pop_fields
+  stddev_samp: concert_stddev_samp_fields
+  sum: concert_sum_fields
+  var_pop: concert_var_pop_fields
+  var_samp: concert_var_samp_fields
+  variance: concert_variance_fields
+}
+
+"""
+order by aggregate values of table "concert"
+"""
+input concert_aggregate_order_by {
+  avg: concert_avg_order_by
+  count: order_by
+  max: concert_max_order_by
+  min: concert_min_order_by
+  stddev: concert_stddev_order_by
+  stddev_pop: concert_stddev_pop_order_by
+  stddev_samp: concert_stddev_samp_order_by
+  sum: concert_sum_order_by
+  var_pop: concert_var_pop_order_by
+  var_samp: concert_var_samp_order_by
+  variance: concert_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "concert"
+"""
+input concert_arr_rel_insert_input {
+  data: [concert_insert_input!]!
+  on_conflict: concert_on_conflict
+}
+
+"""aggregate avg on columns"""
+type concert_avg_fields {
+  concert_id: Float
+  stadium_id: Float
+}
+
+"""
+order by avg() on columns of table "concert"
+"""
+input concert_avg_order_by {
+  concert_id: order_by
+  stadium_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "concert". All fields are combined with a logical 'AND'.
+"""
+input concert_bool_exp {
+  _and: [concert_bool_exp]
+  _not: concert_bool_exp
+  _or: [concert_bool_exp]
+  concert_id: Int_comparison_exp
+  concert_name: String_comparison_exp
+  singer_in_concerts: singer_in_concert_bool_exp
+  stadium: stadium_bool_exp
+  stadium_id: Int_comparison_exp
+  theme: String_comparison_exp
+  year: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "concert"
+"""
+enum concert_constraint {
+  """unique or primary key constraint"""
+  idx_22923_sqlite_autoindex_concert_1
+}
+
+"""
+input type for incrementing integer columne in table "concert"
+"""
+input concert_inc_input {
+  concert_id: Int
+  stadium_id: Int
+}
+
+"""
+input type for inserting data into table "concert"
+"""
+input concert_insert_input {
+  concert_id: Int
+  concert_name: String
+  singer_in_concerts: singer_in_concert_arr_rel_insert_input
+  stadium: stadium_obj_rel_insert_input
+  stadium_id: Int
+  theme: String
+  year: String
+}
+
+"""aggregate max on columns"""
+type concert_max_fields {
+  concert_id: Int
+  concert_name: String
+  stadium_id: Int
+  theme: String
+  year: String
+}
+
+"""
+order by max() on columns of table "concert"
+"""
+input concert_max_order_by {
+  concert_id: order_by
+  concert_name: order_by
+  stadium_id: order_by
+  theme: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type concert_min_fields {
+  concert_id: Int
+  concert_name: String
+  stadium_id: Int
+  theme: String
+  year: String
+}
+
+"""
+order by min() on columns of table "concert"
+"""
+input concert_min_order_by {
+  concert_id: order_by
+  concert_name: order_by
+  stadium_id: order_by
+  theme: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "concert"
+"""
+type concert_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [concert!]!
+}
+
+"""
+input type for inserting object relation for remote table "concert"
+"""
+input concert_obj_rel_insert_input {
+  data: concert_insert_input!
+  on_conflict: concert_on_conflict
+}
+
+"""
+on conflict condition type for table "concert"
+"""
+input concert_on_conflict {
+  constraint: concert_constraint!
+  update_columns: [concert_update_column!]!
+  where: concert_bool_exp
+}
+
+"""
+ordering options when selecting data from "concert"
+"""
+input concert_order_by {
+  concert_id: order_by
+  concert_name: order_by
+  singer_in_concerts_aggregate: singer_in_concert_aggregate_order_by
+  stadium: stadium_order_by
+  stadium_id: order_by
+  theme: order_by
+  year: order_by
+}
+
+"""
+select columns of table "concert"
+"""
+enum concert_select_column {
+  """column name"""
+  concert_id
+
+  """column name"""
+  concert_name
+
+  """column name"""
+  stadium_id
+
+  """column name"""
+  theme
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "concert"
+"""
+input concert_set_input {
+  concert_id: Int
+  concert_name: String
+  stadium_id: Int
+  theme: String
+  year: String
+}
+
+"""aggregate stddev on columns"""
+type concert_stddev_fields {
+  concert_id: Float
+  stadium_id: Float
+}
+
+"""
+order by stddev() on columns of table "concert"
+"""
+input concert_stddev_order_by {
+  concert_id: order_by
+  stadium_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type concert_stddev_pop_fields {
+  concert_id: Float
+  stadium_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "concert"
+"""
+input concert_stddev_pop_order_by {
+  concert_id: order_by
+  stadium_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type concert_stddev_samp_fields {
+  concert_id: Float
+  stadium_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "concert"
+"""
+input concert_stddev_samp_order_by {
+  concert_id: order_by
+  stadium_id: order_by
+}
+
+"""aggregate sum on columns"""
+type concert_sum_fields {
+  concert_id: Int
+  stadium_id: Int
+}
+
+"""
+order by sum() on columns of table "concert"
+"""
+input concert_sum_order_by {
+  concert_id: order_by
+  stadium_id: order_by
+}
+
+"""
+update columns of table "concert"
+"""
+enum concert_update_column {
+  """column name"""
+  concert_id
+
+  """column name"""
+  concert_name
+
+  """column name"""
+  stadium_id
+
+  """column name"""
+  theme
+
+  """column name"""
+  year
+}
+
+"""aggregate var_pop on columns"""
+type concert_var_pop_fields {
+  concert_id: Float
+  stadium_id: Float
+}
+
+"""
+order by var_pop() on columns of table "concert"
+"""
+input concert_var_pop_order_by {
+  concert_id: order_by
+  stadium_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type concert_var_samp_fields {
+  concert_id: Float
+  stadium_id: Float
+}
+
+"""
+order by var_samp() on columns of table "concert"
+"""
+input concert_var_samp_order_by {
+  concert_id: order_by
+  stadium_id: order_by
+}
+
+"""aggregate variance on columns"""
+type concert_variance_fields {
+  concert_id: Float
+  stadium_id: Float
+}
+
+"""
+order by variance() on columns of table "concert"
+"""
+input concert_variance_order_by {
+  concert_id: order_by
+  stadium_id: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "concert"
+  """
+  delete_concert(
+    """filter the rows which have to be deleted"""
+    where: concert_bool_exp!
+  ): concert_mutation_response
+
+  """
+  delete data from the table: "singer"
+  """
+  delete_singer(
+    """filter the rows which have to be deleted"""
+    where: singer_bool_exp!
+  ): singer_mutation_response
+
+  """
+  delete data from the table: "singer_in_concert"
+  """
+  delete_singer_in_concert(
+    """filter the rows which have to be deleted"""
+    where: singer_in_concert_bool_exp!
+  ): singer_in_concert_mutation_response
+
+  """
+  delete data from the table: "stadium"
+  """
+  delete_stadium(
+    """filter the rows which have to be deleted"""
+    where: stadium_bool_exp!
+  ): stadium_mutation_response
+
+  """
+  insert data into the table: "concert"
+  """
+  insert_concert(
+    """the rows to be inserted"""
+    objects: [concert_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: concert_on_conflict
+  ): concert_mutation_response
+
+  """
+  insert data into the table: "singer"
+  """
+  insert_singer(
+    """the rows to be inserted"""
+    objects: [singer_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: singer_on_conflict
+  ): singer_mutation_response
+
+  """
+  insert data into the table: "singer_in_concert"
+  """
+  insert_singer_in_concert(
+    """the rows to be inserted"""
+    objects: [singer_in_concert_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: singer_in_concert_on_conflict
+  ): singer_in_concert_mutation_response
+
+  """
+  insert data into the table: "stadium"
+  """
+  insert_stadium(
+    """the rows to be inserted"""
+    objects: [stadium_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: stadium_on_conflict
+  ): stadium_mutation_response
+
+  """
+  update data of the table: "concert"
+  """
+  update_concert(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: concert_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: concert_set_input
+
+    """filter the rows which have to be updated"""
+    where: concert_bool_exp!
+  ): concert_mutation_response
+
+  """
+  update data of the table: "singer"
+  """
+  update_singer(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: singer_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: singer_set_input
+
+    """filter the rows which have to be updated"""
+    where: singer_bool_exp!
+  ): singer_mutation_response
+
+  """
+  update data of the table: "singer_in_concert"
+  """
+  update_singer_in_concert(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: singer_in_concert_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: singer_in_concert_set_input
+
+    """filter the rows which have to be updated"""
+    where: singer_in_concert_bool_exp!
+  ): singer_in_concert_mutation_response
+
+  """
+  update data of the table: "stadium"
+  """
+  update_stadium(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: stadium_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: stadium_set_input
+
+    """filter the rows which have to be updated"""
+    where: stadium_bool_exp!
+  ): stadium_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "concert"
+  """
+  concert(
+    """distinct select on columns"""
+    distinct_on: [concert_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [concert_order_by!]
+
+    """filter the rows returned"""
+    where: concert_bool_exp
+  ): [concert!]!
+
+  """
+  fetch aggregated fields from the table: "concert"
+  """
+  concert_aggregate(
+    """distinct select on columns"""
+    distinct_on: [concert_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [concert_order_by!]
+
+    """filter the rows returned"""
+    where: concert_bool_exp
+  ): concert_aggregate!
+
+  """
+  fetch data from the table: "singer"
+  """
+  singer(
+    """distinct select on columns"""
+    distinct_on: [singer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [singer_order_by!]
+
+    """filter the rows returned"""
+    where: singer_bool_exp
+  ): [singer!]!
+
+  """
+  fetch aggregated fields from the table: "singer"
+  """
+  singer_aggregate(
+    """distinct select on columns"""
+    distinct_on: [singer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [singer_order_by!]
+
+    """filter the rows returned"""
+    where: singer_bool_exp
+  ): singer_aggregate!
+
+  """
+  fetch data from the table: "singer_in_concert"
+  """
+  singer_in_concert(
+    """distinct select on columns"""
+    distinct_on: [singer_in_concert_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [singer_in_concert_order_by!]
+
+    """filter the rows returned"""
+    where: singer_in_concert_bool_exp
+  ): [singer_in_concert!]!
+
+  """
+  fetch aggregated fields from the table: "singer_in_concert"
+  """
+  singer_in_concert_aggregate(
+    """distinct select on columns"""
+    distinct_on: [singer_in_concert_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [singer_in_concert_order_by!]
+
+    """filter the rows returned"""
+    where: singer_in_concert_bool_exp
+  ): singer_in_concert_aggregate!
+
+  """
+  fetch data from the table: "stadium"
+  """
+  stadium(
+    """distinct select on columns"""
+    distinct_on: [stadium_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stadium_order_by!]
+
+    """filter the rows returned"""
+    where: stadium_bool_exp
+  ): [stadium!]!
+
+  """
+  fetch aggregated fields from the table: "stadium"
+  """
+  stadium_aggregate(
+    """distinct select on columns"""
+    distinct_on: [stadium_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stadium_order_by!]
+
+    """filter the rows returned"""
+    where: stadium_bool_exp
+  ): stadium_aggregate!
+}
+
+"""
+columns and relationships of "singer"
+"""
+type singer {
+  age: Int
+  country: String
+  is_male: Boolean
+  name: String
+  singer_id: Int
+
+  """An array relationship"""
+  singer_in_concerts(
+    """distinct select on columns"""
+    distinct_on: [singer_in_concert_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [singer_in_concert_order_by!]
+
+    """filter the rows returned"""
+    where: singer_in_concert_bool_exp
+  ): [singer_in_concert!]!
+
+  """An aggregated array relationship"""
+  singer_in_concerts_aggregate(
+    """distinct select on columns"""
+    distinct_on: [singer_in_concert_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [singer_in_concert_order_by!]
+
+    """filter the rows returned"""
+    where: singer_in_concert_bool_exp
+  ): singer_in_concert_aggregate!
+  song_name: String
+  song_release_year: String
+}
+
+"""
+aggregated selection of "singer"
+"""
+type singer_aggregate {
+  aggregate: singer_aggregate_fields
+  nodes: [singer!]!
+}
+
+"""
+aggregate fields of "singer"
+"""
+type singer_aggregate_fields {
+  avg: singer_avg_fields
+  count(columns: [singer_select_column!], distinct: Boolean): Int
+  max: singer_max_fields
+  min: singer_min_fields
+  stddev: singer_stddev_fields
+  stddev_pop: singer_stddev_pop_fields
+  stddev_samp: singer_stddev_samp_fields
+  sum: singer_sum_fields
+  var_pop: singer_var_pop_fields
+  var_samp: singer_var_samp_fields
+  variance: singer_variance_fields
+}
+
+"""
+order by aggregate values of table "singer"
+"""
+input singer_aggregate_order_by {
+  avg: singer_avg_order_by
+  count: order_by
+  max: singer_max_order_by
+  min: singer_min_order_by
+  stddev: singer_stddev_order_by
+  stddev_pop: singer_stddev_pop_order_by
+  stddev_samp: singer_stddev_samp_order_by
+  sum: singer_sum_order_by
+  var_pop: singer_var_pop_order_by
+  var_samp: singer_var_samp_order_by
+  variance: singer_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "singer"
+"""
+input singer_arr_rel_insert_input {
+  data: [singer_insert_input!]!
+  on_conflict: singer_on_conflict
+}
+
+"""aggregate avg on columns"""
+type singer_avg_fields {
+  age: Float
+  singer_id: Float
+}
+
+"""
+order by avg() on columns of table "singer"
+"""
+input singer_avg_order_by {
+  age: order_by
+  singer_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "singer". All fields are combined with a logical 'AND'.
+"""
+input singer_bool_exp {
+  _and: [singer_bool_exp]
+  _not: singer_bool_exp
+  _or: [singer_bool_exp]
+  age: Int_comparison_exp
+  country: String_comparison_exp
+  is_male: Boolean_comparison_exp
+  name: String_comparison_exp
+  singer_id: Int_comparison_exp
+  singer_in_concerts: singer_in_concert_bool_exp
+  song_name: String_comparison_exp
+  song_release_year: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "singer"
+"""
+enum singer_constraint {
+  """unique or primary key constraint"""
+  idx_22917_sqlite_autoindex_singer_1
+}
+
+"""
+columns and relationships of "singer_in_concert"
+"""
+type singer_in_concert {
+  """An object relationship"""
+  concert: concert
+  concert_id: Int
+
+  """An object relationship"""
+  singer: singer
+  singer_id: Int
+}
+
+"""
+aggregated selection of "singer_in_concert"
+"""
+type singer_in_concert_aggregate {
+  aggregate: singer_in_concert_aggregate_fields
+  nodes: [singer_in_concert!]!
+}
+
+"""
+aggregate fields of "singer_in_concert"
+"""
+type singer_in_concert_aggregate_fields {
+  avg: singer_in_concert_avg_fields
+  count(columns: [singer_in_concert_select_column!], distinct: Boolean): Int
+  max: singer_in_concert_max_fields
+  min: singer_in_concert_min_fields
+  stddev: singer_in_concert_stddev_fields
+  stddev_pop: singer_in_concert_stddev_pop_fields
+  stddev_samp: singer_in_concert_stddev_samp_fields
+  sum: singer_in_concert_sum_fields
+  var_pop: singer_in_concert_var_pop_fields
+  var_samp: singer_in_concert_var_samp_fields
+  variance: singer_in_concert_variance_fields
+}
+
+"""
+order by aggregate values of table "singer_in_concert"
+"""
+input singer_in_concert_aggregate_order_by {
+  avg: singer_in_concert_avg_order_by
+  count: order_by
+  max: singer_in_concert_max_order_by
+  min: singer_in_concert_min_order_by
+  stddev: singer_in_concert_stddev_order_by
+  stddev_pop: singer_in_concert_stddev_pop_order_by
+  stddev_samp: singer_in_concert_stddev_samp_order_by
+  sum: singer_in_concert_sum_order_by
+  var_pop: singer_in_concert_var_pop_order_by
+  var_samp: singer_in_concert_var_samp_order_by
+  variance: singer_in_concert_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "singer_in_concert"
+"""
+input singer_in_concert_arr_rel_insert_input {
+  data: [singer_in_concert_insert_input!]!
+  on_conflict: singer_in_concert_on_conflict
+}
+
+"""aggregate avg on columns"""
+type singer_in_concert_avg_fields {
+  concert_id: Float
+  singer_id: Float
+}
+
+"""
+order by avg() on columns of table "singer_in_concert"
+"""
+input singer_in_concert_avg_order_by {
+  concert_id: order_by
+  singer_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "singer_in_concert". All fields are combined with a logical 'AND'.
+"""
+input singer_in_concert_bool_exp {
+  _and: [singer_in_concert_bool_exp]
+  _not: singer_in_concert_bool_exp
+  _or: [singer_in_concert_bool_exp]
+  concert: concert_bool_exp
+  concert_id: Int_comparison_exp
+  singer: singer_bool_exp
+  singer_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "singer_in_concert"
+"""
+enum singer_in_concert_constraint {
+  """unique or primary key constraint"""
+  idx_22929_sqlite_autoindex_singer_in_concert_1
+}
+
+"""
+input type for incrementing integer columne in table "singer_in_concert"
+"""
+input singer_in_concert_inc_input {
+  concert_id: Int
+  singer_id: Int
+}
+
+"""
+input type for inserting data into table "singer_in_concert"
+"""
+input singer_in_concert_insert_input {
+  concert: concert_obj_rel_insert_input
+  concert_id: Int
+  singer: singer_obj_rel_insert_input
+  singer_id: Int
+}
+
+"""aggregate max on columns"""
+type singer_in_concert_max_fields {
+  concert_id: Int
+  singer_id: Int
+}
+
+"""
+order by max() on columns of table "singer_in_concert"
+"""
+input singer_in_concert_max_order_by {
+  concert_id: order_by
+  singer_id: order_by
+}
+
+"""aggregate min on columns"""
+type singer_in_concert_min_fields {
+  concert_id: Int
+  singer_id: Int
+}
+
+"""
+order by min() on columns of table "singer_in_concert"
+"""
+input singer_in_concert_min_order_by {
+  concert_id: order_by
+  singer_id: order_by
+}
+
+"""
+response of any mutation on the table "singer_in_concert"
+"""
+type singer_in_concert_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [singer_in_concert!]!
+}
+
+"""
+input type for inserting object relation for remote table "singer_in_concert"
+"""
+input singer_in_concert_obj_rel_insert_input {
+  data: singer_in_concert_insert_input!
+  on_conflict: singer_in_concert_on_conflict
+}
+
+"""
+on conflict condition type for table "singer_in_concert"
+"""
+input singer_in_concert_on_conflict {
+  constraint: singer_in_concert_constraint!
+  update_columns: [singer_in_concert_update_column!]!
+  where: singer_in_concert_bool_exp
+}
+
+"""
+ordering options when selecting data from "singer_in_concert"
+"""
+input singer_in_concert_order_by {
+  concert: concert_order_by
+  concert_id: order_by
+  singer: singer_order_by
+  singer_id: order_by
+}
+
+"""
+select columns of table "singer_in_concert"
+"""
+enum singer_in_concert_select_column {
+  """column name"""
+  concert_id
+
+  """column name"""
+  singer_id
+}
+
+"""
+input type for updating data in table "singer_in_concert"
+"""
+input singer_in_concert_set_input {
+  concert_id: Int
+  singer_id: Int
+}
+
+"""aggregate stddev on columns"""
+type singer_in_concert_stddev_fields {
+  concert_id: Float
+  singer_id: Float
+}
+
+"""
+order by stddev() on columns of table "singer_in_concert"
+"""
+input singer_in_concert_stddev_order_by {
+  concert_id: order_by
+  singer_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type singer_in_concert_stddev_pop_fields {
+  concert_id: Float
+  singer_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "singer_in_concert"
+"""
+input singer_in_concert_stddev_pop_order_by {
+  concert_id: order_by
+  singer_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type singer_in_concert_stddev_samp_fields {
+  concert_id: Float
+  singer_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "singer_in_concert"
+"""
+input singer_in_concert_stddev_samp_order_by {
+  concert_id: order_by
+  singer_id: order_by
+}
+
+"""aggregate sum on columns"""
+type singer_in_concert_sum_fields {
+  concert_id: Int
+  singer_id: Int
+}
+
+"""
+order by sum() on columns of table "singer_in_concert"
+"""
+input singer_in_concert_sum_order_by {
+  concert_id: order_by
+  singer_id: order_by
+}
+
+"""
+update columns of table "singer_in_concert"
+"""
+enum singer_in_concert_update_column {
+  """column name"""
+  concert_id
+
+  """column name"""
+  singer_id
+}
+
+"""aggregate var_pop on columns"""
+type singer_in_concert_var_pop_fields {
+  concert_id: Float
+  singer_id: Float
+}
+
+"""
+order by var_pop() on columns of table "singer_in_concert"
+"""
+input singer_in_concert_var_pop_order_by {
+  concert_id: order_by
+  singer_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type singer_in_concert_var_samp_fields {
+  concert_id: Float
+  singer_id: Float
+}
+
+"""
+order by var_samp() on columns of table "singer_in_concert"
+"""
+input singer_in_concert_var_samp_order_by {
+  concert_id: order_by
+  singer_id: order_by
+}
+
+"""aggregate variance on columns"""
+type singer_in_concert_variance_fields {
+  concert_id: Float
+  singer_id: Float
+}
+
+"""
+order by variance() on columns of table "singer_in_concert"
+"""
+input singer_in_concert_variance_order_by {
+  concert_id: order_by
+  singer_id: order_by
+}
+
+"""
+input type for incrementing integer columne in table "singer"
+"""
+input singer_inc_input {
+  age: Int
+  singer_id: Int
+}
+
+"""
+input type for inserting data into table "singer"
+"""
+input singer_insert_input {
+  age: Int
+  country: String
+  is_male: Boolean
+  name: String
+  singer_id: Int
+  singer_in_concerts: singer_in_concert_arr_rel_insert_input
+  song_name: String
+  song_release_year: String
+}
+
+"""aggregate max on columns"""
+type singer_max_fields {
+  age: Int
+  country: String
+  name: String
+  singer_id: Int
+  song_name: String
+  song_release_year: String
+}
+
+"""
+order by max() on columns of table "singer"
+"""
+input singer_max_order_by {
+  age: order_by
+  country: order_by
+  name: order_by
+  singer_id: order_by
+  song_name: order_by
+  song_release_year: order_by
+}
+
+"""aggregate min on columns"""
+type singer_min_fields {
+  age: Int
+  country: String
+  name: String
+  singer_id: Int
+  song_name: String
+  song_release_year: String
+}
+
+"""
+order by min() on columns of table "singer"
+"""
+input singer_min_order_by {
+  age: order_by
+  country: order_by
+  name: order_by
+  singer_id: order_by
+  song_name: order_by
+  song_release_year: order_by
+}
+
+"""
+response of any mutation on the table "singer"
+"""
+type singer_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [singer!]!
+}
+
+"""
+input type for inserting object relation for remote table "singer"
+"""
+input singer_obj_rel_insert_input {
+  data: singer_insert_input!
+  on_conflict: singer_on_conflict
+}
+
+"""
+on conflict condition type for table "singer"
+"""
+input singer_on_conflict {
+  constraint: singer_constraint!
+  update_columns: [singer_update_column!]!
+  where: singer_bool_exp
+}
+
+"""
+ordering options when selecting data from "singer"
+"""
+input singer_order_by {
+  age: order_by
+  country: order_by
+  is_male: order_by
+  name: order_by
+  singer_id: order_by
+  singer_in_concerts_aggregate: singer_in_concert_aggregate_order_by
+  song_name: order_by
+  song_release_year: order_by
+}
+
+"""
+select columns of table "singer"
+"""
+enum singer_select_column {
+  """column name"""
+  age
+
+  """column name"""
+  country
+
+  """column name"""
+  is_male
+
+  """column name"""
+  name
+
+  """column name"""
+  singer_id
+
+  """column name"""
+  song_name
+
+  """column name"""
+  song_release_year
+}
+
+"""
+input type for updating data in table "singer"
+"""
+input singer_set_input {
+  age: Int
+  country: String
+  is_male: Boolean
+  name: String
+  singer_id: Int
+  song_name: String
+  song_release_year: String
+}
+
+"""aggregate stddev on columns"""
+type singer_stddev_fields {
+  age: Float
+  singer_id: Float
+}
+
+"""
+order by stddev() on columns of table "singer"
+"""
+input singer_stddev_order_by {
+  age: order_by
+  singer_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type singer_stddev_pop_fields {
+  age: Float
+  singer_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "singer"
+"""
+input singer_stddev_pop_order_by {
+  age: order_by
+  singer_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type singer_stddev_samp_fields {
+  age: Float
+  singer_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "singer"
+"""
+input singer_stddev_samp_order_by {
+  age: order_by
+  singer_id: order_by
+}
+
+"""aggregate sum on columns"""
+type singer_sum_fields {
+  age: Int
+  singer_id: Int
+}
+
+"""
+order by sum() on columns of table "singer"
+"""
+input singer_sum_order_by {
+  age: order_by
+  singer_id: order_by
+}
+
+"""
+update columns of table "singer"
+"""
+enum singer_update_column {
+  """column name"""
+  age
+
+  """column name"""
+  country
+
+  """column name"""
+  is_male
+
+  """column name"""
+  name
+
+  """column name"""
+  singer_id
+
+  """column name"""
+  song_name
+
+  """column name"""
+  song_release_year
+}
+
+"""aggregate var_pop on columns"""
+type singer_var_pop_fields {
+  age: Float
+  singer_id: Float
+}
+
+"""
+order by var_pop() on columns of table "singer"
+"""
+input singer_var_pop_order_by {
+  age: order_by
+  singer_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type singer_var_samp_fields {
+  age: Float
+  singer_id: Float
+}
+
+"""
+order by var_samp() on columns of table "singer"
+"""
+input singer_var_samp_order_by {
+  age: order_by
+  singer_id: order_by
+}
+
+"""aggregate variance on columns"""
+type singer_variance_fields {
+  age: Float
+  singer_id: Float
+}
+
+"""
+order by variance() on columns of table "singer"
+"""
+input singer_variance_order_by {
+  age: order_by
+  singer_id: order_by
+}
+
+"""
+columns and relationships of "stadium"
+"""
+type stadium {
+  average: Int
+  capacity: Int
+
+  """An array relationship"""
+  concerts(
+    """distinct select on columns"""
+    distinct_on: [concert_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [concert_order_by!]
+
+    """filter the rows returned"""
+    where: concert_bool_exp
+  ): [concert!]!
+
+  """An aggregated array relationship"""
+  concerts_aggregate(
+    """distinct select on columns"""
+    distinct_on: [concert_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [concert_order_by!]
+
+    """filter the rows returned"""
+    where: concert_bool_exp
+  ): concert_aggregate!
+  highest: Int
+  location: String
+  lowest: Int
+  name: String
+  stadium_id: Int
+}
+
+"""
+aggregated selection of "stadium"
+"""
+type stadium_aggregate {
+  aggregate: stadium_aggregate_fields
+  nodes: [stadium!]!
+}
+
+"""
+aggregate fields of "stadium"
+"""
+type stadium_aggregate_fields {
+  avg: stadium_avg_fields
+  count(columns: [stadium_select_column!], distinct: Boolean): Int
+  max: stadium_max_fields
+  min: stadium_min_fields
+  stddev: stadium_stddev_fields
+  stddev_pop: stadium_stddev_pop_fields
+  stddev_samp: stadium_stddev_samp_fields
+  sum: stadium_sum_fields
+  var_pop: stadium_var_pop_fields
+  var_samp: stadium_var_samp_fields
+  variance: stadium_variance_fields
+}
+
+"""
+order by aggregate values of table "stadium"
+"""
+input stadium_aggregate_order_by {
+  avg: stadium_avg_order_by
+  count: order_by
+  max: stadium_max_order_by
+  min: stadium_min_order_by
+  stddev: stadium_stddev_order_by
+  stddev_pop: stadium_stddev_pop_order_by
+  stddev_samp: stadium_stddev_samp_order_by
+  sum: stadium_sum_order_by
+  var_pop: stadium_var_pop_order_by
+  var_samp: stadium_var_samp_order_by
+  variance: stadium_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "stadium"
+"""
+input stadium_arr_rel_insert_input {
+  data: [stadium_insert_input!]!
+  on_conflict: stadium_on_conflict
+}
+
+"""aggregate avg on columns"""
+type stadium_avg_fields {
+  average: Float
+  capacity: Float
+  highest: Float
+  lowest: Float
+  stadium_id: Float
+}
+
+"""
+order by avg() on columns of table "stadium"
+"""
+input stadium_avg_order_by {
+  average: order_by
+  capacity: order_by
+  highest: order_by
+  lowest: order_by
+  stadium_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "stadium". All fields are combined with a logical 'AND'.
+"""
+input stadium_bool_exp {
+  _and: [stadium_bool_exp]
+  _not: stadium_bool_exp
+  _or: [stadium_bool_exp]
+  average: Int_comparison_exp
+  capacity: Int_comparison_exp
+  concerts: concert_bool_exp
+  highest: Int_comparison_exp
+  location: String_comparison_exp
+  lowest: Int_comparison_exp
+  name: String_comparison_exp
+  stadium_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "stadium"
+"""
+enum stadium_constraint {
+  """unique or primary key constraint"""
+  idx_22911_sqlite_autoindex_stadium_1
+}
+
+"""
+input type for incrementing integer columne in table "stadium"
+"""
+input stadium_inc_input {
+  average: Int
+  capacity: Int
+  highest: Int
+  lowest: Int
+  stadium_id: Int
+}
+
+"""
+input type for inserting data into table "stadium"
+"""
+input stadium_insert_input {
+  average: Int
+  capacity: Int
+  concerts: concert_arr_rel_insert_input
+  highest: Int
+  location: String
+  lowest: Int
+  name: String
+  stadium_id: Int
+}
+
+"""aggregate max on columns"""
+type stadium_max_fields {
+  average: Int
+  capacity: Int
+  highest: Int
+  location: String
+  lowest: Int
+  name: String
+  stadium_id: Int
+}
+
+"""
+order by max() on columns of table "stadium"
+"""
+input stadium_max_order_by {
+  average: order_by
+  capacity: order_by
+  highest: order_by
+  location: order_by
+  lowest: order_by
+  name: order_by
+  stadium_id: order_by
+}
+
+"""aggregate min on columns"""
+type stadium_min_fields {
+  average: Int
+  capacity: Int
+  highest: Int
+  location: String
+  lowest: Int
+  name: String
+  stadium_id: Int
+}
+
+"""
+order by min() on columns of table "stadium"
+"""
+input stadium_min_order_by {
+  average: order_by
+  capacity: order_by
+  highest: order_by
+  location: order_by
+  lowest: order_by
+  name: order_by
+  stadium_id: order_by
+}
+
+"""
+response of any mutation on the table "stadium"
+"""
+type stadium_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [stadium!]!
+}
+
+"""
+input type for inserting object relation for remote table "stadium"
+"""
+input stadium_obj_rel_insert_input {
+  data: stadium_insert_input!
+  on_conflict: stadium_on_conflict
+}
+
+"""
+on conflict condition type for table "stadium"
+"""
+input stadium_on_conflict {
+  constraint: stadium_constraint!
+  update_columns: [stadium_update_column!]!
+  where: stadium_bool_exp
+}
+
+"""
+ordering options when selecting data from "stadium"
+"""
+input stadium_order_by {
+  average: order_by
+  capacity: order_by
+  concerts_aggregate: concert_aggregate_order_by
+  highest: order_by
+  location: order_by
+  lowest: order_by
+  name: order_by
+  stadium_id: order_by
+}
+
+"""
+select columns of table "stadium"
+"""
+enum stadium_select_column {
+  """column name"""
+  average
+
+  """column name"""
+  capacity
+
+  """column name"""
+  highest
+
+  """column name"""
+  location
+
+  """column name"""
+  lowest
+
+  """column name"""
+  name
+
+  """column name"""
+  stadium_id
+}
+
+"""
+input type for updating data in table "stadium"
+"""
+input stadium_set_input {
+  average: Int
+  capacity: Int
+  highest: Int
+  location: String
+  lowest: Int
+  name: String
+  stadium_id: Int
+}
+
+"""aggregate stddev on columns"""
+type stadium_stddev_fields {
+  average: Float
+  capacity: Float
+  highest: Float
+  lowest: Float
+  stadium_id: Float
+}
+
+"""
+order by stddev() on columns of table "stadium"
+"""
+input stadium_stddev_order_by {
+  average: order_by
+  capacity: order_by
+  highest: order_by
+  lowest: order_by
+  stadium_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type stadium_stddev_pop_fields {
+  average: Float
+  capacity: Float
+  highest: Float
+  lowest: Float
+  stadium_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "stadium"
+"""
+input stadium_stddev_pop_order_by {
+  average: order_by
+  capacity: order_by
+  highest: order_by
+  lowest: order_by
+  stadium_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type stadium_stddev_samp_fields {
+  average: Float
+  capacity: Float
+  highest: Float
+  lowest: Float
+  stadium_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "stadium"
+"""
+input stadium_stddev_samp_order_by {
+  average: order_by
+  capacity: order_by
+  highest: order_by
+  lowest: order_by
+  stadium_id: order_by
+}
+
+"""aggregate sum on columns"""
+type stadium_sum_fields {
+  average: Int
+  capacity: Int
+  highest: Int
+  lowest: Int
+  stadium_id: Int
+}
+
+"""
+order by sum() on columns of table "stadium"
+"""
+input stadium_sum_order_by {
+  average: order_by
+  capacity: order_by
+  highest: order_by
+  lowest: order_by
+  stadium_id: order_by
+}
+
+"""
+update columns of table "stadium"
+"""
+enum stadium_update_column {
+  """column name"""
+  average
+
+  """column name"""
+  capacity
+
+  """column name"""
+  highest
+
+  """column name"""
+  location
+
+  """column name"""
+  lowest
+
+  """column name"""
+  name
+
+  """column name"""
+  stadium_id
+}
+
+"""aggregate var_pop on columns"""
+type stadium_var_pop_fields {
+  average: Float
+  capacity: Float
+  highest: Float
+  lowest: Float
+  stadium_id: Float
+}
+
+"""
+order by var_pop() on columns of table "stadium"
+"""
+input stadium_var_pop_order_by {
+  average: order_by
+  capacity: order_by
+  highest: order_by
+  lowest: order_by
+  stadium_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type stadium_var_samp_fields {
+  average: Float
+  capacity: Float
+  highest: Float
+  lowest: Float
+  stadium_id: Float
+}
+
+"""
+order by var_samp() on columns of table "stadium"
+"""
+input stadium_var_samp_order_by {
+  average: order_by
+  capacity: order_by
+  highest: order_by
+  lowest: order_by
+  stadium_id: order_by
+}
+
+"""aggregate variance on columns"""
+type stadium_variance_fields {
+  average: Float
+  capacity: Float
+  highest: Float
+  lowest: Float
+  stadium_id: Float
+}
+
+"""
+order by variance() on columns of table "stadium"
+"""
+input stadium_variance_order_by {
+  average: order_by
+  capacity: order_by
+  highest: order_by
+  lowest: order_by
+  stadium_id: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "concert"
+  """
+  concert(
+    """distinct select on columns"""
+    distinct_on: [concert_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [concert_order_by!]
+
+    """filter the rows returned"""
+    where: concert_bool_exp
+  ): [concert!]!
+
+  """
+  fetch aggregated fields from the table: "concert"
+  """
+  concert_aggregate(
+    """distinct select on columns"""
+    distinct_on: [concert_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [concert_order_by!]
+
+    """filter the rows returned"""
+    where: concert_bool_exp
+  ): concert_aggregate!
+
+  """
+  fetch data from the table: "singer"
+  """
+  singer(
+    """distinct select on columns"""
+    distinct_on: [singer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [singer_order_by!]
+
+    """filter the rows returned"""
+    where: singer_bool_exp
+  ): [singer!]!
+
+  """
+  fetch aggregated fields from the table: "singer"
+  """
+  singer_aggregate(
+    """distinct select on columns"""
+    distinct_on: [singer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [singer_order_by!]
+
+    """filter the rows returned"""
+    where: singer_bool_exp
+  ): singer_aggregate!
+
+  """
+  fetch data from the table: "singer_in_concert"
+  """
+  singer_in_concert(
+    """distinct select on columns"""
+    distinct_on: [singer_in_concert_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [singer_in_concert_order_by!]
+
+    """filter the rows returned"""
+    where: singer_in_concert_bool_exp
+  ): [singer_in_concert!]!
+
+  """
+  fetch aggregated fields from the table: "singer_in_concert"
+  """
+  singer_in_concert_aggregate(
+    """distinct select on columns"""
+    distinct_on: [singer_in_concert_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [singer_in_concert_order_by!]
+
+    """filter the rows returned"""
+    where: singer_in_concert_bool_exp
+  ): singer_in_concert_aggregate!
+
+  """
+  fetch data from the table: "stadium"
+  """
+  stadium(
+    """distinct select on columns"""
+    distinct_on: [stadium_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stadium_order_by!]
+
+    """filter the rows returned"""
+    where: stadium_bool_exp
+  ): [stadium!]!
+
+  """
+  fetch aggregated fields from the table: "stadium"
+  """
+  stadium_aggregate(
+    """distinct select on columns"""
+    distinct_on: [stadium_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [stadium_order_by!]
+
+    """filter the rows returned"""
+    where: stadium_bool_exp
+  ): stadium_aggregate!
+}

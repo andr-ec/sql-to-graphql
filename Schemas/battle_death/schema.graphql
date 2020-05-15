@@ -1,0 +1,1645 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "battle"
+"""
+type battle {
+  bulgarian_commander: String
+  date: String
+  id: Int!
+  latin_commander: String
+  name: String
+  result: String
+
+  """An array relationship"""
+  ships(
+    """distinct select on columns"""
+    distinct_on: [ship_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ship_order_by!]
+
+    """filter the rows returned"""
+    where: ship_bool_exp
+  ): [ship!]!
+
+  """An aggregated array relationship"""
+  ships_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ship_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ship_order_by!]
+
+    """filter the rows returned"""
+    where: ship_bool_exp
+  ): ship_aggregate!
+}
+
+"""
+aggregated selection of "battle"
+"""
+type battle_aggregate {
+  aggregate: battle_aggregate_fields
+  nodes: [battle!]!
+}
+
+"""
+aggregate fields of "battle"
+"""
+type battle_aggregate_fields {
+  avg: battle_avg_fields
+  count(columns: [battle_select_column!], distinct: Boolean): Int
+  max: battle_max_fields
+  min: battle_min_fields
+  stddev: battle_stddev_fields
+  stddev_pop: battle_stddev_pop_fields
+  stddev_samp: battle_stddev_samp_fields
+  sum: battle_sum_fields
+  var_pop: battle_var_pop_fields
+  var_samp: battle_var_samp_fields
+  variance: battle_variance_fields
+}
+
+"""
+order by aggregate values of table "battle"
+"""
+input battle_aggregate_order_by {
+  avg: battle_avg_order_by
+  count: order_by
+  max: battle_max_order_by
+  min: battle_min_order_by
+  stddev: battle_stddev_order_by
+  stddev_pop: battle_stddev_pop_order_by
+  stddev_samp: battle_stddev_samp_order_by
+  sum: battle_sum_order_by
+  var_pop: battle_var_pop_order_by
+  var_samp: battle_var_samp_order_by
+  variance: battle_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "battle"
+"""
+input battle_arr_rel_insert_input {
+  data: [battle_insert_input!]!
+  on_conflict: battle_on_conflict
+}
+
+"""aggregate avg on columns"""
+type battle_avg_fields {
+  id: Float
+}
+
+"""
+order by avg() on columns of table "battle"
+"""
+input battle_avg_order_by {
+  id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "battle". All fields are combined with a logical 'AND'.
+"""
+input battle_bool_exp {
+  _and: [battle_bool_exp]
+  _not: battle_bool_exp
+  _or: [battle_bool_exp]
+  bulgarian_commander: String_comparison_exp
+  date: String_comparison_exp
+  id: Int_comparison_exp
+  latin_commander: String_comparison_exp
+  name: String_comparison_exp
+  result: String_comparison_exp
+  ships: ship_bool_exp
+}
+
+"""
+unique or primary key constraints on table "battle"
+"""
+enum battle_constraint {
+  """unique or primary key constraint"""
+  idx_25349_sqlite_autoindex_battle_1
+}
+
+"""
+input type for incrementing integer columne in table "battle"
+"""
+input battle_inc_input {
+  id: Int
+}
+
+"""
+input type for inserting data into table "battle"
+"""
+input battle_insert_input {
+  bulgarian_commander: String
+  date: String
+  id: Int
+  latin_commander: String
+  name: String
+  result: String
+  ships: ship_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type battle_max_fields {
+  bulgarian_commander: String
+  date: String
+  id: Int
+  latin_commander: String
+  name: String
+  result: String
+}
+
+"""
+order by max() on columns of table "battle"
+"""
+input battle_max_order_by {
+  bulgarian_commander: order_by
+  date: order_by
+  id: order_by
+  latin_commander: order_by
+  name: order_by
+  result: order_by
+}
+
+"""aggregate min on columns"""
+type battle_min_fields {
+  bulgarian_commander: String
+  date: String
+  id: Int
+  latin_commander: String
+  name: String
+  result: String
+}
+
+"""
+order by min() on columns of table "battle"
+"""
+input battle_min_order_by {
+  bulgarian_commander: order_by
+  date: order_by
+  id: order_by
+  latin_commander: order_by
+  name: order_by
+  result: order_by
+}
+
+"""
+response of any mutation on the table "battle"
+"""
+type battle_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [battle!]!
+}
+
+"""
+input type for inserting object relation for remote table "battle"
+"""
+input battle_obj_rel_insert_input {
+  data: battle_insert_input!
+  on_conflict: battle_on_conflict
+}
+
+"""
+on conflict condition type for table "battle"
+"""
+input battle_on_conflict {
+  constraint: battle_constraint!
+  update_columns: [battle_update_column!]!
+  where: battle_bool_exp
+}
+
+"""
+ordering options when selecting data from "battle"
+"""
+input battle_order_by {
+  bulgarian_commander: order_by
+  date: order_by
+  id: order_by
+  latin_commander: order_by
+  name: order_by
+  result: order_by
+  ships_aggregate: ship_aggregate_order_by
+}
+
+"""
+select columns of table "battle"
+"""
+enum battle_select_column {
+  """column name"""
+  bulgarian_commander
+
+  """column name"""
+  date
+
+  """column name"""
+  id
+
+  """column name"""
+  latin_commander
+
+  """column name"""
+  name
+
+  """column name"""
+  result
+}
+
+"""
+input type for updating data in table "battle"
+"""
+input battle_set_input {
+  bulgarian_commander: String
+  date: String
+  id: Int
+  latin_commander: String
+  name: String
+  result: String
+}
+
+"""aggregate stddev on columns"""
+type battle_stddev_fields {
+  id: Float
+}
+
+"""
+order by stddev() on columns of table "battle"
+"""
+input battle_stddev_order_by {
+  id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type battle_stddev_pop_fields {
+  id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "battle"
+"""
+input battle_stddev_pop_order_by {
+  id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type battle_stddev_samp_fields {
+  id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "battle"
+"""
+input battle_stddev_samp_order_by {
+  id: order_by
+}
+
+"""aggregate sum on columns"""
+type battle_sum_fields {
+  id: Int
+}
+
+"""
+order by sum() on columns of table "battle"
+"""
+input battle_sum_order_by {
+  id: order_by
+}
+
+"""
+update columns of table "battle"
+"""
+enum battle_update_column {
+  """column name"""
+  bulgarian_commander
+
+  """column name"""
+  date
+
+  """column name"""
+  id
+
+  """column name"""
+  latin_commander
+
+  """column name"""
+  name
+
+  """column name"""
+  result
+}
+
+"""aggregate var_pop on columns"""
+type battle_var_pop_fields {
+  id: Float
+}
+
+"""
+order by var_pop() on columns of table "battle"
+"""
+input battle_var_pop_order_by {
+  id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type battle_var_samp_fields {
+  id: Float
+}
+
+"""
+order by var_samp() on columns of table "battle"
+"""
+input battle_var_samp_order_by {
+  id: order_by
+}
+
+"""aggregate variance on columns"""
+type battle_variance_fields {
+  id: Float
+}
+
+"""
+order by variance() on columns of table "battle"
+"""
+input battle_variance_order_by {
+  id: order_by
+}
+
+"""
+columns and relationships of "death"
+"""
+type death {
+  caused_by_ship_id: Int
+  id: Int!
+  injured: Int
+  killed: Int
+  note: String
+
+  """An object relationship"""
+  ship: ship
+}
+
+"""
+aggregated selection of "death"
+"""
+type death_aggregate {
+  aggregate: death_aggregate_fields
+  nodes: [death!]!
+}
+
+"""
+aggregate fields of "death"
+"""
+type death_aggregate_fields {
+  avg: death_avg_fields
+  count(columns: [death_select_column!], distinct: Boolean): Int
+  max: death_max_fields
+  min: death_min_fields
+  stddev: death_stddev_fields
+  stddev_pop: death_stddev_pop_fields
+  stddev_samp: death_stddev_samp_fields
+  sum: death_sum_fields
+  var_pop: death_var_pop_fields
+  var_samp: death_var_samp_fields
+  variance: death_variance_fields
+}
+
+"""
+order by aggregate values of table "death"
+"""
+input death_aggregate_order_by {
+  avg: death_avg_order_by
+  count: order_by
+  max: death_max_order_by
+  min: death_min_order_by
+  stddev: death_stddev_order_by
+  stddev_pop: death_stddev_pop_order_by
+  stddev_samp: death_stddev_samp_order_by
+  sum: death_sum_order_by
+  var_pop: death_var_pop_order_by
+  var_samp: death_var_samp_order_by
+  variance: death_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "death"
+"""
+input death_arr_rel_insert_input {
+  data: [death_insert_input!]!
+  on_conflict: death_on_conflict
+}
+
+"""aggregate avg on columns"""
+type death_avg_fields {
+  caused_by_ship_id: Float
+  id: Float
+  injured: Float
+  killed: Float
+}
+
+"""
+order by avg() on columns of table "death"
+"""
+input death_avg_order_by {
+  caused_by_ship_id: order_by
+  id: order_by
+  injured: order_by
+  killed: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "death". All fields are combined with a logical 'AND'.
+"""
+input death_bool_exp {
+  _and: [death_bool_exp]
+  _not: death_bool_exp
+  _or: [death_bool_exp]
+  caused_by_ship_id: Int_comparison_exp
+  id: Int_comparison_exp
+  injured: Int_comparison_exp
+  killed: Int_comparison_exp
+  note: String_comparison_exp
+  ship: ship_bool_exp
+}
+
+"""
+unique or primary key constraints on table "death"
+"""
+enum death_constraint {
+  """unique or primary key constraint"""
+  idx_25361_sqlite_autoindex_death_1
+}
+
+"""
+input type for incrementing integer columne in table "death"
+"""
+input death_inc_input {
+  caused_by_ship_id: Int
+  id: Int
+  injured: Int
+  killed: Int
+}
+
+"""
+input type for inserting data into table "death"
+"""
+input death_insert_input {
+  caused_by_ship_id: Int
+  id: Int
+  injured: Int
+  killed: Int
+  note: String
+  ship: ship_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type death_max_fields {
+  caused_by_ship_id: Int
+  id: Int
+  injured: Int
+  killed: Int
+  note: String
+}
+
+"""
+order by max() on columns of table "death"
+"""
+input death_max_order_by {
+  caused_by_ship_id: order_by
+  id: order_by
+  injured: order_by
+  killed: order_by
+  note: order_by
+}
+
+"""aggregate min on columns"""
+type death_min_fields {
+  caused_by_ship_id: Int
+  id: Int
+  injured: Int
+  killed: Int
+  note: String
+}
+
+"""
+order by min() on columns of table "death"
+"""
+input death_min_order_by {
+  caused_by_ship_id: order_by
+  id: order_by
+  injured: order_by
+  killed: order_by
+  note: order_by
+}
+
+"""
+response of any mutation on the table "death"
+"""
+type death_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [death!]!
+}
+
+"""
+input type for inserting object relation for remote table "death"
+"""
+input death_obj_rel_insert_input {
+  data: death_insert_input!
+  on_conflict: death_on_conflict
+}
+
+"""
+on conflict condition type for table "death"
+"""
+input death_on_conflict {
+  constraint: death_constraint!
+  update_columns: [death_update_column!]!
+  where: death_bool_exp
+}
+
+"""
+ordering options when selecting data from "death"
+"""
+input death_order_by {
+  caused_by_ship_id: order_by
+  id: order_by
+  injured: order_by
+  killed: order_by
+  note: order_by
+  ship: ship_order_by
+}
+
+"""
+select columns of table "death"
+"""
+enum death_select_column {
+  """column name"""
+  caused_by_ship_id
+
+  """column name"""
+  id
+
+  """column name"""
+  injured
+
+  """column name"""
+  killed
+
+  """column name"""
+  note
+}
+
+"""
+input type for updating data in table "death"
+"""
+input death_set_input {
+  caused_by_ship_id: Int
+  id: Int
+  injured: Int
+  killed: Int
+  note: String
+}
+
+"""aggregate stddev on columns"""
+type death_stddev_fields {
+  caused_by_ship_id: Float
+  id: Float
+  injured: Float
+  killed: Float
+}
+
+"""
+order by stddev() on columns of table "death"
+"""
+input death_stddev_order_by {
+  caused_by_ship_id: order_by
+  id: order_by
+  injured: order_by
+  killed: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type death_stddev_pop_fields {
+  caused_by_ship_id: Float
+  id: Float
+  injured: Float
+  killed: Float
+}
+
+"""
+order by stddev_pop() on columns of table "death"
+"""
+input death_stddev_pop_order_by {
+  caused_by_ship_id: order_by
+  id: order_by
+  injured: order_by
+  killed: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type death_stddev_samp_fields {
+  caused_by_ship_id: Float
+  id: Float
+  injured: Float
+  killed: Float
+}
+
+"""
+order by stddev_samp() on columns of table "death"
+"""
+input death_stddev_samp_order_by {
+  caused_by_ship_id: order_by
+  id: order_by
+  injured: order_by
+  killed: order_by
+}
+
+"""aggregate sum on columns"""
+type death_sum_fields {
+  caused_by_ship_id: Int
+  id: Int
+  injured: Int
+  killed: Int
+}
+
+"""
+order by sum() on columns of table "death"
+"""
+input death_sum_order_by {
+  caused_by_ship_id: order_by
+  id: order_by
+  injured: order_by
+  killed: order_by
+}
+
+"""
+update columns of table "death"
+"""
+enum death_update_column {
+  """column name"""
+  caused_by_ship_id
+
+  """column name"""
+  id
+
+  """column name"""
+  injured
+
+  """column name"""
+  killed
+
+  """column name"""
+  note
+}
+
+"""aggregate var_pop on columns"""
+type death_var_pop_fields {
+  caused_by_ship_id: Float
+  id: Float
+  injured: Float
+  killed: Float
+}
+
+"""
+order by var_pop() on columns of table "death"
+"""
+input death_var_pop_order_by {
+  caused_by_ship_id: order_by
+  id: order_by
+  injured: order_by
+  killed: order_by
+}
+
+"""aggregate var_samp on columns"""
+type death_var_samp_fields {
+  caused_by_ship_id: Float
+  id: Float
+  injured: Float
+  killed: Float
+}
+
+"""
+order by var_samp() on columns of table "death"
+"""
+input death_var_samp_order_by {
+  caused_by_ship_id: order_by
+  id: order_by
+  injured: order_by
+  killed: order_by
+}
+
+"""aggregate variance on columns"""
+type death_variance_fields {
+  caused_by_ship_id: Float
+  id: Float
+  injured: Float
+  killed: Float
+}
+
+"""
+order by variance() on columns of table "death"
+"""
+input death_variance_order_by {
+  caused_by_ship_id: order_by
+  id: order_by
+  injured: order_by
+  killed: order_by
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "battle"
+  """
+  delete_battle(
+    """filter the rows which have to be deleted"""
+    where: battle_bool_exp!
+  ): battle_mutation_response
+
+  """
+  delete data from the table: "death"
+  """
+  delete_death(
+    """filter the rows which have to be deleted"""
+    where: death_bool_exp!
+  ): death_mutation_response
+
+  """
+  delete data from the table: "ship"
+  """
+  delete_ship(
+    """filter the rows which have to be deleted"""
+    where: ship_bool_exp!
+  ): ship_mutation_response
+
+  """
+  insert data into the table: "battle"
+  """
+  insert_battle(
+    """the rows to be inserted"""
+    objects: [battle_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: battle_on_conflict
+  ): battle_mutation_response
+
+  """
+  insert data into the table: "death"
+  """
+  insert_death(
+    """the rows to be inserted"""
+    objects: [death_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: death_on_conflict
+  ): death_mutation_response
+
+  """
+  insert data into the table: "ship"
+  """
+  insert_ship(
+    """the rows to be inserted"""
+    objects: [ship_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: ship_on_conflict
+  ): ship_mutation_response
+
+  """
+  update data of the table: "battle"
+  """
+  update_battle(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: battle_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: battle_set_input
+
+    """filter the rows which have to be updated"""
+    where: battle_bool_exp!
+  ): battle_mutation_response
+
+  """
+  update data of the table: "death"
+  """
+  update_death(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: death_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: death_set_input
+
+    """filter the rows which have to be updated"""
+    where: death_bool_exp!
+  ): death_mutation_response
+
+  """
+  update data of the table: "ship"
+  """
+  update_ship(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: ship_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: ship_set_input
+
+    """filter the rows which have to be updated"""
+    where: ship_bool_exp!
+  ): ship_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "battle"
+  """
+  battle(
+    """distinct select on columns"""
+    distinct_on: [battle_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [battle_order_by!]
+
+    """filter the rows returned"""
+    where: battle_bool_exp
+  ): [battle!]!
+
+  """
+  fetch aggregated fields from the table: "battle"
+  """
+  battle_aggregate(
+    """distinct select on columns"""
+    distinct_on: [battle_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [battle_order_by!]
+
+    """filter the rows returned"""
+    where: battle_bool_exp
+  ): battle_aggregate!
+
+  """fetch data from the table: "battle" using primary key columns"""
+  battle_by_pk(id: Int!): battle
+
+  """
+  fetch data from the table: "death"
+  """
+  death(
+    """distinct select on columns"""
+    distinct_on: [death_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [death_order_by!]
+
+    """filter the rows returned"""
+    where: death_bool_exp
+  ): [death!]!
+
+  """
+  fetch aggregated fields from the table: "death"
+  """
+  death_aggregate(
+    """distinct select on columns"""
+    distinct_on: [death_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [death_order_by!]
+
+    """filter the rows returned"""
+    where: death_bool_exp
+  ): death_aggregate!
+
+  """fetch data from the table: "death" using primary key columns"""
+  death_by_pk(id: Int!): death
+
+  """
+  fetch data from the table: "ship"
+  """
+  ship(
+    """distinct select on columns"""
+    distinct_on: [ship_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ship_order_by!]
+
+    """filter the rows returned"""
+    where: ship_bool_exp
+  ): [ship!]!
+
+  """
+  fetch aggregated fields from the table: "ship"
+  """
+  ship_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ship_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ship_order_by!]
+
+    """filter the rows returned"""
+    where: ship_bool_exp
+  ): ship_aggregate!
+
+  """fetch data from the table: "ship" using primary key columns"""
+  ship_by_pk(id: Int!): ship
+}
+
+"""
+columns and relationships of "ship"
+"""
+type ship {
+  """An object relationship"""
+  battle: battle
+
+  """An array relationship"""
+  deaths(
+    """distinct select on columns"""
+    distinct_on: [death_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [death_order_by!]
+
+    """filter the rows returned"""
+    where: death_bool_exp
+  ): [death!]!
+
+  """An aggregated array relationship"""
+  deaths_aggregate(
+    """distinct select on columns"""
+    distinct_on: [death_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [death_order_by!]
+
+    """filter the rows returned"""
+    where: death_bool_exp
+  ): death_aggregate!
+  disposition_of_ship: String
+  id: Int!
+  location: String
+  lost_in_battle: Int
+  name: String
+  ship_type: String
+  tonnage: String
+}
+
+"""
+aggregated selection of "ship"
+"""
+type ship_aggregate {
+  aggregate: ship_aggregate_fields
+  nodes: [ship!]!
+}
+
+"""
+aggregate fields of "ship"
+"""
+type ship_aggregate_fields {
+  avg: ship_avg_fields
+  count(columns: [ship_select_column!], distinct: Boolean): Int
+  max: ship_max_fields
+  min: ship_min_fields
+  stddev: ship_stddev_fields
+  stddev_pop: ship_stddev_pop_fields
+  stddev_samp: ship_stddev_samp_fields
+  sum: ship_sum_fields
+  var_pop: ship_var_pop_fields
+  var_samp: ship_var_samp_fields
+  variance: ship_variance_fields
+}
+
+"""
+order by aggregate values of table "ship"
+"""
+input ship_aggregate_order_by {
+  avg: ship_avg_order_by
+  count: order_by
+  max: ship_max_order_by
+  min: ship_min_order_by
+  stddev: ship_stddev_order_by
+  stddev_pop: ship_stddev_pop_order_by
+  stddev_samp: ship_stddev_samp_order_by
+  sum: ship_sum_order_by
+  var_pop: ship_var_pop_order_by
+  var_samp: ship_var_samp_order_by
+  variance: ship_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "ship"
+"""
+input ship_arr_rel_insert_input {
+  data: [ship_insert_input!]!
+  on_conflict: ship_on_conflict
+}
+
+"""aggregate avg on columns"""
+type ship_avg_fields {
+  id: Float
+  lost_in_battle: Float
+}
+
+"""
+order by avg() on columns of table "ship"
+"""
+input ship_avg_order_by {
+  id: order_by
+  lost_in_battle: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "ship". All fields are combined with a logical 'AND'.
+"""
+input ship_bool_exp {
+  _and: [ship_bool_exp]
+  _not: ship_bool_exp
+  _or: [ship_bool_exp]
+  battle: battle_bool_exp
+  deaths: death_bool_exp
+  disposition_of_ship: String_comparison_exp
+  id: Int_comparison_exp
+  location: String_comparison_exp
+  lost_in_battle: Int_comparison_exp
+  name: String_comparison_exp
+  ship_type: String_comparison_exp
+  tonnage: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "ship"
+"""
+enum ship_constraint {
+  """unique or primary key constraint"""
+  idx_25355_sqlite_autoindex_ship_1
+}
+
+"""
+input type for incrementing integer columne in table "ship"
+"""
+input ship_inc_input {
+  id: Int
+  lost_in_battle: Int
+}
+
+"""
+input type for inserting data into table "ship"
+"""
+input ship_insert_input {
+  battle: battle_obj_rel_insert_input
+  deaths: death_arr_rel_insert_input
+  disposition_of_ship: String
+  id: Int
+  location: String
+  lost_in_battle: Int
+  name: String
+  ship_type: String
+  tonnage: String
+}
+
+"""aggregate max on columns"""
+type ship_max_fields {
+  disposition_of_ship: String
+  id: Int
+  location: String
+  lost_in_battle: Int
+  name: String
+  ship_type: String
+  tonnage: String
+}
+
+"""
+order by max() on columns of table "ship"
+"""
+input ship_max_order_by {
+  disposition_of_ship: order_by
+  id: order_by
+  location: order_by
+  lost_in_battle: order_by
+  name: order_by
+  ship_type: order_by
+  tonnage: order_by
+}
+
+"""aggregate min on columns"""
+type ship_min_fields {
+  disposition_of_ship: String
+  id: Int
+  location: String
+  lost_in_battle: Int
+  name: String
+  ship_type: String
+  tonnage: String
+}
+
+"""
+order by min() on columns of table "ship"
+"""
+input ship_min_order_by {
+  disposition_of_ship: order_by
+  id: order_by
+  location: order_by
+  lost_in_battle: order_by
+  name: order_by
+  ship_type: order_by
+  tonnage: order_by
+}
+
+"""
+response of any mutation on the table "ship"
+"""
+type ship_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [ship!]!
+}
+
+"""
+input type for inserting object relation for remote table "ship"
+"""
+input ship_obj_rel_insert_input {
+  data: ship_insert_input!
+  on_conflict: ship_on_conflict
+}
+
+"""
+on conflict condition type for table "ship"
+"""
+input ship_on_conflict {
+  constraint: ship_constraint!
+  update_columns: [ship_update_column!]!
+  where: ship_bool_exp
+}
+
+"""
+ordering options when selecting data from "ship"
+"""
+input ship_order_by {
+  battle: battle_order_by
+  deaths_aggregate: death_aggregate_order_by
+  disposition_of_ship: order_by
+  id: order_by
+  location: order_by
+  lost_in_battle: order_by
+  name: order_by
+  ship_type: order_by
+  tonnage: order_by
+}
+
+"""
+select columns of table "ship"
+"""
+enum ship_select_column {
+  """column name"""
+  disposition_of_ship
+
+  """column name"""
+  id
+
+  """column name"""
+  location
+
+  """column name"""
+  lost_in_battle
+
+  """column name"""
+  name
+
+  """column name"""
+  ship_type
+
+  """column name"""
+  tonnage
+}
+
+"""
+input type for updating data in table "ship"
+"""
+input ship_set_input {
+  disposition_of_ship: String
+  id: Int
+  location: String
+  lost_in_battle: Int
+  name: String
+  ship_type: String
+  tonnage: String
+}
+
+"""aggregate stddev on columns"""
+type ship_stddev_fields {
+  id: Float
+  lost_in_battle: Float
+}
+
+"""
+order by stddev() on columns of table "ship"
+"""
+input ship_stddev_order_by {
+  id: order_by
+  lost_in_battle: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type ship_stddev_pop_fields {
+  id: Float
+  lost_in_battle: Float
+}
+
+"""
+order by stddev_pop() on columns of table "ship"
+"""
+input ship_stddev_pop_order_by {
+  id: order_by
+  lost_in_battle: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type ship_stddev_samp_fields {
+  id: Float
+  lost_in_battle: Float
+}
+
+"""
+order by stddev_samp() on columns of table "ship"
+"""
+input ship_stddev_samp_order_by {
+  id: order_by
+  lost_in_battle: order_by
+}
+
+"""aggregate sum on columns"""
+type ship_sum_fields {
+  id: Int
+  lost_in_battle: Int
+}
+
+"""
+order by sum() on columns of table "ship"
+"""
+input ship_sum_order_by {
+  id: order_by
+  lost_in_battle: order_by
+}
+
+"""
+update columns of table "ship"
+"""
+enum ship_update_column {
+  """column name"""
+  disposition_of_ship
+
+  """column name"""
+  id
+
+  """column name"""
+  location
+
+  """column name"""
+  lost_in_battle
+
+  """column name"""
+  name
+
+  """column name"""
+  ship_type
+
+  """column name"""
+  tonnage
+}
+
+"""aggregate var_pop on columns"""
+type ship_var_pop_fields {
+  id: Float
+  lost_in_battle: Float
+}
+
+"""
+order by var_pop() on columns of table "ship"
+"""
+input ship_var_pop_order_by {
+  id: order_by
+  lost_in_battle: order_by
+}
+
+"""aggregate var_samp on columns"""
+type ship_var_samp_fields {
+  id: Float
+  lost_in_battle: Float
+}
+
+"""
+order by var_samp() on columns of table "ship"
+"""
+input ship_var_samp_order_by {
+  id: order_by
+  lost_in_battle: order_by
+}
+
+"""aggregate variance on columns"""
+type ship_variance_fields {
+  id: Float
+  lost_in_battle: Float
+}
+
+"""
+order by variance() on columns of table "ship"
+"""
+input ship_variance_order_by {
+  id: order_by
+  lost_in_battle: order_by
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "battle"
+  """
+  battle(
+    """distinct select on columns"""
+    distinct_on: [battle_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [battle_order_by!]
+
+    """filter the rows returned"""
+    where: battle_bool_exp
+  ): [battle!]!
+
+  """
+  fetch aggregated fields from the table: "battle"
+  """
+  battle_aggregate(
+    """distinct select on columns"""
+    distinct_on: [battle_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [battle_order_by!]
+
+    """filter the rows returned"""
+    where: battle_bool_exp
+  ): battle_aggregate!
+
+  """fetch data from the table: "battle" using primary key columns"""
+  battle_by_pk(id: Int!): battle
+
+  """
+  fetch data from the table: "death"
+  """
+  death(
+    """distinct select on columns"""
+    distinct_on: [death_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [death_order_by!]
+
+    """filter the rows returned"""
+    where: death_bool_exp
+  ): [death!]!
+
+  """
+  fetch aggregated fields from the table: "death"
+  """
+  death_aggregate(
+    """distinct select on columns"""
+    distinct_on: [death_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [death_order_by!]
+
+    """filter the rows returned"""
+    where: death_bool_exp
+  ): death_aggregate!
+
+  """fetch data from the table: "death" using primary key columns"""
+  death_by_pk(id: Int!): death
+
+  """
+  fetch data from the table: "ship"
+  """
+  ship(
+    """distinct select on columns"""
+    distinct_on: [ship_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ship_order_by!]
+
+    """filter the rows returned"""
+    where: ship_bool_exp
+  ): [ship!]!
+
+  """
+  fetch aggregated fields from the table: "ship"
+  """
+  ship_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ship_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ship_order_by!]
+
+    """filter the rows returned"""
+    where: ship_bool_exp
+  ): ship_aggregate!
+
+  """fetch data from the table: "ship" using primary key columns"""
+  ship_by_pk(id: Int!): ship
+}

@@ -1,0 +1,3210 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "apartment_bookings"
+"""
+type apartment_bookings {
+  """An object relationship"""
+  apartment: apartments
+  apt_booking_id: bigint!
+  apt_id: bigint
+  booking_end_date: timestamptz
+  booking_start_date: timestamptz
+  booking_status_code: String
+
+  """An object relationship"""
+  guest: guests
+  guest_id: bigint
+
+  """An array relationship"""
+  view_unit_statuses(
+    """distinct select on columns"""
+    distinct_on: [view_unit_status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [view_unit_status_order_by!]
+
+    """filter the rows returned"""
+    where: view_unit_status_bool_exp
+  ): [view_unit_status!]!
+
+  """An aggregated array relationship"""
+  view_unit_statuses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [view_unit_status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [view_unit_status_order_by!]
+
+    """filter the rows returned"""
+    where: view_unit_status_bool_exp
+  ): view_unit_status_aggregate!
+}
+
+"""
+aggregated selection of "apartment_bookings"
+"""
+type apartment_bookings_aggregate {
+  aggregate: apartment_bookings_aggregate_fields
+  nodes: [apartment_bookings!]!
+}
+
+"""
+aggregate fields of "apartment_bookings"
+"""
+type apartment_bookings_aggregate_fields {
+  avg: apartment_bookings_avg_fields
+  count(columns: [apartment_bookings_select_column!], distinct: Boolean): Int
+  max: apartment_bookings_max_fields
+  min: apartment_bookings_min_fields
+  stddev: apartment_bookings_stddev_fields
+  stddev_pop: apartment_bookings_stddev_pop_fields
+  stddev_samp: apartment_bookings_stddev_samp_fields
+  sum: apartment_bookings_sum_fields
+  var_pop: apartment_bookings_var_pop_fields
+  var_samp: apartment_bookings_var_samp_fields
+  variance: apartment_bookings_variance_fields
+}
+
+"""
+order by aggregate values of table "apartment_bookings"
+"""
+input apartment_bookings_aggregate_order_by {
+  avg: apartment_bookings_avg_order_by
+  count: order_by
+  max: apartment_bookings_max_order_by
+  min: apartment_bookings_min_order_by
+  stddev: apartment_bookings_stddev_order_by
+  stddev_pop: apartment_bookings_stddev_pop_order_by
+  stddev_samp: apartment_bookings_stddev_samp_order_by
+  sum: apartment_bookings_sum_order_by
+  var_pop: apartment_bookings_var_pop_order_by
+  var_samp: apartment_bookings_var_samp_order_by
+  variance: apartment_bookings_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "apartment_bookings"
+"""
+input apartment_bookings_arr_rel_insert_input {
+  data: [apartment_bookings_insert_input!]!
+  on_conflict: apartment_bookings_on_conflict
+}
+
+"""aggregate avg on columns"""
+type apartment_bookings_avg_fields {
+  apt_booking_id: Float
+  apt_id: Float
+  guest_id: Float
+}
+
+"""
+order by avg() on columns of table "apartment_bookings"
+"""
+input apartment_bookings_avg_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+  guest_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "apartment_bookings". All fields are combined with a logical 'AND'.
+"""
+input apartment_bookings_bool_exp {
+  _and: [apartment_bookings_bool_exp]
+  _not: apartment_bookings_bool_exp
+  _or: [apartment_bookings_bool_exp]
+  apartment: apartments_bool_exp
+  apt_booking_id: bigint_comparison_exp
+  apt_id: bigint_comparison_exp
+  booking_end_date: timestamptz_comparison_exp
+  booking_start_date: timestamptz_comparison_exp
+  booking_status_code: String_comparison_exp
+  guest: guests_bool_exp
+  guest_id: bigint_comparison_exp
+  view_unit_statuses: view_unit_status_bool_exp
+}
+
+"""
+unique or primary key constraints on table "apartment_bookings"
+"""
+enum apartment_bookings_constraint {
+  """unique or primary key constraint"""
+  idx_24769_sqlite_autoindex_apartment_bookings_1
+}
+
+"""
+input type for incrementing integer columne in table "apartment_bookings"
+"""
+input apartment_bookings_inc_input {
+  apt_booking_id: bigint
+  apt_id: bigint
+  guest_id: bigint
+}
+
+"""
+input type for inserting data into table "apartment_bookings"
+"""
+input apartment_bookings_insert_input {
+  apartment: apartments_obj_rel_insert_input
+  apt_booking_id: bigint
+  apt_id: bigint
+  booking_end_date: timestamptz
+  booking_start_date: timestamptz
+  booking_status_code: String
+  guest: guests_obj_rel_insert_input
+  guest_id: bigint
+  view_unit_statuses: view_unit_status_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type apartment_bookings_max_fields {
+  apt_booking_id: bigint
+  apt_id: bigint
+  booking_end_date: timestamptz
+  booking_start_date: timestamptz
+  booking_status_code: String
+  guest_id: bigint
+}
+
+"""
+order by max() on columns of table "apartment_bookings"
+"""
+input apartment_bookings_max_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+  booking_end_date: order_by
+  booking_start_date: order_by
+  booking_status_code: order_by
+  guest_id: order_by
+}
+
+"""aggregate min on columns"""
+type apartment_bookings_min_fields {
+  apt_booking_id: bigint
+  apt_id: bigint
+  booking_end_date: timestamptz
+  booking_start_date: timestamptz
+  booking_status_code: String
+  guest_id: bigint
+}
+
+"""
+order by min() on columns of table "apartment_bookings"
+"""
+input apartment_bookings_min_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+  booking_end_date: order_by
+  booking_start_date: order_by
+  booking_status_code: order_by
+  guest_id: order_by
+}
+
+"""
+response of any mutation on the table "apartment_bookings"
+"""
+type apartment_bookings_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [apartment_bookings!]!
+}
+
+"""
+input type for inserting object relation for remote table "apartment_bookings"
+"""
+input apartment_bookings_obj_rel_insert_input {
+  data: apartment_bookings_insert_input!
+  on_conflict: apartment_bookings_on_conflict
+}
+
+"""
+on conflict condition type for table "apartment_bookings"
+"""
+input apartment_bookings_on_conflict {
+  constraint: apartment_bookings_constraint!
+  update_columns: [apartment_bookings_update_column!]!
+  where: apartment_bookings_bool_exp
+}
+
+"""
+ordering options when selecting data from "apartment_bookings"
+"""
+input apartment_bookings_order_by {
+  apartment: apartments_order_by
+  apt_booking_id: order_by
+  apt_id: order_by
+  booking_end_date: order_by
+  booking_start_date: order_by
+  booking_status_code: order_by
+  guest: guests_order_by
+  guest_id: order_by
+  view_unit_statuses_aggregate: view_unit_status_aggregate_order_by
+}
+
+"""
+select columns of table "apartment_bookings"
+"""
+enum apartment_bookings_select_column {
+  """column name"""
+  apt_booking_id
+
+  """column name"""
+  apt_id
+
+  """column name"""
+  booking_end_date
+
+  """column name"""
+  booking_start_date
+
+  """column name"""
+  booking_status_code
+
+  """column name"""
+  guest_id
+}
+
+"""
+input type for updating data in table "apartment_bookings"
+"""
+input apartment_bookings_set_input {
+  apt_booking_id: bigint
+  apt_id: bigint
+  booking_end_date: timestamptz
+  booking_start_date: timestamptz
+  booking_status_code: String
+  guest_id: bigint
+}
+
+"""aggregate stddev on columns"""
+type apartment_bookings_stddev_fields {
+  apt_booking_id: Float
+  apt_id: Float
+  guest_id: Float
+}
+
+"""
+order by stddev() on columns of table "apartment_bookings"
+"""
+input apartment_bookings_stddev_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+  guest_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type apartment_bookings_stddev_pop_fields {
+  apt_booking_id: Float
+  apt_id: Float
+  guest_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "apartment_bookings"
+"""
+input apartment_bookings_stddev_pop_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+  guest_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type apartment_bookings_stddev_samp_fields {
+  apt_booking_id: Float
+  apt_id: Float
+  guest_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "apartment_bookings"
+"""
+input apartment_bookings_stddev_samp_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+  guest_id: order_by
+}
+
+"""aggregate sum on columns"""
+type apartment_bookings_sum_fields {
+  apt_booking_id: bigint
+  apt_id: bigint
+  guest_id: bigint
+}
+
+"""
+order by sum() on columns of table "apartment_bookings"
+"""
+input apartment_bookings_sum_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+  guest_id: order_by
+}
+
+"""
+update columns of table "apartment_bookings"
+"""
+enum apartment_bookings_update_column {
+  """column name"""
+  apt_booking_id
+
+  """column name"""
+  apt_id
+
+  """column name"""
+  booking_end_date
+
+  """column name"""
+  booking_start_date
+
+  """column name"""
+  booking_status_code
+
+  """column name"""
+  guest_id
+}
+
+"""aggregate var_pop on columns"""
+type apartment_bookings_var_pop_fields {
+  apt_booking_id: Float
+  apt_id: Float
+  guest_id: Float
+}
+
+"""
+order by var_pop() on columns of table "apartment_bookings"
+"""
+input apartment_bookings_var_pop_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+  guest_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type apartment_bookings_var_samp_fields {
+  apt_booking_id: Float
+  apt_id: Float
+  guest_id: Float
+}
+
+"""
+order by var_samp() on columns of table "apartment_bookings"
+"""
+input apartment_bookings_var_samp_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+  guest_id: order_by
+}
+
+"""aggregate variance on columns"""
+type apartment_bookings_variance_fields {
+  apt_booking_id: Float
+  apt_id: Float
+  guest_id: Float
+}
+
+"""
+order by variance() on columns of table "apartment_bookings"
+"""
+input apartment_bookings_variance_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+  guest_id: order_by
+}
+
+"""
+columns and relationships of "apartment_buildings"
+"""
+type apartment_buildings {
+  """An array relationship"""
+  apartments(
+    """distinct select on columns"""
+    distinct_on: [apartments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartments_order_by!]
+
+    """filter the rows returned"""
+    where: apartments_bool_exp
+  ): [apartments!]!
+
+  """An aggregated array relationship"""
+  apartments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [apartments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartments_order_by!]
+
+    """filter the rows returned"""
+    where: apartments_bool_exp
+  ): apartments_aggregate!
+  building_address: String
+  building_description: String
+  building_full_name: String
+  building_id: bigint!
+  building_manager: String
+  building_phone: String
+  building_short_name: String
+}
+
+"""
+aggregated selection of "apartment_buildings"
+"""
+type apartment_buildings_aggregate {
+  aggregate: apartment_buildings_aggregate_fields
+  nodes: [apartment_buildings!]!
+}
+
+"""
+aggregate fields of "apartment_buildings"
+"""
+type apartment_buildings_aggregate_fields {
+  avg: apartment_buildings_avg_fields
+  count(columns: [apartment_buildings_select_column!], distinct: Boolean): Int
+  max: apartment_buildings_max_fields
+  min: apartment_buildings_min_fields
+  stddev: apartment_buildings_stddev_fields
+  stddev_pop: apartment_buildings_stddev_pop_fields
+  stddev_samp: apartment_buildings_stddev_samp_fields
+  sum: apartment_buildings_sum_fields
+  var_pop: apartment_buildings_var_pop_fields
+  var_samp: apartment_buildings_var_samp_fields
+  variance: apartment_buildings_variance_fields
+}
+
+"""
+order by aggregate values of table "apartment_buildings"
+"""
+input apartment_buildings_aggregate_order_by {
+  avg: apartment_buildings_avg_order_by
+  count: order_by
+  max: apartment_buildings_max_order_by
+  min: apartment_buildings_min_order_by
+  stddev: apartment_buildings_stddev_order_by
+  stddev_pop: apartment_buildings_stddev_pop_order_by
+  stddev_samp: apartment_buildings_stddev_samp_order_by
+  sum: apartment_buildings_sum_order_by
+  var_pop: apartment_buildings_var_pop_order_by
+  var_samp: apartment_buildings_var_samp_order_by
+  variance: apartment_buildings_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "apartment_buildings"
+"""
+input apartment_buildings_arr_rel_insert_input {
+  data: [apartment_buildings_insert_input!]!
+  on_conflict: apartment_buildings_on_conflict
+}
+
+"""aggregate avg on columns"""
+type apartment_buildings_avg_fields {
+  building_id: Float
+}
+
+"""
+order by avg() on columns of table "apartment_buildings"
+"""
+input apartment_buildings_avg_order_by {
+  building_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "apartment_buildings". All fields are combined with a logical 'AND'.
+"""
+input apartment_buildings_bool_exp {
+  _and: [apartment_buildings_bool_exp]
+  _not: apartment_buildings_bool_exp
+  _or: [apartment_buildings_bool_exp]
+  apartments: apartments_bool_exp
+  building_address: String_comparison_exp
+  building_description: String_comparison_exp
+  building_full_name: String_comparison_exp
+  building_id: bigint_comparison_exp
+  building_manager: String_comparison_exp
+  building_phone: String_comparison_exp
+  building_short_name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "apartment_buildings"
+"""
+enum apartment_buildings_constraint {
+  """unique or primary key constraint"""
+  idx_24745_sqlite_autoindex_apartment_buildings_1
+}
+
+"""
+input type for incrementing integer columne in table "apartment_buildings"
+"""
+input apartment_buildings_inc_input {
+  building_id: bigint
+}
+
+"""
+input type for inserting data into table "apartment_buildings"
+"""
+input apartment_buildings_insert_input {
+  apartments: apartments_arr_rel_insert_input
+  building_address: String
+  building_description: String
+  building_full_name: String
+  building_id: bigint
+  building_manager: String
+  building_phone: String
+  building_short_name: String
+}
+
+"""aggregate max on columns"""
+type apartment_buildings_max_fields {
+  building_address: String
+  building_description: String
+  building_full_name: String
+  building_id: bigint
+  building_manager: String
+  building_phone: String
+  building_short_name: String
+}
+
+"""
+order by max() on columns of table "apartment_buildings"
+"""
+input apartment_buildings_max_order_by {
+  building_address: order_by
+  building_description: order_by
+  building_full_name: order_by
+  building_id: order_by
+  building_manager: order_by
+  building_phone: order_by
+  building_short_name: order_by
+}
+
+"""aggregate min on columns"""
+type apartment_buildings_min_fields {
+  building_address: String
+  building_description: String
+  building_full_name: String
+  building_id: bigint
+  building_manager: String
+  building_phone: String
+  building_short_name: String
+}
+
+"""
+order by min() on columns of table "apartment_buildings"
+"""
+input apartment_buildings_min_order_by {
+  building_address: order_by
+  building_description: order_by
+  building_full_name: order_by
+  building_id: order_by
+  building_manager: order_by
+  building_phone: order_by
+  building_short_name: order_by
+}
+
+"""
+response of any mutation on the table "apartment_buildings"
+"""
+type apartment_buildings_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [apartment_buildings!]!
+}
+
+"""
+input type for inserting object relation for remote table "apartment_buildings"
+"""
+input apartment_buildings_obj_rel_insert_input {
+  data: apartment_buildings_insert_input!
+  on_conflict: apartment_buildings_on_conflict
+}
+
+"""
+on conflict condition type for table "apartment_buildings"
+"""
+input apartment_buildings_on_conflict {
+  constraint: apartment_buildings_constraint!
+  update_columns: [apartment_buildings_update_column!]!
+  where: apartment_buildings_bool_exp
+}
+
+"""
+ordering options when selecting data from "apartment_buildings"
+"""
+input apartment_buildings_order_by {
+  apartments_aggregate: apartments_aggregate_order_by
+  building_address: order_by
+  building_description: order_by
+  building_full_name: order_by
+  building_id: order_by
+  building_manager: order_by
+  building_phone: order_by
+  building_short_name: order_by
+}
+
+"""
+select columns of table "apartment_buildings"
+"""
+enum apartment_buildings_select_column {
+  """column name"""
+  building_address
+
+  """column name"""
+  building_description
+
+  """column name"""
+  building_full_name
+
+  """column name"""
+  building_id
+
+  """column name"""
+  building_manager
+
+  """column name"""
+  building_phone
+
+  """column name"""
+  building_short_name
+}
+
+"""
+input type for updating data in table "apartment_buildings"
+"""
+input apartment_buildings_set_input {
+  building_address: String
+  building_description: String
+  building_full_name: String
+  building_id: bigint
+  building_manager: String
+  building_phone: String
+  building_short_name: String
+}
+
+"""aggregate stddev on columns"""
+type apartment_buildings_stddev_fields {
+  building_id: Float
+}
+
+"""
+order by stddev() on columns of table "apartment_buildings"
+"""
+input apartment_buildings_stddev_order_by {
+  building_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type apartment_buildings_stddev_pop_fields {
+  building_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "apartment_buildings"
+"""
+input apartment_buildings_stddev_pop_order_by {
+  building_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type apartment_buildings_stddev_samp_fields {
+  building_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "apartment_buildings"
+"""
+input apartment_buildings_stddev_samp_order_by {
+  building_id: order_by
+}
+
+"""aggregate sum on columns"""
+type apartment_buildings_sum_fields {
+  building_id: bigint
+}
+
+"""
+order by sum() on columns of table "apartment_buildings"
+"""
+input apartment_buildings_sum_order_by {
+  building_id: order_by
+}
+
+"""
+update columns of table "apartment_buildings"
+"""
+enum apartment_buildings_update_column {
+  """column name"""
+  building_address
+
+  """column name"""
+  building_description
+
+  """column name"""
+  building_full_name
+
+  """column name"""
+  building_id
+
+  """column name"""
+  building_manager
+
+  """column name"""
+  building_phone
+
+  """column name"""
+  building_short_name
+}
+
+"""aggregate var_pop on columns"""
+type apartment_buildings_var_pop_fields {
+  building_id: Float
+}
+
+"""
+order by var_pop() on columns of table "apartment_buildings"
+"""
+input apartment_buildings_var_pop_order_by {
+  building_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type apartment_buildings_var_samp_fields {
+  building_id: Float
+}
+
+"""
+order by var_samp() on columns of table "apartment_buildings"
+"""
+input apartment_buildings_var_samp_order_by {
+  building_id: order_by
+}
+
+"""aggregate variance on columns"""
+type apartment_buildings_variance_fields {
+  building_id: Float
+}
+
+"""
+order by variance() on columns of table "apartment_buildings"
+"""
+input apartment_buildings_variance_order_by {
+  building_id: order_by
+}
+
+"""
+columns and relationships of "apartment_facilities"
+"""
+type apartment_facilities {
+  """An object relationship"""
+  apartment: apartments!
+  apt_id: bigint!
+  facility_code: String!
+}
+
+"""
+aggregated selection of "apartment_facilities"
+"""
+type apartment_facilities_aggregate {
+  aggregate: apartment_facilities_aggregate_fields
+  nodes: [apartment_facilities!]!
+}
+
+"""
+aggregate fields of "apartment_facilities"
+"""
+type apartment_facilities_aggregate_fields {
+  avg: apartment_facilities_avg_fields
+  count(columns: [apartment_facilities_select_column!], distinct: Boolean): Int
+  max: apartment_facilities_max_fields
+  min: apartment_facilities_min_fields
+  stddev: apartment_facilities_stddev_fields
+  stddev_pop: apartment_facilities_stddev_pop_fields
+  stddev_samp: apartment_facilities_stddev_samp_fields
+  sum: apartment_facilities_sum_fields
+  var_pop: apartment_facilities_var_pop_fields
+  var_samp: apartment_facilities_var_samp_fields
+  variance: apartment_facilities_variance_fields
+}
+
+"""
+order by aggregate values of table "apartment_facilities"
+"""
+input apartment_facilities_aggregate_order_by {
+  avg: apartment_facilities_avg_order_by
+  count: order_by
+  max: apartment_facilities_max_order_by
+  min: apartment_facilities_min_order_by
+  stddev: apartment_facilities_stddev_order_by
+  stddev_pop: apartment_facilities_stddev_pop_order_by
+  stddev_samp: apartment_facilities_stddev_samp_order_by
+  sum: apartment_facilities_sum_order_by
+  var_pop: apartment_facilities_var_pop_order_by
+  var_samp: apartment_facilities_var_samp_order_by
+  variance: apartment_facilities_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "apartment_facilities"
+"""
+input apartment_facilities_arr_rel_insert_input {
+  data: [apartment_facilities_insert_input!]!
+  on_conflict: apartment_facilities_on_conflict
+}
+
+"""aggregate avg on columns"""
+type apartment_facilities_avg_fields {
+  apt_id: Float
+}
+
+"""
+order by avg() on columns of table "apartment_facilities"
+"""
+input apartment_facilities_avg_order_by {
+  apt_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "apartment_facilities". All fields are combined with a logical 'AND'.
+"""
+input apartment_facilities_bool_exp {
+  _and: [apartment_facilities_bool_exp]
+  _not: apartment_facilities_bool_exp
+  _or: [apartment_facilities_bool_exp]
+  apartment: apartments_bool_exp
+  apt_id: bigint_comparison_exp
+  facility_code: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "apartment_facilities"
+"""
+enum apartment_facilities_constraint {
+  """unique or primary key constraint"""
+  idx_24757_sqlite_autoindex_apartment_facilities_1
+}
+
+"""
+input type for incrementing integer columne in table "apartment_facilities"
+"""
+input apartment_facilities_inc_input {
+  apt_id: bigint
+}
+
+"""
+input type for inserting data into table "apartment_facilities"
+"""
+input apartment_facilities_insert_input {
+  apartment: apartments_obj_rel_insert_input
+  apt_id: bigint
+  facility_code: String
+}
+
+"""aggregate max on columns"""
+type apartment_facilities_max_fields {
+  apt_id: bigint
+  facility_code: String
+}
+
+"""
+order by max() on columns of table "apartment_facilities"
+"""
+input apartment_facilities_max_order_by {
+  apt_id: order_by
+  facility_code: order_by
+}
+
+"""aggregate min on columns"""
+type apartment_facilities_min_fields {
+  apt_id: bigint
+  facility_code: String
+}
+
+"""
+order by min() on columns of table "apartment_facilities"
+"""
+input apartment_facilities_min_order_by {
+  apt_id: order_by
+  facility_code: order_by
+}
+
+"""
+response of any mutation on the table "apartment_facilities"
+"""
+type apartment_facilities_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [apartment_facilities!]!
+}
+
+"""
+input type for inserting object relation for remote table "apartment_facilities"
+"""
+input apartment_facilities_obj_rel_insert_input {
+  data: apartment_facilities_insert_input!
+  on_conflict: apartment_facilities_on_conflict
+}
+
+"""
+on conflict condition type for table "apartment_facilities"
+"""
+input apartment_facilities_on_conflict {
+  constraint: apartment_facilities_constraint!
+  update_columns: [apartment_facilities_update_column!]!
+  where: apartment_facilities_bool_exp
+}
+
+"""
+ordering options when selecting data from "apartment_facilities"
+"""
+input apartment_facilities_order_by {
+  apartment: apartments_order_by
+  apt_id: order_by
+  facility_code: order_by
+}
+
+"""
+select columns of table "apartment_facilities"
+"""
+enum apartment_facilities_select_column {
+  """column name"""
+  apt_id
+
+  """column name"""
+  facility_code
+}
+
+"""
+input type for updating data in table "apartment_facilities"
+"""
+input apartment_facilities_set_input {
+  apt_id: bigint
+  facility_code: String
+}
+
+"""aggregate stddev on columns"""
+type apartment_facilities_stddev_fields {
+  apt_id: Float
+}
+
+"""
+order by stddev() on columns of table "apartment_facilities"
+"""
+input apartment_facilities_stddev_order_by {
+  apt_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type apartment_facilities_stddev_pop_fields {
+  apt_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "apartment_facilities"
+"""
+input apartment_facilities_stddev_pop_order_by {
+  apt_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type apartment_facilities_stddev_samp_fields {
+  apt_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "apartment_facilities"
+"""
+input apartment_facilities_stddev_samp_order_by {
+  apt_id: order_by
+}
+
+"""aggregate sum on columns"""
+type apartment_facilities_sum_fields {
+  apt_id: bigint
+}
+
+"""
+order by sum() on columns of table "apartment_facilities"
+"""
+input apartment_facilities_sum_order_by {
+  apt_id: order_by
+}
+
+"""
+update columns of table "apartment_facilities"
+"""
+enum apartment_facilities_update_column {
+  """column name"""
+  apt_id
+
+  """column name"""
+  facility_code
+}
+
+"""aggregate var_pop on columns"""
+type apartment_facilities_var_pop_fields {
+  apt_id: Float
+}
+
+"""
+order by var_pop() on columns of table "apartment_facilities"
+"""
+input apartment_facilities_var_pop_order_by {
+  apt_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type apartment_facilities_var_samp_fields {
+  apt_id: Float
+}
+
+"""
+order by var_samp() on columns of table "apartment_facilities"
+"""
+input apartment_facilities_var_samp_order_by {
+  apt_id: order_by
+}
+
+"""aggregate variance on columns"""
+type apartment_facilities_variance_fields {
+  apt_id: Float
+}
+
+"""
+order by variance() on columns of table "apartment_facilities"
+"""
+input apartment_facilities_variance_order_by {
+  apt_id: order_by
+}
+
+"""
+columns and relationships of "apartments"
+"""
+type apartments {
+  """An array relationship"""
+  apartment_bookings(
+    """distinct select on columns"""
+    distinct_on: [apartment_bookings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartment_bookings_order_by!]
+
+    """filter the rows returned"""
+    where: apartment_bookings_bool_exp
+  ): [apartment_bookings!]!
+
+  """An aggregated array relationship"""
+  apartment_bookings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [apartment_bookings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartment_bookings_order_by!]
+
+    """filter the rows returned"""
+    where: apartment_bookings_bool_exp
+  ): apartment_bookings_aggregate!
+
+  """An object relationship"""
+  apartment_building: apartment_buildings
+
+  """An array relationship"""
+  apartment_facilities(
+    """distinct select on columns"""
+    distinct_on: [apartment_facilities_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartment_facilities_order_by!]
+
+    """filter the rows returned"""
+    where: apartment_facilities_bool_exp
+  ): [apartment_facilities!]!
+
+  """An aggregated array relationship"""
+  apartment_facilities_aggregate(
+    """distinct select on columns"""
+    distinct_on: [apartment_facilities_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartment_facilities_order_by!]
+
+    """filter the rows returned"""
+    where: apartment_facilities_bool_exp
+  ): apartment_facilities_aggregate!
+  apt_id: bigint!
+  apt_number: String
+  apt_type_code: String
+  bathroom_count: bigint
+  bedroom_count: bigint
+  building_id: bigint
+  room_count: String
+
+  """An array relationship"""
+  view_unit_statuses(
+    """distinct select on columns"""
+    distinct_on: [view_unit_status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [view_unit_status_order_by!]
+
+    """filter the rows returned"""
+    where: view_unit_status_bool_exp
+  ): [view_unit_status!]!
+
+  """An aggregated array relationship"""
+  view_unit_statuses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [view_unit_status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [view_unit_status_order_by!]
+
+    """filter the rows returned"""
+    where: view_unit_status_bool_exp
+  ): view_unit_status_aggregate!
+}
+
+"""
+aggregated selection of "apartments"
+"""
+type apartments_aggregate {
+  aggregate: apartments_aggregate_fields
+  nodes: [apartments!]!
+}
+
+"""
+aggregate fields of "apartments"
+"""
+type apartments_aggregate_fields {
+  avg: apartments_avg_fields
+  count(columns: [apartments_select_column!], distinct: Boolean): Int
+  max: apartments_max_fields
+  min: apartments_min_fields
+  stddev: apartments_stddev_fields
+  stddev_pop: apartments_stddev_pop_fields
+  stddev_samp: apartments_stddev_samp_fields
+  sum: apartments_sum_fields
+  var_pop: apartments_var_pop_fields
+  var_samp: apartments_var_samp_fields
+  variance: apartments_variance_fields
+}
+
+"""
+order by aggregate values of table "apartments"
+"""
+input apartments_aggregate_order_by {
+  avg: apartments_avg_order_by
+  count: order_by
+  max: apartments_max_order_by
+  min: apartments_min_order_by
+  stddev: apartments_stddev_order_by
+  stddev_pop: apartments_stddev_pop_order_by
+  stddev_samp: apartments_stddev_samp_order_by
+  sum: apartments_sum_order_by
+  var_pop: apartments_var_pop_order_by
+  var_samp: apartments_var_samp_order_by
+  variance: apartments_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "apartments"
+"""
+input apartments_arr_rel_insert_input {
+  data: [apartments_insert_input!]!
+  on_conflict: apartments_on_conflict
+}
+
+"""aggregate avg on columns"""
+type apartments_avg_fields {
+  apt_id: Float
+  bathroom_count: Float
+  bedroom_count: Float
+  building_id: Float
+}
+
+"""
+order by avg() on columns of table "apartments"
+"""
+input apartments_avg_order_by {
+  apt_id: order_by
+  bathroom_count: order_by
+  bedroom_count: order_by
+  building_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "apartments". All fields are combined with a logical 'AND'.
+"""
+input apartments_bool_exp {
+  _and: [apartments_bool_exp]
+  _not: apartments_bool_exp
+  _or: [apartments_bool_exp]
+  apartment_bookings: apartment_bookings_bool_exp
+  apartment_building: apartment_buildings_bool_exp
+  apartment_facilities: apartment_facilities_bool_exp
+  apt_id: bigint_comparison_exp
+  apt_number: String_comparison_exp
+  apt_type_code: String_comparison_exp
+  bathroom_count: bigint_comparison_exp
+  bedroom_count: bigint_comparison_exp
+  building_id: bigint_comparison_exp
+  room_count: String_comparison_exp
+  view_unit_statuses: view_unit_status_bool_exp
+}
+
+"""
+unique or primary key constraints on table "apartments"
+"""
+enum apartments_constraint {
+  """unique or primary key constraint"""
+  idx_24751_sqlite_autoindex_apartments_1
+}
+
+"""
+input type for incrementing integer columne in table "apartments"
+"""
+input apartments_inc_input {
+  apt_id: bigint
+  bathroom_count: bigint
+  bedroom_count: bigint
+  building_id: bigint
+}
+
+"""
+input type for inserting data into table "apartments"
+"""
+input apartments_insert_input {
+  apartment_bookings: apartment_bookings_arr_rel_insert_input
+  apartment_building: apartment_buildings_obj_rel_insert_input
+  apartment_facilities: apartment_facilities_arr_rel_insert_input
+  apt_id: bigint
+  apt_number: String
+  apt_type_code: String
+  bathroom_count: bigint
+  bedroom_count: bigint
+  building_id: bigint
+  room_count: String
+  view_unit_statuses: view_unit_status_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type apartments_max_fields {
+  apt_id: bigint
+  apt_number: String
+  apt_type_code: String
+  bathroom_count: bigint
+  bedroom_count: bigint
+  building_id: bigint
+  room_count: String
+}
+
+"""
+order by max() on columns of table "apartments"
+"""
+input apartments_max_order_by {
+  apt_id: order_by
+  apt_number: order_by
+  apt_type_code: order_by
+  bathroom_count: order_by
+  bedroom_count: order_by
+  building_id: order_by
+  room_count: order_by
+}
+
+"""aggregate min on columns"""
+type apartments_min_fields {
+  apt_id: bigint
+  apt_number: String
+  apt_type_code: String
+  bathroom_count: bigint
+  bedroom_count: bigint
+  building_id: bigint
+  room_count: String
+}
+
+"""
+order by min() on columns of table "apartments"
+"""
+input apartments_min_order_by {
+  apt_id: order_by
+  apt_number: order_by
+  apt_type_code: order_by
+  bathroom_count: order_by
+  bedroom_count: order_by
+  building_id: order_by
+  room_count: order_by
+}
+
+"""
+response of any mutation on the table "apartments"
+"""
+type apartments_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [apartments!]!
+}
+
+"""
+input type for inserting object relation for remote table "apartments"
+"""
+input apartments_obj_rel_insert_input {
+  data: apartments_insert_input!
+  on_conflict: apartments_on_conflict
+}
+
+"""
+on conflict condition type for table "apartments"
+"""
+input apartments_on_conflict {
+  constraint: apartments_constraint!
+  update_columns: [apartments_update_column!]!
+  where: apartments_bool_exp
+}
+
+"""
+ordering options when selecting data from "apartments"
+"""
+input apartments_order_by {
+  apartment_bookings_aggregate: apartment_bookings_aggregate_order_by
+  apartment_building: apartment_buildings_order_by
+  apartment_facilities_aggregate: apartment_facilities_aggregate_order_by
+  apt_id: order_by
+  apt_number: order_by
+  apt_type_code: order_by
+  bathroom_count: order_by
+  bedroom_count: order_by
+  building_id: order_by
+  room_count: order_by
+  view_unit_statuses_aggregate: view_unit_status_aggregate_order_by
+}
+
+"""
+select columns of table "apartments"
+"""
+enum apartments_select_column {
+  """column name"""
+  apt_id
+
+  """column name"""
+  apt_number
+
+  """column name"""
+  apt_type_code
+
+  """column name"""
+  bathroom_count
+
+  """column name"""
+  bedroom_count
+
+  """column name"""
+  building_id
+
+  """column name"""
+  room_count
+}
+
+"""
+input type for updating data in table "apartments"
+"""
+input apartments_set_input {
+  apt_id: bigint
+  apt_number: String
+  apt_type_code: String
+  bathroom_count: bigint
+  bedroom_count: bigint
+  building_id: bigint
+  room_count: String
+}
+
+"""aggregate stddev on columns"""
+type apartments_stddev_fields {
+  apt_id: Float
+  bathroom_count: Float
+  bedroom_count: Float
+  building_id: Float
+}
+
+"""
+order by stddev() on columns of table "apartments"
+"""
+input apartments_stddev_order_by {
+  apt_id: order_by
+  bathroom_count: order_by
+  bedroom_count: order_by
+  building_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type apartments_stddev_pop_fields {
+  apt_id: Float
+  bathroom_count: Float
+  bedroom_count: Float
+  building_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "apartments"
+"""
+input apartments_stddev_pop_order_by {
+  apt_id: order_by
+  bathroom_count: order_by
+  bedroom_count: order_by
+  building_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type apartments_stddev_samp_fields {
+  apt_id: Float
+  bathroom_count: Float
+  bedroom_count: Float
+  building_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "apartments"
+"""
+input apartments_stddev_samp_order_by {
+  apt_id: order_by
+  bathroom_count: order_by
+  bedroom_count: order_by
+  building_id: order_by
+}
+
+"""aggregate sum on columns"""
+type apartments_sum_fields {
+  apt_id: bigint
+  bathroom_count: bigint
+  bedroom_count: bigint
+  building_id: bigint
+}
+
+"""
+order by sum() on columns of table "apartments"
+"""
+input apartments_sum_order_by {
+  apt_id: order_by
+  bathroom_count: order_by
+  bedroom_count: order_by
+  building_id: order_by
+}
+
+"""
+update columns of table "apartments"
+"""
+enum apartments_update_column {
+  """column name"""
+  apt_id
+
+  """column name"""
+  apt_number
+
+  """column name"""
+  apt_type_code
+
+  """column name"""
+  bathroom_count
+
+  """column name"""
+  bedroom_count
+
+  """column name"""
+  building_id
+
+  """column name"""
+  room_count
+}
+
+"""aggregate var_pop on columns"""
+type apartments_var_pop_fields {
+  apt_id: Float
+  bathroom_count: Float
+  bedroom_count: Float
+  building_id: Float
+}
+
+"""
+order by var_pop() on columns of table "apartments"
+"""
+input apartments_var_pop_order_by {
+  apt_id: order_by
+  bathroom_count: order_by
+  bedroom_count: order_by
+  building_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type apartments_var_samp_fields {
+  apt_id: Float
+  bathroom_count: Float
+  bedroom_count: Float
+  building_id: Float
+}
+
+"""
+order by var_samp() on columns of table "apartments"
+"""
+input apartments_var_samp_order_by {
+  apt_id: order_by
+  bathroom_count: order_by
+  bedroom_count: order_by
+  building_id: order_by
+}
+
+"""aggregate variance on columns"""
+type apartments_variance_fields {
+  apt_id: Float
+  bathroom_count: Float
+  bedroom_count: Float
+  building_id: Float
+}
+
+"""
+order by variance() on columns of table "apartments"
+"""
+input apartments_variance_order_by {
+  apt_id: order_by
+  bathroom_count: order_by
+  bedroom_count: order_by
+  building_id: order_by
+}
+
+scalar bigint
+
+"""
+expression to compare columns of type bigint. All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+scalar bit
+
+"""
+expression to compare columns of type bit. All fields are combined with logical 'AND'.
+"""
+input bit_comparison_exp {
+  _eq: bit
+  _gt: bit
+  _gte: bit
+  _in: [bit!]
+  _is_null: Boolean
+  _lt: bit
+  _lte: bit
+  _neq: bit
+  _nin: [bit!]
+}
+
+"""
+columns and relationships of "guests"
+"""
+type guests {
+  """An array relationship"""
+  apartment_bookings(
+    """distinct select on columns"""
+    distinct_on: [apartment_bookings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartment_bookings_order_by!]
+
+    """filter the rows returned"""
+    where: apartment_bookings_bool_exp
+  ): [apartment_bookings!]!
+
+  """An aggregated array relationship"""
+  apartment_bookings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [apartment_bookings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartment_bookings_order_by!]
+
+    """filter the rows returned"""
+    where: apartment_bookings_bool_exp
+  ): apartment_bookings_aggregate!
+  date_of_birth: timestamptz
+  gender_code: String
+  guest_first_name: String
+  guest_id: bigint!
+  guest_last_name: String
+}
+
+"""
+aggregated selection of "guests"
+"""
+type guests_aggregate {
+  aggregate: guests_aggregate_fields
+  nodes: [guests!]!
+}
+
+"""
+aggregate fields of "guests"
+"""
+type guests_aggregate_fields {
+  avg: guests_avg_fields
+  count(columns: [guests_select_column!], distinct: Boolean): Int
+  max: guests_max_fields
+  min: guests_min_fields
+  stddev: guests_stddev_fields
+  stddev_pop: guests_stddev_pop_fields
+  stddev_samp: guests_stddev_samp_fields
+  sum: guests_sum_fields
+  var_pop: guests_var_pop_fields
+  var_samp: guests_var_samp_fields
+  variance: guests_variance_fields
+}
+
+"""
+order by aggregate values of table "guests"
+"""
+input guests_aggregate_order_by {
+  avg: guests_avg_order_by
+  count: order_by
+  max: guests_max_order_by
+  min: guests_min_order_by
+  stddev: guests_stddev_order_by
+  stddev_pop: guests_stddev_pop_order_by
+  stddev_samp: guests_stddev_samp_order_by
+  sum: guests_sum_order_by
+  var_pop: guests_var_pop_order_by
+  var_samp: guests_var_samp_order_by
+  variance: guests_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "guests"
+"""
+input guests_arr_rel_insert_input {
+  data: [guests_insert_input!]!
+  on_conflict: guests_on_conflict
+}
+
+"""aggregate avg on columns"""
+type guests_avg_fields {
+  guest_id: Float
+}
+
+"""
+order by avg() on columns of table "guests"
+"""
+input guests_avg_order_by {
+  guest_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "guests". All fields are combined with a logical 'AND'.
+"""
+input guests_bool_exp {
+  _and: [guests_bool_exp]
+  _not: guests_bool_exp
+  _or: [guests_bool_exp]
+  apartment_bookings: apartment_bookings_bool_exp
+  date_of_birth: timestamptz_comparison_exp
+  gender_code: String_comparison_exp
+  guest_first_name: String_comparison_exp
+  guest_id: bigint_comparison_exp
+  guest_last_name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "guests"
+"""
+enum guests_constraint {
+  """unique or primary key constraint"""
+  idx_24763_sqlite_autoindex_guests_1
+}
+
+"""
+input type for incrementing integer columne in table "guests"
+"""
+input guests_inc_input {
+  guest_id: bigint
+}
+
+"""
+input type for inserting data into table "guests"
+"""
+input guests_insert_input {
+  apartment_bookings: apartment_bookings_arr_rel_insert_input
+  date_of_birth: timestamptz
+  gender_code: String
+  guest_first_name: String
+  guest_id: bigint
+  guest_last_name: String
+}
+
+"""aggregate max on columns"""
+type guests_max_fields {
+  date_of_birth: timestamptz
+  gender_code: String
+  guest_first_name: String
+  guest_id: bigint
+  guest_last_name: String
+}
+
+"""
+order by max() on columns of table "guests"
+"""
+input guests_max_order_by {
+  date_of_birth: order_by
+  gender_code: order_by
+  guest_first_name: order_by
+  guest_id: order_by
+  guest_last_name: order_by
+}
+
+"""aggregate min on columns"""
+type guests_min_fields {
+  date_of_birth: timestamptz
+  gender_code: String
+  guest_first_name: String
+  guest_id: bigint
+  guest_last_name: String
+}
+
+"""
+order by min() on columns of table "guests"
+"""
+input guests_min_order_by {
+  date_of_birth: order_by
+  gender_code: order_by
+  guest_first_name: order_by
+  guest_id: order_by
+  guest_last_name: order_by
+}
+
+"""
+response of any mutation on the table "guests"
+"""
+type guests_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [guests!]!
+}
+
+"""
+input type for inserting object relation for remote table "guests"
+"""
+input guests_obj_rel_insert_input {
+  data: guests_insert_input!
+  on_conflict: guests_on_conflict
+}
+
+"""
+on conflict condition type for table "guests"
+"""
+input guests_on_conflict {
+  constraint: guests_constraint!
+  update_columns: [guests_update_column!]!
+  where: guests_bool_exp
+}
+
+"""
+ordering options when selecting data from "guests"
+"""
+input guests_order_by {
+  apartment_bookings_aggregate: apartment_bookings_aggregate_order_by
+  date_of_birth: order_by
+  gender_code: order_by
+  guest_first_name: order_by
+  guest_id: order_by
+  guest_last_name: order_by
+}
+
+"""
+select columns of table "guests"
+"""
+enum guests_select_column {
+  """column name"""
+  date_of_birth
+
+  """column name"""
+  gender_code
+
+  """column name"""
+  guest_first_name
+
+  """column name"""
+  guest_id
+
+  """column name"""
+  guest_last_name
+}
+
+"""
+input type for updating data in table "guests"
+"""
+input guests_set_input {
+  date_of_birth: timestamptz
+  gender_code: String
+  guest_first_name: String
+  guest_id: bigint
+  guest_last_name: String
+}
+
+"""aggregate stddev on columns"""
+type guests_stddev_fields {
+  guest_id: Float
+}
+
+"""
+order by stddev() on columns of table "guests"
+"""
+input guests_stddev_order_by {
+  guest_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type guests_stddev_pop_fields {
+  guest_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "guests"
+"""
+input guests_stddev_pop_order_by {
+  guest_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type guests_stddev_samp_fields {
+  guest_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "guests"
+"""
+input guests_stddev_samp_order_by {
+  guest_id: order_by
+}
+
+"""aggregate sum on columns"""
+type guests_sum_fields {
+  guest_id: bigint
+}
+
+"""
+order by sum() on columns of table "guests"
+"""
+input guests_sum_order_by {
+  guest_id: order_by
+}
+
+"""
+update columns of table "guests"
+"""
+enum guests_update_column {
+  """column name"""
+  date_of_birth
+
+  """column name"""
+  gender_code
+
+  """column name"""
+  guest_first_name
+
+  """column name"""
+  guest_id
+
+  """column name"""
+  guest_last_name
+}
+
+"""aggregate var_pop on columns"""
+type guests_var_pop_fields {
+  guest_id: Float
+}
+
+"""
+order by var_pop() on columns of table "guests"
+"""
+input guests_var_pop_order_by {
+  guest_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type guests_var_samp_fields {
+  guest_id: Float
+}
+
+"""
+order by var_samp() on columns of table "guests"
+"""
+input guests_var_samp_order_by {
+  guest_id: order_by
+}
+
+"""aggregate variance on columns"""
+type guests_variance_fields {
+  guest_id: Float
+}
+
+"""
+order by variance() on columns of table "guests"
+"""
+input guests_variance_order_by {
+  guest_id: order_by
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "apartment_bookings"
+  """
+  delete_apartment_bookings(
+    """filter the rows which have to be deleted"""
+    where: apartment_bookings_bool_exp!
+  ): apartment_bookings_mutation_response
+
+  """
+  delete data from the table: "apartment_buildings"
+  """
+  delete_apartment_buildings(
+    """filter the rows which have to be deleted"""
+    where: apartment_buildings_bool_exp!
+  ): apartment_buildings_mutation_response
+
+  """
+  delete data from the table: "apartment_facilities"
+  """
+  delete_apartment_facilities(
+    """filter the rows which have to be deleted"""
+    where: apartment_facilities_bool_exp!
+  ): apartment_facilities_mutation_response
+
+  """
+  delete data from the table: "apartments"
+  """
+  delete_apartments(
+    """filter the rows which have to be deleted"""
+    where: apartments_bool_exp!
+  ): apartments_mutation_response
+
+  """
+  delete data from the table: "guests"
+  """
+  delete_guests(
+    """filter the rows which have to be deleted"""
+    where: guests_bool_exp!
+  ): guests_mutation_response
+
+  """
+  delete data from the table: "view_unit_status"
+  """
+  delete_view_unit_status(
+    """filter the rows which have to be deleted"""
+    where: view_unit_status_bool_exp!
+  ): view_unit_status_mutation_response
+
+  """
+  insert data into the table: "apartment_bookings"
+  """
+  insert_apartment_bookings(
+    """the rows to be inserted"""
+    objects: [apartment_bookings_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: apartment_bookings_on_conflict
+  ): apartment_bookings_mutation_response
+
+  """
+  insert data into the table: "apartment_buildings"
+  """
+  insert_apartment_buildings(
+    """the rows to be inserted"""
+    objects: [apartment_buildings_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: apartment_buildings_on_conflict
+  ): apartment_buildings_mutation_response
+
+  """
+  insert data into the table: "apartment_facilities"
+  """
+  insert_apartment_facilities(
+    """the rows to be inserted"""
+    objects: [apartment_facilities_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: apartment_facilities_on_conflict
+  ): apartment_facilities_mutation_response
+
+  """
+  insert data into the table: "apartments"
+  """
+  insert_apartments(
+    """the rows to be inserted"""
+    objects: [apartments_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: apartments_on_conflict
+  ): apartments_mutation_response
+
+  """
+  insert data into the table: "guests"
+  """
+  insert_guests(
+    """the rows to be inserted"""
+    objects: [guests_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: guests_on_conflict
+  ): guests_mutation_response
+
+  """
+  insert data into the table: "view_unit_status"
+  """
+  insert_view_unit_status(
+    """the rows to be inserted"""
+    objects: [view_unit_status_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: view_unit_status_on_conflict
+  ): view_unit_status_mutation_response
+
+  """
+  update data of the table: "apartment_bookings"
+  """
+  update_apartment_bookings(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: apartment_bookings_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: apartment_bookings_set_input
+
+    """filter the rows which have to be updated"""
+    where: apartment_bookings_bool_exp!
+  ): apartment_bookings_mutation_response
+
+  """
+  update data of the table: "apartment_buildings"
+  """
+  update_apartment_buildings(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: apartment_buildings_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: apartment_buildings_set_input
+
+    """filter the rows which have to be updated"""
+    where: apartment_buildings_bool_exp!
+  ): apartment_buildings_mutation_response
+
+  """
+  update data of the table: "apartment_facilities"
+  """
+  update_apartment_facilities(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: apartment_facilities_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: apartment_facilities_set_input
+
+    """filter the rows which have to be updated"""
+    where: apartment_facilities_bool_exp!
+  ): apartment_facilities_mutation_response
+
+  """
+  update data of the table: "apartments"
+  """
+  update_apartments(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: apartments_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: apartments_set_input
+
+    """filter the rows which have to be updated"""
+    where: apartments_bool_exp!
+  ): apartments_mutation_response
+
+  """
+  update data of the table: "guests"
+  """
+  update_guests(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: guests_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: guests_set_input
+
+    """filter the rows which have to be updated"""
+    where: guests_bool_exp!
+  ): guests_mutation_response
+
+  """
+  update data of the table: "view_unit_status"
+  """
+  update_view_unit_status(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: view_unit_status_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: view_unit_status_set_input
+
+    """filter the rows which have to be updated"""
+    where: view_unit_status_bool_exp!
+  ): view_unit_status_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "apartment_bookings"
+  """
+  apartment_bookings(
+    """distinct select on columns"""
+    distinct_on: [apartment_bookings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartment_bookings_order_by!]
+
+    """filter the rows returned"""
+    where: apartment_bookings_bool_exp
+  ): [apartment_bookings!]!
+
+  """
+  fetch aggregated fields from the table: "apartment_bookings"
+  """
+  apartment_bookings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [apartment_bookings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartment_bookings_order_by!]
+
+    """filter the rows returned"""
+    where: apartment_bookings_bool_exp
+  ): apartment_bookings_aggregate!
+
+  """
+  fetch data from the table: "apartment_bookings" using primary key columns
+  """
+  apartment_bookings_by_pk(apt_booking_id: bigint!): apartment_bookings
+
+  """
+  fetch data from the table: "apartment_buildings"
+  """
+  apartment_buildings(
+    """distinct select on columns"""
+    distinct_on: [apartment_buildings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartment_buildings_order_by!]
+
+    """filter the rows returned"""
+    where: apartment_buildings_bool_exp
+  ): [apartment_buildings!]!
+
+  """
+  fetch aggregated fields from the table: "apartment_buildings"
+  """
+  apartment_buildings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [apartment_buildings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartment_buildings_order_by!]
+
+    """filter the rows returned"""
+    where: apartment_buildings_bool_exp
+  ): apartment_buildings_aggregate!
+
+  """
+  fetch data from the table: "apartment_buildings" using primary key columns
+  """
+  apartment_buildings_by_pk(building_id: bigint!): apartment_buildings
+
+  """
+  fetch data from the table: "apartment_facilities"
+  """
+  apartment_facilities(
+    """distinct select on columns"""
+    distinct_on: [apartment_facilities_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartment_facilities_order_by!]
+
+    """filter the rows returned"""
+    where: apartment_facilities_bool_exp
+  ): [apartment_facilities!]!
+
+  """
+  fetch aggregated fields from the table: "apartment_facilities"
+  """
+  apartment_facilities_aggregate(
+    """distinct select on columns"""
+    distinct_on: [apartment_facilities_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartment_facilities_order_by!]
+
+    """filter the rows returned"""
+    where: apartment_facilities_bool_exp
+  ): apartment_facilities_aggregate!
+
+  """
+  fetch data from the table: "apartment_facilities" using primary key columns
+  """
+  apartment_facilities_by_pk(apt_id: bigint!, facility_code: String!): apartment_facilities
+
+  """
+  fetch data from the table: "apartments"
+  """
+  apartments(
+    """distinct select on columns"""
+    distinct_on: [apartments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartments_order_by!]
+
+    """filter the rows returned"""
+    where: apartments_bool_exp
+  ): [apartments!]!
+
+  """
+  fetch aggregated fields from the table: "apartments"
+  """
+  apartments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [apartments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartments_order_by!]
+
+    """filter the rows returned"""
+    where: apartments_bool_exp
+  ): apartments_aggregate!
+
+  """fetch data from the table: "apartments" using primary key columns"""
+  apartments_by_pk(apt_id: bigint!): apartments
+
+  """
+  fetch data from the table: "guests"
+  """
+  guests(
+    """distinct select on columns"""
+    distinct_on: [guests_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [guests_order_by!]
+
+    """filter the rows returned"""
+    where: guests_bool_exp
+  ): [guests!]!
+
+  """
+  fetch aggregated fields from the table: "guests"
+  """
+  guests_aggregate(
+    """distinct select on columns"""
+    distinct_on: [guests_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [guests_order_by!]
+
+    """filter the rows returned"""
+    where: guests_bool_exp
+  ): guests_aggregate!
+
+  """fetch data from the table: "guests" using primary key columns"""
+  guests_by_pk(guest_id: bigint!): guests
+
+  """
+  fetch data from the table: "view_unit_status"
+  """
+  view_unit_status(
+    """distinct select on columns"""
+    distinct_on: [view_unit_status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [view_unit_status_order_by!]
+
+    """filter the rows returned"""
+    where: view_unit_status_bool_exp
+  ): [view_unit_status!]!
+
+  """
+  fetch aggregated fields from the table: "view_unit_status"
+  """
+  view_unit_status_aggregate(
+    """distinct select on columns"""
+    distinct_on: [view_unit_status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [view_unit_status_order_by!]
+
+    """filter the rows returned"""
+    where: view_unit_status_bool_exp
+  ): view_unit_status_aggregate!
+
+  """
+  fetch data from the table: "view_unit_status" using primary key columns
+  """
+  view_unit_status_by_pk(status_date: timestamptz!): view_unit_status
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "apartment_bookings"
+  """
+  apartment_bookings(
+    """distinct select on columns"""
+    distinct_on: [apartment_bookings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartment_bookings_order_by!]
+
+    """filter the rows returned"""
+    where: apartment_bookings_bool_exp
+  ): [apartment_bookings!]!
+
+  """
+  fetch aggregated fields from the table: "apartment_bookings"
+  """
+  apartment_bookings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [apartment_bookings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartment_bookings_order_by!]
+
+    """filter the rows returned"""
+    where: apartment_bookings_bool_exp
+  ): apartment_bookings_aggregate!
+
+  """
+  fetch data from the table: "apartment_bookings" using primary key columns
+  """
+  apartment_bookings_by_pk(apt_booking_id: bigint!): apartment_bookings
+
+  """
+  fetch data from the table: "apartment_buildings"
+  """
+  apartment_buildings(
+    """distinct select on columns"""
+    distinct_on: [apartment_buildings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartment_buildings_order_by!]
+
+    """filter the rows returned"""
+    where: apartment_buildings_bool_exp
+  ): [apartment_buildings!]!
+
+  """
+  fetch aggregated fields from the table: "apartment_buildings"
+  """
+  apartment_buildings_aggregate(
+    """distinct select on columns"""
+    distinct_on: [apartment_buildings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartment_buildings_order_by!]
+
+    """filter the rows returned"""
+    where: apartment_buildings_bool_exp
+  ): apartment_buildings_aggregate!
+
+  """
+  fetch data from the table: "apartment_buildings" using primary key columns
+  """
+  apartment_buildings_by_pk(building_id: bigint!): apartment_buildings
+
+  """
+  fetch data from the table: "apartment_facilities"
+  """
+  apartment_facilities(
+    """distinct select on columns"""
+    distinct_on: [apartment_facilities_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartment_facilities_order_by!]
+
+    """filter the rows returned"""
+    where: apartment_facilities_bool_exp
+  ): [apartment_facilities!]!
+
+  """
+  fetch aggregated fields from the table: "apartment_facilities"
+  """
+  apartment_facilities_aggregate(
+    """distinct select on columns"""
+    distinct_on: [apartment_facilities_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartment_facilities_order_by!]
+
+    """filter the rows returned"""
+    where: apartment_facilities_bool_exp
+  ): apartment_facilities_aggregate!
+
+  """
+  fetch data from the table: "apartment_facilities" using primary key columns
+  """
+  apartment_facilities_by_pk(apt_id: bigint!, facility_code: String!): apartment_facilities
+
+  """
+  fetch data from the table: "apartments"
+  """
+  apartments(
+    """distinct select on columns"""
+    distinct_on: [apartments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartments_order_by!]
+
+    """filter the rows returned"""
+    where: apartments_bool_exp
+  ): [apartments!]!
+
+  """
+  fetch aggregated fields from the table: "apartments"
+  """
+  apartments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [apartments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [apartments_order_by!]
+
+    """filter the rows returned"""
+    where: apartments_bool_exp
+  ): apartments_aggregate!
+
+  """fetch data from the table: "apartments" using primary key columns"""
+  apartments_by_pk(apt_id: bigint!): apartments
+
+  """
+  fetch data from the table: "guests"
+  """
+  guests(
+    """distinct select on columns"""
+    distinct_on: [guests_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [guests_order_by!]
+
+    """filter the rows returned"""
+    where: guests_bool_exp
+  ): [guests!]!
+
+  """
+  fetch aggregated fields from the table: "guests"
+  """
+  guests_aggregate(
+    """distinct select on columns"""
+    distinct_on: [guests_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [guests_order_by!]
+
+    """filter the rows returned"""
+    where: guests_bool_exp
+  ): guests_aggregate!
+
+  """fetch data from the table: "guests" using primary key columns"""
+  guests_by_pk(guest_id: bigint!): guests
+
+  """
+  fetch data from the table: "view_unit_status"
+  """
+  view_unit_status(
+    """distinct select on columns"""
+    distinct_on: [view_unit_status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [view_unit_status_order_by!]
+
+    """filter the rows returned"""
+    where: view_unit_status_bool_exp
+  ): [view_unit_status!]!
+
+  """
+  fetch aggregated fields from the table: "view_unit_status"
+  """
+  view_unit_status_aggregate(
+    """distinct select on columns"""
+    distinct_on: [view_unit_status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [view_unit_status_order_by!]
+
+    """filter the rows returned"""
+    where: view_unit_status_bool_exp
+  ): view_unit_status_aggregate!
+
+  """
+  fetch data from the table: "view_unit_status" using primary key columns
+  """
+  view_unit_status_by_pk(status_date: timestamptz!): view_unit_status
+}
+
+scalar timestamptz
+
+"""
+expression to compare columns of type timestamptz. All fields are combined with logical 'AND'.
+"""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}
+
+"""
+columns and relationships of "view_unit_status"
+"""
+type view_unit_status {
+  """An object relationship"""
+  apartment: apartments
+
+  """An object relationship"""
+  apartment_booking: apartment_bookings
+  apt_booking_id: bigint
+  apt_id: bigint
+  available_yn: bit
+  status_date: timestamptz!
+}
+
+"""
+aggregated selection of "view_unit_status"
+"""
+type view_unit_status_aggregate {
+  aggregate: view_unit_status_aggregate_fields
+  nodes: [view_unit_status!]!
+}
+
+"""
+aggregate fields of "view_unit_status"
+"""
+type view_unit_status_aggregate_fields {
+  avg: view_unit_status_avg_fields
+  count(columns: [view_unit_status_select_column!], distinct: Boolean): Int
+  max: view_unit_status_max_fields
+  min: view_unit_status_min_fields
+  stddev: view_unit_status_stddev_fields
+  stddev_pop: view_unit_status_stddev_pop_fields
+  stddev_samp: view_unit_status_stddev_samp_fields
+  sum: view_unit_status_sum_fields
+  var_pop: view_unit_status_var_pop_fields
+  var_samp: view_unit_status_var_samp_fields
+  variance: view_unit_status_variance_fields
+}
+
+"""
+order by aggregate values of table "view_unit_status"
+"""
+input view_unit_status_aggregate_order_by {
+  avg: view_unit_status_avg_order_by
+  count: order_by
+  max: view_unit_status_max_order_by
+  min: view_unit_status_min_order_by
+  stddev: view_unit_status_stddev_order_by
+  stddev_pop: view_unit_status_stddev_pop_order_by
+  stddev_samp: view_unit_status_stddev_samp_order_by
+  sum: view_unit_status_sum_order_by
+  var_pop: view_unit_status_var_pop_order_by
+  var_samp: view_unit_status_var_samp_order_by
+  variance: view_unit_status_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "view_unit_status"
+"""
+input view_unit_status_arr_rel_insert_input {
+  data: [view_unit_status_insert_input!]!
+  on_conflict: view_unit_status_on_conflict
+}
+
+"""aggregate avg on columns"""
+type view_unit_status_avg_fields {
+  apt_booking_id: Float
+  apt_id: Float
+}
+
+"""
+order by avg() on columns of table "view_unit_status"
+"""
+input view_unit_status_avg_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "view_unit_status". All fields are combined with a logical 'AND'.
+"""
+input view_unit_status_bool_exp {
+  _and: [view_unit_status_bool_exp]
+  _not: view_unit_status_bool_exp
+  _or: [view_unit_status_bool_exp]
+  apartment: apartments_bool_exp
+  apartment_booking: apartment_bookings_bool_exp
+  apt_booking_id: bigint_comparison_exp
+  apt_id: bigint_comparison_exp
+  available_yn: bit_comparison_exp
+  status_date: timestamptz_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "view_unit_status"
+"""
+enum view_unit_status_constraint {
+  """unique or primary key constraint"""
+  idx_24775_sqlite_autoindex_view_unit_status_1
+}
+
+"""
+input type for incrementing integer columne in table "view_unit_status"
+"""
+input view_unit_status_inc_input {
+  apt_booking_id: bigint
+  apt_id: bigint
+}
+
+"""
+input type for inserting data into table "view_unit_status"
+"""
+input view_unit_status_insert_input {
+  apartment: apartments_obj_rel_insert_input
+  apartment_booking: apartment_bookings_obj_rel_insert_input
+  apt_booking_id: bigint
+  apt_id: bigint
+  available_yn: bit
+  status_date: timestamptz
+}
+
+"""aggregate max on columns"""
+type view_unit_status_max_fields {
+  apt_booking_id: bigint
+  apt_id: bigint
+  status_date: timestamptz
+}
+
+"""
+order by max() on columns of table "view_unit_status"
+"""
+input view_unit_status_max_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+  status_date: order_by
+}
+
+"""aggregate min on columns"""
+type view_unit_status_min_fields {
+  apt_booking_id: bigint
+  apt_id: bigint
+  status_date: timestamptz
+}
+
+"""
+order by min() on columns of table "view_unit_status"
+"""
+input view_unit_status_min_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+  status_date: order_by
+}
+
+"""
+response of any mutation on the table "view_unit_status"
+"""
+type view_unit_status_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [view_unit_status!]!
+}
+
+"""
+input type for inserting object relation for remote table "view_unit_status"
+"""
+input view_unit_status_obj_rel_insert_input {
+  data: view_unit_status_insert_input!
+  on_conflict: view_unit_status_on_conflict
+}
+
+"""
+on conflict condition type for table "view_unit_status"
+"""
+input view_unit_status_on_conflict {
+  constraint: view_unit_status_constraint!
+  update_columns: [view_unit_status_update_column!]!
+  where: view_unit_status_bool_exp
+}
+
+"""
+ordering options when selecting data from "view_unit_status"
+"""
+input view_unit_status_order_by {
+  apartment: apartments_order_by
+  apartment_booking: apartment_bookings_order_by
+  apt_booking_id: order_by
+  apt_id: order_by
+  available_yn: order_by
+  status_date: order_by
+}
+
+"""
+select columns of table "view_unit_status"
+"""
+enum view_unit_status_select_column {
+  """column name"""
+  apt_booking_id
+
+  """column name"""
+  apt_id
+
+  """column name"""
+  available_yn
+
+  """column name"""
+  status_date
+}
+
+"""
+input type for updating data in table "view_unit_status"
+"""
+input view_unit_status_set_input {
+  apt_booking_id: bigint
+  apt_id: bigint
+  available_yn: bit
+  status_date: timestamptz
+}
+
+"""aggregate stddev on columns"""
+type view_unit_status_stddev_fields {
+  apt_booking_id: Float
+  apt_id: Float
+}
+
+"""
+order by stddev() on columns of table "view_unit_status"
+"""
+input view_unit_status_stddev_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type view_unit_status_stddev_pop_fields {
+  apt_booking_id: Float
+  apt_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "view_unit_status"
+"""
+input view_unit_status_stddev_pop_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type view_unit_status_stddev_samp_fields {
+  apt_booking_id: Float
+  apt_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "view_unit_status"
+"""
+input view_unit_status_stddev_samp_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+}
+
+"""aggregate sum on columns"""
+type view_unit_status_sum_fields {
+  apt_booking_id: bigint
+  apt_id: bigint
+}
+
+"""
+order by sum() on columns of table "view_unit_status"
+"""
+input view_unit_status_sum_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+}
+
+"""
+update columns of table "view_unit_status"
+"""
+enum view_unit_status_update_column {
+  """column name"""
+  apt_booking_id
+
+  """column name"""
+  apt_id
+
+  """column name"""
+  available_yn
+
+  """column name"""
+  status_date
+}
+
+"""aggregate var_pop on columns"""
+type view_unit_status_var_pop_fields {
+  apt_booking_id: Float
+  apt_id: Float
+}
+
+"""
+order by var_pop() on columns of table "view_unit_status"
+"""
+input view_unit_status_var_pop_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type view_unit_status_var_samp_fields {
+  apt_booking_id: Float
+  apt_id: Float
+}
+
+"""
+order by var_samp() on columns of table "view_unit_status"
+"""
+input view_unit_status_var_samp_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+}
+
+"""aggregate variance on columns"""
+type view_unit_status_variance_fields {
+  apt_booking_id: Float
+  apt_id: Float
+}
+
+"""
+order by variance() on columns of table "view_unit_status"
+"""
+input view_unit_status_variance_order_by {
+  apt_booking_id: order_by
+  apt_id: order_by
+}

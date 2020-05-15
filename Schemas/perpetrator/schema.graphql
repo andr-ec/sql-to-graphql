@@ -1,0 +1,1174 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "people"
+  """
+  delete_people(
+    """filter the rows which have to be deleted"""
+    where: people_bool_exp!
+  ): people_mutation_response
+
+  """
+  delete data from the table: "perpetrator"
+  """
+  delete_perpetrator(
+    """filter the rows which have to be deleted"""
+    where: perpetrator_bool_exp!
+  ): perpetrator_mutation_response
+
+  """
+  insert data into the table: "people"
+  """
+  insert_people(
+    """the rows to be inserted"""
+    objects: [people_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: people_on_conflict
+  ): people_mutation_response
+
+  """
+  insert data into the table: "perpetrator"
+  """
+  insert_perpetrator(
+    """the rows to be inserted"""
+    objects: [perpetrator_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: perpetrator_on_conflict
+  ): perpetrator_mutation_response
+
+  """
+  update data of the table: "people"
+  """
+  update_people(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: people_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: people_set_input
+
+    """filter the rows which have to be updated"""
+    where: people_bool_exp!
+  ): people_mutation_response
+
+  """
+  update data of the table: "perpetrator"
+  """
+  update_perpetrator(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: perpetrator_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: perpetrator_set_input
+
+    """filter the rows which have to be updated"""
+    where: perpetrator_bool_exp!
+  ): perpetrator_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "people"
+"""
+type people {
+  height: Float
+  name: String
+  people_id: Int
+
+  """An array relationship"""
+  perpetrators(
+    """distinct select on columns"""
+    distinct_on: [perpetrator_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [perpetrator_order_by!]
+
+    """filter the rows returned"""
+    where: perpetrator_bool_exp
+  ): [perpetrator!]!
+
+  """An aggregated array relationship"""
+  perpetrators_aggregate(
+    """distinct select on columns"""
+    distinct_on: [perpetrator_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [perpetrator_order_by!]
+
+    """filter the rows returned"""
+    where: perpetrator_bool_exp
+  ): perpetrator_aggregate!
+  weight: Float
+}
+
+"""
+aggregated selection of "people"
+"""
+type people_aggregate {
+  aggregate: people_aggregate_fields
+  nodes: [people!]!
+}
+
+"""
+aggregate fields of "people"
+"""
+type people_aggregate_fields {
+  avg: people_avg_fields
+  count(columns: [people_select_column!], distinct: Boolean): Int
+  max: people_max_fields
+  min: people_min_fields
+  stddev: people_stddev_fields
+  stddev_pop: people_stddev_pop_fields
+  stddev_samp: people_stddev_samp_fields
+  sum: people_sum_fields
+  var_pop: people_var_pop_fields
+  var_samp: people_var_samp_fields
+  variance: people_variance_fields
+}
+
+"""
+order by aggregate values of table "people"
+"""
+input people_aggregate_order_by {
+  avg: people_avg_order_by
+  count: order_by
+  max: people_max_order_by
+  min: people_min_order_by
+  stddev: people_stddev_order_by
+  stddev_pop: people_stddev_pop_order_by
+  stddev_samp: people_stddev_samp_order_by
+  sum: people_sum_order_by
+  var_pop: people_var_pop_order_by
+  var_samp: people_var_samp_order_by
+  variance: people_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "people"
+"""
+input people_arr_rel_insert_input {
+  data: [people_insert_input!]!
+  on_conflict: people_on_conflict
+}
+
+"""aggregate avg on columns"""
+type people_avg_fields {
+  height: Float
+  people_id: Float
+  weight: Float
+}
+
+"""
+order by avg() on columns of table "people"
+"""
+input people_avg_order_by {
+  height: order_by
+  people_id: order_by
+  weight: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "people". All fields are combined with a logical 'AND'.
+"""
+input people_bool_exp {
+  _and: [people_bool_exp]
+  _not: people_bool_exp
+  _or: [people_bool_exp]
+  height: Float_comparison_exp
+  name: String_comparison_exp
+  people_id: Int_comparison_exp
+  perpetrators: perpetrator_bool_exp
+  weight: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "people"
+"""
+enum people_constraint {
+  """unique or primary key constraint"""
+  idx_17531_sqlite_autoindex_people_1
+}
+
+"""
+input type for incrementing integer columne in table "people"
+"""
+input people_inc_input {
+  people_id: Int
+}
+
+"""
+input type for inserting data into table "people"
+"""
+input people_insert_input {
+  height: Float
+  name: String
+  people_id: Int
+  perpetrators: perpetrator_arr_rel_insert_input
+  weight: Float
+}
+
+"""aggregate max on columns"""
+type people_max_fields {
+  height: Float
+  name: String
+  people_id: Int
+  weight: Float
+}
+
+"""
+order by max() on columns of table "people"
+"""
+input people_max_order_by {
+  height: order_by
+  name: order_by
+  people_id: order_by
+  weight: order_by
+}
+
+"""aggregate min on columns"""
+type people_min_fields {
+  height: Float
+  name: String
+  people_id: Int
+  weight: Float
+}
+
+"""
+order by min() on columns of table "people"
+"""
+input people_min_order_by {
+  height: order_by
+  name: order_by
+  people_id: order_by
+  weight: order_by
+}
+
+"""
+response of any mutation on the table "people"
+"""
+type people_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [people!]!
+}
+
+"""
+input type for inserting object relation for remote table "people"
+"""
+input people_obj_rel_insert_input {
+  data: people_insert_input!
+  on_conflict: people_on_conflict
+}
+
+"""
+on conflict condition type for table "people"
+"""
+input people_on_conflict {
+  constraint: people_constraint!
+  update_columns: [people_update_column!]!
+  where: people_bool_exp
+}
+
+"""
+ordering options when selecting data from "people"
+"""
+input people_order_by {
+  height: order_by
+  name: order_by
+  people_id: order_by
+  perpetrators_aggregate: perpetrator_aggregate_order_by
+  weight: order_by
+}
+
+"""
+select columns of table "people"
+"""
+enum people_select_column {
+  """column name"""
+  height
+
+  """column name"""
+  name
+
+  """column name"""
+  people_id
+
+  """column name"""
+  weight
+}
+
+"""
+input type for updating data in table "people"
+"""
+input people_set_input {
+  height: Float
+  name: String
+  people_id: Int
+  weight: Float
+}
+
+"""aggregate stddev on columns"""
+type people_stddev_fields {
+  height: Float
+  people_id: Float
+  weight: Float
+}
+
+"""
+order by stddev() on columns of table "people"
+"""
+input people_stddev_order_by {
+  height: order_by
+  people_id: order_by
+  weight: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type people_stddev_pop_fields {
+  height: Float
+  people_id: Float
+  weight: Float
+}
+
+"""
+order by stddev_pop() on columns of table "people"
+"""
+input people_stddev_pop_order_by {
+  height: order_by
+  people_id: order_by
+  weight: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type people_stddev_samp_fields {
+  height: Float
+  people_id: Float
+  weight: Float
+}
+
+"""
+order by stddev_samp() on columns of table "people"
+"""
+input people_stddev_samp_order_by {
+  height: order_by
+  people_id: order_by
+  weight: order_by
+}
+
+"""aggregate sum on columns"""
+type people_sum_fields {
+  height: Float
+  people_id: Int
+  weight: Float
+}
+
+"""
+order by sum() on columns of table "people"
+"""
+input people_sum_order_by {
+  height: order_by
+  people_id: order_by
+  weight: order_by
+}
+
+"""
+update columns of table "people"
+"""
+enum people_update_column {
+  """column name"""
+  height
+
+  """column name"""
+  name
+
+  """column name"""
+  people_id
+
+  """column name"""
+  weight
+}
+
+"""aggregate var_pop on columns"""
+type people_var_pop_fields {
+  height: Float
+  people_id: Float
+  weight: Float
+}
+
+"""
+order by var_pop() on columns of table "people"
+"""
+input people_var_pop_order_by {
+  height: order_by
+  people_id: order_by
+  weight: order_by
+}
+
+"""aggregate var_samp on columns"""
+type people_var_samp_fields {
+  height: Float
+  people_id: Float
+  weight: Float
+}
+
+"""
+order by var_samp() on columns of table "people"
+"""
+input people_var_samp_order_by {
+  height: order_by
+  people_id: order_by
+  weight: order_by
+}
+
+"""aggregate variance on columns"""
+type people_variance_fields {
+  height: Float
+  people_id: Float
+  weight: Float
+}
+
+"""
+order by variance() on columns of table "people"
+"""
+input people_variance_order_by {
+  height: order_by
+  people_id: order_by
+  weight: order_by
+}
+
+"""
+columns and relationships of "perpetrator"
+"""
+type perpetrator {
+  country: String
+  date: String
+  injured: Int
+  killed: Int
+  location: String
+  people_id: Int
+  perpetrator_id: Int
+
+  """An object relationship"""
+  person: people
+  year: Float
+}
+
+"""
+aggregated selection of "perpetrator"
+"""
+type perpetrator_aggregate {
+  aggregate: perpetrator_aggregate_fields
+  nodes: [perpetrator!]!
+}
+
+"""
+aggregate fields of "perpetrator"
+"""
+type perpetrator_aggregate_fields {
+  avg: perpetrator_avg_fields
+  count(columns: [perpetrator_select_column!], distinct: Boolean): Int
+  max: perpetrator_max_fields
+  min: perpetrator_min_fields
+  stddev: perpetrator_stddev_fields
+  stddev_pop: perpetrator_stddev_pop_fields
+  stddev_samp: perpetrator_stddev_samp_fields
+  sum: perpetrator_sum_fields
+  var_pop: perpetrator_var_pop_fields
+  var_samp: perpetrator_var_samp_fields
+  variance: perpetrator_variance_fields
+}
+
+"""
+order by aggregate values of table "perpetrator"
+"""
+input perpetrator_aggregate_order_by {
+  avg: perpetrator_avg_order_by
+  count: order_by
+  max: perpetrator_max_order_by
+  min: perpetrator_min_order_by
+  stddev: perpetrator_stddev_order_by
+  stddev_pop: perpetrator_stddev_pop_order_by
+  stddev_samp: perpetrator_stddev_samp_order_by
+  sum: perpetrator_sum_order_by
+  var_pop: perpetrator_var_pop_order_by
+  var_samp: perpetrator_var_samp_order_by
+  variance: perpetrator_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "perpetrator"
+"""
+input perpetrator_arr_rel_insert_input {
+  data: [perpetrator_insert_input!]!
+  on_conflict: perpetrator_on_conflict
+}
+
+"""aggregate avg on columns"""
+type perpetrator_avg_fields {
+  injured: Float
+  killed: Float
+  people_id: Float
+  perpetrator_id: Float
+  year: Float
+}
+
+"""
+order by avg() on columns of table "perpetrator"
+"""
+input perpetrator_avg_order_by {
+  injured: order_by
+  killed: order_by
+  people_id: order_by
+  perpetrator_id: order_by
+  year: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "perpetrator". All fields are combined with a logical 'AND'.
+"""
+input perpetrator_bool_exp {
+  _and: [perpetrator_bool_exp]
+  _not: perpetrator_bool_exp
+  _or: [perpetrator_bool_exp]
+  country: String_comparison_exp
+  date: String_comparison_exp
+  injured: Int_comparison_exp
+  killed: Int_comparison_exp
+  location: String_comparison_exp
+  people_id: Int_comparison_exp
+  perpetrator_id: Int_comparison_exp
+  person: people_bool_exp
+  year: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "perpetrator"
+"""
+enum perpetrator_constraint {
+  """unique or primary key constraint"""
+  idx_17525_sqlite_autoindex_perpetrator_1
+}
+
+"""
+input type for incrementing integer columne in table "perpetrator"
+"""
+input perpetrator_inc_input {
+  injured: Int
+  killed: Int
+  people_id: Int
+  perpetrator_id: Int
+}
+
+"""
+input type for inserting data into table "perpetrator"
+"""
+input perpetrator_insert_input {
+  country: String
+  date: String
+  injured: Int
+  killed: Int
+  location: String
+  people_id: Int
+  perpetrator_id: Int
+  person: people_obj_rel_insert_input
+  year: Float
+}
+
+"""aggregate max on columns"""
+type perpetrator_max_fields {
+  country: String
+  date: String
+  injured: Int
+  killed: Int
+  location: String
+  people_id: Int
+  perpetrator_id: Int
+  year: Float
+}
+
+"""
+order by max() on columns of table "perpetrator"
+"""
+input perpetrator_max_order_by {
+  country: order_by
+  date: order_by
+  injured: order_by
+  killed: order_by
+  location: order_by
+  people_id: order_by
+  perpetrator_id: order_by
+  year: order_by
+}
+
+"""aggregate min on columns"""
+type perpetrator_min_fields {
+  country: String
+  date: String
+  injured: Int
+  killed: Int
+  location: String
+  people_id: Int
+  perpetrator_id: Int
+  year: Float
+}
+
+"""
+order by min() on columns of table "perpetrator"
+"""
+input perpetrator_min_order_by {
+  country: order_by
+  date: order_by
+  injured: order_by
+  killed: order_by
+  location: order_by
+  people_id: order_by
+  perpetrator_id: order_by
+  year: order_by
+}
+
+"""
+response of any mutation on the table "perpetrator"
+"""
+type perpetrator_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [perpetrator!]!
+}
+
+"""
+input type for inserting object relation for remote table "perpetrator"
+"""
+input perpetrator_obj_rel_insert_input {
+  data: perpetrator_insert_input!
+  on_conflict: perpetrator_on_conflict
+}
+
+"""
+on conflict condition type for table "perpetrator"
+"""
+input perpetrator_on_conflict {
+  constraint: perpetrator_constraint!
+  update_columns: [perpetrator_update_column!]!
+  where: perpetrator_bool_exp
+}
+
+"""
+ordering options when selecting data from "perpetrator"
+"""
+input perpetrator_order_by {
+  country: order_by
+  date: order_by
+  injured: order_by
+  killed: order_by
+  location: order_by
+  people_id: order_by
+  perpetrator_id: order_by
+  person: people_order_by
+  year: order_by
+}
+
+"""
+select columns of table "perpetrator"
+"""
+enum perpetrator_select_column {
+  """column name"""
+  country
+
+  """column name"""
+  date
+
+  """column name"""
+  injured
+
+  """column name"""
+  killed
+
+  """column name"""
+  location
+
+  """column name"""
+  people_id
+
+  """column name"""
+  perpetrator_id
+
+  """column name"""
+  year
+}
+
+"""
+input type for updating data in table "perpetrator"
+"""
+input perpetrator_set_input {
+  country: String
+  date: String
+  injured: Int
+  killed: Int
+  location: String
+  people_id: Int
+  perpetrator_id: Int
+  year: Float
+}
+
+"""aggregate stddev on columns"""
+type perpetrator_stddev_fields {
+  injured: Float
+  killed: Float
+  people_id: Float
+  perpetrator_id: Float
+  year: Float
+}
+
+"""
+order by stddev() on columns of table "perpetrator"
+"""
+input perpetrator_stddev_order_by {
+  injured: order_by
+  killed: order_by
+  people_id: order_by
+  perpetrator_id: order_by
+  year: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type perpetrator_stddev_pop_fields {
+  injured: Float
+  killed: Float
+  people_id: Float
+  perpetrator_id: Float
+  year: Float
+}
+
+"""
+order by stddev_pop() on columns of table "perpetrator"
+"""
+input perpetrator_stddev_pop_order_by {
+  injured: order_by
+  killed: order_by
+  people_id: order_by
+  perpetrator_id: order_by
+  year: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type perpetrator_stddev_samp_fields {
+  injured: Float
+  killed: Float
+  people_id: Float
+  perpetrator_id: Float
+  year: Float
+}
+
+"""
+order by stddev_samp() on columns of table "perpetrator"
+"""
+input perpetrator_stddev_samp_order_by {
+  injured: order_by
+  killed: order_by
+  people_id: order_by
+  perpetrator_id: order_by
+  year: order_by
+}
+
+"""aggregate sum on columns"""
+type perpetrator_sum_fields {
+  injured: Int
+  killed: Int
+  people_id: Int
+  perpetrator_id: Int
+  year: Float
+}
+
+"""
+order by sum() on columns of table "perpetrator"
+"""
+input perpetrator_sum_order_by {
+  injured: order_by
+  killed: order_by
+  people_id: order_by
+  perpetrator_id: order_by
+  year: order_by
+}
+
+"""
+update columns of table "perpetrator"
+"""
+enum perpetrator_update_column {
+  """column name"""
+  country
+
+  """column name"""
+  date
+
+  """column name"""
+  injured
+
+  """column name"""
+  killed
+
+  """column name"""
+  location
+
+  """column name"""
+  people_id
+
+  """column name"""
+  perpetrator_id
+
+  """column name"""
+  year
+}
+
+"""aggregate var_pop on columns"""
+type perpetrator_var_pop_fields {
+  injured: Float
+  killed: Float
+  people_id: Float
+  perpetrator_id: Float
+  year: Float
+}
+
+"""
+order by var_pop() on columns of table "perpetrator"
+"""
+input perpetrator_var_pop_order_by {
+  injured: order_by
+  killed: order_by
+  people_id: order_by
+  perpetrator_id: order_by
+  year: order_by
+}
+
+"""aggregate var_samp on columns"""
+type perpetrator_var_samp_fields {
+  injured: Float
+  killed: Float
+  people_id: Float
+  perpetrator_id: Float
+  year: Float
+}
+
+"""
+order by var_samp() on columns of table "perpetrator"
+"""
+input perpetrator_var_samp_order_by {
+  injured: order_by
+  killed: order_by
+  people_id: order_by
+  perpetrator_id: order_by
+  year: order_by
+}
+
+"""aggregate variance on columns"""
+type perpetrator_variance_fields {
+  injured: Float
+  killed: Float
+  people_id: Float
+  perpetrator_id: Float
+  year: Float
+}
+
+"""
+order by variance() on columns of table "perpetrator"
+"""
+input perpetrator_variance_order_by {
+  injured: order_by
+  killed: order_by
+  people_id: order_by
+  perpetrator_id: order_by
+  year: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "people"
+  """
+  people(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): [people!]!
+
+  """
+  fetch aggregated fields from the table: "people"
+  """
+  people_aggregate(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): people_aggregate!
+
+  """
+  fetch data from the table: "perpetrator"
+  """
+  perpetrator(
+    """distinct select on columns"""
+    distinct_on: [perpetrator_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [perpetrator_order_by!]
+
+    """filter the rows returned"""
+    where: perpetrator_bool_exp
+  ): [perpetrator!]!
+
+  """
+  fetch aggregated fields from the table: "perpetrator"
+  """
+  perpetrator_aggregate(
+    """distinct select on columns"""
+    distinct_on: [perpetrator_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [perpetrator_order_by!]
+
+    """filter the rows returned"""
+    where: perpetrator_bool_exp
+  ): perpetrator_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "people"
+  """
+  people(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): [people!]!
+
+  """
+  fetch aggregated fields from the table: "people"
+  """
+  people_aggregate(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): people_aggregate!
+
+  """
+  fetch data from the table: "perpetrator"
+  """
+  perpetrator(
+    """distinct select on columns"""
+    distinct_on: [perpetrator_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [perpetrator_order_by!]
+
+    """filter the rows returned"""
+    where: perpetrator_bool_exp
+  ): [perpetrator!]!
+
+  """
+  fetch aggregated fields from the table: "perpetrator"
+  """
+  perpetrator_aggregate(
+    """distinct select on columns"""
+    distinct_on: [perpetrator_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [perpetrator_order_by!]
+
+    """filter the rows returned"""
+    where: perpetrator_bool_exp
+  ): perpetrator_aggregate!
+}

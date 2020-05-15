@@ -1,0 +1,1649 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+"""
+columns and relationships of "company"
+"""
+type company {
+  assets_in_billion: Float
+  company_id: Float
+
+  """An array relationship"""
+  employments(
+    """distinct select on columns"""
+    distinct_on: [employment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employment_order_by!]
+
+    """filter the rows returned"""
+    where: employment_bool_exp
+  ): [employment!]!
+
+  """An aggregated array relationship"""
+  employments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [employment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employment_order_by!]
+
+    """filter the rows returned"""
+    where: employment_bool_exp
+  ): employment_aggregate!
+  headquarters: String
+  industry: String
+  market_value_in_billion: Float
+  name: String
+  profits_in_billion: Float
+  sales_in_billion: Float
+}
+
+"""
+aggregated selection of "company"
+"""
+type company_aggregate {
+  aggregate: company_aggregate_fields
+  nodes: [company!]!
+}
+
+"""
+aggregate fields of "company"
+"""
+type company_aggregate_fields {
+  avg: company_avg_fields
+  count(columns: [company_select_column!], distinct: Boolean): Int
+  max: company_max_fields
+  min: company_min_fields
+  stddev: company_stddev_fields
+  stddev_pop: company_stddev_pop_fields
+  stddev_samp: company_stddev_samp_fields
+  sum: company_sum_fields
+  var_pop: company_var_pop_fields
+  var_samp: company_var_samp_fields
+  variance: company_variance_fields
+}
+
+"""
+order by aggregate values of table "company"
+"""
+input company_aggregate_order_by {
+  avg: company_avg_order_by
+  count: order_by
+  max: company_max_order_by
+  min: company_min_order_by
+  stddev: company_stddev_order_by
+  stddev_pop: company_stddev_pop_order_by
+  stddev_samp: company_stddev_samp_order_by
+  sum: company_sum_order_by
+  var_pop: company_var_pop_order_by
+  var_samp: company_var_samp_order_by
+  variance: company_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "company"
+"""
+input company_arr_rel_insert_input {
+  data: [company_insert_input!]!
+  on_conflict: company_on_conflict
+}
+
+"""aggregate avg on columns"""
+type company_avg_fields {
+  assets_in_billion: Float
+  company_id: Float
+  market_value_in_billion: Float
+  profits_in_billion: Float
+  sales_in_billion: Float
+}
+
+"""
+order by avg() on columns of table "company"
+"""
+input company_avg_order_by {
+  assets_in_billion: order_by
+  company_id: order_by
+  market_value_in_billion: order_by
+  profits_in_billion: order_by
+  sales_in_billion: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "company". All fields are combined with a logical 'AND'.
+"""
+input company_bool_exp {
+  _and: [company_bool_exp]
+  _not: company_bool_exp
+  _or: [company_bool_exp]
+  assets_in_billion: Float_comparison_exp
+  company_id: Float_comparison_exp
+  employments: employment_bool_exp
+  headquarters: String_comparison_exp
+  industry: String_comparison_exp
+  market_value_in_billion: Float_comparison_exp
+  name: String_comparison_exp
+  profits_in_billion: Float_comparison_exp
+  sales_in_billion: Float_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "company"
+"""
+enum company_constraint {
+  """unique or primary key constraint"""
+  idx_20799_sqlite_autoindex_company_1
+}
+
+"""
+input type for inserting data into table "company"
+"""
+input company_insert_input {
+  assets_in_billion: Float
+  company_id: Float
+  employments: employment_arr_rel_insert_input
+  headquarters: String
+  industry: String
+  market_value_in_billion: Float
+  name: String
+  profits_in_billion: Float
+  sales_in_billion: Float
+}
+
+"""aggregate max on columns"""
+type company_max_fields {
+  assets_in_billion: Float
+  company_id: Float
+  headquarters: String
+  industry: String
+  market_value_in_billion: Float
+  name: String
+  profits_in_billion: Float
+  sales_in_billion: Float
+}
+
+"""
+order by max() on columns of table "company"
+"""
+input company_max_order_by {
+  assets_in_billion: order_by
+  company_id: order_by
+  headquarters: order_by
+  industry: order_by
+  market_value_in_billion: order_by
+  name: order_by
+  profits_in_billion: order_by
+  sales_in_billion: order_by
+}
+
+"""aggregate min on columns"""
+type company_min_fields {
+  assets_in_billion: Float
+  company_id: Float
+  headquarters: String
+  industry: String
+  market_value_in_billion: Float
+  name: String
+  profits_in_billion: Float
+  sales_in_billion: Float
+}
+
+"""
+order by min() on columns of table "company"
+"""
+input company_min_order_by {
+  assets_in_billion: order_by
+  company_id: order_by
+  headquarters: order_by
+  industry: order_by
+  market_value_in_billion: order_by
+  name: order_by
+  profits_in_billion: order_by
+  sales_in_billion: order_by
+}
+
+"""
+response of any mutation on the table "company"
+"""
+type company_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [company!]!
+}
+
+"""
+input type for inserting object relation for remote table "company"
+"""
+input company_obj_rel_insert_input {
+  data: company_insert_input!
+  on_conflict: company_on_conflict
+}
+
+"""
+on conflict condition type for table "company"
+"""
+input company_on_conflict {
+  constraint: company_constraint!
+  update_columns: [company_update_column!]!
+  where: company_bool_exp
+}
+
+"""
+ordering options when selecting data from "company"
+"""
+input company_order_by {
+  assets_in_billion: order_by
+  company_id: order_by
+  employments_aggregate: employment_aggregate_order_by
+  headquarters: order_by
+  industry: order_by
+  market_value_in_billion: order_by
+  name: order_by
+  profits_in_billion: order_by
+  sales_in_billion: order_by
+}
+
+"""
+select columns of table "company"
+"""
+enum company_select_column {
+  """column name"""
+  assets_in_billion
+
+  """column name"""
+  company_id
+
+  """column name"""
+  headquarters
+
+  """column name"""
+  industry
+
+  """column name"""
+  market_value_in_billion
+
+  """column name"""
+  name
+
+  """column name"""
+  profits_in_billion
+
+  """column name"""
+  sales_in_billion
+}
+
+"""
+input type for updating data in table "company"
+"""
+input company_set_input {
+  assets_in_billion: Float
+  company_id: Float
+  headquarters: String
+  industry: String
+  market_value_in_billion: Float
+  name: String
+  profits_in_billion: Float
+  sales_in_billion: Float
+}
+
+"""aggregate stddev on columns"""
+type company_stddev_fields {
+  assets_in_billion: Float
+  company_id: Float
+  market_value_in_billion: Float
+  profits_in_billion: Float
+  sales_in_billion: Float
+}
+
+"""
+order by stddev() on columns of table "company"
+"""
+input company_stddev_order_by {
+  assets_in_billion: order_by
+  company_id: order_by
+  market_value_in_billion: order_by
+  profits_in_billion: order_by
+  sales_in_billion: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type company_stddev_pop_fields {
+  assets_in_billion: Float
+  company_id: Float
+  market_value_in_billion: Float
+  profits_in_billion: Float
+  sales_in_billion: Float
+}
+
+"""
+order by stddev_pop() on columns of table "company"
+"""
+input company_stddev_pop_order_by {
+  assets_in_billion: order_by
+  company_id: order_by
+  market_value_in_billion: order_by
+  profits_in_billion: order_by
+  sales_in_billion: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type company_stddev_samp_fields {
+  assets_in_billion: Float
+  company_id: Float
+  market_value_in_billion: Float
+  profits_in_billion: Float
+  sales_in_billion: Float
+}
+
+"""
+order by stddev_samp() on columns of table "company"
+"""
+input company_stddev_samp_order_by {
+  assets_in_billion: order_by
+  company_id: order_by
+  market_value_in_billion: order_by
+  profits_in_billion: order_by
+  sales_in_billion: order_by
+}
+
+"""aggregate sum on columns"""
+type company_sum_fields {
+  assets_in_billion: Float
+  company_id: Float
+  market_value_in_billion: Float
+  profits_in_billion: Float
+  sales_in_billion: Float
+}
+
+"""
+order by sum() on columns of table "company"
+"""
+input company_sum_order_by {
+  assets_in_billion: order_by
+  company_id: order_by
+  market_value_in_billion: order_by
+  profits_in_billion: order_by
+  sales_in_billion: order_by
+}
+
+"""
+update columns of table "company"
+"""
+enum company_update_column {
+  """column name"""
+  assets_in_billion
+
+  """column name"""
+  company_id
+
+  """column name"""
+  headquarters
+
+  """column name"""
+  industry
+
+  """column name"""
+  market_value_in_billion
+
+  """column name"""
+  name
+
+  """column name"""
+  profits_in_billion
+
+  """column name"""
+  sales_in_billion
+}
+
+"""aggregate var_pop on columns"""
+type company_var_pop_fields {
+  assets_in_billion: Float
+  company_id: Float
+  market_value_in_billion: Float
+  profits_in_billion: Float
+  sales_in_billion: Float
+}
+
+"""
+order by var_pop() on columns of table "company"
+"""
+input company_var_pop_order_by {
+  assets_in_billion: order_by
+  company_id: order_by
+  market_value_in_billion: order_by
+  profits_in_billion: order_by
+  sales_in_billion: order_by
+}
+
+"""aggregate var_samp on columns"""
+type company_var_samp_fields {
+  assets_in_billion: Float
+  company_id: Float
+  market_value_in_billion: Float
+  profits_in_billion: Float
+  sales_in_billion: Float
+}
+
+"""
+order by var_samp() on columns of table "company"
+"""
+input company_var_samp_order_by {
+  assets_in_billion: order_by
+  company_id: order_by
+  market_value_in_billion: order_by
+  profits_in_billion: order_by
+  sales_in_billion: order_by
+}
+
+"""aggregate variance on columns"""
+type company_variance_fields {
+  assets_in_billion: Float
+  company_id: Float
+  market_value_in_billion: Float
+  profits_in_billion: Float
+  sales_in_billion: Float
+}
+
+"""
+order by variance() on columns of table "company"
+"""
+input company_variance_order_by {
+  assets_in_billion: order_by
+  company_id: order_by
+  market_value_in_billion: order_by
+  profits_in_billion: order_by
+  sales_in_billion: order_by
+}
+
+"""
+columns and relationships of "employment"
+"""
+type employment {
+  """An object relationship"""
+  company: company
+  company_id: Int
+  people_id: Int
+
+  """An object relationship"""
+  person: people
+  year_working: Int
+}
+
+"""
+aggregated selection of "employment"
+"""
+type employment_aggregate {
+  aggregate: employment_aggregate_fields
+  nodes: [employment!]!
+}
+
+"""
+aggregate fields of "employment"
+"""
+type employment_aggregate_fields {
+  avg: employment_avg_fields
+  count(columns: [employment_select_column!], distinct: Boolean): Int
+  max: employment_max_fields
+  min: employment_min_fields
+  stddev: employment_stddev_fields
+  stddev_pop: employment_stddev_pop_fields
+  stddev_samp: employment_stddev_samp_fields
+  sum: employment_sum_fields
+  var_pop: employment_var_pop_fields
+  var_samp: employment_var_samp_fields
+  variance: employment_variance_fields
+}
+
+"""
+order by aggregate values of table "employment"
+"""
+input employment_aggregate_order_by {
+  avg: employment_avg_order_by
+  count: order_by
+  max: employment_max_order_by
+  min: employment_min_order_by
+  stddev: employment_stddev_order_by
+  stddev_pop: employment_stddev_pop_order_by
+  stddev_samp: employment_stddev_samp_order_by
+  sum: employment_sum_order_by
+  var_pop: employment_var_pop_order_by
+  var_samp: employment_var_samp_order_by
+  variance: employment_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "employment"
+"""
+input employment_arr_rel_insert_input {
+  data: [employment_insert_input!]!
+  on_conflict: employment_on_conflict
+}
+
+"""aggregate avg on columns"""
+type employment_avg_fields {
+  company_id: Float
+  people_id: Float
+  year_working: Float
+}
+
+"""
+order by avg() on columns of table "employment"
+"""
+input employment_avg_order_by {
+  company_id: order_by
+  people_id: order_by
+  year_working: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "employment". All fields are combined with a logical 'AND'.
+"""
+input employment_bool_exp {
+  _and: [employment_bool_exp]
+  _not: employment_bool_exp
+  _or: [employment_bool_exp]
+  company: company_bool_exp
+  company_id: Int_comparison_exp
+  people_id: Int_comparison_exp
+  person: people_bool_exp
+  year_working: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "employment"
+"""
+enum employment_constraint {
+  """unique or primary key constraint"""
+  idx_20805_sqlite_autoindex_employment_1
+}
+
+"""
+input type for incrementing integer columne in table "employment"
+"""
+input employment_inc_input {
+  company_id: Int
+  people_id: Int
+  year_working: Int
+}
+
+"""
+input type for inserting data into table "employment"
+"""
+input employment_insert_input {
+  company: company_obj_rel_insert_input
+  company_id: Int
+  people_id: Int
+  person: people_obj_rel_insert_input
+  year_working: Int
+}
+
+"""aggregate max on columns"""
+type employment_max_fields {
+  company_id: Int
+  people_id: Int
+  year_working: Int
+}
+
+"""
+order by max() on columns of table "employment"
+"""
+input employment_max_order_by {
+  company_id: order_by
+  people_id: order_by
+  year_working: order_by
+}
+
+"""aggregate min on columns"""
+type employment_min_fields {
+  company_id: Int
+  people_id: Int
+  year_working: Int
+}
+
+"""
+order by min() on columns of table "employment"
+"""
+input employment_min_order_by {
+  company_id: order_by
+  people_id: order_by
+  year_working: order_by
+}
+
+"""
+response of any mutation on the table "employment"
+"""
+type employment_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [employment!]!
+}
+
+"""
+input type for inserting object relation for remote table "employment"
+"""
+input employment_obj_rel_insert_input {
+  data: employment_insert_input!
+  on_conflict: employment_on_conflict
+}
+
+"""
+on conflict condition type for table "employment"
+"""
+input employment_on_conflict {
+  constraint: employment_constraint!
+  update_columns: [employment_update_column!]!
+  where: employment_bool_exp
+}
+
+"""
+ordering options when selecting data from "employment"
+"""
+input employment_order_by {
+  company: company_order_by
+  company_id: order_by
+  people_id: order_by
+  person: people_order_by
+  year_working: order_by
+}
+
+"""
+select columns of table "employment"
+"""
+enum employment_select_column {
+  """column name"""
+  company_id
+
+  """column name"""
+  people_id
+
+  """column name"""
+  year_working
+}
+
+"""
+input type for updating data in table "employment"
+"""
+input employment_set_input {
+  company_id: Int
+  people_id: Int
+  year_working: Int
+}
+
+"""aggregate stddev on columns"""
+type employment_stddev_fields {
+  company_id: Float
+  people_id: Float
+  year_working: Float
+}
+
+"""
+order by stddev() on columns of table "employment"
+"""
+input employment_stddev_order_by {
+  company_id: order_by
+  people_id: order_by
+  year_working: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type employment_stddev_pop_fields {
+  company_id: Float
+  people_id: Float
+  year_working: Float
+}
+
+"""
+order by stddev_pop() on columns of table "employment"
+"""
+input employment_stddev_pop_order_by {
+  company_id: order_by
+  people_id: order_by
+  year_working: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type employment_stddev_samp_fields {
+  company_id: Float
+  people_id: Float
+  year_working: Float
+}
+
+"""
+order by stddev_samp() on columns of table "employment"
+"""
+input employment_stddev_samp_order_by {
+  company_id: order_by
+  people_id: order_by
+  year_working: order_by
+}
+
+"""aggregate sum on columns"""
+type employment_sum_fields {
+  company_id: Int
+  people_id: Int
+  year_working: Int
+}
+
+"""
+order by sum() on columns of table "employment"
+"""
+input employment_sum_order_by {
+  company_id: order_by
+  people_id: order_by
+  year_working: order_by
+}
+
+"""
+update columns of table "employment"
+"""
+enum employment_update_column {
+  """column name"""
+  company_id
+
+  """column name"""
+  people_id
+
+  """column name"""
+  year_working
+}
+
+"""aggregate var_pop on columns"""
+type employment_var_pop_fields {
+  company_id: Float
+  people_id: Float
+  year_working: Float
+}
+
+"""
+order by var_pop() on columns of table "employment"
+"""
+input employment_var_pop_order_by {
+  company_id: order_by
+  people_id: order_by
+  year_working: order_by
+}
+
+"""aggregate var_samp on columns"""
+type employment_var_samp_fields {
+  company_id: Float
+  people_id: Float
+  year_working: Float
+}
+
+"""
+order by var_samp() on columns of table "employment"
+"""
+input employment_var_samp_order_by {
+  company_id: order_by
+  people_id: order_by
+  year_working: order_by
+}
+
+"""aggregate variance on columns"""
+type employment_variance_fields {
+  company_id: Float
+  people_id: Float
+  year_working: Float
+}
+
+"""
+order by variance() on columns of table "employment"
+"""
+input employment_variance_order_by {
+  company_id: order_by
+  people_id: order_by
+  year_working: order_by
+}
+
+"""
+expression to compare columns of type Float. All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "company"
+  """
+  delete_company(
+    """filter the rows which have to be deleted"""
+    where: company_bool_exp!
+  ): company_mutation_response
+
+  """
+  delete data from the table: "employment"
+  """
+  delete_employment(
+    """filter the rows which have to be deleted"""
+    where: employment_bool_exp!
+  ): employment_mutation_response
+
+  """
+  delete data from the table: "people"
+  """
+  delete_people(
+    """filter the rows which have to be deleted"""
+    where: people_bool_exp!
+  ): people_mutation_response
+
+  """
+  insert data into the table: "company"
+  """
+  insert_company(
+    """the rows to be inserted"""
+    objects: [company_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: company_on_conflict
+  ): company_mutation_response
+
+  """
+  insert data into the table: "employment"
+  """
+  insert_employment(
+    """the rows to be inserted"""
+    objects: [employment_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: employment_on_conflict
+  ): employment_mutation_response
+
+  """
+  insert data into the table: "people"
+  """
+  insert_people(
+    """the rows to be inserted"""
+    objects: [people_insert_input!]!
+
+    """on conflict condition"""
+    on_conflict: people_on_conflict
+  ): people_mutation_response
+
+  """
+  update data of the table: "company"
+  """
+  update_company(
+    """sets the columns of the filtered rows to the given values"""
+    _set: company_set_input
+
+    """filter the rows which have to be updated"""
+    where: company_bool_exp!
+  ): company_mutation_response
+
+  """
+  update data of the table: "employment"
+  """
+  update_employment(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: employment_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: employment_set_input
+
+    """filter the rows which have to be updated"""
+    where: employment_bool_exp!
+  ): employment_mutation_response
+
+  """
+  update data of the table: "people"
+  """
+  update_people(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: people_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: people_set_input
+
+    """filter the rows which have to be updated"""
+    where: people_bool_exp!
+  ): people_mutation_response
+}
+
+"""column ordering options"""
+enum order_by {
+  """in the ascending order, nulls last"""
+  asc
+
+  """in the ascending order, nulls first"""
+  asc_nulls_first
+
+  """in the ascending order, nulls last"""
+  asc_nulls_last
+
+  """in the descending order, nulls first"""
+  desc
+
+  """in the descending order, nulls first"""
+  desc_nulls_first
+
+  """in the descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "people"
+"""
+type people {
+  age: Int
+
+  """An array relationship"""
+  employments(
+    """distinct select on columns"""
+    distinct_on: [employment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employment_order_by!]
+
+    """filter the rows returned"""
+    where: employment_bool_exp
+  ): [employment!]!
+
+  """An aggregated array relationship"""
+  employments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [employment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employment_order_by!]
+
+    """filter the rows returned"""
+    where: employment_bool_exp
+  ): employment_aggregate!
+  graduation_college: String
+  name: String
+  nationality: String
+  people_id: Int
+}
+
+"""
+aggregated selection of "people"
+"""
+type people_aggregate {
+  aggregate: people_aggregate_fields
+  nodes: [people!]!
+}
+
+"""
+aggregate fields of "people"
+"""
+type people_aggregate_fields {
+  avg: people_avg_fields
+  count(columns: [people_select_column!], distinct: Boolean): Int
+  max: people_max_fields
+  min: people_min_fields
+  stddev: people_stddev_fields
+  stddev_pop: people_stddev_pop_fields
+  stddev_samp: people_stddev_samp_fields
+  sum: people_sum_fields
+  var_pop: people_var_pop_fields
+  var_samp: people_var_samp_fields
+  variance: people_variance_fields
+}
+
+"""
+order by aggregate values of table "people"
+"""
+input people_aggregate_order_by {
+  avg: people_avg_order_by
+  count: order_by
+  max: people_max_order_by
+  min: people_min_order_by
+  stddev: people_stddev_order_by
+  stddev_pop: people_stddev_pop_order_by
+  stddev_samp: people_stddev_samp_order_by
+  sum: people_sum_order_by
+  var_pop: people_var_pop_order_by
+  var_samp: people_var_samp_order_by
+  variance: people_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "people"
+"""
+input people_arr_rel_insert_input {
+  data: [people_insert_input!]!
+  on_conflict: people_on_conflict
+}
+
+"""aggregate avg on columns"""
+type people_avg_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by avg() on columns of table "people"
+"""
+input people_avg_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "people". All fields are combined with a logical 'AND'.
+"""
+input people_bool_exp {
+  _and: [people_bool_exp]
+  _not: people_bool_exp
+  _or: [people_bool_exp]
+  age: Int_comparison_exp
+  employments: employment_bool_exp
+  graduation_college: String_comparison_exp
+  name: String_comparison_exp
+  nationality: String_comparison_exp
+  people_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "people"
+"""
+enum people_constraint {
+  """unique or primary key constraint"""
+  idx_20793_sqlite_autoindex_people_1
+}
+
+"""
+input type for incrementing integer columne in table "people"
+"""
+input people_inc_input {
+  age: Int
+  people_id: Int
+}
+
+"""
+input type for inserting data into table "people"
+"""
+input people_insert_input {
+  age: Int
+  employments: employment_arr_rel_insert_input
+  graduation_college: String
+  name: String
+  nationality: String
+  people_id: Int
+}
+
+"""aggregate max on columns"""
+type people_max_fields {
+  age: Int
+  graduation_college: String
+  name: String
+  nationality: String
+  people_id: Int
+}
+
+"""
+order by max() on columns of table "people"
+"""
+input people_max_order_by {
+  age: order_by
+  graduation_college: order_by
+  name: order_by
+  nationality: order_by
+  people_id: order_by
+}
+
+"""aggregate min on columns"""
+type people_min_fields {
+  age: Int
+  graduation_college: String
+  name: String
+  nationality: String
+  people_id: Int
+}
+
+"""
+order by min() on columns of table "people"
+"""
+input people_min_order_by {
+  age: order_by
+  graduation_college: order_by
+  name: order_by
+  nationality: order_by
+  people_id: order_by
+}
+
+"""
+response of any mutation on the table "people"
+"""
+type people_mutation_response {
+  """number of affected rows by the mutation"""
+  affected_rows: Int!
+
+  """data of the affected rows by the mutation"""
+  returning: [people!]!
+}
+
+"""
+input type for inserting object relation for remote table "people"
+"""
+input people_obj_rel_insert_input {
+  data: people_insert_input!
+  on_conflict: people_on_conflict
+}
+
+"""
+on conflict condition type for table "people"
+"""
+input people_on_conflict {
+  constraint: people_constraint!
+  update_columns: [people_update_column!]!
+  where: people_bool_exp
+}
+
+"""
+ordering options when selecting data from "people"
+"""
+input people_order_by {
+  age: order_by
+  employments_aggregate: employment_aggregate_order_by
+  graduation_college: order_by
+  name: order_by
+  nationality: order_by
+  people_id: order_by
+}
+
+"""
+select columns of table "people"
+"""
+enum people_select_column {
+  """column name"""
+  age
+
+  """column name"""
+  graduation_college
+
+  """column name"""
+  name
+
+  """column name"""
+  nationality
+
+  """column name"""
+  people_id
+}
+
+"""
+input type for updating data in table "people"
+"""
+input people_set_input {
+  age: Int
+  graduation_college: String
+  name: String
+  nationality: String
+  people_id: Int
+}
+
+"""aggregate stddev on columns"""
+type people_stddev_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by stddev() on columns of table "people"
+"""
+input people_stddev_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type people_stddev_pop_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "people"
+"""
+input people_stddev_pop_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type people_stddev_samp_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "people"
+"""
+input people_stddev_samp_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""aggregate sum on columns"""
+type people_sum_fields {
+  age: Int
+  people_id: Int
+}
+
+"""
+order by sum() on columns of table "people"
+"""
+input people_sum_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""
+update columns of table "people"
+"""
+enum people_update_column {
+  """column name"""
+  age
+
+  """column name"""
+  graduation_college
+
+  """column name"""
+  name
+
+  """column name"""
+  nationality
+
+  """column name"""
+  people_id
+}
+
+"""aggregate var_pop on columns"""
+type people_var_pop_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by var_pop() on columns of table "people"
+"""
+input people_var_pop_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type people_var_samp_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by var_samp() on columns of table "people"
+"""
+input people_var_samp_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""aggregate variance on columns"""
+type people_variance_fields {
+  age: Float
+  people_id: Float
+}
+
+"""
+order by variance() on columns of table "people"
+"""
+input people_variance_order_by {
+  age: order_by
+  people_id: order_by
+}
+
+"""query root"""
+type query_root {
+  """
+  fetch data from the table: "company"
+  """
+  company(
+    """distinct select on columns"""
+    distinct_on: [company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [company_order_by!]
+
+    """filter the rows returned"""
+    where: company_bool_exp
+  ): [company!]!
+
+  """
+  fetch aggregated fields from the table: "company"
+  """
+  company_aggregate(
+    """distinct select on columns"""
+    distinct_on: [company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [company_order_by!]
+
+    """filter the rows returned"""
+    where: company_bool_exp
+  ): company_aggregate!
+
+  """
+  fetch data from the table: "employment"
+  """
+  employment(
+    """distinct select on columns"""
+    distinct_on: [employment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employment_order_by!]
+
+    """filter the rows returned"""
+    where: employment_bool_exp
+  ): [employment!]!
+
+  """
+  fetch aggregated fields from the table: "employment"
+  """
+  employment_aggregate(
+    """distinct select on columns"""
+    distinct_on: [employment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employment_order_by!]
+
+    """filter the rows returned"""
+    where: employment_bool_exp
+  ): employment_aggregate!
+
+  """
+  fetch data from the table: "people"
+  """
+  people(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): [people!]!
+
+  """
+  fetch aggregated fields from the table: "people"
+  """
+  people_aggregate(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): people_aggregate!
+}
+
+"""
+expression to compare columns of type String. All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+"""subscription root"""
+type subscription_root {
+  """
+  fetch data from the table: "company"
+  """
+  company(
+    """distinct select on columns"""
+    distinct_on: [company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [company_order_by!]
+
+    """filter the rows returned"""
+    where: company_bool_exp
+  ): [company!]!
+
+  """
+  fetch aggregated fields from the table: "company"
+  """
+  company_aggregate(
+    """distinct select on columns"""
+    distinct_on: [company_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [company_order_by!]
+
+    """filter the rows returned"""
+    where: company_bool_exp
+  ): company_aggregate!
+
+  """
+  fetch data from the table: "employment"
+  """
+  employment(
+    """distinct select on columns"""
+    distinct_on: [employment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employment_order_by!]
+
+    """filter the rows returned"""
+    where: employment_bool_exp
+  ): [employment!]!
+
+  """
+  fetch aggregated fields from the table: "employment"
+  """
+  employment_aggregate(
+    """distinct select on columns"""
+    distinct_on: [employment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [employment_order_by!]
+
+    """filter the rows returned"""
+    where: employment_bool_exp
+  ): employment_aggregate!
+
+  """
+  fetch data from the table: "people"
+  """
+  people(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): [people!]!
+
+  """
+  fetch aggregated fields from the table: "people"
+  """
+  people_aggregate(
+    """distinct select on columns"""
+    distinct_on: [people_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [people_order_by!]
+
+    """filter the rows returned"""
+    where: people_bool_exp
+  ): people_aggregate!
+}
