@@ -215,7 +215,7 @@ class RawGraphQLArgument: Hashable {
         }
         
         if self.not {
-            return "_not { \(encoded) }"
+            return "_not : { \(encoded) }"
         } else {
             return encoded
         }
