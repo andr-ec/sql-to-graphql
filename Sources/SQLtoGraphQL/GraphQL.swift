@@ -197,11 +197,59 @@ class RawGraphQLArgument: Hashable {
         if case .column(_) = name {
             fatalError("column should be replaced with name.")
         }
+        
+        let encoded: String
         if name == .or {
-            return "\(name.rawValue) : [ \(value.encode(isOr: true)) ]" // otherwise it's treated as an and.
+             encoded = "\(name.rawValue) : [ \(value.encode(isOr: true)) ]" // otherwise it's treated as an and.
+        } else if name == .and, case .arguments(let args) = value {
+            // consolidate arguments with same name
+            let consolidatedArguments = self.consolidate(args: args)
+            value = .arguments(consolidatedArguments)
+            encoded = "\(name.rawValue) : " + value.encode()
+        } else if case .arguments(let args) = value {
+            let consolidatedArguments = self.consolidate(args: args)
+            value = .arguments(consolidatedArguments)
+            encoded = "\(name.rawValue) : " + value.encode()
+        }  else {
+            encoded = "\(name.rawValue) : " + value.encode()
         }
-        let encoded = "\(name.rawValue) : " + value.encode()
-        return encoded
+        
+        if self.not {
+            return "_not { \(encoded) }"
+        } else {
+            return encoded
+        }
+    }
+    
+    func consolidate(args: [RawGraphQLArgument]) -> [RawGraphQLArgument] {
+        // each val is something like gt or lt
+        // each name is something like weight
+        // if it contains something that is not an arg, escape
+        if args.contains(where: { arg in
+            if case .arguments(_) = arg.value {
+                return false
+            } else {
+                return true
+            }
+        }) {
+            return args
+        }
+        let groupedArgsByName = Dictionary(grouping: args, by: {$0.name})
+        
+        let consolidatedArguments = groupedArgsByName.values.map{ similarArguments -> RawGraphQLArgument  in
+            guard let firstArg = similarArguments.first, similarArguments.count > 1 else {
+                return similarArguments.first!
+            }
+            let consolidatedArgument = similarArguments.dropFirst().reduce(into: firstArg) { (result, argument) in
+                guard case .arguments(let nestedArgs) = result.value,
+                    case .arguments(let currentNestedArgs) = argument.value else {
+                        fatalError("should be nested args")
+                }
+                result.value = .arguments(nestedArgs + currentNestedArgs)
+            }
+            return consolidatedArgument
+        }
+        return consolidatedArguments
     }
 }
 
@@ -289,6 +337,10 @@ class RawGraphQLQuery: Hashable {
         guard !self.isEmpty else {
             return "" // this should never be called since it's handled in encodedQueries
         }
+        if hasAggregates {
+            self.queries.first!.name = "nodes"
+        }
+        
         let encodedArgs = arguments.count > 0 ? self.encodedArguments() : " "
         var allEncodedFields: String
         if !fields.isEmpty && queries.isEmpty {
@@ -421,4 +473,10 @@ struct GraphQLDatasetExample: Codable {
     let question: String
     //    let questionTokens: [String]
     let query: String
+}
+
+/// only used to nest arugments with relations
+struct ArgumentQueryNestable: Equatable {
+    let argument: RawGraphQLArgument
+    let query: RawGraphQLQuery
 }

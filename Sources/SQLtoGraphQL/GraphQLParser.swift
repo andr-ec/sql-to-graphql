@@ -32,11 +32,11 @@ class DatabaseExamplesParser: Codable {
                 let processedExample = GraphQLDatasetExample(
                     schemaId: currentExample.dbID,
                     question: currentExample.question,
-//                    questionTokens:currentExample.questionToks,
+                    //                    questionTokens:currentExample.questionToks,
                     query: "query { \(processedQuery) }")
                 return (successful + [processedExample], failed)
             } catch let error as ProcessingError {
-//                print(error)
+                //                print(error)
                 // TODO return error?
                 let example = FailedExample(example: currentExample, failedReason: error)
                 return (successful, failed + [example])
@@ -101,7 +101,7 @@ class DatabaseExamplesParser: Codable {
     
     func getFieldName(from column: DatabaseColumn) -> Field {
         self.schema.schema.types
-        .first(where: {column.tableName.lowercased() == $0.name.lowercased()})!
+            .first(where: {column.tableName.lowercased() == $0.name.lowercased()})!
             .fields!.first(where: {$0.name.lowercased() == column.columnName.lowercased()})!
     }
     
@@ -137,24 +137,36 @@ class DatabaseExamplesParser: Codable {
         argument.matchArgumentWithType(field: field)
         
         argument.name = .name(name)
-//        RawGraphQLArgumentValue(
-        let baseArgument = argument.not ? RawGraphQLArgument(name: .not, value: .arguments([argument])) : argument
         let baseQuery = query.hasAggregates ? query.queries.first! : query
-        return try self.nestColumnArgument(column: column, argument: baseArgument, query: baseQuery, fromTableQueries: fromTableQueries)
+        if baseQuery.table.columns.contains(column) {
+            return argument
+        } else {
+            let mainArgument = ArgumentQueryNestable(argument: argument, query: .init(table: self.database.tables[column.tableIndex]))
+            return try self.nestArgumentRelations(mainArgument: mainArgument, orderedArgumentsToNest: [], query: baseQuery, fromTableQueries: fromTableQueries)
+        }
+        
     }
     
     /// recursively searches in query for the correct depth which handles that column
     /// should only be called recursively or from `nameAndNestColumnArgument`
-    private func nestColumnArgument(column: DatabaseColumn, argument: RawGraphQLArgument, query: RawGraphQLQuery, fromTableQueries: [RawGraphQLQuery]) throws -> RawGraphQLArgument? {
-
-        if query.table.columns.contains(column) {
-            // need to make sure argument is of the right type.
-            return argument
+    private func nestArgumentRelations(mainArgument: ArgumentQueryNestable, orderedArgumentsToNest: [ArgumentQueryNestable], query: RawGraphQLQuery, fromTableQueries: [RawGraphQLQuery]) throws -> RawGraphQLArgument? {
+        if let lastArgument = orderedArgumentsToNest.last, lastArgument.query.table == mainArgument.query.table {
+            return orderedArgumentsToNest
+                .reversed()
+                .reduce(mainArgument.argument) { (result, currentArgument) -> RawGraphQLArgument in
+                    return RawGraphQLArgument(name: currentArgument.argument.name, value: .arguments([result]))
+            }
         } else if !query.queries.isEmpty {
             // go through each nested query and pass a new argument representing it.
             return try query.queries
-                // more efficient then: compactMap().first
-                .reduce(nil){ r, q in r != nil ? r : try self.nestColumnArgument(column: column, argument: .init(name: .queryRelation(q.name!), value: .arguments([argument])), query: q, fromTableQueries: fromTableQueries)}
+                .reduce(nil, { (result, queryToNest) -> RawGraphQLArgument? in
+                    guard result == nil else {
+                        return result
+                    }
+                    let newArg = ArgumentQueryNestable(argument: .init(name: .queryRelation(queryToNest.name!), value: .arguments([])), query: queryToNest)
+                    let orderedArgs = orderedArgumentsToNest + [newArg]
+                    return try self.nestArgumentRelations(mainArgument: mainArgument, orderedArgumentsToNest: orderedArgs, query: queryToNest, fromTableQueries: fromTableQueries)
+                })
         } else if fromTableQueries.isEmpty {
             return nil
         } else { // this is a leaf node
@@ -162,8 +174,8 @@ class DatabaseExamplesParser: Codable {
             let parentQuery = query.hasAggregates ? query.queries.first! : query
             return try fromTableQueries
                 .filter{ $0.table != query.table }
-            // can't filter because they might be nested deeper
-//                .filter{ $0.table.columns.contains(column)}
+                // can't filter because they might be nested deeper
+                //                .filter{ $0.table.columns.contains(column)}
                 // map to include name
                 .compactMap { q -> RawGraphQLQuery? in
                     if let name = try self.getChildQueryName(child: q, of: parentQuery) {
@@ -173,8 +185,17 @@ class DatabaseExamplesParser: Codable {
                     }
                     return nil
             }
-                .reduce(nil){ r, q in r != nil ? r : try self.nestColumnArgument(column: column, argument: .init(name: .queryRelation(q.name!), value: .arguments([argument])), query: q, fromTableQueries: fromTableQueries.filter({ $0.table != q.table })) }
+            .reduce(nil, { (result, queryToNest) -> RawGraphQLArgument? in
+                guard result == nil else {
+                    return result
+                }
+                let newArg = ArgumentQueryNestable(argument: .init(name: .queryRelation(queryToNest.name!), value: .arguments([])), query: queryToNest)
+                let orderedArgs = orderedArgumentsToNest + [newArg]
+                let filteredFromTableQueries = fromTableQueries.filter({ $0.table != queryToNest.table })
+                return try self.nestArgumentRelations(mainArgument: mainArgument, orderedArgumentsToNest: orderedArgs, query: queryToNest, fromTableQueries: filteredFromTableQueries)
+            })
         }
+
     }
     
     func nestOrderByArgument(argument: RawGraphQLArgument, query: RawGraphQLQuery, fromTableQueries: [RawGraphQLQuery]) throws -> RawGraphQLArgument {
@@ -186,7 +207,7 @@ class DatabaseExamplesParser: Codable {
         } else {
             // TODO prompt for manual relation
             throw ProcessingError.manualRelationEntryNeeded
-//            fatalError("nested relation not found for argument")
+            //            fatalError("nested relation not found for argument")
         }
     }
     
@@ -198,11 +219,11 @@ class DatabaseExamplesParser: Codable {
                 assert(queryField.arguments.count == 0)
                 return self.schema.schema.types
                     .first(where: {$0.name.lowercased() == query.table.name.lowercased()})!
-                .allSingleFieldNames
+                    .allSingleFieldNames
                     .map { RawGraphQLField(name: .field($0), column: queryField.column)}
             } else if case .aggregate(let aggregate) = queryField.name, aggregate != .count {
                 let name = self.schema.schema.types
-                .first(where: {$0.name.lowercased() == query.table.name.lowercased()})!
+                    .first(where: {$0.name.lowercased() == query.table.name.lowercased()})!
                     .fields!.first(where: {$0.name.lowercased() == queryField.column.columnName.lowercased()})!.name
                 var field = RawGraphQLField(name: queryField.name, column: queryField.column, arguments: queryField.arguments)
                 field.aggregateFieldName = name
@@ -296,14 +317,14 @@ class DatabaseExamplesParser: Codable {
                 handleAllFields(for: currentQuery) // needed to handle `*` fields
                 let previousCount = previousResult.nestedQueryCount
                 var newResult = try self.nestQueries(into: previousResult, currentQuery: currentQuery)
-
+                
                 if newResult.nestedQueryCount != previousCount + 1,
                     let unusedQuery = group.fromTableQueries.first(where: { $0.table != previousResult.table && $0.table != currentQuery.table && $0.name != nil}) {
                     unusedQuery.setNameFrom(schema: self.schema)
                     let intermediateResult = try self.nestQueries(into: unusedQuery, currentQuery: currentQuery)
                     assert(intermediateResult.nestedQueryCount == 2)
                     newResult = try self.nestQueries(into: previousResult, currentQuery: intermediateResult)
-
+                    
                     if newResult.nestedQueryCount != previousCount + 2,
                         let newNestedResult = try nestIntermediateQuery(previousResult: previousResult, currentQuery: intermediateResult) {
                         newResult = newNestedResult
@@ -350,7 +371,7 @@ class DatabaseExamplesParser: Codable {
                 .filter({ !$0.name.contains("aggregate")})
             
             
-             // otherwise ask for value
+            // otherwise ask for value
             var currentParent = previousResult
             while true {
                 var matchingMissingField = matchingMissingFields.first!
@@ -511,7 +532,7 @@ class DatabaseExamplesParser: Codable {
         let selectToIndex = Dictionary(select.selectStatements.enumerated()
             .map{ ($1, $0)}, uniquingKeysWith: { $0 < $1 ? $0 : $1})
         if select.selectStatements.count != selectToIndex.count {
-//            print("select fields are not unique.")
+            //            print("select fields are not unique.")
             // these are simple cases to fix manually.
             throw ProcessingError.selectFieldsNotUnique
         }
@@ -609,7 +630,6 @@ class DatabaseExamplesParser: Codable {
                     return RawGraphQLField(name: .aggregate(field.aggregateOpperation), column: column, arguments: arguments)
                 }
                 let aggregatesQuery = RawGraphQLQuery(table: table, fields: aggregateFields)
-                // TODO: queryWithFields will become `nodes`
                 return RawGraphQLQuery(table: table, queries: [queryWithFields, aggregatesQuery], hasAggregates: true)
             }
         }
