@@ -177,7 +177,7 @@ enum enzyme_constraint {
 }
 
 """
-input type for incrementing integer columne in table "enzyme"
+input type for incrementing integer column in table "enzyme"
 """
 input enzyme_inc_input {
   id: Int
@@ -286,6 +286,13 @@ input enzyme_order_by {
   omim: order_by
   porphyria: order_by
   product: order_by
+}
+
+"""
+primary key columns input for table: "enzyme"
+"""
+input enzyme_pk_columns_input {
+  id: Int!
 }
 
 """
@@ -698,7 +705,7 @@ enum medicine_enzyme_interaction_constraint {
 }
 
 """
-input type for incrementing integer columne in table "medicine_enzyme_interaction"
+input type for incrementing integer column in table "medicine_enzyme_interaction"
 """
 input medicine_enzyme_interaction_inc_input {
   enzyme_id: Int
@@ -785,6 +792,14 @@ input medicine_enzyme_interaction_order_by {
   interaction_type: order_by
   medicine: medicine_order_by
   medicine_id: order_by
+}
+
+"""
+primary key columns input for table: "medicine_enzyme_interaction"
+"""
+input medicine_enzyme_interaction_pk_columns_input {
+  enzyme_id: Int!
+  medicine_id: Int!
 }
 
 """
@@ -923,7 +938,7 @@ input medicine_enzyme_interaction_variance_order_by {
 }
 
 """
-input type for incrementing integer columne in table "medicine"
+input type for incrementing integer column in table "medicine"
 """
 input medicine_inc_input {
   id: Int
@@ -1013,6 +1028,13 @@ input medicine_order_by {
   medicine_enzyme_interactions_aggregate: medicine_enzyme_interaction_aggregate_order_by
   name: order_by
   trade_name: order_by
+}
+
+"""
+primary key columns input for table: "medicine"
+"""
+input medicine_pk_columns_input {
+  id: Int!
 }
 
 """
@@ -1154,6 +1176,11 @@ type mutation_root {
   ): enzyme_mutation_response
 
   """
+  delete single row from the table: "enzyme"
+  """
+  delete_enzyme_by_pk(id: Int!): enzyme
+
+  """
   delete data from the table: "medicine"
   """
   delete_medicine(
@@ -1162,12 +1189,22 @@ type mutation_root {
   ): medicine_mutation_response
 
   """
+  delete single row from the table: "medicine"
+  """
+  delete_medicine_by_pk(id: Int!): medicine
+
+  """
   delete data from the table: "medicine_enzyme_interaction"
   """
   delete_medicine_enzyme_interaction(
     """filter the rows which have to be deleted"""
     where: medicine_enzyme_interaction_bool_exp!
   ): medicine_enzyme_interaction_mutation_response
+
+  """
+  delete single row from the table: "medicine_enzyme_interaction"
+  """
+  delete_medicine_enzyme_interaction_by_pk(enzyme_id: Int!, medicine_id: Int!): medicine_enzyme_interaction
 
   """
   insert data into the table: "enzyme"
@@ -1179,6 +1216,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: enzyme_on_conflict
   ): enzyme_mutation_response
+
+  """
+  insert a single row into the table: "enzyme"
+  """
+  insert_enzyme_one(
+    """the row to be inserted"""
+    object: enzyme_insert_input!
+
+    """on conflict condition"""
+    on_conflict: enzyme_on_conflict
+  ): enzyme
 
   """
   insert data into the table: "medicine"
@@ -1203,6 +1251,28 @@ type mutation_root {
   ): medicine_enzyme_interaction_mutation_response
 
   """
+  insert a single row into the table: "medicine_enzyme_interaction"
+  """
+  insert_medicine_enzyme_interaction_one(
+    """the row to be inserted"""
+    object: medicine_enzyme_interaction_insert_input!
+
+    """on conflict condition"""
+    on_conflict: medicine_enzyme_interaction_on_conflict
+  ): medicine_enzyme_interaction
+
+  """
+  insert a single row into the table: "medicine"
+  """
+  insert_medicine_one(
+    """the row to be inserted"""
+    object: medicine_insert_input!
+
+    """on conflict condition"""
+    on_conflict: medicine_on_conflict
+  ): medicine
+
+  """
   update data of the table: "enzyme"
   """
   update_enzyme(
@@ -1215,6 +1285,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: enzyme_bool_exp!
   ): enzyme_mutation_response
+
+  """
+  update single row of the table: "enzyme"
+  """
+  update_enzyme_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: enzyme_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: enzyme_set_input
+    pk_columns: enzyme_pk_columns_input!
+  ): enzyme
 
   """
   update data of the table: "medicine"
@@ -1231,6 +1313,18 @@ type mutation_root {
   ): medicine_mutation_response
 
   """
+  update single row of the table: "medicine"
+  """
+  update_medicine_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: medicine_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: medicine_set_input
+    pk_columns: medicine_pk_columns_input!
+  ): medicine
+
+  """
   update data of the table: "medicine_enzyme_interaction"
   """
   update_medicine_enzyme_interaction(
@@ -1243,6 +1337,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: medicine_enzyme_interaction_bool_exp!
   ): medicine_enzyme_interaction_mutation_response
+
+  """
+  update single row of the table: "medicine_enzyme_interaction"
+  """
+  update_medicine_enzyme_interaction_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: medicine_enzyme_interaction_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: medicine_enzyme_interaction_set_input
+    pk_columns: medicine_enzyme_interaction_pk_columns_input!
+  ): medicine_enzyme_interaction
 }
 
 """column ordering options"""

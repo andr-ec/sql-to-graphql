@@ -173,7 +173,7 @@ enum albums_constraint {
 }
 
 """
-input type for incrementing integer columne in table "albums"
+input type for incrementing integer column in table "albums"
 """
 input albums_inc_input {
   aid: bigint
@@ -270,6 +270,13 @@ input albums_order_by {
   tracklists_aggregate: tracklists_aggregate_order_by
   type: order_by
   year: order_by
+}
+
+"""
+primary key columns input for table: "albums"
+"""
+input albums_pk_columns_input {
+  aid: bigint!
 }
 
 """
@@ -624,7 +631,7 @@ enum band_constraint {
 }
 
 """
-input type for incrementing integer columne in table "band"
+input type for incrementing integer column in table "band"
 """
 input band_inc_input {
   id: bigint
@@ -712,6 +719,13 @@ input band_order_by {
   lastname: order_by
   performances_aggregate: performance_aggregate_order_by
   vocals_aggregate: vocals_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "band"
+"""
+input band_pk_columns_input {
+  id: bigint!
 }
 
 """
@@ -953,7 +967,7 @@ enum instruments_constraint {
 }
 
 """
-input type for incrementing integer columne in table "instruments"
+input type for incrementing integer column in table "instruments"
 """
 input instruments_inc_input {
   bandmateid: bigint
@@ -1188,12 +1202,22 @@ type mutation_root {
   ): albums_mutation_response
 
   """
+  delete single row from the table: "albums"
+  """
+  delete_albums_by_pk(aid: bigint!): albums
+
+  """
   delete data from the table: "band"
   """
   delete_band(
     """filter the rows which have to be deleted"""
     where: band_bool_exp!
   ): band_mutation_response
+
+  """
+  delete single row from the table: "band"
+  """
+  delete_band_by_pk(id: bigint!): band
 
   """
   delete data from the table: "instruments"
@@ -1212,12 +1236,22 @@ type mutation_root {
   ): performance_mutation_response
 
   """
+  delete single row from the table: "performance"
+  """
+  delete_performance_by_pk(bandmate: bigint!, songid: bigint!): performance
+
+  """
   delete data from the table: "songs"
   """
   delete_songs(
     """filter the rows which have to be deleted"""
     where: songs_bool_exp!
   ): songs_mutation_response
+
+  """
+  delete single row from the table: "songs"
+  """
+  delete_songs_by_pk(songid: bigint!): songs
 
   """
   delete data from the table: "tracklists"
@@ -1228,12 +1262,22 @@ type mutation_root {
   ): tracklists_mutation_response
 
   """
+  delete single row from the table: "tracklists"
+  """
+  delete_tracklists_by_pk(albumid: bigint!, position: bigint!): tracklists
+
+  """
   delete data from the table: "vocals"
   """
   delete_vocals(
     """filter the rows which have to be deleted"""
     where: vocals_bool_exp!
   ): vocals_mutation_response
+
+  """
+  delete single row from the table: "vocals"
+  """
+  delete_vocals_by_pk(bandmate: bigint!, songid: bigint!): vocals
 
   """
   insert data into the table: "albums"
@@ -1247,6 +1291,17 @@ type mutation_root {
   ): albums_mutation_response
 
   """
+  insert a single row into the table: "albums"
+  """
+  insert_albums_one(
+    """the row to be inserted"""
+    object: albums_insert_input!
+
+    """on conflict condition"""
+    on_conflict: albums_on_conflict
+  ): albums
+
+  """
   insert data into the table: "band"
   """
   insert_band(
@@ -1256,6 +1311,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: band_on_conflict
   ): band_mutation_response
+
+  """
+  insert a single row into the table: "band"
+  """
+  insert_band_one(
+    """the row to be inserted"""
+    object: band_insert_input!
+
+    """on conflict condition"""
+    on_conflict: band_on_conflict
+  ): band
 
   """
   insert data into the table: "instruments"
@@ -1269,6 +1335,17 @@ type mutation_root {
   ): instruments_mutation_response
 
   """
+  insert a single row into the table: "instruments"
+  """
+  insert_instruments_one(
+    """the row to be inserted"""
+    object: instruments_insert_input!
+
+    """on conflict condition"""
+    on_conflict: instruments_on_conflict
+  ): instruments
+
+  """
   insert data into the table: "performance"
   """
   insert_performance(
@@ -1278,6 +1355,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: performance_on_conflict
   ): performance_mutation_response
+
+  """
+  insert a single row into the table: "performance"
+  """
+  insert_performance_one(
+    """the row to be inserted"""
+    object: performance_insert_input!
+
+    """on conflict condition"""
+    on_conflict: performance_on_conflict
+  ): performance
 
   """
   insert data into the table: "songs"
@@ -1291,6 +1379,17 @@ type mutation_root {
   ): songs_mutation_response
 
   """
+  insert a single row into the table: "songs"
+  """
+  insert_songs_one(
+    """the row to be inserted"""
+    object: songs_insert_input!
+
+    """on conflict condition"""
+    on_conflict: songs_on_conflict
+  ): songs
+
+  """
   insert data into the table: "tracklists"
   """
   insert_tracklists(
@@ -1302,6 +1401,17 @@ type mutation_root {
   ): tracklists_mutation_response
 
   """
+  insert a single row into the table: "tracklists"
+  """
+  insert_tracklists_one(
+    """the row to be inserted"""
+    object: tracklists_insert_input!
+
+    """on conflict condition"""
+    on_conflict: tracklists_on_conflict
+  ): tracklists
+
+  """
   insert data into the table: "vocals"
   """
   insert_vocals(
@@ -1311,6 +1421,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: vocals_on_conflict
   ): vocals_mutation_response
+
+  """
+  insert a single row into the table: "vocals"
+  """
+  insert_vocals_one(
+    """the row to be inserted"""
+    object: vocals_insert_input!
+
+    """on conflict condition"""
+    on_conflict: vocals_on_conflict
+  ): vocals
 
   """
   update data of the table: "albums"
@@ -1327,6 +1448,18 @@ type mutation_root {
   ): albums_mutation_response
 
   """
+  update single row of the table: "albums"
+  """
+  update_albums_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: albums_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: albums_set_input
+    pk_columns: albums_pk_columns_input!
+  ): albums
+
+  """
   update data of the table: "band"
   """
   update_band(
@@ -1339,6 +1472,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: band_bool_exp!
   ): band_mutation_response
+
+  """
+  update single row of the table: "band"
+  """
+  update_band_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: band_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: band_set_input
+    pk_columns: band_pk_columns_input!
+  ): band
 
   """
   update data of the table: "instruments"
@@ -1369,6 +1514,18 @@ type mutation_root {
   ): performance_mutation_response
 
   """
+  update single row of the table: "performance"
+  """
+  update_performance_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: performance_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: performance_set_input
+    pk_columns: performance_pk_columns_input!
+  ): performance
+
+  """
   update data of the table: "songs"
   """
   update_songs(
@@ -1381,6 +1538,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: songs_bool_exp!
   ): songs_mutation_response
+
+  """
+  update single row of the table: "songs"
+  """
+  update_songs_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: songs_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: songs_set_input
+    pk_columns: songs_pk_columns_input!
+  ): songs
 
   """
   update data of the table: "tracklists"
@@ -1397,6 +1566,18 @@ type mutation_root {
   ): tracklists_mutation_response
 
   """
+  update single row of the table: "tracklists"
+  """
+  update_tracklists_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: tracklists_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: tracklists_set_input
+    pk_columns: tracklists_pk_columns_input!
+  ): tracklists
+
+  """
   update data of the table: "vocals"
   """
   update_vocals(
@@ -1409,6 +1590,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: vocals_bool_exp!
   ): vocals_mutation_response
+
+  """
+  update single row of the table: "vocals"
+  """
+  update_vocals_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: vocals_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: vocals_set_input
+    pk_columns: vocals_pk_columns_input!
+  ): vocals
 }
 
 """column ordering options"""
@@ -1536,7 +1729,7 @@ enum performance_constraint {
 }
 
 """
-input type for incrementing integer columne in table "performance"
+input type for incrementing integer column in table "performance"
 """
 input performance_inc_input {
   bandmate: bigint
@@ -1623,6 +1816,14 @@ input performance_order_by {
   song: songs_order_by
   songid: order_by
   stageposition: order_by
+}
+
+"""
+primary key columns input for table: "performance"
+"""
+input performance_pk_columns_input {
+  bandmate: bigint!
+  songid: bigint!
 }
 
 """
@@ -2298,7 +2499,7 @@ enum songs_constraint {
 }
 
 """
-input type for incrementing integer columne in table "songs"
+input type for incrementing integer column in table "songs"
 """
 input songs_inc_input {
   songid: bigint
@@ -2382,6 +2583,13 @@ input songs_order_by {
   title: order_by
   tracklists_aggregate: tracklists_aggregate_order_by
   vocals_aggregate: vocals_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "songs"
+"""
+input songs_pk_columns_input {
+  songid: bigint!
 }
 
 """
@@ -2926,7 +3134,7 @@ enum tracklists_constraint {
 }
 
 """
-input type for incrementing integer columne in table "tracklists"
+input type for incrementing integer column in table "tracklists"
 """
 input tracklists_inc_input {
   albumid: bigint
@@ -3014,6 +3222,14 @@ input tracklists_order_by {
   position: order_by
   song: songs_order_by
   songid: order_by
+}
+
+"""
+primary key columns input for table: "tracklists"
+"""
+input tracklists_pk_columns_input {
+  albumid: bigint!
+  position: bigint!
 }
 
 """
@@ -3269,7 +3485,7 @@ enum vocals_constraint {
 }
 
 """
-input type for incrementing integer columne in table "vocals"
+input type for incrementing integer column in table "vocals"
 """
 input vocals_inc_input {
   bandmate: bigint
@@ -3356,6 +3572,14 @@ input vocals_order_by {
   song: songs_order_by
   songid: order_by
   type: order_by
+}
+
+"""
+primary key columns input for table: "vocals"
+"""
+input vocals_pk_columns_input {
+  bandmate: bigint!
+  songid: bigint!
 }
 
 """

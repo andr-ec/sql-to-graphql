@@ -179,6 +179,15 @@ enum chip_model_constraint {
 }
 
 """
+input type for incrementing integer column in table "chip_model"
+"""
+input chip_model_inc_input {
+  launch_year: Float
+  ram_mib: Float
+  rom_mib: Float
+}
+
+"""
 input type for inserting data into table "chip_model"
 """
 input chip_model_insert_input {
@@ -516,6 +525,11 @@ type mutation_root {
   ): screen_mode_mutation_response
 
   """
+  delete single row from the table: "screen_mode"
+  """
+  delete_screen_mode_by_pk(graphics_mode: Int!): screen_mode
+
+  """
   insert data into the table: "chip_model"
   """
   insert_chip_model(
@@ -525,6 +539,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: chip_model_on_conflict
   ): chip_model_mutation_response
+
+  """
+  insert a single row into the table: "chip_model"
+  """
+  insert_chip_model_one(
+    """the row to be inserted"""
+    object: chip_model_insert_input!
+
+    """on conflict condition"""
+    on_conflict: chip_model_on_conflict
+  ): chip_model
 
   """
   insert data into the table: "phone"
@@ -538,6 +563,17 @@ type mutation_root {
   ): phone_mutation_response
 
   """
+  insert a single row into the table: "phone"
+  """
+  insert_phone_one(
+    """the row to be inserted"""
+    object: phone_insert_input!
+
+    """on conflict condition"""
+    on_conflict: phone_on_conflict
+  ): phone
+
+  """
   insert data into the table: "screen_mode"
   """
   insert_screen_mode(
@@ -549,9 +585,23 @@ type mutation_root {
   ): screen_mode_mutation_response
 
   """
+  insert a single row into the table: "screen_mode"
+  """
+  insert_screen_mode_one(
+    """the row to be inserted"""
+    object: screen_mode_insert_input!
+
+    """on conflict condition"""
+    on_conflict: screen_mode_on_conflict
+  ): screen_mode
+
+  """
   update data of the table: "chip_model"
   """
   update_chip_model(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: chip_model_inc_input
+
     """sets the columns of the filtered rows to the given values"""
     _set: chip_model_set_input
 
@@ -586,6 +636,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: screen_mode_bool_exp!
   ): screen_mode_mutation_response
+
+  """
+  update single row of the table: "screen_mode"
+  """
+  update_screen_mode_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: screen_mode_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: screen_mode_set_input
+    pk_columns: screen_mode_pk_columns_input!
+  ): screen_mode
 }
 
 """column ordering options"""
@@ -717,7 +779,7 @@ enum phone_constraint {
 }
 
 """
-input type for incrementing integer columne in table "phone"
+input type for incrementing integer column in table "phone"
 """
 input phone_inc_input {
   screen_mode: Int
@@ -1251,10 +1313,12 @@ enum screen_mode_constraint {
 }
 
 """
-input type for incrementing integer columne in table "screen_mode"
+input type for incrementing integer column in table "screen_mode"
 """
 input screen_mode_inc_input {
   graphics_mode: Int
+  hardware_colours: Float
+  used_kb: Float
 }
 
 """
@@ -1359,6 +1423,13 @@ input screen_mode_order_by {
   pixels: order_by
   type: order_by
   used_kb: order_by
+}
+
+"""
+primary key columns input for table: "screen_mode"
+"""
+input screen_mode_pk_columns_input {
+  graphics_mode: Int!
 }
 
 """

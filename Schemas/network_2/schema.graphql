@@ -66,6 +66,11 @@ type mutation_root {
   ): person_mutation_response
 
   """
+  delete single row from the table: "person"
+  """
+  delete_person_by_pk(name: String!): person
+
+  """
   delete data from the table: "personfriend"
   """
   delete_personfriend(
@@ -85,12 +90,31 @@ type mutation_root {
   ): person_mutation_response
 
   """
+  insert a single row into the table: "person"
+  """
+  insert_person_one(
+    """the row to be inserted"""
+    object: person_insert_input!
+
+    """on conflict condition"""
+    on_conflict: person_on_conflict
+  ): person
+
+  """
   insert data into the table: "personfriend"
   """
   insert_personfriend(
     """the rows to be inserted"""
     objects: [personfriend_insert_input!]!
   ): personfriend_mutation_response
+
+  """
+  insert a single row into the table: "personfriend"
+  """
+  insert_personfriend_one(
+    """the row to be inserted"""
+    object: personfriend_insert_input!
+  ): personfriend
 
   """
   update data of the table: "person"
@@ -105,6 +129,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: person_bool_exp!
   ): person_mutation_response
+
+  """
+  update single row of the table: "person"
+  """
+  update_person_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: person_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: person_set_input
+    pk_columns: person_pk_columns_input!
+  ): person
 
   """
   update data of the table: "personfriend"
@@ -312,7 +348,7 @@ enum person_constraint {
 }
 
 """
-input type for incrementing integer columne in table "person"
+input type for incrementing integer column in table "person"
 """
 input person_inc_input {
   age: bigint
@@ -410,6 +446,13 @@ input person_order_by {
   name: order_by
   personfriendsByName_aggregate: personfriend_aggregate_order_by
   personfriends_aggregate: personfriend_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "person"
+"""
+input person_pk_columns_input {
+  name: String!
 }
 
 """
@@ -638,7 +681,7 @@ input personfriend_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "personfriend"
+input type for incrementing integer column in table "personfriend"
 """
 input personfriend_inc_input {
   year: bigint

@@ -162,7 +162,7 @@ enum customer_event_notes_constraint {
 }
 
 """
-input type for incrementing integer columne in table "customer_event_notes"
+input type for incrementing integer column in table "customer_event_notes"
 """
 input customer_event_notes_inc_input {
   customer_event_id: bigint
@@ -267,6 +267,13 @@ input customer_event_notes_order_by {
   property_id: order_by
   resident_id: order_by
   service_type_code: order_by
+}
+
+"""
+primary key columns input for table: "customer_event_notes"
+"""
+input customer_event_notes_pk_columns_input {
+  customer_event_note_id: bigint!
 }
 
 """
@@ -611,7 +618,7 @@ enum customer_events_constraint {
 }
 
 """
-input type for incrementing integer columne in table "customer_events"
+input type for incrementing integer column in table "customer_events"
 """
 input customer_events_inc_input {
   customer_event_id: bigint
@@ -725,6 +732,13 @@ input customer_events_order_by {
   resident_id: order_by
   thing: things_order_by
   thing_id: order_by
+}
+
+"""
+primary key columns input for table: "customer_events"
+"""
+input customer_events_pk_columns_input {
+  customer_event_id: bigint!
 }
 
 """
@@ -1052,7 +1066,7 @@ enum customers_constraint {
 }
 
 """
-input type for incrementing integer columne in table "customers"
+input type for incrementing integer column in table "customers"
 """
 input customers_inc_input {
   customer_id: bigint
@@ -1130,6 +1144,13 @@ input customers_order_by {
   customer_details: order_by
   customer_events_aggregate: customer_events_aggregate_order_by
   customer_id: order_by
+}
+
+"""
+primary key columns input for table: "customers"
+"""
+input customers_pk_columns_input {
+  customer_id: bigint!
 }
 
 """
@@ -1257,12 +1278,22 @@ type mutation_root {
   ): customer_event_notes_mutation_response
 
   """
+  delete single row from the table: "customer_event_notes"
+  """
+  delete_customer_event_notes_by_pk(customer_event_note_id: bigint!): customer_event_notes
+
+  """
   delete data from the table: "customer_events"
   """
   delete_customer_events(
     """filter the rows which have to be deleted"""
     where: customer_events_bool_exp!
   ): customer_events_mutation_response
+
+  """
+  delete single row from the table: "customer_events"
+  """
+  delete_customer_events_by_pk(customer_event_id: bigint!): customer_events
 
   """
   delete data from the table: "customers"
@@ -1273,12 +1304,22 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  delete single row from the table: "customers"
+  """
+  delete_customers_by_pk(customer_id: bigint!): customers
+
+  """
   delete data from the table: "organizations"
   """
   delete_organizations(
     """filter the rows which have to be deleted"""
     where: organizations_bool_exp!
   ): organizations_mutation_response
+
+  """
+  delete single row from the table: "organizations"
+  """
+  delete_organizations_by_pk(organization_id: bigint!): organizations
 
   """
   delete data from the table: "properties"
@@ -1289,12 +1330,22 @@ type mutation_root {
   ): properties_mutation_response
 
   """
+  delete single row from the table: "properties"
+  """
+  delete_properties_by_pk(property_id: bigint!): properties
+
+  """
   delete data from the table: "residents"
   """
   delete_residents(
     """filter the rows which have to be deleted"""
     where: residents_bool_exp!
   ): residents_mutation_response
+
+  """
+  delete single row from the table: "residents"
+  """
+  delete_residents_by_pk(date_moved_in: timestamptz!, property_id: bigint!, resident_id: bigint!): residents
 
   """
   delete data from the table: "residents_services"
@@ -1305,6 +1356,11 @@ type mutation_root {
   ): residents_services_mutation_response
 
   """
+  delete single row from the table: "residents_services"
+  """
+  delete_residents_services_by_pk(resident_id: bigint!, service_id: bigint!): residents_services
+
+  """
   delete data from the table: "services"
   """
   delete_services(
@@ -1313,12 +1369,22 @@ type mutation_root {
   ): services_mutation_response
 
   """
+  delete single row from the table: "services"
+  """
+  delete_services_by_pk(service_id: bigint!): services
+
+  """
   delete data from the table: "things"
   """
   delete_things(
     """filter the rows which have to be deleted"""
     where: things_bool_exp!
   ): things_mutation_response
+
+  """
+  delete single row from the table: "things"
+  """
+  delete_things_by_pk(thing_id: bigint!): things
 
   """
   delete data from the table: "timed_locations_of_things"
@@ -1348,6 +1414,17 @@ type mutation_root {
   ): customer_event_notes_mutation_response
 
   """
+  insert a single row into the table: "customer_event_notes"
+  """
+  insert_customer_event_notes_one(
+    """the row to be inserted"""
+    object: customer_event_notes_insert_input!
+
+    """on conflict condition"""
+    on_conflict: customer_event_notes_on_conflict
+  ): customer_event_notes
+
+  """
   insert data into the table: "customer_events"
   """
   insert_customer_events(
@@ -1357,6 +1434,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: customer_events_on_conflict
   ): customer_events_mutation_response
+
+  """
+  insert a single row into the table: "customer_events"
+  """
+  insert_customer_events_one(
+    """the row to be inserted"""
+    object: customer_events_insert_input!
+
+    """on conflict condition"""
+    on_conflict: customer_events_on_conflict
+  ): customer_events
 
   """
   insert data into the table: "customers"
@@ -1370,6 +1458,17 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  insert a single row into the table: "customers"
+  """
+  insert_customers_one(
+    """the row to be inserted"""
+    object: customers_insert_input!
+
+    """on conflict condition"""
+    on_conflict: customers_on_conflict
+  ): customers
+
+  """
   insert data into the table: "organizations"
   """
   insert_organizations(
@@ -1379,6 +1478,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: organizations_on_conflict
   ): organizations_mutation_response
+
+  """
+  insert a single row into the table: "organizations"
+  """
+  insert_organizations_one(
+    """the row to be inserted"""
+    object: organizations_insert_input!
+
+    """on conflict condition"""
+    on_conflict: organizations_on_conflict
+  ): organizations
 
   """
   insert data into the table: "properties"
@@ -1392,6 +1502,17 @@ type mutation_root {
   ): properties_mutation_response
 
   """
+  insert a single row into the table: "properties"
+  """
+  insert_properties_one(
+    """the row to be inserted"""
+    object: properties_insert_input!
+
+    """on conflict condition"""
+    on_conflict: properties_on_conflict
+  ): properties
+
+  """
   insert data into the table: "residents"
   """
   insert_residents(
@@ -1401,6 +1522,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: residents_on_conflict
   ): residents_mutation_response
+
+  """
+  insert a single row into the table: "residents"
+  """
+  insert_residents_one(
+    """the row to be inserted"""
+    object: residents_insert_input!
+
+    """on conflict condition"""
+    on_conflict: residents_on_conflict
+  ): residents
 
   """
   insert data into the table: "residents_services"
@@ -1414,6 +1546,17 @@ type mutation_root {
   ): residents_services_mutation_response
 
   """
+  insert a single row into the table: "residents_services"
+  """
+  insert_residents_services_one(
+    """the row to be inserted"""
+    object: residents_services_insert_input!
+
+    """on conflict condition"""
+    on_conflict: residents_services_on_conflict
+  ): residents_services
+
+  """
   insert data into the table: "services"
   """
   insert_services(
@@ -1423,6 +1566,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: services_on_conflict
   ): services_mutation_response
+
+  """
+  insert a single row into the table: "services"
+  """
+  insert_services_one(
+    """the row to be inserted"""
+    object: services_insert_input!
+
+    """on conflict condition"""
+    on_conflict: services_on_conflict
+  ): services
 
   """
   insert data into the table: "things"
@@ -1436,6 +1590,17 @@ type mutation_root {
   ): things_mutation_response
 
   """
+  insert a single row into the table: "things"
+  """
+  insert_things_one(
+    """the row to be inserted"""
+    object: things_insert_input!
+
+    """on conflict condition"""
+    on_conflict: things_on_conflict
+  ): things
+
+  """
   insert data into the table: "timed_locations_of_things"
   """
   insert_timed_locations_of_things(
@@ -1447,6 +1612,17 @@ type mutation_root {
   ): timed_locations_of_things_mutation_response
 
   """
+  insert a single row into the table: "timed_locations_of_things"
+  """
+  insert_timed_locations_of_things_one(
+    """the row to be inserted"""
+    object: timed_locations_of_things_insert_input!
+
+    """on conflict condition"""
+    on_conflict: timed_locations_of_things_on_conflict
+  ): timed_locations_of_things
+
+  """
   insert data into the table: "timed_status_of_things"
   """
   insert_timed_status_of_things(
@@ -1456,6 +1632,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: timed_status_of_things_on_conflict
   ): timed_status_of_things_mutation_response
+
+  """
+  insert a single row into the table: "timed_status_of_things"
+  """
+  insert_timed_status_of_things_one(
+    """the row to be inserted"""
+    object: timed_status_of_things_insert_input!
+
+    """on conflict condition"""
+    on_conflict: timed_status_of_things_on_conflict
+  ): timed_status_of_things
 
   """
   update data of the table: "customer_event_notes"
@@ -1472,6 +1659,18 @@ type mutation_root {
   ): customer_event_notes_mutation_response
 
   """
+  update single row of the table: "customer_event_notes"
+  """
+  update_customer_event_notes_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customer_event_notes_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customer_event_notes_set_input
+    pk_columns: customer_event_notes_pk_columns_input!
+  ): customer_event_notes
+
+  """
   update data of the table: "customer_events"
   """
   update_customer_events(
@@ -1484,6 +1683,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: customer_events_bool_exp!
   ): customer_events_mutation_response
+
+  """
+  update single row of the table: "customer_events"
+  """
+  update_customer_events_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customer_events_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customer_events_set_input
+    pk_columns: customer_events_pk_columns_input!
+  ): customer_events
 
   """
   update data of the table: "customers"
@@ -1500,6 +1711,18 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  update single row of the table: "customers"
+  """
+  update_customers_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customers_set_input
+    pk_columns: customers_pk_columns_input!
+  ): customers
+
+  """
   update data of the table: "organizations"
   """
   update_organizations(
@@ -1512,6 +1735,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: organizations_bool_exp!
   ): organizations_mutation_response
+
+  """
+  update single row of the table: "organizations"
+  """
+  update_organizations_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: organizations_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: organizations_set_input
+    pk_columns: organizations_pk_columns_input!
+  ): organizations
 
   """
   update data of the table: "properties"
@@ -1528,6 +1763,18 @@ type mutation_root {
   ): properties_mutation_response
 
   """
+  update single row of the table: "properties"
+  """
+  update_properties_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: properties_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: properties_set_input
+    pk_columns: properties_pk_columns_input!
+  ): properties
+
+  """
   update data of the table: "residents"
   """
   update_residents(
@@ -1540,6 +1787,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: residents_bool_exp!
   ): residents_mutation_response
+
+  """
+  update single row of the table: "residents"
+  """
+  update_residents_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: residents_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: residents_set_input
+    pk_columns: residents_pk_columns_input!
+  ): residents
 
   """
   update data of the table: "residents_services"
@@ -1556,6 +1815,18 @@ type mutation_root {
   ): residents_services_mutation_response
 
   """
+  update single row of the table: "residents_services"
+  """
+  update_residents_services_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: residents_services_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: residents_services_set_input
+    pk_columns: residents_services_pk_columns_input!
+  ): residents_services
+
+  """
   update data of the table: "services"
   """
   update_services(
@@ -1570,6 +1841,18 @@ type mutation_root {
   ): services_mutation_response
 
   """
+  update single row of the table: "services"
+  """
+  update_services_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: services_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: services_set_input
+    pk_columns: services_pk_columns_input!
+  ): services
+
+  """
   update data of the table: "things"
   """
   update_things(
@@ -1582,6 +1865,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: things_bool_exp!
   ): things_mutation_response
+
+  """
+  update single row of the table: "things"
+  """
+  update_things_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: things_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: things_set_input
+    pk_columns: things_pk_columns_input!
+  ): things
 
   """
   update data of the table: "timed_locations_of_things"
@@ -1805,7 +2100,7 @@ enum organizations_constraint {
 }
 
 """
-input type for incrementing integer columne in table "organizations"
+input type for incrementing integer column in table "organizations"
 """
 input organizations_inc_input {
   organization_id: bigint
@@ -1894,6 +2189,13 @@ input organizations_order_by {
   parent_organization_id: order_by
   services_aggregate: services_aggregate_order_by
   things_aggregate: things_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "organizations"
+"""
+input organizations_pk_columns_input {
+  organization_id: bigint!
 }
 
 """
@@ -2235,7 +2537,7 @@ enum properties_constraint {
 }
 
 """
-input type for incrementing integer columne in table "properties"
+input type for incrementing integer column in table "properties"
 """
 input properties_inc_input {
   property_id: bigint
@@ -2329,6 +2631,13 @@ input properties_order_by {
   property_type_code: order_by
   residents_aggregate: residents_aggregate_order_by
   residents_services_aggregate: residents_services_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "properties"
+"""
+input properties_pk_columns_input {
+  property_id: bigint!
 }
 
 """
@@ -3108,7 +3417,7 @@ enum residents_constraint {
 }
 
 """
-input type for incrementing integer columne in table "residents"
+input type for incrementing integer column in table "residents"
 """
 input residents_inc_input {
   property_id: bigint
@@ -3209,6 +3518,15 @@ input residents_order_by {
   property_id: order_by
   resident_id: order_by
   residents_services_aggregate: residents_services_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "residents"
+"""
+input residents_pk_columns_input {
+  date_moved_in: timestamptz!
+  property_id: bigint!
+  resident_id: bigint!
 }
 
 """
@@ -3347,7 +3665,7 @@ enum residents_services_constraint {
 }
 
 """
-input type for incrementing integer columne in table "residents_services"
+input type for incrementing integer column in table "residents_services"
 """
 input residents_services_inc_input {
   property_id: bigint
@@ -3461,6 +3779,14 @@ input residents_services_order_by {
   resident_id: order_by
   service: services_order_by
   service_id: order_by
+}
+
+"""
+primary key columns input for table: "residents_services"
+"""
+input residents_services_pk_columns_input {
+  resident_id: bigint!
+  service_id: bigint!
 }
 
 """
@@ -3905,7 +4231,7 @@ enum services_constraint {
 }
 
 """
-input type for incrementing integer columne in table "services"
+input type for incrementing integer column in table "services"
 """
 input services_inc_input {
   organization_id: bigint
@@ -3998,6 +4324,13 @@ input services_order_by {
   service_details: order_by
   service_id: order_by
   service_type_code: order_by
+}
+
+"""
+primary key columns input for table: "services"
+"""
+input services_pk_columns_input {
+  service_id: bigint!
 }
 
 """
@@ -4849,7 +5182,7 @@ enum things_constraint {
 }
 
 """
-input type for incrementing integer columne in table "things"
+input type for incrementing integer column in table "things"
 """
 input things_inc_input {
   organization_id: bigint
@@ -4952,6 +5285,13 @@ input things_order_by {
   timed_locations_of_things_aggregate: timed_locations_of_things_aggregate_order_by
   timed_status_of_things_aggregate: timed_status_of_things_aggregate_order_by
   type_of_thing_code: order_by
+}
+
+"""
+primary key columns input for table: "things"
+"""
+input things_pk_columns_input {
+  thing_id: bigint!
 }
 
 """
@@ -5199,7 +5539,7 @@ enum timed_locations_of_things_constraint {
 }
 
 """
-input type for incrementing integer columne in table "timed_locations_of_things"
+input type for incrementing integer column in table "timed_locations_of_things"
 """
 input timed_locations_of_things_inc_input {
   thing_id: bigint
@@ -5502,7 +5842,7 @@ enum timed_status_of_things_constraint {
 }
 
 """
-input type for incrementing integer columne in table "timed_status_of_things"
+input type for incrementing integer column in table "timed_status_of_things"
 """
 input timed_status_of_things_inc_input {
   thing_id: bigint

@@ -204,7 +204,7 @@ enum course_constraint {
 }
 
 """
-input type for incrementing integer columne in table "course"
+input type for incrementing integer column in table "course"
 """
 input course_inc_input {
   credits: bigint
@@ -708,7 +708,7 @@ enum department_constraint {
 }
 
 """
-input type for incrementing integer columne in table "department"
+input type for incrementing integer column in table "department"
 """
 input department_inc_input {
   dno: bigint
@@ -815,6 +815,13 @@ input department_order_by {
   member_ofs_aggregate: member_of_aggregate_order_by
   minor_ins_aggregate: minor_in_aggregate_order_by
   room: order_by
+}
+
+"""
+primary key columns input for table: "department"
+"""
+input department_pk_columns_input {
+  dno: bigint!
 }
 
 """
@@ -1068,7 +1075,7 @@ input enrolled_in_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "enrolled_in"
+input type for incrementing integer column in table "enrolled_in"
 """
 input enrolled_in_inc_input {
   stuid: bigint
@@ -1470,7 +1477,7 @@ enum faculty_constraint {
 }
 
 """
-input type for incrementing integer columne in table "faculty"
+input type for incrementing integer column in table "faculty"
 """
 input faculty_inc_input {
   facid: bigint
@@ -1589,6 +1596,13 @@ input faculty_order_by {
   room: order_by
   sex: order_by
   students_aggregate: student_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "faculty"
+"""
+input faculty_pk_columns_input {
+  facid: bigint!
 }
 
 """
@@ -1904,6 +1918,13 @@ enum gradeconversion_constraint {
 }
 
 """
+input type for incrementing integer column in table "gradeconversion"
+"""
+input gradeconversion_inc_input {
+  gradepoint: float8
+}
+
+"""
 input type for inserting data into table "gradeconversion"
 """
 input gradeconversion_insert_input {
@@ -1975,6 +1996,13 @@ input gradeconversion_order_by {
   enrolled_ins_aggregate: enrolled_in_aggregate_order_by
   gradepoint: order_by
   lettergrade: order_by
+}
+
+"""
+primary key columns input for table: "gradeconversion"
+"""
+input gradeconversion_pk_columns_input {
+  lettergrade: String!
 }
 
 """
@@ -2184,7 +2212,7 @@ input member_of_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "member_of"
+input type for incrementing integer column in table "member_of"
 """
 input member_of_inc_input {
   dno: bigint
@@ -2474,7 +2502,7 @@ input minor_in_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "minor_in"
+input type for incrementing integer column in table "minor_in"
 """
 input minor_in_inc_input {
   dno: bigint
@@ -2683,6 +2711,11 @@ type mutation_root {
   ): department_mutation_response
 
   """
+  delete single row from the table: "department"
+  """
+  delete_department_by_pk(dno: bigint!): department
+
+  """
   delete data from the table: "enrolled_in"
   """
   delete_enrolled_in(
@@ -2699,12 +2732,22 @@ type mutation_root {
   ): faculty_mutation_response
 
   """
+  delete single row from the table: "faculty"
+  """
+  delete_faculty_by_pk(facid: bigint!): faculty
+
+  """
   delete data from the table: "gradeconversion"
   """
   delete_gradeconversion(
     """filter the rows which have to be deleted"""
     where: gradeconversion_bool_exp!
   ): gradeconversion_mutation_response
+
+  """
+  delete single row from the table: "gradeconversion"
+  """
+  delete_gradeconversion_by_pk(lettergrade: String!): gradeconversion
 
   """
   delete data from the table: "member_of"
@@ -2731,6 +2774,11 @@ type mutation_root {
   ): student_mutation_response
 
   """
+  delete single row from the table: "student"
+  """
+  delete_student_by_pk(stuid: bigint!): student
+
+  """
   insert data into the table: "course"
   """
   insert_course(
@@ -2740,6 +2788,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: course_on_conflict
   ): course_mutation_response
+
+  """
+  insert a single row into the table: "course"
+  """
+  insert_course_one(
+    """the row to be inserted"""
+    object: course_insert_input!
+
+    """on conflict condition"""
+    on_conflict: course_on_conflict
+  ): course
 
   """
   insert data into the table: "department"
@@ -2753,12 +2812,31 @@ type mutation_root {
   ): department_mutation_response
 
   """
+  insert a single row into the table: "department"
+  """
+  insert_department_one(
+    """the row to be inserted"""
+    object: department_insert_input!
+
+    """on conflict condition"""
+    on_conflict: department_on_conflict
+  ): department
+
+  """
   insert data into the table: "enrolled_in"
   """
   insert_enrolled_in(
     """the rows to be inserted"""
     objects: [enrolled_in_insert_input!]!
   ): enrolled_in_mutation_response
+
+  """
+  insert a single row into the table: "enrolled_in"
+  """
+  insert_enrolled_in_one(
+    """the row to be inserted"""
+    object: enrolled_in_insert_input!
+  ): enrolled_in
 
   """
   insert data into the table: "faculty"
@@ -2772,6 +2850,17 @@ type mutation_root {
   ): faculty_mutation_response
 
   """
+  insert a single row into the table: "faculty"
+  """
+  insert_faculty_one(
+    """the row to be inserted"""
+    object: faculty_insert_input!
+
+    """on conflict condition"""
+    on_conflict: faculty_on_conflict
+  ): faculty
+
+  """
   insert data into the table: "gradeconversion"
   """
   insert_gradeconversion(
@@ -2783,6 +2872,17 @@ type mutation_root {
   ): gradeconversion_mutation_response
 
   """
+  insert a single row into the table: "gradeconversion"
+  """
+  insert_gradeconversion_one(
+    """the row to be inserted"""
+    object: gradeconversion_insert_input!
+
+    """on conflict condition"""
+    on_conflict: gradeconversion_on_conflict
+  ): gradeconversion
+
+  """
   insert data into the table: "member_of"
   """
   insert_member_of(
@@ -2791,12 +2891,28 @@ type mutation_root {
   ): member_of_mutation_response
 
   """
+  insert a single row into the table: "member_of"
+  """
+  insert_member_of_one(
+    """the row to be inserted"""
+    object: member_of_insert_input!
+  ): member_of
+
+  """
   insert data into the table: "minor_in"
   """
   insert_minor_in(
     """the rows to be inserted"""
     objects: [minor_in_insert_input!]!
   ): minor_in_mutation_response
+
+  """
+  insert a single row into the table: "minor_in"
+  """
+  insert_minor_in_one(
+    """the row to be inserted"""
+    object: minor_in_insert_input!
+  ): minor_in
 
   """
   insert data into the table: "student"
@@ -2808,6 +2924,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: student_on_conflict
   ): student_mutation_response
+
+  """
+  insert a single row into the table: "student"
+  """
+  insert_student_one(
+    """the row to be inserted"""
+    object: student_insert_input!
+
+    """on conflict condition"""
+    on_conflict: student_on_conflict
+  ): student
 
   """
   update data of the table: "course"
@@ -2838,6 +2965,18 @@ type mutation_root {
   ): department_mutation_response
 
   """
+  update single row of the table: "department"
+  """
+  update_department_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: department_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: department_set_input
+    pk_columns: department_pk_columns_input!
+  ): department
+
+  """
   update data of the table: "enrolled_in"
   """
   update_enrolled_in(
@@ -2866,15 +3005,42 @@ type mutation_root {
   ): faculty_mutation_response
 
   """
+  update single row of the table: "faculty"
+  """
+  update_faculty_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: faculty_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: faculty_set_input
+    pk_columns: faculty_pk_columns_input!
+  ): faculty
+
+  """
   update data of the table: "gradeconversion"
   """
   update_gradeconversion(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: gradeconversion_inc_input
+
     """sets the columns of the filtered rows to the given values"""
     _set: gradeconversion_set_input
 
     """filter the rows which have to be updated"""
     where: gradeconversion_bool_exp!
   ): gradeconversion_mutation_response
+
+  """
+  update single row of the table: "gradeconversion"
+  """
+  update_gradeconversion_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: gradeconversion_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: gradeconversion_set_input
+    pk_columns: gradeconversion_pk_columns_input!
+  ): gradeconversion
 
   """
   update data of the table: "member_of"
@@ -2917,6 +3083,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: student_bool_exp!
   ): student_mutation_response
+
+  """
+  update single row of the table: "student"
+  """
+  update_student_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: student_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: student_set_input
+    pk_columns: student_pk_columns_input!
+  ): student
 }
 
 """column ordering options"""
@@ -3482,7 +3660,7 @@ enum student_constraint {
 }
 
 """
-input type for incrementing integer columne in table "student"
+input type for incrementing integer column in table "student"
 """
 input student_inc_input {
   advisor: bigint
@@ -3603,6 +3781,13 @@ input student_order_by {
   minor_ins_aggregate: minor_in_aggregate_order_by
   sex: order_by
   stuid: order_by
+}
+
+"""
+primary key columns input for table: "student"
+"""
+input student_pk_columns_input {
+  stuid: bigint!
 }
 
 """

@@ -175,7 +175,7 @@ enum building_constraint {
 }
 
 """
-input type for incrementing integer columne in table "building"
+input type for incrementing integer column in table "building"
 """
 input building_inc_input {
   floors: Int
@@ -278,6 +278,13 @@ input building_order_by {
   name: order_by
   street_address: order_by
   years_as_tallest: order_by
+}
+
+"""
+primary key columns input for table: "building"
+"""
+input building_pk_columns_input {
+  building_id: String!
 }
 
 """
@@ -597,10 +604,11 @@ enum institution_constraint {
 }
 
 """
-input type for incrementing integer columne in table "institution"
+input type for incrementing integer column in table "institution"
 """
 input institution_inc_input {
   enrollment: Int
+  founded: Float
 }
 
 """
@@ -924,6 +932,11 @@ type mutation_root {
   ): building_mutation_response
 
   """
+  delete single row from the table: "building"
+  """
+  delete_building_by_pk(building_id: String!): building
+
+  """
   delete data from the table: "institution"
   """
   delete_institution(
@@ -940,6 +953,11 @@ type mutation_root {
   ): protein_mutation_response
 
   """
+  delete single row from the table: "protein"
+  """
+  delete_protein_by_pk(common_name: String!): protein
+
+  """
   insert data into the table: "building"
   """
   insert_building(
@@ -949,6 +967,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: building_on_conflict
   ): building_mutation_response
+
+  """
+  insert a single row into the table: "building"
+  """
+  insert_building_one(
+    """the row to be inserted"""
+    object: building_insert_input!
+
+    """on conflict condition"""
+    on_conflict: building_on_conflict
+  ): building
 
   """
   insert data into the table: "institution"
@@ -962,6 +991,17 @@ type mutation_root {
   ): institution_mutation_response
 
   """
+  insert a single row into the table: "institution"
+  """
+  insert_institution_one(
+    """the row to be inserted"""
+    object: institution_insert_input!
+
+    """on conflict condition"""
+    on_conflict: institution_on_conflict
+  ): institution
+
+  """
   insert data into the table: "protein"
   """
   insert_protein(
@@ -971,6 +1011,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: protein_on_conflict
   ): protein_mutation_response
+
+  """
+  insert a single row into the table: "protein"
+  """
+  insert_protein_one(
+    """the row to be inserted"""
+    object: protein_insert_input!
+
+    """on conflict condition"""
+    on_conflict: protein_on_conflict
+  ): protein
 
   """
   update data of the table: "building"
@@ -985,6 +1036,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: building_bool_exp!
   ): building_mutation_response
+
+  """
+  update single row of the table: "building"
+  """
+  update_building_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: building_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: building_set_input
+    pk_columns: building_pk_columns_input!
+  ): building
 
   """
   update data of the table: "institution"
@@ -1004,12 +1067,27 @@ type mutation_root {
   update data of the table: "protein"
   """
   update_protein(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: protein_inc_input
+
     """sets the columns of the filtered rows to the given values"""
     _set: protein_set_input
 
     """filter the rows which have to be updated"""
     where: protein_bool_exp!
   ): protein_mutation_response
+
+  """
+  update single row of the table: "protein"
+  """
+  update_protein_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: protein_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: protein_set_input
+    pk_columns: protein_pk_columns_input!
+  ): protein
 }
 
 """column ordering options"""
@@ -1139,6 +1217,14 @@ enum protein_constraint {
 }
 
 """
+input type for incrementing integer column in table "protein"
+"""
+input protein_inc_input {
+  divergence_from_human_lineage: Float
+  sequence_length: Float
+}
+
+"""
 input type for inserting data into table "protein"
 """
 input protein_insert_input {
@@ -1240,6 +1326,13 @@ input protein_order_by {
   protein_name: order_by
   sequence_identity_to_human_protein: order_by
   sequence_length: order_by
+}
+
+"""
+primary key columns input for table: "protein"
+"""
+input protein_pk_columns_input {
+  common_name: String!
 }
 
 """

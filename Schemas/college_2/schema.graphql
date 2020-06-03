@@ -342,6 +342,13 @@ enum classroom_constraint {
 }
 
 """
+input type for incrementing integer column in table "classroom"
+"""
+input classroom_inc_input {
+  capacity: numeric
+}
+
+"""
 input type for inserting data into table "classroom"
 """
 input classroom_insert_input {
@@ -419,6 +426,14 @@ input classroom_order_by {
   capacity: order_by
   room_number: order_by
   sections_aggregate: section_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "classroom"
+"""
+input classroom_pk_columns_input {
+  building: String!
+  room_number: String!
 }
 
 """
@@ -825,6 +840,13 @@ enum course_constraint {
 }
 
 """
+input type for incrementing integer column in table "course"
+"""
+input course_inc_input {
+  credits: numeric
+}
+
+"""
 input type for inserting data into table "course"
 """
 input course_insert_input {
@@ -918,6 +940,13 @@ input course_order_by {
   takes_aggregate: takes_aggregate_order_by
   teaches_aggregate: teaches_aggregate_order_by
   title: order_by
+}
+
+"""
+primary key columns input for table: "course"
+"""
+input course_pk_columns_input {
+  course_id: String!
 }
 
 """
@@ -1251,6 +1280,13 @@ enum department_constraint {
 }
 
 """
+input type for incrementing integer column in table "department"
+"""
+input department_inc_input {
+  budget: numeric
+}
+
+"""
 input type for inserting data into table "department"
 """
 input department_insert_input {
@@ -1332,6 +1368,13 @@ input department_order_by {
   dept_name: order_by
   instructors_aggregate: instructor_aggregate_order_by
   students_aggregate: student_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "department"
+"""
+input department_pk_columns_input {
+  dept_name: String!
 }
 
 """
@@ -1626,6 +1669,13 @@ enum instructor_constraint {
 }
 
 """
+input type for incrementing integer column in table "instructor"
+"""
+input instructor_inc_input {
+  salary: numeric
+}
+
+"""
 input type for inserting data into table "instructor"
 """
 input instructor_insert_input {
@@ -1862,6 +1912,11 @@ type mutation_root {
   ): classroom_mutation_response
 
   """
+  delete single row from the table: "classroom"
+  """
+  delete_classroom_by_pk(building: String!, room_number: String!): classroom
+
+  """
   delete data from the table: "course"
   """
   delete_course(
@@ -1870,12 +1925,22 @@ type mutation_root {
   ): course_mutation_response
 
   """
+  delete single row from the table: "course"
+  """
+  delete_course_by_pk(course_id: String!): course
+
+  """
   delete data from the table: "department"
   """
   delete_department(
     """filter the rows which have to be deleted"""
     where: department_bool_exp!
   ): department_mutation_response
+
+  """
+  delete single row from the table: "department"
+  """
+  delete_department_by_pk(dept_name: String!): department
 
   """
   delete data from the table: "instructor"
@@ -1894,12 +1959,22 @@ type mutation_root {
   ): prereq_mutation_response
 
   """
+  delete single row from the table: "prereq"
+  """
+  delete_prereq_by_pk(course_id: String!, prereq_id: String!): prereq
+
+  """
   delete data from the table: "section"
   """
   delete_section(
     """filter the rows which have to be deleted"""
     where: section_bool_exp!
   ): section_mutation_response
+
+  """
+  delete single row from the table: "section"
+  """
+  delete_section_by_pk(course_id: String!, sec_id: String!, semester: String!, year: numeric!): section
 
   """
   delete data from the table: "student"
@@ -1934,6 +2009,11 @@ type mutation_root {
   ): time_slot_mutation_response
 
   """
+  delete single row from the table: "time_slot"
+  """
+  delete_time_slot_by_pk(day: String!, start_hr: numeric!, start_min: numeric!, time_slot_id: String!): time_slot
+
+  """
   insert data into the table: "advisor"
   """
   insert_advisor(
@@ -1943,6 +2023,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: advisor_on_conflict
   ): advisor_mutation_response
+
+  """
+  insert a single row into the table: "advisor"
+  """
+  insert_advisor_one(
+    """the row to be inserted"""
+    object: advisor_insert_input!
+
+    """on conflict condition"""
+    on_conflict: advisor_on_conflict
+  ): advisor
 
   """
   insert data into the table: "classroom"
@@ -1956,6 +2047,17 @@ type mutation_root {
   ): classroom_mutation_response
 
   """
+  insert a single row into the table: "classroom"
+  """
+  insert_classroom_one(
+    """the row to be inserted"""
+    object: classroom_insert_input!
+
+    """on conflict condition"""
+    on_conflict: classroom_on_conflict
+  ): classroom
+
+  """
   insert data into the table: "course"
   """
   insert_course(
@@ -1965,6 +2067,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: course_on_conflict
   ): course_mutation_response
+
+  """
+  insert a single row into the table: "course"
+  """
+  insert_course_one(
+    """the row to be inserted"""
+    object: course_insert_input!
+
+    """on conflict condition"""
+    on_conflict: course_on_conflict
+  ): course
 
   """
   insert data into the table: "department"
@@ -1978,6 +2091,17 @@ type mutation_root {
   ): department_mutation_response
 
   """
+  insert a single row into the table: "department"
+  """
+  insert_department_one(
+    """the row to be inserted"""
+    object: department_insert_input!
+
+    """on conflict condition"""
+    on_conflict: department_on_conflict
+  ): department
+
+  """
   insert data into the table: "instructor"
   """
   insert_instructor(
@@ -1987,6 +2111,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: instructor_on_conflict
   ): instructor_mutation_response
+
+  """
+  insert a single row into the table: "instructor"
+  """
+  insert_instructor_one(
+    """the row to be inserted"""
+    object: instructor_insert_input!
+
+    """on conflict condition"""
+    on_conflict: instructor_on_conflict
+  ): instructor
 
   """
   insert data into the table: "prereq"
@@ -2000,6 +2135,17 @@ type mutation_root {
   ): prereq_mutation_response
 
   """
+  insert a single row into the table: "prereq"
+  """
+  insert_prereq_one(
+    """the row to be inserted"""
+    object: prereq_insert_input!
+
+    """on conflict condition"""
+    on_conflict: prereq_on_conflict
+  ): prereq
+
+  """
   insert data into the table: "section"
   """
   insert_section(
@@ -2009,6 +2155,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: section_on_conflict
   ): section_mutation_response
+
+  """
+  insert a single row into the table: "section"
+  """
+  insert_section_one(
+    """the row to be inserted"""
+    object: section_insert_input!
+
+    """on conflict condition"""
+    on_conflict: section_on_conflict
+  ): section
 
   """
   insert data into the table: "student"
@@ -2022,6 +2179,17 @@ type mutation_root {
   ): student_mutation_response
 
   """
+  insert a single row into the table: "student"
+  """
+  insert_student_one(
+    """the row to be inserted"""
+    object: student_insert_input!
+
+    """on conflict condition"""
+    on_conflict: student_on_conflict
+  ): student
+
+  """
   insert data into the table: "takes"
   """
   insert_takes(
@@ -2031,6 +2199,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: takes_on_conflict
   ): takes_mutation_response
+
+  """
+  insert a single row into the table: "takes"
+  """
+  insert_takes_one(
+    """the row to be inserted"""
+    object: takes_insert_input!
+
+    """on conflict condition"""
+    on_conflict: takes_on_conflict
+  ): takes
 
   """
   insert data into the table: "teaches"
@@ -2044,6 +2223,17 @@ type mutation_root {
   ): teaches_mutation_response
 
   """
+  insert a single row into the table: "teaches"
+  """
+  insert_teaches_one(
+    """the row to be inserted"""
+    object: teaches_insert_input!
+
+    """on conflict condition"""
+    on_conflict: teaches_on_conflict
+  ): teaches
+
+  """
   insert data into the table: "time_slot"
   """
   insert_time_slot(
@@ -2053,6 +2243,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: time_slot_on_conflict
   ): time_slot_mutation_response
+
+  """
+  insert a single row into the table: "time_slot"
+  """
+  insert_time_slot_one(
+    """the row to be inserted"""
+    object: time_slot_insert_input!
+
+    """on conflict condition"""
+    on_conflict: time_slot_on_conflict
+  ): time_slot
 
   """
   update data of the table: "advisor"
@@ -2069,6 +2270,9 @@ type mutation_root {
   update data of the table: "classroom"
   """
   update_classroom(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: classroom_inc_input
+
     """sets the columns of the filtered rows to the given values"""
     _set: classroom_set_input
 
@@ -2077,9 +2281,24 @@ type mutation_root {
   ): classroom_mutation_response
 
   """
+  update single row of the table: "classroom"
+  """
+  update_classroom_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: classroom_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: classroom_set_input
+    pk_columns: classroom_pk_columns_input!
+  ): classroom
+
+  """
   update data of the table: "course"
   """
   update_course(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: course_inc_input
+
     """sets the columns of the filtered rows to the given values"""
     _set: course_set_input
 
@@ -2088,9 +2307,24 @@ type mutation_root {
   ): course_mutation_response
 
   """
+  update single row of the table: "course"
+  """
+  update_course_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: course_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: course_set_input
+    pk_columns: course_pk_columns_input!
+  ): course
+
+  """
   update data of the table: "department"
   """
   update_department(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: department_inc_input
+
     """sets the columns of the filtered rows to the given values"""
     _set: department_set_input
 
@@ -2099,9 +2333,24 @@ type mutation_root {
   ): department_mutation_response
 
   """
+  update single row of the table: "department"
+  """
+  update_department_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: department_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: department_set_input
+    pk_columns: department_pk_columns_input!
+  ): department
+
+  """
   update data of the table: "instructor"
   """
   update_instructor(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: instructor_inc_input
+
     """sets the columns of the filtered rows to the given values"""
     _set: instructor_set_input
 
@@ -2121,9 +2370,21 @@ type mutation_root {
   ): prereq_mutation_response
 
   """
+  update single row of the table: "prereq"
+  """
+  update_prereq_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: prereq_set_input
+    pk_columns: prereq_pk_columns_input!
+  ): prereq
+
+  """
   update data of the table: "section"
   """
   update_section(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: section_inc_input
+
     """sets the columns of the filtered rows to the given values"""
     _set: section_set_input
 
@@ -2132,9 +2393,24 @@ type mutation_root {
   ): section_mutation_response
 
   """
+  update single row of the table: "section"
+  """
+  update_section_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: section_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: section_set_input
+    pk_columns: section_pk_columns_input!
+  ): section
+
+  """
   update data of the table: "student"
   """
   update_student(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: student_inc_input
+
     """sets the columns of the filtered rows to the given values"""
     _set: student_set_input
 
@@ -2146,6 +2422,9 @@ type mutation_root {
   update data of the table: "takes"
   """
   update_takes(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: takes_inc_input
+
     """sets the columns of the filtered rows to the given values"""
     _set: takes_set_input
 
@@ -2157,6 +2436,9 @@ type mutation_root {
   update data of the table: "teaches"
   """
   update_teaches(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: teaches_inc_input
+
     """sets the columns of the filtered rows to the given values"""
     _set: teaches_set_input
 
@@ -2168,12 +2450,27 @@ type mutation_root {
   update data of the table: "time_slot"
   """
   update_time_slot(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: time_slot_inc_input
+
     """sets the columns of the filtered rows to the given values"""
     _set: time_slot_set_input
 
     """filter the rows which have to be updated"""
     where: time_slot_bool_exp!
   ): time_slot_mutation_response
+
+  """
+  update single row of the table: "time_slot"
+  """
+  update_time_slot_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: time_slot_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: time_slot_set_input
+    pk_columns: time_slot_pk_columns_input!
+  ): time_slot
 }
 
 scalar numeric
@@ -2356,6 +2653,14 @@ input prereq_order_by {
   courseByPrereqId: course_order_by
   course_id: order_by
   prereq_id: order_by
+}
+
+"""
+primary key columns input for table: "prereq"
+"""
+input prereq_pk_columns_input {
+  course_id: String!
+  prereq_id: String!
 }
 
 """
@@ -3068,6 +3373,13 @@ enum section_constraint {
 }
 
 """
+input type for incrementing integer column in table "section"
+"""
+input section_inc_input {
+  year: numeric
+}
+
+"""
 input type for inserting data into table "section"
 """
 input section_insert_input {
@@ -3177,6 +3489,16 @@ input section_order_by {
   time_slot_id: order_by
   time_slots_aggregate: time_slot_aggregate_order_by
   year: order_by
+}
+
+"""
+primary key columns input for table: "section"
+"""
+input section_pk_columns_input {
+  course_id: String!
+  sec_id: String!
+  semester: String!
+  year: numeric!
 }
 
 """
@@ -3517,6 +3839,13 @@ unique or primary key constraints on table "student"
 enum student_constraint {
   """unique or primary key constraint"""
   idx_19921_sqlite_autoindex_student_1
+}
+
+"""
+input type for incrementing integer column in table "student"
+"""
+input student_inc_input {
+  tot_cred: numeric
 }
 
 """
@@ -4307,6 +4636,13 @@ enum takes_constraint {
 }
 
 """
+input type for incrementing integer column in table "takes"
+"""
+input takes_inc_input {
+  year: numeric
+}
+
+"""
 input type for inserting data into table "takes"
 """
 input takes_insert_input {
@@ -4654,6 +4990,13 @@ unique or primary key constraints on table "teaches"
 enum teaches_constraint {
   """unique or primary key constraint"""
   idx_19915_sqlite_autoindex_teaches_1
+}
+
+"""
+input type for incrementing integer column in table "teaches"
+"""
+input teaches_inc_input {
+  year: numeric
 }
 
 """
@@ -5028,6 +5371,16 @@ enum time_slot_constraint {
 }
 
 """
+input type for incrementing integer column in table "time_slot"
+"""
+input time_slot_inc_input {
+  end_hr: numeric
+  end_min: numeric
+  start_hr: numeric
+  start_min: numeric
+}
+
+"""
 input type for inserting data into table "time_slot"
 """
 input time_slot_insert_input {
@@ -5123,6 +5476,16 @@ input time_slot_order_by {
   start_hr: order_by
   start_min: order_by
   time_slot_id: order_by
+}
+
+"""
+primary key columns input for table: "time_slot"
+"""
+input time_slot_pk_columns_input {
+  day: String!
+  start_hr: numeric!
+  start_min: numeric!
+  time_slot_id: String!
 }
 
 """

@@ -175,7 +175,7 @@ enum accounts_constraint {
 }
 
 """
-input type for incrementing integer columne in table "accounts"
+input type for incrementing integer column in table "accounts"
 """
 input accounts_inc_input {
   account_id: bigint
@@ -268,6 +268,13 @@ input accounts_order_by {
   customer_id: order_by
   financial_transactions_aggregate: financial_transactions_aggregate_order_by
   other_account_details: order_by
+}
+
+"""
+primary key columns input for table: "accounts"
+"""
+input accounts_pk_columns_input {
+  account_id: bigint!
 }
 
 """
@@ -736,7 +743,7 @@ enum customers_cards_constraint {
 }
 
 """
-input type for incrementing integer columne in table "customers_cards"
+input type for incrementing integer column in table "customers_cards"
 """
 input customers_cards_inc_input {
   card_id: bigint
@@ -847,6 +854,13 @@ input customers_cards_order_by {
   date_valid_to: order_by
   financial_transactions_aggregate: financial_transactions_aggregate_order_by
   other_card_details: order_by
+}
+
+"""
+primary key columns input for table: "customers_cards"
+"""
+input customers_cards_pk_columns_input {
+  card_id: bigint!
 }
 
 """
@@ -1021,7 +1035,7 @@ enum customers_constraint {
 }
 
 """
-input type for incrementing integer columne in table "customers"
+input type for incrementing integer column in table "customers"
 """
 input customers_inc_input {
   customer_id: bigint
@@ -1131,6 +1145,13 @@ input customers_order_by {
   customer_phone: order_by
   customers_cards_aggregate: customers_cards_aggregate_order_by
   other_customer_details: order_by
+}
+
+"""
+primary key columns input for table: "customers"
+"""
+input customers_pk_columns_input {
+  customer_id: bigint!
 }
 
 """
@@ -1392,12 +1413,13 @@ input financial_transactions_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "financial_transactions"
+input type for incrementing integer column in table "financial_transactions"
 """
 input financial_transactions_inc_input {
   account_id: bigint
   card_id: bigint
   previous_transaction_id: bigint
+  transaction_amount: float8
   transaction_id: bigint
 }
 
@@ -1724,6 +1746,11 @@ type mutation_root {
   ): accounts_mutation_response
 
   """
+  delete single row from the table: "accounts"
+  """
+  delete_accounts_by_pk(account_id: bigint!): accounts
+
+  """
   delete data from the table: "customers"
   """
   delete_customers(
@@ -1732,12 +1759,22 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  delete single row from the table: "customers"
+  """
+  delete_customers_by_pk(customer_id: bigint!): customers
+
+  """
   delete data from the table: "customers_cards"
   """
   delete_customers_cards(
     """filter the rows which have to be deleted"""
     where: customers_cards_bool_exp!
   ): customers_cards_mutation_response
+
+  """
+  delete single row from the table: "customers_cards"
+  """
+  delete_customers_cards_by_pk(card_id: bigint!): customers_cards
 
   """
   delete data from the table: "financial_transactions"
@@ -1757,6 +1794,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: accounts_on_conflict
   ): accounts_mutation_response
+
+  """
+  insert a single row into the table: "accounts"
+  """
+  insert_accounts_one(
+    """the row to be inserted"""
+    object: accounts_insert_input!
+
+    """on conflict condition"""
+    on_conflict: accounts_on_conflict
+  ): accounts
 
   """
   insert data into the table: "customers"
@@ -1781,12 +1829,42 @@ type mutation_root {
   ): customers_cards_mutation_response
 
   """
+  insert a single row into the table: "customers_cards"
+  """
+  insert_customers_cards_one(
+    """the row to be inserted"""
+    object: customers_cards_insert_input!
+
+    """on conflict condition"""
+    on_conflict: customers_cards_on_conflict
+  ): customers_cards
+
+  """
+  insert a single row into the table: "customers"
+  """
+  insert_customers_one(
+    """the row to be inserted"""
+    object: customers_insert_input!
+
+    """on conflict condition"""
+    on_conflict: customers_on_conflict
+  ): customers
+
+  """
   insert data into the table: "financial_transactions"
   """
   insert_financial_transactions(
     """the rows to be inserted"""
     objects: [financial_transactions_insert_input!]!
   ): financial_transactions_mutation_response
+
+  """
+  insert a single row into the table: "financial_transactions"
+  """
+  insert_financial_transactions_one(
+    """the row to be inserted"""
+    object: financial_transactions_insert_input!
+  ): financial_transactions
 
   """
   update data of the table: "accounts"
@@ -1803,6 +1881,18 @@ type mutation_root {
   ): accounts_mutation_response
 
   """
+  update single row of the table: "accounts"
+  """
+  update_accounts_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: accounts_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: accounts_set_input
+    pk_columns: accounts_pk_columns_input!
+  ): accounts
+
+  """
   update data of the table: "customers"
   """
   update_customers(
@@ -1817,6 +1907,18 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  update single row of the table: "customers"
+  """
+  update_customers_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customers_set_input
+    pk_columns: customers_pk_columns_input!
+  ): customers
+
+  """
   update data of the table: "customers_cards"
   """
   update_customers_cards(
@@ -1829,6 +1931,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: customers_cards_bool_exp!
   ): customers_cards_mutation_response
+
+  """
+  update single row of the table: "customers_cards"
+  """
+  update_customers_cards_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customers_cards_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customers_cards_set_input
+    pk_columns: customers_cards_pk_columns_input!
+  ): customers_cards
 
   """
   update data of the table: "financial_transactions"

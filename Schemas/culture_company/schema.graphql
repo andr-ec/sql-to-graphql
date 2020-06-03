@@ -144,7 +144,7 @@ enum book_club_constraint {
 }
 
 """
-input type for incrementing integer columne in table "book_club"
+input type for incrementing integer column in table "book_club"
 """
 input book_club_inc_input {
   book_club_id: Int
@@ -253,6 +253,13 @@ input book_club_order_by {
   publisher: order_by
   result: order_by
   year: order_by
+}
+
+"""
+primary key columns input for table: "book_club"
+"""
+input book_club_pk_columns_input {
+  book_club_id: Int!
 }
 
 """
@@ -527,10 +534,11 @@ enum culture_company_constraint {
 }
 
 """
-input type for incrementing integer columne in table "culture_company"
+input type for incrementing integer column in table "culture_company"
 """
 input culture_company_inc_input {
   book_club_id: Int
+  group_equity_shareholding: Float
   movie_id: Int
 }
 
@@ -942,9 +950,10 @@ enum movie_constraint {
 }
 
 """
-input type for incrementing integer columne in table "movie"
+input type for incrementing integer column in table "movie"
 """
 input movie_inc_input {
+  budget_million: Float
   gross_worldwide: Int
   movie_id: Int
   year: Int
@@ -1046,6 +1055,13 @@ input movie_order_by {
   movie_id: order_by
   title: order_by
   year: order_by
+}
+
+"""
+primary key columns input for table: "movie"
+"""
+input movie_pk_columns_input {
+  movie_id: Int!
 }
 
 """
@@ -1243,6 +1259,11 @@ type mutation_root {
   ): book_club_mutation_response
 
   """
+  delete single row from the table: "book_club"
+  """
+  delete_book_club_by_pk(book_club_id: Int!): book_club
+
+  """
   delete data from the table: "culture_company"
   """
   delete_culture_company(
@@ -1259,6 +1280,11 @@ type mutation_root {
   ): movie_mutation_response
 
   """
+  delete single row from the table: "movie"
+  """
+  delete_movie_by_pk(movie_id: Int!): movie
+
+  """
   insert data into the table: "book_club"
   """
   insert_book_club(
@@ -1268,6 +1294,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: book_club_on_conflict
   ): book_club_mutation_response
+
+  """
+  insert a single row into the table: "book_club"
+  """
+  insert_book_club_one(
+    """the row to be inserted"""
+    object: book_club_insert_input!
+
+    """on conflict condition"""
+    on_conflict: book_club_on_conflict
+  ): book_club
 
   """
   insert data into the table: "culture_company"
@@ -1281,6 +1318,17 @@ type mutation_root {
   ): culture_company_mutation_response
 
   """
+  insert a single row into the table: "culture_company"
+  """
+  insert_culture_company_one(
+    """the row to be inserted"""
+    object: culture_company_insert_input!
+
+    """on conflict condition"""
+    on_conflict: culture_company_on_conflict
+  ): culture_company
+
+  """
   insert data into the table: "movie"
   """
   insert_movie(
@@ -1290,6 +1338,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: movie_on_conflict
   ): movie_mutation_response
+
+  """
+  insert a single row into the table: "movie"
+  """
+  insert_movie_one(
+    """the row to be inserted"""
+    object: movie_insert_input!
+
+    """on conflict condition"""
+    on_conflict: movie_on_conflict
+  ): movie
 
   """
   update data of the table: "book_club"
@@ -1304,6 +1363,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: book_club_bool_exp!
   ): book_club_mutation_response
+
+  """
+  update single row of the table: "book_club"
+  """
+  update_book_club_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: book_club_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: book_club_set_input
+    pk_columns: book_club_pk_columns_input!
+  ): book_club
 
   """
   update data of the table: "culture_company"
@@ -1332,6 +1403,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: movie_bool_exp!
   ): movie_mutation_response
+
+  """
+  update single row of the table: "movie"
+  """
+  update_movie_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: movie_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: movie_set_input
+    pk_columns: movie_pk_columns_input!
+  ): movie
 }
 
 """column ordering options"""

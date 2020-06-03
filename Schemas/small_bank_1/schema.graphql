@@ -201,7 +201,7 @@ enum accounts_constraint {
 }
 
 """
-input type for incrementing integer columne in table "accounts"
+input type for incrementing integer column in table "accounts"
 """
 input accounts_inc_input {
   custid: bigint
@@ -281,6 +281,13 @@ input accounts_order_by {
   custid: order_by
   name: order_by
   savings_aggregate: savings_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "accounts"
+"""
+input accounts_pk_columns_input {
+  custid: bigint!
 }
 
 """
@@ -509,9 +516,10 @@ enum checking_constraint {
 }
 
 """
-input type for incrementing integer columne in table "checking"
+input type for incrementing integer column in table "checking"
 """
 input checking_inc_input {
+  balance: float8
   custid: bigint
 }
 
@@ -587,6 +595,13 @@ input checking_order_by {
   account: accounts_order_by
   balance: order_by
   custid: order_by
+}
+
+"""
+primary key columns input for table: "checking"
+"""
+input checking_pk_columns_input {
+  custid: bigint!
 }
 
 """
@@ -745,6 +760,11 @@ type mutation_root {
   ): accounts_mutation_response
 
   """
+  delete single row from the table: "accounts"
+  """
+  delete_accounts_by_pk(custid: bigint!): accounts
+
+  """
   delete data from the table: "checking"
   """
   delete_checking(
@@ -753,12 +773,22 @@ type mutation_root {
   ): checking_mutation_response
 
   """
+  delete single row from the table: "checking"
+  """
+  delete_checking_by_pk(custid: bigint!): checking
+
+  """
   delete data from the table: "savings"
   """
   delete_savings(
     """filter the rows which have to be deleted"""
     where: savings_bool_exp!
   ): savings_mutation_response
+
+  """
+  delete single row from the table: "savings"
+  """
+  delete_savings_by_pk(custid: bigint!): savings
 
   """
   insert data into the table: "accounts"
@@ -772,6 +802,17 @@ type mutation_root {
   ): accounts_mutation_response
 
   """
+  insert a single row into the table: "accounts"
+  """
+  insert_accounts_one(
+    """the row to be inserted"""
+    object: accounts_insert_input!
+
+    """on conflict condition"""
+    on_conflict: accounts_on_conflict
+  ): accounts
+
+  """
   insert data into the table: "checking"
   """
   insert_checking(
@@ -783,6 +824,17 @@ type mutation_root {
   ): checking_mutation_response
 
   """
+  insert a single row into the table: "checking"
+  """
+  insert_checking_one(
+    """the row to be inserted"""
+    object: checking_insert_input!
+
+    """on conflict condition"""
+    on_conflict: checking_on_conflict
+  ): checking
+
+  """
   insert data into the table: "savings"
   """
   insert_savings(
@@ -792,6 +844,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: savings_on_conflict
   ): savings_mutation_response
+
+  """
+  insert a single row into the table: "savings"
+  """
+  insert_savings_one(
+    """the row to be inserted"""
+    object: savings_insert_input!
+
+    """on conflict condition"""
+    on_conflict: savings_on_conflict
+  ): savings
 
   """
   update data of the table: "accounts"
@@ -808,6 +871,18 @@ type mutation_root {
   ): accounts_mutation_response
 
   """
+  update single row of the table: "accounts"
+  """
+  update_accounts_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: accounts_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: accounts_set_input
+    pk_columns: accounts_pk_columns_input!
+  ): accounts
+
+  """
   update data of the table: "checking"
   """
   update_checking(
@@ -822,6 +897,18 @@ type mutation_root {
   ): checking_mutation_response
 
   """
+  update single row of the table: "checking"
+  """
+  update_checking_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: checking_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: checking_set_input
+    pk_columns: checking_pk_columns_input!
+  ): checking
+
+  """
   update data of the table: "savings"
   """
   update_savings(
@@ -834,6 +921,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: savings_bool_exp!
   ): savings_mutation_response
+
+  """
+  update single row of the table: "savings"
+  """
+  update_savings_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: savings_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: savings_set_input
+    pk_columns: savings_pk_columns_input!
+  ): savings
 }
 
 """column ordering options"""
@@ -1084,9 +1183,10 @@ enum savings_constraint {
 }
 
 """
-input type for incrementing integer columne in table "savings"
+input type for incrementing integer column in table "savings"
 """
 input savings_inc_input {
+  balance: float8
   custid: bigint
 }
 
@@ -1162,6 +1262,13 @@ input savings_order_by {
   account: accounts_order_by
   balance: order_by
   custid: order_by
+}
+
+"""
+primary key columns input for table: "savings"
+"""
+input savings_pk_columns_input {
+  custid: bigint!
 }
 
 """

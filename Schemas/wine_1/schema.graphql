@@ -176,7 +176,7 @@ enum appellations_constraint {
 }
 
 """
-input type for incrementing integer columne in table "appellations"
+input type for incrementing integer column in table "appellations"
 """
 input appellations_inc_input {
   no: bigint
@@ -278,6 +278,13 @@ input appellations_order_by {
   no: order_by
   state: order_by
   wines_aggregate: wine_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "appellations"
+"""
+input appellations_pk_columns_input {
+  no: bigint!
 }
 
 """
@@ -571,7 +578,7 @@ enum grapes_constraint {
 }
 
 """
-input type for incrementing integer columne in table "grapes"
+input type for incrementing integer column in table "grapes"
 """
 input grapes_inc_input {
   id: bigint
@@ -655,6 +662,13 @@ input grapes_order_by {
   grape: order_by
   id: order_by
   wines_aggregate: wine_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "grapes"
+"""
+input grapes_pk_columns_input {
+  id: bigint!
 }
 
 """
@@ -789,12 +803,22 @@ type mutation_root {
   ): appellations_mutation_response
 
   """
+  delete single row from the table: "appellations"
+  """
+  delete_appellations_by_pk(no: bigint!): appellations
+
+  """
   delete data from the table: "grapes"
   """
   delete_grapes(
     """filter the rows which have to be deleted"""
     where: grapes_bool_exp!
   ): grapes_mutation_response
+
+  """
+  delete single row from the table: "grapes"
+  """
+  delete_grapes_by_pk(id: bigint!): grapes
 
   """
   delete data from the table: "wine"
@@ -816,6 +840,17 @@ type mutation_root {
   ): appellations_mutation_response
 
   """
+  insert a single row into the table: "appellations"
+  """
+  insert_appellations_one(
+    """the row to be inserted"""
+    object: appellations_insert_input!
+
+    """on conflict condition"""
+    on_conflict: appellations_on_conflict
+  ): appellations
+
+  """
   insert data into the table: "grapes"
   """
   insert_grapes(
@@ -827,12 +862,31 @@ type mutation_root {
   ): grapes_mutation_response
 
   """
+  insert a single row into the table: "grapes"
+  """
+  insert_grapes_one(
+    """the row to be inserted"""
+    object: grapes_insert_input!
+
+    """on conflict condition"""
+    on_conflict: grapes_on_conflict
+  ): grapes
+
+  """
   insert data into the table: "wine"
   """
   insert_wine(
     """the rows to be inserted"""
     objects: [wine_insert_input!]!
   ): wine_mutation_response
+
+  """
+  insert a single row into the table: "wine"
+  """
+  insert_wine_one(
+    """the row to be inserted"""
+    object: wine_insert_input!
+  ): wine
 
   """
   update data of the table: "appellations"
@@ -849,6 +903,18 @@ type mutation_root {
   ): appellations_mutation_response
 
   """
+  update single row of the table: "appellations"
+  """
+  update_appellations_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: appellations_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: appellations_set_input
+    pk_columns: appellations_pk_columns_input!
+  ): appellations
+
+  """
   update data of the table: "grapes"
   """
   update_grapes(
@@ -861,6 +927,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: grapes_bool_exp!
   ): grapes_mutation_response
+
+  """
+  update single row of the table: "grapes"
+  """
+  update_grapes_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: grapes_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: grapes_set_input
+    pk_columns: grapes_pk_columns_input!
+  ): grapes
 
   """
   update data of the table: "wine"
@@ -1292,7 +1370,7 @@ input wine_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "wine"
+input type for incrementing integer column in table "wine"
 """
 input wine_inc_input {
   cases: bigint

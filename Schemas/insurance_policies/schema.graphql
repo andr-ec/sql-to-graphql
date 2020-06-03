@@ -200,7 +200,7 @@ enum claims_constraint {
 }
 
 """
-input type for incrementing integer columne in table "claims"
+input type for incrementing integer column in table "claims"
 """
 input claims_inc_input {
   amount_claimed: bigint
@@ -307,6 +307,13 @@ input claims_order_by {
   date_claim_settled: order_by
   policy_id: order_by
   settlements_aggregate: settlements_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "claims"
+"""
+input claims_pk_columns_input {
+  claim_id: bigint!
 }
 
 """
@@ -631,7 +638,7 @@ enum customer_policies_constraint {
 }
 
 """
-input type for incrementing integer columne in table "customer_policies"
+input type for incrementing integer column in table "customer_policies"
 """
 input customer_policies_inc_input {
   customer_id: bigint
@@ -730,6 +737,13 @@ input customer_policies_order_by {
   policy_id: order_by
   policy_type_code: order_by
   start_date: order_by
+}
+
+"""
+primary key columns input for table: "customer_policies"
+"""
+input customer_policies_pk_columns_input {
+  policy_id: bigint!
 }
 
 """
@@ -1008,7 +1022,7 @@ enum customers_constraint {
 }
 
 """
-input type for incrementing integer columne in table "customers"
+input type for incrementing integer column in table "customers"
 """
 input customers_inc_input {
   customer_id: bigint
@@ -1086,6 +1100,13 @@ input customers_order_by {
   customer_details: order_by
   customer_id: order_by
   customer_policies_aggregate: customer_policies_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "customers"
+"""
+input customers_pk_columns_input {
+  customer_id: bigint!
 }
 
 """
@@ -1230,12 +1251,22 @@ type mutation_root {
   ): claims_mutation_response
 
   """
+  delete single row from the table: "claims"
+  """
+  delete_claims_by_pk(claim_id: bigint!): claims
+
+  """
   delete data from the table: "customer_policies"
   """
   delete_customer_policies(
     """filter the rows which have to be deleted"""
     where: customer_policies_bool_exp!
   ): customer_policies_mutation_response
+
+  """
+  delete single row from the table: "customer_policies"
+  """
+  delete_customer_policies_by_pk(policy_id: bigint!): customer_policies
 
   """
   delete data from the table: "customers"
@@ -1246,6 +1277,11 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  delete single row from the table: "customers"
+  """
+  delete_customers_by_pk(customer_id: bigint!): customers
+
+  """
   delete data from the table: "payments"
   """
   delete_payments(
@@ -1254,12 +1290,22 @@ type mutation_root {
   ): payments_mutation_response
 
   """
+  delete single row from the table: "payments"
+  """
+  delete_payments_by_pk(payment_id: bigint!): payments
+
+  """
   delete data from the table: "settlements"
   """
   delete_settlements(
     """filter the rows which have to be deleted"""
     where: settlements_bool_exp!
   ): settlements_mutation_response
+
+  """
+  delete single row from the table: "settlements"
+  """
+  delete_settlements_by_pk(settlement_id: bigint!): settlements
 
   """
   insert data into the table: "claims"
@@ -1273,6 +1319,17 @@ type mutation_root {
   ): claims_mutation_response
 
   """
+  insert a single row into the table: "claims"
+  """
+  insert_claims_one(
+    """the row to be inserted"""
+    object: claims_insert_input!
+
+    """on conflict condition"""
+    on_conflict: claims_on_conflict
+  ): claims
+
+  """
   insert data into the table: "customer_policies"
   """
   insert_customer_policies(
@@ -1282,6 +1339,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: customer_policies_on_conflict
   ): customer_policies_mutation_response
+
+  """
+  insert a single row into the table: "customer_policies"
+  """
+  insert_customer_policies_one(
+    """the row to be inserted"""
+    object: customer_policies_insert_input!
+
+    """on conflict condition"""
+    on_conflict: customer_policies_on_conflict
+  ): customer_policies
 
   """
   insert data into the table: "customers"
@@ -1295,6 +1363,17 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  insert a single row into the table: "customers"
+  """
+  insert_customers_one(
+    """the row to be inserted"""
+    object: customers_insert_input!
+
+    """on conflict condition"""
+    on_conflict: customers_on_conflict
+  ): customers
+
+  """
   insert data into the table: "payments"
   """
   insert_payments(
@@ -1306,6 +1385,17 @@ type mutation_root {
   ): payments_mutation_response
 
   """
+  insert a single row into the table: "payments"
+  """
+  insert_payments_one(
+    """the row to be inserted"""
+    object: payments_insert_input!
+
+    """on conflict condition"""
+    on_conflict: payments_on_conflict
+  ): payments
+
+  """
   insert data into the table: "settlements"
   """
   insert_settlements(
@@ -1315,6 +1405,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: settlements_on_conflict
   ): settlements_mutation_response
+
+  """
+  insert a single row into the table: "settlements"
+  """
+  insert_settlements_one(
+    """the row to be inserted"""
+    object: settlements_insert_input!
+
+    """on conflict condition"""
+    on_conflict: settlements_on_conflict
+  ): settlements
 
   """
   update data of the table: "claims"
@@ -1331,6 +1432,18 @@ type mutation_root {
   ): claims_mutation_response
 
   """
+  update single row of the table: "claims"
+  """
+  update_claims_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: claims_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: claims_set_input
+    pk_columns: claims_pk_columns_input!
+  ): claims
+
+  """
   update data of the table: "customer_policies"
   """
   update_customer_policies(
@@ -1343,6 +1456,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: customer_policies_bool_exp!
   ): customer_policies_mutation_response
+
+  """
+  update single row of the table: "customer_policies"
+  """
+  update_customer_policies_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customer_policies_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customer_policies_set_input
+    pk_columns: customer_policies_pk_columns_input!
+  ): customer_policies
 
   """
   update data of the table: "customers"
@@ -1359,6 +1484,18 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  update single row of the table: "customers"
+  """
+  update_customers_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customers_set_input
+    pk_columns: customers_pk_columns_input!
+  ): customers
+
+  """
   update data of the table: "payments"
   """
   update_payments(
@@ -1373,6 +1510,18 @@ type mutation_root {
   ): payments_mutation_response
 
   """
+  update single row of the table: "payments"
+  """
+  update_payments_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: payments_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: payments_set_input
+    pk_columns: payments_pk_columns_input!
+  ): payments
+
+  """
   update data of the table: "settlements"
   """
   update_settlements(
@@ -1385,6 +1534,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: settlements_bool_exp!
   ): settlements_mutation_response
+
+  """
+  update single row of the table: "settlements"
+  """
+  update_settlements_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: settlements_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: settlements_set_input
+    pk_columns: settlements_pk_columns_input!
+  ): settlements
 }
 
 """column ordering options"""
@@ -1512,7 +1673,7 @@ enum payments_constraint {
 }
 
 """
-input type for incrementing integer columne in table "payments"
+input type for incrementing integer column in table "payments"
 """
 input payments_inc_input {
   amount_payment: bigint
@@ -1610,6 +1771,13 @@ input payments_order_by {
   payment_method_code: order_by
   settlement: settlements_order_by
   settlement_id: order_by
+}
+
+"""
+primary key columns input for table: "payments"
+"""
+input payments_pk_columns_input {
+  payment_id: bigint!
 }
 
 """
@@ -2144,7 +2312,7 @@ enum settlements_constraint {
 }
 
 """
-input type for incrementing integer columne in table "settlements"
+input type for incrementing integer column in table "settlements"
 """
 input settlements_inc_input {
   amount_claimed: bigint
@@ -2258,6 +2426,13 @@ input settlements_order_by {
   date_claim_settled: order_by
   payments_aggregate: payments_aggregate_order_by
   settlement_id: order_by
+}
+
+"""
+primary key columns input for table: "settlements"
+"""
+input settlements_pk_columns_input {
+  settlement_id: bigint!
 }
 
 """

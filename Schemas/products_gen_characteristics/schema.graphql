@@ -192,7 +192,7 @@ enum characteristics_constraint {
 }
 
 """
-input type for incrementing integer columne in table "characteristics"
+input type for incrementing integer column in table "characteristics"
 """
 input characteristics_inc_input {
   characteristic_id: bigint
@@ -290,6 +290,13 @@ input characteristics_order_by {
   other_characteristic_details: order_by
   product_characteristics_aggregate: product_characteristics_aggregate_order_by
   ref_characteristic_type: ref_characteristic_types_order_by
+}
+
+"""
+primary key columns input for table: "characteristics"
+"""
+input characteristics_pk_columns_input {
+  characteristic_id: bigint!
 }
 
 """
@@ -438,6 +445,11 @@ type mutation_root {
   ): characteristics_mutation_response
 
   """
+  delete single row from the table: "characteristics"
+  """
+  delete_characteristics_by_pk(characteristic_id: bigint!): characteristics
+
+  """
   delete data from the table: "product_characteristics"
   """
   delete_product_characteristics(
@@ -454,12 +466,22 @@ type mutation_root {
   ): products_mutation_response
 
   """
+  delete single row from the table: "products"
+  """
+  delete_products_by_pk(product_id: bigint!): products
+
+  """
   delete data from the table: "ref_characteristic_types"
   """
   delete_ref_characteristic_types(
     """filter the rows which have to be deleted"""
     where: ref_characteristic_types_bool_exp!
   ): ref_characteristic_types_mutation_response
+
+  """
+  delete single row from the table: "ref_characteristic_types"
+  """
+  delete_ref_characteristic_types_by_pk(characteristic_type_code: String!): ref_characteristic_types
 
   """
   delete data from the table: "ref_colors"
@@ -470,12 +492,22 @@ type mutation_root {
   ): ref_colors_mutation_response
 
   """
+  delete single row from the table: "ref_colors"
+  """
+  delete_ref_colors_by_pk(color_code: String!): ref_colors
+
+  """
   delete data from the table: "ref_product_categories"
   """
   delete_ref_product_categories(
     """filter the rows which have to be deleted"""
     where: ref_product_categories_bool_exp!
   ): ref_product_categories_mutation_response
+
+  """
+  delete single row from the table: "ref_product_categories"
+  """
+  delete_ref_product_categories_by_pk(product_category_code: String!): ref_product_categories
 
   """
   insert data into the table: "characteristics"
@@ -489,12 +521,31 @@ type mutation_root {
   ): characteristics_mutation_response
 
   """
+  insert a single row into the table: "characteristics"
+  """
+  insert_characteristics_one(
+    """the row to be inserted"""
+    object: characteristics_insert_input!
+
+    """on conflict condition"""
+    on_conflict: characteristics_on_conflict
+  ): characteristics
+
+  """
   insert data into the table: "product_characteristics"
   """
   insert_product_characteristics(
     """the rows to be inserted"""
     objects: [product_characteristics_insert_input!]!
   ): product_characteristics_mutation_response
+
+  """
+  insert a single row into the table: "product_characteristics"
+  """
+  insert_product_characteristics_one(
+    """the row to be inserted"""
+    object: product_characteristics_insert_input!
+  ): product_characteristics
 
   """
   insert data into the table: "products"
@@ -508,6 +559,17 @@ type mutation_root {
   ): products_mutation_response
 
   """
+  insert a single row into the table: "products"
+  """
+  insert_products_one(
+    """the row to be inserted"""
+    object: products_insert_input!
+
+    """on conflict condition"""
+    on_conflict: products_on_conflict
+  ): products
+
+  """
   insert data into the table: "ref_characteristic_types"
   """
   insert_ref_characteristic_types(
@@ -517,6 +579,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: ref_characteristic_types_on_conflict
   ): ref_characteristic_types_mutation_response
+
+  """
+  insert a single row into the table: "ref_characteristic_types"
+  """
+  insert_ref_characteristic_types_one(
+    """the row to be inserted"""
+    object: ref_characteristic_types_insert_input!
+
+    """on conflict condition"""
+    on_conflict: ref_characteristic_types_on_conflict
+  ): ref_characteristic_types
 
   """
   insert data into the table: "ref_colors"
@@ -530,6 +603,17 @@ type mutation_root {
   ): ref_colors_mutation_response
 
   """
+  insert a single row into the table: "ref_colors"
+  """
+  insert_ref_colors_one(
+    """the row to be inserted"""
+    object: ref_colors_insert_input!
+
+    """on conflict condition"""
+    on_conflict: ref_colors_on_conflict
+  ): ref_colors
+
+  """
   insert data into the table: "ref_product_categories"
   """
   insert_ref_product_categories(
@@ -539,6 +623,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: ref_product_categories_on_conflict
   ): ref_product_categories_mutation_response
+
+  """
+  insert a single row into the table: "ref_product_categories"
+  """
+  insert_ref_product_categories_one(
+    """the row to be inserted"""
+    object: ref_product_categories_insert_input!
+
+    """on conflict condition"""
+    on_conflict: ref_product_categories_on_conflict
+  ): ref_product_categories
 
   """
   update data of the table: "characteristics"
@@ -553,6 +648,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: characteristics_bool_exp!
   ): characteristics_mutation_response
+
+  """
+  update single row of the table: "characteristics"
+  """
+  update_characteristics_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: characteristics_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: characteristics_set_input
+    pk_columns: characteristics_pk_columns_input!
+  ): characteristics
 
   """
   update data of the table: "product_characteristics"
@@ -583,6 +690,18 @@ type mutation_root {
   ): products_mutation_response
 
   """
+  update single row of the table: "products"
+  """
+  update_products_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: products_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: products_set_input
+    pk_columns: products_pk_columns_input!
+  ): products
+
+  """
   update data of the table: "ref_characteristic_types"
   """
   update_ref_characteristic_types(
@@ -592,6 +711,15 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: ref_characteristic_types_bool_exp!
   ): ref_characteristic_types_mutation_response
+
+  """
+  update single row of the table: "ref_characteristic_types"
+  """
+  update_ref_characteristic_types_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ref_characteristic_types_set_input
+    pk_columns: ref_characteristic_types_pk_columns_input!
+  ): ref_characteristic_types
 
   """
   update data of the table: "ref_colors"
@@ -605,6 +733,15 @@ type mutation_root {
   ): ref_colors_mutation_response
 
   """
+  update single row of the table: "ref_colors"
+  """
+  update_ref_colors_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ref_colors_set_input
+    pk_columns: ref_colors_pk_columns_input!
+  ): ref_colors
+
+  """
   update data of the table: "ref_product_categories"
   """
   update_ref_product_categories(
@@ -614,6 +751,15 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: ref_product_categories_bool_exp!
   ): ref_product_categories_mutation_response
+
+  """
+  update single row of the table: "ref_product_categories"
+  """
+  update_ref_product_categories_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ref_product_categories_set_input
+    pk_columns: ref_product_categories_pk_columns_input!
+  ): ref_product_categories
 }
 
 """column ordering options"""
@@ -729,7 +875,7 @@ input product_characteristics_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "product_characteristics"
+input type for incrementing integer column in table "product_characteristics"
 """
 input product_characteristics_inc_input {
   characteristic_id: bigint
@@ -1076,7 +1222,7 @@ enum products_constraint {
 }
 
 """
-input type for incrementing integer columne in table "products"
+input type for incrementing integer column in table "products"
 """
 input products_inc_input {
   product_id: bigint
@@ -1194,6 +1340,13 @@ input products_order_by {
   ref_product_category: ref_product_categories_order_by
   typical_buying_price: order_by
   typical_selling_price: order_by
+}
+
+"""
+primary key columns input for table: "products"
+"""
+input products_pk_columns_input {
+  product_id: bigint!
 }
 
 """
@@ -1787,6 +1940,13 @@ input ref_characteristic_types_order_by {
 }
 
 """
+primary key columns input for table: "ref_characteristic_types"
+"""
+input ref_characteristic_types_pk_columns_input {
+  characteristic_type_code: String!
+}
+
+"""
 select columns of table "ref_characteristic_types"
 """
 enum ref_characteristic_types_select_column {
@@ -1986,6 +2146,13 @@ input ref_colors_order_by {
   color_code: order_by
   color_description: order_by
   products_aggregate: products_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "ref_colors"
+"""
+input ref_colors_pk_columns_input {
+  color_code: String!
 }
 
 """
@@ -2196,6 +2363,13 @@ input ref_product_categories_order_by {
   product_category_description: order_by
   products_aggregate: products_aggregate_order_by
   unit_of_measure: order_by
+}
+
+"""
+primary key columns input for table: "ref_product_categories"
+"""
+input ref_product_categories_pk_columns_input {
+  product_category_code: String!
 }
 
 """

@@ -218,7 +218,7 @@ enum all_documents_constraint {
 }
 
 """
-input type for incrementing integer columne in table "all_documents"
+input type for incrementing integer column in table "all_documents"
 """
 input all_documents_inc_input {
   document_id: bigint
@@ -326,6 +326,13 @@ input all_documents_order_by {
   other_details: order_by
   ref_calendar: ref_calendar_order_by
   ref_document_type: ref_document_types_order_by
+}
+
+"""
+primary key columns input for table: "all_documents"
+"""
+input all_documents_pk_columns_input {
+  document_id: bigint!
 }
 
 """
@@ -596,7 +603,7 @@ enum document_locations_constraint {
 }
 
 """
-input type for incrementing integer columne in table "document_locations"
+input type for incrementing integer column in table "document_locations"
 """
 input document_locations_inc_input {
   document_id: bigint
@@ -944,7 +951,7 @@ enum documents_to_be_destroyed_constraint {
 }
 
 """
-input type for incrementing integer columne in table "documents_to_be_destroyed"
+input type for incrementing integer column in table "documents_to_be_destroyed"
 """
 input documents_to_be_destroyed_inc_input {
   destroyed_by_employee_id: bigint
@@ -1056,6 +1063,13 @@ input documents_to_be_destroyed_order_by {
   planned_destruction_date: order_by
   refCalendarByPlannedDestructionDate: ref_calendar_order_by
   ref_calendar: ref_calendar_order_by
+}
+
+"""
+primary key columns input for table: "documents_to_be_destroyed"
+"""
+input documents_to_be_destroyed_pk_columns_input {
+  document_id: bigint!
 }
 
 """
@@ -1404,7 +1418,7 @@ enum employees_constraint {
 }
 
 """
-input type for incrementing integer columne in table "employees"
+input type for incrementing integer column in table "employees"
 """
 input employees_inc_input {
   employee_id: bigint
@@ -1510,6 +1524,13 @@ input employees_order_by {
   other_details: order_by
   role: roles_order_by
   role_code: order_by
+}
+
+"""
+primary key columns input for table: "employees"
+"""
+input employees_pk_columns_input {
+  employee_id: bigint!
 }
 
 """
@@ -1665,6 +1686,11 @@ type mutation_root {
   ): all_documents_mutation_response
 
   """
+  delete single row from the table: "all_documents"
+  """
+  delete_all_documents_by_pk(document_id: bigint!): all_documents
+
+  """
   delete data from the table: "document_locations"
   """
   delete_document_locations(
@@ -1681,12 +1707,22 @@ type mutation_root {
   ): documents_to_be_destroyed_mutation_response
 
   """
+  delete single row from the table: "documents_to_be_destroyed"
+  """
+  delete_documents_to_be_destroyed_by_pk(document_id: bigint!): documents_to_be_destroyed
+
+  """
   delete data from the table: "employees"
   """
   delete_employees(
     """filter the rows which have to be deleted"""
     where: employees_bool_exp!
   ): employees_mutation_response
+
+  """
+  delete single row from the table: "employees"
+  """
+  delete_employees_by_pk(employee_id: bigint!): employees
 
   """
   delete data from the table: "ref_calendar"
@@ -1732,6 +1768,17 @@ type mutation_root {
   ): all_documents_mutation_response
 
   """
+  insert a single row into the table: "all_documents"
+  """
+  insert_all_documents_one(
+    """the row to be inserted"""
+    object: all_documents_insert_input!
+
+    """on conflict condition"""
+    on_conflict: all_documents_on_conflict
+  ): all_documents
+
+  """
   insert data into the table: "document_locations"
   """
   insert_document_locations(
@@ -1741,6 +1788,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: document_locations_on_conflict
   ): document_locations_mutation_response
+
+  """
+  insert a single row into the table: "document_locations"
+  """
+  insert_document_locations_one(
+    """the row to be inserted"""
+    object: document_locations_insert_input!
+
+    """on conflict condition"""
+    on_conflict: document_locations_on_conflict
+  ): document_locations
 
   """
   insert data into the table: "documents_to_be_destroyed"
@@ -1754,6 +1812,17 @@ type mutation_root {
   ): documents_to_be_destroyed_mutation_response
 
   """
+  insert a single row into the table: "documents_to_be_destroyed"
+  """
+  insert_documents_to_be_destroyed_one(
+    """the row to be inserted"""
+    object: documents_to_be_destroyed_insert_input!
+
+    """on conflict condition"""
+    on_conflict: documents_to_be_destroyed_on_conflict
+  ): documents_to_be_destroyed
+
+  """
   insert data into the table: "employees"
   """
   insert_employees(
@@ -1763,6 +1832,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: employees_on_conflict
   ): employees_mutation_response
+
+  """
+  insert a single row into the table: "employees"
+  """
+  insert_employees_one(
+    """the row to be inserted"""
+    object: employees_insert_input!
+
+    """on conflict condition"""
+    on_conflict: employees_on_conflict
+  ): employees
 
   """
   insert data into the table: "ref_calendar"
@@ -1776,6 +1856,17 @@ type mutation_root {
   ): ref_calendar_mutation_response
 
   """
+  insert a single row into the table: "ref_calendar"
+  """
+  insert_ref_calendar_one(
+    """the row to be inserted"""
+    object: ref_calendar_insert_input!
+
+    """on conflict condition"""
+    on_conflict: ref_calendar_on_conflict
+  ): ref_calendar
+
+  """
   insert data into the table: "ref_document_types"
   """
   insert_ref_document_types(
@@ -1785,6 +1876,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: ref_document_types_on_conflict
   ): ref_document_types_mutation_response
+
+  """
+  insert a single row into the table: "ref_document_types"
+  """
+  insert_ref_document_types_one(
+    """the row to be inserted"""
+    object: ref_document_types_insert_input!
+
+    """on conflict condition"""
+    on_conflict: ref_document_types_on_conflict
+  ): ref_document_types
 
   """
   insert data into the table: "ref_locations"
@@ -1798,6 +1900,17 @@ type mutation_root {
   ): ref_locations_mutation_response
 
   """
+  insert a single row into the table: "ref_locations"
+  """
+  insert_ref_locations_one(
+    """the row to be inserted"""
+    object: ref_locations_insert_input!
+
+    """on conflict condition"""
+    on_conflict: ref_locations_on_conflict
+  ): ref_locations
+
+  """
   insert data into the table: "roles"
   """
   insert_roles(
@@ -1807,6 +1920,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: roles_on_conflict
   ): roles_mutation_response
+
+  """
+  insert a single row into the table: "roles"
+  """
+  insert_roles_one(
+    """the row to be inserted"""
+    object: roles_insert_input!
+
+    """on conflict condition"""
+    on_conflict: roles_on_conflict
+  ): roles
 
   """
   update data of the table: "all_documents"
@@ -1821,6 +1945,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: all_documents_bool_exp!
   ): all_documents_mutation_response
+
+  """
+  update single row of the table: "all_documents"
+  """
+  update_all_documents_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: all_documents_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: all_documents_set_input
+    pk_columns: all_documents_pk_columns_input!
+  ): all_documents
 
   """
   update data of the table: "document_locations"
@@ -1851,6 +1987,18 @@ type mutation_root {
   ): documents_to_be_destroyed_mutation_response
 
   """
+  update single row of the table: "documents_to_be_destroyed"
+  """
+  update_documents_to_be_destroyed_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: documents_to_be_destroyed_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: documents_to_be_destroyed_set_input
+    pk_columns: documents_to_be_destroyed_pk_columns_input!
+  ): documents_to_be_destroyed
+
+  """
   update data of the table: "employees"
   """
   update_employees(
@@ -1863,6 +2011,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: employees_bool_exp!
   ): employees_mutation_response
+
+  """
+  update single row of the table: "employees"
+  """
+  update_employees_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: employees_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: employees_set_input
+    pk_columns: employees_pk_columns_input!
+  ): employees
 
   """
   update data of the table: "ref_calendar"
@@ -2541,7 +2701,7 @@ enum ref_calendar_constraint {
 }
 
 """
-input type for incrementing integer columne in table "ref_calendar"
+input type for incrementing integer column in table "ref_calendar"
 """
 input ref_calendar_inc_input {
   day_number: bigint

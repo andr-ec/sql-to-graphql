@@ -165,7 +165,7 @@ enum area_code_state_constraint {
 }
 
 """
-input type for incrementing integer columne in table "area_code_state"
+input type for incrementing integer column in table "area_code_state"
 """
 input area_code_state_inc_input {
   area_code: bigint
@@ -243,6 +243,13 @@ input area_code_state_order_by {
   area_code: order_by
   state: order_by
   votes_aggregate: votes_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "area_code_state"
+"""
+input area_code_state_pk_columns_input {
+  area_code: bigint!
 }
 
 """
@@ -503,7 +510,7 @@ enum contestants_constraint {
 }
 
 """
-input type for incrementing integer columne in table "contestants"
+input type for incrementing integer column in table "contestants"
 """
 input contestants_inc_input {
   contestant_number: bigint
@@ -581,6 +588,13 @@ input contestants_order_by {
   contestant_name: order_by
   contestant_number: order_by
   votes_aggregate: votes_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "contestants"
+"""
+input contestants_pk_columns_input {
+  contestant_number: bigint!
 }
 
 """
@@ -708,6 +722,11 @@ type mutation_root {
   ): area_code_state_mutation_response
 
   """
+  delete single row from the table: "area_code_state"
+  """
+  delete_area_code_state_by_pk(area_code: bigint!): area_code_state
+
+  """
   delete data from the table: "contestants"
   """
   delete_contestants(
@@ -716,12 +735,22 @@ type mutation_root {
   ): contestants_mutation_response
 
   """
+  delete single row from the table: "contestants"
+  """
+  delete_contestants_by_pk(contestant_number: bigint!): contestants
+
+  """
   delete data from the table: "votes"
   """
   delete_votes(
     """filter the rows which have to be deleted"""
     where: votes_bool_exp!
   ): votes_mutation_response
+
+  """
+  delete single row from the table: "votes"
+  """
+  delete_votes_by_pk(vote_id: bigint!): votes
 
   """
   insert data into the table: "area_code_state"
@@ -735,6 +764,17 @@ type mutation_root {
   ): area_code_state_mutation_response
 
   """
+  insert a single row into the table: "area_code_state"
+  """
+  insert_area_code_state_one(
+    """the row to be inserted"""
+    object: area_code_state_insert_input!
+
+    """on conflict condition"""
+    on_conflict: area_code_state_on_conflict
+  ): area_code_state
+
+  """
   insert data into the table: "contestants"
   """
   insert_contestants(
@@ -746,6 +786,17 @@ type mutation_root {
   ): contestants_mutation_response
 
   """
+  insert a single row into the table: "contestants"
+  """
+  insert_contestants_one(
+    """the row to be inserted"""
+    object: contestants_insert_input!
+
+    """on conflict condition"""
+    on_conflict: contestants_on_conflict
+  ): contestants
+
+  """
   insert data into the table: "votes"
   """
   insert_votes(
@@ -755,6 +806,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: votes_on_conflict
   ): votes_mutation_response
+
+  """
+  insert a single row into the table: "votes"
+  """
+  insert_votes_one(
+    """the row to be inserted"""
+    object: votes_insert_input!
+
+    """on conflict condition"""
+    on_conflict: votes_on_conflict
+  ): votes
 
   """
   update data of the table: "area_code_state"
@@ -771,6 +833,18 @@ type mutation_root {
   ): area_code_state_mutation_response
 
   """
+  update single row of the table: "area_code_state"
+  """
+  update_area_code_state_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: area_code_state_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: area_code_state_set_input
+    pk_columns: area_code_state_pk_columns_input!
+  ): area_code_state
+
+  """
   update data of the table: "contestants"
   """
   update_contestants(
@@ -785,6 +859,18 @@ type mutation_root {
   ): contestants_mutation_response
 
   """
+  update single row of the table: "contestants"
+  """
+  update_contestants_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: contestants_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: contestants_set_input
+    pk_columns: contestants_pk_columns_input!
+  ): contestants
+
+  """
   update data of the table: "votes"
   """
   update_votes(
@@ -797,6 +883,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: votes_bool_exp!
   ): votes_mutation_response
+
+  """
+  update single row of the table: "votes"
+  """
+  update_votes_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: votes_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: votes_set_input
+    pk_columns: votes_pk_columns_input!
+  ): votes
 }
 
 """column ordering options"""
@@ -1105,21 +1203,21 @@ type subscription_root {
   votes_by_pk(vote_id: bigint!): votes
 }
 
-scalar timestamp
+scalar timestamptz
 
 """
-expression to compare columns of type timestamp. All fields are combined with logical 'AND'.
+expression to compare columns of type timestamptz. All fields are combined with logical 'AND'.
 """
-input timestamp_comparison_exp {
-  _eq: timestamp
-  _gt: timestamp
-  _gte: timestamp
-  _in: [timestamp!]
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
   _is_null: Boolean
-  _lt: timestamp
-  _lte: timestamp
-  _neq: timestamp
-  _nin: [timestamp!]
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
 }
 
 """
@@ -1165,7 +1263,7 @@ type votes {
   """An object relationship"""
   contestant: contestants
   contestant_number: bigint
-  created: timestamp
+  created: timestamptz
   phone_number: bigint
   state: String
   vote_id: bigint!
@@ -1247,7 +1345,7 @@ input votes_bool_exp {
   area_code_state: area_code_state_bool_exp
   contestant: contestants_bool_exp
   contestant_number: bigint_comparison_exp
-  created: timestamp_comparison_exp
+  created: timestamptz_comparison_exp
   phone_number: bigint_comparison_exp
   state: String_comparison_exp
   vote_id: bigint_comparison_exp
@@ -1262,7 +1360,7 @@ enum votes_constraint {
 }
 
 """
-input type for incrementing integer columne in table "votes"
+input type for incrementing integer column in table "votes"
 """
 input votes_inc_input {
   contestant_number: bigint
@@ -1277,7 +1375,7 @@ input votes_insert_input {
   area_code_state: area_code_state_arr_rel_insert_input
   contestant: contestants_obj_rel_insert_input
   contestant_number: bigint
-  created: timestamp
+  created: timestamptz
   phone_number: bigint
   state: String
   vote_id: bigint
@@ -1286,6 +1384,7 @@ input votes_insert_input {
 """aggregate max on columns"""
 type votes_max_fields {
   contestant_number: bigint
+  created: timestamptz
   phone_number: bigint
   state: String
   vote_id: bigint
@@ -1296,6 +1395,7 @@ order by max() on columns of table "votes"
 """
 input votes_max_order_by {
   contestant_number: order_by
+  created: order_by
   phone_number: order_by
   state: order_by
   vote_id: order_by
@@ -1304,6 +1404,7 @@ input votes_max_order_by {
 """aggregate min on columns"""
 type votes_min_fields {
   contestant_number: bigint
+  created: timestamptz
   phone_number: bigint
   state: String
   vote_id: bigint
@@ -1314,6 +1415,7 @@ order by min() on columns of table "votes"
 """
 input votes_min_order_by {
   contestant_number: order_by
+  created: order_by
   phone_number: order_by
   state: order_by
   vote_id: order_by
@@ -1361,6 +1463,13 @@ input votes_order_by {
 }
 
 """
+primary key columns input for table: "votes"
+"""
+input votes_pk_columns_input {
+  vote_id: bigint!
+}
+
+"""
 select columns of table "votes"
 """
 enum votes_select_column {
@@ -1385,7 +1494,7 @@ input type for updating data in table "votes"
 """
 input votes_set_input {
   contestant_number: bigint
-  created: timestamp
+  created: timestamptz
   phone_number: bigint
   state: String
   vote_id: bigint

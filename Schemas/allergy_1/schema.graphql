@@ -346,7 +346,7 @@ input has_allergy_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "has_allergy"
+input type for incrementing integer column in table "has_allergy"
 """
 input has_allergy_inc_input {
   stuid: bigint
@@ -548,6 +548,11 @@ type mutation_root {
   ): student_mutation_response
 
   """
+  delete single row from the table: "student"
+  """
+  delete_student_by_pk(stuid: bigint!): student
+
+  """
   insert data into the table: "allergy_type"
   """
   insert_allergy_type(
@@ -559,12 +564,31 @@ type mutation_root {
   ): allergy_type_mutation_response
 
   """
+  insert a single row into the table: "allergy_type"
+  """
+  insert_allergy_type_one(
+    """the row to be inserted"""
+    object: allergy_type_insert_input!
+
+    """on conflict condition"""
+    on_conflict: allergy_type_on_conflict
+  ): allergy_type
+
+  """
   insert data into the table: "has_allergy"
   """
   insert_has_allergy(
     """the rows to be inserted"""
     objects: [has_allergy_insert_input!]!
   ): has_allergy_mutation_response
+
+  """
+  insert a single row into the table: "has_allergy"
+  """
+  insert_has_allergy_one(
+    """the row to be inserted"""
+    object: has_allergy_insert_input!
+  ): has_allergy
 
   """
   insert data into the table: "student"
@@ -576,6 +600,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: student_on_conflict
   ): student_mutation_response
+
+  """
+  insert a single row into the table: "student"
+  """
+  insert_student_one(
+    """the row to be inserted"""
+    object: student_insert_input!
+
+    """on conflict condition"""
+    on_conflict: student_on_conflict
+  ): student
 
   """
   update data of the table: "allergy_type"
@@ -615,6 +650,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: student_bool_exp!
   ): student_mutation_response
+
+  """
+  update single row of the table: "student"
+  """
+  update_student_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: student_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: student_set_input
+    pk_columns: student_pk_columns_input!
+  ): student
 }
 
 """column ordering options"""
@@ -930,7 +977,7 @@ enum student_constraint {
 }
 
 """
-input type for incrementing integer columne in table "student"
+input type for incrementing integer column in table "student"
 """
 input student_inc_input {
   advisor: bigint
@@ -1047,6 +1094,13 @@ input student_order_by {
   major: order_by
   sex: order_by
   stuid: order_by
+}
+
+"""
+primary key columns input for table: "student"
+"""
+input student_pk_columns_input {
+  stuid: bigint!
 }
 
 """

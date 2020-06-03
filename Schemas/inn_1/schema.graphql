@@ -81,6 +81,11 @@ type mutation_root {
   ): reservations_mutation_response
 
   """
+  delete single row from the table: "reservations"
+  """
+  delete_reservations_by_pk(code: bigint!): reservations
+
+  """
   delete data from the table: "rooms"
   """
   delete_rooms(
@@ -100,6 +105,17 @@ type mutation_root {
   ): reservations_mutation_response
 
   """
+  insert a single row into the table: "reservations"
+  """
+  insert_reservations_one(
+    """the row to be inserted"""
+    object: reservations_insert_input!
+
+    """on conflict condition"""
+    on_conflict: reservations_on_conflict
+  ): reservations
+
+  """
   insert data into the table: "rooms"
   """
   insert_rooms(
@@ -109,6 +125,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: rooms_on_conflict
   ): rooms_mutation_response
+
+  """
+  insert a single row into the table: "rooms"
+  """
+  insert_rooms_one(
+    """the row to be inserted"""
+    object: rooms_insert_input!
+
+    """on conflict condition"""
+    on_conflict: rooms_on_conflict
+  ): rooms
 
   """
   update data of the table: "reservations"
@@ -123,6 +150,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: reservations_bool_exp!
   ): reservations_mutation_response
+
+  """
+  update single row of the table: "reservations"
+  """
+  update_reservations_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: reservations_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: reservations_set_input
+    pk_columns: reservations_pk_columns_input!
+  ): reservations
 
   """
   update data of the table: "rooms"
@@ -360,12 +399,13 @@ enum reservations_constraint {
 }
 
 """
-input type for incrementing integer columne in table "reservations"
+input type for incrementing integer column in table "reservations"
 """
 input reservations_inc_input {
   adults: bigint
   code: bigint
   kids: bigint
+  rate: Float
 }
 
 """
@@ -482,6 +522,13 @@ input reservations_order_by {
   rate: order_by
   room: order_by
   roomByRoom: rooms_order_by
+}
+
+"""
+primary key columns input for table: "reservations"
+"""
+input reservations_pk_columns_input {
+  code: bigint!
 }
 
 """
@@ -830,7 +877,7 @@ enum rooms_constraint {
 }
 
 """
-input type for incrementing integer columne in table "rooms"
+input type for incrementing integer column in table "rooms"
 """
 input rooms_inc_input {
   baseprice: bigint

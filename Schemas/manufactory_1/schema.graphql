@@ -205,10 +205,11 @@ enum manufacturers_constraint {
 }
 
 """
-input type for incrementing integer columne in table "manufacturers"
+input type for incrementing integer column in table "manufacturers"
 """
 input manufacturers_inc_input {
   code: bigint
+  revenue: Float
 }
 
 """
@@ -301,6 +302,13 @@ input manufacturers_order_by {
   name: order_by
   products_aggregate: products_aggregate_order_by
   revenue: order_by
+}
+
+"""
+primary key columns input for table: "manufacturers"
+"""
+input manufacturers_pk_columns_input {
+  code: bigint!
 }
 
 """
@@ -463,12 +471,22 @@ type mutation_root {
   ): manufacturers_mutation_response
 
   """
+  delete single row from the table: "manufacturers"
+  """
+  delete_manufacturers_by_pk(code: bigint!): manufacturers
+
+  """
   delete data from the table: "products"
   """
   delete_products(
     """filter the rows which have to be deleted"""
     where: products_bool_exp!
   ): products_mutation_response
+
+  """
+  delete single row from the table: "products"
+  """
+  delete_products_by_pk(code: bigint!): products
 
   """
   insert data into the table: "manufacturers"
@@ -482,6 +500,17 @@ type mutation_root {
   ): manufacturers_mutation_response
 
   """
+  insert a single row into the table: "manufacturers"
+  """
+  insert_manufacturers_one(
+    """the row to be inserted"""
+    object: manufacturers_insert_input!
+
+    """on conflict condition"""
+    on_conflict: manufacturers_on_conflict
+  ): manufacturers
+
+  """
   insert data into the table: "products"
   """
   insert_products(
@@ -491,6 +520,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: products_on_conflict
   ): products_mutation_response
+
+  """
+  insert a single row into the table: "products"
+  """
+  insert_products_one(
+    """the row to be inserted"""
+    object: products_insert_input!
+
+    """on conflict condition"""
+    on_conflict: products_on_conflict
+  ): products
 
   """
   update data of the table: "manufacturers"
@@ -507,6 +547,18 @@ type mutation_root {
   ): manufacturers_mutation_response
 
   """
+  update single row of the table: "manufacturers"
+  """
+  update_manufacturers_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: manufacturers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: manufacturers_set_input
+    pk_columns: manufacturers_pk_columns_input!
+  ): manufacturers
+
+  """
   update data of the table: "products"
   """
   update_products(
@@ -519,6 +571,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: products_bool_exp!
   ): products_mutation_response
+
+  """
+  update single row of the table: "products"
+  """
+  update_products_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: products_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: products_set_input
+    pk_columns: products_pk_columns_input!
+  ): products
 }
 
 scalar numeric
@@ -661,11 +725,12 @@ enum products_constraint {
 }
 
 """
-input type for incrementing integer columne in table "products"
+input type for incrementing integer column in table "products"
 """
 input products_inc_input {
   code: bigint
   manufacturer: bigint
+  price: numeric
 }
 
 """
@@ -752,6 +817,13 @@ input products_order_by {
   manufacturerByManufacturer: manufacturers_order_by
   name: order_by
   price: order_by
+}
+
+"""
+primary key columns input for table: "products"
+"""
+input products_pk_columns_input {
+  code: bigint!
 }
 
 """

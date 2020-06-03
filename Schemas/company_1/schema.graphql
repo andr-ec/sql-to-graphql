@@ -265,7 +265,7 @@ enum department_constraint {
 }
 
 """
-input type for incrementing integer columne in table "department"
+input type for incrementing integer column in table "department"
 """
 input department_inc_input {
   dnumber: bigint
@@ -362,6 +362,13 @@ input department_order_by {
   mgr_ssn: order_by
   mgr_start_date: order_by
   projects_aggregate: project_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "department"
+"""
+input department_pk_columns_input {
+  dnumber: bigint!
 }
 
 """
@@ -606,7 +613,7 @@ enum dependent_constraint {
 }
 
 """
-input type for incrementing integer columne in table "dependent"
+input type for incrementing integer column in table "dependent"
 """
 input dependent_inc_input {
   essn: bigint
@@ -932,7 +939,7 @@ enum dept_locations_constraint {
 }
 
 """
-input type for incrementing integer columne in table "dept_locations"
+input type for incrementing integer column in table "dept_locations"
 """
 input dept_locations_inc_input {
   dnumber: bigint
@@ -1353,7 +1360,7 @@ enum employee_constraint {
 }
 
 """
-input type for incrementing integer columne in table "employee"
+input type for incrementing integer column in table "employee"
 """
 input employee_inc_input {
   dno: bigint
@@ -1488,6 +1495,13 @@ input employee_order_by {
   ssn: order_by
   super_ssn: order_by
   works_ons_aggregate: works_on_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "employee"
+"""
+input employee_pk_columns_input {
+  ssn: bigint!
 }
 
 """
@@ -1728,6 +1742,11 @@ type mutation_root {
   ): department_mutation_response
 
   """
+  delete single row from the table: "department"
+  """
+  delete_department_by_pk(dnumber: bigint!): department
+
+  """
   delete data from the table: "dependent"
   """
   delete_dependent(
@@ -1752,6 +1771,11 @@ type mutation_root {
   ): employee_mutation_response
 
   """
+  delete single row from the table: "employee"
+  """
+  delete_employee_by_pk(ssn: bigint!): employee
+
+  """
   delete data from the table: "project"
   """
   delete_project(
@@ -1760,12 +1784,22 @@ type mutation_root {
   ): project_mutation_response
 
   """
+  delete single row from the table: "project"
+  """
+  delete_project_by_pk(pnumber: bigint!): project
+
+  """
   delete data from the table: "works_on"
   """
   delete_works_on(
     """filter the rows which have to be deleted"""
     where: works_on_bool_exp!
   ): works_on_mutation_response
+
+  """
+  delete single row from the table: "works_on"
+  """
+  delete_works_on_by_pk(essn: bigint!, pno: bigint!): works_on
 
   """
   insert data into the table: "department"
@@ -1779,6 +1813,17 @@ type mutation_root {
   ): department_mutation_response
 
   """
+  insert a single row into the table: "department"
+  """
+  insert_department_one(
+    """the row to be inserted"""
+    object: department_insert_input!
+
+    """on conflict condition"""
+    on_conflict: department_on_conflict
+  ): department
+
+  """
   insert data into the table: "dependent"
   """
   insert_dependent(
@@ -1788,6 +1833,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: dependent_on_conflict
   ): dependent_mutation_response
+
+  """
+  insert a single row into the table: "dependent"
+  """
+  insert_dependent_one(
+    """the row to be inserted"""
+    object: dependent_insert_input!
+
+    """on conflict condition"""
+    on_conflict: dependent_on_conflict
+  ): dependent
 
   """
   insert data into the table: "dept_locations"
@@ -1801,6 +1857,17 @@ type mutation_root {
   ): dept_locations_mutation_response
 
   """
+  insert a single row into the table: "dept_locations"
+  """
+  insert_dept_locations_one(
+    """the row to be inserted"""
+    object: dept_locations_insert_input!
+
+    """on conflict condition"""
+    on_conflict: dept_locations_on_conflict
+  ): dept_locations
+
+  """
   insert data into the table: "employee"
   """
   insert_employee(
@@ -1810,6 +1877,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: employee_on_conflict
   ): employee_mutation_response
+
+  """
+  insert a single row into the table: "employee"
+  """
+  insert_employee_one(
+    """the row to be inserted"""
+    object: employee_insert_input!
+
+    """on conflict condition"""
+    on_conflict: employee_on_conflict
+  ): employee
 
   """
   insert data into the table: "project"
@@ -1823,6 +1901,17 @@ type mutation_root {
   ): project_mutation_response
 
   """
+  insert a single row into the table: "project"
+  """
+  insert_project_one(
+    """the row to be inserted"""
+    object: project_insert_input!
+
+    """on conflict condition"""
+    on_conflict: project_on_conflict
+  ): project
+
+  """
   insert data into the table: "works_on"
   """
   insert_works_on(
@@ -1832,6 +1921,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: works_on_on_conflict
   ): works_on_mutation_response
+
+  """
+  insert a single row into the table: "works_on"
+  """
+  insert_works_on_one(
+    """the row to be inserted"""
+    object: works_on_insert_input!
+
+    """on conflict condition"""
+    on_conflict: works_on_on_conflict
+  ): works_on
 
   """
   update data of the table: "department"
@@ -1846,6 +1946,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: department_bool_exp!
   ): department_mutation_response
+
+  """
+  update single row of the table: "department"
+  """
+  update_department_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: department_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: department_set_input
+    pk_columns: department_pk_columns_input!
+  ): department
 
   """
   update data of the table: "dependent"
@@ -1890,6 +2002,18 @@ type mutation_root {
   ): employee_mutation_response
 
   """
+  update single row of the table: "employee"
+  """
+  update_employee_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: employee_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: employee_set_input
+    pk_columns: employee_pk_columns_input!
+  ): employee
+
+  """
   update data of the table: "project"
   """
   update_project(
@@ -1904,6 +2028,18 @@ type mutation_root {
   ): project_mutation_response
 
   """
+  update single row of the table: "project"
+  """
+  update_project_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: project_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: project_set_input
+    pk_columns: project_pk_columns_input!
+  ): project
+
+  """
   update data of the table: "works_on"
   """
   update_works_on(
@@ -1916,6 +2052,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: works_on_bool_exp!
   ): works_on_mutation_response
+
+  """
+  update single row of the table: "works_on"
+  """
+  update_works_on_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: works_on_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: works_on_set_input
+    pk_columns: works_on_pk_columns_input!
+  ): works_on
 }
 
 """column ordering options"""
@@ -2075,7 +2223,7 @@ enum project_constraint {
 }
 
 """
-input type for incrementing integer columne in table "project"
+input type for incrementing integer column in table "project"
 """
 input project_inc_input {
   dnum: bigint
@@ -2168,6 +2316,13 @@ input project_order_by {
   pname: order_by
   pnumber: order_by
   works_ons_aggregate: works_on_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "project"
+"""
+input project_pk_columns_input {
+  pnumber: bigint!
 }
 
 """
@@ -2949,10 +3104,11 @@ enum works_on_constraint {
 }
 
 """
-input type for incrementing integer columne in table "works_on"
+input type for incrementing integer column in table "works_on"
 """
 input works_on_inc_input {
   essn: bigint
+  hours: Float
   pno: bigint
 }
 
@@ -3036,6 +3192,14 @@ input works_on_order_by {
   hours: order_by
   pno: order_by
   project: project_order_by
+}
+
+"""
+primary key columns input for table: "works_on"
+"""
+input works_on_pk_columns_input {
+  essn: bigint!
+  pno: bigint!
 }
 
 """

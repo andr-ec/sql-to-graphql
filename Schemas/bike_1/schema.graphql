@@ -66,6 +66,11 @@ type mutation_root {
   ): station_mutation_response
 
   """
+  delete single row from the table: "station"
+  """
+  delete_station_by_pk(id: bigint!): station
+
+  """
   delete data from the table: "status"
   """
   delete_status(
@@ -80,6 +85,11 @@ type mutation_root {
     """filter the rows which have to be deleted"""
     where: trip_bool_exp!
   ): trip_mutation_response
+
+  """
+  delete single row from the table: "trip"
+  """
+  delete_trip_by_pk(id: bigint!): trip
 
   """
   delete data from the table: "weather"
@@ -101,12 +111,31 @@ type mutation_root {
   ): station_mutation_response
 
   """
+  insert a single row into the table: "station"
+  """
+  insert_station_one(
+    """the row to be inserted"""
+    object: station_insert_input!
+
+    """on conflict condition"""
+    on_conflict: station_on_conflict
+  ): station
+
+  """
   insert data into the table: "status"
   """
   insert_status(
     """the rows to be inserted"""
     objects: [status_insert_input!]!
   ): status_mutation_response
+
+  """
+  insert a single row into the table: "status"
+  """
+  insert_status_one(
+    """the row to be inserted"""
+    object: status_insert_input!
+  ): status
 
   """
   insert data into the table: "trip"
@@ -120,12 +149,31 @@ type mutation_root {
   ): trip_mutation_response
 
   """
+  insert a single row into the table: "trip"
+  """
+  insert_trip_one(
+    """the row to be inserted"""
+    object: trip_insert_input!
+
+    """on conflict condition"""
+    on_conflict: trip_on_conflict
+  ): trip
+
+  """
   insert data into the table: "weather"
   """
   insert_weather(
     """the rows to be inserted"""
     objects: [weather_insert_input!]!
   ): weather_mutation_response
+
+  """
+  insert a single row into the table: "weather"
+  """
+  insert_weather_one(
+    """the row to be inserted"""
+    object: weather_insert_input!
+  ): weather
 
   """
   update data of the table: "station"
@@ -140,6 +188,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: station_bool_exp!
   ): station_mutation_response
+
+  """
+  update single row of the table: "station"
+  """
+  update_station_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: station_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: station_set_input
+    pk_columns: station_pk_columns_input!
+  ): station
 
   """
   update data of the table: "status"
@@ -168,6 +228,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: trip_bool_exp!
   ): trip_mutation_response
+
+  """
+  update single row of the table: "trip"
+  """
+  update_trip_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: trip_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: trip_set_input
+    pk_columns: trip_pk_columns_input!
+  ): trip
 
   """
   update data of the table: "weather"
@@ -608,11 +680,13 @@ enum station_constraint {
 }
 
 """
-input type for incrementing integer columne in table "station"
+input type for incrementing integer column in table "station"
 """
 input station_inc_input {
   dock_count: bigint
   id: bigint
+  lat: numeric
+  long: numeric
 }
 
 """
@@ -721,6 +795,13 @@ input station_order_by {
   statuses_aggregate: status_aggregate_order_by
   tripsByEndStationId_aggregate: trip_aggregate_order_by
   tripsByStartStationId_aggregate: trip_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "station"
+"""
+input station_pk_columns_input {
+  id: bigint!
 }
 
 """
@@ -1007,7 +1088,7 @@ input status_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "status"
+input type for incrementing integer column in table "status"
 """
 input status_inc_input {
   bikes_available: bigint
@@ -1583,7 +1664,7 @@ enum trip_constraint {
 }
 
 """
-input type for incrementing integer columne in table "trip"
+input type for incrementing integer column in table "trip"
 """
 input trip_inc_input {
   bike_id: bigint
@@ -1724,6 +1805,13 @@ input trip_order_by {
   subscription_type: order_by
   weathers_aggregate: weather_aggregate_order_by
   zip_code: order_by
+}
+
+"""
+primary key columns input for table: "trip"
+"""
+input trip_pk_columns_input {
+  id: bigint!
 }
 
 """
@@ -2177,23 +2265,26 @@ input weather_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "weather"
+input type for incrementing integer column in table "weather"
 """
 input weather_inc_input {
   cloud_cover: bigint
   max_dew_point_f: bigint
   max_gust_speed_mph: bigint
   max_humidity: bigint
+  max_sea_level_pressure_inches: numeric
   max_temperature_f: bigint
   max_visibility_miles: bigint
   max_wind_speed_mph: bigint
   mean_dew_point_f: bigint
   mean_humidity: bigint
+  mean_sea_level_pressure_inches: numeric
   mean_temperature_f: bigint
   mean_visibility_miles: bigint
   mean_wind_speed_mph: bigint
   min_dew_point_f: bigint
   min_humidity: bigint
+  min_sea_level_pressure_inches: numeric
   min_temperature_f: bigint
   min_visibility_miles: bigint
   precipitation_inches: bigint

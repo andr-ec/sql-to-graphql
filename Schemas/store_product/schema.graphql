@@ -175,9 +175,11 @@ enum district_constraint {
 }
 
 """
-input type for incrementing integer columne in table "district"
+input type for incrementing integer column in table "district"
 """
 input district_inc_input {
+  city_area: Float
+  city_population: Float
   district_id: Int
 }
 
@@ -485,6 +487,11 @@ type mutation_root {
   ): product_mutation_response
 
   """
+  delete single row from the table: "product"
+  """
+  delete_product_by_pk(product_id: Int!): product
+
+  """
   delete data from the table: "store"
   """
   delete_store(
@@ -520,6 +527,17 @@ type mutation_root {
   ): district_mutation_response
 
   """
+  insert a single row into the table: "district"
+  """
+  insert_district_one(
+    """the row to be inserted"""
+    object: district_insert_input!
+
+    """on conflict condition"""
+    on_conflict: district_on_conflict
+  ): district
+
+  """
   insert data into the table: "product"
   """
   insert_product(
@@ -529,6 +547,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: product_on_conflict
   ): product_mutation_response
+
+  """
+  insert a single row into the table: "product"
+  """
+  insert_product_one(
+    """the row to be inserted"""
+    object: product_insert_input!
+
+    """on conflict condition"""
+    on_conflict: product_on_conflict
+  ): product
 
   """
   insert data into the table: "store"
@@ -553,6 +582,28 @@ type mutation_root {
   ): store_district_mutation_response
 
   """
+  insert a single row into the table: "store_district"
+  """
+  insert_store_district_one(
+    """the row to be inserted"""
+    object: store_district_insert_input!
+
+    """on conflict condition"""
+    on_conflict: store_district_on_conflict
+  ): store_district
+
+  """
+  insert a single row into the table: "store"
+  """
+  insert_store_one(
+    """the row to be inserted"""
+    object: store_insert_input!
+
+    """on conflict condition"""
+    on_conflict: store_on_conflict
+  ): store
+
+  """
   insert data into the table: "store_product"
   """
   insert_store_product(
@@ -562,6 +613,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: store_product_on_conflict
   ): store_product_mutation_response
+
+  """
+  insert a single row into the table: "store_product"
+  """
+  insert_store_product_one(
+    """the row to be inserted"""
+    object: store_product_insert_input!
+
+    """on conflict condition"""
+    on_conflict: store_product_on_conflict
+  ): store_product
 
   """
   update data of the table: "district"
@@ -590,6 +652,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: product_bool_exp!
   ): product_mutation_response
+
+  """
+  update single row of the table: "product"
+  """
+  update_product_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: product_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: product_set_input
+    pk_columns: product_pk_columns_input!
+  ): product
 
   """
   update data of the table: "store"
@@ -796,9 +870,11 @@ enum product_constraint {
 }
 
 """
-input type for incrementing integer columne in table "product"
+input type for incrementing integer column in table "product"
 """
 input product_inc_input {
+  dpi: Float
+  pages_per_minute_color: Float
   product_id: Int
 }
 
@@ -904,6 +980,13 @@ input product_order_by {
   product: order_by
   product_id: order_by
   store_products_aggregate: store_product_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "product"
+"""
+input product_pk_columns_input {
+  product_id: Int!
 }
 
 """
@@ -1565,7 +1648,7 @@ enum store_district_constraint {
 }
 
 """
-input type for incrementing integer columne in table "store_district"
+input type for incrementing integer column in table "store_district"
 """
 input store_district_inc_input {
   district_id: Int
@@ -1777,9 +1860,11 @@ input store_district_variance_order_by {
 }
 
 """
-input type for incrementing integer columne in table "store"
+input type for incrementing integer column in table "store"
 """
 input store_inc_input {
+  area_size: Float
+  number_of_product_category: Float
   ranking: Int
   store_id: Int
 }
@@ -1983,7 +2068,7 @@ enum store_product_constraint {
 }
 
 """
-input type for incrementing integer columne in table "store_product"
+input type for incrementing integer column in table "store_product"
 """
 input store_product_inc_input {
   product_id: Int

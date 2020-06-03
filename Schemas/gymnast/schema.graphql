@@ -179,10 +179,17 @@ enum gymnast_constraint {
 }
 
 """
-input type for incrementing integer columne in table "gymnast"
+input type for incrementing integer column in table "gymnast"
 """
 input gymnast_inc_input {
+  floor_exercise_points: Float
   gymnast_id: Int
+  horizontal_bar_points: Float
+  parallel_bars_points: Float
+  pommel_horse_points: Float
+  rings_points: Float
+  total_points: Float
+  vault_points: Float
 }
 
 """
@@ -293,6 +300,13 @@ input gymnast_order_by {
   rings_points: order_by
   total_points: order_by
   vault_points: order_by
+}
+
+"""
+primary key columns input for table: "gymnast"
+"""
+input gymnast_pk_columns_input {
+  gymnast_id: Int!
 }
 
 """
@@ -575,12 +589,22 @@ type mutation_root {
   ): gymnast_mutation_response
 
   """
+  delete single row from the table: "gymnast"
+  """
+  delete_gymnast_by_pk(gymnast_id: Int!): gymnast
+
+  """
   delete data from the table: "people"
   """
   delete_people(
     """filter the rows which have to be deleted"""
     where: people_bool_exp!
   ): people_mutation_response
+
+  """
+  delete single row from the table: "people"
+  """
+  delete_people_by_pk(people_id: Int!): people
 
   """
   insert data into the table: "gymnast"
@@ -594,6 +618,17 @@ type mutation_root {
   ): gymnast_mutation_response
 
   """
+  insert a single row into the table: "gymnast"
+  """
+  insert_gymnast_one(
+    """the row to be inserted"""
+    object: gymnast_insert_input!
+
+    """on conflict condition"""
+    on_conflict: gymnast_on_conflict
+  ): gymnast
+
+  """
   insert data into the table: "people"
   """
   insert_people(
@@ -603,6 +638,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: people_on_conflict
   ): people_mutation_response
+
+  """
+  insert a single row into the table: "people"
+  """
+  insert_people_one(
+    """the row to be inserted"""
+    object: people_insert_input!
+
+    """on conflict condition"""
+    on_conflict: people_on_conflict
+  ): people
 
   """
   update data of the table: "gymnast"
@@ -619,6 +665,18 @@ type mutation_root {
   ): gymnast_mutation_response
 
   """
+  update single row of the table: "gymnast"
+  """
+  update_gymnast_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: gymnast_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: gymnast_set_input
+    pk_columns: gymnast_pk_columns_input!
+  ): gymnast
+
+  """
   update data of the table: "people"
   """
   update_people(
@@ -631,6 +689,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: people_bool_exp!
   ): people_mutation_response
+
+  """
+  update single row of the table: "people"
+  """
+  update_people_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: people_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: people_set_input
+    pk_columns: people_pk_columns_input!
+  ): people
 }
 
 """column ordering options"""
@@ -764,9 +834,11 @@ enum people_constraint {
 }
 
 """
-input type for incrementing integer columne in table "people"
+input type for incrementing integer column in table "people"
 """
 input people_inc_input {
+  age: Float
+  height: Float
   people_id: Int
 }
 
@@ -860,6 +932,13 @@ input people_order_by {
   hometown: order_by
   name: order_by
   people_id: order_by
+}
+
+"""
+primary key columns input for table: "people"
+"""
+input people_pk_columns_input {
+  people_id: Int!
 }
 
 """

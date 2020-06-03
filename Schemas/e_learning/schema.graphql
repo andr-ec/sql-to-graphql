@@ -196,7 +196,7 @@ enum course_authors_and_tutors_constraint {
 }
 
 """
-input type for incrementing integer columne in table "course_authors_and_tutors"
+input type for incrementing integer column in table "course_authors_and_tutors"
 """
 input course_authors_and_tutors_inc_input {
   author_id: bigint
@@ -316,6 +316,13 @@ input course_authors_and_tutors_order_by {
   middle_name: order_by
   password: order_by
   personal_name: order_by
+}
+
+"""
+primary key columns input for table: "course_authors_and_tutors"
+"""
+input course_authors_and_tutors_pk_columns_input {
+  author_id: bigint!
 }
 
 """
@@ -626,7 +633,7 @@ enum courses_constraint {
 }
 
 """
-input type for incrementing integer columne in table "courses"
+input type for incrementing integer column in table "courses"
 """
 input courses_inc_input {
   author_id: bigint
@@ -728,6 +735,13 @@ input courses_order_by {
   student_course_enrolments_aggregate: student_course_enrolment_aggregate_order_by
   subject: subjects_order_by
   subject_id: order_by
+}
+
+"""
+primary key columns input for table: "courses"
+"""
+input courses_pk_columns_input {
+  course_id: bigint!
 }
 
 """
@@ -904,6 +918,11 @@ type mutation_root {
   ): course_authors_and_tutors_mutation_response
 
   """
+  delete single row from the table: "course_authors_and_tutors"
+  """
+  delete_course_authors_and_tutors_by_pk(author_id: bigint!): course_authors_and_tutors
+
+  """
   delete data from the table: "courses"
   """
   delete_courses(
@@ -912,12 +931,22 @@ type mutation_root {
   ): courses_mutation_response
 
   """
+  delete single row from the table: "courses"
+  """
+  delete_courses_by_pk(course_id: bigint!): courses
+
+  """
   delete data from the table: "student_course_enrolment"
   """
   delete_student_course_enrolment(
     """filter the rows which have to be deleted"""
     where: student_course_enrolment_bool_exp!
   ): student_course_enrolment_mutation_response
+
+  """
+  delete single row from the table: "student_course_enrolment"
+  """
+  delete_student_course_enrolment_by_pk(registration_id: bigint!): student_course_enrolment
 
   """
   delete data from the table: "student_tests_taken"
@@ -936,12 +965,22 @@ type mutation_root {
   ): students_mutation_response
 
   """
+  delete single row from the table: "students"
+  """
+  delete_students_by_pk(student_id: bigint!): students
+
+  """
   delete data from the table: "subjects"
   """
   delete_subjects(
     """filter the rows which have to be deleted"""
     where: subjects_bool_exp!
   ): subjects_mutation_response
+
+  """
+  delete single row from the table: "subjects"
+  """
+  delete_subjects_by_pk(subject_id: bigint!): subjects
 
   """
   insert data into the table: "course_authors_and_tutors"
@@ -955,6 +994,17 @@ type mutation_root {
   ): course_authors_and_tutors_mutation_response
 
   """
+  insert a single row into the table: "course_authors_and_tutors"
+  """
+  insert_course_authors_and_tutors_one(
+    """the row to be inserted"""
+    object: course_authors_and_tutors_insert_input!
+
+    """on conflict condition"""
+    on_conflict: course_authors_and_tutors_on_conflict
+  ): course_authors_and_tutors
+
+  """
   insert data into the table: "courses"
   """
   insert_courses(
@@ -964,6 +1014,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: courses_on_conflict
   ): courses_mutation_response
+
+  """
+  insert a single row into the table: "courses"
+  """
+  insert_courses_one(
+    """the row to be inserted"""
+    object: courses_insert_input!
+
+    """on conflict condition"""
+    on_conflict: courses_on_conflict
+  ): courses
 
   """
   insert data into the table: "student_course_enrolment"
@@ -977,12 +1038,31 @@ type mutation_root {
   ): student_course_enrolment_mutation_response
 
   """
+  insert a single row into the table: "student_course_enrolment"
+  """
+  insert_student_course_enrolment_one(
+    """the row to be inserted"""
+    object: student_course_enrolment_insert_input!
+
+    """on conflict condition"""
+    on_conflict: student_course_enrolment_on_conflict
+  ): student_course_enrolment
+
+  """
   insert data into the table: "student_tests_taken"
   """
   insert_student_tests_taken(
     """the rows to be inserted"""
     objects: [student_tests_taken_insert_input!]!
   ): student_tests_taken_mutation_response
+
+  """
+  insert a single row into the table: "student_tests_taken"
+  """
+  insert_student_tests_taken_one(
+    """the row to be inserted"""
+    object: student_tests_taken_insert_input!
+  ): student_tests_taken
 
   """
   insert data into the table: "students"
@@ -996,6 +1076,17 @@ type mutation_root {
   ): students_mutation_response
 
   """
+  insert a single row into the table: "students"
+  """
+  insert_students_one(
+    """the row to be inserted"""
+    object: students_insert_input!
+
+    """on conflict condition"""
+    on_conflict: students_on_conflict
+  ): students
+
+  """
   insert data into the table: "subjects"
   """
   insert_subjects(
@@ -1005,6 +1096,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: subjects_on_conflict
   ): subjects_mutation_response
+
+  """
+  insert a single row into the table: "subjects"
+  """
+  insert_subjects_one(
+    """the row to be inserted"""
+    object: subjects_insert_input!
+
+    """on conflict condition"""
+    on_conflict: subjects_on_conflict
+  ): subjects
 
   """
   update data of the table: "course_authors_and_tutors"
@@ -1021,6 +1123,18 @@ type mutation_root {
   ): course_authors_and_tutors_mutation_response
 
   """
+  update single row of the table: "course_authors_and_tutors"
+  """
+  update_course_authors_and_tutors_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: course_authors_and_tutors_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: course_authors_and_tutors_set_input
+    pk_columns: course_authors_and_tutors_pk_columns_input!
+  ): course_authors_and_tutors
+
+  """
   update data of the table: "courses"
   """
   update_courses(
@@ -1035,6 +1149,18 @@ type mutation_root {
   ): courses_mutation_response
 
   """
+  update single row of the table: "courses"
+  """
+  update_courses_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: courses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: courses_set_input
+    pk_columns: courses_pk_columns_input!
+  ): courses
+
+  """
   update data of the table: "student_course_enrolment"
   """
   update_student_course_enrolment(
@@ -1047,6 +1173,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: student_course_enrolment_bool_exp!
   ): student_course_enrolment_mutation_response
+
+  """
+  update single row of the table: "student_course_enrolment"
+  """
+  update_student_course_enrolment_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: student_course_enrolment_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: student_course_enrolment_set_input
+    pk_columns: student_course_enrolment_pk_columns_input!
+  ): student_course_enrolment
 
   """
   update data of the table: "student_tests_taken"
@@ -1077,6 +1215,18 @@ type mutation_root {
   ): students_mutation_response
 
   """
+  update single row of the table: "students"
+  """
+  update_students_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: students_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: students_set_input
+    pk_columns: students_pk_columns_input!
+  ): students
+
+  """
   update data of the table: "subjects"
   """
   update_subjects(
@@ -1089,6 +1239,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: subjects_bool_exp!
   ): subjects_mutation_response
+
+  """
+  update single row of the table: "subjects"
+  """
+  update_subjects_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: subjects_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: subjects_set_input
+    pk_columns: subjects_pk_columns_input!
+  ): subjects
 }
 
 """column ordering options"""
@@ -1539,7 +1701,7 @@ enum student_course_enrolment_constraint {
 }
 
 """
-input type for incrementing integer columne in table "student_course_enrolment"
+input type for incrementing integer column in table "student_course_enrolment"
 """
 input student_course_enrolment_inc_input {
   course_id: bigint
@@ -1641,6 +1803,13 @@ input student_course_enrolment_order_by {
   student: students_order_by
   student_id: order_by
   student_tests_takens_aggregate: student_tests_taken_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "student_course_enrolment"
+"""
+input student_course_enrolment_pk_columns_input {
+  registration_id: bigint!
 }
 
 """
@@ -1893,7 +2062,7 @@ input student_tests_taken_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "student_tests_taken"
+input type for incrementing integer column in table "student_tests_taken"
 """
 input student_tests_taken_inc_input {
   registration_id: bigint
@@ -2215,7 +2384,7 @@ enum students_constraint {
 }
 
 """
-input type for incrementing integer columne in table "students"
+input type for incrementing integer column in table "students"
 """
 input students_inc_input {
   student_id: bigint
@@ -2329,6 +2498,13 @@ input students_order_by {
   personal_name: order_by
   student_course_enrolments_aggregate: student_course_enrolment_aggregate_order_by
   student_id: order_by
+}
+
+"""
+primary key columns input for table: "students"
+"""
+input students_pk_columns_input {
+  student_id: bigint!
 }
 
 """
@@ -2613,7 +2789,7 @@ enum subjects_constraint {
 }
 
 """
-input type for incrementing integer columne in table "subjects"
+input type for incrementing integer column in table "subjects"
 """
 input subjects_inc_input {
   subject_id: bigint
@@ -2691,6 +2867,13 @@ input subjects_order_by {
   courses_aggregate: courses_aggregate_order_by
   subject_id: order_by
   subject_name: order_by
+}
+
+"""
+primary key columns input for table: "subjects"
+"""
+input subjects_pk_columns_input {
+  subject_id: bigint!
 }
 
 """

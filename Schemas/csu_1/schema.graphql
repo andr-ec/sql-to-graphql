@@ -338,7 +338,7 @@ enum campuses_constraint {
 }
 
 """
-input type for incrementing integer columne in table "campuses"
+input type for incrementing integer column in table "campuses"
 """
 input campuses_inc_input {
   id: bigint
@@ -443,6 +443,13 @@ input campuses_order_by {
   id: order_by
   location: order_by
   year: order_by
+}
+
+"""
+primary key columns input for table: "campuses"
+"""
+input campuses_pk_columns_input {
+  id: bigint!
 }
 
 """
@@ -694,7 +701,7 @@ enum csu_fees_constraint {
 }
 
 """
-input type for incrementing integer columne in table "csu_fees"
+input type for incrementing integer column in table "csu_fees"
 """
 input csu_fees_inc_input {
   campus: bigint
@@ -780,6 +787,13 @@ input csu_fees_order_by {
   campusByCampus: campuses_order_by
   campusfee: order_by
   year: order_by
+}
+
+"""
+primary key columns input for table: "csu_fees"
+"""
+input csu_fees_pk_columns_input {
+  campus: bigint!
 }
 
 """
@@ -1034,7 +1048,7 @@ enum degrees_constraint {
 }
 
 """
-input type for incrementing integer columne in table "degrees"
+input type for incrementing integer column in table "degrees"
 """
 input degrees_inc_input {
   campus: bigint
@@ -1120,6 +1134,14 @@ input degrees_order_by {
   campusByCampus: campuses_order_by
   degrees: order_by
   year: order_by
+}
+
+"""
+primary key columns input for table: "degrees"
+"""
+input degrees_pk_columns_input {
+  campus: bigint!
+  year: bigint!
 }
 
 """
@@ -1382,7 +1404,7 @@ enum discipline_enrollments_constraint {
 }
 
 """
-input type for incrementing integer columne in table "discipline_enrollments"
+input type for incrementing integer column in table "discipline_enrollments"
 """
 input discipline_enrollments_inc_input {
   campus: bigint
@@ -1482,6 +1504,14 @@ input discipline_enrollments_order_by {
   graduate: order_by
   undergraduate: order_by
   year: order_by
+}
+
+"""
+primary key columns input for table: "discipline_enrollments"
+"""
+input discipline_enrollments_pk_columns_input {
+  campus: bigint!
+  discipline: bigint!
 }
 
 """
@@ -1782,7 +1812,7 @@ enum enrollments_constraint {
 }
 
 """
-input type for incrementing integer columne in table "enrollments"
+input type for incrementing integer column in table "enrollments"
 """
 input enrollments_inc_input {
   campus: bigint
@@ -1875,6 +1905,14 @@ input enrollments_order_by {
   fte_ay: order_by
   totalenrollment_ay: order_by
   year: order_by
+}
+
+"""
+primary key columns input for table: "enrollments"
+"""
+input enrollments_pk_columns_input {
+  campus: bigint!
+  year: bigint!
 }
 
 """
@@ -2138,10 +2176,11 @@ input faculty_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "faculty"
+input type for incrementing integer column in table "faculty"
 """
 input faculty_inc_input {
   campus: bigint
+  faculty: Float
   year: bigint
 }
 
@@ -2376,12 +2415,22 @@ type mutation_root {
   ): campuses_mutation_response
 
   """
+  delete single row from the table: "campuses"
+  """
+  delete_campuses_by_pk(id: bigint!): campuses
+
+  """
   delete data from the table: "csu_fees"
   """
   delete_csu_fees(
     """filter the rows which have to be deleted"""
     where: csu_fees_bool_exp!
   ): csu_fees_mutation_response
+
+  """
+  delete single row from the table: "csu_fees"
+  """
+  delete_csu_fees_by_pk(campus: bigint!): csu_fees
 
   """
   delete data from the table: "degrees"
@@ -2392,6 +2441,11 @@ type mutation_root {
   ): degrees_mutation_response
 
   """
+  delete single row from the table: "degrees"
+  """
+  delete_degrees_by_pk(campus: bigint!, year: bigint!): degrees
+
+  """
   delete data from the table: "discipline_enrollments"
   """
   delete_discipline_enrollments(
@@ -2400,12 +2454,22 @@ type mutation_root {
   ): discipline_enrollments_mutation_response
 
   """
+  delete single row from the table: "discipline_enrollments"
+  """
+  delete_discipline_enrollments_by_pk(campus: bigint!, discipline: bigint!): discipline_enrollments
+
+  """
   delete data from the table: "enrollments"
   """
   delete_enrollments(
     """filter the rows which have to be deleted"""
     where: enrollments_bool_exp!
   ): enrollments_mutation_response
+
+  """
+  delete single row from the table: "enrollments"
+  """
+  delete_enrollments_by_pk(campus: bigint!, year: bigint!): enrollments
 
   """
   delete data from the table: "faculty"
@@ -2427,6 +2491,17 @@ type mutation_root {
   ): campuses_mutation_response
 
   """
+  insert a single row into the table: "campuses"
+  """
+  insert_campuses_one(
+    """the row to be inserted"""
+    object: campuses_insert_input!
+
+    """on conflict condition"""
+    on_conflict: campuses_on_conflict
+  ): campuses
+
+  """
   insert data into the table: "csu_fees"
   """
   insert_csu_fees(
@@ -2436,6 +2511,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: csu_fees_on_conflict
   ): csu_fees_mutation_response
+
+  """
+  insert a single row into the table: "csu_fees"
+  """
+  insert_csu_fees_one(
+    """the row to be inserted"""
+    object: csu_fees_insert_input!
+
+    """on conflict condition"""
+    on_conflict: csu_fees_on_conflict
+  ): csu_fees
 
   """
   insert data into the table: "degrees"
@@ -2449,6 +2535,17 @@ type mutation_root {
   ): degrees_mutation_response
 
   """
+  insert a single row into the table: "degrees"
+  """
+  insert_degrees_one(
+    """the row to be inserted"""
+    object: degrees_insert_input!
+
+    """on conflict condition"""
+    on_conflict: degrees_on_conflict
+  ): degrees
+
+  """
   insert data into the table: "discipline_enrollments"
   """
   insert_discipline_enrollments(
@@ -2458,6 +2555,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: discipline_enrollments_on_conflict
   ): discipline_enrollments_mutation_response
+
+  """
+  insert a single row into the table: "discipline_enrollments"
+  """
+  insert_discipline_enrollments_one(
+    """the row to be inserted"""
+    object: discipline_enrollments_insert_input!
+
+    """on conflict condition"""
+    on_conflict: discipline_enrollments_on_conflict
+  ): discipline_enrollments
 
   """
   insert data into the table: "enrollments"
@@ -2471,12 +2579,31 @@ type mutation_root {
   ): enrollments_mutation_response
 
   """
+  insert a single row into the table: "enrollments"
+  """
+  insert_enrollments_one(
+    """the row to be inserted"""
+    object: enrollments_insert_input!
+
+    """on conflict condition"""
+    on_conflict: enrollments_on_conflict
+  ): enrollments
+
+  """
   insert data into the table: "faculty"
   """
   insert_faculty(
     """the rows to be inserted"""
     objects: [faculty_insert_input!]!
   ): faculty_mutation_response
+
+  """
+  insert a single row into the table: "faculty"
+  """
+  insert_faculty_one(
+    """the row to be inserted"""
+    object: faculty_insert_input!
+  ): faculty
 
   """
   update data of the table: "campuses"
@@ -2493,6 +2620,18 @@ type mutation_root {
   ): campuses_mutation_response
 
   """
+  update single row of the table: "campuses"
+  """
+  update_campuses_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: campuses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: campuses_set_input
+    pk_columns: campuses_pk_columns_input!
+  ): campuses
+
+  """
   update data of the table: "csu_fees"
   """
   update_csu_fees(
@@ -2505,6 +2644,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: csu_fees_bool_exp!
   ): csu_fees_mutation_response
+
+  """
+  update single row of the table: "csu_fees"
+  """
+  update_csu_fees_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: csu_fees_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: csu_fees_set_input
+    pk_columns: csu_fees_pk_columns_input!
+  ): csu_fees
 
   """
   update data of the table: "degrees"
@@ -2521,6 +2672,18 @@ type mutation_root {
   ): degrees_mutation_response
 
   """
+  update single row of the table: "degrees"
+  """
+  update_degrees_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: degrees_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: degrees_set_input
+    pk_columns: degrees_pk_columns_input!
+  ): degrees
+
+  """
   update data of the table: "discipline_enrollments"
   """
   update_discipline_enrollments(
@@ -2535,6 +2698,18 @@ type mutation_root {
   ): discipline_enrollments_mutation_response
 
   """
+  update single row of the table: "discipline_enrollments"
+  """
+  update_discipline_enrollments_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: discipline_enrollments_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: discipline_enrollments_set_input
+    pk_columns: discipline_enrollments_pk_columns_input!
+  ): discipline_enrollments
+
+  """
   update data of the table: "enrollments"
   """
   update_enrollments(
@@ -2547,6 +2722,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: enrollments_bool_exp!
   ): enrollments_mutation_response
+
+  """
+  update single row of the table: "enrollments"
+  """
+  update_enrollments_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: enrollments_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: enrollments_set_input
+    pk_columns: enrollments_pk_columns_input!
+  ): enrollments
 
   """
   update data of the table: "faculty"

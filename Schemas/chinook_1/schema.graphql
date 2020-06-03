@@ -173,7 +173,7 @@ enum album_constraint {
 }
 
 """
-input type for incrementing integer columne in table "album"
+input type for incrementing integer column in table "album"
 """
 input album_inc_input {
   albumid: bigint
@@ -260,6 +260,13 @@ input album_order_by {
   artistid: order_by
   title: order_by
   tracks_aggregate: track_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "album"
+"""
+input album_pk_columns_input {
+  albumid: bigint!
 }
 
 """
@@ -523,7 +530,7 @@ enum artist_constraint {
 }
 
 """
-input type for incrementing integer columne in table "artist"
+input type for incrementing integer column in table "artist"
 """
 input artist_inc_input {
   artistid: bigint
@@ -601,6 +608,13 @@ input artist_order_by {
   albums_aggregate: album_aggregate_order_by
   artistid: order_by
   name: order_by
+}
+
+"""
+primary key columns input for table: "artist"
+"""
+input artist_pk_columns_input {
+  artistid: bigint!
 }
 
 """
@@ -889,7 +903,7 @@ enum customer_constraint {
 }
 
 """
-input type for incrementing integer columne in table "customer"
+input type for incrementing integer column in table "customer"
 """
 input customer_inc_input {
   customerid: bigint
@@ -1036,6 +1050,13 @@ input customer_order_by {
   postalcode: order_by
   state: order_by
   supportrepid: order_by
+}
+
+"""
+primary key columns input for table: "customer"
+"""
+input customer_pk_columns_input {
+  customerid: bigint!
 }
 
 """
@@ -1439,7 +1460,7 @@ enum employee_constraint {
 }
 
 """
-input type for incrementing integer columne in table "employee"
+input type for incrementing integer column in table "employee"
 """
 input employee_inc_input {
   employeeid: bigint
@@ -1600,6 +1621,13 @@ input employee_order_by {
   reportsto: order_by
   state: order_by
   title: order_by
+}
+
+"""
+primary key columns input for table: "employee"
+"""
+input employee_pk_columns_input {
+  employeeid: bigint!
 }
 
 """
@@ -1948,7 +1976,7 @@ enum genre_constraint {
 }
 
 """
-input type for incrementing integer columne in table "genre"
+input type for incrementing integer column in table "genre"
 """
 input genre_inc_input {
   genreid: bigint
@@ -2026,6 +2054,13 @@ input genre_order_by {
   genreid: order_by
   name: order_by
   tracks_aggregate: track_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "genre"
+"""
+input genre_pk_columns_input {
+  genreid: bigint!
 }
 
 """
@@ -2291,11 +2326,12 @@ enum invoice_constraint {
 }
 
 """
-input type for incrementing integer columne in table "invoice"
+input type for incrementing integer column in table "invoice"
 """
 input invoice_inc_input {
   customerid: bigint
   invoiceid: bigint
+  total: numeric
 }
 
 """
@@ -2414,6 +2450,13 @@ input invoice_order_by {
   invoiceid: order_by
   invoicelines_aggregate: invoiceline_aggregate_order_by
   total: order_by
+}
+
+"""
+primary key columns input for table: "invoice"
+"""
+input invoice_pk_columns_input {
+  invoiceid: bigint!
 }
 
 """
@@ -2718,13 +2761,14 @@ enum invoiceline_constraint {
 }
 
 """
-input type for incrementing integer columne in table "invoiceline"
+input type for incrementing integer column in table "invoiceline"
 """
 input invoiceline_inc_input {
   invoiceid: bigint
   invoicelineid: bigint
   quantity: bigint
   trackid: bigint
+  unitprice: numeric
 }
 
 """
@@ -2819,6 +2863,13 @@ input invoiceline_order_by {
   track: track_order_by
   trackid: order_by
   unitprice: order_by
+}
+
+"""
+primary key columns input for table: "invoiceline"
+"""
+input invoiceline_pk_columns_input {
+  invoicelineid: bigint!
 }
 
 """
@@ -3139,7 +3190,7 @@ enum mediatype_constraint {
 }
 
 """
-input type for incrementing integer columne in table "mediatype"
+input type for incrementing integer column in table "mediatype"
 """
 input mediatype_inc_input {
   mediatypeid: bigint
@@ -3217,6 +3268,13 @@ input mediatype_order_by {
   mediatypeid: order_by
   name: order_by
   tracks_aggregate: track_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "mediatype"
+"""
+input mediatype_pk_columns_input {
+  mediatypeid: bigint!
 }
 
 """
@@ -3344,12 +3402,22 @@ type mutation_root {
   ): album_mutation_response
 
   """
+  delete single row from the table: "album"
+  """
+  delete_album_by_pk(albumid: bigint!): album
+
+  """
   delete data from the table: "artist"
   """
   delete_artist(
     """filter the rows which have to be deleted"""
     where: artist_bool_exp!
   ): artist_mutation_response
+
+  """
+  delete single row from the table: "artist"
+  """
+  delete_artist_by_pk(artistid: bigint!): artist
 
   """
   delete data from the table: "customer"
@@ -3360,12 +3428,22 @@ type mutation_root {
   ): customer_mutation_response
 
   """
+  delete single row from the table: "customer"
+  """
+  delete_customer_by_pk(customerid: bigint!): customer
+
+  """
   delete data from the table: "employee"
   """
   delete_employee(
     """filter the rows which have to be deleted"""
     where: employee_bool_exp!
   ): employee_mutation_response
+
+  """
+  delete single row from the table: "employee"
+  """
+  delete_employee_by_pk(employeeid: bigint!): employee
 
   """
   delete data from the table: "genre"
@@ -3376,12 +3454,22 @@ type mutation_root {
   ): genre_mutation_response
 
   """
+  delete single row from the table: "genre"
+  """
+  delete_genre_by_pk(genreid: bigint!): genre
+
+  """
   delete data from the table: "invoice"
   """
   delete_invoice(
     """filter the rows which have to be deleted"""
     where: invoice_bool_exp!
   ): invoice_mutation_response
+
+  """
+  delete single row from the table: "invoice"
+  """
+  delete_invoice_by_pk(invoiceid: bigint!): invoice
 
   """
   delete data from the table: "invoiceline"
@@ -3392,12 +3480,22 @@ type mutation_root {
   ): invoiceline_mutation_response
 
   """
+  delete single row from the table: "invoiceline"
+  """
+  delete_invoiceline_by_pk(invoicelineid: bigint!): invoiceline
+
+  """
   delete data from the table: "mediatype"
   """
   delete_mediatype(
     """filter the rows which have to be deleted"""
     where: mediatype_bool_exp!
   ): mediatype_mutation_response
+
+  """
+  delete single row from the table: "mediatype"
+  """
+  delete_mediatype_by_pk(mediatypeid: bigint!): mediatype
 
   """
   delete data from the table: "playlist"
@@ -3408,6 +3506,11 @@ type mutation_root {
   ): playlist_mutation_response
 
   """
+  delete single row from the table: "playlist"
+  """
+  delete_playlist_by_pk(playlistid: bigint!): playlist
+
+  """
   delete data from the table: "playlisttrack"
   """
   delete_playlisttrack(
@@ -3416,12 +3519,22 @@ type mutation_root {
   ): playlisttrack_mutation_response
 
   """
+  delete single row from the table: "playlisttrack"
+  """
+  delete_playlisttrack_by_pk(playlistid: bigint!, trackid: bigint!): playlisttrack
+
+  """
   delete data from the table: "track"
   """
   delete_track(
     """filter the rows which have to be deleted"""
     where: track_bool_exp!
   ): track_mutation_response
+
+  """
+  delete single row from the table: "track"
+  """
+  delete_track_by_pk(trackid: bigint!): track
 
   """
   insert data into the table: "album"
@@ -3435,6 +3548,17 @@ type mutation_root {
   ): album_mutation_response
 
   """
+  insert a single row into the table: "album"
+  """
+  insert_album_one(
+    """the row to be inserted"""
+    object: album_insert_input!
+
+    """on conflict condition"""
+    on_conflict: album_on_conflict
+  ): album
+
+  """
   insert data into the table: "artist"
   """
   insert_artist(
@@ -3444,6 +3568,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: artist_on_conflict
   ): artist_mutation_response
+
+  """
+  insert a single row into the table: "artist"
+  """
+  insert_artist_one(
+    """the row to be inserted"""
+    object: artist_insert_input!
+
+    """on conflict condition"""
+    on_conflict: artist_on_conflict
+  ): artist
 
   """
   insert data into the table: "customer"
@@ -3457,6 +3592,17 @@ type mutation_root {
   ): customer_mutation_response
 
   """
+  insert a single row into the table: "customer"
+  """
+  insert_customer_one(
+    """the row to be inserted"""
+    object: customer_insert_input!
+
+    """on conflict condition"""
+    on_conflict: customer_on_conflict
+  ): customer
+
+  """
   insert data into the table: "employee"
   """
   insert_employee(
@@ -3466,6 +3612,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: employee_on_conflict
   ): employee_mutation_response
+
+  """
+  insert a single row into the table: "employee"
+  """
+  insert_employee_one(
+    """the row to be inserted"""
+    object: employee_insert_input!
+
+    """on conflict condition"""
+    on_conflict: employee_on_conflict
+  ): employee
 
   """
   insert data into the table: "genre"
@@ -3479,6 +3636,17 @@ type mutation_root {
   ): genre_mutation_response
 
   """
+  insert a single row into the table: "genre"
+  """
+  insert_genre_one(
+    """the row to be inserted"""
+    object: genre_insert_input!
+
+    """on conflict condition"""
+    on_conflict: genre_on_conflict
+  ): genre
+
+  """
   insert data into the table: "invoice"
   """
   insert_invoice(
@@ -3488,6 +3656,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: invoice_on_conflict
   ): invoice_mutation_response
+
+  """
+  insert a single row into the table: "invoice"
+  """
+  insert_invoice_one(
+    """the row to be inserted"""
+    object: invoice_insert_input!
+
+    """on conflict condition"""
+    on_conflict: invoice_on_conflict
+  ): invoice
 
   """
   insert data into the table: "invoiceline"
@@ -3501,6 +3680,17 @@ type mutation_root {
   ): invoiceline_mutation_response
 
   """
+  insert a single row into the table: "invoiceline"
+  """
+  insert_invoiceline_one(
+    """the row to be inserted"""
+    object: invoiceline_insert_input!
+
+    """on conflict condition"""
+    on_conflict: invoiceline_on_conflict
+  ): invoiceline
+
+  """
   insert data into the table: "mediatype"
   """
   insert_mediatype(
@@ -3510,6 +3700,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: mediatype_on_conflict
   ): mediatype_mutation_response
+
+  """
+  insert a single row into the table: "mediatype"
+  """
+  insert_mediatype_one(
+    """the row to be inserted"""
+    object: mediatype_insert_input!
+
+    """on conflict condition"""
+    on_conflict: mediatype_on_conflict
+  ): mediatype
 
   """
   insert data into the table: "playlist"
@@ -3523,6 +3724,17 @@ type mutation_root {
   ): playlist_mutation_response
 
   """
+  insert a single row into the table: "playlist"
+  """
+  insert_playlist_one(
+    """the row to be inserted"""
+    object: playlist_insert_input!
+
+    """on conflict condition"""
+    on_conflict: playlist_on_conflict
+  ): playlist
+
+  """
   insert data into the table: "playlisttrack"
   """
   insert_playlisttrack(
@@ -3534,6 +3746,17 @@ type mutation_root {
   ): playlisttrack_mutation_response
 
   """
+  insert a single row into the table: "playlisttrack"
+  """
+  insert_playlisttrack_one(
+    """the row to be inserted"""
+    object: playlisttrack_insert_input!
+
+    """on conflict condition"""
+    on_conflict: playlisttrack_on_conflict
+  ): playlisttrack
+
+  """
   insert data into the table: "track"
   """
   insert_track(
@@ -3543,6 +3766,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: track_on_conflict
   ): track_mutation_response
+
+  """
+  insert a single row into the table: "track"
+  """
+  insert_track_one(
+    """the row to be inserted"""
+    object: track_insert_input!
+
+    """on conflict condition"""
+    on_conflict: track_on_conflict
+  ): track
 
   """
   update data of the table: "album"
@@ -3559,6 +3793,18 @@ type mutation_root {
   ): album_mutation_response
 
   """
+  update single row of the table: "album"
+  """
+  update_album_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: album_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: album_set_input
+    pk_columns: album_pk_columns_input!
+  ): album
+
+  """
   update data of the table: "artist"
   """
   update_artist(
@@ -3571,6 +3817,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: artist_bool_exp!
   ): artist_mutation_response
+
+  """
+  update single row of the table: "artist"
+  """
+  update_artist_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: artist_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: artist_set_input
+    pk_columns: artist_pk_columns_input!
+  ): artist
 
   """
   update data of the table: "customer"
@@ -3587,6 +3845,18 @@ type mutation_root {
   ): customer_mutation_response
 
   """
+  update single row of the table: "customer"
+  """
+  update_customer_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customer_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customer_set_input
+    pk_columns: customer_pk_columns_input!
+  ): customer
+
+  """
   update data of the table: "employee"
   """
   update_employee(
@@ -3599,6 +3869,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: employee_bool_exp!
   ): employee_mutation_response
+
+  """
+  update single row of the table: "employee"
+  """
+  update_employee_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: employee_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: employee_set_input
+    pk_columns: employee_pk_columns_input!
+  ): employee
 
   """
   update data of the table: "genre"
@@ -3615,6 +3897,18 @@ type mutation_root {
   ): genre_mutation_response
 
   """
+  update single row of the table: "genre"
+  """
+  update_genre_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: genre_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: genre_set_input
+    pk_columns: genre_pk_columns_input!
+  ): genre
+
+  """
   update data of the table: "invoice"
   """
   update_invoice(
@@ -3627,6 +3921,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: invoice_bool_exp!
   ): invoice_mutation_response
+
+  """
+  update single row of the table: "invoice"
+  """
+  update_invoice_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: invoice_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: invoice_set_input
+    pk_columns: invoice_pk_columns_input!
+  ): invoice
 
   """
   update data of the table: "invoiceline"
@@ -3643,6 +3949,18 @@ type mutation_root {
   ): invoiceline_mutation_response
 
   """
+  update single row of the table: "invoiceline"
+  """
+  update_invoiceline_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: invoiceline_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: invoiceline_set_input
+    pk_columns: invoiceline_pk_columns_input!
+  ): invoiceline
+
+  """
   update data of the table: "mediatype"
   """
   update_mediatype(
@@ -3655,6 +3973,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: mediatype_bool_exp!
   ): mediatype_mutation_response
+
+  """
+  update single row of the table: "mediatype"
+  """
+  update_mediatype_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: mediatype_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: mediatype_set_input
+    pk_columns: mediatype_pk_columns_input!
+  ): mediatype
 
   """
   update data of the table: "playlist"
@@ -3671,6 +4001,18 @@ type mutation_root {
   ): playlist_mutation_response
 
   """
+  update single row of the table: "playlist"
+  """
+  update_playlist_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: playlist_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: playlist_set_input
+    pk_columns: playlist_pk_columns_input!
+  ): playlist
+
+  """
   update data of the table: "playlisttrack"
   """
   update_playlisttrack(
@@ -3685,6 +4027,18 @@ type mutation_root {
   ): playlisttrack_mutation_response
 
   """
+  update single row of the table: "playlisttrack"
+  """
+  update_playlisttrack_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: playlisttrack_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: playlisttrack_set_input
+    pk_columns: playlisttrack_pk_columns_input!
+  ): playlisttrack
+
+  """
   update data of the table: "track"
   """
   update_track(
@@ -3697,6 +4051,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: track_bool_exp!
   ): track_mutation_response
+
+  """
+  update single row of the table: "track"
+  """
+  update_track_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: track_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: track_set_input
+    pk_columns: track_pk_columns_input!
+  ): track
 }
 
 scalar numeric
@@ -3864,7 +4230,7 @@ enum playlist_constraint {
 }
 
 """
-input type for incrementing integer columne in table "playlist"
+input type for incrementing integer column in table "playlist"
 """
 input playlist_inc_input {
   playlistid: bigint
@@ -3942,6 +4308,13 @@ input playlist_order_by {
   name: order_by
   playlistid: order_by
   playlisttracks_aggregate: playlisttrack_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "playlist"
+"""
+input playlist_pk_columns_input {
+  playlistid: bigint!
 }
 
 """
@@ -4160,7 +4533,7 @@ enum playlisttrack_constraint {
 }
 
 """
-input type for incrementing integer columne in table "playlisttrack"
+input type for incrementing integer column in table "playlisttrack"
 """
 input playlisttrack_inc_input {
   playlistid: bigint
@@ -4241,6 +4614,14 @@ input playlisttrack_order_by {
   playlistid: order_by
   track: track_order_by
   trackid: order_by
+}
+
+"""
+primary key columns input for table: "playlisttrack"
+"""
+input playlisttrack_pk_columns_input {
+  playlistid: bigint!
+  trackid: bigint!
 }
 
 """
@@ -5562,7 +5943,7 @@ enum track_constraint {
 }
 
 """
-input type for incrementing integer columne in table "track"
+input type for incrementing integer column in table "track"
 """
 input track_inc_input {
   albumid: bigint
@@ -5571,6 +5952,7 @@ input track_inc_input {
   mediatypeid: bigint
   milliseconds: bigint
   trackid: bigint
+  unitprice: numeric
 }
 
 """
@@ -5695,6 +6077,13 @@ input track_order_by {
   playlisttracks_aggregate: playlisttrack_aggregate_order_by
   trackid: order_by
   unitprice: order_by
+}
+
+"""
+primary key columns input for table: "track"
+"""
+input track_pk_columns_input {
+  trackid: bigint!
 }
 
 """

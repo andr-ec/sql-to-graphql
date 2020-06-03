@@ -56,6 +56,21 @@ input bigint_comparison_exp {
 }
 
 """
+expression to compare columns of type Int. All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
 columns and relationships of "investors"
 """
 type investors {
@@ -219,7 +234,7 @@ enum investors_constraint {
 }
 
 """
-input type for incrementing integer columne in table "investors"
+input type for incrementing integer column in table "investors"
 """
 input investors_inc_input {
   investor_id: bigint
@@ -299,6 +314,13 @@ input investors_order_by {
   investor_id: order_by
   lots_aggregate: lots_aggregate_order_by
   transactions_aggregate: transactions_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "investors"
+"""
+input investors_pk_columns_input {
+  investor_id: bigint!
 }
 
 """
@@ -549,7 +571,7 @@ enum lots_constraint {
 }
 
 """
-input type for incrementing integer columne in table "lots"
+input type for incrementing integer column in table "lots"
 """
 input lots_inc_input {
   investor_id: bigint
@@ -636,6 +658,13 @@ input lots_order_by {
   lot_details: order_by
   lot_id: order_by
   transactions_lots_aggregate: transactions_lots_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "lots"
+"""
+input lots_pk_columns_input {
+  lot_id: bigint!
 }
 
 """
@@ -784,12 +813,22 @@ type mutation_root {
   ): investors_mutation_response
 
   """
+  delete single row from the table: "investors"
+  """
+  delete_investors_by_pk(investor_id: bigint!): investors
+
+  """
   delete data from the table: "lots"
   """
   delete_lots(
     """filter the rows which have to be deleted"""
     where: lots_bool_exp!
   ): lots_mutation_response
+
+  """
+  delete single row from the table: "lots"
+  """
+  delete_lots_by_pk(lot_id: bigint!): lots
 
   """
   delete data from the table: "purchases"
@@ -808,6 +847,11 @@ type mutation_root {
   ): ref_transaction_types_mutation_response
 
   """
+  delete single row from the table: "ref_transaction_types"
+  """
+  delete_ref_transaction_types_by_pk(transaction_type_code: String!): ref_transaction_types
+
+  """
   delete data from the table: "sales"
   """
   delete_sales(
@@ -816,12 +860,22 @@ type mutation_root {
   ): sales_mutation_response
 
   """
+  delete single row from the table: "sales"
+  """
+  delete_sales_by_pk(sales_transaction_id: bigint!): sales
+
+  """
   delete data from the table: "transactions"
   """
   delete_transactions(
     """filter the rows which have to be deleted"""
     where: transactions_bool_exp!
   ): transactions_mutation_response
+
+  """
+  delete single row from the table: "transactions"
+  """
+  delete_transactions_by_pk(transaction_id: bigint!): transactions
 
   """
   delete data from the table: "transactions_lots"
@@ -843,6 +897,17 @@ type mutation_root {
   ): investors_mutation_response
 
   """
+  insert a single row into the table: "investors"
+  """
+  insert_investors_one(
+    """the row to be inserted"""
+    object: investors_insert_input!
+
+    """on conflict condition"""
+    on_conflict: investors_on_conflict
+  ): investors
+
+  """
   insert data into the table: "lots"
   """
   insert_lots(
@@ -854,12 +919,31 @@ type mutation_root {
   ): lots_mutation_response
 
   """
+  insert a single row into the table: "lots"
+  """
+  insert_lots_one(
+    """the row to be inserted"""
+    object: lots_insert_input!
+
+    """on conflict condition"""
+    on_conflict: lots_on_conflict
+  ): lots
+
+  """
   insert data into the table: "purchases"
   """
   insert_purchases(
     """the rows to be inserted"""
     objects: [purchases_insert_input!]!
   ): purchases_mutation_response
+
+  """
+  insert a single row into the table: "purchases"
+  """
+  insert_purchases_one(
+    """the row to be inserted"""
+    object: purchases_insert_input!
+  ): purchases
 
   """
   insert data into the table: "ref_transaction_types"
@@ -873,6 +957,17 @@ type mutation_root {
   ): ref_transaction_types_mutation_response
 
   """
+  insert a single row into the table: "ref_transaction_types"
+  """
+  insert_ref_transaction_types_one(
+    """the row to be inserted"""
+    object: ref_transaction_types_insert_input!
+
+    """on conflict condition"""
+    on_conflict: ref_transaction_types_on_conflict
+  ): ref_transaction_types
+
+  """
   insert data into the table: "sales"
   """
   insert_sales(
@@ -882,6 +977,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: sales_on_conflict
   ): sales_mutation_response
+
+  """
+  insert a single row into the table: "sales"
+  """
+  insert_sales_one(
+    """the row to be inserted"""
+    object: sales_insert_input!
+
+    """on conflict condition"""
+    on_conflict: sales_on_conflict
+  ): sales
 
   """
   insert data into the table: "transactions"
@@ -903,6 +1009,25 @@ type mutation_root {
   ): transactions_lots_mutation_response
 
   """
+  insert a single row into the table: "transactions_lots"
+  """
+  insert_transactions_lots_one(
+    """the row to be inserted"""
+    object: transactions_lots_insert_input!
+  ): transactions_lots
+
+  """
+  insert a single row into the table: "transactions"
+  """
+  insert_transactions_one(
+    """the row to be inserted"""
+    object: transactions_insert_input!
+
+    """on conflict condition"""
+    on_conflict: transactions_on_conflict
+  ): transactions
+
+  """
   update data of the table: "investors"
   """
   update_investors(
@@ -917,6 +1042,18 @@ type mutation_root {
   ): investors_mutation_response
 
   """
+  update single row of the table: "investors"
+  """
+  update_investors_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: investors_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: investors_set_input
+    pk_columns: investors_pk_columns_input!
+  ): investors
+
+  """
   update data of the table: "lots"
   """
   update_lots(
@@ -929,6 +1066,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: lots_bool_exp!
   ): lots_mutation_response
+
+  """
+  update single row of the table: "lots"
+  """
+  update_lots_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: lots_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: lots_set_input
+    pk_columns: lots_pk_columns_input!
+  ): lots
 
   """
   update data of the table: "purchases"
@@ -956,6 +1105,15 @@ type mutation_root {
   ): ref_transaction_types_mutation_response
 
   """
+  update single row of the table: "ref_transaction_types"
+  """
+  update_ref_transaction_types_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ref_transaction_types_set_input
+    pk_columns: ref_transaction_types_pk_columns_input!
+  ): ref_transaction_types
+
+  """
   update data of the table: "sales"
   """
   update_sales(
@@ -970,6 +1128,18 @@ type mutation_root {
   ): sales_mutation_response
 
   """
+  update single row of the table: "sales"
+  """
+  update_sales_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: sales_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: sales_set_input
+    pk_columns: sales_pk_columns_input!
+  ): sales
+
+  """
   update data of the table: "transactions"
   """
   update_transactions(
@@ -982,6 +1152,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: transactions_bool_exp!
   ): transactions_mutation_response
+
+  """
+  update single row of the table: "transactions"
+  """
+  update_transactions_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: transactions_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: transactions_set_input
+    pk_columns: transactions_pk_columns_input!
+  ): transactions
 
   """
   update data of the table: "transactions_lots"
@@ -1121,7 +1303,7 @@ input purchases_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "purchases"
+input type for incrementing integer column in table "purchases"
 """
 input purchases_inc_input {
   purchase_transaction_id: bigint
@@ -1767,6 +1949,13 @@ input ref_transaction_types_order_by {
 }
 
 """
+primary key columns input for table: "ref_transaction_types"
+"""
+input ref_transaction_types_pk_columns_input {
+  transaction_type_code: String!
+}
+
+"""
 select columns of table "ref_transaction_types"
 """
 enum ref_transaction_types_select_column {
@@ -1890,7 +2079,7 @@ enum sales_constraint {
 }
 
 """
-input type for incrementing integer columne in table "sales"
+input type for incrementing integer column in table "sales"
 """
 input sales_inc_input {
   sales_transaction_id: bigint
@@ -1968,6 +2157,13 @@ input sales_order_by {
   sales_details: order_by
   sales_transaction_id: order_by
   transaction: transactions_order_by
+}
+
+"""
+primary key columns input for table: "sales"
+"""
+input sales_pk_columns_input {
+  sales_transaction_id: bigint!
 }
 
 """
@@ -2508,7 +2704,7 @@ type transactions {
     """filter the rows returned"""
     where: sales_bool_exp
   ): sales_aggregate!
-  share_count: String
+  share_count: Int
   transaction_id: bigint!
   transaction_type_code: String
 
@@ -2603,6 +2799,7 @@ input transactions_arr_rel_insert_input {
 type transactions_avg_fields {
   amount_of_transaction: Float
   investor_id: Float
+  share_count: Float
   transaction_id: Float
 }
 
@@ -2612,6 +2809,7 @@ order by avg() on columns of table "transactions"
 input transactions_avg_order_by {
   amount_of_transaction: order_by
   investor_id: order_by
+  share_count: order_by
   transaction_id: order_by
 }
 
@@ -2630,7 +2828,7 @@ input transactions_bool_exp {
   purchases: purchases_bool_exp
   ref_transaction_type: ref_transaction_types_bool_exp
   sales: sales_bool_exp
-  share_count: String_comparison_exp
+  share_count: Int_comparison_exp
   transaction_id: bigint_comparison_exp
   transaction_type_code: String_comparison_exp
   transactions_lots: transactions_lots_bool_exp
@@ -2645,10 +2843,12 @@ enum transactions_constraint {
 }
 
 """
-input type for incrementing integer columne in table "transactions"
+input type for incrementing integer column in table "transactions"
 """
 input transactions_inc_input {
+  amount_of_transaction: numeric
   investor_id: bigint
+  share_count: Int
   transaction_id: bigint
 }
 
@@ -2664,7 +2864,7 @@ input transactions_insert_input {
   purchases: purchases_arr_rel_insert_input
   ref_transaction_type: ref_transaction_types_obj_rel_insert_input
   sales: sales_arr_rel_insert_input
-  share_count: String
+  share_count: Int
   transaction_id: bigint
   transaction_type_code: String
   transactions_lots: transactions_lots_arr_rel_insert_input
@@ -2760,7 +2960,7 @@ input transactions_lots_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "transactions_lots"
+input type for incrementing integer column in table "transactions_lots"
 """
 input transactions_lots_inc_input {
   lot_id: bigint
@@ -2956,7 +3156,7 @@ type transactions_max_fields {
   date_of_transaction: timestamptz
   investor_id: bigint
   other_details: String
-  share_count: String
+  share_count: Int
   transaction_id: bigint
   transaction_type_code: String
 }
@@ -2980,7 +3180,7 @@ type transactions_min_fields {
   date_of_transaction: timestamptz
   investor_id: bigint
   other_details: String
-  share_count: String
+  share_count: Int
   transaction_id: bigint
   transaction_type_code: String
 }
@@ -3045,6 +3245,13 @@ input transactions_order_by {
 }
 
 """
+primary key columns input for table: "transactions"
+"""
+input transactions_pk_columns_input {
+  transaction_id: bigint!
+}
+
+"""
 select columns of table "transactions"
 """
 enum transactions_select_column {
@@ -3078,7 +3285,7 @@ input transactions_set_input {
   date_of_transaction: timestamptz
   investor_id: bigint
   other_details: String
-  share_count: String
+  share_count: Int
   transaction_id: bigint
   transaction_type_code: String
 }
@@ -3087,6 +3294,7 @@ input transactions_set_input {
 type transactions_stddev_fields {
   amount_of_transaction: Float
   investor_id: Float
+  share_count: Float
   transaction_id: Float
 }
 
@@ -3096,6 +3304,7 @@ order by stddev() on columns of table "transactions"
 input transactions_stddev_order_by {
   amount_of_transaction: order_by
   investor_id: order_by
+  share_count: order_by
   transaction_id: order_by
 }
 
@@ -3103,6 +3312,7 @@ input transactions_stddev_order_by {
 type transactions_stddev_pop_fields {
   amount_of_transaction: Float
   investor_id: Float
+  share_count: Float
   transaction_id: Float
 }
 
@@ -3112,6 +3322,7 @@ order by stddev_pop() on columns of table "transactions"
 input transactions_stddev_pop_order_by {
   amount_of_transaction: order_by
   investor_id: order_by
+  share_count: order_by
   transaction_id: order_by
 }
 
@@ -3119,6 +3330,7 @@ input transactions_stddev_pop_order_by {
 type transactions_stddev_samp_fields {
   amount_of_transaction: Float
   investor_id: Float
+  share_count: Float
   transaction_id: Float
 }
 
@@ -3128,6 +3340,7 @@ order by stddev_samp() on columns of table "transactions"
 input transactions_stddev_samp_order_by {
   amount_of_transaction: order_by
   investor_id: order_by
+  share_count: order_by
   transaction_id: order_by
 }
 
@@ -3135,6 +3348,7 @@ input transactions_stddev_samp_order_by {
 type transactions_sum_fields {
   amount_of_transaction: numeric
   investor_id: bigint
+  share_count: Int
   transaction_id: bigint
 }
 
@@ -3144,6 +3358,7 @@ order by sum() on columns of table "transactions"
 input transactions_sum_order_by {
   amount_of_transaction: order_by
   investor_id: order_by
+  share_count: order_by
   transaction_id: order_by
 }
 
@@ -3177,6 +3392,7 @@ enum transactions_update_column {
 type transactions_var_pop_fields {
   amount_of_transaction: Float
   investor_id: Float
+  share_count: Float
   transaction_id: Float
 }
 
@@ -3186,6 +3402,7 @@ order by var_pop() on columns of table "transactions"
 input transactions_var_pop_order_by {
   amount_of_transaction: order_by
   investor_id: order_by
+  share_count: order_by
   transaction_id: order_by
 }
 
@@ -3193,6 +3410,7 @@ input transactions_var_pop_order_by {
 type transactions_var_samp_fields {
   amount_of_transaction: Float
   investor_id: Float
+  share_count: Float
   transaction_id: Float
 }
 
@@ -3202,6 +3420,7 @@ order by var_samp() on columns of table "transactions"
 input transactions_var_samp_order_by {
   amount_of_transaction: order_by
   investor_id: order_by
+  share_count: order_by
   transaction_id: order_by
 }
 
@@ -3209,6 +3428,7 @@ input transactions_var_samp_order_by {
 type transactions_variance_fields {
   amount_of_transaction: Float
   investor_id: Float
+  share_count: Float
   transaction_id: Float
 }
 
@@ -3218,5 +3438,6 @@ order by variance() on columns of table "transactions"
 input transactions_variance_order_by {
   amount_of_transaction: order_by
   investor_id: order_by
+  share_count: order_by
   transaction_id: order_by
 }

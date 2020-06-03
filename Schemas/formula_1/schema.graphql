@@ -200,10 +200,12 @@ enum circuits_constraint {
 }
 
 """
-input type for incrementing integer columne in table "circuits"
+input type for incrementing integer column in table "circuits"
 """
 input circuits_inc_input {
   circuitid: bigint
+  lat: Float
+  lng: Float
 }
 
 """
@@ -320,6 +322,13 @@ input circuits_order_by {
   name: order_by
   races_aggregate: races_aggregate_order_by
   url: order_by
+}
+
+"""
+primary key columns input for table: "circuits"
+"""
+input circuits_pk_columns_input {
+  circuitid: bigint!
 }
 
 """
@@ -622,11 +631,12 @@ enum constructorresults_constraint {
 }
 
 """
-input type for incrementing integer columne in table "constructorresults"
+input type for incrementing integer column in table "constructorresults"
 """
 input constructorresults_inc_input {
   constructorid: bigint
   constructorresultsid: bigint
+  points: Float
   raceid: bigint
 }
 
@@ -722,6 +732,13 @@ input constructorresults_order_by {
   race: races_order_by
   raceid: order_by
   status: order_by
+}
+
+"""
+primary key columns input for table: "constructorresults"
+"""
+input constructorresults_pk_columns_input {
+  constructorresultsid: bigint!
 }
 
 """
@@ -1145,7 +1162,7 @@ enum constructors_constraint {
 }
 
 """
-input type for incrementing integer columne in table "constructors"
+input type for incrementing integer column in table "constructors"
 """
 input constructors_inc_input {
   constructorid: bigint
@@ -1247,6 +1264,13 @@ input constructors_order_by {
   qualifyings_aggregate: qualifying_aggregate_order_by
   results_aggregate: results_aggregate_order_by
   url: order_by
+}
+
+"""
+primary key columns input for table: "constructors"
+"""
+input constructors_pk_columns_input {
+  constructorid: bigint!
 }
 
 """
@@ -1501,11 +1525,12 @@ enum constructorstandings_constraint {
 }
 
 """
-input type for incrementing integer columne in table "constructorstandings"
+input type for incrementing integer column in table "constructorstandings"
 """
 input constructorstandings_inc_input {
   constructorid: bigint
   constructorstandingsid: bigint
+  points: Float
   position: bigint
   raceid: bigint
   wins: bigint
@@ -1615,6 +1640,13 @@ input constructorstandings_order_by {
   race: races_order_by
   raceid: order_by
   wins: order_by
+}
+
+"""
+primary key columns input for table: "constructorstandings"
+"""
+input constructorstandings_pk_columns_input {
+  constructorstandingsid: bigint!
 }
 
 """
@@ -2125,7 +2157,7 @@ enum drivers_constraint {
 }
 
 """
-input type for incrementing integer columne in table "drivers"
+input type for incrementing integer column in table "drivers"
 """
 input drivers_inc_input {
   driverid: bigint
@@ -2253,6 +2285,13 @@ input drivers_order_by {
   results_aggregate: results_aggregate_order_by
   surname: order_by
   url: order_by
+}
+
+"""
+primary key columns input for table: "drivers"
+"""
+input drivers_pk_columns_input {
+  driverid: bigint!
 }
 
 """
@@ -2535,11 +2574,12 @@ enum driverstandings_constraint {
 }
 
 """
-input type for incrementing integer columne in table "driverstandings"
+input type for incrementing integer column in table "driverstandings"
 """
 input driverstandings_inc_input {
   driverid: bigint
   driverstandingsid: bigint
+  points: Float
   position: bigint
   raceid: bigint
   wins: bigint
@@ -2649,6 +2689,13 @@ input driverstandings_order_by {
   race: races_order_by
   raceid: order_by
   wins: order_by
+}
+
+"""
+primary key columns input for table: "driverstandings"
+"""
+input driverstandings_pk_columns_input {
+  driverstandingsid: bigint!
 }
 
 """
@@ -2885,6 +2932,23 @@ input Float_comparison_exp {
   _nin: [Float!]
 }
 
+scalar float8
+
+"""
+expression to compare columns of type float8. All fields are combined with logical 'AND'.
+"""
+input float8_comparison_exp {
+  _eq: float8
+  _gt: float8
+  _gte: float8
+  _in: [float8!]
+  _is_null: Boolean
+  _lt: float8
+  _lte: float8
+  _neq: float8
+  _nin: [float8!]
+}
+
 """
 columns and relationships of "laptimes"
 """
@@ -3001,7 +3065,7 @@ enum laptimes_constraint {
 }
 
 """
-input type for incrementing integer columne in table "laptimes"
+input type for incrementing integer column in table "laptimes"
 """
 input laptimes_inc_input {
   driverid: bigint
@@ -3109,6 +3173,15 @@ input laptimes_order_by {
   race: races_order_by
   raceid: order_by
   time: order_by
+}
+
+"""
+primary key columns input for table: "laptimes"
+"""
+input laptimes_pk_columns_input {
+  driverid: bigint!
+  lap: bigint!
+  raceid: bigint!
 }
 
 """
@@ -3320,12 +3393,22 @@ type mutation_root {
   ): circuits_mutation_response
 
   """
+  delete single row from the table: "circuits"
+  """
+  delete_circuits_by_pk(circuitid: bigint!): circuits
+
+  """
   delete data from the table: "constructorresults"
   """
   delete_constructorresults(
     """filter the rows which have to be deleted"""
     where: constructorresults_bool_exp!
   ): constructorresults_mutation_response
+
+  """
+  delete single row from the table: "constructorresults"
+  """
+  delete_constructorresults_by_pk(constructorresultsid: bigint!): constructorresults
 
   """
   delete data from the table: "constructors"
@@ -3336,12 +3419,22 @@ type mutation_root {
   ): constructors_mutation_response
 
   """
+  delete single row from the table: "constructors"
+  """
+  delete_constructors_by_pk(constructorid: bigint!): constructors
+
+  """
   delete data from the table: "constructorstandings"
   """
   delete_constructorstandings(
     """filter the rows which have to be deleted"""
     where: constructorstandings_bool_exp!
   ): constructorstandings_mutation_response
+
+  """
+  delete single row from the table: "constructorstandings"
+  """
+  delete_constructorstandings_by_pk(constructorstandingsid: bigint!): constructorstandings
 
   """
   delete data from the table: "drivers"
@@ -3352,12 +3445,22 @@ type mutation_root {
   ): drivers_mutation_response
 
   """
+  delete single row from the table: "drivers"
+  """
+  delete_drivers_by_pk(driverid: bigint!): drivers
+
+  """
   delete data from the table: "driverstandings"
   """
   delete_driverstandings(
     """filter the rows which have to be deleted"""
     where: driverstandings_bool_exp!
   ): driverstandings_mutation_response
+
+  """
+  delete single row from the table: "driverstandings"
+  """
+  delete_driverstandings_by_pk(driverstandingsid: bigint!): driverstandings
 
   """
   delete data from the table: "laptimes"
@@ -3368,12 +3471,22 @@ type mutation_root {
   ): laptimes_mutation_response
 
   """
+  delete single row from the table: "laptimes"
+  """
+  delete_laptimes_by_pk(driverid: bigint!, lap: bigint!, raceid: bigint!): laptimes
+
+  """
   delete data from the table: "pitstops"
   """
   delete_pitstops(
     """filter the rows which have to be deleted"""
     where: pitstops_bool_exp!
   ): pitstops_mutation_response
+
+  """
+  delete single row from the table: "pitstops"
+  """
+  delete_pitstops_by_pk(driverid: bigint!, raceid: bigint!, stop: bigint!): pitstops
 
   """
   delete data from the table: "qualifying"
@@ -3384,12 +3497,22 @@ type mutation_root {
   ): qualifying_mutation_response
 
   """
+  delete single row from the table: "qualifying"
+  """
+  delete_qualifying_by_pk(qualifyid: bigint!): qualifying
+
+  """
   delete data from the table: "races"
   """
   delete_races(
     """filter the rows which have to be deleted"""
     where: races_bool_exp!
   ): races_mutation_response
+
+  """
+  delete single row from the table: "races"
+  """
+  delete_races_by_pk(raceid: bigint!): races
 
   """
   delete data from the table: "results"
@@ -3400,6 +3523,11 @@ type mutation_root {
   ): results_mutation_response
 
   """
+  delete single row from the table: "results"
+  """
+  delete_results_by_pk(resultid: bigint!): results
+
+  """
   delete data from the table: "seasons"
   """
   delete_seasons(
@@ -3408,12 +3536,22 @@ type mutation_root {
   ): seasons_mutation_response
 
   """
+  delete single row from the table: "seasons"
+  """
+  delete_seasons_by_pk(year: bigint!): seasons
+
+  """
   delete data from the table: "status"
   """
   delete_status(
     """filter the rows which have to be deleted"""
     where: status_bool_exp!
   ): status_mutation_response
+
+  """
+  delete single row from the table: "status"
+  """
+  delete_status_by_pk(statusid: bigint!): status
 
   """
   insert data into the table: "circuits"
@@ -3427,6 +3565,17 @@ type mutation_root {
   ): circuits_mutation_response
 
   """
+  insert a single row into the table: "circuits"
+  """
+  insert_circuits_one(
+    """the row to be inserted"""
+    object: circuits_insert_input!
+
+    """on conflict condition"""
+    on_conflict: circuits_on_conflict
+  ): circuits
+
+  """
   insert data into the table: "constructorresults"
   """
   insert_constructorresults(
@@ -3436,6 +3585,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: constructorresults_on_conflict
   ): constructorresults_mutation_response
+
+  """
+  insert a single row into the table: "constructorresults"
+  """
+  insert_constructorresults_one(
+    """the row to be inserted"""
+    object: constructorresults_insert_input!
+
+    """on conflict condition"""
+    on_conflict: constructorresults_on_conflict
+  ): constructorresults
 
   """
   insert data into the table: "constructors"
@@ -3449,6 +3609,17 @@ type mutation_root {
   ): constructors_mutation_response
 
   """
+  insert a single row into the table: "constructors"
+  """
+  insert_constructors_one(
+    """the row to be inserted"""
+    object: constructors_insert_input!
+
+    """on conflict condition"""
+    on_conflict: constructors_on_conflict
+  ): constructors
+
+  """
   insert data into the table: "constructorstandings"
   """
   insert_constructorstandings(
@@ -3458,6 +3629,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: constructorstandings_on_conflict
   ): constructorstandings_mutation_response
+
+  """
+  insert a single row into the table: "constructorstandings"
+  """
+  insert_constructorstandings_one(
+    """the row to be inserted"""
+    object: constructorstandings_insert_input!
+
+    """on conflict condition"""
+    on_conflict: constructorstandings_on_conflict
+  ): constructorstandings
 
   """
   insert data into the table: "drivers"
@@ -3471,6 +3653,17 @@ type mutation_root {
   ): drivers_mutation_response
 
   """
+  insert a single row into the table: "drivers"
+  """
+  insert_drivers_one(
+    """the row to be inserted"""
+    object: drivers_insert_input!
+
+    """on conflict condition"""
+    on_conflict: drivers_on_conflict
+  ): drivers
+
+  """
   insert data into the table: "driverstandings"
   """
   insert_driverstandings(
@@ -3480,6 +3673,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: driverstandings_on_conflict
   ): driverstandings_mutation_response
+
+  """
+  insert a single row into the table: "driverstandings"
+  """
+  insert_driverstandings_one(
+    """the row to be inserted"""
+    object: driverstandings_insert_input!
+
+    """on conflict condition"""
+    on_conflict: driverstandings_on_conflict
+  ): driverstandings
 
   """
   insert data into the table: "laptimes"
@@ -3493,6 +3697,17 @@ type mutation_root {
   ): laptimes_mutation_response
 
   """
+  insert a single row into the table: "laptimes"
+  """
+  insert_laptimes_one(
+    """the row to be inserted"""
+    object: laptimes_insert_input!
+
+    """on conflict condition"""
+    on_conflict: laptimes_on_conflict
+  ): laptimes
+
+  """
   insert data into the table: "pitstops"
   """
   insert_pitstops(
@@ -3502,6 +3717,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: pitstops_on_conflict
   ): pitstops_mutation_response
+
+  """
+  insert a single row into the table: "pitstops"
+  """
+  insert_pitstops_one(
+    """the row to be inserted"""
+    object: pitstops_insert_input!
+
+    """on conflict condition"""
+    on_conflict: pitstops_on_conflict
+  ): pitstops
 
   """
   insert data into the table: "qualifying"
@@ -3515,6 +3741,17 @@ type mutation_root {
   ): qualifying_mutation_response
 
   """
+  insert a single row into the table: "qualifying"
+  """
+  insert_qualifying_one(
+    """the row to be inserted"""
+    object: qualifying_insert_input!
+
+    """on conflict condition"""
+    on_conflict: qualifying_on_conflict
+  ): qualifying
+
+  """
   insert data into the table: "races"
   """
   insert_races(
@@ -3524,6 +3761,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: races_on_conflict
   ): races_mutation_response
+
+  """
+  insert a single row into the table: "races"
+  """
+  insert_races_one(
+    """the row to be inserted"""
+    object: races_insert_input!
+
+    """on conflict condition"""
+    on_conflict: races_on_conflict
+  ): races
 
   """
   insert data into the table: "results"
@@ -3537,6 +3785,17 @@ type mutation_root {
   ): results_mutation_response
 
   """
+  insert a single row into the table: "results"
+  """
+  insert_results_one(
+    """the row to be inserted"""
+    object: results_insert_input!
+
+    """on conflict condition"""
+    on_conflict: results_on_conflict
+  ): results
+
+  """
   insert data into the table: "seasons"
   """
   insert_seasons(
@@ -3548,6 +3807,17 @@ type mutation_root {
   ): seasons_mutation_response
 
   """
+  insert a single row into the table: "seasons"
+  """
+  insert_seasons_one(
+    """the row to be inserted"""
+    object: seasons_insert_input!
+
+    """on conflict condition"""
+    on_conflict: seasons_on_conflict
+  ): seasons
+
+  """
   insert data into the table: "status"
   """
   insert_status(
@@ -3557,6 +3827,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: status_on_conflict
   ): status_mutation_response
+
+  """
+  insert a single row into the table: "status"
+  """
+  insert_status_one(
+    """the row to be inserted"""
+    object: status_insert_input!
+
+    """on conflict condition"""
+    on_conflict: status_on_conflict
+  ): status
 
   """
   update data of the table: "circuits"
@@ -3573,6 +3854,18 @@ type mutation_root {
   ): circuits_mutation_response
 
   """
+  update single row of the table: "circuits"
+  """
+  update_circuits_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: circuits_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: circuits_set_input
+    pk_columns: circuits_pk_columns_input!
+  ): circuits
+
+  """
   update data of the table: "constructorresults"
   """
   update_constructorresults(
@@ -3585,6 +3878,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: constructorresults_bool_exp!
   ): constructorresults_mutation_response
+
+  """
+  update single row of the table: "constructorresults"
+  """
+  update_constructorresults_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: constructorresults_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: constructorresults_set_input
+    pk_columns: constructorresults_pk_columns_input!
+  ): constructorresults
 
   """
   update data of the table: "constructors"
@@ -3601,6 +3906,18 @@ type mutation_root {
   ): constructors_mutation_response
 
   """
+  update single row of the table: "constructors"
+  """
+  update_constructors_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: constructors_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: constructors_set_input
+    pk_columns: constructors_pk_columns_input!
+  ): constructors
+
+  """
   update data of the table: "constructorstandings"
   """
   update_constructorstandings(
@@ -3613,6 +3930,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: constructorstandings_bool_exp!
   ): constructorstandings_mutation_response
+
+  """
+  update single row of the table: "constructorstandings"
+  """
+  update_constructorstandings_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: constructorstandings_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: constructorstandings_set_input
+    pk_columns: constructorstandings_pk_columns_input!
+  ): constructorstandings
 
   """
   update data of the table: "drivers"
@@ -3629,6 +3958,18 @@ type mutation_root {
   ): drivers_mutation_response
 
   """
+  update single row of the table: "drivers"
+  """
+  update_drivers_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: drivers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: drivers_set_input
+    pk_columns: drivers_pk_columns_input!
+  ): drivers
+
+  """
   update data of the table: "driverstandings"
   """
   update_driverstandings(
@@ -3641,6 +3982,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: driverstandings_bool_exp!
   ): driverstandings_mutation_response
+
+  """
+  update single row of the table: "driverstandings"
+  """
+  update_driverstandings_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: driverstandings_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: driverstandings_set_input
+    pk_columns: driverstandings_pk_columns_input!
+  ): driverstandings
 
   """
   update data of the table: "laptimes"
@@ -3657,6 +4010,18 @@ type mutation_root {
   ): laptimes_mutation_response
 
   """
+  update single row of the table: "laptimes"
+  """
+  update_laptimes_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: laptimes_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: laptimes_set_input
+    pk_columns: laptimes_pk_columns_input!
+  ): laptimes
+
+  """
   update data of the table: "pitstops"
   """
   update_pitstops(
@@ -3669,6 +4034,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: pitstops_bool_exp!
   ): pitstops_mutation_response
+
+  """
+  update single row of the table: "pitstops"
+  """
+  update_pitstops_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: pitstops_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: pitstops_set_input
+    pk_columns: pitstops_pk_columns_input!
+  ): pitstops
 
   """
   update data of the table: "qualifying"
@@ -3685,6 +4062,18 @@ type mutation_root {
   ): qualifying_mutation_response
 
   """
+  update single row of the table: "qualifying"
+  """
+  update_qualifying_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: qualifying_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: qualifying_set_input
+    pk_columns: qualifying_pk_columns_input!
+  ): qualifying
+
+  """
   update data of the table: "races"
   """
   update_races(
@@ -3697,6 +4086,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: races_bool_exp!
   ): races_mutation_response
+
+  """
+  update single row of the table: "races"
+  """
+  update_races_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: races_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: races_set_input
+    pk_columns: races_pk_columns_input!
+  ): races
 
   """
   update data of the table: "results"
@@ -3713,6 +4114,18 @@ type mutation_root {
   ): results_mutation_response
 
   """
+  update single row of the table: "results"
+  """
+  update_results_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: results_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: results_set_input
+    pk_columns: results_pk_columns_input!
+  ): results
+
+  """
   update data of the table: "seasons"
   """
   update_seasons(
@@ -3727,6 +4140,18 @@ type mutation_root {
   ): seasons_mutation_response
 
   """
+  update single row of the table: "seasons"
+  """
+  update_seasons_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: seasons_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: seasons_set_input
+    pk_columns: seasons_pk_columns_input!
+  ): seasons
+
+  """
   update data of the table: "status"
   """
   update_status(
@@ -3739,6 +4164,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: status_bool_exp!
   ): status_mutation_response
+
+  """
+  update single row of the table: "status"
+  """
+  update_status_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: status_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: status_set_input
+    pk_columns: status_pk_columns_input!
+  ): status
 }
 
 """column ordering options"""
@@ -3880,7 +4317,7 @@ enum pitstops_constraint {
 }
 
 """
-input type for incrementing integer columne in table "pitstops"
+input type for incrementing integer column in table "pitstops"
 """
 input pitstops_inc_input {
   driverid: bigint
@@ -3994,6 +4431,15 @@ input pitstops_order_by {
   raceid: order_by
   stop: order_by
   time: order_by
+}
+
+"""
+primary key columns input for table: "pitstops"
+"""
+input pitstops_pk_columns_input {
+  driverid: bigint!
+  raceid: bigint!
+  stop: bigint!
 }
 
 """
@@ -4326,7 +4772,7 @@ enum qualifying_constraint {
 }
 
 """
-input type for incrementing integer columne in table "qualifying"
+input type for incrementing integer column in table "qualifying"
 """
 input qualifying_inc_input {
   constructorid: bigint
@@ -4455,6 +4901,13 @@ input qualifying_order_by {
   qualifyid: order_by
   race: races_order_by
   raceid: order_by
+}
+
+"""
+primary key columns input for table: "qualifying"
+"""
+input qualifying_pk_columns_input {
+  qualifyid: bigint!
 }
 
 """
@@ -5630,7 +6083,7 @@ enum races_constraint {
 }
 
 """
-input type for incrementing integer columne in table "races"
+input type for incrementing integer column in table "races"
 """
 input races_inc_input {
   circuitid: bigint
@@ -5763,6 +6216,13 @@ input races_order_by {
   time: order_by
   url: order_by
   year: order_by
+}
+
+"""
+primary key columns input for table: "races"
+"""
+input races_pk_columns_input {
+  raceid: bigint!
 }
 
 """
@@ -5975,7 +6435,7 @@ type results {
   driver: drivers
   driverid: bigint
   fastestlap: String
-  fastestlapspeed: String
+  fastestlapspeed: float8
   fastestlaptime: String
   grid: bigint
   laps: String
@@ -6052,6 +6512,7 @@ input results_arr_rel_insert_input {
 type results_avg_fields {
   constructorid: Float
   driverid: Float
+  fastestlapspeed: Float
   grid: Float
   number: Float
   points: Float
@@ -6067,6 +6528,7 @@ order by avg() on columns of table "results"
 input results_avg_order_by {
   constructorid: order_by
   driverid: order_by
+  fastestlapspeed: order_by
   grid: order_by
   number: order_by
   points: order_by
@@ -6088,7 +6550,7 @@ input results_bool_exp {
   driver: drivers_bool_exp
   driverid: bigint_comparison_exp
   fastestlap: String_comparison_exp
-  fastestlapspeed: String_comparison_exp
+  fastestlapspeed: float8_comparison_exp
   fastestlaptime: String_comparison_exp
   grid: bigint_comparison_exp
   laps: String_comparison_exp
@@ -6116,13 +6578,15 @@ enum results_constraint {
 }
 
 """
-input type for incrementing integer columne in table "results"
+input type for incrementing integer column in table "results"
 """
 input results_inc_input {
   constructorid: bigint
   driverid: bigint
+  fastestlapspeed: float8
   grid: bigint
   number: bigint
+  points: Float
   positionorder: bigint
   raceid: bigint
   resultid: bigint
@@ -6138,7 +6602,7 @@ input results_insert_input {
   driver: drivers_obj_rel_insert_input
   driverid: bigint
   fastestlap: String
-  fastestlapspeed: String
+  fastestlapspeed: float8
   fastestlaptime: String
   grid: bigint
   laps: String
@@ -6162,7 +6626,7 @@ type results_max_fields {
   constructorid: bigint
   driverid: bigint
   fastestlap: String
-  fastestlapspeed: String
+  fastestlapspeed: float8
   fastestlaptime: String
   grid: bigint
   laps: String
@@ -6208,7 +6672,7 @@ type results_min_fields {
   constructorid: bigint
   driverid: bigint
   fastestlap: String
-  fastestlapspeed: String
+  fastestlapspeed: float8
   fastestlaptime: String
   grid: bigint
   laps: String
@@ -6306,6 +6770,13 @@ input results_order_by {
 }
 
 """
+primary key columns input for table: "results"
+"""
+input results_pk_columns_input {
+  resultid: bigint!
+}
+
+"""
 select columns of table "results"
 """
 enum results_select_column {
@@ -6371,7 +6842,7 @@ input results_set_input {
   constructorid: bigint
   driverid: bigint
   fastestlap: String
-  fastestlapspeed: String
+  fastestlapspeed: float8
   fastestlaptime: String
   grid: bigint
   laps: String
@@ -6392,6 +6863,7 @@ input results_set_input {
 type results_stddev_fields {
   constructorid: Float
   driverid: Float
+  fastestlapspeed: Float
   grid: Float
   number: Float
   points: Float
@@ -6407,6 +6879,7 @@ order by stddev() on columns of table "results"
 input results_stddev_order_by {
   constructorid: order_by
   driverid: order_by
+  fastestlapspeed: order_by
   grid: order_by
   number: order_by
   points: order_by
@@ -6420,6 +6893,7 @@ input results_stddev_order_by {
 type results_stddev_pop_fields {
   constructorid: Float
   driverid: Float
+  fastestlapspeed: Float
   grid: Float
   number: Float
   points: Float
@@ -6435,6 +6909,7 @@ order by stddev_pop() on columns of table "results"
 input results_stddev_pop_order_by {
   constructorid: order_by
   driverid: order_by
+  fastestlapspeed: order_by
   grid: order_by
   number: order_by
   points: order_by
@@ -6448,6 +6923,7 @@ input results_stddev_pop_order_by {
 type results_stddev_samp_fields {
   constructorid: Float
   driverid: Float
+  fastestlapspeed: Float
   grid: Float
   number: Float
   points: Float
@@ -6463,6 +6939,7 @@ order by stddev_samp() on columns of table "results"
 input results_stddev_samp_order_by {
   constructorid: order_by
   driverid: order_by
+  fastestlapspeed: order_by
   grid: order_by
   number: order_by
   points: order_by
@@ -6476,6 +6953,7 @@ input results_stddev_samp_order_by {
 type results_sum_fields {
   constructorid: bigint
   driverid: bigint
+  fastestlapspeed: float8
   grid: bigint
   number: bigint
   points: Float
@@ -6491,6 +6969,7 @@ order by sum() on columns of table "results"
 input results_sum_order_by {
   constructorid: order_by
   driverid: order_by
+  fastestlapspeed: order_by
   grid: order_by
   number: order_by
   points: order_by
@@ -6563,6 +7042,7 @@ enum results_update_column {
 type results_var_pop_fields {
   constructorid: Float
   driverid: Float
+  fastestlapspeed: Float
   grid: Float
   number: Float
   points: Float
@@ -6578,6 +7058,7 @@ order by var_pop() on columns of table "results"
 input results_var_pop_order_by {
   constructorid: order_by
   driverid: order_by
+  fastestlapspeed: order_by
   grid: order_by
   number: order_by
   points: order_by
@@ -6591,6 +7072,7 @@ input results_var_pop_order_by {
 type results_var_samp_fields {
   constructorid: Float
   driverid: Float
+  fastestlapspeed: Float
   grid: Float
   number: Float
   points: Float
@@ -6606,6 +7088,7 @@ order by var_samp() on columns of table "results"
 input results_var_samp_order_by {
   constructorid: order_by
   driverid: order_by
+  fastestlapspeed: order_by
   grid: order_by
   number: order_by
   points: order_by
@@ -6619,6 +7102,7 @@ input results_var_samp_order_by {
 type results_variance_fields {
   constructorid: Float
   driverid: Float
+  fastestlapspeed: Float
   grid: Float
   number: Float
   points: Float
@@ -6634,6 +7118,7 @@ order by variance() on columns of table "results"
 input results_variance_order_by {
   constructorid: order_by
   driverid: order_by
+  fastestlapspeed: order_by
   grid: order_by
   number: order_by
   points: order_by
@@ -6769,7 +7254,7 @@ enum seasons_constraint {
 }
 
 """
-input type for incrementing integer columne in table "seasons"
+input type for incrementing integer column in table "seasons"
 """
 input seasons_inc_input {
   year: bigint
@@ -6847,6 +7332,13 @@ input seasons_order_by {
   races_aggregate: races_aggregate_order_by
   url: order_by
   year: order_by
+}
+
+"""
+primary key columns input for table: "seasons"
+"""
+input seasons_pk_columns_input {
+  year: bigint!
 }
 
 """
@@ -7089,7 +7581,7 @@ enum status_constraint {
 }
 
 """
-input type for incrementing integer columne in table "status"
+input type for incrementing integer column in table "status"
 """
 input status_inc_input {
   statusid: bigint
@@ -7167,6 +7659,13 @@ input status_order_by {
   results_aggregate: results_aggregate_order_by
   status: order_by
   statusid: order_by
+}
+
+"""
+primary key columns input for table: "status"
+"""
+input status_pk_columns_input {
+  statusid: bigint!
 }
 
 """

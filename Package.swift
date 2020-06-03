@@ -3,6 +3,9 @@ import PackageDescription
 
 let package = Package(
     name: "ProcessGraphQL",
+    platforms: [
+        .macOS(.v10_15),
+    ],
     products: [
         //        .library(name: "SqlToPostgres", targets: ["SqlToPostgres"]),
         //        .library(name: "LaunchHasura", targets: ["LaunchHasura"])
@@ -36,6 +39,16 @@ let package = Package(
             dependencies: [.product(name: "ArgumentParser", package: "swift-argument-parser"),
             .target(name: "Utilities"),
             .product(name: "ApolloCodegenLib", package: "Apollo")]
+        ),
+        .target(
+            name: "VerifyQueryExecution",
+            dependencies: [.product(name: "ArgumentParser", package: "swift-argument-parser"),
+                           .target(name: "Utilities")]
+        ),
+        .target(
+            name: "SavePostgres",
+            dependencies: [.product(name: "ArgumentParser", package: "swift-argument-parser"),
+                           .target(name: "Utilities")]
         )
     ]
 )

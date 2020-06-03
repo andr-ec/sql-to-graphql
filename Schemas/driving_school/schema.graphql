@@ -210,7 +210,7 @@ enum addresses_constraint {
 }
 
 """
-input type for incrementing integer columne in table "addresses"
+input type for incrementing integer column in table "addresses"
 """
 input addresses_inc_input {
   address_id: bigint
@@ -314,6 +314,13 @@ input addresses_order_by {
   staffs_aggregate: staff_aggregate_order_by
   state_province_county: order_by
   zip_postcode: order_by
+}
+
+"""
+primary key columns input for table: "addresses"
+"""
+input addresses_pk_columns_input {
+  address_id: bigint!
 }
 
 """
@@ -575,9 +582,10 @@ enum customer_payments_constraint {
 }
 
 """
-input type for incrementing integer columne in table "customer_payments"
+input type for incrementing integer column in table "customer_payments"
 """
 input customer_payments_inc_input {
+  amount_payment: float8
   customer_id: bigint
 }
 
@@ -665,6 +673,14 @@ input customer_payments_order_by {
   customer_id: order_by
   datetime_payment: order_by
   payment_method_code: order_by
+}
+
+"""
+primary key columns input for table: "customer_payments"
+"""
+input customer_payments_pk_columns_input {
+  customer_id: bigint!
+  datetime_payment: timestamptz!
 }
 
 """
@@ -998,9 +1014,10 @@ enum customers_constraint {
 }
 
 """
-input type for incrementing integer columne in table "customers"
+input type for incrementing integer column in table "customers"
 """
 input customers_inc_input {
+  amount_outstanding: float8
   customer_address_id: bigint
   customer_id: bigint
 }
@@ -1135,6 +1152,13 @@ input customers_order_by {
   last_name: order_by
   lessons_aggregate: lessons_aggregate_order_by
   phone_number: order_by
+}
+
+"""
+primary key columns input for table: "customers"
+"""
+input customers_pk_columns_input {
+  customer_id: bigint!
 }
 
 """
@@ -1369,7 +1393,7 @@ type lessons {
   lesson_date: timestamptz
   lesson_id: bigint!
   lesson_status_code: String
-  lesson_time: String
+  lesson_time: bigint
   price: float8
 
   """An object relationship"""
@@ -1435,6 +1459,7 @@ input lessons_arr_rel_insert_input {
 type lessons_avg_fields {
   customer_id: Float
   lesson_id: Float
+  lesson_time: Float
   price: Float
   staff_id: Float
   vehicle_id: Float
@@ -1446,6 +1471,7 @@ order by avg() on columns of table "lessons"
 input lessons_avg_order_by {
   customer_id: order_by
   lesson_id: order_by
+  lesson_time: order_by
   price: order_by
   staff_id: order_by
   vehicle_id: order_by
@@ -1463,7 +1489,7 @@ input lessons_bool_exp {
   lesson_date: timestamptz_comparison_exp
   lesson_id: bigint_comparison_exp
   lesson_status_code: String_comparison_exp
-  lesson_time: String_comparison_exp
+  lesson_time: bigint_comparison_exp
   price: float8_comparison_exp
   staff: staff_bool_exp
   staff_id: bigint_comparison_exp
@@ -1480,11 +1506,13 @@ enum lessons_constraint {
 }
 
 """
-input type for incrementing integer columne in table "lessons"
+input type for incrementing integer column in table "lessons"
 """
 input lessons_inc_input {
   customer_id: bigint
   lesson_id: bigint
+  lesson_time: bigint
+  price: float8
   staff_id: bigint
   vehicle_id: bigint
 }
@@ -1498,7 +1526,7 @@ input lessons_insert_input {
   lesson_date: timestamptz
   lesson_id: bigint
   lesson_status_code: String
-  lesson_time: String
+  lesson_time: bigint
   price: float8
   staff: staff_obj_rel_insert_input
   staff_id: bigint
@@ -1512,7 +1540,7 @@ type lessons_max_fields {
   lesson_date: timestamptz
   lesson_id: bigint
   lesson_status_code: String
-  lesson_time: String
+  lesson_time: bigint
   price: float8
   staff_id: bigint
   vehicle_id: bigint
@@ -1538,7 +1566,7 @@ type lessons_min_fields {
   lesson_date: timestamptz
   lesson_id: bigint
   lesson_status_code: String
-  lesson_time: String
+  lesson_time: bigint
   price: float8
   staff_id: bigint
   vehicle_id: bigint
@@ -1604,6 +1632,13 @@ input lessons_order_by {
 }
 
 """
+primary key columns input for table: "lessons"
+"""
+input lessons_pk_columns_input {
+  lesson_id: bigint!
+}
+
+"""
 select columns of table "lessons"
 """
 enum lessons_select_column {
@@ -1640,7 +1675,7 @@ input lessons_set_input {
   lesson_date: timestamptz
   lesson_id: bigint
   lesson_status_code: String
-  lesson_time: String
+  lesson_time: bigint
   price: float8
   staff_id: bigint
   vehicle_id: bigint
@@ -1650,6 +1685,7 @@ input lessons_set_input {
 type lessons_stddev_fields {
   customer_id: Float
   lesson_id: Float
+  lesson_time: Float
   price: Float
   staff_id: Float
   vehicle_id: Float
@@ -1661,6 +1697,7 @@ order by stddev() on columns of table "lessons"
 input lessons_stddev_order_by {
   customer_id: order_by
   lesson_id: order_by
+  lesson_time: order_by
   price: order_by
   staff_id: order_by
   vehicle_id: order_by
@@ -1670,6 +1707,7 @@ input lessons_stddev_order_by {
 type lessons_stddev_pop_fields {
   customer_id: Float
   lesson_id: Float
+  lesson_time: Float
   price: Float
   staff_id: Float
   vehicle_id: Float
@@ -1681,6 +1719,7 @@ order by stddev_pop() on columns of table "lessons"
 input lessons_stddev_pop_order_by {
   customer_id: order_by
   lesson_id: order_by
+  lesson_time: order_by
   price: order_by
   staff_id: order_by
   vehicle_id: order_by
@@ -1690,6 +1729,7 @@ input lessons_stddev_pop_order_by {
 type lessons_stddev_samp_fields {
   customer_id: Float
   lesson_id: Float
+  lesson_time: Float
   price: Float
   staff_id: Float
   vehicle_id: Float
@@ -1701,6 +1741,7 @@ order by stddev_samp() on columns of table "lessons"
 input lessons_stddev_samp_order_by {
   customer_id: order_by
   lesson_id: order_by
+  lesson_time: order_by
   price: order_by
   staff_id: order_by
   vehicle_id: order_by
@@ -1710,6 +1751,7 @@ input lessons_stddev_samp_order_by {
 type lessons_sum_fields {
   customer_id: bigint
   lesson_id: bigint
+  lesson_time: bigint
   price: float8
   staff_id: bigint
   vehicle_id: bigint
@@ -1721,6 +1763,7 @@ order by sum() on columns of table "lessons"
 input lessons_sum_order_by {
   customer_id: order_by
   lesson_id: order_by
+  lesson_time: order_by
   price: order_by
   staff_id: order_by
   vehicle_id: order_by
@@ -1759,6 +1802,7 @@ enum lessons_update_column {
 type lessons_var_pop_fields {
   customer_id: Float
   lesson_id: Float
+  lesson_time: Float
   price: Float
   staff_id: Float
   vehicle_id: Float
@@ -1770,6 +1814,7 @@ order by var_pop() on columns of table "lessons"
 input lessons_var_pop_order_by {
   customer_id: order_by
   lesson_id: order_by
+  lesson_time: order_by
   price: order_by
   staff_id: order_by
   vehicle_id: order_by
@@ -1779,6 +1824,7 @@ input lessons_var_pop_order_by {
 type lessons_var_samp_fields {
   customer_id: Float
   lesson_id: Float
+  lesson_time: Float
   price: Float
   staff_id: Float
   vehicle_id: Float
@@ -1790,6 +1836,7 @@ order by var_samp() on columns of table "lessons"
 input lessons_var_samp_order_by {
   customer_id: order_by
   lesson_id: order_by
+  lesson_time: order_by
   price: order_by
   staff_id: order_by
   vehicle_id: order_by
@@ -1799,6 +1846,7 @@ input lessons_var_samp_order_by {
 type lessons_variance_fields {
   customer_id: Float
   lesson_id: Float
+  lesson_time: Float
   price: Float
   staff_id: Float
   vehicle_id: Float
@@ -1810,6 +1858,7 @@ order by variance() on columns of table "lessons"
 input lessons_variance_order_by {
   customer_id: order_by
   lesson_id: order_by
+  lesson_time: order_by
   price: order_by
   staff_id: order_by
   vehicle_id: order_by
@@ -1826,12 +1875,22 @@ type mutation_root {
   ): addresses_mutation_response
 
   """
+  delete single row from the table: "addresses"
+  """
+  delete_addresses_by_pk(address_id: bigint!): addresses
+
+  """
   delete data from the table: "customer_payments"
   """
   delete_customer_payments(
     """filter the rows which have to be deleted"""
     where: customer_payments_bool_exp!
   ): customer_payments_mutation_response
+
+  """
+  delete single row from the table: "customer_payments"
+  """
+  delete_customer_payments_by_pk(customer_id: bigint!, datetime_payment: timestamptz!): customer_payments
 
   """
   delete data from the table: "customers"
@@ -1842,12 +1901,22 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  delete single row from the table: "customers"
+  """
+  delete_customers_by_pk(customer_id: bigint!): customers
+
+  """
   delete data from the table: "lessons"
   """
   delete_lessons(
     """filter the rows which have to be deleted"""
     where: lessons_bool_exp!
   ): lessons_mutation_response
+
+  """
+  delete single row from the table: "lessons"
+  """
+  delete_lessons_by_pk(lesson_id: bigint!): lessons
 
   """
   delete data from the table: "staff"
@@ -1858,12 +1927,22 @@ type mutation_root {
   ): staff_mutation_response
 
   """
+  delete single row from the table: "staff"
+  """
+  delete_staff_by_pk(staff_id: bigint!): staff
+
+  """
   delete data from the table: "vehicles"
   """
   delete_vehicles(
     """filter the rows which have to be deleted"""
     where: vehicles_bool_exp!
   ): vehicles_mutation_response
+
+  """
+  delete single row from the table: "vehicles"
+  """
+  delete_vehicles_by_pk(vehicle_id: bigint!): vehicles
 
   """
   insert data into the table: "addresses"
@@ -1877,6 +1956,17 @@ type mutation_root {
   ): addresses_mutation_response
 
   """
+  insert a single row into the table: "addresses"
+  """
+  insert_addresses_one(
+    """the row to be inserted"""
+    object: addresses_insert_input!
+
+    """on conflict condition"""
+    on_conflict: addresses_on_conflict
+  ): addresses
+
+  """
   insert data into the table: "customer_payments"
   """
   insert_customer_payments(
@@ -1886,6 +1976,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: customer_payments_on_conflict
   ): customer_payments_mutation_response
+
+  """
+  insert a single row into the table: "customer_payments"
+  """
+  insert_customer_payments_one(
+    """the row to be inserted"""
+    object: customer_payments_insert_input!
+
+    """on conflict condition"""
+    on_conflict: customer_payments_on_conflict
+  ): customer_payments
 
   """
   insert data into the table: "customers"
@@ -1899,6 +2000,17 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  insert a single row into the table: "customers"
+  """
+  insert_customers_one(
+    """the row to be inserted"""
+    object: customers_insert_input!
+
+    """on conflict condition"""
+    on_conflict: customers_on_conflict
+  ): customers
+
+  """
   insert data into the table: "lessons"
   """
   insert_lessons(
@@ -1908,6 +2020,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: lessons_on_conflict
   ): lessons_mutation_response
+
+  """
+  insert a single row into the table: "lessons"
+  """
+  insert_lessons_one(
+    """the row to be inserted"""
+    object: lessons_insert_input!
+
+    """on conflict condition"""
+    on_conflict: lessons_on_conflict
+  ): lessons
 
   """
   insert data into the table: "staff"
@@ -1921,6 +2044,17 @@ type mutation_root {
   ): staff_mutation_response
 
   """
+  insert a single row into the table: "staff"
+  """
+  insert_staff_one(
+    """the row to be inserted"""
+    object: staff_insert_input!
+
+    """on conflict condition"""
+    on_conflict: staff_on_conflict
+  ): staff
+
+  """
   insert data into the table: "vehicles"
   """
   insert_vehicles(
@@ -1930,6 +2064,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: vehicles_on_conflict
   ): vehicles_mutation_response
+
+  """
+  insert a single row into the table: "vehicles"
+  """
+  insert_vehicles_one(
+    """the row to be inserted"""
+    object: vehicles_insert_input!
+
+    """on conflict condition"""
+    on_conflict: vehicles_on_conflict
+  ): vehicles
 
   """
   update data of the table: "addresses"
@@ -1946,6 +2091,18 @@ type mutation_root {
   ): addresses_mutation_response
 
   """
+  update single row of the table: "addresses"
+  """
+  update_addresses_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: addresses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: addresses_set_input
+    pk_columns: addresses_pk_columns_input!
+  ): addresses
+
+  """
   update data of the table: "customer_payments"
   """
   update_customer_payments(
@@ -1958,6 +2115,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: customer_payments_bool_exp!
   ): customer_payments_mutation_response
+
+  """
+  update single row of the table: "customer_payments"
+  """
+  update_customer_payments_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customer_payments_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customer_payments_set_input
+    pk_columns: customer_payments_pk_columns_input!
+  ): customer_payments
 
   """
   update data of the table: "customers"
@@ -1974,6 +2143,18 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  update single row of the table: "customers"
+  """
+  update_customers_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customers_set_input
+    pk_columns: customers_pk_columns_input!
+  ): customers
+
+  """
   update data of the table: "lessons"
   """
   update_lessons(
@@ -1986,6 +2167,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: lessons_bool_exp!
   ): lessons_mutation_response
+
+  """
+  update single row of the table: "lessons"
+  """
+  update_lessons_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: lessons_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: lessons_set_input
+    pk_columns: lessons_pk_columns_input!
+  ): lessons
 
   """
   update data of the table: "staff"
@@ -2002,6 +2195,18 @@ type mutation_root {
   ): staff_mutation_response
 
   """
+  update single row of the table: "staff"
+  """
+  update_staff_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: staff_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: staff_set_input
+    pk_columns: staff_pk_columns_input!
+  ): staff
+
+  """
   update data of the table: "vehicles"
   """
   update_vehicles(
@@ -2014,6 +2219,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: vehicles_bool_exp!
   ): vehicles_mutation_response
+
+  """
+  update single row of the table: "vehicles"
+  """
+  update_vehicles_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: vehicles_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: vehicles_set_input
+    pk_columns: vehicles_pk_columns_input!
+  ): vehicles
 }
 
 """column ordering options"""
@@ -2446,7 +2663,7 @@ enum staff_constraint {
 }
 
 """
-input type for incrementing integer columne in table "staff"
+input type for incrementing integer column in table "staff"
 """
 input staff_inc_input {
   staff_address_id: bigint
@@ -2569,6 +2786,13 @@ input staff_order_by {
   nickname: order_by
   staff_address_id: order_by
   staff_id: order_by
+}
+
+"""
+primary key columns input for table: "staff"
+"""
+input staff_pk_columns_input {
+  staff_id: bigint!
 }
 
 """
@@ -3175,7 +3399,7 @@ enum vehicles_constraint {
 }
 
 """
-input type for incrementing integer columne in table "vehicles"
+input type for incrementing integer column in table "vehicles"
 """
 input vehicles_inc_input {
   vehicle_id: bigint
@@ -3253,6 +3477,13 @@ input vehicles_order_by {
   lessons_aggregate: lessons_aggregate_order_by
   vehicle_details: order_by
   vehicle_id: order_by
+}
+
+"""
+primary key columns input for table: "vehicles"
+"""
+input vehicles_pk_columns_input {
+  vehicle_id: bigint!
 }
 
 """

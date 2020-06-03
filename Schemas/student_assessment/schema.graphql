@@ -175,7 +175,7 @@ enum addresses_constraint {
 }
 
 """
-input type for incrementing integer columne in table "addresses"
+input type for incrementing integer column in table "addresses"
 """
 input addresses_inc_input {
   address_id: bigint
@@ -283,6 +283,13 @@ input addresses_order_by {
   people_addresses_aggregate: people_addresses_aggregate_order_by
   state_province_county: order_by
   zip_postcode: order_by
+}
+
+"""
+primary key columns input for table: "addresses"
+"""
+input addresses_pk_columns_input {
+  address_id: bigint!
 }
 
 """
@@ -549,7 +556,7 @@ enum candidate_assessments_constraint {
 }
 
 """
-input type for incrementing integer columne in table "candidate_assessments"
+input type for incrementing integer column in table "candidate_assessments"
 """
 input candidate_assessments_inc_input {
   candidate_id: bigint
@@ -639,6 +646,14 @@ input candidate_assessments_order_by {
   candidate: candidates_order_by
   candidate_id: order_by
   qualification: order_by
+}
+
+"""
+primary key columns input for table: "candidate_assessments"
+"""
+input candidate_assessments_pk_columns_input {
+  candidate_id: bigint!
+  qualification: String!
 }
 
 """
@@ -899,7 +914,7 @@ enum candidates_constraint {
 }
 
 """
-input type for incrementing integer columne in table "candidates"
+input type for incrementing integer column in table "candidates"
 """
 input candidates_inc_input {
   candidate_id: bigint
@@ -979,6 +994,13 @@ input candidates_order_by {
   candidate_details: order_by
   candidate_id: order_by
   person: people_order_by
+}
+
+"""
+primary key columns input for table: "candidates"
+"""
+input candidates_pk_columns_input {
+  candidate_id: bigint!
 }
 
 """
@@ -1263,7 +1285,7 @@ enum courses_constraint {
 }
 
 """
-input type for incrementing integer columne in table "courses"
+input type for incrementing integer column in table "courses"
 """
 input courses_inc_input {
   course_id: bigint
@@ -1355,6 +1377,13 @@ input courses_order_by {
   other_details: order_by
   student_course_attendances_aggregate: student_course_attendance_aggregate_order_by
   student_course_registrations_aggregate: student_course_registrations_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "courses"
+"""
+input courses_pk_columns_input {
+  course_id: bigint!
 }
 
 """
@@ -1496,12 +1525,22 @@ type mutation_root {
   ): addresses_mutation_response
 
   """
+  delete single row from the table: "addresses"
+  """
+  delete_addresses_by_pk(address_id: bigint!): addresses
+
+  """
   delete data from the table: "candidate_assessments"
   """
   delete_candidate_assessments(
     """filter the rows which have to be deleted"""
     where: candidate_assessments_bool_exp!
   ): candidate_assessments_mutation_response
+
+  """
+  delete single row from the table: "candidate_assessments"
+  """
+  delete_candidate_assessments_by_pk(candidate_id: bigint!, qualification: String!): candidate_assessments
 
   """
   delete data from the table: "candidates"
@@ -1512,12 +1551,22 @@ type mutation_root {
   ): candidates_mutation_response
 
   """
+  delete single row from the table: "candidates"
+  """
+  delete_candidates_by_pk(candidate_id: bigint!): candidates
+
+  """
   delete data from the table: "courses"
   """
   delete_courses(
     """filter the rows which have to be deleted"""
     where: courses_bool_exp!
   ): courses_mutation_response
+
+  """
+  delete single row from the table: "courses"
+  """
+  delete_courses_by_pk(course_id: bigint!): courses
 
   """
   delete data from the table: "people"
@@ -1536,12 +1585,27 @@ type mutation_root {
   ): people_addresses_mutation_response
 
   """
+  delete single row from the table: "people_addresses"
+  """
+  delete_people_addresses_by_pk(person_address_id: bigint!): people_addresses
+
+  """
+  delete single row from the table: "people"
+  """
+  delete_people_by_pk(person_id: bigint!): people
+
+  """
   delete data from the table: "student_course_attendance"
   """
   delete_student_course_attendance(
     """filter the rows which have to be deleted"""
     where: student_course_attendance_bool_exp!
   ): student_course_attendance_mutation_response
+
+  """
+  delete single row from the table: "student_course_attendance"
+  """
+  delete_student_course_attendance_by_pk(course_id: bigint!, student_id: bigint!): student_course_attendance
 
   """
   delete data from the table: "student_course_registrations"
@@ -1552,12 +1616,22 @@ type mutation_root {
   ): student_course_registrations_mutation_response
 
   """
+  delete single row from the table: "student_course_registrations"
+  """
+  delete_student_course_registrations_by_pk(course_id: bigint!, student_id: bigint!): student_course_registrations
+
+  """
   delete data from the table: "students"
   """
   delete_students(
     """filter the rows which have to be deleted"""
     where: students_bool_exp!
   ): students_mutation_response
+
+  """
+  delete single row from the table: "students"
+  """
+  delete_students_by_pk(student_id: bigint!): students
 
   """
   insert data into the table: "addresses"
@@ -1571,6 +1645,17 @@ type mutation_root {
   ): addresses_mutation_response
 
   """
+  insert a single row into the table: "addresses"
+  """
+  insert_addresses_one(
+    """the row to be inserted"""
+    object: addresses_insert_input!
+
+    """on conflict condition"""
+    on_conflict: addresses_on_conflict
+  ): addresses
+
+  """
   insert data into the table: "candidate_assessments"
   """
   insert_candidate_assessments(
@@ -1580,6 +1665,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: candidate_assessments_on_conflict
   ): candidate_assessments_mutation_response
+
+  """
+  insert a single row into the table: "candidate_assessments"
+  """
+  insert_candidate_assessments_one(
+    """the row to be inserted"""
+    object: candidate_assessments_insert_input!
+
+    """on conflict condition"""
+    on_conflict: candidate_assessments_on_conflict
+  ): candidate_assessments
 
   """
   insert data into the table: "candidates"
@@ -1593,6 +1689,17 @@ type mutation_root {
   ): candidates_mutation_response
 
   """
+  insert a single row into the table: "candidates"
+  """
+  insert_candidates_one(
+    """the row to be inserted"""
+    object: candidates_insert_input!
+
+    """on conflict condition"""
+    on_conflict: candidates_on_conflict
+  ): candidates
+
+  """
   insert data into the table: "courses"
   """
   insert_courses(
@@ -1602,6 +1709,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: courses_on_conflict
   ): courses_mutation_response
+
+  """
+  insert a single row into the table: "courses"
+  """
+  insert_courses_one(
+    """the row to be inserted"""
+    object: courses_insert_input!
+
+    """on conflict condition"""
+    on_conflict: courses_on_conflict
+  ): courses
 
   """
   insert data into the table: "people"
@@ -1626,6 +1744,28 @@ type mutation_root {
   ): people_addresses_mutation_response
 
   """
+  insert a single row into the table: "people_addresses"
+  """
+  insert_people_addresses_one(
+    """the row to be inserted"""
+    object: people_addresses_insert_input!
+
+    """on conflict condition"""
+    on_conflict: people_addresses_on_conflict
+  ): people_addresses
+
+  """
+  insert a single row into the table: "people"
+  """
+  insert_people_one(
+    """the row to be inserted"""
+    object: people_insert_input!
+
+    """on conflict condition"""
+    on_conflict: people_on_conflict
+  ): people
+
+  """
   insert data into the table: "student_course_attendance"
   """
   insert_student_course_attendance(
@@ -1635,6 +1775,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: student_course_attendance_on_conflict
   ): student_course_attendance_mutation_response
+
+  """
+  insert a single row into the table: "student_course_attendance"
+  """
+  insert_student_course_attendance_one(
+    """the row to be inserted"""
+    object: student_course_attendance_insert_input!
+
+    """on conflict condition"""
+    on_conflict: student_course_attendance_on_conflict
+  ): student_course_attendance
 
   """
   insert data into the table: "student_course_registrations"
@@ -1648,6 +1799,17 @@ type mutation_root {
   ): student_course_registrations_mutation_response
 
   """
+  insert a single row into the table: "student_course_registrations"
+  """
+  insert_student_course_registrations_one(
+    """the row to be inserted"""
+    object: student_course_registrations_insert_input!
+
+    """on conflict condition"""
+    on_conflict: student_course_registrations_on_conflict
+  ): student_course_registrations
+
+  """
   insert data into the table: "students"
   """
   insert_students(
@@ -1657,6 +1819,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: students_on_conflict
   ): students_mutation_response
+
+  """
+  insert a single row into the table: "students"
+  """
+  insert_students_one(
+    """the row to be inserted"""
+    object: students_insert_input!
+
+    """on conflict condition"""
+    on_conflict: students_on_conflict
+  ): students
 
   """
   update data of the table: "addresses"
@@ -1673,6 +1846,18 @@ type mutation_root {
   ): addresses_mutation_response
 
   """
+  update single row of the table: "addresses"
+  """
+  update_addresses_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: addresses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: addresses_set_input
+    pk_columns: addresses_pk_columns_input!
+  ): addresses
+
+  """
   update data of the table: "candidate_assessments"
   """
   update_candidate_assessments(
@@ -1685,6 +1870,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: candidate_assessments_bool_exp!
   ): candidate_assessments_mutation_response
+
+  """
+  update single row of the table: "candidate_assessments"
+  """
+  update_candidate_assessments_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: candidate_assessments_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: candidate_assessments_set_input
+    pk_columns: candidate_assessments_pk_columns_input!
+  ): candidate_assessments
 
   """
   update data of the table: "candidates"
@@ -1701,6 +1898,18 @@ type mutation_root {
   ): candidates_mutation_response
 
   """
+  update single row of the table: "candidates"
+  """
+  update_candidates_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: candidates_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: candidates_set_input
+    pk_columns: candidates_pk_columns_input!
+  ): candidates
+
+  """
   update data of the table: "courses"
   """
   update_courses(
@@ -1713,6 +1922,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: courses_bool_exp!
   ): courses_mutation_response
+
+  """
+  update single row of the table: "courses"
+  """
+  update_courses_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: courses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: courses_set_input
+    pk_columns: courses_pk_columns_input!
+  ): courses
 
   """
   update data of the table: "people"
@@ -1743,6 +1964,30 @@ type mutation_root {
   ): people_addresses_mutation_response
 
   """
+  update single row of the table: "people_addresses"
+  """
+  update_people_addresses_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: people_addresses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: people_addresses_set_input
+    pk_columns: people_addresses_pk_columns_input!
+  ): people_addresses
+
+  """
+  update single row of the table: "people"
+  """
+  update_people_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: people_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: people_set_input
+    pk_columns: people_pk_columns_input!
+  ): people
+
+  """
   update data of the table: "student_course_attendance"
   """
   update_student_course_attendance(
@@ -1755,6 +2000,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: student_course_attendance_bool_exp!
   ): student_course_attendance_mutation_response
+
+  """
+  update single row of the table: "student_course_attendance"
+  """
+  update_student_course_attendance_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: student_course_attendance_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: student_course_attendance_set_input
+    pk_columns: student_course_attendance_pk_columns_input!
+  ): student_course_attendance
 
   """
   update data of the table: "student_course_registrations"
@@ -1771,6 +2028,18 @@ type mutation_root {
   ): student_course_registrations_mutation_response
 
   """
+  update single row of the table: "student_course_registrations"
+  """
+  update_student_course_registrations_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: student_course_registrations_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: student_course_registrations_set_input
+    pk_columns: student_course_registrations_pk_columns_input!
+  ): student_course_registrations
+
+  """
   update data of the table: "students"
   """
   update_students(
@@ -1783,6 +2052,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: students_bool_exp!
   ): students_mutation_response
+
+  """
+  update single row of the table: "students"
+  """
+  update_students_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: students_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: students_set_input
+    pk_columns: students_pk_columns_input!
+  ): students
 }
 
 """column ordering options"""
@@ -2034,7 +2315,7 @@ enum people_addresses_constraint {
 }
 
 """
-input type for incrementing integer columne in table "people_addresses"
+input type for incrementing integer column in table "people_addresses"
 """
 input people_addresses_inc_input {
   address_id: bigint
@@ -2134,6 +2415,13 @@ input people_addresses_order_by {
   person: people_order_by
   person_address_id: order_by
   person_id: order_by
+}
+
+"""
+primary key columns input for table: "people_addresses"
+"""
+input people_addresses_pk_columns_input {
+  person_address_id: bigint!
 }
 
 """
@@ -2390,7 +2678,7 @@ enum people_constraint {
 }
 
 """
-input type for incrementing integer columne in table "people"
+input type for incrementing integer column in table "people"
 """
 input people_inc_input {
   person_id: bigint
@@ -2508,6 +2796,13 @@ input people_order_by {
   people_addresses_aggregate: people_addresses_aggregate_order_by
   person_id: order_by
   students_aggregate: students_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "people"
+"""
+input people_pk_columns_input {
+  person_id: bigint!
 }
 
 """
@@ -3190,7 +3485,7 @@ enum student_course_attendance_constraint {
 }
 
 """
-input type for incrementing integer columne in table "student_course_attendance"
+input type for incrementing integer column in table "student_course_attendance"
 """
 input student_course_attendance_inc_input {
   course_id: bigint
@@ -3279,6 +3574,14 @@ input student_course_attendance_order_by {
   student: students_order_by
   student_course_registration: student_course_registrations_order_by
   student_id: order_by
+}
+
+"""
+primary key columns input for table: "student_course_attendance"
+"""
+input student_course_attendance_pk_columns_input {
+  course_id: bigint!
+  student_id: bigint!
 }
 
 """
@@ -3555,7 +3858,7 @@ enum student_course_registrations_constraint {
 }
 
 """
-input type for incrementing integer columne in table "student_course_registrations"
+input type for incrementing integer column in table "student_course_registrations"
 """
 input student_course_registrations_inc_input {
   course_id: bigint
@@ -3644,6 +3947,14 @@ input student_course_registrations_order_by {
   student: students_order_by
   student_course_attendances_aggregate: student_course_attendance_aggregate_order_by
   student_id: order_by
+}
+
+"""
+primary key columns input for table: "student_course_registrations"
+"""
+input student_course_registrations_pk_columns_input {
+  course_id: bigint!
+  student_id: bigint!
 }
 
 """
@@ -3948,7 +4259,7 @@ enum students_constraint {
 }
 
 """
-input type for incrementing integer columne in table "students"
+input type for incrementing integer column in table "students"
 """
 input students_inc_input {
   student_id: bigint
@@ -4030,6 +4341,13 @@ input students_order_by {
   student_course_registrations_aggregate: student_course_registrations_aggregate_order_by
   student_details: order_by
   student_id: order_by
+}
+
+"""
+primary key columns input for table: "students"
+"""
+input students_pk_columns_input {
+  student_id: bigint!
 }
 
 """

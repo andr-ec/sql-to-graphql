@@ -175,10 +175,12 @@ enum camera_lens_constraint {
 }
 
 """
-input type for incrementing integer columne in table "camera_lens"
+input type for incrementing integer column in table "camera_lens"
 """
 input camera_lens_inc_input {
+  focal_length_mm: Float
   id: Int
+  max_aperture: Float
 }
 
 """
@@ -271,6 +273,13 @@ input camera_lens_order_by {
   max_aperture: order_by
   name: order_by
   photos_aggregate: photos_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "camera_lens"
+"""
+input camera_lens_pk_columns_input {
+  id: Int!
 }
 
 """
@@ -605,10 +614,12 @@ enum mountain_constraint {
 }
 
 """
-input type for incrementing integer columne in table "mountain"
+input type for incrementing integer column in table "mountain"
 """
 input mountain_inc_input {
+  height: Float
   id: Int
+  prominence: Float
 }
 
 """
@@ -707,6 +718,13 @@ input mountain_order_by {
   photos_aggregate: photos_aggregate_order_by
   prominence: order_by
   range: order_by
+}
+
+"""
+primary key columns input for table: "mountain"
+"""
+input mountain_pk_columns_input {
+  id: Int!
 }
 
 """
@@ -890,6 +908,11 @@ type mutation_root {
   ): camera_lens_mutation_response
 
   """
+  delete single row from the table: "camera_lens"
+  """
+  delete_camera_lens_by_pk(id: Int!): camera_lens
+
+  """
   delete data from the table: "mountain"
   """
   delete_mountain(
@@ -898,12 +921,22 @@ type mutation_root {
   ): mountain_mutation_response
 
   """
+  delete single row from the table: "mountain"
+  """
+  delete_mountain_by_pk(id: Int!): mountain
+
+  """
   delete data from the table: "photos"
   """
   delete_photos(
     """filter the rows which have to be deleted"""
     where: photos_bool_exp!
   ): photos_mutation_response
+
+  """
+  delete single row from the table: "photos"
+  """
+  delete_photos_by_pk(id: Int!): photos
 
   """
   insert data into the table: "camera_lens"
@@ -917,6 +950,17 @@ type mutation_root {
   ): camera_lens_mutation_response
 
   """
+  insert a single row into the table: "camera_lens"
+  """
+  insert_camera_lens_one(
+    """the row to be inserted"""
+    object: camera_lens_insert_input!
+
+    """on conflict condition"""
+    on_conflict: camera_lens_on_conflict
+  ): camera_lens
+
+  """
   insert data into the table: "mountain"
   """
   insert_mountain(
@@ -928,6 +972,17 @@ type mutation_root {
   ): mountain_mutation_response
 
   """
+  insert a single row into the table: "mountain"
+  """
+  insert_mountain_one(
+    """the row to be inserted"""
+    object: mountain_insert_input!
+
+    """on conflict condition"""
+    on_conflict: mountain_on_conflict
+  ): mountain
+
+  """
   insert data into the table: "photos"
   """
   insert_photos(
@@ -937,6 +992,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: photos_on_conflict
   ): photos_mutation_response
+
+  """
+  insert a single row into the table: "photos"
+  """
+  insert_photos_one(
+    """the row to be inserted"""
+    object: photos_insert_input!
+
+    """on conflict condition"""
+    on_conflict: photos_on_conflict
+  ): photos
 
   """
   update data of the table: "camera_lens"
@@ -953,6 +1019,18 @@ type mutation_root {
   ): camera_lens_mutation_response
 
   """
+  update single row of the table: "camera_lens"
+  """
+  update_camera_lens_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: camera_lens_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: camera_lens_set_input
+    pk_columns: camera_lens_pk_columns_input!
+  ): camera_lens
+
+  """
   update data of the table: "mountain"
   """
   update_mountain(
@@ -967,6 +1045,18 @@ type mutation_root {
   ): mountain_mutation_response
 
   """
+  update single row of the table: "mountain"
+  """
+  update_mountain_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: mountain_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: mountain_set_input
+    pk_columns: mountain_pk_columns_input!
+  ): mountain
+
+  """
   update data of the table: "photos"
   """
   update_photos(
@@ -979,6 +1069,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: photos_bool_exp!
   ): photos_mutation_response
+
+  """
+  update single row of the table: "photos"
+  """
+  update_photos_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: photos_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: photos_set_input
+    pk_columns: photos_pk_columns_input!
+  ): photos
 }
 
 """column ordering options"""
@@ -1109,7 +1211,7 @@ enum photos_constraint {
 }
 
 """
-input type for incrementing integer columne in table "photos"
+input type for incrementing integer column in table "photos"
 """
 input photos_inc_input {
   camera_lens_id: Int
@@ -1209,6 +1311,13 @@ input photos_order_by {
   mountain: mountain_order_by
   mountain_id: order_by
   name: order_by
+}
+
+"""
+primary key columns input for table: "photos"
+"""
+input photos_pk_columns_input {
+  id: Int!
 }
 
 """

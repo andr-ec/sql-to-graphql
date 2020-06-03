@@ -173,7 +173,7 @@ enum addresses_constraint {
 }
 
 """
-input type for incrementing integer columne in table "addresses"
+input type for incrementing integer column in table "addresses"
 """
 input addresses_inc_input {
   address_id: bigint
@@ -275,6 +275,13 @@ input addresses_order_by {
   state_province_county: order_by
   town_city: order_by
   zip_postcode: order_by
+}
+
+"""
+primary key columns input for table: "addresses"
+"""
+input addresses_pk_columns_input {
+  address_id: bigint!
 }
 
 """
@@ -577,7 +584,7 @@ enum forms_constraint {
 }
 
 """
-input type for incrementing integer columne in table "forms"
+input type for incrementing integer column in table "forms"
 """
 input forms_inc_input {
   form_id: bigint
@@ -682,6 +689,13 @@ input forms_order_by {
   party_forms_aggregate: party_forms_aggregate_order_by
   service: services_order_by
   service_id: order_by
+}
+
+"""
+primary key columns input for table: "forms"
+"""
+input forms_pk_columns_input {
+  form_id: bigint!
 }
 
 """
@@ -977,7 +991,7 @@ enum individuals_constraint {
 }
 
 """
-input type for incrementing integer columne in table "individuals"
+input type for incrementing integer column in table "individuals"
 """
 input individuals_inc_input {
   individual_id: bigint
@@ -1085,6 +1099,13 @@ input individuals_order_by {
   individual_middle_name: order_by
   inidividual_phone: order_by
   organization_contact_individuals_aggregate: organization_contact_individuals_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "individuals"
+"""
+input individuals_pk_columns_input {
+  individual_id: bigint!
 }
 
 """
@@ -1247,12 +1268,22 @@ type mutation_root {
   ): addresses_mutation_response
 
   """
+  delete single row from the table: "addresses"
+  """
+  delete_addresses_by_pk(address_id: bigint!): addresses
+
+  """
   delete data from the table: "forms"
   """
   delete_forms(
     """filter the rows which have to be deleted"""
     where: forms_bool_exp!
   ): forms_mutation_response
+
+  """
+  delete single row from the table: "forms"
+  """
+  delete_forms_by_pk(form_id: bigint!): forms
 
   """
   delete data from the table: "individuals"
@@ -1263,12 +1294,22 @@ type mutation_root {
   ): individuals_mutation_response
 
   """
+  delete single row from the table: "individuals"
+  """
+  delete_individuals_by_pk(individual_id: bigint!): individuals
+
+  """
   delete data from the table: "organization_contact_individuals"
   """
   delete_organization_contact_individuals(
     """filter the rows which have to be deleted"""
     where: organization_contact_individuals_bool_exp!
   ): organization_contact_individuals_mutation_response
+
+  """
+  delete single row from the table: "organization_contact_individuals"
+  """
+  delete_organization_contact_individuals_by_pk(individual_id: bigint!, organization_id: bigint!): organization_contact_individuals
 
   """
   delete data from the table: "organizations"
@@ -1279,12 +1320,22 @@ type mutation_root {
   ): organizations_mutation_response
 
   """
+  delete single row from the table: "organizations"
+  """
+  delete_organizations_by_pk(organization_id: bigint!): organizations
+
+  """
   delete data from the table: "parties"
   """
   delete_parties(
     """filter the rows which have to be deleted"""
     where: parties_bool_exp!
   ): parties_mutation_response
+
+  """
+  delete single row from the table: "parties"
+  """
+  delete_parties_by_pk(party_id: bigint!): parties
 
   """
   delete data from the table: "party_addresses"
@@ -1295,12 +1346,22 @@ type mutation_root {
   ): party_addresses_mutation_response
 
   """
+  delete single row from the table: "party_addresses"
+  """
+  delete_party_addresses_by_pk(address_id: bigint!, party_id: bigint!): party_addresses
+
+  """
   delete data from the table: "party_forms"
   """
   delete_party_forms(
     """filter the rows which have to be deleted"""
     where: party_forms_bool_exp!
   ): party_forms_mutation_response
+
+  """
+  delete single row from the table: "party_forms"
+  """
+  delete_party_forms_by_pk(form_id: bigint!, party_id: bigint!): party_forms
 
   """
   delete data from the table: "party_services"
@@ -1319,6 +1380,11 @@ type mutation_root {
   ): services_mutation_response
 
   """
+  delete single row from the table: "services"
+  """
+  delete_services_by_pk(service_id: bigint!): services
+
+  """
   insert data into the table: "addresses"
   """
   insert_addresses(
@@ -1328,6 +1394,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: addresses_on_conflict
   ): addresses_mutation_response
+
+  """
+  insert a single row into the table: "addresses"
+  """
+  insert_addresses_one(
+    """the row to be inserted"""
+    object: addresses_insert_input!
+
+    """on conflict condition"""
+    on_conflict: addresses_on_conflict
+  ): addresses
 
   """
   insert data into the table: "forms"
@@ -1341,6 +1418,17 @@ type mutation_root {
   ): forms_mutation_response
 
   """
+  insert a single row into the table: "forms"
+  """
+  insert_forms_one(
+    """the row to be inserted"""
+    object: forms_insert_input!
+
+    """on conflict condition"""
+    on_conflict: forms_on_conflict
+  ): forms
+
+  """
   insert data into the table: "individuals"
   """
   insert_individuals(
@@ -1350,6 +1438,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: individuals_on_conflict
   ): individuals_mutation_response
+
+  """
+  insert a single row into the table: "individuals"
+  """
+  insert_individuals_one(
+    """the row to be inserted"""
+    object: individuals_insert_input!
+
+    """on conflict condition"""
+    on_conflict: individuals_on_conflict
+  ): individuals
 
   """
   insert data into the table: "organization_contact_individuals"
@@ -1363,6 +1462,17 @@ type mutation_root {
   ): organization_contact_individuals_mutation_response
 
   """
+  insert a single row into the table: "organization_contact_individuals"
+  """
+  insert_organization_contact_individuals_one(
+    """the row to be inserted"""
+    object: organization_contact_individuals_insert_input!
+
+    """on conflict condition"""
+    on_conflict: organization_contact_individuals_on_conflict
+  ): organization_contact_individuals
+
+  """
   insert data into the table: "organizations"
   """
   insert_organizations(
@@ -1372,6 +1482,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: organizations_on_conflict
   ): organizations_mutation_response
+
+  """
+  insert a single row into the table: "organizations"
+  """
+  insert_organizations_one(
+    """the row to be inserted"""
+    object: organizations_insert_input!
+
+    """on conflict condition"""
+    on_conflict: organizations_on_conflict
+  ): organizations
 
   """
   insert data into the table: "parties"
@@ -1385,6 +1506,17 @@ type mutation_root {
   ): parties_mutation_response
 
   """
+  insert a single row into the table: "parties"
+  """
+  insert_parties_one(
+    """the row to be inserted"""
+    object: parties_insert_input!
+
+    """on conflict condition"""
+    on_conflict: parties_on_conflict
+  ): parties
+
+  """
   insert data into the table: "party_addresses"
   """
   insert_party_addresses(
@@ -1394,6 +1526,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: party_addresses_on_conflict
   ): party_addresses_mutation_response
+
+  """
+  insert a single row into the table: "party_addresses"
+  """
+  insert_party_addresses_one(
+    """the row to be inserted"""
+    object: party_addresses_insert_input!
+
+    """on conflict condition"""
+    on_conflict: party_addresses_on_conflict
+  ): party_addresses
 
   """
   insert data into the table: "party_forms"
@@ -1407,12 +1550,31 @@ type mutation_root {
   ): party_forms_mutation_response
 
   """
+  insert a single row into the table: "party_forms"
+  """
+  insert_party_forms_one(
+    """the row to be inserted"""
+    object: party_forms_insert_input!
+
+    """on conflict condition"""
+    on_conflict: party_forms_on_conflict
+  ): party_forms
+
+  """
   insert data into the table: "party_services"
   """
   insert_party_services(
     """the rows to be inserted"""
     objects: [party_services_insert_input!]!
   ): party_services_mutation_response
+
+  """
+  insert a single row into the table: "party_services"
+  """
+  insert_party_services_one(
+    """the row to be inserted"""
+    object: party_services_insert_input!
+  ): party_services
 
   """
   insert data into the table: "services"
@@ -1424,6 +1586,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: services_on_conflict
   ): services_mutation_response
+
+  """
+  insert a single row into the table: "services"
+  """
+  insert_services_one(
+    """the row to be inserted"""
+    object: services_insert_input!
+
+    """on conflict condition"""
+    on_conflict: services_on_conflict
+  ): services
 
   """
   update data of the table: "addresses"
@@ -1440,6 +1613,18 @@ type mutation_root {
   ): addresses_mutation_response
 
   """
+  update single row of the table: "addresses"
+  """
+  update_addresses_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: addresses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: addresses_set_input
+    pk_columns: addresses_pk_columns_input!
+  ): addresses
+
+  """
   update data of the table: "forms"
   """
   update_forms(
@@ -1452,6 +1637,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: forms_bool_exp!
   ): forms_mutation_response
+
+  """
+  update single row of the table: "forms"
+  """
+  update_forms_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: forms_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: forms_set_input
+    pk_columns: forms_pk_columns_input!
+  ): forms
 
   """
   update data of the table: "individuals"
@@ -1468,6 +1665,18 @@ type mutation_root {
   ): individuals_mutation_response
 
   """
+  update single row of the table: "individuals"
+  """
+  update_individuals_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: individuals_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: individuals_set_input
+    pk_columns: individuals_pk_columns_input!
+  ): individuals
+
+  """
   update data of the table: "organization_contact_individuals"
   """
   update_organization_contact_individuals(
@@ -1480,6 +1689,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: organization_contact_individuals_bool_exp!
   ): organization_contact_individuals_mutation_response
+
+  """
+  update single row of the table: "organization_contact_individuals"
+  """
+  update_organization_contact_individuals_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: organization_contact_individuals_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: organization_contact_individuals_set_input
+    pk_columns: organization_contact_individuals_pk_columns_input!
+  ): organization_contact_individuals
 
   """
   update data of the table: "organizations"
@@ -1496,6 +1717,18 @@ type mutation_root {
   ): organizations_mutation_response
 
   """
+  update single row of the table: "organizations"
+  """
+  update_organizations_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: organizations_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: organizations_set_input
+    pk_columns: organizations_pk_columns_input!
+  ): organizations
+
+  """
   update data of the table: "parties"
   """
   update_parties(
@@ -1508,6 +1741,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: parties_bool_exp!
   ): parties_mutation_response
+
+  """
+  update single row of the table: "parties"
+  """
+  update_parties_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: parties_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: parties_set_input
+    pk_columns: parties_pk_columns_input!
+  ): parties
 
   """
   update data of the table: "party_addresses"
@@ -1524,6 +1769,18 @@ type mutation_root {
   ): party_addresses_mutation_response
 
   """
+  update single row of the table: "party_addresses"
+  """
+  update_party_addresses_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: party_addresses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: party_addresses_set_input
+    pk_columns: party_addresses_pk_columns_input!
+  ): party_addresses
+
+  """
   update data of the table: "party_forms"
   """
   update_party_forms(
@@ -1536,6 +1793,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: party_forms_bool_exp!
   ): party_forms_mutation_response
+
+  """
+  update single row of the table: "party_forms"
+  """
+  update_party_forms_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: party_forms_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: party_forms_set_input
+    pk_columns: party_forms_pk_columns_input!
+  ): party_forms
 
   """
   update data of the table: "party_services"
@@ -1564,6 +1833,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: services_bool_exp!
   ): services_mutation_response
+
+  """
+  update single row of the table: "services"
+  """
+  update_services_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: services_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: services_set_input
+    pk_columns: services_pk_columns_input!
+  ): services
 }
 
 """column ordering options"""
@@ -1692,7 +1973,7 @@ enum organization_contact_individuals_constraint {
 }
 
 """
-input type for incrementing integer columne in table "organization_contact_individuals"
+input type for incrementing integer column in table "organization_contact_individuals"
 """
 input organization_contact_individuals_inc_input {
   individual_id: bigint
@@ -1785,6 +2066,14 @@ input organization_contact_individuals_order_by {
   individual_id: order_by
   organization: organizations_order_by
   organization_id: order_by
+}
+
+"""
+primary key columns input for table: "organization_contact_individuals"
+"""
+input organization_contact_individuals_pk_columns_input {
+  individual_id: bigint!
+  organization_id: bigint!
 }
 
 """
@@ -2060,7 +2349,7 @@ enum organizations_constraint {
 }
 
 """
-input type for incrementing integer columne in table "organizations"
+input type for incrementing integer column in table "organizations"
 """
 input organizations_inc_input {
   organization_id: bigint
@@ -2150,6 +2439,13 @@ input organizations_order_by {
   organization_id: order_by
   organization_name: order_by
   uk_vat_number: order_by
+}
+
+"""
+primary key columns input for table: "organizations"
+"""
+input organizations_pk_columns_input {
+  organization_id: bigint!
 }
 
 """
@@ -2484,7 +2780,7 @@ enum parties_constraint {
 }
 
 """
-input type for incrementing integer columne in table "parties"
+input type for incrementing integer column in table "parties"
 """
 input parties_inc_input {
   party_id: bigint
@@ -2578,6 +2874,13 @@ input parties_order_by {
   party_phone: order_by
   party_services_aggregate: party_services_aggregate_order_by
   payment_method_code: order_by
+}
+
+"""
+primary key columns input for table: "parties"
+"""
+input parties_pk_columns_input {
+  party_id: bigint!
 }
 
 """
@@ -2813,7 +3116,7 @@ enum party_addresses_constraint {
 }
 
 """
-input type for incrementing integer columne in table "party_addresses"
+input type for incrementing integer column in table "party_addresses"
 """
 input party_addresses_inc_input {
   address_id: bigint
@@ -2912,6 +3215,14 @@ input party_addresses_order_by {
   date_address_to: order_by
   party: parties_order_by
   party_id: order_by
+}
+
+"""
+primary key columns input for table: "party_addresses"
+"""
+input party_addresses_pk_columns_input {
+  address_id: bigint!
+  party_id: bigint!
 }
 
 """
@@ -3169,7 +3480,7 @@ enum party_forms_constraint {
 }
 
 """
-input type for incrementing integer columne in table "party_forms"
+input type for incrementing integer column in table "party_forms"
 """
 input party_forms_inc_input {
   form_id: bigint
@@ -3268,6 +3579,14 @@ input party_forms_order_by {
   form_status_code: order_by
   party: parties_order_by
   party_id: order_by
+}
+
+"""
+primary key columns input for table: "party_forms"
+"""
+input party_forms_pk_columns_input {
+  form_id: bigint!
+  party_id: bigint!
 }
 
 """
@@ -3518,7 +3837,7 @@ input party_services_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "party_services"
+input type for incrementing integer column in table "party_services"
 """
 input party_services_inc_input {
   booking_id: bigint
@@ -4352,7 +4671,7 @@ enum services_constraint {
 }
 
 """
-input type for incrementing integer columne in table "services"
+input type for incrementing integer column in table "services"
 """
 input services_inc_input {
   service_id: bigint
@@ -4444,6 +4763,13 @@ input services_order_by {
   service_id: order_by
   service_name: order_by
   service_type_code: order_by
+}
+
+"""
+primary key columns input for table: "services"
+"""
+input services_pk_columns_input {
+  service_id: bigint!
 }
 
 """

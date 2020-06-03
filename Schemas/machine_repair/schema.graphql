@@ -211,12 +211,13 @@ enum machine_constraint {
 }
 
 """
-input type for incrementing integer columne in table "machine"
+input type for incrementing integer column in table "machine"
 """
 input machine_inc_input {
   machine_id: Int
   making_year: Int
   quality_rank: Int
+  value_points: Float
 }
 
 """
@@ -549,6 +550,11 @@ type mutation_root {
   ): technician_mutation_response
 
   """
+  delete single row from the table: "technician"
+  """
+  delete_technician_by_pk(technician_id: Float!): technician
+
+  """
   insert data into the table: "machine"
   """
   insert_machine(
@@ -558,6 +564,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: machine_on_conflict
   ): machine_mutation_response
+
+  """
+  insert a single row into the table: "machine"
+  """
+  insert_machine_one(
+    """the row to be inserted"""
+    object: machine_insert_input!
+
+    """on conflict condition"""
+    on_conflict: machine_on_conflict
+  ): machine
 
   """
   insert data into the table: "repair"
@@ -582,6 +599,28 @@ type mutation_root {
   ): repair_assignment_mutation_response
 
   """
+  insert a single row into the table: "repair_assignment"
+  """
+  insert_repair_assignment_one(
+    """the row to be inserted"""
+    object: repair_assignment_insert_input!
+
+    """on conflict condition"""
+    on_conflict: repair_assignment_on_conflict
+  ): repair_assignment
+
+  """
+  insert a single row into the table: "repair"
+  """
+  insert_repair_one(
+    """the row to be inserted"""
+    object: repair_insert_input!
+
+    """on conflict condition"""
+    on_conflict: repair_on_conflict
+  ): repair
+
+  """
   insert data into the table: "technician"
   """
   insert_technician(
@@ -591,6 +630,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: technician_on_conflict
   ): technician_mutation_response
+
+  """
+  insert a single row into the table: "technician"
+  """
+  insert_technician_one(
+    """the row to be inserted"""
+    object: technician_insert_input!
+
+    """on conflict condition"""
+    on_conflict: technician_on_conflict
+  ): technician
 
   """
   update data of the table: "machine"
@@ -647,6 +697,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: technician_bool_exp!
   ): technician_mutation_response
+
+  """
+  update single row of the table: "technician"
+  """
+  update_technician_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: technician_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: technician_set_input
+    pk_columns: technician_pk_columns_input!
+  ): technician
 }
 
 """column ordering options"""
@@ -1039,7 +1101,7 @@ enum repair_assignment_constraint {
 }
 
 """
-input type for incrementing integer columne in table "repair_assignment"
+input type for incrementing integer column in table "repair_assignment"
 """
 input repair_assignment_inc_input {
   machine_id: Int
@@ -1315,7 +1377,7 @@ enum repair_constraint {
 }
 
 """
-input type for incrementing integer columne in table "repair"
+input type for incrementing integer column in table "repair"
 """
 input repair_inc_input {
   repair_id: Int
@@ -1859,10 +1921,12 @@ enum technician_constraint {
 }
 
 """
-input type for incrementing integer columne in table "technician"
+input type for incrementing integer column in table "technician"
 """
 input technician_inc_input {
   age: Int
+  starting_year: Float
+  technician_id: Float
 }
 
 """
@@ -1955,6 +2019,13 @@ input technician_order_by {
   starting_year: order_by
   team: order_by
   technician_id: order_by
+}
+
+"""
+primary key columns input for table: "technician"
+"""
+input technician_pk_columns_input {
+  technician_id: Float!
 }
 
 """

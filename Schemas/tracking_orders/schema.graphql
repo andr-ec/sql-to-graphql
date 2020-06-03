@@ -184,7 +184,7 @@ enum customers_constraint {
 }
 
 """
-input type for incrementing integer columne in table "customers"
+input type for incrementing integer column in table "customers"
 """
 input customers_inc_input {
   customer_id: bigint
@@ -268,6 +268,13 @@ input customers_order_by {
   customer_id: order_by
   customer_name: order_by
   orders_aggregate: orders_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "customers"
+"""
+input customers_pk_columns_input {
+  customer_id: bigint!
 }
 
 """
@@ -520,7 +527,7 @@ enum invoices_constraint {
 }
 
 """
-input type for incrementing integer columne in table "invoices"
+input type for incrementing integer column in table "invoices"
 """
 input invoices_inc_input {
   invoice_number: bigint
@@ -604,6 +611,13 @@ input invoices_order_by {
   invoice_details: order_by
   invoice_number: order_by
   shipments_aggregate: shipments_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "invoices"
+"""
+input invoices_pk_columns_input {
+  invoice_number: bigint!
 }
 
 """
@@ -738,12 +752,22 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  delete single row from the table: "customers"
+  """
+  delete_customers_by_pk(customer_id: bigint!): customers
+
+  """
   delete data from the table: "invoices"
   """
   delete_invoices(
     """filter the rows which have to be deleted"""
     where: invoices_bool_exp!
   ): invoices_mutation_response
+
+  """
+  delete single row from the table: "invoices"
+  """
+  delete_invoices_by_pk(invoice_number: bigint!): invoices
 
   """
   delete data from the table: "order_items"
@@ -754,6 +778,11 @@ type mutation_root {
   ): order_items_mutation_response
 
   """
+  delete single row from the table: "order_items"
+  """
+  delete_order_items_by_pk(order_item_id: bigint!): order_items
+
+  """
   delete data from the table: "orders"
   """
   delete_orders(
@@ -762,12 +791,22 @@ type mutation_root {
   ): orders_mutation_response
 
   """
+  delete single row from the table: "orders"
+  """
+  delete_orders_by_pk(order_id: bigint!): orders
+
+  """
   delete data from the table: "products"
   """
   delete_products(
     """filter the rows which have to be deleted"""
     where: products_bool_exp!
   ): products_mutation_response
+
+  """
+  delete single row from the table: "products"
+  """
+  delete_products_by_pk(product_id: bigint!): products
 
   """
   delete data from the table: "shipment_items"
@@ -786,6 +825,11 @@ type mutation_root {
   ): shipments_mutation_response
 
   """
+  delete single row from the table: "shipments"
+  """
+  delete_shipments_by_pk(shipment_id: bigint!): shipments
+
+  """
   insert data into the table: "customers"
   """
   insert_customers(
@@ -795,6 +839,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: customers_on_conflict
   ): customers_mutation_response
+
+  """
+  insert a single row into the table: "customers"
+  """
+  insert_customers_one(
+    """the row to be inserted"""
+    object: customers_insert_input!
+
+    """on conflict condition"""
+    on_conflict: customers_on_conflict
+  ): customers
 
   """
   insert data into the table: "invoices"
@@ -808,6 +863,17 @@ type mutation_root {
   ): invoices_mutation_response
 
   """
+  insert a single row into the table: "invoices"
+  """
+  insert_invoices_one(
+    """the row to be inserted"""
+    object: invoices_insert_input!
+
+    """on conflict condition"""
+    on_conflict: invoices_on_conflict
+  ): invoices
+
+  """
   insert data into the table: "order_items"
   """
   insert_order_items(
@@ -817,6 +883,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: order_items_on_conflict
   ): order_items_mutation_response
+
+  """
+  insert a single row into the table: "order_items"
+  """
+  insert_order_items_one(
+    """the row to be inserted"""
+    object: order_items_insert_input!
+
+    """on conflict condition"""
+    on_conflict: order_items_on_conflict
+  ): order_items
 
   """
   insert data into the table: "orders"
@@ -830,6 +907,17 @@ type mutation_root {
   ): orders_mutation_response
 
   """
+  insert a single row into the table: "orders"
+  """
+  insert_orders_one(
+    """the row to be inserted"""
+    object: orders_insert_input!
+
+    """on conflict condition"""
+    on_conflict: orders_on_conflict
+  ): orders
+
+  """
   insert data into the table: "products"
   """
   insert_products(
@@ -841,12 +929,31 @@ type mutation_root {
   ): products_mutation_response
 
   """
+  insert a single row into the table: "products"
+  """
+  insert_products_one(
+    """the row to be inserted"""
+    object: products_insert_input!
+
+    """on conflict condition"""
+    on_conflict: products_on_conflict
+  ): products
+
+  """
   insert data into the table: "shipment_items"
   """
   insert_shipment_items(
     """the rows to be inserted"""
     objects: [shipment_items_insert_input!]!
   ): shipment_items_mutation_response
+
+  """
+  insert a single row into the table: "shipment_items"
+  """
+  insert_shipment_items_one(
+    """the row to be inserted"""
+    object: shipment_items_insert_input!
+  ): shipment_items
 
   """
   insert data into the table: "shipments"
@@ -858,6 +965,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: shipments_on_conflict
   ): shipments_mutation_response
+
+  """
+  insert a single row into the table: "shipments"
+  """
+  insert_shipments_one(
+    """the row to be inserted"""
+    object: shipments_insert_input!
+
+    """on conflict condition"""
+    on_conflict: shipments_on_conflict
+  ): shipments
 
   """
   update data of the table: "customers"
@@ -874,6 +992,18 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  update single row of the table: "customers"
+  """
+  update_customers_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customers_set_input
+    pk_columns: customers_pk_columns_input!
+  ): customers
+
+  """
   update data of the table: "invoices"
   """
   update_invoices(
@@ -886,6 +1016,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: invoices_bool_exp!
   ): invoices_mutation_response
+
+  """
+  update single row of the table: "invoices"
+  """
+  update_invoices_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: invoices_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: invoices_set_input
+    pk_columns: invoices_pk_columns_input!
+  ): invoices
 
   """
   update data of the table: "order_items"
@@ -902,6 +1044,18 @@ type mutation_root {
   ): order_items_mutation_response
 
   """
+  update single row of the table: "order_items"
+  """
+  update_order_items_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: order_items_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: order_items_set_input
+    pk_columns: order_items_pk_columns_input!
+  ): order_items
+
+  """
   update data of the table: "orders"
   """
   update_orders(
@@ -916,6 +1070,18 @@ type mutation_root {
   ): orders_mutation_response
 
   """
+  update single row of the table: "orders"
+  """
+  update_orders_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: orders_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: orders_set_input
+    pk_columns: orders_pk_columns_input!
+  ): orders
+
+  """
   update data of the table: "products"
   """
   update_products(
@@ -928,6 +1094,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: products_bool_exp!
   ): products_mutation_response
+
+  """
+  update single row of the table: "products"
+  """
+  update_products_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: products_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: products_set_input
+    pk_columns: products_pk_columns_input!
+  ): products
 
   """
   update data of the table: "shipment_items"
@@ -956,6 +1134,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: shipments_bool_exp!
   ): shipments_mutation_response
+
+  """
+  update single row of the table: "shipments"
+  """
+  update_shipments_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: shipments_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: shipments_set_input
+    pk_columns: shipments_pk_columns_input!
+  ): shipments
 }
 
 """column ordering options"""
@@ -1123,7 +1313,7 @@ enum order_items_constraint {
 }
 
 """
-input type for incrementing integer columne in table "order_items"
+input type for incrementing integer column in table "order_items"
 """
 input order_items_inc_input {
   order_id: bigint
@@ -1225,6 +1415,13 @@ input order_items_order_by {
   product: products_order_by
   product_id: order_by
   shipment_items_aggregate: shipment_items_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "order_items"
+"""
+input order_items_pk_columns_input {
+  order_item_id: bigint!
 }
 
 """
@@ -1565,7 +1762,7 @@ enum orders_constraint {
 }
 
 """
-input type for incrementing integer columne in table "orders"
+input type for incrementing integer column in table "orders"
 """
 input orders_inc_input {
   customer_id: bigint
@@ -1666,6 +1863,13 @@ input orders_order_by {
   order_items_aggregate: order_items_aggregate_order_by
   order_status: order_by
   shipments_aggregate: shipments_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "orders"
+"""
+input orders_pk_columns_input {
+  order_id: bigint!
 }
 
 """
@@ -1945,7 +2149,7 @@ enum products_constraint {
 }
 
 """
-input type for incrementing integer columne in table "products"
+input type for incrementing integer column in table "products"
 """
 input products_inc_input {
   product_id: bigint
@@ -2029,6 +2233,13 @@ input products_order_by {
   product_details: order_by
   product_id: order_by
   product_name: order_by
+}
+
+"""
+primary key columns input for table: "products"
+"""
+input products_pk_columns_input {
+  product_id: bigint!
 }
 
 """
@@ -2543,7 +2754,7 @@ input shipment_items_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "shipment_items"
+input type for incrementing integer column in table "shipment_items"
 """
 input shipment_items_inc_input {
   order_item_id: bigint
@@ -2879,7 +3090,7 @@ enum shipments_constraint {
 }
 
 """
-input type for incrementing integer columne in table "shipments"
+input type for incrementing integer column in table "shipments"
 """
 input shipments_inc_input {
   invoice_number: bigint
@@ -2987,6 +3198,13 @@ input shipments_order_by {
   shipment_id: order_by
   shipment_items_aggregate: shipment_items_aggregate_order_by
   shipment_tracking_number: order_by
+}
+
+"""
+primary key columns input for table: "shipments"
+"""
+input shipments_pk_columns_input {
+  shipment_id: bigint!
 }
 
 """

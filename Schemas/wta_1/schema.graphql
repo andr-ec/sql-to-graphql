@@ -268,11 +268,12 @@ input matches_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "matches"
+input type for incrementing integer column in table "matches"
 """
 input matches_inc_input {
   best_of: Int
   draw_size: Int
+  loser_age: float8
   loser_ht: Int
   loser_id: Int
   loser_rank: Int
@@ -280,6 +281,7 @@ input matches_inc_input {
   loser_seed: Int
   match_num: Int
   minutes: Int
+  winner_age: float8
   winner_ht: Int
   winner_id: Int
   winner_rank: Int
@@ -1000,6 +1002,11 @@ type mutation_root {
   ): players_mutation_response
 
   """
+  delete single row from the table: "players"
+  """
+  delete_players_by_pk(player_id: Int!): players
+
+  """
   delete data from the table: "rankings"
   """
   delete_rankings(
@@ -1016,6 +1023,14 @@ type mutation_root {
   ): matches_mutation_response
 
   """
+  insert a single row into the table: "matches"
+  """
+  insert_matches_one(
+    """the row to be inserted"""
+    object: matches_insert_input!
+  ): matches
+
+  """
   insert data into the table: "players"
   """
   insert_players(
@@ -1027,12 +1042,31 @@ type mutation_root {
   ): players_mutation_response
 
   """
+  insert a single row into the table: "players"
+  """
+  insert_players_one(
+    """the row to be inserted"""
+    object: players_insert_input!
+
+    """on conflict condition"""
+    on_conflict: players_on_conflict
+  ): players
+
+  """
   insert data into the table: "rankings"
   """
   insert_rankings(
     """the rows to be inserted"""
     objects: [rankings_insert_input!]!
   ): rankings_mutation_response
+
+  """
+  insert a single row into the table: "rankings"
+  """
+  insert_rankings_one(
+    """the row to be inserted"""
+    object: rankings_insert_input!
+  ): rankings
 
   """
   update data of the table: "matches"
@@ -1061,6 +1095,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: players_bool_exp!
   ): players_mutation_response
+
+  """
+  update single row of the table: "players"
+  """
+  update_players_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: players_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: players_set_input
+    pk_columns: players_pk_columns_input!
+  ): players
 
   """
   update data of the table: "rankings"
@@ -1307,7 +1353,7 @@ enum players_constraint {
 }
 
 """
-input type for incrementing integer columne in table "players"
+input type for incrementing integer column in table "players"
 """
 input players_inc_input {
   player_id: Int
@@ -1413,6 +1459,13 @@ input players_order_by {
   matchesByWinnerId_aggregate: matches_aggregate_order_by
   player_id: order_by
   rankings_aggregate: rankings_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "players"
+"""
+input players_pk_columns_input {
+  player_id: Int!
 }
 
 """
@@ -1779,7 +1832,7 @@ input rankings_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "rankings"
+input type for incrementing integer column in table "rankings"
 """
 input rankings_inc_input {
   player_id: Int

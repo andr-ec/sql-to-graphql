@@ -328,7 +328,7 @@ enum city_constraint {
 }
 
 """
-input type for incrementing integer columne in table "city"
+input type for incrementing integer column in table "city"
 """
 input city_inc_input {
   population: bigint
@@ -418,6 +418,14 @@ input city_order_by {
   population: order_by
   state: state_order_by
   state_name: order_by
+}
+
+"""
+primary key columns input for table: "city"
+"""
+input city_pk_columns_input {
+  city_name: String!
+  state_name: String!
 }
 
 """
@@ -729,6 +737,13 @@ input highlow_order_by {
 }
 
 """
+primary key columns input for table: "highlow"
+"""
+input highlow_pk_columns_input {
+  state_name: String!
+}
+
+"""
 select columns of table "highlow"
 """
 enum highlow_select_column {
@@ -861,6 +876,13 @@ input lake_bool_exp {
   country_name: String_comparison_exp
   lake_name: String_comparison_exp
   state_name: String_comparison_exp
+}
+
+"""
+input type for incrementing integer column in table "lake"
+"""
+input lake_inc_input {
+  area: float8
 }
 
 """
@@ -1146,7 +1168,7 @@ enum mountain_constraint {
 }
 
 """
-input type for incrementing integer columne in table "mountain"
+input type for incrementing integer column in table "mountain"
 """
 input mountain_inc_input {
   mountain_altitude: bigint
@@ -1236,6 +1258,14 @@ input mountain_order_by {
   mountain_name: order_by
   state: state_order_by
   state_name: order_by
+}
+
+"""
+primary key columns input for table: "mountain"
+"""
+input mountain_pk_columns_input {
+  mountain_name: String!
+  state_name: String!
 }
 
 """
@@ -1385,12 +1415,22 @@ type mutation_root {
   ): city_mutation_response
 
   """
+  delete single row from the table: "city"
+  """
+  delete_city_by_pk(city_name: String!, state_name: String!): city
+
+  """
   delete data from the table: "highlow"
   """
   delete_highlow(
     """filter the rows which have to be deleted"""
     where: highlow_bool_exp!
   ): highlow_mutation_response
+
+  """
+  delete single row from the table: "highlow"
+  """
+  delete_highlow_by_pk(state_name: String!): highlow
 
   """
   delete data from the table: "lake"
@@ -1409,6 +1449,11 @@ type mutation_root {
   ): mountain_mutation_response
 
   """
+  delete single row from the table: "mountain"
+  """
+  delete_mountain_by_pk(mountain_name: String!, state_name: String!): mountain
+
+  """
   delete data from the table: "river"
   """
   delete_river(
@@ -1417,12 +1462,22 @@ type mutation_root {
   ): river_mutation_response
 
   """
+  delete single row from the table: "river"
+  """
+  delete_river_by_pk(river_name: String!): river
+
+  """
   delete data from the table: "state"
   """
   delete_state(
     """filter the rows which have to be deleted"""
     where: state_bool_exp!
   ): state_mutation_response
+
+  """
+  delete single row from the table: "state"
+  """
+  delete_state_by_pk(state_name: String!): state
 
   """
   insert data into the table: "border_info"
@@ -1436,6 +1491,17 @@ type mutation_root {
   ): border_info_mutation_response
 
   """
+  insert a single row into the table: "border_info"
+  """
+  insert_border_info_one(
+    """the row to be inserted"""
+    object: border_info_insert_input!
+
+    """on conflict condition"""
+    on_conflict: border_info_on_conflict
+  ): border_info
+
+  """
   insert data into the table: "city"
   """
   insert_city(
@@ -1445,6 +1511,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: city_on_conflict
   ): city_mutation_response
+
+  """
+  insert a single row into the table: "city"
+  """
+  insert_city_one(
+    """the row to be inserted"""
+    object: city_insert_input!
+
+    """on conflict condition"""
+    on_conflict: city_on_conflict
+  ): city
 
   """
   insert data into the table: "highlow"
@@ -1458,12 +1535,31 @@ type mutation_root {
   ): highlow_mutation_response
 
   """
+  insert a single row into the table: "highlow"
+  """
+  insert_highlow_one(
+    """the row to be inserted"""
+    object: highlow_insert_input!
+
+    """on conflict condition"""
+    on_conflict: highlow_on_conflict
+  ): highlow
+
+  """
   insert data into the table: "lake"
   """
   insert_lake(
     """the rows to be inserted"""
     objects: [lake_insert_input!]!
   ): lake_mutation_response
+
+  """
+  insert a single row into the table: "lake"
+  """
+  insert_lake_one(
+    """the row to be inserted"""
+    object: lake_insert_input!
+  ): lake
 
   """
   insert data into the table: "mountain"
@@ -1477,6 +1573,17 @@ type mutation_root {
   ): mountain_mutation_response
 
   """
+  insert a single row into the table: "mountain"
+  """
+  insert_mountain_one(
+    """the row to be inserted"""
+    object: mountain_insert_input!
+
+    """on conflict condition"""
+    on_conflict: mountain_on_conflict
+  ): mountain
+
+  """
   insert data into the table: "river"
   """
   insert_river(
@@ -1488,6 +1595,17 @@ type mutation_root {
   ): river_mutation_response
 
   """
+  insert a single row into the table: "river"
+  """
+  insert_river_one(
+    """the row to be inserted"""
+    object: river_insert_input!
+
+    """on conflict condition"""
+    on_conflict: river_on_conflict
+  ): river
+
+  """
   insert data into the table: "state"
   """
   insert_state(
@@ -1497,6 +1615,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: state_on_conflict
   ): state_mutation_response
+
+  """
+  insert a single row into the table: "state"
+  """
+  insert_state_one(
+    """the row to be inserted"""
+    object: state_insert_input!
+
+    """on conflict condition"""
+    on_conflict: state_on_conflict
+  ): state
 
   """
   update data of the table: "border_info"
@@ -1524,6 +1653,18 @@ type mutation_root {
   ): city_mutation_response
 
   """
+  update single row of the table: "city"
+  """
+  update_city_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: city_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: city_set_input
+    pk_columns: city_pk_columns_input!
+  ): city
+
+  """
   update data of the table: "highlow"
   """
   update_highlow(
@@ -1535,9 +1676,21 @@ type mutation_root {
   ): highlow_mutation_response
 
   """
+  update single row of the table: "highlow"
+  """
+  update_highlow_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: highlow_set_input
+    pk_columns: highlow_pk_columns_input!
+  ): highlow
+
+  """
   update data of the table: "lake"
   """
   update_lake(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: lake_inc_input
+
     """sets the columns of the filtered rows to the given values"""
     _set: lake_set_input
 
@@ -1560,6 +1713,18 @@ type mutation_root {
   ): mountain_mutation_response
 
   """
+  update single row of the table: "mountain"
+  """
+  update_mountain_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: mountain_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: mountain_set_input
+    pk_columns: mountain_pk_columns_input!
+  ): mountain
+
+  """
   update data of the table: "river"
   """
   update_river(
@@ -1574,6 +1739,18 @@ type mutation_root {
   ): river_mutation_response
 
   """
+  update single row of the table: "river"
+  """
+  update_river_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: river_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: river_set_input
+    pk_columns: river_pk_columns_input!
+  ): river
+
+  """
   update data of the table: "state"
   """
   update_state(
@@ -1586,6 +1763,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: state_bool_exp!
   ): state_mutation_response
+
+  """
+  update single row of the table: "state"
+  """
+  update_state_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: state_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: state_set_input
+    pk_columns: state_pk_columns_input!
+  ): state
 }
 
 """column ordering options"""
@@ -2005,7 +2194,7 @@ enum river_constraint {
 }
 
 """
-input type for incrementing integer columne in table "river"
+input type for incrementing integer column in table "river"
 """
 input river_inc_input {
   length: bigint
@@ -2095,6 +2284,13 @@ input river_order_by {
   river_name: order_by
   state: state_order_by
   traverse: order_by
+}
+
+"""
+primary key columns input for table: "river"
+"""
+input river_pk_columns_input {
+  river_name: String!
 }
 
 """
@@ -2549,9 +2745,11 @@ enum state_constraint {
 }
 
 """
-input type for incrementing integer columne in table "state"
+input type for incrementing integer column in table "state"
 """
 input state_inc_input {
+  area: float8
+  density: float8
   population: bigint
 }
 
@@ -2661,6 +2859,13 @@ input state_order_by {
   population: order_by
   rivers_aggregate: river_aggregate_order_by
   state_name: order_by
+}
+
+"""
+primary key columns input for table: "state"
+"""
+input state_pk_columns_input {
+  state_name: String!
 }
 
 """

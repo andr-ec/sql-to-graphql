@@ -205,7 +205,7 @@ enum architect_constraint {
 }
 
 """
-input type for incrementing integer columne in table "architect"
+input type for incrementing integer column in table "architect"
 """
 input architect_inc_input {
   id: Int
@@ -297,6 +297,13 @@ input architect_order_by {
   mills_aggregate: mill_aggregate_order_by
   name: order_by
   nationality: order_by
+}
+
+"""
+primary key columns input for table: "architect"
+"""
+input architect_pk_columns_input {
+  id: Int!
 }
 
 """
@@ -534,11 +541,13 @@ enum bridge_constraint {
 }
 
 """
-input type for incrementing integer columne in table "bridge"
+input type for incrementing integer column in table "bridge"
 """
 input bridge_inc_input {
   architect_id: Int
   id: Int
+  length_feet: Float
+  length_meters: Float
 }
 
 """
@@ -637,6 +646,13 @@ input bridge_order_by {
   length_meters: order_by
   location: order_by
   name: order_by
+}
+
+"""
+primary key columns input for table: "bridge"
+"""
+input bridge_pk_columns_input {
+  id: Int!
 }
 
 """
@@ -960,7 +976,7 @@ enum mill_constraint {
 }
 
 """
-input type for incrementing integer columne in table "mill"
+input type for incrementing integer column in table "mill"
 """
 input mill_inc_input {
   architect_id: Int
@@ -1070,6 +1086,13 @@ input mill_order_by {
   name: order_by
   notes: order_by
   type: order_by
+}
+
+"""
+primary key columns input for table: "mill"
+"""
+input mill_pk_columns_input {
+  id: Int!
 }
 
 """
@@ -1260,6 +1283,11 @@ type mutation_root {
   ): architect_mutation_response
 
   """
+  delete single row from the table: "architect"
+  """
+  delete_architect_by_pk(id: Int!): architect
+
+  """
   delete data from the table: "bridge"
   """
   delete_bridge(
@@ -1268,12 +1296,22 @@ type mutation_root {
   ): bridge_mutation_response
 
   """
+  delete single row from the table: "bridge"
+  """
+  delete_bridge_by_pk(id: Int!): bridge
+
+  """
   delete data from the table: "mill"
   """
   delete_mill(
     """filter the rows which have to be deleted"""
     where: mill_bool_exp!
   ): mill_mutation_response
+
+  """
+  delete single row from the table: "mill"
+  """
+  delete_mill_by_pk(id: Int!): mill
 
   """
   insert data into the table: "architect"
@@ -1287,6 +1325,17 @@ type mutation_root {
   ): architect_mutation_response
 
   """
+  insert a single row into the table: "architect"
+  """
+  insert_architect_one(
+    """the row to be inserted"""
+    object: architect_insert_input!
+
+    """on conflict condition"""
+    on_conflict: architect_on_conflict
+  ): architect
+
+  """
   insert data into the table: "bridge"
   """
   insert_bridge(
@@ -1298,6 +1347,17 @@ type mutation_root {
   ): bridge_mutation_response
 
   """
+  insert a single row into the table: "bridge"
+  """
+  insert_bridge_one(
+    """the row to be inserted"""
+    object: bridge_insert_input!
+
+    """on conflict condition"""
+    on_conflict: bridge_on_conflict
+  ): bridge
+
+  """
   insert data into the table: "mill"
   """
   insert_mill(
@@ -1307,6 +1367,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: mill_on_conflict
   ): mill_mutation_response
+
+  """
+  insert a single row into the table: "mill"
+  """
+  insert_mill_one(
+    """the row to be inserted"""
+    object: mill_insert_input!
+
+    """on conflict condition"""
+    on_conflict: mill_on_conflict
+  ): mill
 
   """
   update data of the table: "architect"
@@ -1323,6 +1394,18 @@ type mutation_root {
   ): architect_mutation_response
 
   """
+  update single row of the table: "architect"
+  """
+  update_architect_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: architect_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: architect_set_input
+    pk_columns: architect_pk_columns_input!
+  ): architect
+
+  """
   update data of the table: "bridge"
   """
   update_bridge(
@@ -1337,6 +1420,18 @@ type mutation_root {
   ): bridge_mutation_response
 
   """
+  update single row of the table: "bridge"
+  """
+  update_bridge_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: bridge_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: bridge_set_input
+    pk_columns: bridge_pk_columns_input!
+  ): bridge
+
+  """
   update data of the table: "mill"
   """
   update_mill(
@@ -1349,6 +1444,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: mill_bool_exp!
   ): mill_mutation_response
+
+  """
+  update single row of the table: "mill"
+  """
+  update_mill_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: mill_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: mill_set_input
+    pk_columns: mill_pk_columns_input!
+  ): mill
 }
 
 """column ordering options"""

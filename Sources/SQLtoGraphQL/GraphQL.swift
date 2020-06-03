@@ -468,13 +468,6 @@ class GraphQLQuery {
     }
 }
 
-struct GraphQLDatasetExample: Codable {
-    let schemaId: String
-    let question: String
-    //    let questionTokens: [String]
-    let query: String
-}
-
 /// only used to nest arugments with relations
 struct ArgumentQueryNestable: Equatable {
     let argument: RawGraphQLArgument

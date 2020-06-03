@@ -192,7 +192,7 @@ enum car_makers_constraint {
 }
 
 """
-input type for incrementing integer columne in table "car_makers"
+input type for incrementing integer column in table "car_makers"
 """
 input car_makers_inc_input {
   country: bigint
@@ -285,6 +285,13 @@ input car_makers_order_by {
   id: order_by
   maker: order_by
   model_lists_aggregate: model_list_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "car_makers"
+"""
+input car_makers_pk_columns_input {
+  id: bigint!
 }
 
 """
@@ -528,7 +535,7 @@ enum car_names_constraint {
 }
 
 """
-input type for incrementing integer columne in table "car_names"
+input type for incrementing integer column in table "car_names"
 """
 input car_names_inc_input {
   makeid: bigint
@@ -614,6 +621,13 @@ input car_names_order_by {
   makeid: order_by
   model: order_by
   model_list: model_list_order_by
+}
+
+"""
+primary key columns input for table: "car_names"
+"""
+input car_names_pk_columns_input {
+  makeid: bigint!
 }
 
 """
@@ -857,12 +871,15 @@ enum cars_data_constraint {
 }
 
 """
-input type for incrementing integer columne in table "cars_data"
+input type for incrementing integer column in table "cars_data"
 """
 input cars_data_inc_input {
+  accelerate: Float
   cylinders: bigint
+  edispl: Float
   horsepower: Int
   id: bigint
+  mpg: Float
   weight: bigint
   year: bigint
 }
@@ -975,6 +992,13 @@ input cars_data_order_by {
   mpg: order_by
   weight: order_by
   year: order_by
+}
+
+"""
+primary key columns input for table: "cars_data"
+"""
+input cars_data_pk_columns_input {
+  id: bigint!
 }
 
 """
@@ -1358,7 +1382,7 @@ enum continents_constraint {
 }
 
 """
-input type for incrementing integer columne in table "continents"
+input type for incrementing integer column in table "continents"
 """
 input continents_inc_input {
   contid: bigint
@@ -1436,6 +1460,13 @@ input continents_order_by {
   contid: order_by
   continent: order_by
   countries_aggregate: countries_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "continents"
+"""
+input continents_pk_columns_input {
+  contid: bigint!
 }
 
 """
@@ -1686,7 +1717,7 @@ enum countries_constraint {
 }
 
 """
-input type for incrementing integer columne in table "countries"
+input type for incrementing integer column in table "countries"
 """
 input countries_inc_input {
   continent: bigint
@@ -1773,6 +1804,13 @@ input countries_order_by {
   continentByContinent: continents_order_by
   countryid: order_by
   countryname: order_by
+}
+
+"""
+primary key columns input for table: "countries"
+"""
+input countries_pk_columns_input {
+  countryid: bigint!
 }
 
 """
@@ -2077,7 +2115,7 @@ enum model_list_constraint {
 }
 
 """
-input type for incrementing integer columne in table "model_list"
+input type for incrementing integer column in table "model_list"
 """
 input model_list_inc_input {
   maker: bigint
@@ -2164,6 +2202,13 @@ input model_list_order_by {
   maker: order_by
   model: order_by
   modelid: order_by
+}
+
+"""
+primary key columns input for table: "model_list"
+"""
+input model_list_pk_columns_input {
+  modelid: bigint!
 }
 
 """
@@ -2312,12 +2357,22 @@ type mutation_root {
   ): car_makers_mutation_response
 
   """
+  delete single row from the table: "car_makers"
+  """
+  delete_car_makers_by_pk(id: bigint!): car_makers
+
+  """
   delete data from the table: "car_names"
   """
   delete_car_names(
     """filter the rows which have to be deleted"""
     where: car_names_bool_exp!
   ): car_names_mutation_response
+
+  """
+  delete single row from the table: "car_names"
+  """
+  delete_car_names_by_pk(makeid: bigint!): car_names
 
   """
   delete data from the table: "cars_data"
@@ -2328,12 +2383,22 @@ type mutation_root {
   ): cars_data_mutation_response
 
   """
+  delete single row from the table: "cars_data"
+  """
+  delete_cars_data_by_pk(id: bigint!): cars_data
+
+  """
   delete data from the table: "continents"
   """
   delete_continents(
     """filter the rows which have to be deleted"""
     where: continents_bool_exp!
   ): continents_mutation_response
+
+  """
+  delete single row from the table: "continents"
+  """
+  delete_continents_by_pk(contid: bigint!): continents
 
   """
   delete data from the table: "countries"
@@ -2344,12 +2409,22 @@ type mutation_root {
   ): countries_mutation_response
 
   """
+  delete single row from the table: "countries"
+  """
+  delete_countries_by_pk(countryid: bigint!): countries
+
+  """
   delete data from the table: "model_list"
   """
   delete_model_list(
     """filter the rows which have to be deleted"""
     where: model_list_bool_exp!
   ): model_list_mutation_response
+
+  """
+  delete single row from the table: "model_list"
+  """
+  delete_model_list_by_pk(modelid: bigint!): model_list
 
   """
   insert data into the table: "car_makers"
@@ -2363,6 +2438,17 @@ type mutation_root {
   ): car_makers_mutation_response
 
   """
+  insert a single row into the table: "car_makers"
+  """
+  insert_car_makers_one(
+    """the row to be inserted"""
+    object: car_makers_insert_input!
+
+    """on conflict condition"""
+    on_conflict: car_makers_on_conflict
+  ): car_makers
+
+  """
   insert data into the table: "car_names"
   """
   insert_car_names(
@@ -2372,6 +2458,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: car_names_on_conflict
   ): car_names_mutation_response
+
+  """
+  insert a single row into the table: "car_names"
+  """
+  insert_car_names_one(
+    """the row to be inserted"""
+    object: car_names_insert_input!
+
+    """on conflict condition"""
+    on_conflict: car_names_on_conflict
+  ): car_names
 
   """
   insert data into the table: "cars_data"
@@ -2385,6 +2482,17 @@ type mutation_root {
   ): cars_data_mutation_response
 
   """
+  insert a single row into the table: "cars_data"
+  """
+  insert_cars_data_one(
+    """the row to be inserted"""
+    object: cars_data_insert_input!
+
+    """on conflict condition"""
+    on_conflict: cars_data_on_conflict
+  ): cars_data
+
+  """
   insert data into the table: "continents"
   """
   insert_continents(
@@ -2394,6 +2502,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: continents_on_conflict
   ): continents_mutation_response
+
+  """
+  insert a single row into the table: "continents"
+  """
+  insert_continents_one(
+    """the row to be inserted"""
+    object: continents_insert_input!
+
+    """on conflict condition"""
+    on_conflict: continents_on_conflict
+  ): continents
 
   """
   insert data into the table: "countries"
@@ -2407,6 +2526,17 @@ type mutation_root {
   ): countries_mutation_response
 
   """
+  insert a single row into the table: "countries"
+  """
+  insert_countries_one(
+    """the row to be inserted"""
+    object: countries_insert_input!
+
+    """on conflict condition"""
+    on_conflict: countries_on_conflict
+  ): countries
+
+  """
   insert data into the table: "model_list"
   """
   insert_model_list(
@@ -2416,6 +2546,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: model_list_on_conflict
   ): model_list_mutation_response
+
+  """
+  insert a single row into the table: "model_list"
+  """
+  insert_model_list_one(
+    """the row to be inserted"""
+    object: model_list_insert_input!
+
+    """on conflict condition"""
+    on_conflict: model_list_on_conflict
+  ): model_list
 
   """
   update data of the table: "car_makers"
@@ -2432,6 +2573,18 @@ type mutation_root {
   ): car_makers_mutation_response
 
   """
+  update single row of the table: "car_makers"
+  """
+  update_car_makers_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: car_makers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: car_makers_set_input
+    pk_columns: car_makers_pk_columns_input!
+  ): car_makers
+
+  """
   update data of the table: "car_names"
   """
   update_car_names(
@@ -2444,6 +2597,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: car_names_bool_exp!
   ): car_names_mutation_response
+
+  """
+  update single row of the table: "car_names"
+  """
+  update_car_names_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: car_names_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: car_names_set_input
+    pk_columns: car_names_pk_columns_input!
+  ): car_names
 
   """
   update data of the table: "cars_data"
@@ -2460,6 +2625,18 @@ type mutation_root {
   ): cars_data_mutation_response
 
   """
+  update single row of the table: "cars_data"
+  """
+  update_cars_data_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: cars_data_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: cars_data_set_input
+    pk_columns: cars_data_pk_columns_input!
+  ): cars_data
+
+  """
   update data of the table: "continents"
   """
   update_continents(
@@ -2472,6 +2649,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: continents_bool_exp!
   ): continents_mutation_response
+
+  """
+  update single row of the table: "continents"
+  """
+  update_continents_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: continents_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: continents_set_input
+    pk_columns: continents_pk_columns_input!
+  ): continents
 
   """
   update data of the table: "countries"
@@ -2488,6 +2677,18 @@ type mutation_root {
   ): countries_mutation_response
 
   """
+  update single row of the table: "countries"
+  """
+  update_countries_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: countries_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: countries_set_input
+    pk_columns: countries_pk_columns_input!
+  ): countries
+
+  """
   update data of the table: "model_list"
   """
   update_model_list(
@@ -2500,6 +2701,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: model_list_bool_exp!
   ): model_list_mutation_response
+
+  """
+  update single row of the table: "model_list"
+  """
+  update_model_list_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: model_list_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: model_list_set_input
+    pk_columns: model_list_pk_columns_input!
+  ): model_list
 }
 
 """column ordering options"""

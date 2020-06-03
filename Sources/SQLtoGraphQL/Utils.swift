@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Utilities
 
 struct FailedExample {
     let example: DatasetExample

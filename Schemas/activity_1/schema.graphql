@@ -202,7 +202,7 @@ enum activity_constraint {
 }
 
 """
-input type for incrementing integer columne in table "activity"
+input type for incrementing integer column in table "activity"
 """
 input activity_inc_input {
   actid: bigint
@@ -282,6 +282,13 @@ input activity_order_by {
   activity_name: order_by
   faculty_participates_ins_aggregate: faculty_participates_in_aggregate_order_by
   participates_ins_aggregate: participates_in_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "activity"
+"""
+input activity_pk_columns_input {
+  actid: bigint!
 }
 
 """
@@ -556,7 +563,7 @@ enum faculty_constraint {
 }
 
 """
-input type for incrementing integer columne in table "faculty"
+input type for incrementing integer column in table "faculty"
 """
 input faculty_inc_input {
   facid: bigint
@@ -764,7 +771,7 @@ input faculty_participates_in_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "faculty_participates_in"
+input type for incrementing integer column in table "faculty_participates_in"
 """
 input faculty_participates_in_inc_input {
   actid: bigint
@@ -955,6 +962,13 @@ input faculty_participates_in_variance_order_by {
 }
 
 """
+primary key columns input for table: "faculty"
+"""
+input faculty_pk_columns_input {
+  facid: bigint!
+}
+
+"""
 select columns of table "faculty"
 """
 enum faculty_select_column {
@@ -1135,12 +1149,22 @@ type mutation_root {
   ): activity_mutation_response
 
   """
+  delete single row from the table: "activity"
+  """
+  delete_activity_by_pk(actid: bigint!): activity
+
+  """
   delete data from the table: "faculty"
   """
   delete_faculty(
     """filter the rows which have to be deleted"""
     where: faculty_bool_exp!
   ): faculty_mutation_response
+
+  """
+  delete single row from the table: "faculty"
+  """
+  delete_faculty_by_pk(facid: bigint!): faculty
 
   """
   delete data from the table: "faculty_participates_in"
@@ -1167,6 +1191,11 @@ type mutation_root {
   ): student_mutation_response
 
   """
+  delete single row from the table: "student"
+  """
+  delete_student_by_pk(stuid: bigint!): student
+
+  """
   insert data into the table: "activity"
   """
   insert_activity(
@@ -1176,6 +1205,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: activity_on_conflict
   ): activity_mutation_response
+
+  """
+  insert a single row into the table: "activity"
+  """
+  insert_activity_one(
+    """the row to be inserted"""
+    object: activity_insert_input!
+
+    """on conflict condition"""
+    on_conflict: activity_on_conflict
+  ): activity
 
   """
   insert data into the table: "faculty"
@@ -1189,6 +1229,17 @@ type mutation_root {
   ): faculty_mutation_response
 
   """
+  insert a single row into the table: "faculty"
+  """
+  insert_faculty_one(
+    """the row to be inserted"""
+    object: faculty_insert_input!
+
+    """on conflict condition"""
+    on_conflict: faculty_on_conflict
+  ): faculty
+
+  """
   insert data into the table: "faculty_participates_in"
   """
   insert_faculty_participates_in(
@@ -1197,12 +1248,28 @@ type mutation_root {
   ): faculty_participates_in_mutation_response
 
   """
+  insert a single row into the table: "faculty_participates_in"
+  """
+  insert_faculty_participates_in_one(
+    """the row to be inserted"""
+    object: faculty_participates_in_insert_input!
+  ): faculty_participates_in
+
+  """
   insert data into the table: "participates_in"
   """
   insert_participates_in(
     """the rows to be inserted"""
     objects: [participates_in_insert_input!]!
   ): participates_in_mutation_response
+
+  """
+  insert a single row into the table: "participates_in"
+  """
+  insert_participates_in_one(
+    """the row to be inserted"""
+    object: participates_in_insert_input!
+  ): participates_in
 
   """
   insert data into the table: "student"
@@ -1214,6 +1281,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: student_on_conflict
   ): student_mutation_response
+
+  """
+  insert a single row into the table: "student"
+  """
+  insert_student_one(
+    """the row to be inserted"""
+    object: student_insert_input!
+
+    """on conflict condition"""
+    on_conflict: student_on_conflict
+  ): student
 
   """
   update data of the table: "activity"
@@ -1230,6 +1308,18 @@ type mutation_root {
   ): activity_mutation_response
 
   """
+  update single row of the table: "activity"
+  """
+  update_activity_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: activity_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: activity_set_input
+    pk_columns: activity_pk_columns_input!
+  ): activity
+
+  """
   update data of the table: "faculty"
   """
   update_faculty(
@@ -1242,6 +1332,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: faculty_bool_exp!
   ): faculty_mutation_response
+
+  """
+  update single row of the table: "faculty"
+  """
+  update_faculty_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: faculty_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: faculty_set_input
+    pk_columns: faculty_pk_columns_input!
+  ): faculty
 
   """
   update data of the table: "faculty_participates_in"
@@ -1284,6 +1386,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: student_bool_exp!
   ): student_mutation_response
+
+  """
+  update single row of the table: "student"
+  """
+  update_student_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: student_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: student_set_input
+    pk_columns: student_pk_columns_input!
+  ): student
 }
 
 """column ordering options"""
@@ -1398,7 +1512,7 @@ input participates_in_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "participates_in"
+input type for incrementing integer column in table "participates_in"
 """
 input participates_in_inc_input {
   actid: bigint
@@ -1966,7 +2080,7 @@ enum student_constraint {
 }
 
 """
-input type for incrementing integer columne in table "student"
+input type for incrementing integer column in table "student"
 """
 input student_inc_input {
   advisor: bigint
@@ -2083,6 +2197,13 @@ input student_order_by {
   participates_ins_aggregate: participates_in_aggregate_order_by
   sex: order_by
   stuid: order_by
+}
+
+"""
+primary key columns input for table: "student"
+"""
+input student_pk_columns_input {
+  stuid: bigint!
 }
 
 """

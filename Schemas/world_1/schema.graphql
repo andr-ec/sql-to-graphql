@@ -156,7 +156,7 @@ enum city_constraint {
 }
 
 """
-input type for incrementing integer columne in table "city"
+input type for incrementing integer column in table "city"
 """
 input city_inc_input {
   id: bigint
@@ -253,6 +253,13 @@ input city_order_by {
   id: order_by
   name: order_by
   population: order_by
+}
+
+"""
+primary key columns input for table: "city"
+"""
+input city_pk_columns_input {
+  id: bigint!
 }
 
 """
@@ -606,12 +613,16 @@ enum country_constraint {
 }
 
 """
-input type for incrementing integer columne in table "country"
+input type for incrementing integer column in table "country"
 """
 input country_inc_input {
   capital: bigint
+  gnp: float8
+  gnpold: float8
   indepyear: bigint
+  lifeexpectancy: float8
   population: bigint
+  surfacearea: float8
 }
 
 """
@@ -1154,6 +1165,13 @@ enum countrylanguage_constraint {
 }
 
 """
+input type for incrementing integer column in table "countrylanguage"
+"""
+input countrylanguage_inc_input {
+  percentage: float8
+}
+
+"""
 input type for inserting data into table "countrylanguage"
 """
 input countrylanguage_insert_input {
@@ -1395,6 +1413,11 @@ type mutation_root {
   ): city_mutation_response
 
   """
+  delete single row from the table: "city"
+  """
+  delete_city_by_pk(id: bigint!): city
+
+  """
   delete data from the table: "country"
   """
   delete_country(
@@ -1422,6 +1445,17 @@ type mutation_root {
   ): city_mutation_response
 
   """
+  insert a single row into the table: "city"
+  """
+  insert_city_one(
+    """the row to be inserted"""
+    object: city_insert_input!
+
+    """on conflict condition"""
+    on_conflict: city_on_conflict
+  ): city
+
+  """
   insert data into the table: "country"
   """
   insert_country(
@@ -1433,6 +1467,17 @@ type mutation_root {
   ): country_mutation_response
 
   """
+  insert a single row into the table: "country"
+  """
+  insert_country_one(
+    """the row to be inserted"""
+    object: country_insert_input!
+
+    """on conflict condition"""
+    on_conflict: country_on_conflict
+  ): country
+
+  """
   insert data into the table: "countrylanguage"
   """
   insert_countrylanguage(
@@ -1442,6 +1487,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: countrylanguage_on_conflict
   ): countrylanguage_mutation_response
+
+  """
+  insert a single row into the table: "countrylanguage"
+  """
+  insert_countrylanguage_one(
+    """the row to be inserted"""
+    object: countrylanguage_insert_input!
+
+    """on conflict condition"""
+    on_conflict: countrylanguage_on_conflict
+  ): countrylanguage
 
   """
   update data of the table: "city"
@@ -1456,6 +1512,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: city_bool_exp!
   ): city_mutation_response
+
+  """
+  update single row of the table: "city"
+  """
+  update_city_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: city_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: city_set_input
+    pk_columns: city_pk_columns_input!
+  ): city
 
   """
   update data of the table: "country"
@@ -1475,6 +1543,9 @@ type mutation_root {
   update data of the table: "countrylanguage"
   """
   update_countrylanguage(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: countrylanguage_inc_input
+
     """sets the columns of the filtered rows to the given values"""
     _set: countrylanguage_set_input
 

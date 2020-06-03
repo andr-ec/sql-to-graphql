@@ -168,7 +168,7 @@ input complaints_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "complaints"
+input type for incrementing integer column in table "complaints"
 """
 input complaints_inc_input {
   complaint_id: bigint
@@ -599,7 +599,7 @@ enum customers_constraint {
 }
 
 """
-input type for incrementing integer columne in table "customers"
+input type for incrementing integer column in table "customers"
 """
 input customers_inc_input {
   customer_id: bigint
@@ -713,6 +713,13 @@ input customers_order_by {
   phone_number: order_by
   state: order_by
   town_city: order_by
+}
+
+"""
+primary key columns input for table: "customers"
+"""
+input customers_pk_columns_input {
+  customer_id: bigint!
 }
 
 """
@@ -890,12 +897,22 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  delete single row from the table: "customers"
+  """
+  delete_customers_by_pk(customer_id: bigint!): customers
+
+  """
   delete data from the table: "products"
   """
   delete_products(
     """filter the rows which have to be deleted"""
     where: products_bool_exp!
   ): products_mutation_response
+
+  """
+  delete single row from the table: "products"
+  """
+  delete_products_by_pk(product_id: bigint!): products
 
   """
   delete data from the table: "staff"
@@ -906,12 +923,25 @@ type mutation_root {
   ): staff_mutation_response
 
   """
+  delete single row from the table: "staff"
+  """
+  delete_staff_by_pk(staff_id: bigint!): staff
+
+  """
   insert data into the table: "complaints"
   """
   insert_complaints(
     """the rows to be inserted"""
     objects: [complaints_insert_input!]!
   ): complaints_mutation_response
+
+  """
+  insert a single row into the table: "complaints"
+  """
+  insert_complaints_one(
+    """the row to be inserted"""
+    object: complaints_insert_input!
+  ): complaints
 
   """
   insert data into the table: "customers"
@@ -925,6 +955,17 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  insert a single row into the table: "customers"
+  """
+  insert_customers_one(
+    """the row to be inserted"""
+    object: customers_insert_input!
+
+    """on conflict condition"""
+    on_conflict: customers_on_conflict
+  ): customers
+
+  """
   insert data into the table: "products"
   """
   insert_products(
@@ -936,6 +977,17 @@ type mutation_root {
   ): products_mutation_response
 
   """
+  insert a single row into the table: "products"
+  """
+  insert_products_one(
+    """the row to be inserted"""
+    object: products_insert_input!
+
+    """on conflict condition"""
+    on_conflict: products_on_conflict
+  ): products
+
+  """
   insert data into the table: "staff"
   """
   insert_staff(
@@ -945,6 +997,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: staff_on_conflict
   ): staff_mutation_response
+
+  """
+  insert a single row into the table: "staff"
+  """
+  insert_staff_one(
+    """the row to be inserted"""
+    object: staff_insert_input!
+
+    """on conflict condition"""
+    on_conflict: staff_on_conflict
+  ): staff
 
   """
   update data of the table: "complaints"
@@ -975,6 +1038,18 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  update single row of the table: "customers"
+  """
+  update_customers_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customers_set_input
+    pk_columns: customers_pk_columns_input!
+  ): customers
+
+  """
   update data of the table: "products"
   """
   update_products(
@@ -989,6 +1064,18 @@ type mutation_root {
   ): products_mutation_response
 
   """
+  update single row of the table: "products"
+  """
+  update_products_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: products_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: products_set_input
+    pk_columns: products_pk_columns_input!
+  ): products
+
+  """
   update data of the table: "staff"
   """
   update_staff(
@@ -1001,6 +1088,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: staff_bool_exp!
   ): staff_mutation_response
+
+  """
+  update single row of the table: "staff"
+  """
+  update_staff_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: staff_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: staff_set_input
+    pk_columns: staff_pk_columns_input!
+  ): staff
 }
 
 scalar numeric
@@ -1183,11 +1282,12 @@ enum products_constraint {
 }
 
 """
-input type for incrementing integer columne in table "products"
+input type for incrementing integer column in table "products"
 """
 input products_inc_input {
   parent_product_id: bigint
   product_id: bigint
+  product_price: numeric
 }
 
 """
@@ -1298,6 +1398,13 @@ input products_order_by {
   product_id: order_by
   product_name: order_by
   product_price: order_by
+}
+
+"""
+primary key columns input for table: "products"
+"""
+input products_pk_columns_input {
+  product_id: bigint!
 }
 
 """
@@ -1790,7 +1897,7 @@ enum staff_constraint {
 }
 
 """
-input type for incrementing integer columne in table "staff"
+input type for incrementing integer column in table "staff"
 """
 input staff_inc_input {
   staff_id: bigint
@@ -1892,6 +1999,13 @@ input staff_order_by {
   last_name: order_by
   phone_number: order_by
   staff_id: order_by
+}
+
+"""
+primary key columns input for table: "staff"
+"""
+input staff_pk_columns_input {
+  staff_id: bigint!
 }
 
 """

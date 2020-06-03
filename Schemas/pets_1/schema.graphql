@@ -160,7 +160,7 @@ input has_pet_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "has_pet"
+input type for incrementing integer column in table "has_pet"
 """
 input has_pet_inc_input {
   petid: bigint
@@ -369,6 +369,11 @@ type mutation_root {
   ): pets_mutation_response
 
   """
+  delete single row from the table: "pets"
+  """
+  delete_pets_by_pk(petid: bigint!): pets
+
+  """
   delete data from the table: "student"
   """
   delete_student(
@@ -377,12 +382,25 @@ type mutation_root {
   ): student_mutation_response
 
   """
+  delete single row from the table: "student"
+  """
+  delete_student_by_pk(stuid: bigint!): student
+
+  """
   insert data into the table: "has_pet"
   """
   insert_has_pet(
     """the rows to be inserted"""
     objects: [has_pet_insert_input!]!
   ): has_pet_mutation_response
+
+  """
+  insert a single row into the table: "has_pet"
+  """
+  insert_has_pet_one(
+    """the row to be inserted"""
+    object: has_pet_insert_input!
+  ): has_pet
 
   """
   insert data into the table: "pets"
@@ -396,6 +414,17 @@ type mutation_root {
   ): pets_mutation_response
 
   """
+  insert a single row into the table: "pets"
+  """
+  insert_pets_one(
+    """the row to be inserted"""
+    object: pets_insert_input!
+
+    """on conflict condition"""
+    on_conflict: pets_on_conflict
+  ): pets
+
+  """
   insert data into the table: "student"
   """
   insert_student(
@@ -405,6 +434,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: student_on_conflict
   ): student_mutation_response
+
+  """
+  insert a single row into the table: "student"
+  """
+  insert_student_one(
+    """the row to be inserted"""
+    object: student_insert_input!
+
+    """on conflict condition"""
+    on_conflict: student_on_conflict
+  ): student
 
   """
   update data of the table: "has_pet"
@@ -435,6 +475,18 @@ type mutation_root {
   ): pets_mutation_response
 
   """
+  update single row of the table: "pets"
+  """
+  update_pets_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: pets_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: pets_set_input
+    pk_columns: pets_pk_columns_input!
+  ): pets
+
+  """
   update data of the table: "student"
   """
   update_student(
@@ -447,6 +499,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: student_bool_exp!
   ): student_mutation_response
+
+  """
+  update single row of the table: "student"
+  """
+  update_student_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: student_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: student_set_input
+    pk_columns: student_pk_columns_input!
+  ): student
 }
 
 """column ordering options"""
@@ -604,11 +668,12 @@ enum pets_constraint {
 }
 
 """
-input type for incrementing integer columne in table "pets"
+input type for incrementing integer column in table "pets"
 """
 input pets_inc_input {
   pet_age: bigint
   petid: bigint
+  weight: Float
 }
 
 """
@@ -695,6 +760,13 @@ input pets_order_by {
   petid: order_by
   pettype: order_by
   weight: order_by
+}
+
+"""
+primary key columns input for table: "pets"
+"""
+input pets_pk_columns_input {
+  petid: bigint!
 }
 
 """
@@ -1148,7 +1220,7 @@ enum student_constraint {
 }
 
 """
-input type for incrementing integer columne in table "student"
+input type for incrementing integer column in table "student"
 """
 input student_inc_input {
   advisor: bigint
@@ -1265,6 +1337,13 @@ input student_order_by {
   major: order_by
   sex: order_by
   stuid: order_by
+}
+
+"""
+primary key columns input for table: "student"
+"""
+input student_pk_columns_input {
+  stuid: bigint!
 }
 
 """

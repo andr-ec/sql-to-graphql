@@ -169,6 +169,7 @@ public let databaseNames = [
     "school_player"
 ]
 
+/// starts hasura/graphql-engine:v1.2.2
 @discardableResult
 public func startHasura(name: String, dockerPath: String) -> String {
     return shell(
@@ -176,7 +177,7 @@ public func startHasura(name: String, dockerPath: String) -> String {
              \(dockerPath) run -d -p 8080:8080 \
     -e HASURA_GRAPHQL_DATABASE_URL=postgres://host.docker.internal:5432/\(name) \
     -e HASURA_GRAPHQL_ENABLE_CONSOLE=true \
-    hasura/graphql-engine:latest
+    hasura/graphql-engine:v1.2.2
     """)
 }
 @discardableResult

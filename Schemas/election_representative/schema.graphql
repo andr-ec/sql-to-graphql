@@ -152,11 +152,15 @@ enum election_constraint {
 }
 
 """
-input type for incrementing integer columne in table "election"
+input type for incrementing integer column in table "election"
 """
 input election_inc_input {
   election_id: Int
+  place: Float
   representative_id: Int
+  seats: Float
+  vote_percent: Float
+  votes: Float
 }
 
 """
@@ -542,6 +546,17 @@ type mutation_root {
   ): election_mutation_response
 
   """
+  insert a single row into the table: "election"
+  """
+  insert_election_one(
+    """the row to be inserted"""
+    object: election_insert_input!
+
+    """on conflict condition"""
+    on_conflict: election_on_conflict
+  ): election
+
+  """
   insert data into the table: "representative"
   """
   insert_representative(
@@ -551,6 +566,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: representative_on_conflict
   ): representative_mutation_response
+
+  """
+  insert a single row into the table: "representative"
+  """
+  insert_representative_one(
+    """the row to be inserted"""
+    object: representative_insert_input!
+
+    """on conflict condition"""
+    on_conflict: representative_on_conflict
+  ): representative
 
   """
   update data of the table: "election"
@@ -817,7 +843,7 @@ enum representative_constraint {
 }
 
 """
-input type for incrementing integer columne in table "representative"
+input type for incrementing integer column in table "representative"
 """
 input representative_inc_input {
   representative_id: Int

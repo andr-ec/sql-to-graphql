@@ -82,12 +82,22 @@ type mutation_root {
   ): student_mutation_response
 
   """
+  delete single row from the table: "student"
+  """
+  delete_student_by_pk(stuid: bigint!): student
+
+  """
   delete data from the table: "video_games"
   """
   delete_video_games(
     """filter the rows which have to be deleted"""
     where: video_games_bool_exp!
   ): video_games_mutation_response
+
+  """
+  delete single row from the table: "video_games"
+  """
+  delete_video_games_by_pk(gameid: bigint!): video_games
 
   """
   insert data into the table: "plays_games"
@@ -98,12 +108,28 @@ type mutation_root {
   ): plays_games_mutation_response
 
   """
+  insert a single row into the table: "plays_games"
+  """
+  insert_plays_games_one(
+    """the row to be inserted"""
+    object: plays_games_insert_input!
+  ): plays_games
+
+  """
   insert data into the table: "sportsinfo"
   """
   insert_sportsinfo(
     """the rows to be inserted"""
     objects: [sportsinfo_insert_input!]!
   ): sportsinfo_mutation_response
+
+  """
+  insert a single row into the table: "sportsinfo"
+  """
+  insert_sportsinfo_one(
+    """the row to be inserted"""
+    object: sportsinfo_insert_input!
+  ): sportsinfo
 
   """
   insert data into the table: "student"
@@ -117,6 +143,17 @@ type mutation_root {
   ): student_mutation_response
 
   """
+  insert a single row into the table: "student"
+  """
+  insert_student_one(
+    """the row to be inserted"""
+    object: student_insert_input!
+
+    """on conflict condition"""
+    on_conflict: student_on_conflict
+  ): student
+
+  """
   insert data into the table: "video_games"
   """
   insert_video_games(
@@ -126,6 +163,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: video_games_on_conflict
   ): video_games_mutation_response
+
+  """
+  insert a single row into the table: "video_games"
+  """
+  insert_video_games_one(
+    """the row to be inserted"""
+    object: video_games_insert_input!
+
+    """on conflict condition"""
+    on_conflict: video_games_on_conflict
+  ): video_games
 
   """
   update data of the table: "plays_games"
@@ -170,6 +218,18 @@ type mutation_root {
   ): student_mutation_response
 
   """
+  update single row of the table: "student"
+  """
+  update_student_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: student_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: student_set_input
+    pk_columns: student_pk_columns_input!
+  ): student
+
+  """
   update data of the table: "video_games"
   """
   update_video_games(
@@ -182,6 +242,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: video_games_bool_exp!
   ): video_games_mutation_response
+
+  """
+  update single row of the table: "video_games"
+  """
+  update_video_games_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: video_games_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: video_games_set_input
+    pk_columns: video_games_pk_columns_input!
+  ): video_games
 }
 
 """column ordering options"""
@@ -300,7 +372,7 @@ input plays_games_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "plays_games"
+input type for incrementing integer column in table "plays_games"
 """
 input plays_games_inc_input {
   gameid: bigint
@@ -779,7 +851,7 @@ input sportsinfo_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "sportsinfo"
+input type for incrementing integer column in table "sportsinfo"
 """
 input sportsinfo_inc_input {
   gamesplayed: bigint
@@ -1215,7 +1287,7 @@ enum student_constraint {
 }
 
 """
-input type for incrementing integer columne in table "student"
+input type for incrementing integer column in table "student"
 """
 input student_inc_input {
   advisor: bigint
@@ -1334,6 +1406,13 @@ input student_order_by {
   sex: order_by
   sportsinfos_aggregate: sportsinfo_aggregate_order_by
   stuid: order_by
+}
+
+"""
+primary key columns input for table: "student"
+"""
+input student_pk_columns_input {
+  stuid: bigint!
 }
 
 """
@@ -1832,7 +1911,7 @@ enum video_games_constraint {
 }
 
 """
-input type for incrementing integer columne in table "video_games"
+input type for incrementing integer column in table "video_games"
 """
 input video_games_inc_input {
   gameid: bigint
@@ -1916,6 +1995,13 @@ input video_games_order_by {
   gname: order_by
   gtype: order_by
   plays_games_aggregate: plays_games_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "video_games"
+"""
+input video_games_pk_columns_input {
+  gameid: bigint!
 }
 
 """

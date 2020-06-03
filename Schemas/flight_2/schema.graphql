@@ -169,7 +169,7 @@ enum airlines_constraint {
 }
 
 """
-input type for incrementing integer columne in table "airlines"
+input type for incrementing integer column in table "airlines"
 """
 input airlines_inc_input {
   uid: bigint
@@ -259,6 +259,13 @@ input airlines_order_by {
   country: order_by
   flights_aggregate: flights_aggregate_order_by
   uid: order_by
+}
+
+"""
+primary key columns input for table: "airlines"
+"""
+input airlines_pk_columns_input {
+  uid: bigint!
 }
 
 """
@@ -803,7 +810,7 @@ enum flights_constraint {
 }
 
 """
-input type for incrementing integer columne in table "flights"
+input type for incrementing integer column in table "flights"
 """
 input flights_inc_input {
   airline: bigint
@@ -898,6 +905,14 @@ input flights_order_by {
   destairport: order_by
   flightno: order_by
   sourceairport: order_by
+}
+
+"""
+primary key columns input for table: "flights"
+"""
+input flights_pk_columns_input {
+  airline: bigint!
+  flightno: bigint!
 }
 
 """
@@ -1053,6 +1068,11 @@ type mutation_root {
   ): airlines_mutation_response
 
   """
+  delete single row from the table: "airlines"
+  """
+  delete_airlines_by_pk(uid: bigint!): airlines
+
+  """
   delete data from the table: "airports"
   """
   delete_airports(
@@ -1069,6 +1089,11 @@ type mutation_root {
   ): flights_mutation_response
 
   """
+  delete single row from the table: "flights"
+  """
+  delete_flights_by_pk(airline: bigint!, flightno: bigint!): flights
+
+  """
   insert data into the table: "airlines"
   """
   insert_airlines(
@@ -1078,6 +1103,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: airlines_on_conflict
   ): airlines_mutation_response
+
+  """
+  insert a single row into the table: "airlines"
+  """
+  insert_airlines_one(
+    """the row to be inserted"""
+    object: airlines_insert_input!
+
+    """on conflict condition"""
+    on_conflict: airlines_on_conflict
+  ): airlines
 
   """
   insert data into the table: "airports"
@@ -1091,6 +1127,17 @@ type mutation_root {
   ): airports_mutation_response
 
   """
+  insert a single row into the table: "airports"
+  """
+  insert_airports_one(
+    """the row to be inserted"""
+    object: airports_insert_input!
+
+    """on conflict condition"""
+    on_conflict: airports_on_conflict
+  ): airports
+
+  """
   insert data into the table: "flights"
   """
   insert_flights(
@@ -1100,6 +1147,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: flights_on_conflict
   ): flights_mutation_response
+
+  """
+  insert a single row into the table: "flights"
+  """
+  insert_flights_one(
+    """the row to be inserted"""
+    object: flights_insert_input!
+
+    """on conflict condition"""
+    on_conflict: flights_on_conflict
+  ): flights
 
   """
   update data of the table: "airlines"
@@ -1114,6 +1172,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: airlines_bool_exp!
   ): airlines_mutation_response
+
+  """
+  update single row of the table: "airlines"
+  """
+  update_airlines_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: airlines_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: airlines_set_input
+    pk_columns: airlines_pk_columns_input!
+  ): airlines
 
   """
   update data of the table: "airports"
@@ -1139,6 +1209,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: flights_bool_exp!
   ): flights_mutation_response
+
+  """
+  update single row of the table: "flights"
+  """
+  update_flights_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: flights_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: flights_set_input
+    pk_columns: flights_pk_columns_input!
+  ): flights
 }
 
 """column ordering options"""

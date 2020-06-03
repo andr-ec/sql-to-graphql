@@ -288,9 +288,13 @@ enum bookings_constraint {
 }
 
 """
-input type for incrementing integer columne in table "bookings"
+input type for incrementing integer column in table "bookings"
 """
 input bookings_inc_input {
+  amount_of_discount: numeric
+  amount_of_refund: numeric
+  amount_outstanding: numeric
+  amount_payable: numeric
   booking_id: bigint
   customer_id: bigint
 }
@@ -427,6 +431,13 @@ input bookings_order_by {
   products_bookeds_aggregate: products_booked_aggregate_order_by
   returned_damaged_yn: order_by
   view_product_availabilities_aggregate: view_product_availability_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "bookings"
+"""
+input bookings_pk_columns_input {
+  booking_id: bigint!
 }
 
 """
@@ -857,7 +868,7 @@ enum customers_constraint {
 }
 
 """
-input type for incrementing integer columne in table "customers"
+input type for incrementing integer column in table "customers"
 """
 input customers_inc_input {
   coupon_id: bigint
@@ -976,6 +987,13 @@ input customers_order_by {
   good_or_bad_customer: order_by
   last_name: order_by
   payments_aggregate: payments_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "customers"
+"""
+input customers_pk_columns_input {
+  customer_id: bigint!
 }
 
 """
@@ -1279,9 +1297,10 @@ enum discount_coupons_constraint {
 }
 
 """
-input type for incrementing integer columne in table "discount_coupons"
+input type for incrementing integer column in table "discount_coupons"
 """
 input discount_coupons_inc_input {
+  coupon_amount: numeric
   coupon_id: bigint
 }
 
@@ -1363,6 +1382,13 @@ input discount_coupons_order_by {
   coupon_id: order_by
   customers_aggregate: customers_aggregate_order_by
   date_issued: order_by
+}
+
+"""
+primary key columns input for table: "discount_coupons"
+"""
+input discount_coupons_pk_columns_input {
+  coupon_id: bigint!
 }
 
 """
@@ -1528,12 +1554,22 @@ type mutation_root {
   ): bookings_mutation_response
 
   """
+  delete single row from the table: "bookings"
+  """
+  delete_bookings_by_pk(booking_id: bigint!): bookings
+
+  """
   delete data from the table: "customers"
   """
   delete_customers(
     """filter the rows which have to be deleted"""
     where: customers_bool_exp!
   ): customers_mutation_response
+
+  """
+  delete single row from the table: "customers"
+  """
+  delete_customers_by_pk(customer_id: bigint!): customers
 
   """
   delete data from the table: "discount_coupons"
@@ -1544,12 +1580,22 @@ type mutation_root {
   ): discount_coupons_mutation_response
 
   """
+  delete single row from the table: "discount_coupons"
+  """
+  delete_discount_coupons_by_pk(coupon_id: bigint!): discount_coupons
+
+  """
   delete data from the table: "payments"
   """
   delete_payments(
     """filter the rows which have to be deleted"""
     where: payments_bool_exp!
   ): payments_mutation_response
+
+  """
+  delete single row from the table: "payments"
+  """
+  delete_payments_by_pk(payment_id: bigint!): payments
 
   """
   delete data from the table: "products_booked"
@@ -1560,6 +1606,11 @@ type mutation_root {
   ): products_booked_mutation_response
 
   """
+  delete single row from the table: "products_booked"
+  """
+  delete_products_booked_by_pk(booking_id: bigint!, product_id: bigint!): products_booked
+
+  """
   delete data from the table: "products_for_hire"
   """
   delete_products_for_hire(
@@ -1568,12 +1619,22 @@ type mutation_root {
   ): products_for_hire_mutation_response
 
   """
+  delete single row from the table: "products_for_hire"
+  """
+  delete_products_for_hire_by_pk(product_id: bigint!): products_for_hire
+
+  """
   delete data from the table: "view_product_availability"
   """
   delete_view_product_availability(
     """filter the rows which have to be deleted"""
     where: view_product_availability_bool_exp!
   ): view_product_availability_mutation_response
+
+  """
+  delete single row from the table: "view_product_availability"
+  """
+  delete_view_product_availability_by_pk(status_date: timestamptz!): view_product_availability
 
   """
   insert data into the table: "bookings"
@@ -1587,6 +1648,17 @@ type mutation_root {
   ): bookings_mutation_response
 
   """
+  insert a single row into the table: "bookings"
+  """
+  insert_bookings_one(
+    """the row to be inserted"""
+    object: bookings_insert_input!
+
+    """on conflict condition"""
+    on_conflict: bookings_on_conflict
+  ): bookings
+
+  """
   insert data into the table: "customers"
   """
   insert_customers(
@@ -1596,6 +1668,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: customers_on_conflict
   ): customers_mutation_response
+
+  """
+  insert a single row into the table: "customers"
+  """
+  insert_customers_one(
+    """the row to be inserted"""
+    object: customers_insert_input!
+
+    """on conflict condition"""
+    on_conflict: customers_on_conflict
+  ): customers
 
   """
   insert data into the table: "discount_coupons"
@@ -1609,6 +1692,17 @@ type mutation_root {
   ): discount_coupons_mutation_response
 
   """
+  insert a single row into the table: "discount_coupons"
+  """
+  insert_discount_coupons_one(
+    """the row to be inserted"""
+    object: discount_coupons_insert_input!
+
+    """on conflict condition"""
+    on_conflict: discount_coupons_on_conflict
+  ): discount_coupons
+
+  """
   insert data into the table: "payments"
   """
   insert_payments(
@@ -1618,6 +1712,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: payments_on_conflict
   ): payments_mutation_response
+
+  """
+  insert a single row into the table: "payments"
+  """
+  insert_payments_one(
+    """the row to be inserted"""
+    object: payments_insert_input!
+
+    """on conflict condition"""
+    on_conflict: payments_on_conflict
+  ): payments
 
   """
   insert data into the table: "products_booked"
@@ -1631,6 +1736,17 @@ type mutation_root {
   ): products_booked_mutation_response
 
   """
+  insert a single row into the table: "products_booked"
+  """
+  insert_products_booked_one(
+    """the row to be inserted"""
+    object: products_booked_insert_input!
+
+    """on conflict condition"""
+    on_conflict: products_booked_on_conflict
+  ): products_booked
+
+  """
   insert data into the table: "products_for_hire"
   """
   insert_products_for_hire(
@@ -1642,6 +1758,17 @@ type mutation_root {
   ): products_for_hire_mutation_response
 
   """
+  insert a single row into the table: "products_for_hire"
+  """
+  insert_products_for_hire_one(
+    """the row to be inserted"""
+    object: products_for_hire_insert_input!
+
+    """on conflict condition"""
+    on_conflict: products_for_hire_on_conflict
+  ): products_for_hire
+
+  """
   insert data into the table: "view_product_availability"
   """
   insert_view_product_availability(
@@ -1651,6 +1778,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: view_product_availability_on_conflict
   ): view_product_availability_mutation_response
+
+  """
+  insert a single row into the table: "view_product_availability"
+  """
+  insert_view_product_availability_one(
+    """the row to be inserted"""
+    object: view_product_availability_insert_input!
+
+    """on conflict condition"""
+    on_conflict: view_product_availability_on_conflict
+  ): view_product_availability
 
   """
   update data of the table: "bookings"
@@ -1667,6 +1805,18 @@ type mutation_root {
   ): bookings_mutation_response
 
   """
+  update single row of the table: "bookings"
+  """
+  update_bookings_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: bookings_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: bookings_set_input
+    pk_columns: bookings_pk_columns_input!
+  ): bookings
+
+  """
   update data of the table: "customers"
   """
   update_customers(
@@ -1679,6 +1829,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: customers_bool_exp!
   ): customers_mutation_response
+
+  """
+  update single row of the table: "customers"
+  """
+  update_customers_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customers_set_input
+    pk_columns: customers_pk_columns_input!
+  ): customers
 
   """
   update data of the table: "discount_coupons"
@@ -1695,6 +1857,18 @@ type mutation_root {
   ): discount_coupons_mutation_response
 
   """
+  update single row of the table: "discount_coupons"
+  """
+  update_discount_coupons_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: discount_coupons_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: discount_coupons_set_input
+    pk_columns: discount_coupons_pk_columns_input!
+  ): discount_coupons
+
+  """
   update data of the table: "payments"
   """
   update_payments(
@@ -1707,6 +1881,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: payments_bool_exp!
   ): payments_mutation_response
+
+  """
+  update single row of the table: "payments"
+  """
+  update_payments_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: payments_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: payments_set_input
+    pk_columns: payments_pk_columns_input!
+  ): payments
 
   """
   update data of the table: "products_booked"
@@ -1723,6 +1909,18 @@ type mutation_root {
   ): products_booked_mutation_response
 
   """
+  update single row of the table: "products_booked"
+  """
+  update_products_booked_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: products_booked_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: products_booked_set_input
+    pk_columns: products_booked_pk_columns_input!
+  ): products_booked
+
+  """
   update data of the table: "products_for_hire"
   """
   update_products_for_hire(
@@ -1737,6 +1935,18 @@ type mutation_root {
   ): products_for_hire_mutation_response
 
   """
+  update single row of the table: "products_for_hire"
+  """
+  update_products_for_hire_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: products_for_hire_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: products_for_hire_set_input
+    pk_columns: products_for_hire_pk_columns_input!
+  ): products_for_hire
+
+  """
   update data of the table: "view_product_availability"
   """
   update_view_product_availability(
@@ -1749,6 +1959,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: view_product_availability_bool_exp!
   ): view_product_availability_mutation_response
+
+  """
+  update single row of the table: "view_product_availability"
+  """
+  update_view_product_availability_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: view_product_availability_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: view_product_availability_set_input
+    pk_columns: view_product_availability_pk_columns_input!
+  ): view_product_availability
 }
 
 scalar numeric
@@ -1907,9 +2129,11 @@ enum payments_constraint {
 }
 
 """
-input type for incrementing integer columne in table "payments"
+input type for incrementing integer column in table "payments"
 """
 input payments_inc_input {
+  amount_due: numeric
+  amount_paid: numeric
   booking_id: bigint
   customer_id: bigint
   payment_id: bigint
@@ -2025,6 +2249,13 @@ input payments_order_by {
   payment_date: order_by
   payment_id: order_by
   payment_type_code: order_by
+}
+
+"""
+primary key columns input for table: "payments"
+"""
+input payments_pk_columns_input {
+  payment_id: bigint!
 }
 
 """
@@ -2351,9 +2582,10 @@ enum products_booked_constraint {
 }
 
 """
-input type for incrementing integer columne in table "products_booked"
+input type for incrementing integer column in table "products_booked"
 """
 input products_booked_inc_input {
+  booked_amount: float8
   booked_count: bigint
   booking_id: bigint
   product_id: bigint
@@ -2457,6 +2689,14 @@ input products_booked_order_by {
   products_for_hire: products_for_hire_order_by
   returned_late_yn: order_by
   returned_yn: order_by
+}
+
+"""
+primary key columns input for table: "products_booked"
+"""
+input products_booked_pk_columns_input {
+  booking_id: bigint!
+  product_id: bigint!
 }
 
 """
@@ -2815,9 +3055,10 @@ enum products_for_hire_constraint {
 }
 
 """
-input type for incrementing integer columne in table "products_for_hire"
+input type for incrementing integer column in table "products_for_hire"
 """
 input products_for_hire_inc_input {
+  daily_hire_cost: numeric
   product_id: bigint
 }
 
@@ -2913,6 +3154,13 @@ input products_for_hire_order_by {
   product_type_code: order_by
   products_bookeds_aggregate: products_booked_aggregate_order_by
   view_product_availabilities_aggregate: view_product_availability_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "products_for_hire"
+"""
+input products_for_hire_pk_columns_input {
+  product_id: bigint!
 }
 
 """
@@ -3826,7 +4074,7 @@ enum view_product_availability_constraint {
 }
 
 """
-input type for incrementing integer columne in table "view_product_availability"
+input type for incrementing integer column in table "view_product_availability"
 """
 input view_product_availability_inc_input {
   booking_id: bigint
@@ -3919,6 +4167,13 @@ input view_product_availability_order_by {
   product_id: order_by
   products_for_hire: products_for_hire_order_by
   status_date: order_by
+}
+
+"""
+primary key columns input for table: "view_product_availability"
+"""
+input view_product_availability_pk_columns_input {
+  status_date: timestamptz!
 }
 
 """

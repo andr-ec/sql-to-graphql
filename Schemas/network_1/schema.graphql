@@ -138,7 +138,7 @@ enum friend_constraint {
 }
 
 """
-input type for incrementing integer columne in table "friend"
+input type for incrementing integer column in table "friend"
 """
 input friend_inc_input {
   friend_id: Int
@@ -219,6 +219,14 @@ input friend_order_by {
   highschooler: highschooler_order_by
   highschoolerByStudentId: highschooler_order_by
   student_id: order_by
+}
+
+"""
+primary key columns input for table: "friend"
+"""
+input friend_pk_columns_input {
+  friend_id: Int!
+  student_id: Int!
 }
 
 """
@@ -590,7 +598,7 @@ enum highschooler_constraint {
 }
 
 """
-input type for incrementing integer columne in table "highschooler"
+input type for incrementing integer column in table "highschooler"
 """
 input highschooler_inc_input {
   grade: Int
@@ -932,7 +940,7 @@ enum likes_constraint {
 }
 
 """
-input type for incrementing integer columne in table "likes"
+input type for incrementing integer column in table "likes"
 """
 input likes_inc_input {
   liked_id: Int
@@ -1013,6 +1021,14 @@ input likes_order_by {
   highschoolerByStudentId: highschooler_order_by
   liked_id: order_by
   student_id: order_by
+}
+
+"""
+primary key columns input for table: "likes"
+"""
+input likes_pk_columns_input {
+  liked_id: Int!
+  student_id: Int!
 }
 
 """
@@ -1154,6 +1170,11 @@ type mutation_root {
   ): friend_mutation_response
 
   """
+  delete single row from the table: "friend"
+  """
+  delete_friend_by_pk(friend_id: Int!, student_id: Int!): friend
+
+  """
   delete data from the table: "highschooler"
   """
   delete_highschooler(
@@ -1170,6 +1191,11 @@ type mutation_root {
   ): likes_mutation_response
 
   """
+  delete single row from the table: "likes"
+  """
+  delete_likes_by_pk(liked_id: Int!, student_id: Int!): likes
+
+  """
   insert data into the table: "friend"
   """
   insert_friend(
@@ -1179,6 +1205,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: friend_on_conflict
   ): friend_mutation_response
+
+  """
+  insert a single row into the table: "friend"
+  """
+  insert_friend_one(
+    """the row to be inserted"""
+    object: friend_insert_input!
+
+    """on conflict condition"""
+    on_conflict: friend_on_conflict
+  ): friend
 
   """
   insert data into the table: "highschooler"
@@ -1192,6 +1229,17 @@ type mutation_root {
   ): highschooler_mutation_response
 
   """
+  insert a single row into the table: "highschooler"
+  """
+  insert_highschooler_one(
+    """the row to be inserted"""
+    object: highschooler_insert_input!
+
+    """on conflict condition"""
+    on_conflict: highschooler_on_conflict
+  ): highschooler
+
+  """
   insert data into the table: "likes"
   """
   insert_likes(
@@ -1201,6 +1249,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: likes_on_conflict
   ): likes_mutation_response
+
+  """
+  insert a single row into the table: "likes"
+  """
+  insert_likes_one(
+    """the row to be inserted"""
+    object: likes_insert_input!
+
+    """on conflict condition"""
+    on_conflict: likes_on_conflict
+  ): likes
 
   """
   update data of the table: "friend"
@@ -1215,6 +1274,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: friend_bool_exp!
   ): friend_mutation_response
+
+  """
+  update single row of the table: "friend"
+  """
+  update_friend_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: friend_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: friend_set_input
+    pk_columns: friend_pk_columns_input!
+  ): friend
 
   """
   update data of the table: "highschooler"
@@ -1243,6 +1314,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: likes_bool_exp!
   ): likes_mutation_response
+
+  """
+  update single row of the table: "likes"
+  """
+  update_likes_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: likes_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: likes_set_input
+    pk_columns: likes_pk_columns_input!
+  ): likes
 }
 
 """column ordering options"""

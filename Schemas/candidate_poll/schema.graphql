@@ -154,11 +154,15 @@ enum candidate_constraint {
 }
 
 """
-input type for incrementing integer columne in table "candidate"
+input type for incrementing integer column in table "candidate"
 """
 input candidate_inc_input {
   candidate_id: Int
+  consider_rate: Float
+  oppose_rate: Float
   people_id: Int
+  support_rate: Float
+  unsure_rate: Float
 }
 
 """
@@ -557,6 +561,17 @@ type mutation_root {
   ): candidate_mutation_response
 
   """
+  insert a single row into the table: "candidate"
+  """
+  insert_candidate_one(
+    """the row to be inserted"""
+    object: candidate_insert_input!
+
+    """on conflict condition"""
+    on_conflict: candidate_on_conflict
+  ): candidate
+
+  """
   insert data into the table: "people"
   """
   insert_people(
@@ -566,6 +581,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: people_on_conflict
   ): people_mutation_response
+
+  """
+  insert a single row into the table: "people"
+  """
+  insert_people_one(
+    """the row to be inserted"""
+    object: people_insert_input!
+
+    """on conflict condition"""
+    on_conflict: people_on_conflict
+  ): people
 
   """
   update data of the table: "candidate"
@@ -755,10 +781,12 @@ enum people_constraint {
 }
 
 """
-input type for incrementing integer columne in table "people"
+input type for incrementing integer column in table "people"
 """
 input people_inc_input {
+  height: Float
   people_id: Int
+  weight: Float
 }
 
 """

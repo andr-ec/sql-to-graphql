@@ -167,7 +167,7 @@ enum attribute_definitions_constraint {
 }
 
 """
-input type for incrementing integer columne in table "attribute_definitions"
+input type for incrementing integer column in table "attribute_definitions"
 """
 input attribute_definitions_inc_input {
   attribute_id: bigint
@@ -251,6 +251,13 @@ input attribute_definitions_order_by {
   attribute_id: order_by
   attribute_name: order_by
   catalog_contents_additional_attributes_aggregate: catalog_contents_additional_attributes_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "attribute_definitions"
+"""
+input attribute_definitions_pk_columns_input {
+  attribute_id: bigint!
 }
 
 """
@@ -551,7 +558,7 @@ input catalog_contents_additional_attributes_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "catalog_contents_additional_attributes"
+input type for incrementing integer column in table "catalog_contents_additional_attributes"
 """
 input catalog_contents_additional_attributes_inc_input {
   attribute_id: bigint
@@ -888,7 +895,7 @@ enum catalog_contents_constraint {
 }
 
 """
-input type for incrementing integer columne in table "catalog_contents"
+input type for incrementing integer column in table "catalog_contents"
 """
 input catalog_contents_inc_input {
   catalog_entry_id: bigint
@@ -896,6 +903,9 @@ input catalog_contents_inc_input {
   next_entry_id: bigint
   parent_entry_id: bigint
   previous_entry_id: bigint
+  price_in_dollars: float8
+  price_in_euros: float8
+  price_in_pounds: float8
 }
 
 """
@@ -1044,6 +1054,13 @@ input catalog_contents_order_by {
   price_in_pounds: order_by
   product_stock_number: order_by
   width: order_by
+}
+
+"""
+primary key columns input for table: "catalog_contents"
+"""
+input catalog_contents_pk_columns_input {
+  catalog_entry_id: bigint!
 }
 
 """
@@ -1513,7 +1530,7 @@ enum catalog_structure_constraint {
 }
 
 """
-input type for incrementing integer columne in table "catalog_structure"
+input type for incrementing integer column in table "catalog_structure"
 """
 input catalog_structure_inc_input {
   catalog_id: bigint
@@ -1602,6 +1619,13 @@ input catalog_structure_order_by {
   catalog_id: order_by
   catalog_level_name: order_by
   catalog_level_number: order_by
+}
+
+"""
+primary key columns input for table: "catalog_structure"
+"""
+input catalog_structure_pk_columns_input {
+  catalog_level_number: bigint!
 }
 
 """
@@ -1872,7 +1896,7 @@ enum catalogs_constraint {
 }
 
 """
-input type for incrementing integer columne in table "catalogs"
+input type for incrementing integer column in table "catalogs"
 """
 input catalogs_inc_input {
   catalog_id: bigint
@@ -1968,6 +1992,13 @@ input catalogs_order_by {
   catalog_structures_aggregate: catalog_structure_aggregate_order_by
   date_of_latest_revision: order_by
   date_of_publication: order_by
+}
+
+"""
+primary key columns input for table: "catalogs"
+"""
+input catalogs_pk_columns_input {
+  catalog_id: bigint!
 }
 
 """
@@ -2133,6 +2164,11 @@ type mutation_root {
   ): attribute_definitions_mutation_response
 
   """
+  delete single row from the table: "attribute_definitions"
+  """
+  delete_attribute_definitions_by_pk(attribute_id: bigint!): attribute_definitions
+
+  """
   delete data from the table: "catalog_contents"
   """
   delete_catalog_contents(
@@ -2149,6 +2185,11 @@ type mutation_root {
   ): catalog_contents_additional_attributes_mutation_response
 
   """
+  delete single row from the table: "catalog_contents"
+  """
+  delete_catalog_contents_by_pk(catalog_entry_id: bigint!): catalog_contents
+
+  """
   delete data from the table: "catalog_structure"
   """
   delete_catalog_structure(
@@ -2157,12 +2198,22 @@ type mutation_root {
   ): catalog_structure_mutation_response
 
   """
+  delete single row from the table: "catalog_structure"
+  """
+  delete_catalog_structure_by_pk(catalog_level_number: bigint!): catalog_structure
+
+  """
   delete data from the table: "catalogs"
   """
   delete_catalogs(
     """filter the rows which have to be deleted"""
     where: catalogs_bool_exp!
   ): catalogs_mutation_response
+
+  """
+  delete single row from the table: "catalogs"
+  """
+  delete_catalogs_by_pk(catalog_id: bigint!): catalogs
 
   """
   insert data into the table: "attribute_definitions"
@@ -2174,6 +2225,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: attribute_definitions_on_conflict
   ): attribute_definitions_mutation_response
+
+  """
+  insert a single row into the table: "attribute_definitions"
+  """
+  insert_attribute_definitions_one(
+    """the row to be inserted"""
+    object: attribute_definitions_insert_input!
+
+    """on conflict condition"""
+    on_conflict: attribute_definitions_on_conflict
+  ): attribute_definitions
 
   """
   insert data into the table: "catalog_contents"
@@ -2195,6 +2257,25 @@ type mutation_root {
   ): catalog_contents_additional_attributes_mutation_response
 
   """
+  insert a single row into the table: "catalog_contents_additional_attributes"
+  """
+  insert_catalog_contents_additional_attributes_one(
+    """the row to be inserted"""
+    object: catalog_contents_additional_attributes_insert_input!
+  ): catalog_contents_additional_attributes
+
+  """
+  insert a single row into the table: "catalog_contents"
+  """
+  insert_catalog_contents_one(
+    """the row to be inserted"""
+    object: catalog_contents_insert_input!
+
+    """on conflict condition"""
+    on_conflict: catalog_contents_on_conflict
+  ): catalog_contents
+
+  """
   insert data into the table: "catalog_structure"
   """
   insert_catalog_structure(
@@ -2206,6 +2287,17 @@ type mutation_root {
   ): catalog_structure_mutation_response
 
   """
+  insert a single row into the table: "catalog_structure"
+  """
+  insert_catalog_structure_one(
+    """the row to be inserted"""
+    object: catalog_structure_insert_input!
+
+    """on conflict condition"""
+    on_conflict: catalog_structure_on_conflict
+  ): catalog_structure
+
+  """
   insert data into the table: "catalogs"
   """
   insert_catalogs(
@@ -2215,6 +2307,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: catalogs_on_conflict
   ): catalogs_mutation_response
+
+  """
+  insert a single row into the table: "catalogs"
+  """
+  insert_catalogs_one(
+    """the row to be inserted"""
+    object: catalogs_insert_input!
+
+    """on conflict condition"""
+    on_conflict: catalogs_on_conflict
+  ): catalogs
 
   """
   update data of the table: "attribute_definitions"
@@ -2229,6 +2332,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: attribute_definitions_bool_exp!
   ): attribute_definitions_mutation_response
+
+  """
+  update single row of the table: "attribute_definitions"
+  """
+  update_attribute_definitions_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: attribute_definitions_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: attribute_definitions_set_input
+    pk_columns: attribute_definitions_pk_columns_input!
+  ): attribute_definitions
 
   """
   update data of the table: "catalog_contents"
@@ -2259,6 +2374,18 @@ type mutation_root {
   ): catalog_contents_additional_attributes_mutation_response
 
   """
+  update single row of the table: "catalog_contents"
+  """
+  update_catalog_contents_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: catalog_contents_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: catalog_contents_set_input
+    pk_columns: catalog_contents_pk_columns_input!
+  ): catalog_contents
+
+  """
   update data of the table: "catalog_structure"
   """
   update_catalog_structure(
@@ -2273,6 +2400,18 @@ type mutation_root {
   ): catalog_structure_mutation_response
 
   """
+  update single row of the table: "catalog_structure"
+  """
+  update_catalog_structure_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: catalog_structure_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: catalog_structure_set_input
+    pk_columns: catalog_structure_pk_columns_input!
+  ): catalog_structure
+
+  """
   update data of the table: "catalogs"
   """
   update_catalogs(
@@ -2285,6 +2424,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: catalogs_bool_exp!
   ): catalogs_mutation_response
+
+  """
+  update single row of the table: "catalogs"
+  """
+  update_catalogs_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: catalogs_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: catalogs_set_input
+    pk_columns: catalogs_pk_columns_input!
+  ): catalogs
 }
 
 """column ordering options"""

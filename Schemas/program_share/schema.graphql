@@ -139,7 +139,7 @@ enum broadcast_constraint {
 }
 
 """
-input type for incrementing integer columne in table "broadcast"
+input type for incrementing integer column in table "broadcast"
 """
 input broadcast_inc_input {
   channel_id: Int
@@ -356,11 +356,12 @@ enum broadcast_share_constraint {
 }
 
 """
-input type for incrementing integer columne in table "broadcast_share"
+input type for incrementing integer column in table "broadcast_share"
 """
 input broadcast_share_inc_input {
   channel_id: Int
   program_id: Int
+  share_in_percent: Float
 }
 
 """
@@ -892,10 +893,12 @@ enum channel_constraint {
 }
 
 """
-input type for incrementing integer columne in table "channel"
+input type for incrementing integer column in table "channel"
 """
 input channel_inc_input {
   channel_id: Int
+  rating_in_percent: Float
+  share_in_percent: Float
 }
 
 """
@@ -1231,6 +1234,17 @@ type mutation_root {
   ): broadcast_mutation_response
 
   """
+  insert a single row into the table: "broadcast"
+  """
+  insert_broadcast_one(
+    """the row to be inserted"""
+    object: broadcast_insert_input!
+
+    """on conflict condition"""
+    on_conflict: broadcast_on_conflict
+  ): broadcast
+
+  """
   insert data into the table: "broadcast_share"
   """
   insert_broadcast_share(
@@ -1240,6 +1254,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: broadcast_share_on_conflict
   ): broadcast_share_mutation_response
+
+  """
+  insert a single row into the table: "broadcast_share"
+  """
+  insert_broadcast_share_one(
+    """the row to be inserted"""
+    object: broadcast_share_insert_input!
+
+    """on conflict condition"""
+    on_conflict: broadcast_share_on_conflict
+  ): broadcast_share
 
   """
   insert data into the table: "channel"
@@ -1253,6 +1278,17 @@ type mutation_root {
   ): channel_mutation_response
 
   """
+  insert a single row into the table: "channel"
+  """
+  insert_channel_one(
+    """the row to be inserted"""
+    object: channel_insert_input!
+
+    """on conflict condition"""
+    on_conflict: channel_on_conflict
+  ): channel
+
+  """
   insert data into the table: "program"
   """
   insert_program(
@@ -1262,6 +1298,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: program_on_conflict
   ): program_mutation_response
+
+  """
+  insert a single row into the table: "program"
+  """
+  insert_program_one(
+    """the row to be inserted"""
+    object: program_insert_input!
+
+    """on conflict condition"""
+    on_conflict: program_on_conflict
+  ): program
 
   """
   update data of the table: "broadcast"
@@ -1512,9 +1559,10 @@ enum program_constraint {
 }
 
 """
-input type for incrementing integer columne in table "program"
+input type for incrementing integer column in table "program"
 """
 input program_inc_input {
+  launch: Float
   program_id: Int
 }
 

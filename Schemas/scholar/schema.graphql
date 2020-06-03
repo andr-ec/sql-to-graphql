@@ -165,7 +165,7 @@ enum author_constraint {
 }
 
 """
-input type for incrementing integer columne in table "author"
+input type for incrementing integer column in table "author"
 """
 input author_inc_input {
   authorid: bigint
@@ -243,6 +243,13 @@ input author_order_by {
   authorid: order_by
   authorname: order_by
   writes_aggregate: writes_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "author"
+"""
+input author_pk_columns_input {
+  authorid: bigint!
 }
 
 """
@@ -479,7 +486,7 @@ enum cite_constraint {
 }
 
 """
-input type for incrementing integer columne in table "cite"
+input type for incrementing integer column in table "cite"
 """
 input cite_inc_input {
   citedpaperid: bigint
@@ -560,6 +567,14 @@ input cite_order_by {
   citingpaperid: order_by
   paper: paper_order_by
   paperByCitingpaperid: paper_order_by
+}
+
+"""
+primary key columns input for table: "cite"
+"""
+input cite_pk_columns_input {
+  citedpaperid: bigint!
+  citingpaperid: bigint!
 }
 
 """
@@ -780,7 +795,7 @@ enum dataset_constraint {
 }
 
 """
-input type for incrementing integer columne in table "dataset"
+input type for incrementing integer column in table "dataset"
 """
 input dataset_inc_input {
   datasetid: bigint
@@ -856,6 +871,13 @@ ordering options when selecting data from "dataset"
 input dataset_order_by {
   datasetid: order_by
   datasetname: order_by
+}
+
+"""
+primary key columns input for table: "dataset"
+"""
+input dataset_pk_columns_input {
+  datasetid: bigint!
 }
 
 """
@@ -1099,7 +1121,7 @@ enum journal_constraint {
 }
 
 """
-input type for incrementing integer columne in table "journal"
+input type for incrementing integer column in table "journal"
 """
 input journal_inc_input {
   journalid: bigint
@@ -1177,6 +1199,13 @@ input journal_order_by {
   journalid: order_by
   journalname: order_by
   papers_aggregate: paper_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "journal"
+"""
+input journal_pk_columns_input {
+  journalid: bigint!
 }
 
 """
@@ -1420,7 +1449,7 @@ enum keyphrase_constraint {
 }
 
 """
-input type for incrementing integer columne in table "keyphrase"
+input type for incrementing integer column in table "keyphrase"
 """
 input keyphrase_inc_input {
   keyphraseid: bigint
@@ -1498,6 +1527,13 @@ input keyphrase_order_by {
   keyphraseid: order_by
   keyphrasename: order_by
   paperkeyphrases_aggregate: paperkeyphrase_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "keyphrase"
+"""
+input keyphrase_pk_columns_input {
+  keyphraseid: bigint!
 }
 
 """
@@ -1625,12 +1661,22 @@ type mutation_root {
   ): author_mutation_response
 
   """
+  delete single row from the table: "author"
+  """
+  delete_author_by_pk(authorid: bigint!): author
+
+  """
   delete data from the table: "cite"
   """
   delete_cite(
     """filter the rows which have to be deleted"""
     where: cite_bool_exp!
   ): cite_mutation_response
+
+  """
+  delete single row from the table: "cite"
+  """
+  delete_cite_by_pk(citedpaperid: bigint!, citingpaperid: bigint!): cite
 
   """
   delete data from the table: "dataset"
@@ -1641,12 +1687,22 @@ type mutation_root {
   ): dataset_mutation_response
 
   """
+  delete single row from the table: "dataset"
+  """
+  delete_dataset_by_pk(datasetid: bigint!): dataset
+
+  """
   delete data from the table: "journal"
   """
   delete_journal(
     """filter the rows which have to be deleted"""
     where: journal_bool_exp!
   ): journal_mutation_response
+
+  """
+  delete single row from the table: "journal"
+  """
+  delete_journal_by_pk(journalid: bigint!): journal
 
   """
   delete data from the table: "keyphrase"
@@ -1657,12 +1713,22 @@ type mutation_root {
   ): keyphrase_mutation_response
 
   """
+  delete single row from the table: "keyphrase"
+  """
+  delete_keyphrase_by_pk(keyphraseid: bigint!): keyphrase
+
+  """
   delete data from the table: "paper"
   """
   delete_paper(
     """filter the rows which have to be deleted"""
     where: paper_bool_exp!
   ): paper_mutation_response
+
+  """
+  delete single row from the table: "paper"
+  """
+  delete_paper_by_pk(paperid: bigint!): paper
 
   """
   delete data from the table: "paperdataset"
@@ -1673,12 +1739,22 @@ type mutation_root {
   ): paperdataset_mutation_response
 
   """
+  delete single row from the table: "paperdataset"
+  """
+  delete_paperdataset_by_pk(datasetid: bigint!, paperid: bigint!): paperdataset
+
+  """
   delete data from the table: "paperkeyphrase"
   """
   delete_paperkeyphrase(
     """filter the rows which have to be deleted"""
     where: paperkeyphrase_bool_exp!
   ): paperkeyphrase_mutation_response
+
+  """
+  delete single row from the table: "paperkeyphrase"
+  """
+  delete_paperkeyphrase_by_pk(keyphraseid: bigint!, paperid: bigint!): paperkeyphrase
 
   """
   delete data from the table: "venue"
@@ -1689,12 +1765,22 @@ type mutation_root {
   ): venue_mutation_response
 
   """
+  delete single row from the table: "venue"
+  """
+  delete_venue_by_pk(venueid: bigint!): venue
+
+  """
   delete data from the table: "writes"
   """
   delete_writes(
     """filter the rows which have to be deleted"""
     where: writes_bool_exp!
   ): writes_mutation_response
+
+  """
+  delete single row from the table: "writes"
+  """
+  delete_writes_by_pk(authorid: bigint!, paperid: bigint!): writes
 
   """
   insert data into the table: "author"
@@ -1708,6 +1794,17 @@ type mutation_root {
   ): author_mutation_response
 
   """
+  insert a single row into the table: "author"
+  """
+  insert_author_one(
+    """the row to be inserted"""
+    object: author_insert_input!
+
+    """on conflict condition"""
+    on_conflict: author_on_conflict
+  ): author
+
+  """
   insert data into the table: "cite"
   """
   insert_cite(
@@ -1717,6 +1814,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: cite_on_conflict
   ): cite_mutation_response
+
+  """
+  insert a single row into the table: "cite"
+  """
+  insert_cite_one(
+    """the row to be inserted"""
+    object: cite_insert_input!
+
+    """on conflict condition"""
+    on_conflict: cite_on_conflict
+  ): cite
 
   """
   insert data into the table: "dataset"
@@ -1730,6 +1838,17 @@ type mutation_root {
   ): dataset_mutation_response
 
   """
+  insert a single row into the table: "dataset"
+  """
+  insert_dataset_one(
+    """the row to be inserted"""
+    object: dataset_insert_input!
+
+    """on conflict condition"""
+    on_conflict: dataset_on_conflict
+  ): dataset
+
+  """
   insert data into the table: "journal"
   """
   insert_journal(
@@ -1739,6 +1858,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: journal_on_conflict
   ): journal_mutation_response
+
+  """
+  insert a single row into the table: "journal"
+  """
+  insert_journal_one(
+    """the row to be inserted"""
+    object: journal_insert_input!
+
+    """on conflict condition"""
+    on_conflict: journal_on_conflict
+  ): journal
 
   """
   insert data into the table: "keyphrase"
@@ -1752,6 +1882,17 @@ type mutation_root {
   ): keyphrase_mutation_response
 
   """
+  insert a single row into the table: "keyphrase"
+  """
+  insert_keyphrase_one(
+    """the row to be inserted"""
+    object: keyphrase_insert_input!
+
+    """on conflict condition"""
+    on_conflict: keyphrase_on_conflict
+  ): keyphrase
+
+  """
   insert data into the table: "paper"
   """
   insert_paper(
@@ -1761,6 +1902,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: paper_on_conflict
   ): paper_mutation_response
+
+  """
+  insert a single row into the table: "paper"
+  """
+  insert_paper_one(
+    """the row to be inserted"""
+    object: paper_insert_input!
+
+    """on conflict condition"""
+    on_conflict: paper_on_conflict
+  ): paper
 
   """
   insert data into the table: "paperdataset"
@@ -1774,6 +1926,17 @@ type mutation_root {
   ): paperdataset_mutation_response
 
   """
+  insert a single row into the table: "paperdataset"
+  """
+  insert_paperdataset_one(
+    """the row to be inserted"""
+    object: paperdataset_insert_input!
+
+    """on conflict condition"""
+    on_conflict: paperdataset_on_conflict
+  ): paperdataset
+
+  """
   insert data into the table: "paperkeyphrase"
   """
   insert_paperkeyphrase(
@@ -1783,6 +1946,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: paperkeyphrase_on_conflict
   ): paperkeyphrase_mutation_response
+
+  """
+  insert a single row into the table: "paperkeyphrase"
+  """
+  insert_paperkeyphrase_one(
+    """the row to be inserted"""
+    object: paperkeyphrase_insert_input!
+
+    """on conflict condition"""
+    on_conflict: paperkeyphrase_on_conflict
+  ): paperkeyphrase
 
   """
   insert data into the table: "venue"
@@ -1796,6 +1970,17 @@ type mutation_root {
   ): venue_mutation_response
 
   """
+  insert a single row into the table: "venue"
+  """
+  insert_venue_one(
+    """the row to be inserted"""
+    object: venue_insert_input!
+
+    """on conflict condition"""
+    on_conflict: venue_on_conflict
+  ): venue
+
+  """
   insert data into the table: "writes"
   """
   insert_writes(
@@ -1805,6 +1990,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: writes_on_conflict
   ): writes_mutation_response
+
+  """
+  insert a single row into the table: "writes"
+  """
+  insert_writes_one(
+    """the row to be inserted"""
+    object: writes_insert_input!
+
+    """on conflict condition"""
+    on_conflict: writes_on_conflict
+  ): writes
 
   """
   update data of the table: "author"
@@ -1821,6 +2017,18 @@ type mutation_root {
   ): author_mutation_response
 
   """
+  update single row of the table: "author"
+  """
+  update_author_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: author_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: author_set_input
+    pk_columns: author_pk_columns_input!
+  ): author
+
+  """
   update data of the table: "cite"
   """
   update_cite(
@@ -1833,6 +2041,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: cite_bool_exp!
   ): cite_mutation_response
+
+  """
+  update single row of the table: "cite"
+  """
+  update_cite_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: cite_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: cite_set_input
+    pk_columns: cite_pk_columns_input!
+  ): cite
 
   """
   update data of the table: "dataset"
@@ -1849,6 +2069,18 @@ type mutation_root {
   ): dataset_mutation_response
 
   """
+  update single row of the table: "dataset"
+  """
+  update_dataset_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: dataset_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: dataset_set_input
+    pk_columns: dataset_pk_columns_input!
+  ): dataset
+
+  """
   update data of the table: "journal"
   """
   update_journal(
@@ -1861,6 +2093,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: journal_bool_exp!
   ): journal_mutation_response
+
+  """
+  update single row of the table: "journal"
+  """
+  update_journal_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: journal_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: journal_set_input
+    pk_columns: journal_pk_columns_input!
+  ): journal
 
   """
   update data of the table: "keyphrase"
@@ -1877,6 +2121,18 @@ type mutation_root {
   ): keyphrase_mutation_response
 
   """
+  update single row of the table: "keyphrase"
+  """
+  update_keyphrase_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: keyphrase_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: keyphrase_set_input
+    pk_columns: keyphrase_pk_columns_input!
+  ): keyphrase
+
+  """
   update data of the table: "paper"
   """
   update_paper(
@@ -1889,6 +2145,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: paper_bool_exp!
   ): paper_mutation_response
+
+  """
+  update single row of the table: "paper"
+  """
+  update_paper_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: paper_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: paper_set_input
+    pk_columns: paper_pk_columns_input!
+  ): paper
 
   """
   update data of the table: "paperdataset"
@@ -1905,6 +2173,18 @@ type mutation_root {
   ): paperdataset_mutation_response
 
   """
+  update single row of the table: "paperdataset"
+  """
+  update_paperdataset_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: paperdataset_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: paperdataset_set_input
+    pk_columns: paperdataset_pk_columns_input!
+  ): paperdataset
+
+  """
   update data of the table: "paperkeyphrase"
   """
   update_paperkeyphrase(
@@ -1917,6 +2197,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: paperkeyphrase_bool_exp!
   ): paperkeyphrase_mutation_response
+
+  """
+  update single row of the table: "paperkeyphrase"
+  """
+  update_paperkeyphrase_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: paperkeyphrase_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: paperkeyphrase_set_input
+    pk_columns: paperkeyphrase_pk_columns_input!
+  ): paperkeyphrase
 
   """
   update data of the table: "venue"
@@ -1933,6 +2225,18 @@ type mutation_root {
   ): venue_mutation_response
 
   """
+  update single row of the table: "venue"
+  """
+  update_venue_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: venue_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: venue_set_input
+    pk_columns: venue_pk_columns_input!
+  ): venue
+
+  """
   update data of the table: "writes"
   """
   update_writes(
@@ -1945,6 +2249,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: writes_bool_exp!
   ): writes_mutation_response
+
+  """
+  update single row of the table: "writes"
+  """
+  update_writes_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: writes_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: writes_set_input
+    pk_columns: writes_pk_columns_input!
+  ): writes
 }
 
 """column ordering options"""
@@ -2233,7 +2549,7 @@ enum paper_constraint {
 }
 
 """
-input type for incrementing integer columne in table "paper"
+input type for incrementing integer column in table "paper"
 """
 input paper_inc_input {
   journalid: bigint
@@ -2356,6 +2672,13 @@ input paper_order_by {
   venueid: order_by
   writes_aggregate: writes_aggregate_order_by
   year: order_by
+}
+
+"""
+primary key columns input for table: "paper"
+"""
+input paper_pk_columns_input {
+  paperid: bigint!
 }
 
 """
@@ -2672,7 +2995,7 @@ enum paperdataset_constraint {
 }
 
 """
-input type for incrementing integer columne in table "paperdataset"
+input type for incrementing integer column in table "paperdataset"
 """
 input paperdataset_inc_input {
   datasetid: bigint
@@ -2749,6 +3072,14 @@ ordering options when selecting data from "paperdataset"
 input paperdataset_order_by {
   datasetid: order_by
   paperid: order_by
+}
+
+"""
+primary key columns input for table: "paperdataset"
+"""
+input paperdataset_pk_columns_input {
+  datasetid: bigint!
+  paperid: bigint!
 }
 
 """
@@ -2981,7 +3312,7 @@ enum paperkeyphrase_constraint {
 }
 
 """
-input type for incrementing integer columne in table "paperkeyphrase"
+input type for incrementing integer column in table "paperkeyphrase"
 """
 input paperkeyphrase_inc_input {
   keyphraseid: bigint
@@ -3062,6 +3393,14 @@ input paperkeyphrase_order_by {
   keyphraseid: order_by
   paper: paper_order_by
   paperid: order_by
+}
+
+"""
+primary key columns input for table: "paperkeyphrase"
+"""
+input paperkeyphrase_pk_columns_input {
+  keyphraseid: bigint!
+  paperid: bigint!
 }
 
 """
@@ -4205,7 +4544,7 @@ enum venue_constraint {
 }
 
 """
-input type for incrementing integer columne in table "venue"
+input type for incrementing integer column in table "venue"
 """
 input venue_inc_input {
   venueid: bigint
@@ -4283,6 +4622,13 @@ input venue_order_by {
   papers_aggregate: paper_aggregate_order_by
   venueid: order_by
   venuename: order_by
+}
+
+"""
+primary key columns input for table: "venue"
+"""
+input venue_pk_columns_input {
+  venueid: bigint!
 }
 
 """
@@ -4501,7 +4847,7 @@ enum writes_constraint {
 }
 
 """
-input type for incrementing integer columne in table "writes"
+input type for incrementing integer column in table "writes"
 """
 input writes_inc_input {
   authorid: bigint
@@ -4582,6 +4928,14 @@ input writes_order_by {
   authorid: order_by
   paper: paper_order_by
   paperid: order_by
+}
+
+"""
+primary key columns input for table: "writes"
+"""
+input writes_pk_columns_input {
+  authorid: bigint!
+  paperid: bigint!
 }
 
 """

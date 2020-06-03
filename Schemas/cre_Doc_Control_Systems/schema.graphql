@@ -165,7 +165,7 @@ enum addresses_constraint {
 }
 
 """
-input type for incrementing integer columne in table "addresses"
+input type for incrementing integer column in table "addresses"
 """
 input addresses_inc_input {
   address_id: bigint
@@ -243,6 +243,13 @@ input addresses_order_by {
   address_details: order_by
   address_id: order_by
   documents_maileds_aggregate: documents_mailed_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "addresses"
+"""
+input addresses_pk_columns_input {
+  address_id: bigint!
 }
 
 """
@@ -488,7 +495,7 @@ enum circulation_history_constraint {
 }
 
 """
-input type for incrementing integer columne in table "circulation_history"
+input type for incrementing integer column in table "circulation_history"
 """
 input circulation_history_inc_input {
   copy_number: bigint
@@ -585,6 +592,16 @@ input circulation_history_order_by {
   draft_number: order_by
   employee: employees_order_by
   employee_id: order_by
+}
+
+"""
+primary key columns input for table: "circulation_history"
+"""
+input circulation_history_pk_columns_input {
+  copy_number: bigint!
+  document_id: bigint!
+  draft_number: bigint!
+  employee_id: bigint!
 }
 
 """
@@ -891,7 +908,7 @@ enum document_drafts_constraint {
 }
 
 """
-input type for incrementing integer columne in table "document_drafts"
+input type for incrementing integer column in table "document_drafts"
 """
 input document_drafts_inc_input {
   document_id: bigint
@@ -978,6 +995,14 @@ input document_drafts_order_by {
   draft_copies_aggregate: draft_copies_aggregate_order_by
   draft_details: order_by
   draft_number: order_by
+}
+
+"""
+primary key columns input for table: "document_drafts"
+"""
+input document_drafts_pk_columns_input {
+  document_id: bigint!
+  draft_number: bigint!
 }
 
 """
@@ -1337,7 +1362,7 @@ enum documents_constraint {
 }
 
 """
-input type for incrementing integer columne in table "documents"
+input type for incrementing integer column in table "documents"
 """
 input documents_inc_input {
   document_id: bigint
@@ -1463,7 +1488,7 @@ enum documents_mailed_constraint {
 }
 
 """
-input type for incrementing integer columne in table "documents_mailed"
+input type for incrementing integer column in table "documents_mailed"
 """
 input documents_mailed_inc_input {
   document_id: bigint
@@ -1550,6 +1575,14 @@ input documents_mailed_order_by {
   document_id: order_by
   mailed_to_address_id: order_by
   mailing_date: order_by
+}
+
+"""
+primary key columns input for table: "documents_mailed"
+"""
+input documents_mailed_pk_columns_input {
+  document_id: bigint!
+  mailed_to_address_id: bigint!
 }
 
 """
@@ -1780,6 +1813,13 @@ input documents_order_by {
   ref_document_type: ref_document_types_order_by
   ref_shipping_agent: ref_shipping_agents_order_by
   shipping_agent_code: order_by
+}
+
+"""
+primary key columns input for table: "documents"
+"""
+input documents_pk_columns_input {
+  document_id: bigint!
 }
 
 """
@@ -2067,7 +2107,7 @@ enum draft_copies_constraint {
 }
 
 """
-input type for incrementing integer columne in table "draft_copies"
+input type for incrementing integer column in table "draft_copies"
 """
 input draft_copies_inc_input {
   copy_number: bigint
@@ -2155,6 +2195,15 @@ input draft_copies_order_by {
   document_draft: document_drafts_order_by
   document_id: order_by
   draft_number: order_by
+}
+
+"""
+primary key columns input for table: "draft_copies"
+"""
+input draft_copies_pk_columns_input {
+  copy_number: bigint!
+  document_id: bigint!
+  draft_number: bigint!
 }
 
 """
@@ -2440,7 +2489,7 @@ enum employees_constraint {
 }
 
 """
-input type for incrementing integer columne in table "employees"
+input type for incrementing integer column in table "employees"
 """
 input employees_inc_input {
   employee_id: bigint
@@ -2532,6 +2581,13 @@ input employees_order_by {
   other_details: order_by
   role: roles_order_by
   role_code: order_by
+}
+
+"""
+primary key columns input for table: "employees"
+"""
+input employees_pk_columns_input {
+  employee_id: bigint!
 }
 
 """
@@ -2673,12 +2729,22 @@ type mutation_root {
   ): addresses_mutation_response
 
   """
+  delete single row from the table: "addresses"
+  """
+  delete_addresses_by_pk(address_id: bigint!): addresses
+
+  """
   delete data from the table: "circulation_history"
   """
   delete_circulation_history(
     """filter the rows which have to be deleted"""
     where: circulation_history_bool_exp!
   ): circulation_history_mutation_response
+
+  """
+  delete single row from the table: "circulation_history"
+  """
+  delete_circulation_history_by_pk(copy_number: bigint!, document_id: bigint!, draft_number: bigint!, employee_id: bigint!): circulation_history
 
   """
   delete data from the table: "document_drafts"
@@ -2689,12 +2755,22 @@ type mutation_root {
   ): document_drafts_mutation_response
 
   """
+  delete single row from the table: "document_drafts"
+  """
+  delete_document_drafts_by_pk(document_id: bigint!, draft_number: bigint!): document_drafts
+
+  """
   delete data from the table: "documents"
   """
   delete_documents(
     """filter the rows which have to be deleted"""
     where: documents_bool_exp!
   ): documents_mutation_response
+
+  """
+  delete single row from the table: "documents"
+  """
+  delete_documents_by_pk(document_id: bigint!): documents
 
   """
   delete data from the table: "documents_mailed"
@@ -2705,12 +2781,22 @@ type mutation_root {
   ): documents_mailed_mutation_response
 
   """
+  delete single row from the table: "documents_mailed"
+  """
+  delete_documents_mailed_by_pk(document_id: bigint!, mailed_to_address_id: bigint!): documents_mailed
+
+  """
   delete data from the table: "draft_copies"
   """
   delete_draft_copies(
     """filter the rows which have to be deleted"""
     where: draft_copies_bool_exp!
   ): draft_copies_mutation_response
+
+  """
+  delete single row from the table: "draft_copies"
+  """
+  delete_draft_copies_by_pk(copy_number: bigint!, document_id: bigint!, draft_number: bigint!): draft_copies
 
   """
   delete data from the table: "employees"
@@ -2721,12 +2807,22 @@ type mutation_root {
   ): employees_mutation_response
 
   """
+  delete single row from the table: "employees"
+  """
+  delete_employees_by_pk(employee_id: bigint!): employees
+
+  """
   delete data from the table: "ref_document_status"
   """
   delete_ref_document_status(
     """filter the rows which have to be deleted"""
     where: ref_document_status_bool_exp!
   ): ref_document_status_mutation_response
+
+  """
+  delete single row from the table: "ref_document_status"
+  """
+  delete_ref_document_status_by_pk(document_status_code: String!): ref_document_status
 
   """
   delete data from the table: "ref_document_types"
@@ -2737,6 +2833,11 @@ type mutation_root {
   ): ref_document_types_mutation_response
 
   """
+  delete single row from the table: "ref_document_types"
+  """
+  delete_ref_document_types_by_pk(document_type_code: String!): ref_document_types
+
+  """
   delete data from the table: "ref_shipping_agents"
   """
   delete_ref_shipping_agents(
@@ -2745,12 +2846,22 @@ type mutation_root {
   ): ref_shipping_agents_mutation_response
 
   """
+  delete single row from the table: "ref_shipping_agents"
+  """
+  delete_ref_shipping_agents_by_pk(shipping_agent_code: String!): ref_shipping_agents
+
+  """
   delete data from the table: "roles"
   """
   delete_roles(
     """filter the rows which have to be deleted"""
     where: roles_bool_exp!
   ): roles_mutation_response
+
+  """
+  delete single row from the table: "roles"
+  """
+  delete_roles_by_pk(role_code: String!): roles
 
   """
   insert data into the table: "addresses"
@@ -2764,6 +2875,17 @@ type mutation_root {
   ): addresses_mutation_response
 
   """
+  insert a single row into the table: "addresses"
+  """
+  insert_addresses_one(
+    """the row to be inserted"""
+    object: addresses_insert_input!
+
+    """on conflict condition"""
+    on_conflict: addresses_on_conflict
+  ): addresses
+
+  """
   insert data into the table: "circulation_history"
   """
   insert_circulation_history(
@@ -2775,6 +2897,17 @@ type mutation_root {
   ): circulation_history_mutation_response
 
   """
+  insert a single row into the table: "circulation_history"
+  """
+  insert_circulation_history_one(
+    """the row to be inserted"""
+    object: circulation_history_insert_input!
+
+    """on conflict condition"""
+    on_conflict: circulation_history_on_conflict
+  ): circulation_history
+
+  """
   insert data into the table: "document_drafts"
   """
   insert_document_drafts(
@@ -2784,6 +2917,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: document_drafts_on_conflict
   ): document_drafts_mutation_response
+
+  """
+  insert a single row into the table: "document_drafts"
+  """
+  insert_document_drafts_one(
+    """the row to be inserted"""
+    object: document_drafts_insert_input!
+
+    """on conflict condition"""
+    on_conflict: document_drafts_on_conflict
+  ): document_drafts
 
   """
   insert data into the table: "documents"
@@ -2808,6 +2952,28 @@ type mutation_root {
   ): documents_mailed_mutation_response
 
   """
+  insert a single row into the table: "documents_mailed"
+  """
+  insert_documents_mailed_one(
+    """the row to be inserted"""
+    object: documents_mailed_insert_input!
+
+    """on conflict condition"""
+    on_conflict: documents_mailed_on_conflict
+  ): documents_mailed
+
+  """
+  insert a single row into the table: "documents"
+  """
+  insert_documents_one(
+    """the row to be inserted"""
+    object: documents_insert_input!
+
+    """on conflict condition"""
+    on_conflict: documents_on_conflict
+  ): documents
+
+  """
   insert data into the table: "draft_copies"
   """
   insert_draft_copies(
@@ -2817,6 +2983,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: draft_copies_on_conflict
   ): draft_copies_mutation_response
+
+  """
+  insert a single row into the table: "draft_copies"
+  """
+  insert_draft_copies_one(
+    """the row to be inserted"""
+    object: draft_copies_insert_input!
+
+    """on conflict condition"""
+    on_conflict: draft_copies_on_conflict
+  ): draft_copies
 
   """
   insert data into the table: "employees"
@@ -2830,6 +3007,17 @@ type mutation_root {
   ): employees_mutation_response
 
   """
+  insert a single row into the table: "employees"
+  """
+  insert_employees_one(
+    """the row to be inserted"""
+    object: employees_insert_input!
+
+    """on conflict condition"""
+    on_conflict: employees_on_conflict
+  ): employees
+
+  """
   insert data into the table: "ref_document_status"
   """
   insert_ref_document_status(
@@ -2839,6 +3027,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: ref_document_status_on_conflict
   ): ref_document_status_mutation_response
+
+  """
+  insert a single row into the table: "ref_document_status"
+  """
+  insert_ref_document_status_one(
+    """the row to be inserted"""
+    object: ref_document_status_insert_input!
+
+    """on conflict condition"""
+    on_conflict: ref_document_status_on_conflict
+  ): ref_document_status
 
   """
   insert data into the table: "ref_document_types"
@@ -2852,6 +3051,17 @@ type mutation_root {
   ): ref_document_types_mutation_response
 
   """
+  insert a single row into the table: "ref_document_types"
+  """
+  insert_ref_document_types_one(
+    """the row to be inserted"""
+    object: ref_document_types_insert_input!
+
+    """on conflict condition"""
+    on_conflict: ref_document_types_on_conflict
+  ): ref_document_types
+
+  """
   insert data into the table: "ref_shipping_agents"
   """
   insert_ref_shipping_agents(
@@ -2863,6 +3073,17 @@ type mutation_root {
   ): ref_shipping_agents_mutation_response
 
   """
+  insert a single row into the table: "ref_shipping_agents"
+  """
+  insert_ref_shipping_agents_one(
+    """the row to be inserted"""
+    object: ref_shipping_agents_insert_input!
+
+    """on conflict condition"""
+    on_conflict: ref_shipping_agents_on_conflict
+  ): ref_shipping_agents
+
+  """
   insert data into the table: "roles"
   """
   insert_roles(
@@ -2872,6 +3093,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: roles_on_conflict
   ): roles_mutation_response
+
+  """
+  insert a single row into the table: "roles"
+  """
+  insert_roles_one(
+    """the row to be inserted"""
+    object: roles_insert_input!
+
+    """on conflict condition"""
+    on_conflict: roles_on_conflict
+  ): roles
 
   """
   update data of the table: "addresses"
@@ -2888,6 +3120,18 @@ type mutation_root {
   ): addresses_mutation_response
 
   """
+  update single row of the table: "addresses"
+  """
+  update_addresses_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: addresses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: addresses_set_input
+    pk_columns: addresses_pk_columns_input!
+  ): addresses
+
+  """
   update data of the table: "circulation_history"
   """
   update_circulation_history(
@@ -2900,6 +3144,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: circulation_history_bool_exp!
   ): circulation_history_mutation_response
+
+  """
+  update single row of the table: "circulation_history"
+  """
+  update_circulation_history_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: circulation_history_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: circulation_history_set_input
+    pk_columns: circulation_history_pk_columns_input!
+  ): circulation_history
 
   """
   update data of the table: "document_drafts"
@@ -2916,6 +3172,18 @@ type mutation_root {
   ): document_drafts_mutation_response
 
   """
+  update single row of the table: "document_drafts"
+  """
+  update_document_drafts_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: document_drafts_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: document_drafts_set_input
+    pk_columns: document_drafts_pk_columns_input!
+  ): document_drafts
+
+  """
   update data of the table: "documents"
   """
   update_documents(
@@ -2928,6 +3196,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: documents_bool_exp!
   ): documents_mutation_response
+
+  """
+  update single row of the table: "documents"
+  """
+  update_documents_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: documents_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: documents_set_input
+    pk_columns: documents_pk_columns_input!
+  ): documents
 
   """
   update data of the table: "documents_mailed"
@@ -2944,6 +3224,18 @@ type mutation_root {
   ): documents_mailed_mutation_response
 
   """
+  update single row of the table: "documents_mailed"
+  """
+  update_documents_mailed_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: documents_mailed_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: documents_mailed_set_input
+    pk_columns: documents_mailed_pk_columns_input!
+  ): documents_mailed
+
+  """
   update data of the table: "draft_copies"
   """
   update_draft_copies(
@@ -2956,6 +3248,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: draft_copies_bool_exp!
   ): draft_copies_mutation_response
+
+  """
+  update single row of the table: "draft_copies"
+  """
+  update_draft_copies_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: draft_copies_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: draft_copies_set_input
+    pk_columns: draft_copies_pk_columns_input!
+  ): draft_copies
 
   """
   update data of the table: "employees"
@@ -2972,6 +3276,18 @@ type mutation_root {
   ): employees_mutation_response
 
   """
+  update single row of the table: "employees"
+  """
+  update_employees_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: employees_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: employees_set_input
+    pk_columns: employees_pk_columns_input!
+  ): employees
+
+  """
   update data of the table: "ref_document_status"
   """
   update_ref_document_status(
@@ -2981,6 +3297,15 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: ref_document_status_bool_exp!
   ): ref_document_status_mutation_response
+
+  """
+  update single row of the table: "ref_document_status"
+  """
+  update_ref_document_status_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ref_document_status_set_input
+    pk_columns: ref_document_status_pk_columns_input!
+  ): ref_document_status
 
   """
   update data of the table: "ref_document_types"
@@ -2994,6 +3319,15 @@ type mutation_root {
   ): ref_document_types_mutation_response
 
   """
+  update single row of the table: "ref_document_types"
+  """
+  update_ref_document_types_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ref_document_types_set_input
+    pk_columns: ref_document_types_pk_columns_input!
+  ): ref_document_types
+
+  """
   update data of the table: "ref_shipping_agents"
   """
   update_ref_shipping_agents(
@@ -3005,6 +3339,15 @@ type mutation_root {
   ): ref_shipping_agents_mutation_response
 
   """
+  update single row of the table: "ref_shipping_agents"
+  """
+  update_ref_shipping_agents_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ref_shipping_agents_set_input
+    pk_columns: ref_shipping_agents_pk_columns_input!
+  ): ref_shipping_agents
+
+  """
   update data of the table: "roles"
   """
   update_roles(
@@ -3014,6 +3357,15 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: roles_bool_exp!
   ): roles_mutation_response
+
+  """
+  update single row of the table: "roles"
+  """
+  update_roles_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: roles_set_input
+    pk_columns: roles_pk_columns_input!
+  ): roles
 }
 
 """column ordering options"""
@@ -3696,6 +4048,13 @@ input ref_document_status_order_by {
 }
 
 """
+primary key columns input for table: "ref_document_status"
+"""
+input ref_document_status_pk_columns_input {
+  document_status_code: String!
+}
+
+"""
 select columns of table "ref_document_status"
 """
 enum ref_document_status_select_column {
@@ -3895,6 +4254,13 @@ input ref_document_types_order_by {
   document_type_code: order_by
   document_type_description: order_by
   documents_aggregate: documents_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "ref_document_types"
+"""
+input ref_document_types_pk_columns_input {
+  document_type_code: String!
 }
 
 """
@@ -4107,6 +4473,13 @@ input ref_shipping_agents_order_by {
 }
 
 """
+primary key columns input for table: "ref_shipping_agents"
+"""
+input ref_shipping_agents_pk_columns_input {
+  shipping_agent_code: String!
+}
+
+"""
 select columns of table "ref_shipping_agents"
 """
 enum ref_shipping_agents_select_column {
@@ -4312,6 +4685,13 @@ input roles_order_by {
   employees_aggregate: employees_aggregate_order_by
   role_code: order_by
   role_description: order_by
+}
+
+"""
+primary key columns input for table: "roles"
+"""
+input roles_pk_columns_input {
+  role_code: String!
 }
 
 """

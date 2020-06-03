@@ -241,9 +241,11 @@ enum claim_headers_constraint {
 }
 
 """
-input type for incrementing integer columne in table "claim_headers"
+input type for incrementing integer column in table "claim_headers"
 """
 input claim_headers_inc_input {
+  amount_claimed: numeric
+  amount_piad: numeric
   claim_header_id: bigint
   policy_id: bigint
 }
@@ -360,6 +362,13 @@ input claim_headers_order_by {
   date_of_settlement: order_by
   policy: policies_order_by
   policy_id: order_by
+}
+
+"""
+primary key columns input for table: "claim_headers"
+"""
+input claim_headers_pk_columns_input {
+  claim_header_id: bigint!
 }
 
 """
@@ -665,7 +674,7 @@ enum claims_documents_constraint {
 }
 
 """
-input type for incrementing integer columne in table "claims_documents"
+input type for incrementing integer column in table "claims_documents"
 """
 input claims_documents_inc_input {
   claim_id: bigint
@@ -1030,7 +1039,7 @@ enum claims_processing_constraint {
 }
 
 """
-input type for incrementing integer columne in table "claims_processing"
+input type for incrementing integer column in table "claims_processing"
 """
 input claims_processing_inc_input {
   claim_id: bigint
@@ -1133,6 +1142,13 @@ input claims_processing_order_by {
   claims_processing_stage: claims_processing_stages_order_by
   staff: staff_order_by
   staff_id: order_by
+}
+
+"""
+primary key columns input for table: "claims_processing"
+"""
+input claims_processing_pk_columns_input {
+  claim_processing_id: bigint!
 }
 
 """
@@ -1299,7 +1315,7 @@ enum claims_processing_stages_constraint {
 }
 
 """
-input type for incrementing integer columne in table "claims_processing_stages"
+input type for incrementing integer column in table "claims_processing_stages"
 """
 input claims_processing_stages_inc_input {
   claim_stage_id: bigint
@@ -1390,6 +1406,13 @@ input claims_processing_stages_order_by {
   claim_status_name: order_by
   claims_processings_aggregate: claims_processing_aggregate_order_by
   next_claim_stage_id: order_by
+}
+
+"""
+primary key columns input for table: "claims_processing_stages"
+"""
+input claims_processing_stages_pk_columns_input {
+  claim_stage_id: bigint!
 }
 
 """
@@ -1807,7 +1830,7 @@ enum customers_constraint {
 }
 
 """
-input type for incrementing integer columne in table "customers"
+input type for incrementing integer column in table "customers"
 """
 input customers_inc_input {
   customer_id: bigint
@@ -1885,6 +1908,13 @@ input customers_order_by {
   customer_details: order_by
   customer_id: order_by
   policies_aggregate: policies_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "customers"
+"""
+input customers_pk_columns_input {
+  customer_id: bigint!
 }
 
 """
@@ -2012,6 +2042,11 @@ type mutation_root {
   ): claim_headers_mutation_response
 
   """
+  delete single row from the table: "claim_headers"
+  """
+  delete_claim_headers_by_pk(claim_header_id: bigint!): claim_headers
+
+  """
   delete data from the table: "claims_documents"
   """
   delete_claims_documents(
@@ -2028,12 +2063,22 @@ type mutation_root {
   ): claims_processing_mutation_response
 
   """
+  delete single row from the table: "claims_processing"
+  """
+  delete_claims_processing_by_pk(claim_processing_id: bigint!): claims_processing
+
+  """
   delete data from the table: "claims_processing_stages"
   """
   delete_claims_processing_stages(
     """filter the rows which have to be deleted"""
     where: claims_processing_stages_bool_exp!
   ): claims_processing_stages_mutation_response
+
+  """
+  delete single row from the table: "claims_processing_stages"
+  """
+  delete_claims_processing_stages_by_pk(claim_stage_id: bigint!): claims_processing_stages
 
   """
   delete data from the table: "customers"
@@ -2044,6 +2089,11 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  delete single row from the table: "customers"
+  """
+  delete_customers_by_pk(customer_id: bigint!): customers
+
+  """
   delete data from the table: "policies"
   """
   delete_policies(
@@ -2052,12 +2102,22 @@ type mutation_root {
   ): policies_mutation_response
 
   """
+  delete single row from the table: "policies"
+  """
+  delete_policies_by_pk(policy_id: bigint!): policies
+
+  """
   delete data from the table: "staff"
   """
   delete_staff(
     """filter the rows which have to be deleted"""
     where: staff_bool_exp!
   ): staff_mutation_response
+
+  """
+  delete single row from the table: "staff"
+  """
+  delete_staff_by_pk(staff_id: bigint!): staff
 
   """
   insert data into the table: "claim_headers"
@@ -2071,6 +2131,17 @@ type mutation_root {
   ): claim_headers_mutation_response
 
   """
+  insert a single row into the table: "claim_headers"
+  """
+  insert_claim_headers_one(
+    """the row to be inserted"""
+    object: claim_headers_insert_input!
+
+    """on conflict condition"""
+    on_conflict: claim_headers_on_conflict
+  ): claim_headers
+
+  """
   insert data into the table: "claims_documents"
   """
   insert_claims_documents(
@@ -2080,6 +2151,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: claims_documents_on_conflict
   ): claims_documents_mutation_response
+
+  """
+  insert a single row into the table: "claims_documents"
+  """
+  insert_claims_documents_one(
+    """the row to be inserted"""
+    object: claims_documents_insert_input!
+
+    """on conflict condition"""
+    on_conflict: claims_documents_on_conflict
+  ): claims_documents
 
   """
   insert data into the table: "claims_processing"
@@ -2093,6 +2175,17 @@ type mutation_root {
   ): claims_processing_mutation_response
 
   """
+  insert a single row into the table: "claims_processing"
+  """
+  insert_claims_processing_one(
+    """the row to be inserted"""
+    object: claims_processing_insert_input!
+
+    """on conflict condition"""
+    on_conflict: claims_processing_on_conflict
+  ): claims_processing
+
+  """
   insert data into the table: "claims_processing_stages"
   """
   insert_claims_processing_stages(
@@ -2102,6 +2195,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: claims_processing_stages_on_conflict
   ): claims_processing_stages_mutation_response
+
+  """
+  insert a single row into the table: "claims_processing_stages"
+  """
+  insert_claims_processing_stages_one(
+    """the row to be inserted"""
+    object: claims_processing_stages_insert_input!
+
+    """on conflict condition"""
+    on_conflict: claims_processing_stages_on_conflict
+  ): claims_processing_stages
 
   """
   insert data into the table: "customers"
@@ -2115,6 +2219,17 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  insert a single row into the table: "customers"
+  """
+  insert_customers_one(
+    """the row to be inserted"""
+    object: customers_insert_input!
+
+    """on conflict condition"""
+    on_conflict: customers_on_conflict
+  ): customers
+
+  """
   insert data into the table: "policies"
   """
   insert_policies(
@@ -2126,6 +2241,17 @@ type mutation_root {
   ): policies_mutation_response
 
   """
+  insert a single row into the table: "policies"
+  """
+  insert_policies_one(
+    """the row to be inserted"""
+    object: policies_insert_input!
+
+    """on conflict condition"""
+    on_conflict: policies_on_conflict
+  ): policies
+
+  """
   insert data into the table: "staff"
   """
   insert_staff(
@@ -2135,6 +2261,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: staff_on_conflict
   ): staff_mutation_response
+
+  """
+  insert a single row into the table: "staff"
+  """
+  insert_staff_one(
+    """the row to be inserted"""
+    object: staff_insert_input!
+
+    """on conflict condition"""
+    on_conflict: staff_on_conflict
+  ): staff
 
   """
   update data of the table: "claim_headers"
@@ -2149,6 +2286,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: claim_headers_bool_exp!
   ): claim_headers_mutation_response
+
+  """
+  update single row of the table: "claim_headers"
+  """
+  update_claim_headers_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: claim_headers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: claim_headers_set_input
+    pk_columns: claim_headers_pk_columns_input!
+  ): claim_headers
 
   """
   update data of the table: "claims_documents"
@@ -2179,6 +2328,18 @@ type mutation_root {
   ): claims_processing_mutation_response
 
   """
+  update single row of the table: "claims_processing"
+  """
+  update_claims_processing_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: claims_processing_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: claims_processing_set_input
+    pk_columns: claims_processing_pk_columns_input!
+  ): claims_processing
+
+  """
   update data of the table: "claims_processing_stages"
   """
   update_claims_processing_stages(
@@ -2191,6 +2352,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: claims_processing_stages_bool_exp!
   ): claims_processing_stages_mutation_response
+
+  """
+  update single row of the table: "claims_processing_stages"
+  """
+  update_claims_processing_stages_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: claims_processing_stages_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: claims_processing_stages_set_input
+    pk_columns: claims_processing_stages_pk_columns_input!
+  ): claims_processing_stages
 
   """
   update data of the table: "customers"
@@ -2207,6 +2380,18 @@ type mutation_root {
   ): customers_mutation_response
 
   """
+  update single row of the table: "customers"
+  """
+  update_customers_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: customers_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: customers_set_input
+    pk_columns: customers_pk_columns_input!
+  ): customers
+
+  """
   update data of the table: "policies"
   """
   update_policies(
@@ -2221,6 +2406,18 @@ type mutation_root {
   ): policies_mutation_response
 
   """
+  update single row of the table: "policies"
+  """
+  update_policies_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: policies_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: policies_set_input
+    pk_columns: policies_pk_columns_input!
+  ): policies
+
+  """
   update data of the table: "staff"
   """
   update_staff(
@@ -2233,6 +2430,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: staff_bool_exp!
   ): staff_mutation_response
+
+  """
+  update single row of the table: "staff"
+  """
+  update_staff_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: staff_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: staff_set_input
+    pk_columns: staff_pk_columns_input!
+  ): staff
 }
 
 scalar numeric
@@ -2411,7 +2620,7 @@ enum policies_constraint {
 }
 
 """
-input type for incrementing integer columne in table "policies"
+input type for incrementing integer column in table "policies"
 """
 input policies_inc_input {
   customer_id: bigint
@@ -2510,6 +2719,13 @@ input policies_order_by {
   policy_id: order_by
   policy_type_code: order_by
   start_date: order_by
+}
+
+"""
+primary key columns input for table: "policies"
+"""
+input policies_pk_columns_input {
+  policy_id: bigint!
 }
 
 """
@@ -3129,7 +3345,7 @@ enum staff_constraint {
 }
 
 """
-input type for incrementing integer columne in table "staff"
+input type for incrementing integer column in table "staff"
 """
 input staff_inc_input {
   staff_id: bigint
@@ -3209,6 +3425,13 @@ input staff_order_by {
   claims_processings_aggregate: claims_processing_aggregate_order_by
   staff_details: order_by
   staff_id: order_by
+}
+
+"""
+primary key columns input for table: "staff"
+"""
+input staff_pk_columns_input {
+  staff_id: bigint!
 }
 
 """

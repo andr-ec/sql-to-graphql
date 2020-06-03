@@ -136,7 +136,7 @@ enum accounts_constraint {
 }
 
 """
-input type for incrementing integer columne in table "accounts"
+input type for incrementing integer column in table "accounts"
 """
 input accounts_inc_input {
   account_id: bigint
@@ -221,6 +221,13 @@ input accounts_order_by {
   account_id: order_by
   statement: statements_order_by
   statement_id: order_by
+}
+
+"""
+primary key columns input for table: "accounts"
+"""
+input accounts_pk_columns_input {
+  account_id: bigint!
 }
 
 """
@@ -559,7 +566,7 @@ enum documents_constraint {
 }
 
 """
-input type for incrementing integer columne in table "documents"
+input type for incrementing integer column in table "documents"
 """
 input documents_inc_input {
   document_id: bigint
@@ -674,6 +681,13 @@ input documents_order_by {
   project_id: order_by
   ref_document_type: ref_document_types_order_by
   statements_aggregate: statements_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "documents"
+"""
+input documents_pk_columns_input {
+  document_id: bigint!
 }
 
 """
@@ -939,7 +953,7 @@ enum documents_with_expenses_constraint {
 }
 
 """
-input type for incrementing integer columne in table "documents_with_expenses"
+input type for incrementing integer column in table "documents_with_expenses"
 """
 input documents_with_expenses_inc_input {
   document_id: bigint
@@ -1025,6 +1039,13 @@ input documents_with_expenses_order_by {
   document_details: order_by
   document_id: order_by
   ref_budget_code: ref_budget_codes_order_by
+}
+
+"""
+primary key columns input for table: "documents_with_expenses"
+"""
+input documents_with_expenses_pk_columns_input {
+  document_id: bigint!
 }
 
 """
@@ -1159,12 +1180,22 @@ type mutation_root {
   ): accounts_mutation_response
 
   """
+  delete single row from the table: "accounts"
+  """
+  delete_accounts_by_pk(account_id: bigint!): accounts
+
+  """
   delete data from the table: "documents"
   """
   delete_documents(
     """filter the rows which have to be deleted"""
     where: documents_bool_exp!
   ): documents_mutation_response
+
+  """
+  delete single row from the table: "documents"
+  """
+  delete_documents_by_pk(document_id: bigint!): documents
 
   """
   delete data from the table: "documents_with_expenses"
@@ -1175,12 +1206,22 @@ type mutation_root {
   ): documents_with_expenses_mutation_response
 
   """
+  delete single row from the table: "documents_with_expenses"
+  """
+  delete_documents_with_expenses_by_pk(document_id: bigint!): documents_with_expenses
+
+  """
   delete data from the table: "projects"
   """
   delete_projects(
     """filter the rows which have to be deleted"""
     where: projects_bool_exp!
   ): projects_mutation_response
+
+  """
+  delete single row from the table: "projects"
+  """
+  delete_projects_by_pk(project_id: bigint!): projects
 
   """
   delete data from the table: "ref_budget_codes"
@@ -1207,6 +1248,11 @@ type mutation_root {
   ): statements_mutation_response
 
   """
+  delete single row from the table: "statements"
+  """
+  delete_statements_by_pk(statement_id: bigint!): statements
+
+  """
   insert data into the table: "accounts"
   """
   insert_accounts(
@@ -1216,6 +1262,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: accounts_on_conflict
   ): accounts_mutation_response
+
+  """
+  insert a single row into the table: "accounts"
+  """
+  insert_accounts_one(
+    """the row to be inserted"""
+    object: accounts_insert_input!
+
+    """on conflict condition"""
+    on_conflict: accounts_on_conflict
+  ): accounts
 
   """
   insert data into the table: "documents"
@@ -1229,6 +1286,17 @@ type mutation_root {
   ): documents_mutation_response
 
   """
+  insert a single row into the table: "documents"
+  """
+  insert_documents_one(
+    """the row to be inserted"""
+    object: documents_insert_input!
+
+    """on conflict condition"""
+    on_conflict: documents_on_conflict
+  ): documents
+
+  """
   insert data into the table: "documents_with_expenses"
   """
   insert_documents_with_expenses(
@@ -1238,6 +1306,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: documents_with_expenses_on_conflict
   ): documents_with_expenses_mutation_response
+
+  """
+  insert a single row into the table: "documents_with_expenses"
+  """
+  insert_documents_with_expenses_one(
+    """the row to be inserted"""
+    object: documents_with_expenses_insert_input!
+
+    """on conflict condition"""
+    on_conflict: documents_with_expenses_on_conflict
+  ): documents_with_expenses
 
   """
   insert data into the table: "projects"
@@ -1251,6 +1330,17 @@ type mutation_root {
   ): projects_mutation_response
 
   """
+  insert a single row into the table: "projects"
+  """
+  insert_projects_one(
+    """the row to be inserted"""
+    object: projects_insert_input!
+
+    """on conflict condition"""
+    on_conflict: projects_on_conflict
+  ): projects
+
+  """
   insert data into the table: "ref_budget_codes"
   """
   insert_ref_budget_codes(
@@ -1260,6 +1350,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: ref_budget_codes_on_conflict
   ): ref_budget_codes_mutation_response
+
+  """
+  insert a single row into the table: "ref_budget_codes"
+  """
+  insert_ref_budget_codes_one(
+    """the row to be inserted"""
+    object: ref_budget_codes_insert_input!
+
+    """on conflict condition"""
+    on_conflict: ref_budget_codes_on_conflict
+  ): ref_budget_codes
 
   """
   insert data into the table: "ref_document_types"
@@ -1273,6 +1374,17 @@ type mutation_root {
   ): ref_document_types_mutation_response
 
   """
+  insert a single row into the table: "ref_document_types"
+  """
+  insert_ref_document_types_one(
+    """the row to be inserted"""
+    object: ref_document_types_insert_input!
+
+    """on conflict condition"""
+    on_conflict: ref_document_types_on_conflict
+  ): ref_document_types
+
+  """
   insert data into the table: "statements"
   """
   insert_statements(
@@ -1282,6 +1394,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: statements_on_conflict
   ): statements_mutation_response
+
+  """
+  insert a single row into the table: "statements"
+  """
+  insert_statements_one(
+    """the row to be inserted"""
+    object: statements_insert_input!
+
+    """on conflict condition"""
+    on_conflict: statements_on_conflict
+  ): statements
 
   """
   update data of the table: "accounts"
@@ -1298,6 +1421,18 @@ type mutation_root {
   ): accounts_mutation_response
 
   """
+  update single row of the table: "accounts"
+  """
+  update_accounts_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: accounts_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: accounts_set_input
+    pk_columns: accounts_pk_columns_input!
+  ): accounts
+
+  """
   update data of the table: "documents"
   """
   update_documents(
@@ -1310,6 +1445,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: documents_bool_exp!
   ): documents_mutation_response
+
+  """
+  update single row of the table: "documents"
+  """
+  update_documents_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: documents_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: documents_set_input
+    pk_columns: documents_pk_columns_input!
+  ): documents
 
   """
   update data of the table: "documents_with_expenses"
@@ -1326,6 +1473,18 @@ type mutation_root {
   ): documents_with_expenses_mutation_response
 
   """
+  update single row of the table: "documents_with_expenses"
+  """
+  update_documents_with_expenses_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: documents_with_expenses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: documents_with_expenses_set_input
+    pk_columns: documents_with_expenses_pk_columns_input!
+  ): documents_with_expenses
+
+  """
   update data of the table: "projects"
   """
   update_projects(
@@ -1338,6 +1497,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: projects_bool_exp!
   ): projects_mutation_response
+
+  """
+  update single row of the table: "projects"
+  """
+  update_projects_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: projects_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: projects_set_input
+    pk_columns: projects_pk_columns_input!
+  ): projects
 
   """
   update data of the table: "ref_budget_codes"
@@ -1374,6 +1545,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: statements_bool_exp!
   ): statements_mutation_response
+
+  """
+  update single row of the table: "statements"
+  """
+  update_statements_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: statements_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: statements_set_input
+    pk_columns: statements_pk_columns_input!
+  ): statements
 }
 
 """column ordering options"""
@@ -1523,7 +1706,7 @@ enum projects_constraint {
 }
 
 """
-input type for incrementing integer columne in table "projects"
+input type for incrementing integer column in table "projects"
 """
 input projects_inc_input {
   project_id: bigint
@@ -1601,6 +1784,13 @@ input projects_order_by {
   documents_aggregate: documents_aggregate_order_by
   project_details: order_by
   project_id: order_by
+}
+
+"""
+primary key columns input for table: "projects"
+"""
+input projects_pk_columns_input {
+  project_id: bigint!
 }
 
 """
@@ -2566,7 +2756,7 @@ enum statements_constraint {
 }
 
 """
-input type for incrementing integer columne in table "statements"
+input type for incrementing integer column in table "statements"
 """
 input statements_inc_input {
   statement_id: bigint
@@ -2646,6 +2836,13 @@ input statements_order_by {
   document: documents_order_by
   statement_details: order_by
   statement_id: order_by
+}
+
+"""
+primary key columns input for table: "statements"
+"""
+input statements_pk_columns_input {
+  statement_id: bigint!
 }
 
 """

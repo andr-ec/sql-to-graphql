@@ -83,6 +83,11 @@ type mutation_root {
   ): restaurant_mutation_response
 
   """
+  delete single row from the table: "restaurant"
+  """
+  delete_restaurant_by_pk(resid: bigint!): restaurant
+
+  """
   delete data from the table: "restaurant_type"
   """
   delete_restaurant_type(
@@ -91,12 +96,22 @@ type mutation_root {
   ): restaurant_type_mutation_response
 
   """
+  delete single row from the table: "restaurant_type"
+  """
+  delete_restaurant_type_by_pk(restypeid: bigint!): restaurant_type
+
+  """
   delete data from the table: "student"
   """
   delete_student(
     """filter the rows which have to be deleted"""
     where: student_bool_exp!
   ): student_mutation_response
+
+  """
+  delete single row from the table: "student"
+  """
+  delete_student_by_pk(stuid: bigint!): student
 
   """
   delete data from the table: "type_of_restaurant"
@@ -126,6 +141,17 @@ type mutation_root {
   ): restaurant_mutation_response
 
   """
+  insert a single row into the table: "restaurant"
+  """
+  insert_restaurant_one(
+    """the row to be inserted"""
+    object: restaurant_insert_input!
+
+    """on conflict condition"""
+    on_conflict: restaurant_on_conflict
+  ): restaurant
+
+  """
   insert data into the table: "restaurant_type"
   """
   insert_restaurant_type(
@@ -135,6 +161,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: restaurant_type_on_conflict
   ): restaurant_type_mutation_response
+
+  """
+  insert a single row into the table: "restaurant_type"
+  """
+  insert_restaurant_type_one(
+    """the row to be inserted"""
+    object: restaurant_type_insert_input!
+
+    """on conflict condition"""
+    on_conflict: restaurant_type_on_conflict
+  ): restaurant_type
 
   """
   insert data into the table: "student"
@@ -148,6 +185,17 @@ type mutation_root {
   ): student_mutation_response
 
   """
+  insert a single row into the table: "student"
+  """
+  insert_student_one(
+    """the row to be inserted"""
+    object: student_insert_input!
+
+    """on conflict condition"""
+    on_conflict: student_on_conflict
+  ): student
+
+  """
   insert data into the table: "type_of_restaurant"
   """
   insert_type_of_restaurant(
@@ -156,12 +204,28 @@ type mutation_root {
   ): type_of_restaurant_mutation_response
 
   """
+  insert a single row into the table: "type_of_restaurant"
+  """
+  insert_type_of_restaurant_one(
+    """the row to be inserted"""
+    object: type_of_restaurant_insert_input!
+  ): type_of_restaurant
+
+  """
   insert data into the table: "visits_restaurant"
   """
   insert_visits_restaurant(
     """the rows to be inserted"""
     objects: [visits_restaurant_insert_input!]!
   ): visits_restaurant_mutation_response
+
+  """
+  insert a single row into the table: "visits_restaurant"
+  """
+  insert_visits_restaurant_one(
+    """the row to be inserted"""
+    object: visits_restaurant_insert_input!
+  ): visits_restaurant
 
   """
   update data of the table: "restaurant"
@@ -178,6 +242,18 @@ type mutation_root {
   ): restaurant_mutation_response
 
   """
+  update single row of the table: "restaurant"
+  """
+  update_restaurant_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: restaurant_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: restaurant_set_input
+    pk_columns: restaurant_pk_columns_input!
+  ): restaurant
+
+  """
   update data of the table: "restaurant_type"
   """
   update_restaurant_type(
@@ -192,6 +268,18 @@ type mutation_root {
   ): restaurant_type_mutation_response
 
   """
+  update single row of the table: "restaurant_type"
+  """
+  update_restaurant_type_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: restaurant_type_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: restaurant_type_set_input
+    pk_columns: restaurant_type_pk_columns_input!
+  ): restaurant_type
+
+  """
   update data of the table: "student"
   """
   update_student(
@@ -204,6 +292,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: student_bool_exp!
   ): student_mutation_response
+
+  """
+  update single row of the table: "student"
+  """
+  update_student_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: student_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: student_set_input
+    pk_columns: student_pk_columns_input!
+  ): student
 
   """
   update data of the table: "type_of_restaurant"
@@ -637,7 +737,7 @@ enum restaurant_constraint {
 }
 
 """
-input type for incrementing integer columne in table "restaurant"
+input type for incrementing integer column in table "restaurant"
 """
 input restaurant_inc_input {
   rating: bigint
@@ -730,6 +830,13 @@ input restaurant_order_by {
   resname: order_by
   type_of_restaurants_aggregate: type_of_restaurant_aggregate_order_by
   visits_restaurants_aggregate: visits_restaurant_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "restaurant"
+"""
+input restaurant_pk_columns_input {
+  resid: bigint!
 }
 
 """
@@ -944,7 +1051,7 @@ enum restaurant_type_constraint {
 }
 
 """
-input type for incrementing integer columne in table "restaurant_type"
+input type for incrementing integer column in table "restaurant_type"
 """
 input restaurant_type_inc_input {
   restypeid: bigint
@@ -1028,6 +1135,13 @@ input restaurant_type_order_by {
   restypeid: order_by
   restypename: order_by
   type_of_restaurants_aggregate: type_of_restaurant_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "restaurant_type"
+"""
+input restaurant_type_pk_columns_input {
+  restypeid: bigint!
 }
 
 """
@@ -1376,7 +1490,7 @@ enum student_constraint {
 }
 
 """
-input type for incrementing integer columne in table "student"
+input type for incrementing integer column in table "student"
 """
 input student_inc_input {
   advisor: bigint
@@ -1493,6 +1607,13 @@ input student_order_by {
   sex: order_by
   stuid: order_by
   visits_restaurants_aggregate: visits_restaurant_aggregate_order_by
+}
+
+"""
+primary key columns input for table: "student"
+"""
+input student_pk_columns_input {
+  stuid: bigint!
 }
 
 """
@@ -2013,7 +2134,7 @@ input type_of_restaurant_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "type_of_restaurant"
+input type for incrementing integer column in table "type_of_restaurant"
 """
 input type_of_restaurant_inc_input {
   resid: bigint
@@ -2300,10 +2421,11 @@ input visits_restaurant_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "visits_restaurant"
+input type for incrementing integer column in table "visits_restaurant"
 """
 input visits_restaurant_inc_input {
   resid: bigint
+  spent: float8
   stuid: bigint
 }
 
@@ -2324,6 +2446,7 @@ type visits_restaurant_max_fields {
   resid: bigint
   spent: float8
   stuid: bigint
+  time: timestamp
 }
 
 """
@@ -2333,6 +2456,7 @@ input visits_restaurant_max_order_by {
   resid: order_by
   spent: order_by
   stuid: order_by
+  time: order_by
 }
 
 """aggregate min on columns"""
@@ -2340,6 +2464,7 @@ type visits_restaurant_min_fields {
   resid: bigint
   spent: float8
   stuid: bigint
+  time: timestamp
 }
 
 """
@@ -2349,6 +2474,7 @@ input visits_restaurant_min_order_by {
   resid: order_by
   spent: order_by
   stuid: order_by
+  time: order_by
 }
 
 """

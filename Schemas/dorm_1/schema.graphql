@@ -306,7 +306,7 @@ enum dorm_amenity_constraint {
 }
 
 """
-input type for incrementing integer columne in table "dorm_amenity"
+input type for incrementing integer column in table "dorm_amenity"
 """
 input dorm_amenity_inc_input {
   amenid: bigint
@@ -546,7 +546,7 @@ enum dorm_constraint {
 }
 
 """
-input type for incrementing integer columne in table "dorm"
+input type for incrementing integer column in table "dorm"
 """
 input dorm_inc_input {
   dormid: bigint
@@ -874,7 +874,7 @@ input has_amenity_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "has_amenity"
+input type for incrementing integer column in table "has_amenity"
 """
 input has_amenity_inc_input {
   amenid: bigint
@@ -1158,7 +1158,7 @@ input lives_in_bool_exp {
 }
 
 """
-input type for incrementing integer columne in table "lives_in"
+input type for incrementing integer column in table "lives_in"
 """
 input lives_in_inc_input {
   dormid: bigint
@@ -1416,6 +1416,11 @@ type mutation_root {
   ): student_mutation_response
 
   """
+  delete single row from the table: "student"
+  """
+  delete_student_by_pk(stuid: bigint!): student
+
+  """
   insert data into the table: "dorm"
   """
   insert_dorm(
@@ -1438,6 +1443,28 @@ type mutation_root {
   ): dorm_amenity_mutation_response
 
   """
+  insert a single row into the table: "dorm_amenity"
+  """
+  insert_dorm_amenity_one(
+    """the row to be inserted"""
+    object: dorm_amenity_insert_input!
+
+    """on conflict condition"""
+    on_conflict: dorm_amenity_on_conflict
+  ): dorm_amenity
+
+  """
+  insert a single row into the table: "dorm"
+  """
+  insert_dorm_one(
+    """the row to be inserted"""
+    object: dorm_insert_input!
+
+    """on conflict condition"""
+    on_conflict: dorm_on_conflict
+  ): dorm
+
+  """
   insert data into the table: "has_amenity"
   """
   insert_has_amenity(
@@ -1446,12 +1473,28 @@ type mutation_root {
   ): has_amenity_mutation_response
 
   """
+  insert a single row into the table: "has_amenity"
+  """
+  insert_has_amenity_one(
+    """the row to be inserted"""
+    object: has_amenity_insert_input!
+  ): has_amenity
+
+  """
   insert data into the table: "lives_in"
   """
   insert_lives_in(
     """the rows to be inserted"""
     objects: [lives_in_insert_input!]!
   ): lives_in_mutation_response
+
+  """
+  insert a single row into the table: "lives_in"
+  """
+  insert_lives_in_one(
+    """the row to be inserted"""
+    object: lives_in_insert_input!
+  ): lives_in
 
   """
   insert data into the table: "student"
@@ -1463,6 +1506,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: student_on_conflict
   ): student_mutation_response
+
+  """
+  insert a single row into the table: "student"
+  """
+  insert_student_one(
+    """the row to be inserted"""
+    object: student_insert_input!
+
+    """on conflict condition"""
+    on_conflict: student_on_conflict
+  ): student
 
   """
   update data of the table: "dorm"
@@ -1533,6 +1587,18 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: student_bool_exp!
   ): student_mutation_response
+
+  """
+  update single row of the table: "student"
+  """
+  update_student_by_pk(
+    """increments the integer columns with given value of the filtered values"""
+    _inc: student_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: student_set_input
+    pk_columns: student_pk_columns_input!
+  ): student
 }
 
 """column ordering options"""
@@ -1928,7 +1994,7 @@ enum student_constraint {
 }
 
 """
-input type for incrementing integer columne in table "student"
+input type for incrementing integer column in table "student"
 """
 input student_inc_input {
   advisor: bigint
@@ -2045,6 +2111,13 @@ input student_order_by {
   major: order_by
   sex: order_by
   stuid: order_by
+}
+
+"""
+primary key columns input for table: "student"
+"""
+input student_pk_columns_input {
+  stuid: bigint!
 }
 
 """

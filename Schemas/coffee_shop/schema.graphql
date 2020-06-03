@@ -194,7 +194,7 @@ enum happy_hour_constraint {
 }
 
 """
-input type for incrementing integer columne in table "happy_hour"
+input type for incrementing integer column in table "happy_hour"
 """
 input happy_hour_inc_input {
   hh_id: Int
@@ -335,11 +335,12 @@ enum happy_hour_member_constraint {
 }
 
 """
-input type for incrementing integer columne in table "happy_hour_member"
+input type for incrementing integer column in table "happy_hour_member"
 """
 input happy_hour_member_inc_input {
   hh_id: Int
   member_id: Int
+  total_amount: Float
 }
 
 """
@@ -945,7 +946,7 @@ enum member_constraint {
 }
 
 """
-input type for incrementing integer columne in table "member"
+input type for incrementing integer column in table "member"
 """
 input member_inc_input {
   age: Int
@@ -1306,6 +1307,28 @@ type mutation_root {
   ): happy_hour_member_mutation_response
 
   """
+  insert a single row into the table: "happy_hour_member"
+  """
+  insert_happy_hour_member_one(
+    """the row to be inserted"""
+    object: happy_hour_member_insert_input!
+
+    """on conflict condition"""
+    on_conflict: happy_hour_member_on_conflict
+  ): happy_hour_member
+
+  """
+  insert a single row into the table: "happy_hour"
+  """
+  insert_happy_hour_one(
+    """the row to be inserted"""
+    object: happy_hour_insert_input!
+
+    """on conflict condition"""
+    on_conflict: happy_hour_on_conflict
+  ): happy_hour
+
+  """
   insert data into the table: "member"
   """
   insert_member(
@@ -1317,6 +1340,17 @@ type mutation_root {
   ): member_mutation_response
 
   """
+  insert a single row into the table: "member"
+  """
+  insert_member_one(
+    """the row to be inserted"""
+    object: member_insert_input!
+
+    """on conflict condition"""
+    on_conflict: member_on_conflict
+  ): member
+
+  """
   insert data into the table: "shop"
   """
   insert_shop(
@@ -1326,6 +1360,17 @@ type mutation_root {
     """on conflict condition"""
     on_conflict: shop_on_conflict
   ): shop_mutation_response
+
+  """
+  insert a single row into the table: "shop"
+  """
+  insert_shop_one(
+    """the row to be inserted"""
+    object: shop_insert_input!
+
+    """on conflict condition"""
+    on_conflict: shop_on_conflict
+  ): shop
 
   """
   update data of the table: "happy_hour"
@@ -1609,7 +1654,7 @@ type shop {
     """filter the rows returned"""
     where: happy_hour_bool_exp
   ): happy_hour_aggregate!
-  num_of_staff: String
+  num_of_staff: Int
   open_year: String
   score: Float
   shop_id: Int
@@ -1667,6 +1712,7 @@ input shop_arr_rel_insert_input {
 
 """aggregate avg on columns"""
 type shop_avg_fields {
+  num_of_staff: Float
   score: Float
   shop_id: Float
 }
@@ -1675,6 +1721,7 @@ type shop_avg_fields {
 order by avg() on columns of table "shop"
 """
 input shop_avg_order_by {
+  num_of_staff: order_by
   score: order_by
   shop_id: order_by
 }
@@ -1688,7 +1735,7 @@ input shop_bool_exp {
   _or: [shop_bool_exp]
   address: String_comparison_exp
   happy_hours: happy_hour_bool_exp
-  num_of_staff: String_comparison_exp
+  num_of_staff: Int_comparison_exp
   open_year: String_comparison_exp
   score: Float_comparison_exp
   shop_id: Int_comparison_exp
@@ -1703,9 +1750,11 @@ enum shop_constraint {
 }
 
 """
-input type for incrementing integer columne in table "shop"
+input type for incrementing integer column in table "shop"
 """
 input shop_inc_input {
+  num_of_staff: Int
+  score: Float
   shop_id: Int
 }
 
@@ -1715,7 +1764,7 @@ input type for inserting data into table "shop"
 input shop_insert_input {
   address: String
   happy_hours: happy_hour_arr_rel_insert_input
-  num_of_staff: String
+  num_of_staff: Int
   open_year: String
   score: Float
   shop_id: Int
@@ -1724,7 +1773,7 @@ input shop_insert_input {
 """aggregate max on columns"""
 type shop_max_fields {
   address: String
-  num_of_staff: String
+  num_of_staff: Int
   open_year: String
   score: Float
   shop_id: Int
@@ -1744,7 +1793,7 @@ input shop_max_order_by {
 """aggregate min on columns"""
 type shop_min_fields {
   address: String
-  num_of_staff: String
+  num_of_staff: Int
   open_year: String
   score: Float
   shop_id: Int
@@ -1826,7 +1875,7 @@ input type for updating data in table "shop"
 """
 input shop_set_input {
   address: String
-  num_of_staff: String
+  num_of_staff: Int
   open_year: String
   score: Float
   shop_id: Int
@@ -1834,6 +1883,7 @@ input shop_set_input {
 
 """aggregate stddev on columns"""
 type shop_stddev_fields {
+  num_of_staff: Float
   score: Float
   shop_id: Float
 }
@@ -1842,12 +1892,14 @@ type shop_stddev_fields {
 order by stddev() on columns of table "shop"
 """
 input shop_stddev_order_by {
+  num_of_staff: order_by
   score: order_by
   shop_id: order_by
 }
 
 """aggregate stddev_pop on columns"""
 type shop_stddev_pop_fields {
+  num_of_staff: Float
   score: Float
   shop_id: Float
 }
@@ -1856,12 +1908,14 @@ type shop_stddev_pop_fields {
 order by stddev_pop() on columns of table "shop"
 """
 input shop_stddev_pop_order_by {
+  num_of_staff: order_by
   score: order_by
   shop_id: order_by
 }
 
 """aggregate stddev_samp on columns"""
 type shop_stddev_samp_fields {
+  num_of_staff: Float
   score: Float
   shop_id: Float
 }
@@ -1870,12 +1924,14 @@ type shop_stddev_samp_fields {
 order by stddev_samp() on columns of table "shop"
 """
 input shop_stddev_samp_order_by {
+  num_of_staff: order_by
   score: order_by
   shop_id: order_by
 }
 
 """aggregate sum on columns"""
 type shop_sum_fields {
+  num_of_staff: Int
   score: Float
   shop_id: Int
 }
@@ -1884,6 +1940,7 @@ type shop_sum_fields {
 order by sum() on columns of table "shop"
 """
 input shop_sum_order_by {
+  num_of_staff: order_by
   score: order_by
   shop_id: order_by
 }
@@ -1910,6 +1967,7 @@ enum shop_update_column {
 
 """aggregate var_pop on columns"""
 type shop_var_pop_fields {
+  num_of_staff: Float
   score: Float
   shop_id: Float
 }
@@ -1918,12 +1976,14 @@ type shop_var_pop_fields {
 order by var_pop() on columns of table "shop"
 """
 input shop_var_pop_order_by {
+  num_of_staff: order_by
   score: order_by
   shop_id: order_by
 }
 
 """aggregate var_samp on columns"""
 type shop_var_samp_fields {
+  num_of_staff: Float
   score: Float
   shop_id: Float
 }
@@ -1932,12 +1992,14 @@ type shop_var_samp_fields {
 order by var_samp() on columns of table "shop"
 """
 input shop_var_samp_order_by {
+  num_of_staff: order_by
   score: order_by
   shop_id: order_by
 }
 
 """aggregate variance on columns"""
 type shop_variance_fields {
+  num_of_staff: Float
   score: Float
   shop_id: Float
 }
@@ -1946,6 +2008,7 @@ type shop_variance_fields {
 order by variance() on columns of table "shop"
 """
 input shop_variance_order_by {
+  num_of_staff: order_by
   score: order_by
   shop_id: order_by
 }
