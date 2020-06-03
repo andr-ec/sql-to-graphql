@@ -1,8 +1,8 @@
-# Process GraphQL
-This is a set of helper scripts used to convert a subset of the Spider Dataset SQL examples to GraphQL with hasura. 
+# SQL to GraphQL
+This is a set of helper scripts used to convert a subset of the Spider Dataset SQL examples to hasura GraphQL examples. 
 
 The whole process involved manual verification of each step, and involved modifications to the databases and schemas.
-Since the end result requires manual intervention, and since the end result is available, this is mostly for reference.
+Since the end result requires manual intervention, and since the end result is already available, this is mostly for reference.
 
 # SqlToPostgres
 ## prereqs
